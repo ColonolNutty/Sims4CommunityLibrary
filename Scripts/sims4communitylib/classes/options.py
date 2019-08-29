@@ -49,6 +49,10 @@ class HasCommonOptions:
 
     @property
     def options(self) -> Dict[str, Any]:
+        """
+            Retrieve options.
+        :return: A dictionary of options.
+        """
         if self._options is None:
             self._options = dict()
         return self._options
@@ -58,12 +62,27 @@ class HasCommonOptions:
         self._options = options
 
     def set_option(self, option: CommonOption, value: Any) -> Any:
+        """
+            Set the value of an option
+        :param option: An object of type CommonOption.
+        :param value: The new value for the option.
+        """
         self._options[str(option)] = value
 
     def remove_option(self, option: CommonOption):
+        """
+            Remove an option.
+        :param option: An object of type CommonOption.
+        """
         del self._options[str(option)]
 
     def get_option(self, option: CommonOption, default_value: Any=None) -> Any:
+        """
+            Retrieve the value of an option and give the specified default value if the option does not exist.
+        :param option: An object of type CommonOption.
+        :param default_value: The default value used when the option is not found.
+        :return: The value of the option or the default_value if the option was not found.
+        """
         if str(option) not in self.options and default_value is not None:
             self.set_option(option, default_value)
         return self.options[str(option)]
