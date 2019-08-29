@@ -5,17 +5,19 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from datetime import datetime
 
 
-class CommonRealDateUtils:
+class CommonService:
     """
-        A utility for managing real life date and time.
+        A service used to create a common structure for singleton services.
     """
+    def __init__(self):
+        pass
+
     @classmethod
-    def get_current_date_string(cls) -> str:
+    def get(cls) -> 'CommonService':
         """
-            Retrieve the current date as a pre-formatted string.
-        :return: The string representation of the current date.
+        Get an instance of the service
+        :return: An instance of the service
         """
-        return str(datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))
+        raise NotImplementedError()
