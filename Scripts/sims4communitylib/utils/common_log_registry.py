@@ -163,7 +163,10 @@ class CommonLog:
 
 
 class CommonLogRegistry:
-    """ A registry for log handlers. """
+    """
+        A registry for log handlers.
+        To register your own logs, please use CommonLogRegistry.get() to create a CommonLogRegistry.
+    """
     _LOG_REGISTRY = None
 
     def __init__(self):
