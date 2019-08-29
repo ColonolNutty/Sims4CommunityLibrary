@@ -5,15 +5,15 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import List
 import sims4.commands
+from typing import List
 from pprint import pformat
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.utils.common_log_utils import CommonLogUtils
 
 
 class CommonMessageType:
-    """ Common message types for use when logging. """
+    """ Message types for use when logging. """
     DEBUG = 'DEBUG'
     ERROR = 'ERROR'
     INFO = 'INFO'
