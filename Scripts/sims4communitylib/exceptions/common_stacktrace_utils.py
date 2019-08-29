@@ -10,7 +10,7 @@ import traceback
 from collections import namedtuple
 from typing import Union, Any, List
 
-# The following was tweaked slightly from the publicly made available code here https://stackoverflow.com/questions/13210436/get-full-traceback
+# The following was tweaked slightly from the publicly made available, copyright free code here: https://stackoverflow.com/questions/13210436/get-full-traceback
 from sims4communitylib.utils.common_collection_utils import CommonCollectionUtils
 
 FullTraceback = namedtuple('FullTraceback', ('tb_frame', 'tb_lineno', 'tb_next'))
