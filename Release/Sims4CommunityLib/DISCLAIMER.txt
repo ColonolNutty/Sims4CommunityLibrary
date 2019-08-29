@@ -1,0 +1,13 @@
+- The Sims 4 Community Library is not responsible for any mods utilizing its code, nor is it related to the content of them in any way.
+- The Sims 4 Community Library is meant as a community python API for The Sims 4 to prevent reinventing the wheel in future mods.
+- If you would like to see functions/services added to or expanded upon, ask me ColonolNutty and I can see about adding to the library.
+Others may benefit from your requested changes as well!
+
+- If you wish to report a problem or request features, I suggest you either private message ColonolNutty, post in the mod forum thread, or create an issue within the repository itself.
+
+- On its own, The Sims 4 Community Library does nothing. It is simply an API that provides functions, utilities, and services to the larger community of modders.
+
+
+
+- If any adult content (excluding profile pictures/signatures and swearing) is posted within The Sims 4 Community Library thread,
+ you will be immediately reported for inappropriate content and your post removed. I will NOT give warnings for this!

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/EA/base" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/EA/core" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/EA/simulation" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/EA/generated" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/My Script Mods/WickedWhims_Scripts/Scripts/main" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/My Script Mods/WickedWhims_Scripts/Scripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/EA_missing" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/My Script Mods/WickedWhims_Scripts/Scripts/WWScripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/My Script Mods/WickedWhims_Scripts/Scripts/CNWWScripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/My Script Mods/WickedWhims_Scripts/Scripts/MiscScripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CNScripts/Scripts/CNWWScripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CNScripts/Scripts/WWScripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CNScripts/Scripts/MiscScripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CNScripts/CommonScripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CNScripts/MiscScripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/CNScripts/WWScripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/Scripts" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/My Script Mods/WickedWhims_Scripts/TURBODRIVER_WickedWhims_Scripts" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 3.7" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+  <component name="TestRunnerService">
+    <option name="PROJECT_TEST_RUNNER" value="Unittests" />
+  </component>
+</module>
