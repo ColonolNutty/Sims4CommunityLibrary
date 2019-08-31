@@ -5,9 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from sims4communitylib.enums.common_enum import CommonEnumIntMetaclass
 
 
-class CommonSituationId:
+class CommonSituationId(metaclass=CommonEnumIntMetaclass):
     """ Identifiers for various vanilla situations """
     ACTOR_CAREER_BACKGROUND_ACTOR = 191064
     ACTOR_CAREER_BACKGROUND_PRODUCER = 191065

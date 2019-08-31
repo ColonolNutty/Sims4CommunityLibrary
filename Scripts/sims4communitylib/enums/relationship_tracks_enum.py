@@ -5,9 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from sims4communitylib.enums.common_enum import CommonEnumIntMetaclass
 
 
-class CommonRelationshipTrackId:
+class CommonRelationshipTrackId(metaclass=CommonEnumIntMetaclass):
     """ Identifiers for various vanilla sim relationship tracks """
     AUTHORITY = 161998
     FEUD = 193901

@@ -5,9 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from sims4communitylib.enums.common_enum import CommonEnumIntMetaclass
 
 
-class CommonVenueType:
+class CommonVenueType(metaclass=CommonEnumIntMetaclass):
     """ Identifiers for various venue types """
     ACTING_STUDIO = 190058
     ARTS_CENTER = 144206

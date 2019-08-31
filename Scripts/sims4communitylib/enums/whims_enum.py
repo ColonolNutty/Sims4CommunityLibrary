@@ -5,9 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from sims4communitylib.enums.common_enum import CommonEnumIntMetaclass
 
 
-class CommonWhimSetId:
+class CommonWhimSetId(metaclass=CommonEnumIntMetaclass):
     """ Identifiers for various vanilla whim sets """
     APARTMENT_PROBLEMS = 142026
     APARTMENTS_INDOORS_GO_OUTSIDE = 142732

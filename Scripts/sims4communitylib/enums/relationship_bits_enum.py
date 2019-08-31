@@ -5,9 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from sims4communitylib.enums.common_enum import CommonEnumIntMetaclass
 
 
-class CommonRelationshipBitId:
+class CommonRelationshipBitId(metaclass=CommonEnumIntMetaclass):
     """ Identifiers for various vanilla sim relationship bits """
     ACTOR_CAREER_COWORKER_REL_BITS_COMMERCIAL_DIRECTOR = 194371
     ACTOR_CAREER_COWORKER_REL_BITS_COSTAR1 = 196312

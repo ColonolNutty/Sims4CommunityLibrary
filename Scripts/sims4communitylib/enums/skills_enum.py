@@ -5,9 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from sims4communitylib.enums.common_enum import CommonEnumIntMetaclass
 
 
-class CommonSkillId:
+class CommonSkillId(metaclass=CommonEnumIntMetaclass):
     """ Identifiers for various sim skills """
     ADULT_MAJOR_ACTING = 194727
     ADULT_MAJOR_ARCHAEOLOGY = 174237
