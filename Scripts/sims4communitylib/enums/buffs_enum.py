@@ -5,9 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from sims4communitylib.enums.common_enum import CommonEnumIntMetaclass
 
 
-class CommonBuffId:
+class CommonBuffId(metaclass=CommonEnumIntMetaclass):
     """ Identifiers for various vanilla sim buffs """
     A_GREAT_SCARE = 103141
     A_GREAT_SCARE_GREAT_STORYTELLER = 109738

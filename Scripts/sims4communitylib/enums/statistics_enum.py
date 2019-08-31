@@ -5,9 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from sims4communitylib.enums.common_enum import CommonEnumIntMetaclass
 
 
-class CommonStatisticId:
+class CommonStatisticId(metaclass=CommonEnumIntMetaclass):
     """ Identifiers for various vanilla statistics """
     ACTOR_CAREER_MAIN_GOAL = 197925
     ACTOR_CAREER_PRE_PERFORMANCE_DIRECTOR_PRODUCER = 193186
