@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4communitylib.enums.common_enum import CommonEnumIntMetaclass
+from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntMetaclass
 
 
 class CommonStringId(metaclass=CommonEnumIntMetaclass):
