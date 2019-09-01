@@ -1,3 +1,10 @@
+"""
+This file is part of the Sims 4 Community Library, licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International public license (CC BY-NC-ND 4.0).
+https://creativecommons.org/licenses/by-nc-nd/4.0/
+https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+
+Copyright (c) COLONOLNUTTY
+"""
 from typing import Any, List, Union
 
 
@@ -19,21 +26,27 @@ class CommonEnumMetaclass(type):
         for enum_name, enum_value in enum_dict.items():
             if expected_enum_type is not None and type(enum_value) != expected_enum_type:
                 raise ValueError('Incorrect enum value type for class \'{}\', expected type \'{}\', got type: \'{}\'. Enum Name: \'{}\', Enum Value: \'{}\''.format(cls, expected_enum_type, type(enum_value), enum_name, enum_value))
-            common_enum = mcs._get_common_enum(enum_name, enum_value)
+            common_enum = mcs._get_common_enum(enum_name, enum_value, enum_cls.__name__)
             setattr(enum_cls, enum_name, common_enum)
 
         return enum_cls
 
+    def __call__(cls, val):
+        for (enum_name, enum_value) in cls._members_.items():
+            if val == enum_name or val == enum_value:
+                return getattr(cls, enum_name)
+        return super().__call__(cls)
+
     @classmethod
-    def _get_common_enum(mcs, enum_name: str, enum_value: Any):
-        from sims4communitylib.enums.enumtypes.object_enum import CommonObjectEnum
-        return CommonObjectEnum(enum_name, enum_value)
+    def _get_common_enum(mcs, enum_name: str, enum_value: Any, class_name: str):
+        from sims4communitylib.enums.enumtypes.object_enum import CommonEnumObject
+        return CommonEnumObject(enum_name, enum_value, class_name)
 
     @classmethod
     def get_enum_type(mcs) -> Union[type, None]:
         """
             Retrieve the expected enum type of this enum.
-        :return: The expect enum type
+        :return: The expected enum type
         """
         return None
 

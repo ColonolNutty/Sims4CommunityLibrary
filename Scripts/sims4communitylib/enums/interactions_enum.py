@@ -5,10 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntMetaclass
+from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
-class CommonInteractionId(metaclass=CommonEnumIntMetaclass):
+class CommonInteractionId(CommonEnumIntBase):
     """ Identifiers for various vanilla interactions. """
     SIM_STAND = 13983
     SIM_STAND_EXCLUSIVE = 23835

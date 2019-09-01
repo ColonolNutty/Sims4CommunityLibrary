@@ -5,10 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntMetaclass
+from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
-class CommonTraitId(metaclass=CommonEnumIntMetaclass):
+class CommonTraitId(CommonEnumIntBase):
     """ Identifiers for various vanilla sim traits """
     ACTIVE = 27419
     ACTOR_CAREER_HIDDEN_AUDITION_AWAITING_AUDITION = 198564

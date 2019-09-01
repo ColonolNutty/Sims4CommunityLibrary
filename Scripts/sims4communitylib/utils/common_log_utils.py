@@ -42,6 +42,7 @@ class CommonLogUtils:
         file_path = ''
         root_file = os.path.normpath(os.path.dirname(os.path.realpath(__file__))).replace(os.sep, '/')
         root_file_split = root_file.split('/')
+        # noinspection PyTypeChecker
         exit_index = len(root_file_split) - root_file_split.index('Mods')
         for index in range(0, len(root_file_split) - exit_index):
             file_path = os.path.join(file_path, str(root_file_split[index]))
