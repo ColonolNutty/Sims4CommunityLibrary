@@ -5,10 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntMetaclass
+from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
-class CommonStringId(metaclass=CommonEnumIntMetaclass):
+class CommonStringId(CommonEnumIntBase):
     """ Identifiers for various vanilla localization strings """
     # Notifications
     EXCEPTION_OCCURRED_TITLE = 3506527463

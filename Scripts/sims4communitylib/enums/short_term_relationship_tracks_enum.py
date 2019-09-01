@@ -5,10 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntMetaclass
+from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
-class CommonShortTermRelationshipTrackId(metaclass=CommonEnumIntMetaclass):
+class CommonShortTermRelationshipTrackId(CommonEnumIntBase):
     """ Identifiers for various vanilla sim short-term relationship tracks """
     AWKWARDNESS = 24098
     FRIENDSHIP = 24099

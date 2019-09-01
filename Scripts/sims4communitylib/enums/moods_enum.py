@@ -5,10 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntMetaclass
+from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
-class CommonMoodId(metaclass=CommonEnumIntMetaclass):
+class CommonMoodId(CommonEnumIntBase):
     """ Identifiers for various vanilla sim moods """
     CONFIDENT = 14634
     SLEEPING = 27149

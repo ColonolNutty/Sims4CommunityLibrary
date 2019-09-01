@@ -5,10 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntMetaclass
+from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
-class CommonLotTraitId(metaclass=CommonEnumIntMetaclass):
+class CommonLotTraitId(CommonEnumIntBase):
     """ Identifiers for various vanilla lot traits """
     CELEBRITY_HANG_OUT_HIGH_FAME = 191710
     CELEBRITY_HANG_OUT_LOW_FAME = 191708

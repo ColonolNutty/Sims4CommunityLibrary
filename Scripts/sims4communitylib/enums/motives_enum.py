@@ -5,10 +5,10 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntMetaclass
+from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
-class CommonMotiveId(metaclass=CommonEnumIntMetaclass):
+class CommonMotiveId(CommonEnumIntBase):
     """ Identifiers for various vanilla sim motives """
     BLADDER = 16652
     PET_CAT_BLADDER = 151036
