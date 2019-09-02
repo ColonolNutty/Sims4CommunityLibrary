@@ -5,17 +5,25 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import sims4.commands
 from typing import Callable, Any, Dict, List
 from functools import wraps
 from traceback import format_exc
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
-from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+try:
+    from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
-community_test_log = CommonLogRegistry.get().register_log(ModInfo.MOD_NAME, 'community_test_log')
-community_test_log.enable()
+    community_test_log_log = CommonLogRegistry.get().register_log(ModInfo.MOD_NAME, 'community_test_log')
+    community_test_log_log.enable()
+
+    def community_test_log(val: str):
+        community_test_log_log.debug(val)
+except ModuleNotFoundError:
+    CommonLogRegistry = None
+
+    def community_test_log(val: str):
+        pass
 
 
 class CommonTestResultType:
@@ -111,9 +119,12 @@ class CommonTestService(CommonService):
         @CommonExceptionHandler.catch_exceptions(mod_name)
         def _inner_test_class(cls):
             name_of_class = cls.__name__
-
-            cls.test_log = CommonLogRegistry.get().register_log(mod_name, name_of_class)
-            cls.test_log.enable()
+            if CommonLogRegistry is not None:
+                cls.test_log_log = CommonLogRegistry.get().register_log(mod_name, name_of_class)
+                cls.test_log_log.enable()
+                cls.test_log = lambda val: cls.test_log_log.debug(val)
+            else:
+                cls.test_log = lambda val: print(val)
             for method_name in dir(cls):
                 method = getattr(cls, method_name)
                 if not hasattr(method, 'is_test'):
@@ -122,16 +133,17 @@ class CommonTestService(CommonService):
                 def _test_function(class_name, test_name, test_method, *_, **__):
                     @wraps(test_method)
                     def _wrapper(*args, **kwargs):
-                        new_test_name = '{}({}, {})'.format(test_name, (_ + args), (kwargs, __))
+                        arguments = (_ + args)
+                        new_test_name = '{} (Arguments: {}, Keyword Arguments: {})'.format(test_name, arguments, (kwargs, __))
                         # noinspection PyBroadException
                         try:
                             test_method(*(_ + args), **kwargs, **__)
-                            cls.test_log.debug(CommonTestService._format_test_result(CommonTestResultType.SUCCESS, new_test_name))
+                            cls.test_log(CommonTestService._format_test_result(CommonTestResultType.SUCCESS, new_test_name))
                         except AssertionError:
-                            cls.test_log.debug(CommonTestService._format_test_result(CommonTestResultType.FAILED, new_test_name, stacktrace=format_exc()))
+                            cls.test_log(CommonTestService._format_test_result(CommonTestResultType.FAILED, new_test_name, stacktrace=format_exc()))
                             return CommonTestResultType.FAILED
                         except Exception:
-                            cls.test_log.debug(CommonTestService._format_test_result(CommonTestResultType.FAILED, new_test_name, stacktrace=format_exc()))
+                            cls.test_log(CommonTestService._format_test_result(CommonTestResultType.FAILED, new_test_name, stacktrace=format_exc()))
                             return CommonTestResultType.FAILED
                         return CommonTestResultType.SUCCESS
                     CommonTestService.get().add_test(test_name, _wrapper, class_name=class_name)
@@ -174,7 +186,7 @@ class CommonTestService(CommonService):
             class_tests = CommonTestService.get().all_tests.keys()
         callback('Running Tests')
         for class_name in class_tests:
-            community_test_log.debug('Running tests for class \'{}\''.format(class_name))
+            community_test_log('Running tests for class \'{}\':\n'.format(class_name))
             callback('Running Tests for class \'{}\''.format(class_name))
             tests = CommonTestService.get().get_tests_by_class_name(class_name)
             total_test_count = len(tests)
@@ -189,14 +201,19 @@ class CommonTestService(CommonService):
                     total_failed_test_count += 1
                 callback('{} of {} {} {}'.format(current_test_count, total_test_count, result, test_name))
             total_passed = total_test_count-failed_test_count
-            community_test_log.debug('{} of {} tests Succeeded'.format(total_passed, total_test_count))
-            callback('{} of {} tests Succeeded'.format(total_passed, total_test_count))
+            community_test_log('{} of {} tests Succeeded for class \'{}\'\n'.format(total_passed, total_test_count, class_name))
+            callback('{} of {} tests Succeeded for class \'{}\'\n'.format(total_passed, total_test_count, class_name))
         total_run_passed = total_run_test_count-total_failed_test_count
-        community_test_log.debug('{} of {} total tests Succeeded'.format(total_run_passed, total_run_test_count))
+        community_test_log('{} of {} total tests Succeeded'.format(total_run_passed, total_run_test_count))
         callback('{} of {} total tests Succeeded'.format(total_run_passed, total_run_test_count))
 
 
-@sims4.commands.Command('s4clib.run_tests', command_type=sims4.commands.CommandType.Live)
-def _common_run_tests(*_, _connection=None, **__):
-    output = sims4.commands.CheatOutput(_connection)
-    CommonTestService.get().run_tests(*_, callback=output, **__)
+try:
+    import sims4.commands
+
+    @sims4.commands.Command('s4clib.run_tests', command_type=sims4.commands.CommandType.Live)
+    def _common_run_tests(*_, _connection=None, **__):
+        output = sims4.commands.CheatOutput(_connection)
+        CommonTestService.get().run_tests(*_, callback=output, **__)
+except ModuleNotFoundError:
+    pass

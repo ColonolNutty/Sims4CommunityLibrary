@@ -75,7 +75,4 @@ class CommonEnumIntMetaclass(CommonEnumMetaclass):
 class CommonEnumIntBase(int, metaclass=CommonEnumIntMetaclass):
     """ A base class for integer enums. """
     def __call__(self, val) -> CommonEnumInt:
-        for (enum_name, enum_value) in self.__class__._members_.items():
-            if val == enum_name or val == enum_value:
-                return getattr(self, enum_name)
-        return val
+        pass
