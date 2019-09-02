@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any, List, Union, Tuple
+from typing import Any, List, Union, Tuple, Callable
 
 from sims4communitylib.utils.common_collection_utils import CommonCollectionUtils
 
@@ -64,9 +64,9 @@ class CommonAssertionUtils:
         :exception AssertionError when the assertion fails.
         """
         if not CommonCollectionUtils.is_collection(list_one):
-            raise AssertionError('{}: {} is not a collection'.format(message, list_one))
+            raise AssertionError('{}: expected\n  {}\n  to be equal to\n  {}'.format(message, list_one, list_two))
         if not CommonCollectionUtils.is_collection(list_two):
-            raise AssertionError('{}: {} is not a collection'.format(message, list_two))
+            raise AssertionError('{}: expected\n  {}\n  to be equal to\n  {}'.format(message, list_one, list_two))
         if len(list_one) != len(list_two):
             raise AssertionError('{}: expected\n  {}\n  to be equal to\n  {}'.format(message, list_one, list_two))
         current_idx = 0
@@ -130,6 +130,22 @@ class CommonAssertionUtils:
         return True
 
     @staticmethod
+    def has_length(value, expected_length: int, message: str='') -> bool:
+        """
+            Assert a collection has the specified length.
+        :param expected_length: The length expected of the collection.
+        :param value: The collection being asserted.
+        :param message: A custom message to include when the assertion fails.
+        :return: True if the length matches.
+        :exception AssertionError when the assertion fails.
+        """
+        if not CommonCollectionUtils.is_collection(value):
+            raise AssertionError('{}: expected collection {} to have length {}, but was not a collection'.format(message, value, expected_length))
+        if len(value) != expected_length:
+            raise AssertionError('{}: expected collection {} to have length {}, but was {}'.format(message, value, expected_length, len(value)))
+        return True
+
+    @staticmethod
     def contains(collection: Union[Tuple[Any], List[Any]], value: Any, message: str='') -> bool:
         """
             Assert the value is contained within the collection
@@ -142,3 +158,17 @@ class CommonAssertionUtils:
         if value not in collection:
             raise AssertionError('{}: expected {} to contain {}, but it did not'.format(message, collection, value))
         return True
+
+    @staticmethod
+    def throws(callback: Callable[..., Any], message: str='') -> Exception:
+        """
+            Assert calling a function will raise an Exception.
+        :param callback: The function to invoke.
+        :param message: A custom message to include when the assertion fails.
+        :return: The exception that was thrown.
+        """
+        try:
+            callback()
+        except Exception as ex:
+            return ex
+        raise AssertionError('{}: expected function to throw an exception, but it did not.'.format(message))

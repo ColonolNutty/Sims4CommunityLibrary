@@ -74,7 +74,4 @@ class CommonEnumStringMetaclass(CommonEnumMetaclass):
 class CommonEnumStringBase(str, metaclass=CommonEnumStringMetaclass):
     """ A base class for string enums. """
     def __call__(self, val) -> CommonEnumString:
-        for (enum_name, enum_value) in self.__class__._members_.items():
-            if val == enum_name or val == enum_value:
-                return getattr(self, enum_name)
-        return val
+        pass

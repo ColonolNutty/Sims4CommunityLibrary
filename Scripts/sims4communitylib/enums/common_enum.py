@@ -35,7 +35,7 @@ class CommonEnumMetaclass(type):
         for (enum_name, enum_value) in cls._members_.items():
             if val == enum_name or val == enum_value:
                 return getattr(cls, enum_name)
-        return super().__call__(cls)
+        raise KeyError('Value: \'{}\' not found within class \'{}\''.format(val, cls.__name__))
 
     @classmethod
     def _get_common_enum(mcs, enum_name: str, enum_value: Any, class_name: str):
