@@ -8,11 +8,13 @@ Copyright (c) COLONOLNUTTY
 import sims4.commands
 from typing import List
 from pprint import pformat
+
+from sims4communitylib.enums.enumtypes.string_enum import CommonEnumStringBase
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.utils.common_log_utils import CommonLogUtils
 
 
-class CommonMessageType:
+class CommonMessageType(CommonEnumStringBase):
     """ Message types for use when logging. """
     DEBUG = 'DEBUG'
     ERROR = 'ERROR'
@@ -256,8 +258,8 @@ class CommonLogRegistry:
         return True
 
 
-@sims4.commands.Command('s4clib.enable_log', command_type=sims4.commands.CommandType.Live)
-def _common_command_enable_log(*args, _connection=None):
+@sims4.commands.Command('s4clib.enable_log', 's4clib.enablelog', command_type=sims4.commands.CommandType.Live)
+def _common_command_enable_log(*args, _connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
     if len(args) == 0 or args[0] is None:
         output('specify a log name (See all logs via "s4clib.logs" command)')
@@ -268,8 +270,8 @@ def _common_command_enable_log(*args, _connection=None):
         output('No log found: ' + str(args[0]))
 
 
-@sims4.commands.Command('s4clib.disable_log', command_type=sims4.commands.CommandType.Live)
-def _common_command_disable_log(*args, _connection=None):
+@sims4.commands.Command('s4clib.disable_log', 's4clib.disablelog', command_type=sims4.commands.CommandType.Live)
+def _common_command_disable_log(*args, _connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
     if len(args) == 0 or args[0] is None:
         output('specify a log name (See all logs via "s4clib.logs" command)')
@@ -280,8 +282,8 @@ def _common_command_disable_log(*args, _connection=None):
         output('No log found: ' + str(args[0]))
 
 
-@sims4.commands.Command('s4clib.disable_all_logs', command_type=sims4.commands.CommandType.Live)
-def _common_command_disable_all_logs(_connection=None):
+@sims4.commands.Command('s4clib.disable_all_logs', 's4clib.disablealllogs', command_type=sims4.commands.CommandType.Live)
+def _common_command_disable_all_logs(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
     output('Disabling all logs')
     CommonLogRegistry.get().disable_all_logs()
@@ -289,7 +291,7 @@ def _common_command_disable_all_logs(_connection=None):
 
 
 @sims4.commands.Command('s4clib.logs', command_type=sims4.commands.CommandType.Live)
-def _common_command_show_all_logs(_connection=None):
+def _common_command_show_all_logs(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
     log_names = CommonLogRegistry.get().get_registered_log_names()
     if log_names is None or output is None:

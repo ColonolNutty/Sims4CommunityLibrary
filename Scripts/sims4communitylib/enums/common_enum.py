@@ -24,6 +24,8 @@ class CommonEnumMetaclass(type):
         enum_cls._members_ = enum_dict
         expected_enum_type = mcs.get_enum_type()
         for enum_name, enum_value in enum_dict.items():
+            if hasattr(enum_value, 'value'):
+                enum_value = enum_value.value
             if expected_enum_type is not None and type(enum_value) != expected_enum_type:
                 raise ValueError('Incorrect enum value type for class \'{}\', expected type \'{}\', got type: \'{}\'. Enum Name: \'{}\', Enum Value: \'{}\''.format(cls, expected_enum_type, type(enum_value), enum_name, enum_value))
             common_enum = mcs._get_common_enum(enum_name, enum_value, enum_cls.__name__)
