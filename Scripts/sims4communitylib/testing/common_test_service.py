@@ -17,12 +17,12 @@ try:
     community_test_log_log = CommonLogRegistry.get().register_log(ModInfo.MOD_NAME, 'community_test_log')
     community_test_log_log.enable()
 
-    def community_test_log(val: str):
+    def _community_test_log(val: str):
         community_test_log_log.debug(val)
 except ModuleNotFoundError:
     CommonLogRegistry = None
 
-    def community_test_log(val: str):
+    def _community_test_log(_: str):
         pass
 
 
@@ -186,7 +186,7 @@ class CommonTestService(CommonService):
             class_tests = CommonTestService.get().all_tests.keys()
         callback('Running Tests')
         for class_name in class_tests:
-            community_test_log('Running tests for class \'{}\':\n'.format(class_name))
+            _community_test_log('Running tests for class \'{}\':\n'.format(class_name))
             callback('Running Tests for class \'{}\''.format(class_name))
             tests = CommonTestService.get().get_tests_by_class_name(class_name)
             total_test_count = len(tests)
@@ -201,10 +201,10 @@ class CommonTestService(CommonService):
                     total_failed_test_count += 1
                 callback('{} of {} {} {}'.format(current_test_count, total_test_count, result, test_name))
             total_passed = total_test_count-failed_test_count
-            community_test_log('{} of {} tests Succeeded for class \'{}\'\n'.format(total_passed, total_test_count, class_name))
+            _community_test_log('{} of {} tests Succeeded for class \'{}\'\n'.format(total_passed, total_test_count, class_name))
             callback('{} of {} tests Succeeded for class \'{}\'\n'.format(total_passed, total_test_count, class_name))
         total_run_passed = total_run_test_count-total_failed_test_count
-        community_test_log('{} of {} total tests Succeeded'.format(total_run_passed, total_run_test_count))
+        _community_test_log('{} of {} total tests Succeeded'.format(total_run_passed, total_run_test_count))
         callback('{} of {} total tests Succeeded'.format(total_run_passed, total_run_test_count))
 
 
@@ -212,7 +212,7 @@ try:
     import sims4.commands
 
     @sims4.commands.Command('s4clib.run_tests', command_type=sims4.commands.CommandType.Live)
-    def _common_run_tests(*_, _connection=None, **__):
+    def _common_run_tests(*_, _connection: int=None, **__):
         output = sims4.commands.CheatOutput(_connection)
         CommonTestService.get().run_tests(*_, callback=output, **__)
 except ModuleNotFoundError:

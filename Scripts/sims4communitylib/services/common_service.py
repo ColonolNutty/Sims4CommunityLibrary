@@ -9,7 +9,7 @@ Copyright (c) COLONOLNUTTY
 
 class CommonService:
     """
-        A service used to create a common structure for singleton services.
+        A class used as a common structure for singleton services.
     """
     def __init__(self):
         pass
@@ -17,7 +17,7 @@ class CommonService:
     @classmethod
     def get(cls) -> 'CommonService':
         """
-        Get an instance of the service
+        Create an instance of the service
         :return: An instance of the service
         """
         raise NotImplementedError()

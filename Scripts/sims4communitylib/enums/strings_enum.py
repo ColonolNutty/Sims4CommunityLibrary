@@ -12,6 +12,7 @@ class CommonStringId(CommonEnumIntBase):
     """ Identifiers for various vanilla localization strings """
     # Notifications
     EXCEPTION_OCCURRED_TITLE = 3506527463
+    # 0.String
     EXCEPTION_OCCURRED_TEXT = 1656389837
 
     # Dialog
@@ -21,8 +22,11 @@ class CommonStringId(CommonEnumIntBase):
     CANCEL_ALL_CAPS = 1249800636
 
     # Text
+    # 0.String
     TEXT_WITH_GREEN_COLOR = 3458194999
+    # 0.String
     TEXT_WITH_RED_COLOR = 835489330
+    # 0.String
     TEXT_WITH_BLUE_COLOR = 1505840180
 
     # Ages
@@ -49,3 +53,19 @@ class CommonStringId(CommonEnumIntBase):
     MASCULINE = 585998164
     FEMININE = 667254132
     PHYSICAL_FRAME = 2574825855
+
+    # Text
+    # 0.String
+    STRING_NOT_FOUND_WITH_IDENTIFIER = 3037244137
+
+    # Test
+    TESTING_TEST_BUTTON_ONE = 367590350
+    TESTING_TEST_BUTTON_TWO = 367590349
+    TESTING_SOME_TEXT_FOR_TESTING = 1352970207
+    TESTING_TEST_TEXT_NO_TOKENS = 3987872118
+    # 0.SimInfo
+    TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME = 4280406738
+    # 0.String
+    TESTING_TEST_TEXT_WITH_STRING_TOKEN = 2977195159
+    # 0.Number
+    TESTING_TEST_TEXT_WITH_NUMBER_TOKEN = 4138001347
