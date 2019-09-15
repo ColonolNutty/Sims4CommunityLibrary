@@ -6,41 +6,40 @@ This is more of an API than a mod itself. It does nothing on its own and is mean
 
 Current Features:
 
-- Access to Vanilla Tuning identifiers for
- - Buffs
- - Interactions
- - Relationship Bits
- - Relationship Tracks
- - Short-Term Relationship Bits
- - Motives
- - Moods
- - Lot Traits
- - Sim Traits
- - Situations
- - Situation Jobs
- - Many Others!
+- Access to Vanilla Tuning identifiers for:
+  - Buffs
+  - Interactions
+  - Relationship Bits
+  - Relationship Tracks
+  - Short-Term Relationship Bits
+  - Motives
+  - Moods
+  - Lot Traits
+  - Sim Traits
+  - Situations
+  - Situation Jobs
+  - Many Others!
 - Logging
- - Log messages to a file
- - Log custom exceptions
- - Log the current stack trace, find out who or what is calling your functions!
- - Useful when debugging code!
- - Enable/Disable logs via a command in-game.
- - `s4clib.enable_log <log_name>`
+  - Log messages to a file
+  - Log custom exceptions
+  - Log the current stack trace, find out who or what is calling your functions!
+  - Useful when debugging code!
+    - Enable/Disable logs via a command in-game. `s4clib.enable_log <log_name>`
 - Exception Handling
- - Log to a file exceptions that are thrown
- - Catch exceptions within your functions via a decorator
+  - Log to a file exceptions that are thrown
+  - Catch exceptions within your functions via a decorator
 - Custom Enums
- - Create your own custom Enums (Because The Sims 4 is silly and decided to override the enum module, doh!)
- - Four types of Enums (More will be added if requested)
-   - Int
-   - String
-   - Float
-   - Object
+  - Create your own custom Enums (Because The Sims 4 is silly and decided to override the enum module, doh!)
+  - Four types of Enums (More will be added if requested)
+    - Int
+    - String
+    - Float
+    - Object
 - Custom Dialogs
- - Ok/Cancel - The Player can choose either Ok or Cancel
-   - The text for both the Ok and the Cancel buttons can be custom text as well.
+  - Ok/Cancel - The Player can choose either Ok or Cancel
+    - The text for both the Ok and the Cancel buttons can be custom text as well.
 - Custom Notifications
- - Basic Notification - Display a notification with a title and description of varying urgency.
+  - Basic Notification - Display a notification with a title and description of varying urgency.
 - Interactions
   - Registration
   - Register Interactions to:
