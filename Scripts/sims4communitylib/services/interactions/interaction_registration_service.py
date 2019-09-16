@@ -170,3 +170,20 @@ def _common_terrain_service_on_zone_load(original, self, *args, **kwargs):
     result = original(self, *args, **kwargs)
     CommonInteractionRegistry.get().on_ocean_load(self, *args, **kwargs)
     return result
+
+
+# noinspection PyMissingOrEmptyDocstring
+# @CommonInteractionRegistry.register_interaction_handler(CommonInteractionType.ON_SCRIPT_OBJECT_LOAD)
+class ExampleInteractionHandler(CommonScriptObjectInteractionHandler):
+    @property
+    def interactions_to_add(self) -> Tuple[int]:
+        # Interaction Ids
+        # These are the decimal identifiers of the interactions from a package file.
+        from sims4communitylib.enums.interactions_enum import CommonInteractionId
+        return tuple([int(CommonInteractionId.SIM_CHAT), 2])
+
+    def should_add(self, script_object: ScriptObject, *args, **kwargs) -> bool:
+        # Verify it is the object your are expecting. Return True, if it is.
+        # In this case we are adding these interactions to Sims.
+        from sims.sim import Sim
+        return isinstance(script_object, Sim)
