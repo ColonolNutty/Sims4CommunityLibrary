@@ -36,8 +36,10 @@ Current Features:
     - Float
     - Object
 - Custom Dialogs
-  - Ok/Cancel - The Player can choose either Ok or Cancel
-    - The text for both the Ok and the Cancel buttons can be custom text as well.
+  - Ok/Cancel - Prompt the player with a message and have them choose either Ok or Cancel
+    - The text for both the Ok and the Cancel buttons can be custom text as well. (They could be Yes/No as one custom example)
+  - Object Picker 
+    - Prompt the player to choose an item from a list of items.
 - Custom Notifications
   - Basic Notification - Display a notification with a title and description of varying urgency.
 - Interactions
@@ -47,6 +49,9 @@ Current Features:
     - Ocean
     - Objects (Sims, Furniture, etc.)
 - Utilities
+  - Sim utilities
+    - Get the Active Sim
+    - Get All Sims nearby
   - Collection utilities - Determine if an object is a collection, combine collections, flatten collections, etc.
   - Injection - Inject custom functionality into functions
   - IO (Input/Output) - Write string data to a file or load string data from a file.
@@ -100,7 +105,7 @@ Planned Features:
     - Prompt users to input Numbers/Text
     - Prompt the user to select from a list of items.
   - Sim Picker - Have the player choose a sim or a number of sims.
-  - Object Picker - Have the player choose from a list of items.
+  - Object Picker - Have the player choose multiple things from a list of items.
 
 
 Installation:
