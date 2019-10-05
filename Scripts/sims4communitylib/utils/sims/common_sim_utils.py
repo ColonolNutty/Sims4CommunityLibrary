@@ -34,7 +34,7 @@ class CommonSimUtils:
     def get_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None) -> Iterator[Sim]:
         """
             Retrieve a Sim object for each and every sim (including hidden sims).
-        :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. All sims will be included if not provided.
+        :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. If set to None, All sims will be included.
         """
         for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
             sim_instance = sim_info.get_sim_instance(allow_hidden_flags=ALL_HIDDEN_REASONS)
@@ -46,13 +46,27 @@ class CommonSimUtils:
     def get_sim_info_for_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None) -> Iterator[SimInfo]:
         """
             Retrieve a SimInfo object for each and every sim.
-        :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. All sims will be included if not provided.
+        :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. If set to None, All sims will be included.
         """
         sim_info_list = list(services.sim_info_manager().get_all())
         for sim_info in sim_info_list:
             if sim_info is None:
                 continue
             if include_sim_callback is not None and include_sim_callback(sim_info) is False:
+                continue
+            yield sim_info
+
+    @staticmethod
+    def get_instanced_sim_info_for_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None) -> Iterator[SimInfo]:
+        """
+            Retrieve a SimInfo object for each and every sim.
+
+            Note: Only SimInfo with a Sim instance (get_sim_instance) will be returned.
+        :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. If set to None, All sims will be included.
+        """
+        for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
+            sim_instance = sim_info.get_sim_instance(allow_hidden_flags=ALL_HIDDEN_REASONS)
+            if sim_instance is None:
                 continue
             yield sim_info
 
