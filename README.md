@@ -165,7 +165,7 @@ What is the workflow for working with S4CL?
 - Right click the copied folder -> Mark Directory as -> Sources Root
 - Once you've done this you just have to import sims4communitylibrary as you would with any other python files
 - Ensure you list in the description of your mod a link to the github releases (You may even link a specific release to ensure compatibility.)
-- YOU DO NOT HAVE MY PERMISSION TO INCLUDE S4CL IN YOUR OWN MOD. So don't do it.
+- YOU DO NOT HAVE MY PERMISSION TO BUNDLE S4CL INTO YOUR OWN MOD. So don't do it. Reference the github repository/releases page instead.
 
 Copyright:
 
