@@ -12,8 +12,8 @@ class CommonRealDateUtils:
     """
         A utility for managing real life date and time.
     """
-    @classmethod
-    def get_current_date_string(cls) -> str:
+    @staticmethod
+    def get_current_date_string() -> str:
         """
             Retrieve the current date as a pre-formatted string.
         :return: The string representation of the current date.

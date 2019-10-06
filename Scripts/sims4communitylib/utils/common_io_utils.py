@@ -12,8 +12,8 @@ class CommonIOUtils:
         Utilities for handling reading/writing to and from files.
     """
     # noinspection PyBroadException
-    @classmethod
-    def write_to_file(cls, file_path: str, data: str, buffering: int=1, encoding: str='utf-8'):
+    @staticmethod
+    def write_to_file(file_path: str, data: str, buffering: int=1, encoding: str='utf-8'):
         """
             Write string data to a file.
         :param encoding: See the 'open' function documentation for more details

@@ -6,7 +6,6 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-
 from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
 
 
@@ -15,8 +14,8 @@ class CommonLogUtils:
     # 10 MB
     _MAX_FILE_SIZE = 1048576
 
-    @classmethod
-    def get_exceptions_file_path(cls, mod_name: str) -> str:
+    @staticmethod
+    def get_exceptions_file_path(mod_name: str) -> str:
         """
             Retrieve the file path to the Exceptions file used for logging error messages.
         :param mod_name: The name of the mod requesting the file path.
@@ -24,8 +23,8 @@ class CommonLogUtils:
         """
         return CommonLogUtils._get_file_path(mod_name, 'Exceptions')
 
-    @classmethod
-    def get_message_file_path(cls, mod_name: str) -> str:
+    @staticmethod
+    def get_message_file_path(mod_name: str) -> str:
         """
             Retrieve the file path to the Messages file used for logging info/debug messages.
         :param mod_name: The name of the mod requesting the file path.
@@ -33,8 +32,8 @@ class CommonLogUtils:
         """
         return CommonLogUtils._get_file_path(mod_name, 'Messages')
 
-    @classmethod
-    def get_sims_documents_location_path(cls) -> str:
+    @staticmethod
+    def get_sims_documents_location_path() -> str:
         """
             Retrieves the folder path of the folder 'Documents\Electronic Arts\The Sims 4'
         :return: The file path to 'Documents\Electronic Arts\The Sims 4' folder.
@@ -48,8 +47,8 @@ class CommonLogUtils:
             file_path = os.path.join(file_path, str(root_file_split[index]))
         return file_path
 
-    @classmethod
-    def _get_file_path(cls, mod_name: str, file_name: str):
+    @staticmethod
+    def _get_file_path(mod_name: str, file_name: str) -> str:
         """
             Get an absolute file path to the file with the file name.
         :param mod_name: The name of the mod requesting the file name.
@@ -63,6 +62,6 @@ class CommonLogUtils:
             os.rename(file_path, os.path.join(root_path, 'Old_{}_{}_{}.txt'.format(mod_name, file_name, current_date_time)))
         return file_path
 
-    @classmethod
-    def _file_is_too_big(cls, file_path: str):
+    @staticmethod
+    def _file_is_too_big(file_path: str) -> bool:
         return os.path.getsize(file_path) > CommonLogUtils._MAX_FILE_SIZE
