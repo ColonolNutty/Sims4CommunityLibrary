@@ -6,32 +6,23 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Any
-
-from buffs.buff import Buff
-from objects.doors.door import Door
-from objects.game_object import GameObject
 try:
     from objects.pools.ocean import Ocean
 except ModuleNotFoundError:
+    # Those without the Island Paradise expansion pack won't have an Ocean object
     Ocean = None
+from objects.doors.door import Door
+from objects.game_object import GameObject
 from objects.pools.pool import SwimmingPool
-from objects.pools.pool_seat import PoolSeat
 from objects.script_object import ScriptObject
 from objects.terrain import Terrain
 from sims.sim import Sim
 from sims.sim_info import SimInfo
-from sims4.math import Location
+from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 
 
 class CommonTypeUtils:
     """ Utilities for determining the type of an object. """
-    @staticmethod
-    def is_integer(obj: Any) -> bool:
-        """
-            Determine if an object is of type int
-        """
-        return isinstance(obj, int)
-
     @staticmethod
     def is_sim_or_sim_info(obj: Any) -> bool:
         """
@@ -52,6 +43,13 @@ class CommonTypeUtils:
             Determine if an object is of type SimInfo
         """
         return isinstance(obj, SimInfo)
+
+    @staticmethod
+    def is_sim_info_base_wrapper(obj: Any) -> bool:
+        """
+            Determine if an object is of type SimInfo
+        """
+        return isinstance(obj, SimInfoBaseWrapper)
 
     @staticmethod
     def is_script_object(obj: Any) -> bool:
@@ -91,29 +89,8 @@ class CommonTypeUtils:
         return isinstance(obj, SwimmingPool)
 
     @staticmethod
-    def is_pool_seat(obj: Any) -> bool:
-        """
-            Determine if an object is of type PoolSeat
-        """
-        return isinstance(obj, PoolSeat)
-
-    @staticmethod
-    def is_door_object(obj: Any) -> bool:
+    def is_door(obj: Any) -> bool:
         """
             Determine if an object is of type Door
         """
         return isinstance(obj, Door)
-
-    @staticmethod
-    def is_buff(obj: Any) -> bool:
-        """
-            Determine if an object is of type Buff
-        """
-        return isinstance(obj, Buff)
-
-    @staticmethod
-    def is_location(obj: Any) -> bool:
-        """
-            Determine if an object is of type Location
-        """
-        return isinstance(obj, Location)
