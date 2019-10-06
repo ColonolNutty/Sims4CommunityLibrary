@@ -8,13 +8,35 @@ Copyright (c) COLONOLNUTTY
 from typing import Union, Tuple, Any
 
 from protocolbuffers.Localization_pb2 import LocalizedString
-from sims4.localization import LocalizationHelperTuning, _create_localized_string, create_tokens
+from sims4.localization import LocalizationHelperTuning, _create_localized_string, create_tokens, \
+    TunableLocalizedStringFactory
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 
 
 class CommonLocalizationUtils:
     """ Utilities for handling localization strings """
+    class LocalizedTooltip(TunableLocalizedStringFactory._Wrapper):
+        """ A LocalizedTooltip used when displaying tooltips. """
+        def __init__(self, string_id: Union[int, str, LocalizedString], *tokens: Any):
+            super().__init__(string_id)
+            self._tokens = tokens
+
+        def __call__(self, *_):
+            return CommonLocalizationUtils.create_localized_string(self._string_id, tokens=self._tokens)
+
+    @staticmethod
+    def create_localized_tooltip(tooltip_text: Union[int, str, LocalizedString], tooltip_tokens: Tuple[Any]=()) -> 'LocalizedTooltip':
+        """
+            Create a LocalizedTooltip use this when you wish to display a tooltip on various things.
+        :param tooltip_text: The text that will be displayed.
+        :param tooltip_tokens: A collection of objects to format into the localized string. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few)
+        :return: An object of type LocalizedTooltip
+        """
+        if isinstance(tooltip_text, CommonLocalizationUtils.LocalizedTooltip):
+            return tooltip_text
+        return CommonLocalizationUtils.LocalizedTooltip(tooltip_text, *tooltip_tokens)
+
     @staticmethod
     def create_localized_string(identifier: Union[int, str, LocalizedString], tokens: Tuple[Any]=(), localize_tokens: bool=True, text_color: CommonLocalizedStringColor=CommonLocalizedStringColor.DEFAULT) -> LocalizedString:
         """
