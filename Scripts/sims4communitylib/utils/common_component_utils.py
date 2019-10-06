@@ -5,8 +5,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import sims4.commands
-from typing import Any, Union
+from typing import Union
 
 from objects.components import ComponentContainer, Component
 from sims4communitylib.enums.types.component_types import CommonComponentType
