@@ -6,8 +6,11 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import services
+import sims4.commands
 from clock import ClockSpeedMode, ClockSpeedMultipliers, GameClock
 from date_and_time import DateAndTime
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.modinfo import ModInfo
 from time_service import TimeService
 
 
@@ -201,3 +204,15 @@ class CommonTimeUtils:
             Get an instance of the GameClock.
         """
         return services.game_clock_service()
+
+
+@sims4.commands.Command('s4clib_testing.test_game_pause', command_type=sims4.commands.CommandType.Live)
+def _s4clib_testing_test_game_pause(_connection=None):
+    output = sims4.commands.CheatOutput(_connection)
+    output('Attempting to pause the game.')
+    try:
+        CommonTimeUtils.pause_the_game()
+        output('Game paused successfully.')
+    except Exception as ex:
+        output('Failed to pause the game! See Exception log.')
+        CommonExceptionHandler.log_exception(ModInfo.MOD_NAME, 'Failed to pause the game!', exception=ex)
