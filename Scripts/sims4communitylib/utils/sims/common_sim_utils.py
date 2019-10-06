@@ -71,51 +71,51 @@ class CommonSimUtils:
                 continue
             yield sim_info
 
-    @classmethod
-    def get_sim_id(cls, sim_info_or_sim_id: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> int:
+    @staticmethod
+    def get_sim_id(sim_identifier: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> int:
         """
             Retrieve a SimId (int) from a sim identifier.
         """
-        if sim_info_or_sim_id is None:
+        if sim_identifier is None:
             return 0
-        if isinstance(sim_info_or_sim_id, int):
-            return sim_info_or_sim_id
-        if isinstance(sim_info_or_sim_id, Sim):
-            return sim_info_or_sim_id.sim_id
-        if isinstance(sim_info_or_sim_id, SimInfo) or isinstance(sim_info_or_sim_id, SimInfoBaseWrapper):
-            return sim_info_or_sim_id.id
-        return sim_info_or_sim_id
+        if isinstance(sim_identifier, int):
+            return sim_identifier
+        if isinstance(sim_identifier, Sim):
+            return sim_identifier.sim_id
+        if isinstance(sim_identifier, SimInfo) or isinstance(sim_identifier, SimInfoBaseWrapper):
+            return sim_identifier.id
+        return sim_identifier
 
     @staticmethod
-    def get_sim_info(sim_instance_or_sim_id: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> Union[SimInfoBaseWrapper, SimInfo, None]:
+    def get_sim_info(sim_identifier: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> Union[SimInfoBaseWrapper, SimInfo, None]:
         """
             Retrieve a SimInfo instance from a sim identifier.
         """
-        if sim_instance_or_sim_id is None or isinstance(sim_instance_or_sim_id, SimInfo) or isinstance(sim_instance_or_sim_id, SimInfoBaseWrapper):
-            return sim_instance_or_sim_id
-        if isinstance(sim_instance_or_sim_id, Sim):
-            return sim_instance_or_sim_id.sim_info
-        if isinstance(sim_instance_or_sim_id, int):
-            return services.sim_info_manager().get(sim_instance_or_sim_id)
-        return sim_instance_or_sim_id
+        if sim_identifier is None or isinstance(sim_identifier, SimInfo) or isinstance(sim_identifier, SimInfoBaseWrapper):
+            return sim_identifier
+        if isinstance(sim_identifier, Sim):
+            return sim_identifier.sim_info
+        if isinstance(sim_identifier, int):
+            return services.sim_info_manager().get(sim_identifier)
+        return sim_identifier
 
     @staticmethod
-    def get_sim_instance(sim_info_or_sim_id: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> Union[Sim, None]:
+    def get_sim_instance(sim_identifier: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> Union[Sim, None]:
         """
             Retrieve a Sim instance from a sim identifier.
         """
-        if sim_info_or_sim_id is None or isinstance(sim_info_or_sim_id, Sim):
-            return sim_info_or_sim_id
-        if isinstance(sim_info_or_sim_id, SimInfo):
-            return sim_info_or_sim_id.get_sim_instance(allow_hidden_flags=ALL_HIDDEN_REASONS)
-        if isinstance(sim_info_or_sim_id, SimInfoBaseWrapper):
-            return CommonSimUtils.get_sim_instance(sim_info_or_sim_id.id)
-        if isinstance(sim_info_or_sim_id, int):
-            sim_info = services.sim_info_manager().get(sim_info_or_sim_id)
+        if sim_identifier is None or isinstance(sim_identifier, Sim):
+            return sim_identifier
+        if isinstance(sim_identifier, SimInfo):
+            return sim_identifier.get_sim_instance(allow_hidden_flags=ALL_HIDDEN_REASONS)
+        if isinstance(sim_identifier, SimInfoBaseWrapper):
+            return CommonSimUtils.get_sim_instance(sim_identifier.id)
+        if isinstance(sim_identifier, int):
+            sim_info = services.sim_info_manager().get(sim_identifier)
             if sim_info is None:
                 return None
             return CommonSimUtils.get_sim_instance(sim_info)
-        return sim_info_or_sim_id
+        return sim_identifier
 
 
 @sims4.commands.Command('s4clib_testing.display_name_of_currently_active_sim', command_type=sims4.commands.CommandType.Live)

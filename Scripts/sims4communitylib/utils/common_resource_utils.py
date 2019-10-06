@@ -15,8 +15,8 @@ from sims4communitylib.modinfo import ModInfo
 
 class CommonResourceUtils:
     """ Utilities for retrieving the Tuning files and instances of various resources. (Objects, Snippets, Statistics, etc.) """
-    @classmethod
-    def load_instance(cls, instance_type: Types, instance_id: int) -> Any:
+    @staticmethod
+    def load_instance(instance_type: Types, instance_id: int) -> Any:
         """
             Load an instance of the specified type.
 
@@ -33,8 +33,8 @@ class CommonResourceUtils:
         instance_manager = CommonResourceUtils.get_instance_manager(instance_type)
         return CommonResourceUtils.load_instance_from_manager(instance_manager, instance_id)
 
-    @classmethod
-    def load_instance_from_manager(cls, instance_manager: InstanceManager, instance_id: int) -> Any:
+    @staticmethod
+    def load_instance_from_manager(instance_manager: InstanceManager, instance_id: int) -> Any:
         """
             Load an instance from the specified InstanceManager.
         :param instance_manager: The InstanceManager an instance will be loaded from.
@@ -43,8 +43,8 @@ class CommonResourceUtils:
         """
         return instance_manager.get(instance_id)
 
-    @classmethod
-    def load_all_instances(cls, instance_type: Types) -> ItemsView[Any, Any]:
+    @staticmethod
+    def load_all_instances(instance_type: Types) -> ItemsView[Any, Any]:
         """
             Load all instances of the specified type.
         :param instance_type: The type of instance being loaded.
@@ -52,9 +52,9 @@ class CommonResourceUtils:
         """
         return CommonResourceUtils.get_instance_manager(instance_type).types.items()
 
-    @classmethod
+    @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=None)
-    def get_instance_manager(cls, instance_manager_type: Types) -> Union[InstanceManager, None]:
+    def get_instance_manager(instance_manager_type: Types) -> Union[InstanceManager, None]:
         """
             Get an InstanceManager for the specified type.
         :param instance_manager_type: The type of InstanceManager to get.
@@ -62,8 +62,8 @@ class CommonResourceUtils:
         """
         return services.get_instance_manager(instance_manager_type)
 
-    @classmethod
-    def get_resource_key(cls, resource_type: Types, instance_id: int) -> Any:
+    @staticmethod
+    def get_resource_key(resource_type: Types, instance_id: int) -> Any:
         """
             Retrieve the resource key of a resource in the format: 00000000:00000000:00000000000000000
 
