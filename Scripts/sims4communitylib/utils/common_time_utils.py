@@ -200,4 +200,4 @@ class CommonTimeUtils:
         """
             Get an instance of the GameClock.
         """
-        return CommonTimeUtils.get_game_clock()
+        return services.game_clock_service()
