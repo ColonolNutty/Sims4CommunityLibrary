@@ -11,7 +11,7 @@ from sims.occult.occult_enums import OccultType
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4communitylib.enums.traits_enum import CommonTraitId
-from sims4communitylib.utils.common_trait_utils import CommonTraitUtils
+from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 
 
 class CommonOccultUtils:

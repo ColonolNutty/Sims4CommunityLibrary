@@ -136,7 +136,7 @@ class CommonSpeciesUtils:
         """
             Determine if a sim is a Large Dog.
         """
-        from sims4communitylib.utils.common_trait_utils import CommonTraitUtils
+        from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId
         return CommonSpeciesUtils.is_dog_species(CommonSpeciesUtils.get_species(sim_info)) and CommonTraitUtils.has_trait(sim_info, CommonTraitId.SPECIES_EXTENDED_LARGE_DOGS)
     
@@ -145,7 +145,7 @@ class CommonSpeciesUtils:
         """
             Determine if a sim is a Small Dog.
         """
-        from sims4communitylib.utils.common_trait_utils import CommonTraitUtils
+        from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId
         return CommonSpeciesUtils.is_dog_species(CommonSpeciesUtils.get_species(sim_info)) and CommonTraitUtils.has_trait(sim_info, CommonTraitId.SPECIES_EXTENDED_SMALL_DOGS)
     
@@ -154,6 +154,6 @@ class CommonSpeciesUtils:
         """
             Determine if a sim is a Cat.
         """
-        from sims4communitylib.utils.common_trait_utils import CommonTraitUtils
+        from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId
         return CommonSpeciesUtils.is_cat_species(CommonSpeciesUtils.get_species(sim_info)) or CommonTraitUtils.has_trait(sim_info, CommonTraitId.SPECIES_CAT)
