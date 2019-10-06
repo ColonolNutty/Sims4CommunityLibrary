@@ -119,6 +119,7 @@ class CommonSimUtils:
 def _s4clib_testing_display_name_of_currently_active_sim(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
     sim_info = CommonSimUtils.get_active_sim_info()
+    # noinspection PyPropertyAccess
     output('Currently Active Sim: {} {}'.format(sim_info.first_name, sim_info.last_name))
 
 
@@ -128,6 +129,7 @@ def _s4clib_testing_display_names_of_all_sims(_connection: int=None):
     output('Showing the names of all sims (This may take awhile).')
     current_count = 1
     for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
+        # noinspection PyPropertyAccess
         output('{}: {} {}'.format(str(current_count), sim_info.first_name, sim_info.last_name))
         current_count += 1
     output('Done showing the names of all sims.')

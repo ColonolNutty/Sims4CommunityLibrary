@@ -39,6 +39,7 @@ class CommonOccultUtils:
         for occult in occult_types:
             if occult in exclude_occult_types:
                 continue
+            # noinspection PyPropertyAccess
             if occult == sim_info.current_occult_types:
                 continue
             if not sim_info.occult_tracker.has_occult_type(occult):

@@ -27,6 +27,7 @@ class CommonAgeUtils:
         if hasattr(sim_info, '_base') and hasattr(sim_info._base, 'age'):
             return sim_info._base.age
         if hasattr(sim_info, 'age'):
+            # noinspection PyPropertyAccess
             return sim_info.age
         if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age'):
             return sim_info.sim_info._base.age

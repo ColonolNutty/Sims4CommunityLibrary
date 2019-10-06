@@ -25,6 +25,7 @@ class CommonGenderUtils:
         if sim_info is None:
             return None
         if hasattr(sim_info, 'gender'):
+            # noinspection PyPropertyAccess
             return sim_info.gender
         if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, 'gender'):
             return sim_info.siminfo.gender
