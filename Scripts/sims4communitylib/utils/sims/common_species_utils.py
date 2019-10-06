@@ -9,7 +9,6 @@ from pprint import pformat
 from typing import Union
 
 from sims.sim_info import SimInfo
-from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims.sim_info_types import Species
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
@@ -22,7 +21,7 @@ class CommonSpeciesUtils:
     """ Utilities for handling sim species. """
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=None)
-    def get_species(sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> Union[Species, None]:
+    def get_species(sim_info: SimInfo) -> Union[Species, None]:
         """
             Retrieve the Species of a sim.
         """
@@ -35,7 +34,7 @@ class CommonSpeciesUtils:
         return None
     
     @staticmethod
-    def set_species(sim_info: Union[SimInfo, SimInfoBaseWrapper], species: Union[Species, int]) -> bool:
+    def set_species(sim_info: SimInfo, species: Union[Species, int]) -> bool:
         """
             Set the Species of a sim.
         """
@@ -47,16 +46,16 @@ class CommonSpeciesUtils:
             return False
     
     @staticmethod
-    def are_same_species(sim_info: Union[SimInfo, SimInfoBaseWrapper], other_sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
+    def are_same_species(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:
         """
             Determine if two sims are of the same species.
     
             Note: Also checks Extended Species (Large Dog, Small Dog, etc.)
         """
         if sim_info is None or other_sim_info is None:
-            log.debug('Either sim info or target is None')
+            log.debug('Either sim_info or other_sim_info is None')
             return False
-    
+        log.format_with_message('Checking if sims are the same species.', sim_info=sim_info, other_sim_info=other_sim_info)
         species_one = CommonSpeciesUtils.get_species(sim_info)
         species_two = CommonSpeciesUtils.get_species(other_sim_info)
         if species_one != species_two:
@@ -64,19 +63,19 @@ class CommonSpeciesUtils:
             return False
     
         if CommonSpeciesUtils.is_human(sim_info):
-            log.debug('Both are human.')
+            log.debug('Both sims are human.')
             return True
     
         if CommonSpeciesUtils.is_cat(sim_info):
-            log.debug('Both are cats.')
+            log.debug('Both sims are cats.')
             return True
     
         if CommonSpeciesUtils.is_large_dog(sim_info) and CommonSpeciesUtils.is_large_dog(other_sim_info):
-            log.debug('Both are large dogs.')
+            log.debug('Both sims are large dogs.')
             return True
     
         if CommonSpeciesUtils.is_small_dog(sim_info) and CommonSpeciesUtils.is_small_dog(other_sim_info):
-            log.debug('Both are small dogs.')
+            log.debug('Both sims are small dogs.')
             return True
     
         log.debug('Sims are not the same species.')
@@ -111,28 +110,28 @@ class CommonSpeciesUtils:
         return species == Species.CAT
     
     @staticmethod
-    def is_dog(sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
+    def is_dog(sim_info: SimInfo) -> bool:
         """
             Determine if a sim is a Dog.
         """
         return CommonSpeciesUtils.get_species(sim_info) == Species.DOG
     
     @staticmethod
-    def is_human(sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
+    def is_human(sim_info: SimInfo) -> bool:
         """
             Determine if a sim is a Human.
         """
         return CommonSpeciesUtils.is_human_species(CommonSpeciesUtils.get_species(sim_info))
     
     @staticmethod
-    def is_pet(sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
+    def is_pet(sim_info: SimInfo) -> bool:
         """
             Determine if a sim is a Pet.
         """
         return CommonSpeciesUtils.is_pet_species(CommonSpeciesUtils.get_species(sim_info))
     
     @staticmethod
-    def is_large_dog(sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
+    def is_large_dog(sim_info: SimInfo) -> bool:
         """
             Determine if a sim is a Large Dog.
         """
@@ -141,7 +140,7 @@ class CommonSpeciesUtils:
         return CommonSpeciesUtils.is_dog_species(CommonSpeciesUtils.get_species(sim_info)) and CommonTraitUtils.has_trait(sim_info, CommonTraitId.SPECIES_EXTENDED_LARGE_DOGS)
     
     @staticmethod
-    def is_small_dog(sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
+    def is_small_dog(sim_info: SimInfo) -> bool:
         """
             Determine if a sim is a Small Dog.
         """
@@ -150,7 +149,7 @@ class CommonSpeciesUtils:
         return CommonSpeciesUtils.is_dog_species(CommonSpeciesUtils.get_species(sim_info)) and CommonTraitUtils.has_trait(sim_info, CommonTraitId.SPECIES_EXTENDED_SMALL_DOGS)
     
     @staticmethod
-    def is_cat(sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
+    def is_cat(sim_info: SimInfo) -> bool:
         """
             Determine if a sim is a Cat.
         """

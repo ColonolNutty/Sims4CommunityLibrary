@@ -9,7 +9,6 @@ from pprint import pformat
 from typing import Union
 
 from sims.sim_info import SimInfo
-from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims.sim_info_types import Gender
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
@@ -19,7 +18,7 @@ class CommonGenderUtils:
     """ Utilities for handling sim genders. """
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=None)
-    def get_gender(sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> Union[Gender, None]:
+    def get_gender(sim_info: SimInfo) -> Union[Gender, None]:
         """
             Retrieve the Gender of a sim.
         """
@@ -32,7 +31,7 @@ class CommonGenderUtils:
         return None
 
     @staticmethod
-    def set_gender(sim_info: Union[SimInfo, SimInfoBaseWrapper], gender: Union[int, Gender]) -> bool:
+    def set_gender(sim_info: SimInfo, gender: Union[int, Gender]) -> bool:
         """
             Set the Gender of a sim.
         """
@@ -44,7 +43,7 @@ class CommonGenderUtils:
             return False
 
     @staticmethod
-    def are_same_gender(sim_info: Union[SimInfo, SimInfoBaseWrapper], other_sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
+    def are_same_gender(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:
         """
             Determine if two sims are the same Gender.
         """
@@ -65,14 +64,14 @@ class CommonGenderUtils:
         return gender == Gender.MALE
 
     @staticmethod
-    def is_female(sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
+    def is_female(sim_info: SimInfo) -> bool:
         """
             Determine if a sim is Female.
         """
         return CommonGenderUtils.is_female_gender(CommonGenderUtils.get_gender(sim_info))
 
     @staticmethod
-    def is_male(sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
+    def is_male(sim_info: SimInfo) -> bool:
         """
             Determine if a sim is Male.
         """

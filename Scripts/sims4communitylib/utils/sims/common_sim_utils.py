@@ -11,7 +11,6 @@ from typing import Iterator, Callable, Union
 from sims.sim import Sim
 from sims.sim_info import SimInfo
 from objects import ALL_HIDDEN_REASONS
-from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 
 
 class CommonSimUtils:
@@ -72,7 +71,7 @@ class CommonSimUtils:
             yield sim_info
 
     @staticmethod
-    def get_sim_id(sim_identifier: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> int:
+    def get_sim_id(sim_identifier: Union[int, Sim, SimInfo]) -> int:
         """
             Retrieve a SimId (int) from a sim identifier.
         """
@@ -82,16 +81,16 @@ class CommonSimUtils:
             return sim_identifier
         if isinstance(sim_identifier, Sim):
             return sim_identifier.sim_id
-        if isinstance(sim_identifier, SimInfo) or isinstance(sim_identifier, SimInfoBaseWrapper):
+        if isinstance(sim_identifier, SimInfo):
             return sim_identifier.id
         return sim_identifier
 
     @staticmethod
-    def get_sim_info(sim_identifier: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> Union[SimInfoBaseWrapper, SimInfo, None]:
+    def get_sim_info(sim_identifier: Union[int, Sim, SimInfo]) -> Union[SimInfo, None]:
         """
             Retrieve a SimInfo instance from a sim identifier.
         """
-        if sim_identifier is None or isinstance(sim_identifier, SimInfo) or isinstance(sim_identifier, SimInfoBaseWrapper):
+        if sim_identifier is None or isinstance(sim_identifier, SimInfo):
             return sim_identifier
         if isinstance(sim_identifier, Sim):
             return sim_identifier.sim_info
@@ -100,7 +99,7 @@ class CommonSimUtils:
         return sim_identifier
 
     @staticmethod
-    def get_sim_instance(sim_identifier: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> Union[Sim, None]:
+    def get_sim_instance(sim_identifier: Union[int, Sim, SimInfo]) -> Union[Sim, None]:
         """
             Retrieve a Sim instance from a sim identifier.
         """
@@ -108,8 +107,6 @@ class CommonSimUtils:
             return sim_identifier
         if isinstance(sim_identifier, SimInfo):
             return sim_identifier.get_sim_instance(allow_hidden_flags=ALL_HIDDEN_REASONS)
-        if isinstance(sim_identifier, SimInfoBaseWrapper):
-            return CommonSimUtils.get_sim_instance(sim_identifier.id)
         if isinstance(sim_identifier, int):
             sim_info = services.sim_info_manager().get(sim_identifier)
             if sim_info is None:
@@ -119,14 +116,14 @@ class CommonSimUtils:
 
 
 @sims4.commands.Command('s4clib_testing.display_name_of_currently_active_sim', command_type=sims4.commands.CommandType.Live)
-def _common_testing_display_name_of_currently_active_sim(_connection: int=None):
+def _s4clib_testing_display_name_of_currently_active_sim(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
     sim_info = CommonSimUtils.get_active_sim_info()
     output('Currently Active Sim: {} {}'.format(sim_info.first_name, sim_info.last_name))
 
 
 @sims4.commands.Command('s4clib_testing.display_names_of_all_sims', command_type=sims4.commands.CommandType.Live)
-def _common_testing_display_names_of_all_sims(_connection: int=None):
+def _s4clib_testing_display_names_of_all_sims(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
     output('Showing the names of all sims (This may take awhile).')
     current_count = 1
