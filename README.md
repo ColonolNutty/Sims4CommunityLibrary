@@ -38,8 +38,17 @@ Current Features:
 - Custom Dialogs
   - Ok/Cancel - Prompt the player with a message and have them choose either Ok or Cancel
     - The text for both the Ok and the Cancel buttons can be custom text as well. (They could be Yes/No as one custom example)
-  - Object Picker 
+  - Choose Item Dialog 
     - Prompt the player to choose an item from a list of items.
+    - Custom icons can be used.
+    - A possible use of this could be to display settings of some kind.
+  - Custom Icons available for use with dialogs.
+    - Right Arrow
+    - Navigate Into Arrow
+    - Question Mark
+    - Six Sided Dice
+    - Checked Box
+    - Unchecked Box
 - Custom Notifications
   - Basic Notification - Display a notification with a title and description of varying urgency.
 - Interactions
@@ -48,10 +57,38 @@ Current Features:
     - Terrain
     - Ocean
     - Objects (Sims, Furniture, etc.)
+  - Custom Interactions
+    - Create interactions to perform custom functionality
+    - Interaction Types:
+      - Immediate Super Interaction - An interaction that doesn't require a target to perform. It is started immediately and without an animation.
+      - Super Interaction - Like the Immediate Super interaction but these require a target to perform. (sim_Chat is one example of a Super Interaction)
+      - Mixer Interaction - Use this for custom Mixer interactions.
+      - Social Mixer Interaction - Use this for custom Social Mixer interactions.
+      - Terrain Interaction - Use for interactions that appear when clicking on the ground.
+    - Perform logical checks to determine whether or not to show an interaction
+      - Or display an interaction as disabled, with a displayed tooltip that shows when the player hovers the interaction.
+    - Run Python code when an interaction is started, cancelled, or has finished.
+    - Custom Interaction Tooltips
+      - Display tooltips on interactions that display on hover.
+      - Locate CommonInteraction for an example of how to utilize custom tooltips in your own interactions.
 - Utilities
   - Sim utilities
     - Get the Active Sim
-    - Get All Sims nearby
+    - Get Sim Info, Sim Instance, and Sim Ids
+    - Get All Sims nearby and filter which types of sims to get (Age, Species, Occult, Traits, Buffs, etc.)
+    - Occults - Check Occult Types of sims.
+    - Ages - Get/Set/Check Ages of sims.
+    - Genders - Get/Set/Check Genders of sims.
+    - Species - Get/Set/Check Species of sims.
+    - Buffs - Add/Remove/Check Buffs of sims.
+    - Traits - Add/Remove/Check Traits of sims.
+    - Sim State - Check various states of sims. (Wearing towel, Dying, etc.)
+  - CAS
+    - Outfit - Set/Get/Update/Check the current outfit of sims.
+  - Components - Get various components of objects (Statistics, Traits, Buffs, etc.)
+  - Resources - Load Resources or Tuning files by their identifiers. (Buffs, Traits, Statistics, Snippets, etc.)
+  - Type utilities - Determine the type of objects without needing to use isinstance or having a reference to the type itself in your own code.
+  - Time - Manage time. Pause the game, get/change the current game speed, get/set the time of day, etc.
   - Collection utilities - Determine if an object is a collection, combine collections, flatten collections, etc.
   - Injection - Inject custom functionality into functions
   - IO (Input/Output) - Write string data to a file or load string data from a file.
@@ -63,6 +100,8 @@ Current Features:
       - Blue
       - Green
       - Red
+    - Create Localized Tooltips - Use to display tooltips on interactions (while also displaying the interaction)
+      - These can be useful to give more information to the player about why an interaction cannot be performed, instead of simply hiding interactions.
 - Testing Framework
   - Write tests to test your python code and run the tests via a command within the game.
   - The results will be logged to the 'Documents/The Sims 4/' folder
@@ -77,11 +116,8 @@ Planned Features:
 - Exception Handling (stack trace customization)
 - Services & Utilities:
   - Weather - Detect and change weather conditions
-  - Sims - Get all nearby sims and filter which types of sims to get (Age, Species, Occult, Traits, Buffs, Statistics, Motive Levels)
   - Club - Detect sims that are part of a club, whether they are at a club gathering, whether their club encourages or discourages certain things
   - CAS Parts Modification (Functions to equip/unequip or list cas parts, etc.)
-  - Buff Management (Detect buffs currently on sims, or add your own)
-  - Trait Management (Detect traits currently on sims or add your own)
   - Statistic Management (Manage statistics such as motives, mood, etc.)
   - Motive Management (Change motive levels and moods of sims)
 - Event handling
@@ -101,11 +137,9 @@ Planned Features:
     - Notifications with Custom Buttons.
   - Story Dialogs (Add custom buttons, add sim icons)
   - Custom Dialog Boxes
-    - The ability to formulate a window that could contain settings or a list of items.
     - Prompt users to input Numbers/Text
     - Prompt the user to select from a list of items.
-  - Sim Picker - Have the player choose a sim or a number of sims.
-  - Object Picker - Have the player choose multiple things from a list of items.
+  - Sim Picker - Prompt the player to choose a sim or a number of sims from a dialog.
 
 
 Installation:
@@ -125,3 +159,18 @@ Note for Modders:
 
 - If you have ideas for additions to add or want one of the planned features sooner rather than later, I'm all ears! Let's work together to create a library that we all can use!
 
+
+What is the workflow for working with S4CL?
+- Simply copy the source folder Scripts/sims4communitylibrary into your own PyCharm project.
+- Right click the copied folder -> Mark Directory as -> Sources Root
+- Once you've done this you just have to import sims4communitylibrary as you would with any other python files
+- Ensure you list in the description of your mod a link to the github releases (You may even link a specific release to ensure compatibility.)
+- YOU DO NOT HAVE MY PERMISSION TO INCLUDE S4CL IN YOUR OWN MOD. So don't do it.
+
+Copyright:
+
+The Sims 4 Community Library is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International public license (CC BY-NC-ND 4.0).
+https://creativecommons.org/licenses/by-nc-nd/4.0/
+https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+
+Copyright (c) COLONOLNUTTY
