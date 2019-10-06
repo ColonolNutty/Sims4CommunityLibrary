@@ -6,6 +6,9 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Any
+from sims.sim import Sim
+from sims.sim_info import SimInfo
+from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 try:
     from objects.pools.ocean import Ocean
 except ModuleNotFoundError:
@@ -16,9 +19,6 @@ from objects.game_object import GameObject
 from objects.pools.pool import SwimmingPool
 from objects.script_object import ScriptObject
 from objects.terrain import Terrain
-from sims.sim import Sim
-from sims.sim_info import SimInfo
-from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 
 
 class CommonTypeUtils:
