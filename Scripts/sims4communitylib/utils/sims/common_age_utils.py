@@ -195,3 +195,17 @@ class CommonAgeUtils:
             Determine if a sim is either a Young Adult or an Adult.
         """
         return CommonAgeUtils.is_young_adult(sim_info) or CommonAgeUtils.is_mature_adult(sim_info)
+
+    @staticmethod
+    def is_baby_child_or_toddler(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is a Baby, a Toddler, or a Child.
+        """
+        return CommonAgeUtils.is_baby(sim_info) or CommonAgeUtils.is_toddler(sim_info) or CommonAgeUtils.is_child(sim_info)
+
+    @staticmethod
+    def is_teen_adult_or_elder(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is a Teen, a Young Adult, an Adult, or an Elder.
+        """
+        return CommonAgeUtils.is_teen(sim_info) or CommonAgeUtils.is_adult(sim_info) or CommonAgeUtils.is_elder(sim_info)
