@@ -29,14 +29,7 @@ class CommonOccultUtils:
         if sim_info is None:
             return tuple()
         yield sim_info
-        occult_types = (
-            OccultType.HUMAN,
-            OccultType.ALIEN,
-            OccultType.VAMPIRE,
-            OccultType.MERMAID,
-            OccultType.WITCH
-        )
-        for occult in occult_types:
+        for occult in OccultType.values:
             if occult in exclude_occult_types:
                 continue
             # noinspection PyPropertyAccess
