@@ -8,8 +8,10 @@ Copyright (c) COLONOLNUTTY
 from pprint import pformat
 
 import sims4.commands
-from typing import Tuple
-from sims.outfits.outfit_enums import OutfitCategory
+from typing import Tuple, Union, Dict
+
+from cas.cas import OutfitData
+from sims.outfits.outfit_enums import OutfitCategory, BodyType
 from sims.sim_info import SimInfo
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
@@ -212,6 +214,29 @@ class CommonOutfitUtils:
             Retrieve the current OutfitCategory and Index of the current sim.
         """
         return sim_info.get_current_outfit()
+
+    @staticmethod
+    def get_outfit_data(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> OutfitData:
+        """
+            Retrieve OutfitData for the specified OutfitCategory and Index of a sim.
+        :param sim_info: The sim to retrieve outfit data of.
+        :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
+        """
+        if outfit_category_and_index is None:
+            outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+        return sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
+
+    @staticmethod
+    def get_outfit_parts(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[BodyType, int]:
+        """
+            Retrieve Outfit Parts for the specified OutfitCategory and Index of a sim.
+        :param sim_info: The sim to retrieve outfit parts of.
+        :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
+        """
+        outfit_data = sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
+        if outfit_data is None:
+            return {}
+        return dict(zip(list(outfit_data.body_types), list(outfit_data.part_ids)))
 
     @staticmethod
     def set_current_outfit(sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]):

@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import services
-from typing import ItemsView, Any, Union
+from typing import ItemsView, Any, Union, Tuple
 from sims4.resources import get_resource_key, Types
 from sims4.tuning.instance_manager import InstanceManager
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
@@ -78,3 +78,24 @@ class CommonResourceUtils:
         :return: The resource key of an instance (format: 00000000(Type):00000000(Group):00000000000000000(Instance Guid)) or None if no instance was found.
         """
         return get_resource_key(instance_id, resource_type)
+
+    @staticmethod
+    def load_instances_with_any_tags(resource_type: Types, tags: Tuple[str]) -> Tuple[Any]:
+        """
+            Retrieve all resources that contain the specified tag names within their tuning file.
+
+            Possible Usages:
+            - Load all Snippet files containing properties with any of the specified tags.
+
+        :param resource_type: The type of resource being loaded.
+        :param tags: A collection of tag names to locate within a tuning file.
+        :return: A collection of resources that contain any of the specified tags.
+        """
+        instances = []
+        for (_, instance_class) in CommonResourceUtils.load_all_instances(resource_type):
+            for tag in tags:
+                if not hasattr(instance_class, tag):
+                    continue
+                instances.append(instance_class)
+                break
+        return tuple(instances)

@@ -11,13 +11,17 @@ class CommonService:
     """
         A class used as a common structure for singleton services.
     """
-    def __init__(self):
-        pass
-
     @classmethod
     def get(cls) -> 'CommonService':
         """
-        Create an instance of the service
+            Retrieve an instance of the service
         :return: An instance of the service
         """
-        raise NotImplementedError()
+        if getattr(cls, '_SERVICE', None) is None:
+            setattr(cls, '_SERVICE', cls())
+        return getattr(cls, '_SERVICE')
+
+    def __new__(cls, *args, **kwargs) -> 'CommonService':
+        if getattr(cls, '_SERVICE', None) is None:
+            setattr(cls, '_SERVICE', super().__new__(cls))
+        return getattr(cls, '_SERVICE')

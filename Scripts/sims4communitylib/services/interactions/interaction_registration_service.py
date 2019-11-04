@@ -62,25 +62,12 @@ class CommonScriptObjectInteractionHandler(CommonInteractionHandler):
 
 class CommonInteractionRegistry(CommonService):
     """ A registry used to register interactions to specific places, whether they are script objects, terrain, or what have you. """
-    _REGISTRY: 'CommonInteractionRegistry' = None
-
     def __init__(self):
-        super().__init__()
         self._interaction_handlers = {
             CommonInteractionType.ON_TERRAIN_LOAD: [],
             CommonInteractionType.ON_OCEAN_LOAD: [],
             CommonInteractionType.ON_SCRIPT_OBJECT_LOAD: []
         }
-
-    @classmethod
-    def get(cls) -> 'CommonInteractionRegistry':
-        """
-            Get an instance of the service
-        :return: An instance of the service
-        """
-        if CommonInteractionRegistry._REGISTRY is None:
-            CommonInteractionRegistry._REGISTRY = CommonInteractionRegistry()
-        return CommonInteractionRegistry._REGISTRY
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
     def on_script_object_add(self, script_object: ScriptObject, *args, **kwargs):

@@ -48,22 +48,9 @@ class CommonTestService(CommonService):
                 result = one + two
                 CommonAssertionUtils.are_equal(result, expected_value, message='{} plus {} did not equal {}!'.format(one, two, expected_value))
     """
-    _COMMON_TEST_SERVICE = None
-
     def __init__(self):
-        super().__init__()
         self._tests = dict()
         self._test_count = 0
-
-    @classmethod
-    def get(cls) -> 'CommonTestService':
-        """
-        Get an instance of the service
-        :return: An instance of the service
-        """
-        if CommonTestService._COMMON_TEST_SERVICE is None:
-            CommonTestService._COMMON_TEST_SERVICE = CommonTestService()
-        return CommonTestService._COMMON_TEST_SERVICE
 
     def add_test(self, test_name: str, test_function: Callable[..., Any], class_name: str=None):
         """
