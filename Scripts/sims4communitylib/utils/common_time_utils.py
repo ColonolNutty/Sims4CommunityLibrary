@@ -7,7 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 import services
 import sims4.commands
-from clock import ClockSpeedMode, ClockSpeedMultipliers, GameClock
+from clock import ClockSpeedMode, GameClock, ClockSpeedMultiplierType
 from date_and_time import DateAndTime
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
@@ -80,7 +80,7 @@ class CommonTimeUtils:
         return CommonTimeUtils.get_game_clock().clock_speed
 
     @staticmethod
-    def get_clock_speed_scale() -> ClockSpeedMultipliers:
+    def get_clock_speed_scale() -> ClockSpeedMultiplierType:
         """
             Retrieve the current clock speed multiplier.
         """
