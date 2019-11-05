@@ -233,9 +233,11 @@ class CommonOutfitUtils:
         :param sim_info: The sim to retrieve outfit parts of.
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
         """
+        if outfit_category_and_index is None:
+            outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
         outfit_data = sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
         if outfit_data is None:
-            return {}
+            return dict()
         return dict(zip(list(outfit_data.body_types), list(outfit_data.part_ids)))
 
     @staticmethod

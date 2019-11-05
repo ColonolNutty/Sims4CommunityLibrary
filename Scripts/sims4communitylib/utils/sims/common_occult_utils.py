@@ -76,6 +76,13 @@ class CommonOccultUtils:
         return False
 
     @staticmethod
+    def is_witch(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is a Mermaid
+        """
+        return CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_WITCH)
+
+    @staticmethod
     def is_mermaid(sim_info: SimInfo) -> bool:
         """
             Determine if a sim is a Mermaid

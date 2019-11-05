@@ -46,7 +46,7 @@ class CommonEnumInt(int):
         return self.value.__eq__(other_value)
 
     def __repr__(self):
-        return '{}'.format(self._class_name, self.name)
+        return '{}.{}'.format(self._class_name, self.name)
 
     def __str__(self):
         return self.__repr__()

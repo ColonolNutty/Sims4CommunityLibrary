@@ -5,6 +5,8 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+# noinspection PyUnresolvedReferences
+import _resourceman
 import services
 from typing import ItemsView, Any, Union, Tuple
 from sims4.resources import get_resource_key, Types
@@ -63,7 +65,7 @@ class CommonResourceUtils:
         return services.get_instance_manager(instance_manager_type)
 
     @staticmethod
-    def get_resource_key(resource_type: Types, instance_id: int) -> Any:
+    def get_resource_key(resource_type: Types, instance_id: int) -> _resourceman.Key:
         """
             Retrieve the resource key of a resource in the format: 00000000:00000000:00000000000000000
 

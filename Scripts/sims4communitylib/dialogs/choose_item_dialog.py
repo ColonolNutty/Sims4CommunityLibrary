@@ -69,12 +69,13 @@ class CommonChooseItemDialog:
         self.list_items += (item,)
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
-    def show(self, on_item_chosen: Callable[[Any, CommonChooseItemResult], Any]=CommonFunctionUtils.noop):
+    def show(self, on_item_chosen: Callable[[Any, CommonChooseItemResult], Any]=CommonFunctionUtils.noop, picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT):
         """
             Show the dialog and invoke the callbacks upon the player selecting an item.
         :param on_item_chosen: Invoked upon the player choosing an item from the list.
+        :param picker_type: Determines how the items appear in the dialog.
         """
-        _dialog = self._create_dialog()
+        _dialog = self._create_dialog(picker_type=picker_type)
         if _dialog is None:
             return
 
@@ -91,13 +92,13 @@ class CommonChooseItemDialog:
         _dialog.show_dialog()
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=None)
-    def _create_dialog(self) -> Union[UiObjectPicker, None]:
+    def _create_dialog(self, picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT) -> Union[UiObjectPicker, None]:
         return UiObjectPicker.TunableFactory().default(CommonSimUtils.get_active_sim_info(),
                                                        text=lambda *_, **__: self.description,
                                                        title=lambda *_, **__: self.title,
                                                        min_selectable=1,
                                                        max_selectable=1,
-                                                       picker_type=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT)
+                                                       picker_type=picker_type)
 
 
 @sims4.commands.Command('s4clib_testing.show_choose_item_dialog', command_type=sims4.commands.CommandType.Live)
