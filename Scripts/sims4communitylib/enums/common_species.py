@@ -21,6 +21,7 @@ class CommonSpecies(enum.Int):
 
     @staticmethod
     def get_species(sim_info: SimInfo) -> int:
+        """ Retrieve the CommonSpecies of a sim. Use this instead of CommonSpeciesUtils.get_species to determine a more specific species. """
         from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
         if CommonSpeciesUtils.is_human(sim_info):
             return CommonSpecies.HUMAN
