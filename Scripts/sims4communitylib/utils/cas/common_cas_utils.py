@@ -11,7 +11,12 @@ from cas.cas import get_caspart_bodytype
 from protocolbuffers import S4Common_pb2, Outfits_pb2
 from sims.outfits.outfit_enums import OutfitCategory, BodyType
 from sims.sim_info import SimInfo
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
+from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+
+log = CommonLogRegistry.get().register_log(ModInfo.MOD_NAME, 's4cl_common_cas_utils')
 
 
 class CommonCASUtils:
@@ -25,7 +30,7 @@ class CommonCASUtils:
         :param cas_part_id: A Decimal identifier of the CAS part to locate.
         :return: True if the CAS part has been loaded by the game, False if not.
         """
-        return CommonCASUtils.get_body_type_of_cas_part(cas_part_id) > BodyType.NONE
+        return CommonCASUtils.get_body_type_of_cas_part(cas_part_id) > 0
 
     @staticmethod
     def get_body_type_of_cas_part(cas_part_id: int) -> BodyType:
@@ -37,6 +42,7 @@ class CommonCASUtils:
         return get_caspart_bodytype(cas_part_id)
 
     @staticmethod
+    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
     def attach_cas_part_to_sim(sim_info: SimInfo, cas_part_id: int, body_type: BodyType=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """
             Add a cas part to the specified body type of a sim.
@@ -46,72 +52,114 @@ class CommonCASUtils:
         :param outfit_category_and_index: The outfit category and index of the sim to be added to. Default is the sims current outfit.
         :return: True if successfully attached to the sim, False if not.
         """
+        log.format_with_message('Attempting to attach cas part to sim', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
         if cas_part_id == -1:
+            log.debug('No cas part id.')
             return False
+        log.debug('Saving outfits.')
         saved_outfits = sim_info.save_outfits()
         if outfit_category_and_index is None:
             outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+        log.format_with_message('Using outfit category and index.', outfit_category_and_index=outfit_category_and_index)
         outfit_data = CommonOutfitUtils.get_outfit_data(sim_info, outfit_category_and_index=outfit_category_and_index)
-        outfit_identifier = frozenset(dict(zip(list(outfit_data.body_types_list.body_types), list(outfit_data.parts.ids))).items())
-        if body_type == BodyType.NONE:
+        outfit_identifier = frozenset(dict(zip(list(outfit_data.body_types), list(outfit_data.part_ids))).items())
+        if body_type is None or body_type == BodyType.NONE:
             body_type = CommonCASUtils.get_body_type_of_cas_part(cas_part_id)
+        log.format_with_message('Using body_type', body_type=body_type)
         for outfit in saved_outfits.outfits:
+            log.format_with_message('Attempting to update outfit.', outfit=outfit)
             # noinspection PyUnresolvedReferences
             _outfit_identifier = frozenset(dict(zip(list(outfit.body_types_list.body_types), list(outfit.parts.ids))).items())
             if int(outfit.category) != int(outfit_category_and_index[0]) or outfit.outfit_id != outfit_data.outfit_id or _outfit_identifier != outfit_identifier:
+                log.debug('Outfit is not the outfit we want to update, skipping.')
                 continue
-            outfit.parts = S4Common_pb2.IdList()
-            # noinspection PyUnresolvedReferences
-            outfit.parts.ids.extend([cas_part_id])
-            outfit.body_types_list = Outfits_pb2.BodyTypesList()
-            # noinspection PyUnresolvedReferences
-            outfit.body_types_list.body_types.extend([body_type])
-        sim_info._base.outfits = saved_outfits.SerializeToString()
-        sim_info._base.outfit_type_and_index = outfit_category_and_index
-        CommonOutfitUtils.resend_outfits(sim_info)
-        return True
-
-    @staticmethod
-    def detach_cas_part_from_sim(sim_info: SimInfo, cas_part_id: int, body_type: BodyType=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
-        """
-            Remove the cas part attached to the specified body type of a sim.
-        :param sim_info: The SimInfo of a sim to remove the cas part from.
-        :param cas_part_id: A decimal identifier of the CAS part to detach from the sim.
-        :param body_type: The body type the cas part will be detached from. Default is the body type of the cas part itself.
-        :param outfit_category_and_index: The outfit category and index of the sim to be added to. Default is the sims current outfit.
-        :return: True if successfully detached, False if not.
-        """
-        saved_outfits = sim_info.save_outfits()
-        if outfit_category_and_index is None:
-            outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
-        outfit_data = CommonOutfitUtils.get_outfit_data(sim_info, outfit_category_and_index=outfit_category_and_index)
-        outfit_identifier = frozenset(dict(zip(list(outfit_data.body_types_list.body_types), list(outfit_data.parts.ids))).items())
-        if body_type == BodyType.NONE:
-            body_type = CommonCASUtils.get_body_type_of_cas_part(cas_part_id)
-        for outfit in saved_outfits.outfits:
-            # noinspection PyUnresolvedReferences
-            _outfit_identifier = frozenset(dict(zip(list(outfit.body_types_list.body_types), list(outfit.parts.ids))).items())
-            if int(outfit.category) != int(outfit_category_and_index[0]) or outfit.outfit_id != outfit_data.outfit_id or _outfit_identifier != outfit_identifier:
-                continue
+            log.debug('Updating outfit.')
             # noinspection PyUnresolvedReferences
             previous_cas_parts_list = list(outfit.parts.ids)
-            previous_cas_parts_list.remove(cas_part_id)
+            if cas_part_id not in previous_cas_parts_list:
+                log.debug('Adding cas part id.')
+                previous_cas_parts_list.append(cas_part_id)
             outfit.parts = S4Common_pb2.IdList()
             # noinspection PyUnresolvedReferences
             outfit.parts.ids.extend(previous_cas_parts_list)
             # noinspection PyUnresolvedReferences
             previous_body_types_list = list(outfit.body_types_list.body_types)
-            previous_body_types_list.remove(body_type)
+            if body_type not in previous_body_types_list:
+                log.debug('Adding body type.')
+                previous_body_types_list.append(body_type)
             outfit.body_types_list = Outfits_pb2.BodyTypesList()
             # noinspection PyUnresolvedReferences
             outfit.body_types_list.body_types.extend(previous_body_types_list)
+            log.debug('Done updating outfit.')
+        log.debug('Done updating outfits.')
         sim_info._base.outfits = saved_outfits.SerializeToString()
         sim_info._base.outfit_type_and_index = outfit_category_and_index
+        log.debug('Resending outfits.')
         CommonOutfitUtils.resend_outfits(sim_info)
+        log.debug('Done attaching cas part to sim.')
         return True
 
     @staticmethod
-    def has_cas_part_attached(sim_info: SimInfo, cas_part_id: int, body_type: BodyType=BodyType.NONE, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    def detach_cas_part_from_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, None]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+        """
+            Remove the cas part attached to the specified body type of a sim.
+        :param sim_info: The SimInfo of a sim to remove the cas part from.
+        :param cas_part_id: A decimal identifier of the CAS part to detach from the sim.
+        :param body_type: The body type the cas part will be detached from. Default is the body type of the cas part itself.
+        If body_type is None, the cas part will be removed from all body types.
+        :param outfit_category_and_index: The outfit category and index of the sim to be added to. Default is the sims current outfit.
+        :return: True if successfully detached, False if not.
+        """
+        log.format_with_message('Attempting to remove cas part from sim', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
+        if cas_part_id == -1:
+            log.debug('No cas part id.')
+            return False
+        log.debug('Saving outfits.')
+        saved_outfits = sim_info.save_outfits()
+        if outfit_category_and_index is None:
+            outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+        log.format_with_message('Using outfit category and index.', outfit_category_and_index=outfit_category_and_index)
+        outfit_data = CommonOutfitUtils.get_outfit_data(sim_info, outfit_category_and_index=outfit_category_and_index)
+        outfit_identifier = frozenset(dict(zip(list(outfit_data.body_types), list(outfit_data.part_ids))).items())
+        if body_type == BodyType.NONE:
+            body_type = CommonCASUtils.get_body_type_of_cas_part(cas_part_id)
+        log.format_with_message('Using body_type', body_type=body_type)
+        for outfit in saved_outfits.outfits:
+            log.format_with_message('Attempting to update outfit.', outfit=outfit)
+            # noinspection PyUnresolvedReferences
+            _outfit_identifier = frozenset(dict(zip(list(outfit.body_types_list.body_types), list(outfit.parts.ids))).items())
+            if int(outfit.category) != int(outfit_category_and_index[0]) or outfit.outfit_id != outfit_data.outfit_id or _outfit_identifier != outfit_identifier:
+                log.debug('Outfit is not the outfit we want to update, skipping.')
+                continue
+            log.debug('Updating outfit.')
+            # noinspection PyUnresolvedReferences
+            previous_cas_parts_list = list(outfit.parts.ids)
+            if cas_part_id in previous_cas_parts_list:
+                log.debug('Removing cas part id.')
+                previous_cas_parts_list.remove(cas_part_id)
+            outfit.parts = S4Common_pb2.IdList()
+            # noinspection PyUnresolvedReferences
+            outfit.parts.ids.extend(previous_cas_parts_list)
+            # noinspection PyUnresolvedReferences
+            previous_body_types_list = list(outfit.body_types_list.body_types)
+            if body_type is not None and body_type in previous_body_types_list:
+                log.debug('Removing body type.')
+                previous_body_types_list.remove(body_type)
+            outfit.body_types_list = Outfits_pb2.BodyTypesList()
+            # noinspection PyUnresolvedReferences
+            outfit.body_types_list.body_types.extend(previous_body_types_list)
+            log.debug('Done updating outfit.')
+        log.debug('Done updating outfits.')
+        sim_info._base.outfits = saved_outfits.SerializeToString()
+        sim_info._base.outfit_type_and_index = outfit_category_and_index
+        log.debug('Resending outfits.')
+        CommonOutfitUtils.resend_outfits(sim_info)
+        log.debug('Done attaching cas part to sim.')
+        return True
+
+    @staticmethod
+    def has_cas_part_attached(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, None]=BodyType.NONE, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
         """
             Determine if a sim has a cas part attached to their outfit.
         :param sim_info: The SimInfo of the sim to check.
@@ -121,16 +169,24 @@ class CommonCASUtils:
         :param outfit_category_and_index: The outfit category and index of the sim to be added to. Default is the sims current outfit.
         :return: True if the sims outfit contains any of the specified cas parts.
         """
+        log.format_with_message('Checking if cas part is attached to sim.', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
         if body_type == BodyType.NONE:
             body_type = CommonCASUtils.get_body_type_of_cas_part(cas_part_id)
         if outfit_category_and_index is None:
             outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+        log.format(body_type=body_type, outfit_category_and_index=outfit_category_and_index)
         body_parts = CommonOutfitUtils.get_outfit_parts(sim_info, outfit_category_and_index)
         if not body_parts:
+            log.debug('No body parts found.')
             return False
+        log.format_with_message('Found body parts from outfit.', body_parts=body_parts)
         if body_type is None:
+            log.debug('No body type specified.')
             return cas_part_id in body_parts.values()
         if body_type not in body_parts:
+            log.debug('Specified body type not found within body parts.')
             return False
+        log.debug('Body type found within sims outfit parts.')
         attached_cas_part_id = body_parts[body_type]
+        log.format(attached_cas_part_id=attached_cas_part_id)
         return cas_part_id == attached_cas_part_id
