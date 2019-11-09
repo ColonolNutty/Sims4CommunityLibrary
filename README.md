@@ -29,7 +29,7 @@ Current Features:
   - Log to a file exceptions that are thrown
   - Catch exceptions within your functions via a decorator
 - Custom Enums
-  - Create your own custom Enums (Because The Sims 4 is silly and decided to override the enum module, doh!)
+  - Create your own custom Enums
   - Four types of Enums (More will be added if requested)
     - Int
     - String
@@ -41,7 +41,6 @@ Current Features:
   - Choose Item Dialog 
     - Prompt the player to choose an item from a list of items.
     - Custom icons can be used.
-    - A possible use of this could be to display settings of some kind.
   - Custom Icons available for use with dialogs.
     - Right Arrow
     - Navigate Into Arrow
@@ -58,10 +57,11 @@ Current Features:
     - Ocean
     - Objects (Sims, Furniture, etc.)
   - Custom Interactions
-    - Create interactions to perform custom functionality
+    - Create interactions the run Python code in their backends
     - Interaction Types:
+      - CommonInteraction - Inherit from this to hook into an interaction and add python functionality to its functions
       - Immediate Super Interaction - An interaction that doesn't require a target to perform. It is started immediately and without an animation.
-      - Super Interaction - Like the Immediate Super interaction but these require a target to perform. (sim_Chat is one example of a Super Interaction)
+      - Super Interaction - Like the Immediate Super interaction but these require a target to perform. (sim_chat is one example of a Super Interaction)
       - Mixer Interaction - Use this for custom Mixer interactions.
       - Social Mixer Interaction - Use this for custom Social Mixer interactions.
       - Terrain Interaction - Use for interactions that appear when clicking on the ground.
@@ -71,6 +71,19 @@ Current Features:
     - Custom Interaction Tooltips
       - Display tooltips on interactions that display on hover.
       - Locate CommonInteraction for an example of how to utilize custom tooltips in your own interactions.
+- Event Handling
+  - Create, Dispatch, and Handle Dynamic Events
+    - Handle events without needing a reference to the code that sends the event.
+    - Decouple that code!
+  - Interval Events
+    - Run functions on millisecond intervals.
+    - Run functions once, after an amount of time has passed.
+  - Zone Events
+    - Zone Update - Occurs every time the zone updates. (Basically every time the game ticks)
+    - Zone Teardown - Occurs every time the zone is torn down. Occurs before a loading screen, but only after a Zone had been previously loaded. (See Zone Early/Late Load)
+    - Zone Save - Occurs every time a zone is saved. This occurs before the game saves for the player. Be careful with this one!
+    - Zone Early Load - Occurs when a zone is loaded, but before the players household has loaded.
+    - Zone Late Load - Occurs when a zone is loaded, but after the players household has loaded.
 - Utilities
   - Sim utilities
     - Get the Active Sim
@@ -85,11 +98,13 @@ Current Features:
     - Sim State - Check various states of sims. (Wearing towel, Dying, etc.)
   - CAS
     - Outfit - Set/Get/Update/Check the current outfit of sims.
+    - CAS Utils - Attach/Detach/Check cas parts of a sims outfit. You can put any cas part in any BodyType via these.
   - Components - Get various components of objects (Statistics, Traits, Buffs, etc.)
   - Resources - Load Resources or Tuning files by their identifiers. (Buffs, Traits, Statistics, Snippets, etc.)
-  - Type utilities - Determine the type of objects without needing to use isinstance or having a reference to the type itself in your own code.
+  - Icons - Load Icons provided by S4CL or your own Icons.
+  - Types - Determine the type of objects without needing to use isinstance or having a reference to the type itself in your own code.
   - Time - Manage time. Pause the game, get/change the current game speed, get/set the time of day, etc.
-  - Collection utilities - Determine if an object is a collection, combine collections, flatten collections, etc.
+  - Collections - Determine if an object is a collection, combine collections, flatten collections, etc.
   - Injection - Inject custom functionality into functions
   - IO (Input/Output) - Write string data to a file or load string data from a file.
   - Stack Trace - Retrieve the complete and full stack trace.
@@ -101,7 +116,7 @@ Current Features:
       - Green
       - Red
     - Create Localized Tooltips - Use to display tooltips on interactions (while also displaying the interaction)
-      - These can be useful to give more information to the player about why an interaction cannot be performed, instead of simply hiding interactions.
+      - These can be useful to give more information to the player about why something cannot be performed, instead of simply hiding that something.
 - Testing Framework
   - Write tests to test your python code and run the tests via a command within the game.
   - The results will be logged to the 'Documents/The Sims 4/' folder
@@ -117,13 +132,10 @@ Planned Features:
 - Services & Utilities:
   - Weather - Detect and change weather conditions
   - Club - Detect sims that are part of a club, whether they are at a club gathering, whether their club encourages or discourages certain things
-  - CAS Parts Modification (Functions to equip/unequip or list cas parts, etc.)
   - Statistic Management (Manage statistics such as motives, mood, etc.)
   - Motive Management (Change motive levels and moods of sims)
 - Event handling
   - Interaction events (Queued, Started, Ended, Interaction Outcomes)
-  - Game Tick - Register functions to run when the game updates and how often to run.
-  - Zone Updates - Update, Teardown, Zone Load. Detect when the game has finished loading in to a household
   - Sim - (Spawn, Initialization, Occult Swapping)
 - Custom Enum Types
   - Collections (Tuple, List)
