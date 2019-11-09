@@ -166,7 +166,7 @@ class CommonCASUtils:
         :param cas_part_id: A decimal identifier of the CAS part to locate
         :param body_type: The body type the cas part will be located at. Default is the body type of the cas part itself.
         If body_type is None, the cas part will be located within any body type.
-        :param outfit_category_and_index: The outfit category and index of the sim to be added to. Default is the sims current outfit.
+        :param outfit_category_and_index: The outfit category and index of the sims outfit to check. Default is the sims current outfit.
         :return: True if the sims outfit contains any of the specified cas parts.
         """
         log.format_with_message('Checking if cas part is attached to sim.', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
@@ -190,3 +190,27 @@ class CommonCASUtils:
         attached_cas_part_id = body_parts[body_type]
         log.format(attached_cas_part_id=attached_cas_part_id)
         return cas_part_id == attached_cas_part_id
+
+    @staticmethod
+    def get_cas_part_id_at_body_type(sim_info: SimInfo, body_type: BodyType, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> int:
+        """
+            Retrieve the cas part located at the specified body type
+        :param sim_info: The SimInfo of the sim to check.
+        :param body_type: The body type to locate cas parts at.
+        :param outfit_category_and_index: The outfit category and index of the sims outfit to check. Default is the sims current outfit.
+        :return: True if the sims outfit contains any of the specified cas parts.
+        """
+        log.format_with_message('Checking if cas part is attached to sim.', sim=sim_info, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
+        if outfit_category_and_index is None:
+            outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+        log.format(body_type=body_type, outfit_category_and_index=outfit_category_and_index)
+        body_parts = CommonOutfitUtils.get_outfit_parts(sim_info, outfit_category_and_index)
+        if not body_parts:
+            log.debug('No body parts found.')
+            return -1
+        log.format_with_message('Found body parts from outfit.', body_parts=body_parts)
+        if body_type not in body_parts:
+            log.debug('Specified body type not found within body parts.')
+            return -1
+        log.debug('Body type found within sims outfit parts.')
+        return body_parts[body_type]
