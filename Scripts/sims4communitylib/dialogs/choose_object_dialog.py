@@ -94,10 +94,11 @@ class CommonChooseObjectDialog:
         if page < 0:
             raise AssertionError('page cannot be less than zero.')
 
+        @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
         def _on_chosen(dialog: UiObjectPicker):
             if not dialog.accepted:
                 log.debug('Dialog cancelled.')
-                return on_chosen(None, CommonChoiceOutcome.DIALOG_CANCELLED)
+                return on_chosen(None, CommonChoiceOutcome.CANCEL)
             choice = CommonDialogUtils.get_chosen_item(dialog)
             if choice == 'S4CL_NEXT':
                 log.debug('Next chosen.')
