@@ -21,6 +21,12 @@ class CommonStringId(CommonEnumIntBase):
     CANCEL = 3497542682
     CANCEL_ALL_CAPS = 1249800636
 
+    # Navigation
+    NEXT = 982796106
+    PREVIOUS = 4210670582
+    # 0.String
+    GO_TO_STRING = 3934117375
+
     # Text
     # 0.String
     TEXT_WITH_GREEN_COLOR = 3458194999
