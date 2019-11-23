@@ -69,17 +69,15 @@ class CommonChooseObjectDialog:
         self,
         on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
-        keep_open_after_choice: bool=False,
         page: int=1
     ):
         """
             Show the dialog and invoke the callbacks upon the player making a choice.
         :param on_chosen: A callback invoked upon the player choosing something from the list.
         :param picker_type: The layout of the dialog.
-        :param keep_open_after_choice: If True, the dialog will reopen to the same page after a choice is made.
         :param page: The page to display. Ignored if there is only one page of choices.
         """
-        log.format_with_message('Attempting to display choices', page=page, keep_open_after_choice=keep_open_after_choice)
+        log.format_with_message('Attempting to display choices.', page=page)
         _dialog = self._create_dialog(picker_type=picker_type)
         if _dialog is None:
             log.error('_dialog was None for some reason.')
@@ -102,17 +100,14 @@ class CommonChooseObjectDialog:
             choice = CommonDialogUtils.get_chosen_item(dialog)
             if choice == 'S4CL_NEXT':
                 log.debug('Next chosen.')
-                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page + 1, keep_open_after_choice=keep_open_after_choice)
+                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page + 1)
                 return True
             elif choice == 'S4CL_PREVIOUS':
                 log.debug('Previous chosen.')
-                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page - 1, keep_open_after_choice=keep_open_after_choice)
+                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page - 1)
                 return True
             log.format_with_message('Choice made.', choice=choice)
             result = on_chosen(choice, CommonChoiceOutcome.CHOICE_MADE)
-            if keep_open_after_choice:
-                log.format_with_message('Reopening dialog.', page=page)
-                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page, keep_open_after_choice=keep_open_after_choice)
             log.format_with_message('Finished handling choice.', result=result)
             return result
 
