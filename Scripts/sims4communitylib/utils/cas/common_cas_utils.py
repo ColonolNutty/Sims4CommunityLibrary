@@ -33,13 +33,16 @@ class CommonCASUtils:
         return CommonCASUtils.get_body_type_of_cas_part(cas_part_id) > 0
 
     @staticmethod
-    def get_body_type_of_cas_part(cas_part_id: int) -> BodyType:
+    def get_body_type_of_cas_part(cas_part_id: int) -> Union[BodyType, None]:
         """
             Retrieve the BodyType of a CAS part.
         :param cas_part_id: The decimal identifier of a CAS part.
-        :return: The default BodyType of the CAS part.
+        :return: The default BodyType of the CAS part or None if the Body Type of a cas part is not an actual BodyType.
         """
-        return BodyType(get_caspart_bodytype(cas_part_id))
+        body_type = get_caspart_bodytype(cas_part_id)
+        if body_type not in BodyType:
+            return None
+        return BodyType(body_type)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
