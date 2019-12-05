@@ -26,6 +26,22 @@ def decompile_dir(rootPath):
                 print(ex)
 
 
+def decompile_file(file_path, throw_on_error=True) -> bool:
+    py = decompile(file_path)
+    with io.open(file_path.replace('.pyc', '.py'), 'w') as output_py:
+        success = True
+        for statement in py.statements:
+            try:
+                output_py.write(str(statement) + '\r')
+            except Exception as ex:
+                print('Failed to parse statement.' + str(statement))
+                print(statement.__class__)
+                if throw_on_error:
+                    raise ex
+                success = False
+    return success
+
+
 script_package_types = ['*.zip', '*.ts4script']
 
 
