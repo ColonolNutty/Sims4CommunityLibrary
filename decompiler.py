@@ -427,7 +427,7 @@ total = 0
 
 # A completed thread will issue this callback in the main thread, place the
 # DecompileResultData into a bucket depending on the returned result.
-def completed_callback(result):
+def completed_callback(result) -> bool:
     global completed, total
     completed += 1
 
@@ -437,17 +437,35 @@ def completed_callback(result):
     
     if result.result == 0:
         perfect.append(result)
+        return True
     elif result.result == 1:
         good.append(result)
+        return True
     elif result.result == 2:
         print('syntax')
         syntax.append(result)
+        return False
     elif result.result == 3:
         print('failed')
         failed.append(result)
+        return False
     else:
         print('timeout')
         timeout.append(result)
+        return False
+
+
+def is_success(result) -> bool:
+    if result.result == 0:
+        return True
+    elif result.result == 1:
+        return True
+    elif result.result == 2:
+        return False
+    elif result.result == 3:
+        return False
+    else:
+        return False
 
 # Unzips the script files (.pyc) from the TS4 game executable folders into the destination folder.
 def unzip_script_files(zip_folder, dest_folder):
@@ -464,9 +482,13 @@ def unzip_script_files(zip_folder, dest_folder):
     zip = zipfile.ZipFile(os.path.join(generated_folder, 'generated.zip'))
     zip.extractall(os.path.join(dest_folder, 'generated'))
 
+
 # Launch "threads" and summarize results
 def main(src_folder, dest_folder, prefix_filenames=False, max_threads=DEFAULT_MAX_THREADS, results_file=None, test_large_codeobjects=False, large_codeobjects_threshold=10000, comment_style=0, py37dec_timeout=5, split_result_folders=False):
     global total, DEFAULT_DECOMPILER
+    from shutil import copyfile
+    from Utilities.compiler import decompile_file as unpyc3_decompile
+
     timer = Timer()
     if py37dec_timeout == 0:
         py37dec_timeout = None
@@ -486,9 +508,28 @@ def main(src_folder, dest_folder, prefix_filenames=False, max_threads=DEFAULT_MA
         for pycFile in files:
             total += 1
             subFolder = os.path.relpath(root, srcFolder)
-            pyFile = os.path.splitext(pycFile)[0]+'.py'
+            file_name = os.path.splitext(pycFile)[0]
+            pyFile = file_name + '.py'
+            pyFullFilename = os.path.join(srcFolder, subFolder, pyFile)
+            copiedFilePath = os.path.join(srcFolder, subFolder, pycFile + '_copied')
+            pycFullFilename = os.path.join(srcFolder, subFolder, pycFile)
+            copyfile(pycFullFilename, copiedFilePath)
             sys.stdout.write(os.path.join(src_folder, subFolder, pycFile) + '\n')
             result = decompile(srcFolder, destFolder, subFolder, pycFile, pyFile, prefix_filenames, large_codeobjects_threshold, comment_style, DECOMPILER, py37dec_timeout, split_result_folders)
+            if not is_success(result):
+                print('Failed to decompile file, attempting to use alternative decompiler.')
+                os.remove(pyFullFilename)
+                copyfile(copiedFilePath, pycFullFilename)
+                os.remove(copiedFilePath)
+                if not unpyc3_decompile(pycFullFilename, throw_on_error=False):
+                    print('Failed to decompile, even with alternative decompiler')
+                else:
+                    print('Success! File decompiled successfully via alternative method.')
+                    os.remove(pycFullFilename)
+                    result = DecompileResultData(os.path.realpath(pycFullFilename))
+                    result.result = 1
+            else:
+                os.remove(copiedFilePath)
             completed_callback(result)
             results.append(result)
 
