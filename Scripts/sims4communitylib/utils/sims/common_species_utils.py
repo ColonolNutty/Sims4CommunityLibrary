@@ -14,13 +14,13 @@ from sims4communitylib.exceptions.common_exceptions_handler import CommonExcepti
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
-log = CommonLogRegistry.get().register_log(ModInfo.MOD_NAME, 'common_species_utils')
+log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'common_species_utils')
 
 
 class CommonSpeciesUtils:
     """ Utilities for handling sim species. """
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def get_species(sim_info: SimInfo) -> Union[Species, None]:
         """
             Retrieve the Species of a sim.
@@ -42,7 +42,7 @@ class CommonSpeciesUtils:
             sim_info.species = species
             return True
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.MOD_NAME, 'Failed to set species of sim {} to {}.'.format(pformat(sim_info), species), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to set species of sim {} to {}.'.format(pformat(sim_info), species), exception=ex)
             return False
     
     @staticmethod

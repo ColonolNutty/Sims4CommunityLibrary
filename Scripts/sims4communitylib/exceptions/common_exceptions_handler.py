@@ -18,8 +18,8 @@ class CommonExceptionHandler:
         A class for handling and logging custom exceptions to a file on the system.
     """
 
-    @classmethod
-    def log_exception(cls, mod_name: str, exception_message: str, exception: Exception=None) -> bool:
+    @staticmethod
+    def log_exception(mod_name: str, exception_message: str, exception: Exception=None) -> bool:
         """
             Log an exception with a custom message
         :param mod_name: The name of the mod logging the exception.
@@ -33,8 +33,8 @@ class CommonExceptionHandler:
         file_path = CommonLogUtils.get_exceptions_file_path(mod_name)
         return CommonExceptionHandler._log_stacktrace(mod_name, stack_trace, file_path)
 
-    @classmethod
-    def _log_stacktrace(cls, mod_name: str, _traceback, file_path: str) -> bool:
+    @staticmethod
+    def _log_stacktrace(mod_name: str, _traceback, file_path: str) -> bool:
         exception_traceback_text = '[{}] {} {}\n'.format(mod_name, CommonRealDateUtils.get_current_date_string(), _traceback)
         return CommonIOUtils.write_to_file(file_path, exception_traceback_text)
 

@@ -69,7 +69,7 @@ class CommonInteractionRegistry(CommonService):
             CommonInteractionType.ON_SCRIPT_OBJECT_LOAD: []
         }
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_script_object_add(self, script_object: ScriptObject, *args, **kwargs):
         """
             Occurs upon a script object being added.
@@ -87,7 +87,7 @@ class CommonInteractionRegistry(CommonService):
                 new_super_affordances.append(interaction_instance)
         script_object._super_affordances += tuple(new_super_affordances)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_terrain_load(self, terrain_service: TerrainService, *_, **__):
         """
             Occurs upon the terrain loading
@@ -102,7 +102,7 @@ class CommonInteractionRegistry(CommonService):
         new_terrain_class._super_affordances += tuple(new_super_affordances)
         terrain_service.TERRAIN_DEFINITION.set_class(new_terrain_class)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_ocean_load(self, terrain_service: TerrainService, *_, **__):
         """
             Occurs upon the ocean loading

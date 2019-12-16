@@ -16,7 +16,7 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
-log = CommonLogRegistry.get().register_log(ModInfo.MOD_NAME, 's4cl_common_cas_utils')
+log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 's4cl_common_cas_utils')
 
 
 class CommonCASUtils:
@@ -45,7 +45,7 @@ class CommonCASUtils:
         return BodyType(body_type)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def attach_cas_part_to_sim(sim_info: SimInfo, cas_part_id: int, body_type: BodyType=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """
             Add a cas part at the specified BodyType to the Sims outfit.
@@ -102,7 +102,7 @@ class CommonCASUtils:
         return True
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def detach_cas_part_from_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, None]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """
             Remove a cas part at the specified BodyType from the Sims outfit.

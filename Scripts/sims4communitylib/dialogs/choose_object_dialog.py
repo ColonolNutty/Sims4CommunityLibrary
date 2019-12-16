@@ -25,7 +25,7 @@ from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog_picker import UiObjectPicker, ObjectPickerRow
 
-log = CommonLogRegistry.get().register_log(ModInfo.MOD_NAME, 'choose_object_dialog')
+log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'choose_object_dialog')
 
 
 class CommonChooseObjectDialog:
@@ -57,14 +57,14 @@ class CommonChooseObjectDialog:
             raise AssertionError('per_page must be greater than zero.')
         self._per_page = per_page
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def add_row(self, choice: ObjectPickerRow):
         """
             Add a choice to the dialog.
         """
         self._choices += (choice,)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def show(
         self,
         on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
@@ -92,7 +92,7 @@ class CommonChooseObjectDialog:
         if page < 0:
             raise AssertionError('page cannot be less than zero.')
 
-        @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+        @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
         def _on_chosen(dialog: UiObjectPicker):
             if not dialog.accepted:
                 log.debug('Dialog cancelled.')
@@ -161,7 +161,7 @@ class CommonChooseObjectDialog:
         _dialog.add_listener(_on_chosen)
         _dialog.show_dialog()
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def _create_dialog(
         self,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT

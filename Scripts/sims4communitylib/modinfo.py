@@ -5,10 +5,25 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from sims4communitylib.mod_support.common_mod_info import CommonModInfo
 
 
-class ModInfo:
+class ModInfo(CommonModInfo):
     """ Contains details related to the mod itself. """
-    MOD_NAME = 'Sims4CommunityLib'
-    MOD_SCRIPT_NAME = 'sims4communitylib'
-    FILE_PATH = str(__file__)
+    _FILE_PATH: str = str(__file__)
+
+    @property
+    def _name(self) -> str:
+        return 'Sims4CommunityLib'
+
+    @property
+    def _author(self) -> str:
+        return 'ColonolNutty'
+
+    @property
+    def _base_namespace(self) -> str:
+        return 'sims4communitylib'
+
+    @property
+    def _file_path(self) -> str:
+        return ModInfo._FILE_PATH

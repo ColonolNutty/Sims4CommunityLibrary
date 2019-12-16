@@ -22,7 +22,7 @@ from singletons import DEFAULT
 class CommonInteraction(Interaction):
     """ Enables hooks into the functionality of an Interaction """
     @classmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=TestResult.NONE)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=TestResult.NONE)
     def _test(cls, target: Any, context: InteractionContext, **kwargs) -> TestResult:
         test_result = cls.on_test(context.sim, target, context, **kwargs)
         if test_result is None:
@@ -39,12 +39,12 @@ class CommonInteraction(Interaction):
             return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
         return super()._test(target, context, **kwargs)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def _trigger_interaction_start_event(self):
         super()._trigger_interaction_start_event()
         self.on_started(self.sim, self.target)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def apply_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT):
         """
             Apply a posture to a sim.
@@ -56,7 +56,7 @@ class CommonInteraction(Interaction):
         (new_posture_state, new_participant_type, new_sim) = self.modify_posture_state(posture_state, participant_type=participant_type, sim=sim)
         return super().apply_posture_state(new_posture_state, participant_type=new_participant_type, sim=new_sim)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def kill(self) -> bool:
         """
             Kill the interaction. (Hard Cancel)
@@ -64,7 +64,7 @@ class CommonInteraction(Interaction):
         self.on_killed(self.sim, self.target)
         return super().kill()
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def cancel(self, finishing_type, cancel_reason_msg, **kwargs) -> bool:
         """
             Cancel the interaction.
@@ -75,7 +75,7 @@ class CommonInteraction(Interaction):
         self.on_cancelled(self.sim, self.target, finishing_type, cancel_reason_msg, **kwargs)
         return super().cancel(finishing_type, cancel_reason_msg, **kwargs)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def _post_perform(self):
         self.on_performed(self.sim, self.target)
         return super()._post_perform()
@@ -98,7 +98,7 @@ class CommonInteraction(Interaction):
 
     # noinspection PyUnusedLocal
     @classmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=TestResult.NONE)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=TestResult.NONE)
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
         """
             A hook that occurs upon the interaction being tested for run.
@@ -109,7 +109,7 @@ class CommonInteraction(Interaction):
         """
         return TestResult.TRUE
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=True)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
     def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
         """
             Occurs upon the interaction being started.
@@ -120,7 +120,7 @@ class CommonInteraction(Interaction):
         pass
 
     # noinspection PyUnusedLocal
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=True)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
     def on_killed(self, interaction_sim: Sim, interaction_target: Any) -> bool:
         """
             Occurs upon the interaction being killed.
@@ -130,7 +130,7 @@ class CommonInteraction(Interaction):
         """
         return True
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=True)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
     def on_cancelled(self, interaction_sim: Sim, interaction_target: Any, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> None:
         """
             Occurs upon the interaction being cancelled.
@@ -141,7 +141,7 @@ class CommonInteraction(Interaction):
         """
         pass
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=True)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
     def on_performed(self, interaction_sim: Sim, interaction_target: Any) -> None:
         """
             Occurs after the interaction has been performed.
@@ -150,7 +150,7 @@ class CommonInteraction(Interaction):
         """
         pass
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=True)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
     def modify_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT) -> Tuple[PostureState, ParticipantType, Any]:
         """
             Modify the posture state, participant type or sim of the interaction.

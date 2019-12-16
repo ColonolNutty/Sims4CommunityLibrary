@@ -17,7 +17,7 @@ from sims4communitylib.modinfo import ModInfo
 class CommonGenderUtils:
     """ Utilities for handling sim genders. """
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def get_gender(sim_info: SimInfo) -> Union[Gender, None]:
         """
             Retrieve the Gender of a sim.
@@ -40,7 +40,7 @@ class CommonGenderUtils:
             sim_info.gender = gender
             return True
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.MOD_NAME, 'Failed to set gender of sim {} to {}.'.format(pformat(sim_info), gender), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to set gender of sim {} to {}.'.format(pformat(sim_info), gender), exception=ex)
             return False
 
     @staticmethod

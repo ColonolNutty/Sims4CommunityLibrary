@@ -37,7 +37,7 @@ class CommonIntervalDispatcher:
         """ Determine if this tracker only runs once. """
         return self._run_once
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def try_dispatch(self, ticks_since_last_update: int):
         """ Attempt to trigger the listener based on the amount of time passed. """
         self._total_milliseconds_passed += ticks_since_last_update
@@ -97,6 +97,6 @@ class CommonIntervalEventRegistry(CommonService):
                 CommonExceptionHandler.log_exception(interval_tracker.mod_name, 'Error occurred when attempting to dispatch listener \'{}\''.format(interval_tracker.listening_func_name), exception=ex)
 
     @staticmethod
-    @CommonEventRegistry.handle_events(ModInfo.MOD_NAME)
+    @CommonEventRegistry.handle_events(ModInfo.get_identity().name)
     def _update_game_tick_on_zone_update(event_data: S4CLZoneUpdateEvent):
         CommonIntervalEventRegistry.get()._attempt_to_dispatch(event_data.ticks_since_last_update)

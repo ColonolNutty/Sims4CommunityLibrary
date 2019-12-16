@@ -302,7 +302,7 @@ class CommonOutfitUtils:
         sim_info.set_previous_outfit(None, force=True)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def has_outfit(sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]) -> bool:
         """
             Determine if a sim has an existing outfit in the specified OutfitCategory and Index.

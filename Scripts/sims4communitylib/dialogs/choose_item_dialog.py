@@ -23,7 +23,7 @@ from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog import UiDialogOkCancel
 from ui.ui_dialog_picker import UiObjectPicker, ObjectPickerRow
 
-log = CommonLogRegistry.get().register_log(ModInfo.MOD_NAME, 'choose_item_dialog')
+log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'choose_item_dialog')
 
 
 class CommonChooseItemResult(CommonEnumIntBase):
@@ -60,7 +60,7 @@ class CommonChooseItemDialog:
         self.description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=description_tokens)
         self.list_items = list_items
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def add_item(self, item: ObjectPickerRow):
         """
             Add a new item to choose from.
@@ -68,7 +68,7 @@ class CommonChooseItemDialog:
         """
         self.list_items += (item,)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def show(self, on_item_chosen: Callable[[Any, CommonChooseItemResult], Any]=CommonFunctionUtils.noop, picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT):
         """
             Show the dialog and invoke the callbacks upon the player selecting an item.
@@ -91,7 +91,7 @@ class CommonChooseItemDialog:
         _dialog.add_listener(_on_item_chosen)
         _dialog.show_dialog()
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def _create_dialog(self, picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT) -> Union[UiObjectPicker, None]:
         return UiObjectPicker.TunableFactory().default(CommonSimUtils.get_active_sim_info(),
                                                        text=lambda *_, **__: self.description,

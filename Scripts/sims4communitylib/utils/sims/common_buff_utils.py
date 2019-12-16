@@ -76,7 +76,7 @@ class CommonBuffUtils:
         :return: True if the sim has any of the specified buffs.
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.MOD_NAME, 'argument sim_info was \'None\' for {} of class {}'.format(CommonBuffUtils.has_buff.__name__, CommonBuffUtils.__name__))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'argument sim_info was \'None\' for {} of class {}'.format(CommonBuffUtils.has_buff.__name__, CommonBuffUtils.__name__))
             return False
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
@@ -95,7 +95,7 @@ class CommonBuffUtils:
             Retrieve all buffs currently active on a sim.
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.MOD_NAME, 'argument sim_info was \'None\' for {} of class {}'.format(CommonBuffUtils.get_buffs.__name__, CommonBuffUtils.__name__))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'argument sim_info was \'None\' for {} of class {}'.format(CommonBuffUtils.get_buffs.__name__, CommonBuffUtils.__name__))
             return list()
         if not hasattr(sim_info, 'get_active_buff_types'):
             return list()
@@ -111,7 +111,7 @@ class CommonBuffUtils:
         :return: True if all of the specified buffs were successfully added.
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.MOD_NAME, 'argument sim_info was \'None\' for {} of class {}'.format(CommonBuffUtils.add_buff.__name__, CommonBuffUtils.__name__))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'argument sim_info was \'None\' for {} of class {}'.format(CommonBuffUtils.add_buff.__name__, CommonBuffUtils.__name__))
             return False
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
@@ -134,7 +134,7 @@ class CommonBuffUtils:
         :return: True if all of the specified buffs were successfully removed.
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.MOD_NAME, 'Argument sim_info was \'None\' for {} of class {}'.format(CommonBuffUtils.remove_buff.__name__, CommonBuffUtils.__name__))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Argument sim_info was \'None\' for {} of class {}'.format(CommonBuffUtils.remove_buff.__name__, CommonBuffUtils.__name__))
             return False
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
@@ -148,7 +148,7 @@ class CommonBuffUtils:
         return success
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def _load_buff_instance(buff_identifier: int) -> Union[Buff, None]:
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils

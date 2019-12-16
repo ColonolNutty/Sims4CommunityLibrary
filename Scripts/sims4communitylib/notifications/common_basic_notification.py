@@ -17,7 +17,7 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog_notification import UiDialogNotification
-log = CommonLogRegistry.get().register_log(ModInfo.MOD_NAME, 'common_basic_notification')
+log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'common_basic_notification')
 
 
 class CommonBasicNotification:
@@ -50,7 +50,7 @@ class CommonBasicNotification:
         self.expand_behavior = expand_behavior
         self.ui_responses = ()
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def show(self, icon: IconInfoData=None, secondary_icon: IconInfoData=None):
         """
             Show the notification to the player.
@@ -61,7 +61,7 @@ class CommonBasicNotification:
 
         _notification.show_dialog(icon_override=icon, secondary_icon_override=secondary_icon)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def _create_dialog(self) -> Union[UiDialogNotification, None]:
         return UiDialogNotification.TunableFactory().default(None,
                                                              title=lambda *args, **kwargs: self.title,

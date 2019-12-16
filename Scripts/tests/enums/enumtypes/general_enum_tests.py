@@ -19,7 +19,7 @@ class TestEnum(CommonEnumIntBase):
 
 
 # noinspection PyMissingOrEmptyDocstring
-@CommonTestService.test_class(ModInfo.MOD_NAME)
+@CommonTestService.test_class(ModInfo.get_identity().name)
 class CommonGeneralEnumTests:
     @staticmethod
     @CommonTestService.test()
