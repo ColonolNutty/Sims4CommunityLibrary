@@ -657,7 +657,7 @@ class CommonTraitUtils:
         return success
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def _load_trait_instance(trait_id: int) -> Union[Trait, None]:
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils

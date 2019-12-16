@@ -215,4 +215,4 @@ def _s4clib_testing_test_game_pause(_connection=None):
         output('Game paused successfully.')
     except Exception as ex:
         output('Failed to pause the game! See Exception log.')
-        CommonExceptionHandler.log_exception(ModInfo.MOD_NAME, 'Failed to pause the game!', exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to pause the game!', exception=ex)

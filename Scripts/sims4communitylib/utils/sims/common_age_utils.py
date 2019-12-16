@@ -17,7 +17,7 @@ from sims4communitylib.modinfo import ModInfo
 class CommonAgeUtils:
     """ Utilities for handling sim ages. """
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def get_age(sim_info: SimInfo) -> Union[Age, None]:
         """
             Retrieve the Age of a sim.
@@ -44,7 +44,7 @@ class CommonAgeUtils:
             sim_info.apply_age(age)
             return True
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.MOD_NAME, 'Failed to set age of sim {} to {}.'.format(pformat(sim_info), age), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to set age of sim {} to {}.'.format(pformat(sim_info), age), exception=ex)
             return False
 
     @staticmethod

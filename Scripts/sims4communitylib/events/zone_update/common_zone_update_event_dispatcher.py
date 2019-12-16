@@ -60,7 +60,7 @@ class CommonZoneUpdateEventDispatcherService(CommonService):
             return CommonEventRegistry.get().dispatch(S4CLZoneUpdateEvent(zone, is_paused, self.ticks_since_last_zone_update))
         except Exception as ex:
             from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-            CommonExceptionHandler.log_exception(ModInfo.MOD_NAME, 'Failed to run internal method \'{}\' at \'{}\'.'.format(CommonZoneUpdateEventDispatcherService._on_zone_update.__name__, Zone.update.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to run internal method \'{}\' at \'{}\'.'.format(CommonZoneUpdateEventDispatcherService._on_zone_update.__name__, Zone.update.__name__), exception=ex)
 
 
 @CommonInjectionUtils.inject_into(Zone, Zone.update.__name__)

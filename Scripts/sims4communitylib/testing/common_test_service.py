@@ -14,7 +14,7 @@ from sims4communitylib.services.common_service import CommonService
 try:
     from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
-    community_test_log_log = CommonLogRegistry.get().register_log(ModInfo.MOD_NAME, 'community_test_log')
+    community_test_log_log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'community_test_log')
     community_test_log_log.enable()
 
     def _community_test_log(val: str):

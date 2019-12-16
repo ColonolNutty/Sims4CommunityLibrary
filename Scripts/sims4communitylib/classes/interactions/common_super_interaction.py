@@ -21,7 +21,7 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
         return self.on_run(self.sim, self.target, timeline)
 
     # noinspection PyUnusedLocal
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=True)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
     def on_run(self, interaction_sim, interaction_target, timeline) -> bool:
         """
             Occurs upon the interaction being run.

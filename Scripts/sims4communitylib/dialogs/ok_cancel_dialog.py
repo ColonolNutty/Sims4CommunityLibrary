@@ -18,7 +18,7 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog import UiDialogOkCancel
-log = CommonLogRegistry.get().register_log(ModInfo.MOD_NAME, 'ok_cancel_dialog')
+log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'ok_cancel_dialog')
 
 
 class CommonOkCancelDialog:
@@ -50,7 +50,7 @@ class CommonOkCancelDialog:
         self.ok_text = CommonLocalizationUtils.create_localized_string(ok_text_identifier, tokens=ok_text_tokens)
         self.cancel_text = CommonLocalizationUtils.create_localized_string(cancel_text_identifier, tokens=cancel_text_tokens)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def show(self, on_ok_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop, on_cancel_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop):
         """
             Show the dialog and invoke the callbacks upon the player selecting an option.
@@ -69,7 +69,7 @@ class CommonOkCancelDialog:
         _dialog.add_listener(_on_option_selected)
         _dialog.show_dialog()
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.MOD_NAME, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def _create_dialog(self) -> Union[UiDialogOkCancel, None]:
         return UiDialogOkCancel.TunableFactory().default(CommonSimUtils.get_active_sim_info(),
                                                          text=lambda *_, **__: self.description,
