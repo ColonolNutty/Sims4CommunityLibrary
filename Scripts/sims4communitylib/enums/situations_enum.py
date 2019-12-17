@@ -9,7 +9,7 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonSituationId(CommonEnumIntBase):
-    """ Identifiers for various vanilla situations """
+    """ Identifiers for vanilla situations """
     ACTOR_CAREER_BACKGROUND_ACTOR = 191064
     ACTOR_CAREER_BACKGROUND_PRODUCER = 191065
     ACTOR_CAREER_CO_STAR1 = 189568

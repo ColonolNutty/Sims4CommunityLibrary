@@ -10,6 +10,10 @@ from sims.occult.occult_enums import OccultType
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
+try:
+    from traits.trait_type import TraitType
+except ModuleNotFoundError:
+    from traits.traits import TraitType
 
 
 class CommonOccultUtils:
@@ -76,6 +80,20 @@ class CommonOccultUtils:
         return False
 
     @staticmethod
+    def is_robot(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is a Robot.
+        """
+        if not hasattr(TraitType, 'ROBOT'):
+            return False
+        equipped_sim_traits = CommonTraitUtils.get_equipped_traits(sim_info)
+        for trait in equipped_sim_traits:
+            trait_type = getattr(trait, 'trait_type', -1)
+            if trait_type == TraitType.ROBOT:
+                return True
+        return False
+
+    @staticmethod
     def is_witch(sim_info: SimInfo) -> bool:
         """
             Determine if a sim is a Mermaid
@@ -92,7 +110,7 @@ class CommonOccultUtils:
     @staticmethod
     def is_in_mermaid_form(sim_info: SimInfo) -> bool:
         """
-            Determine if a sim is in Mermaid Form (Their Tail is visible).
+            Determine if a sim is in Mermaid Form (The Sim has a visible Tail).
         """
         return CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_MERMAID_MERMAID_FORM)
 
@@ -104,6 +122,54 @@ class CommonOccultUtils:
         return CommonOccultUtils.is_mermaid(sim_info) and CommonOccultUtils.is_in_mermaid_form(sim_info)
 
     @staticmethod
+    def is_currently_human(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is currently Human (Not an Occult)
+        """
+        if not hasattr(OccultType, 'HUMAN'):
+            return False
+        return CommonOccultUtils._get_current_occult_type(sim_info) == OccultType.HUMAN
+
+    @staticmethod
+    def is_currently_a_mermaid(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is currently a Mermaid
+
+            Note: This only checks their occult status, it does not check for a visible Tail.
+            Use 'is_in_mermaid_form' to check for a visible Tail.
+        """
+        if not hasattr(OccultType, 'MERMAID'):
+            return False
+        return CommonOccultUtils._get_current_occult_type(sim_info) == OccultType.MERMAID
+
+    @staticmethod
+    def is_currently_a_vampire(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is currently a Vampire
+        """
+        if not hasattr(OccultType, 'VAMPIRE'):
+            return False
+        return CommonOccultUtils._get_current_occult_type(sim_info) == OccultType.VAMPIRE
+
+    @staticmethod
+    def is_currently_an_alien(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is currently an Alien
+        """
+        if not hasattr(OccultType, 'ALIEN'):
+            return False
+        return CommonOccultUtils._get_current_occult_type(sim_info) == OccultType.ALIEN
+
+    @staticmethod
+    def is_currently_a_witch(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is currently a Witch
+        """
+        if not hasattr(OccultType, 'WITCH'):
+            return False
+        return CommonOccultUtils._get_current_occult_type(sim_info) == OccultType.WITCH
+
+    @staticmethod
     def _has_occult_trait(sim_info: SimInfo, trait: int) -> bool:
         equipped_sim_traits = CommonTraitUtils.get_equipped_traits(sim_info)
         for sim_trait in equipped_sim_traits:
@@ -111,3 +177,8 @@ class CommonOccultUtils:
             if sim_trait_id == trait:
                 return True
         return False
+
+    @staticmethod
+    def _get_current_occult_type(sim_info: SimInfo) -> OccultType:
+        # noinspection PyPropertyAccess
+        return sim_info.current_occult_types
