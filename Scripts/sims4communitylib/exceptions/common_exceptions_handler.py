@@ -7,7 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 from functools import wraps
 from typing import Any
-
 from sims4communitylib.exceptions.common_stacktrace_utils import CommonStacktraceUtil
 from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
 from sims4communitylib.utils.common_io_utils import CommonIOUtils
@@ -31,7 +30,11 @@ class CommonExceptionHandler:
         stack_trace = '{}{} -> {}: {}\n'.format(''.join(exceptions), exception_message, type(exception).__name__, exception)
         from sims4communitylib.utils.common_log_registry import CommonLogUtils
         file_path = CommonLogUtils.get_exceptions_file_path(mod_name)
-        return CommonExceptionHandler._log_stacktrace(mod_name, stack_trace, file_path)
+        result = CommonExceptionHandler._log_stacktrace(mod_name, stack_trace, file_path)
+        if result:
+            CommonExceptionHandler._notify_exception_occurred(file_path)
+        return result
+
 
     @staticmethod
     def _log_stacktrace(mod_name: str, _traceback, file_path: str) -> bool:
@@ -59,3 +62,19 @@ class CommonExceptionHandler:
                 return fallback_return
             return wrapper
         return catch_exception
+
+    @staticmethod
+    def _notify_exception_occurred(file_path: str):
+        from ui.ui_dialog_notification import UiDialogNotification
+        from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
+        from sims4communitylib.enums.strings_enum import CommonStringId
+        from sims4communitylib.events.zone_spin.common_zone_spin_event_dispatcher import CommonZoneSpinEventDispatcher
+        if not CommonZoneSpinEventDispatcher.get().game_loaded:
+            return
+        basic_notification = CommonBasicNotification(
+            CommonStringId.EXCEPTION_OCCURRED_TITLE,
+            CommonStringId.EXCEPTION_OCCURRED_TEXT,
+            description_tokens=(file_path,),
+            urgency=UiDialogNotification.UiDialogNotificationUrgency.URGENT
+        )
+        basic_notification.show()
