@@ -9,7 +9,7 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonStringId(CommonEnumIntBase):
-    """ Identifiers for various vanilla localization strings """
+    """ Identifiers for vanilla localization strings """
     # Notifications
     EXCEPTION_OCCURRED_TITLE = 3506527463
     # 0.String

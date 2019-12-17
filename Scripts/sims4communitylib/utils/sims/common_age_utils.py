@@ -137,6 +137,69 @@ class CommonAgeUtils:
         return age == Age.ELDER
 
     @staticmethod
+    def is_baby_or_toddler_age(age: Age) -> bool:
+        """
+            Determine if an age is Baby or Toddler
+        """
+        return CommonAgeUtils.is_baby_age(age) or CommonAgeUtils.is_toddler_age(age)
+
+    @staticmethod
+    def is_baby_toddler_or_child_age(age: Age) -> bool:
+        """
+            Determine if an age is Baby, Toddler, or Child
+        """
+        return CommonAgeUtils.is_baby_age(age) or CommonAgeUtils.is_toddler_age(age) or CommonAgeUtils.is_child_age(age)
+
+    @staticmethod
+    def is_toddler_or_child_age(age: Age) -> bool:
+        """
+            Determine if an age is Toddler or Child
+        """
+        return CommonAgeUtils.is_toddler_age(age) or CommonAgeUtils.is_child_age(age)
+
+    @staticmethod
+    def is_child_or_teen_age(age: Age) -> bool:
+        """
+            Determine if an age is Child or Teen.
+        """
+        return CommonAgeUtils.is_child_age(age) or CommonAgeUtils.is_teen_age(age)
+
+    @staticmethod
+    def is_teen_or_young_adult_age(age: Age) -> bool:
+        """
+            Determine if an age is Teen or Young Adult.
+        """
+        return CommonAgeUtils.is_teen_age(age) or CommonAgeUtils.is_young_adult_age(age)
+
+    @staticmethod
+    def is_teen_or_adult_age(age: Age) -> bool:
+        """
+            Determine if an age is Teen, Young Adult, or Adult.
+        """
+        return CommonAgeUtils.is_teen_age(age) or CommonAgeUtils.is_adult_age(age)
+
+    @staticmethod
+    def is_teen_adult_or_elder_age(age: Age) -> bool:
+        """
+            Determine if an age is Teen, Young Adult, Adult, or Elder.
+        """
+        return CommonAgeUtils.is_teen_age(age) or CommonAgeUtils.is_adult_age(age) or CommonAgeUtils.is_elder_age(age)
+
+    @staticmethod
+    def is_adult_or_elder_age(age: Age) -> bool:
+        """
+            Determine if an age is Young Adult, Adult, or Elder.
+        """
+        return CommonAgeUtils.is_adult_age(age) or CommonAgeUtils.is_elder_age(age)
+
+    @staticmethod
+    def is_mature_adult_or_elder_age(age: Age) -> bool:
+        """
+            Determine if an age is Adult or Elder.
+        """
+        return CommonAgeUtils.is_mature_adult_age(age) or CommonAgeUtils.is_elder_age(age)
+
+    @staticmethod
     def is_baby(sim_info: SimInfo) -> bool:
         """
             Determine if a sim is a Baby.
@@ -194,18 +257,74 @@ class CommonAgeUtils:
         """
             Determine if a sim is either a Young Adult or an Adult.
         """
-        return CommonAgeUtils.is_young_adult(sim_info) or CommonAgeUtils.is_mature_adult(sim_info)
+        return CommonAgeUtils.is_adult_age(CommonAgeUtils.get_age(sim_info))
 
     @staticmethod
-    def is_baby_child_or_toddler(sim_info: SimInfo) -> bool:
+    def is_baby_or_toddler(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is a Baby or a Toddler.
+        """
+        return CommonAgeUtils.is_baby_or_toddler_age(CommonAgeUtils.get_age(sim_info))
+
+    @staticmethod
+    def is_toddler_or_child(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is a Toddler or a Child.
+        """
+        return CommonAgeUtils.is_toddler_or_child_age(CommonAgeUtils.get_age(sim_info))
+
+    @staticmethod
+    def is_baby_toddler_or_child(sim_info: SimInfo) -> bool:
         """
             Determine if a sim is a Baby, a Toddler, or a Child.
         """
-        return CommonAgeUtils.is_baby(sim_info) or CommonAgeUtils.is_toddler(sim_info) or CommonAgeUtils.is_child(sim_info)
+        return CommonAgeUtils.is_baby_toddler_or_child_age(CommonAgeUtils.get_age(sim_info))
+
+    @staticmethod
+    def is_child_or_teen(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is a Child or a Teen.
+        """
+        return CommonAgeUtils.is_child_or_teen_age(CommonAgeUtils.get_age(sim_info))
+
+    @staticmethod
+    def is_teen_or_young_adult(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is a Teen or a Young Adult.
+        """
+        return CommonAgeUtils.is_teen_or_young_adult_age(CommonAgeUtils.get_age(sim_info))
+
+    @staticmethod
+    def is_teen_or_adult(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is a Teen, a Young Adult, or an Adult.
+        """
+        return CommonAgeUtils.is_teen_or_adult_age(CommonAgeUtils.get_age(sim_info))
 
     @staticmethod
     def is_teen_adult_or_elder(sim_info: SimInfo) -> bool:
         """
             Determine if a sim is a Teen, a Young Adult, an Adult, or an Elder.
         """
-        return CommonAgeUtils.is_teen(sim_info) or CommonAgeUtils.is_adult(sim_info) or CommonAgeUtils.is_elder(sim_info)
+        return CommonAgeUtils.is_teen_adult_or_elder_age(CommonAgeUtils.get_age(sim_info))
+
+    @staticmethod
+    def is_adult_or_elder(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is a Young Adult, an Adult, or an Elder.
+        """
+        return CommonAgeUtils.is_adult_or_elder_age(CommonAgeUtils.get_age(sim_info))
+
+    @staticmethod
+    def is_mature_adult_or_elder(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is an Adult or an Elder.
+        """
+        return CommonAgeUtils.is_mature_adult_or_elder_age(CommonAgeUtils.get_age(sim_info))
+
+    # Obsolete Functionality
+
+    @staticmethod
+    def is_baby_child_or_toddler(sim_info: SimInfo) -> bool:
+        """ Obsolete: Don't use this function. Use the 'is_baby_toddler_or_child' function instead. """
+        return CommonAgeUtils.is_baby(sim_info) or CommonAgeUtils.is_toddler(sim_info) or CommonAgeUtils.is_child(sim_info)

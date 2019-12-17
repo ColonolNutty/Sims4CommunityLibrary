@@ -9,7 +9,7 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonLotTraitId(CommonEnumIntBase):
-    """ Identifiers for various vanilla lot traits """
+    """ Identifiers for vanilla lot traits """
     CELEBRITY_HANG_OUT_HIGH_FAME = 191710
     CELEBRITY_HANG_OUT_LOW_FAME = 191708
     CELEBRITY_HOME_LOT_TRAIT = 199661

@@ -35,7 +35,6 @@ class CommonExceptionHandler:
             CommonExceptionHandler._notify_exception_occurred(file_path)
         return result
 
-
     @staticmethod
     def _log_stacktrace(mod_name: str, _traceback, file_path: str) -> bool:
         exception_traceback_text = '[{}] {} {}\n'.format(mod_name, CommonRealDateUtils.get_current_date_string(), _traceback)

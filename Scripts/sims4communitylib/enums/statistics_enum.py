@@ -9,7 +9,7 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonStatisticId(CommonEnumIntBase):
-    """ Identifiers for various vanilla statistics """
+    """ Identifiers for vanilla statistics """
     ACTOR_CAREER_MAIN_GOAL = 197925
     ACTOR_CAREER_PRE_PERFORMANCE_DIRECTOR_PRODUCER = 193186
     ACTOR_CAREER_PRE_PERFORMANCE_DOLLY_CAMERA = 194698

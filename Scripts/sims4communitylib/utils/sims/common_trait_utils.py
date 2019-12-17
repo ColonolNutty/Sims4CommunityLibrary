@@ -614,7 +614,7 @@ class CommonTraitUtils:
         return list(sim_info.get_traits())
 
     @staticmethod
-    def get_equipped_traits(sim_info: SimInfo) -> List[int]:
+    def get_equipped_traits(sim_info: SimInfo) -> List[Trait]:
         """
             Retrieve sims currently equipped traits. This is useful mainly for checking occult types.
         """
