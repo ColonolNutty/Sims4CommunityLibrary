@@ -55,8 +55,8 @@ class CommonStacktraceUtil:
         full_traceback = CommonStacktraceUtil._extend_traceback(exec_traceback, CommonStacktraceUtil.current_stack(1))
         return exec_type, exec_value, full_traceback
 
-    @classmethod
-    def get_full_stack_trace(cls) -> List[str]:
+    @staticmethod
+    def get_full_stack_trace() -> List[str]:
         """
             Retrieve the full stacktrace from the current stack.
         :return: A collection of stack trace strings.

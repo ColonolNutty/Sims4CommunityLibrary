@@ -24,14 +24,16 @@ class CommonBasicNotification:
     """
         Use to create a basic notification.
     """
-    def __init__(self,
-                 title_identifier: Union[int, LocalizedString],
-                 description_identifier: Union[int, LocalizedString],
-                 title_tokens: Tuple[Any]=(),
-                 description_tokens: Tuple[Any]=(),
-                 urgency: UiDialogNotification.UiDialogNotificationUrgency=UiDialogNotification.UiDialogNotificationUrgency.DEFAULT,
-                 information_level: UiDialogNotification.UiDialogNotificationLevel=UiDialogNotification.UiDialogNotificationLevel.SIM,
-                 expand_behavior: UiDialogNotification.UiDialogNotificationExpandBehavior=UiDialogNotification.UiDialogNotificationExpandBehavior.USER_SETTING):
+    def __init__(
+        self,
+        title_identifier: Union[int, LocalizedString],
+        description_identifier: Union[int, LocalizedString],
+        title_tokens: Tuple[Any]=(),
+        description_tokens: Tuple[Any]=(),
+        urgency: UiDialogNotification.UiDialogNotificationUrgency=UiDialogNotification.UiDialogNotificationUrgency.DEFAULT,
+        information_level: UiDialogNotification.UiDialogNotificationLevel=UiDialogNotification.UiDialogNotificationLevel.SIM,
+        expand_behavior: UiDialogNotification.UiDialogNotificationExpandBehavior=UiDialogNotification.UiDialogNotificationExpandBehavior.USER_SETTING
+    ):
         """
             Create a notification
         :param title_identifier: A decimal identifier of the title text.
