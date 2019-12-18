@@ -10,30 +10,30 @@ from typing import Dict, Any
 
 class CommonOption:
     """ Useful for typing arguments when str just won't cut it. """
-    def __init__(self, name):
+    def __init__(self, name: str):
         self._name = name
 
     @property
-    def name(self):
+    def name(self) -> str:
         """
             The name of the option
         :return: A string name.
         """
         return self._name
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.name,))
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return self.name == other.name
 
-    def __ne__(self, other):
+    def __ne__(self, other) -> bool:
         return not(self == other)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self._name
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.__repr__()
 
 
@@ -89,4 +89,5 @@ class HasCommonOptions:
 
 
 class _DefaultCommonOption(CommonOption):
-    pass
+    def __init__(self, name: str):
+        super().__init__(name or 'Default')
