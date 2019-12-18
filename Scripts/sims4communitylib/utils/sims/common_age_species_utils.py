@@ -183,3 +183,10 @@ class CommonAgeSpeciesUtils:
             Determine if a sim is an old (Teen, Young Adult, Adult, Elder) Human or an old (Adult, Elder) Pet.
         """
         return CommonAgeSpeciesUtils.is_teen_adult_or_elder_human(sim_info) or CommonAgeSpeciesUtils.is_old_pet(sim_info)
+
+    @staticmethod
+    def are_same_age_and_species(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:
+        """
+            Determine if two Sims are the same Age and the same Species.
+        """
+        return CommonAgeUtils.are_same_age(sim_info, other_sim_info) and CommonSpeciesUtils.are_same_species(sim_info, other_sim_info)

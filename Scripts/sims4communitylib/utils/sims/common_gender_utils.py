@@ -40,7 +40,7 @@ class CommonGenderUtils:
             sim_info.gender = gender
             return True
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to set gender of sim {} to {}.'.format(pformat(sim_info), gender), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to set gender of Sim {} to {}.'.format(pformat(sim_info), gender), exception=ex)
             return False
 
     @staticmethod
