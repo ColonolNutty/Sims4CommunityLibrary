@@ -13,8 +13,10 @@ from typing import Tuple, Union, Dict
 from cas.cas import OutfitData
 from sims.outfits.outfit_enums import OutfitCategory, BodyType
 from sims.sim_info import SimInfo
+from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 
 
 class CommonOutfitUtils:
@@ -193,6 +195,13 @@ class CommonOutfitUtils:
             Determine if a sim is wearing a Cold Weather outfit.
         """
         return CommonOutfitUtils.is_cold_weather_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
+
+    @staticmethod
+    def is_wearing_towel(sim_info: SimInfo) -> bool:
+        """
+            Determine if a sim is currently wearing a towel.
+        """
+        return CommonBuffUtils.has_buff(sim_info, CommonBuffId.IS_WEARING_TOWEL)
 
     @staticmethod
     def get_current_outfit_category(sim_info: SimInfo) -> OutfitCategory:
