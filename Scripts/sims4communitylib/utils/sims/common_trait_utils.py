@@ -318,48 +318,10 @@ class CommonTraitUtils:
     @staticmethod
     def is_service_sim(sim_info: SimInfo) -> bool:
         """
-            Determine if a sim is a Service Sim.
-
-            Service Sims:
-            - Butler
-            - Chalet
-            - City Repair
-            - Forest Ranger
-            - Gardener
-            - Grim Reaper
-            - Maid
-            - Mailman
-            - Massage Therapist
-            - Master Fisherman
-            - Master Gardener
-            - Master Herbalist
-            - Nanny
-            - Pizza Delivery
-            - Repairman
-            - Restaurant Critic
-            - Statue Busker
+            Obsolete: Please use CommonSimTypeUtils.is_service_sim instead.
         """
-        trait_ids = (
-            CommonTraitId.IS_BUTLER,
-            CommonTraitId.IS_CHALET_GARDENS_GHOST,
-            CommonTraitId.IS_CITY_REPAIR,
-            CommonTraitId.IS_FOREST_RANGER,
-            CommonTraitId.IS_GARDENER,
-            CommonTraitId.IS_GARDENER_SERVICE,
-            CommonTraitId.IS_GRIM_REAPER,
-            CommonTraitId.IS_MAID,
-            CommonTraitId.IS_MAILMAN,
-            CommonTraitId.IS_MASSAGE_THERAPIST,
-            CommonTraitId.IS_MASTER_FISHERMAN,
-            CommonTraitId.IS_MASTER_GARDENER,
-            CommonTraitId.IS_MASTER_HERBALIST,
-            CommonTraitId.IS_NANNY,
-            CommonTraitId.IS_PIZZA_DELIVERY,
-            CommonTraitId.IS_REPAIR,
-            CommonTraitId.IS_RESTAURANT_CRITIC,
-            CommonTraitId.IS_STATUE_BUSKER
-        )
-        return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+        from sims4communitylib.utils.sims.common_sim_type_utils import CommonSimTypeUtils
+        return CommonSimTypeUtils.is_service_sim(sim_info)
 
     @staticmethod
     def is_shameless(sim_info: SimInfo) -> bool:
