@@ -5,6 +5,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from pprint import pformat
 from typing import Tuple, Any, Union, List, Set
 from event_testing.results import TestResult
 from interactions import ParticipantType
@@ -14,21 +15,44 @@ from interactions.interaction_finisher import FinishingType
 from postures.posture_state import PostureState
 from sims.sim import Sim
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.logging.has_log import HasLog
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from singletons import DEFAULT
 
 
-class CommonInteraction(Interaction):
+class CommonInteraction(Interaction, HasLog):
     """ Enables hooks into the functionality of an Interaction """
+    def __init__(self, *_, **__):
+        super().__init__(*_, **__)
+        HasLog.__init__(self)
+
+    @property
+    def mod_identity(self) -> CommonModIdentity:
+        """ The Identity of the mod that owns this class. """
+        return ModInfo.get_identity()
+
     @classmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=TestResult.NONE)
     def _test(cls, target: Any, context: InteractionContext, **kwargs) -> TestResult:
-        test_result = cls.on_test(context.sim, target, context, **kwargs)
+        try:
+            test_result = cls.on_test(context.sim, target, context, **kwargs)
+        except Exception as ex:
+            try:
+                if hasattr(cls, 'mod_identity'):
+                    mod_identity = cls.mod_identity
+                else:
+                    mod_identity = ModInfo.get_identity()
+            except Exception as ex1:
+                mod_identity = ModInfo.get_identity()
+                CommonExceptionHandler.log_exception(mod_identity.name, 'Error occurred attempting to retrieve mod info for interaction {}.'.format(cls.__name__), exception=ex1)
+            CommonExceptionHandler.log_exception(mod_identity.name, 'Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
+            return TestResult.NONE
         if test_result is None:
             return super()._test(target, context, **kwargs)
         if not isinstance(test_result, TestResult):
-            raise RuntimeError('Interaction on_test did not result in a TestResult. {}'.format(cls.__name__))
+            raise RuntimeError('Interaction on_test did not result in a TestResult, instead got {}. {}'.format(pformat(test_result), cls.__name__))
         if test_result.result is False:
             if test_result.tooltip is not None:
                 tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.tooltip)
@@ -39,12 +63,13 @@ class CommonInteraction(Interaction):
             return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
         return super()._test(target, context, **kwargs)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def _trigger_interaction_start_event(self):
-        super()._trigger_interaction_start_event()
-        self.on_started(self.sim, self.target)
+        try:
+            super()._trigger_interaction_start_event()
+            self.on_started(self.sim, self.target)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' on_started.'.format(self.__class__.__name__), exception=ex)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def apply_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT):
         """
             Apply a posture to a sim.
@@ -53,7 +78,11 @@ class CommonInteraction(Interaction):
         :param sim: The sim to apply posture states to.
         :return: Unknown
         """
-        (new_posture_state, new_participant_type, new_sim) = self.modify_posture_state(posture_state, participant_type=participant_type, sim=sim)
+        try:
+            (new_posture_state, new_participant_type, new_sim) = self.modify_posture_state(posture_state, participant_type=participant_type, sim=sim)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' modify_posture_state.'.format(self.__class__.__name__), exception=ex)
+            return None, None, None
         return super().apply_posture_state(new_posture_state, participant_type=new_participant_type, sim=new_sim)
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
@@ -61,28 +90,49 @@ class CommonInteraction(Interaction):
         """
             Kill the interaction. (Hard Cancel)
         """
-        self.on_killed(self.sim, self.target)
+        try:
+            self.on_killed(self.sim, self.target)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' on_killed.'.format(self.__class__.__name__), exception=ex)
         return super().kill()
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
-    def cancel(self, finishing_type, cancel_reason_msg, **kwargs) -> bool:
+    def cancel(self, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> bool:
         """
             Cancel the interaction.
         :param finishing_type: The type of cancellation occurring.
         :param cancel_reason_msg: The reason it was cancelled.
         :return: True if cancellation is successful, False if cancellation failed.
         """
-        self.on_cancelled(self.sim, self.target, finishing_type, cancel_reason_msg, **kwargs)
+        try:
+            self.on_cancelled(self.sim, self.target, finishing_type, cancel_reason_msg, **kwargs)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' on_cancelled.'.format(self.__class__.__name__), exception=ex)
         return super().cancel(finishing_type, cancel_reason_msg, **kwargs)
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
+    def on_reset(self) -> None:
+        """
+            Occurs upon the interaction being reset.
+        """
+        try:
+            self._on_reset(self.sim, self.target)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' _on_reset.'.format(self.__class__.__name__), exception=ex)
+        return super().on_reset()
+
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def _post_perform(self):
-        self.on_performed(self.sim, self.target)
+        try:
+            self.on_performed(self.sim, self.target)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' on_performed.'.format(self.__class__.__name__), exception=ex)
         return super()._post_perform()
 
     # The following functions are hooks into various parts of an interaction override them in your own interaction to provide custom functionality.
 
     @staticmethod
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=TestResult.NONE)
     def create_test_result(result: bool, reason: str=None, text_tokens: Union[Tuple[Any], List[Any], Set[Any]]=(), tooltip: Union[int, str, CommonLocalizationUtils.LocalizedTooltip]=None, icon=None, influence_by_active_mood: bool=False) -> TestResult:
         """
             Create a TestResult with the specified information.
@@ -90,7 +140,7 @@ class CommonInteraction(Interaction):
         :param reason: The reason for the Test Result (This is displayed as a tooltip to the player when the interaction is disabled).
         :param text_tokens: Any text tokens to include format into the reason.
         :param tooltip: The tooltip displayed when hovering the interaction while it is disabled.
-        :param icon: The icon of the outcome. (It is currently unknown exactly where this icon would show)
+        :param icon: The icon of the outcome.
         :param influence_by_active_mood: If true, the Test Result will be influenced by the active mood.
         :return: An object of type TestResult.
         """
@@ -98,7 +148,6 @@ class CommonInteraction(Interaction):
 
     # noinspection PyUnusedLocal
     @classmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=TestResult.NONE)
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
         """
             A hook that occurs upon the interaction being tested for run.
@@ -109,7 +158,6 @@ class CommonInteraction(Interaction):
         """
         return TestResult.TRUE
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
     def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
         """
             Occurs upon the interaction being started.
@@ -120,7 +168,6 @@ class CommonInteraction(Interaction):
         pass
 
     # noinspection PyUnusedLocal
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
     def on_killed(self, interaction_sim: Sim, interaction_target: Any) -> bool:
         """
             Occurs upon the interaction being killed.
@@ -130,7 +177,6 @@ class CommonInteraction(Interaction):
         """
         return True
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
     def on_cancelled(self, interaction_sim: Sim, interaction_target: Any, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> None:
         """
             Occurs upon the interaction being cancelled.
@@ -141,7 +187,12 @@ class CommonInteraction(Interaction):
         """
         pass
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
+    def _on_reset(self, interaction_sim: Sim, interaction_target: Any) -> None:
+        """
+            Occurs upon the interaction being reset.
+        """
+        pass
+
     def on_performed(self, interaction_sim: Sim, interaction_target: Any) -> None:
         """
             Occurs after the interaction has been performed.
@@ -150,7 +201,6 @@ class CommonInteraction(Interaction):
         """
         pass
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
     def modify_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT) -> Tuple[PostureState, ParticipantType, Any]:
         """
             Modify the posture state, participant type or sim of the interaction.

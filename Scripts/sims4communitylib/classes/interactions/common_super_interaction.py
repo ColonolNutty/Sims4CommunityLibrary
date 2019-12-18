@@ -5,8 +5,13 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from typing import Any
+
 from interactions import ParticipantType
+from interactions.base.interaction import Interaction
 from interactions.base.super_interaction import SuperInteraction
+from interactions.constraints import Constraint
+from sims.sim import Sim
 from sims4.utils import flexmethod
 from sims4communitylib.classes.interactions.common_interaction import CommonInteraction
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
@@ -18,11 +23,15 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
 
     def _run_interaction_gen(self, timeline):
         super()._run_interaction_gen(timeline)
-        return self.on_run(self.sim, self.target, timeline)
+        try:
+            return self.on_run(self.sim, self.target, timeline)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while running interaction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
+        return False
 
     # noinspection PyUnusedLocal
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
-    def on_run(self, interaction_sim, interaction_target, timeline) -> bool:
+    def on_run(self, interaction_sim: Sim, interaction_target: Any, timeline) -> bool:
         """
             Occurs upon the interaction being run.
         :param interaction_sim: The sim performing the interaction.
@@ -38,12 +47,16 @@ class CommonConstrainedSuperInteraction(SuperInteraction):
 
     # noinspection PyMethodParameters
     @flexmethod
-    def _constraint_gen(cls, inst, sim, target, participant_type=ParticipantType.Actor):
+    def _constraint_gen(cls, inst: Interaction, sim: Sim, target: Any, participant_type: ParticipantType=ParticipantType.Actor, **kwargs) -> Constraint:
         interaction_instance = inst if inst is not None else cls
-        yield cls.on_constraint_gen(interaction_instance, sim or interaction_instance.sim, target or interaction_instance.target)
+        try:
+            yield cls.on_constraint_gen(interaction_instance, sim or interaction_instance.sim, target or interaction_instance.target)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while running interaction \'{}\' on_constraint_gen.'.format(cls.__name__), exception=ex)
+        return None
 
     @classmethod
-    def on_constraint_gen(cls, inst, sim, target):
+    def on_constraint_gen(cls, inst: Interaction, sim: Sim, target: Any) -> Constraint:
         """
             Occurs upon retrieving an interactions constraints.
         :param inst: An object of type Interaction.
