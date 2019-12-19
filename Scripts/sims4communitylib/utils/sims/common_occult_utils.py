@@ -27,7 +27,7 @@ class CommonOccultUtils:
             Note: Results include the occult type of the sim_info specified.
              If they are Human by default, the Human occult sim info will be included.
         :param sim_info: The sim to locate Occults in
-        :param exclude_occult_types: A list of OccultTypes to exclude from the resulting SimInfo list.
+        :param exclude_occult_types: A collection of OccultTypes to exclude from the resulting SimInfo list.
         :return: An iterator of SimInfo objects for all occult types of a sim.
         """
         if sim_info is None:
