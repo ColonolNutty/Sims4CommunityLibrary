@@ -19,8 +19,26 @@ class CommonIntervalDispatcher:
         self._mod_name = mod_name
         self._minimum_milliseconds_to_dispatch = milliseconds
         self._listening_func = listening_func
-        self._total_milliseconds_passed = 0
+        self.total_milliseconds_passed = 0.0
         self._run_once = run_once
+
+    @property
+    def total_milliseconds_passed(self) -> float:
+        """
+            The total amount of milliseconds this dispatcher has known to have passed.
+        """
+        return self._total_milliseconds_passed
+
+    @total_milliseconds_passed.setter
+    def total_milliseconds_passed(self, milliseconds: float):
+        self._total_milliseconds_passed = milliseconds
+
+    @property
+    def minimum_milliseconds_to_dispatch(self) -> int:
+        """
+            The minimum amount of milliseconds that must pass before this dispatcher will dispatch.
+        """
+        return self._minimum_milliseconds_to_dispatch
 
     @property
     def mod_name(self) -> str:
@@ -38,12 +56,12 @@ class CommonIntervalDispatcher:
         return self._run_once
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
-    def try_dispatch(self, ticks_since_last_update: int):
+    def try_dispatch(self, milliseconds_since_last_update: int):
         """ Attempt to trigger the listener based on the amount of time passed. """
-        self._total_milliseconds_passed += ticks_since_last_update
-        if self._total_milliseconds_passed < self._minimum_milliseconds_to_dispatch:
+        self.total_milliseconds_passed += milliseconds_since_last_update
+        if self.total_milliseconds_passed < self.minimum_milliseconds_to_dispatch:
             return False
-        self._total_milliseconds_passed = max(0, self._total_milliseconds_passed - self._minimum_milliseconds_to_dispatch)
+        self.total_milliseconds_passed = max(0.0, self.total_milliseconds_passed - self.minimum_milliseconds_to_dispatch)
         self._listening_func()
         return True
 
@@ -54,8 +72,10 @@ class CommonIntervalEventRegistry(CommonService):
     def __init__(self):
         self._registered_interval_trackers: List[CommonIntervalDispatcher] = []
 
-    def _add_tracker(self, mod_name: str, milliseconds: int, listening_func: Callable[..., Any]):
-        self._registered_interval_trackers.append(CommonIntervalDispatcher(mod_name, milliseconds, listening_func))
+    def _add_tracker(self, mod_name: str, milliseconds: int, listening_func: Callable[..., Any]) -> CommonIntervalDispatcher:
+        dispatcher = CommonIntervalDispatcher(mod_name, milliseconds, listening_func)
+        self._registered_interval_trackers.append(dispatcher)
+        return dispatcher
 
     @staticmethod
     def run_every(mod_name: str, milliseconds: int=1500) -> Callable[..., Any]:
@@ -86,11 +106,11 @@ class CommonIntervalEventRegistry(CommonService):
             return listening_func
         return _wrapper
 
-    def _attempt_to_dispatch(self, ticks_since_last_update: int):
+    def _attempt_to_dispatch(self, milliseconds_since_last_update: int):
         interval_trackers = list(self._registered_interval_trackers)
         for interval_tracker in interval_trackers:
             try:
-                if interval_tracker.try_dispatch(ticks_since_last_update):
+                if interval_tracker.try_dispatch(milliseconds_since_last_update):
                     if interval_tracker.run_once:
                         self._registered_interval_trackers.remove(interval_tracker)
             except Exception as ex:
