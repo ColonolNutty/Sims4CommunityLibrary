@@ -63,6 +63,7 @@ class CommonScriptObjectInteractionHandler(CommonInteractionHandler):
 class CommonInteractionRegistry(CommonService):
     """ A registry used to register interactions to specific places, whether they are script objects, terrain, or what have you. """
     def __init__(self):
+        super().__init__()
         self._interaction_handlers = {
             CommonInteractionType.ON_TERRAIN_LOAD: [],
             CommonInteractionType.ON_OCEAN_LOAD: [],
