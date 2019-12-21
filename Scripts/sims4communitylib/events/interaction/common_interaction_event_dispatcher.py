@@ -10,11 +10,12 @@ from typing import Union
 from event_testing.results import TestResult
 from interactions.base.interaction import Interaction
 from interactions.interaction_queue import InteractionQueue
+from interactions.utils.outcome import InteractionOutcome
 from interactions.utils.outcome_enums import OutcomeResult
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
-from sims4communitylib.events.interactions.events.interaction_outcome import S4CLInteractionOutcomeEvent
-from sims4communitylib.events.interactions.events.interaction_queued import S4CLInteractionQueuedEvent
-from sims4communitylib.events.interactions.events.interaction_run import S4CLInteractionRunEvent
+from sims4communitylib.events.interaction.events.interaction_outcome import S4CLInteractionOutcomeEvent
+from sims4communitylib.events.interaction.events.interaction_queued import S4CLInteractionQueuedEvent
+from sims4communitylib.events.interaction.events.interaction_run import S4CLInteractionRunEvent
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 
@@ -37,7 +38,7 @@ class CommonInteractionEventDispatcherService(CommonService):
             return TestResult(False, 'Interaction \'{}\' Failed to Queue'.format(pformat(interaction)))
         return None
 
-    def _on_interaction_outcome(self, interaction: Interaction, outcome: bool, result: OutcomeResult):
+    def _on_interaction_outcome(self, interaction: Interaction, outcome: InteractionOutcome, result: OutcomeResult):
         if interaction.sim is None:
             return False
         return CommonEventRegistry.get().dispatch(S4CLInteractionOutcomeEvent(interaction, outcome, result))

@@ -6,13 +6,14 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from interactions.base.interaction import Interaction
+from interactions.utils.outcome import InteractionOutcome
 from interactions.utils.outcome_enums import OutcomeResult
 from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
 class S4CLInteractionOutcomeEvent(CommonEvent):
     """ An Event that Occurs upon a Sim running an interaction. """
-    def __init__(self, interaction: Interaction, outcome: bool, outcome_result: OutcomeResult):
+    def __init__(self, interaction: Interaction, outcome: InteractionOutcome, outcome_result: OutcomeResult):
         self._interaction = interaction
         self._outcome = outcome
         self._outcome_result = outcome_result
@@ -23,13 +24,13 @@ class S4CLInteractionOutcomeEvent(CommonEvent):
         return self._interaction
 
     @property
-    def outcome(self) -> bool:
-        """ The boolean representation of an interaction outcome. """
+    def outcome(self) -> InteractionOutcome:
+        """ The outcome of the interaction. """
         return self._outcome
 
     @property
     def outcome_result(self) -> OutcomeResult:
-        """ The result of an interaction completing. """
+        """ The result of an interaction. """
         return self._outcome_result
 
     def is_success(self) -> bool:
