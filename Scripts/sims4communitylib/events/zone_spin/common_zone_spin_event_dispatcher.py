@@ -35,10 +35,6 @@ class CommonZoneSpinEventDispatcher(CommonService):
         return self._game_loading
 
     def _on_early_zone_load(self, zone: Zone):
-        """
-            Invoked upon early zone load.
-        :return: True if the run was successful. False if not.
-        """
         CommonEventRegistry.get().dispatch(S4CLZoneEarlyLoadEvent(zone, game_loaded=self.game_loaded, game_loading=self.game_loading))
 
     def _on_late_zone_load(self, zone: Zone, household_id: int, active_sim_id: int):

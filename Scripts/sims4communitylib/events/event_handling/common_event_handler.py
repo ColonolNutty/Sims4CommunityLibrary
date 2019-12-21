@@ -46,11 +46,11 @@ class CommonEventHandler:
         """ Determine if this event handler can handle the type of the event. """
         return isinstance(event, self.event_type)
 
-    def handle_event(self, event) -> None:
+    def handle_event(self, event) -> bool:
         """
             Handle the event data.
         """
-        self.event_function(event)
+        return self.event_function(event)
 
     def __repr__(self):
         return self.__str__()

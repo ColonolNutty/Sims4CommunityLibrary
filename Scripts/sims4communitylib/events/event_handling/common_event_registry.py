@@ -39,16 +39,19 @@ class CommonEventRegistry(CommonService):
     def dispatch(self, event: CommonEvent) -> bool:
         """ Dispatch an event to any event handlers listening for it. """
         event_handlers = list(self._event_handlers)
+        result = True
         try:
             for event_handler in event_handlers:
                 if not event_handler.can_handle_event(event):
                     continue
                 try:
-                    event_handler.handle_event(event)
+                    handle_result = event_handler.handle_event(event)
+                    if not handle_result:
+                        result = False
                 except Exception as ex:
                     CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred when attempting to handle event type \'{}\' via event handler \'{}\''.format(type(event), str(event_handler)), exception=ex)
                     continue
         except Exception as ex:
             CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to dispatch event \'{}\''.format(event), exception=ex)
             return False
-        return True
+        return result
