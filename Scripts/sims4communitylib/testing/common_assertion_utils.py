@@ -69,6 +69,8 @@ class CommonAssertionUtils:
             raise AssertionError('{}: expected\n  {}\n  to be equal to\n  {}'.format(message, list_one, list_two))
         if len(list_one) != len(list_two):
             raise AssertionError('{}: expected\n  {}\n  to be equal to\n  {}'.format(message, list_one, list_two))
+        if isinstance(list_one, set) or isinstance(list_two, set):
+            return list_one == list_two
         current_idx = 0
         while current_idx < len(list_one):
             item_one = list_one[current_idx]
