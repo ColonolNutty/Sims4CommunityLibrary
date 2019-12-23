@@ -5,11 +5,12 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import List, Union
+from typing import List, Union, Callable
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from traits.traits import Trait
 
 
@@ -33,6 +34,13 @@ class CommonTraitUtils:
             CommonTraitId.FLOWER_BUNNY
         )
         return CommonTraitUtils.has_trait(sim_info, *traits)
+
+    @staticmethod
+    def is_active(sim_info: SimInfo) -> bool:
+        """
+            Determine if a Sim is active.
+        """
+        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.ACTIVE)
 
     @staticmethod
     def is_aggressive_pet(sim_info: SimInfo) -> bool:
@@ -140,6 +148,13 @@ class CommonTraitUtils:
             CommonTraitId.PET_FRIENDLY_CAT
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+
+    @staticmethod
+    def is_geek(sim_info: SimInfo) -> bool:
+        """
+            Determine if a Sim is a geek.
+        """
+        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GEEK)
 
     @staticmethod
     def is_genius(sim_info: SimInfo) -> bool:
@@ -268,6 +283,13 @@ class CommonTraitUtils:
             CommonTraitId.PET_NAUGHTY_CAT
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+
+    @staticmethod
+    def is_neat(sim_info: SimInfo) -> bool:
+        """
+            Determine if a Sim is neat.
+        """
+        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.NEAT)
 
     @staticmethod
     def is_night_owl(sim_info: SimInfo) -> bool:
@@ -617,6 +639,53 @@ class CommonTraitUtils:
             if not sim_info.remove_trait(trait_instance):
                 success = False
         return success
+
+    @staticmethod
+    def swap_traits(sim_info: SimInfo, trait_id_one: int, trait_id_two: int) -> bool:
+        """
+            Remove one trait and add another to a Sim.
+
+            Note:
+            - If trait_id_one exists on the Sim, it will be removed and trait_id_two will be added.
+            - If trait_id_two exists on the Sim, it will be removed and trait_id_one will be added.
+        """
+        # Has Trait One
+        if CommonTraitUtils.has_trait(sim_info, trait_id_one):
+            CommonTraitUtils.remove_trait(sim_info, trait_id_one)
+            if not CommonTraitUtils.has_trait(sim_info, trait_id_two):
+                CommonTraitUtils.add_trait(sim_info, trait_id_two)
+            return True
+        # Has Trait Two
+        elif CommonTraitUtils.has_trait(sim_info, trait_id_two):
+            CommonTraitUtils.remove_trait(sim_info, trait_id_two)
+            if not CommonTraitUtils.has_trait(sim_info, trait_id_one):
+                CommonTraitUtils.add_trait(sim_info, trait_id_one)
+            return True
+        return False
+
+    @staticmethod
+    def add_trait_to_all_sims(trait_id: int, include_sim_callback: Callable[[SimInfo], bool]=None):
+        """
+            Add a trait to all sims that match the specified include filter.
+        :param trait_id: The Trait to add to all Sims.
+        :param include_sim_callback: Only sims that match this filter will have the Trait added.
+        """
+        for sim_info in CommonSimUtils.get_instanced_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
+            if CommonTraitUtils.has_trait(sim_info, trait_id):
+                continue
+            CommonTraitUtils.add_trait(sim_info, trait_id)
+
+    @staticmethod
+    def remove_trait_from_all_sims(trait_id: int, include_sim_callback: Callable[[SimInfo], bool]=None):
+        """
+            Remove a trait from all Sims that match the specified include filter.
+        :param trait_id: The Trait to remove from all Sims.
+        :param include_sim_callback: Only sims that match this filter will have the Trait removed.
+        """
+        for sim_info in CommonSimUtils.get_instanced_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
+            if not CommonTraitUtils.has_trait(sim_info, trait_id):
+                continue
+            CommonTraitUtils.remove_trait(sim_info, trait_id)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
