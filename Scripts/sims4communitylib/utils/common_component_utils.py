@@ -13,8 +13,8 @@ from sims4communitylib.enums.types.component_types import CommonComponentType
 
 class CommonComponentUtils:
     """ Utilities for handling components of component containers. """
-    @classmethod
-    def has_component(cls, component_container: ComponentContainer, component_type: CommonComponentType) -> bool:
+    @staticmethod
+    def has_component(component_container: ComponentContainer, component_type: CommonComponentType) -> bool:
         """
             Determine if a ComponentContainer has a component of the specified type.
         :param component_container: The ComponentContainer to check.
@@ -25,8 +25,8 @@ class CommonComponentUtils:
             return False
         return component_container.has_component(component_type)
 
-    @classmethod
-    def get_component(cls, component_container: ComponentContainer, component_type: CommonComponentType, add_dynamic: bool=False) -> Union[Component, None]:
+    @staticmethod
+    def get_component(component_container: ComponentContainer, component_type: CommonComponentType, add_dynamic: bool=False) -> Union[Component, None]:
         """
             Retrieve a component from a ComponentContainer.
         :param component_container: The ComponentContainer to retrieve a component from.
@@ -40,8 +40,8 @@ class CommonComponentUtils:
             return CommonComponentUtils.add_dynamic_component(component_container, component_type)
         return component_container.get_component(component_type)
 
-    @classmethod
-    def add_dynamic_component(cls, component_container: ComponentContainer, component_type: CommonComponentType) -> Union[Component, None]:
+    @staticmethod
+    def add_dynamic_component(component_container: ComponentContainer, component_type: CommonComponentType) -> Union[Component, None]:
         """
             Add a dynamic component to a ComponentContainer.
         :param component_container: The ComponentContainer to add to.
