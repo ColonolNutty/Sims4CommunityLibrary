@@ -22,8 +22,8 @@ class TestEnum(CommonEnumStringBase):
 @CommonTestService.test_class(ModInfo.get_identity().name)
 class CommonStringEnumTests:
     @staticmethod
-    @CommonTestService.test(TestEnum.TEST_VALUE_ONE, 1.0)
-    @CommonTestService.test(TestEnum.TEST_VALUE_TWO, 2.0)
-    @CommonTestService.test(TestEnum.TEST_VALUE_THREE, 3.0)
+    @CommonTestService.test(TestEnum.TEST_VALUE_ONE, 'TestEnum.TEST_VALUE_ONE')
+    @CommonTestService.test(TestEnum.TEST_VALUE_TWO, 'TestEnum.TEST_VALUE_TWO')
+    @CommonTestService.test(TestEnum.TEST_VALUE_THREE, 'TestEnum.TEST_VALUE_THREE')
     def enum_should_convert_properly(enum_val, expected_value):
         CommonAssertionUtils.are_equal(str(enum_val), expected_value)
