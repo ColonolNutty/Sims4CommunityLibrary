@@ -5,30 +5,53 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import os
+from typing import Union
+
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.modinfo import ModInfo
 
 
 class CommonIOUtils:
     """
         Utilities for handling reading/writing to and from files.
     """
-    # noinspection PyBroadException
     @staticmethod
-    def write_to_file(file_path: str, data: str, buffering: int=1, encoding: str='utf-8'):
+    def write_to_file(file_path: str, data: str, buffering: int=1, encoding: str='utf-8') -> bool:
         """
             Write string data to a file.
-        :param encoding: See the 'open' function documentation for more details
-        :param buffering: See the 'open' function documentation for more details
         :param file_path: The file to write to.
         :param data: The data to write.
-        :return: True if successful.
+        :param encoding: See the 'open' function documentation for more details.
+        :param buffering: See the 'open' function documentation for more details.
+        :return: True if successful. False if not.
         """
         if file_path is None or data is None:
             return False
         try:
-            opened_file = open(file_path, mode='a', buffering=buffering, encoding=encoding)
-            opened_file.write(data)
-            opened_file.flush()
-            opened_file.close()
-        except Exception:
+            with open(file_path, mode='a', buffering=buffering, encoding=encoding) as opened_file:
+                opened_file.write(data)
+                opened_file.flush()
+                opened_file.close()
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while writing to file \'{}\''.format(file_path), exception=ex)
             return False
         return True
+
+    @staticmethod
+    def load_from_file(file_path: str, buffering: int=1, encoding: str='utf-8') -> Union[str, None]:
+        """
+            Load string data from a file.
+        :param file_path: The file to read from.
+        :param encoding: See the 'open' function documentation for more details.
+        :param buffering: See the 'open' function documentation for more details.
+        :return: The contents of the file as a string or None if an error occurred.
+        """
+        if not os.path.isfile(file_path):
+            return None
+        try:
+            with open(file_path, mode='r', buffering=buffering, encoding=encoding) as file:
+                return file.read()
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while reading from file \'{}\''.format(file_path), exception=ex)
+            return None
