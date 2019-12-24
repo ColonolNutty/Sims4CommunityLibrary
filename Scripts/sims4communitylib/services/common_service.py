@@ -5,6 +5,9 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from typing import TypeVar, Type
+
+ServiceType = TypeVar('ServiceType', bound=object)
 
 
 class CommonService:
@@ -12,7 +15,7 @@ class CommonService:
         A class used as a common structure for singleton services.
     """
     @classmethod
-    def get(cls) -> 'CommonService':
+    def get(cls: Type[ServiceType]) -> ServiceType:
         """
             Retrieve an instance of the service
         :return: An instance of the service
