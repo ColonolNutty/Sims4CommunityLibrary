@@ -7,8 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 import os
 from typing import Union
-
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 
 
@@ -17,13 +15,14 @@ class CommonIOUtils:
         Utilities for handling reading/writing to and from files.
     """
     @staticmethod
-    def write_to_file(file_path: str, data: str, buffering: int=1, encoding: str='utf-8') -> bool:
+    def write_to_file(file_path: str, data: str, buffering: int=1, encoding: str='utf-8', ignore_errors: bool=False) -> bool:
         """
             Write string data to a file.
         :param file_path: The file to write to.
         :param data: The data to write.
         :param encoding: See the 'open' function documentation for more details.
         :param buffering: See the 'open' function documentation for more details.
+        :param ignore_errors: If True, any exceptions thrown will be ignored (Useful in preventing infinite loops)
         :return: True if successful. False if not.
         """
         if file_path is None or data is None:
@@ -34,6 +33,9 @@ class CommonIOUtils:
                 opened_file.flush()
                 opened_file.close()
         except Exception as ex:
+            if ignore_errors:
+                return False
+            from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
             CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while writing to file \'{}\''.format(file_path), exception=ex)
             return False
         return True
@@ -53,5 +55,6 @@ class CommonIOUtils:
             with open(file_path, mode='r', buffering=buffering, encoding=encoding) as file:
                 return file.read()
         except Exception as ex:
+            from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
             CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while reading from file \'{}\''.format(file_path), exception=ex)
             return None

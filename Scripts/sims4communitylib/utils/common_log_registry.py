@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import sims4.commands
-from typing import List
+from typing import List, Dict
 from pprint import pformat
 
 from sims4communitylib.enums.enumtypes.string_enum import CommonEnumStringBase
@@ -160,7 +160,7 @@ class CommonLog:
         try:
             from sims4communitylib.utils.common_io_utils import CommonIOUtils
             file_path = CommonLogUtils.get_message_file_path(self._mod_name)
-            CommonIOUtils.write_to_file(file_path, new_message)
+            CommonIOUtils.write_to_file(file_path, new_message, ignore_errors=True)
         except Exception as ex:
             CommonExceptionHandler.log_exception(self._mod_name, 'Error occurred while attempting to log message: {}'.format(pformat(message)), exception=ex)
 
@@ -171,7 +171,7 @@ class CommonLogRegistry(CommonService):
         To register your own logs, please use CommonLogRegistry.get() to create a CommonLogRegistry.
     """
     def __init__(self):
-        self._registered_logs = dict()
+        self._registered_logs: Dict[str, List[CommonLog]] = dict()
 
     def get_registered_log_names(self) -> List[str]:
         """

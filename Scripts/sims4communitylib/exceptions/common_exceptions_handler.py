@@ -38,7 +38,7 @@ class CommonExceptionHandler:
     @staticmethod
     def _log_stacktrace(mod_name: str, _traceback, file_path: str) -> bool:
         exception_traceback_text = '[{}] {} {}\n'.format(mod_name, CommonRealDateUtils.get_current_date_string(), _traceback)
-        return CommonIOUtils.write_to_file(file_path, exception_traceback_text)
+        return CommonIOUtils.write_to_file(file_path, exception_traceback_text, ignore_errors=True)
 
     @staticmethod
     def catch_exceptions(mod_name: str, fallback_return: Any=None):

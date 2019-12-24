@@ -55,7 +55,6 @@ class CommonFunctionUtilsTests:
             CommonAssertionUtils.are_equal(normal_key_arg, normal_key_val)
             if normal_arg == normal_val and normal_key_arg == normal_key_val and value_one == _additional_value and key_value == _additional_key_word_value:
                 return True
-            raise Exception('No normarg: {}, valone: {}, normakeyva: {} keyva: {}'.format(normal_arg, value_one, normal_key_arg, key_value))
 
         result = CommonFunctionUtils.run_with_arguments(_function, _additional_value, key_value=_additional_key_word_value)(normal_val, normal_key_arg=normal_key_val)
         CommonAssertionUtils.is_true(result, message='Failed to send proper arguments: {}'.format(result))
