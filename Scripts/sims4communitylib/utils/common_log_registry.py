@@ -11,6 +11,7 @@ from pprint import pformat
 
 from sims4communitylib.enums.enumtypes.string_enum import CommonEnumStringBase
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_log_utils import CommonLogUtils
 
 
@@ -164,25 +165,13 @@ class CommonLog:
             CommonExceptionHandler.log_exception(self._mod_name, 'Error occurred while attempting to log message: {}'.format(pformat(message)), exception=ex)
 
 
-class CommonLogRegistry:
+class CommonLogRegistry(CommonService):
     """
         A registry for log handlers.
         To register your own logs, please use CommonLogRegistry.get() to create a CommonLogRegistry.
     """
-    _LOG_REGISTRY = None
-
     def __init__(self):
         self._registered_logs = dict()
-
-    @classmethod
-    def get(cls) -> 'CommonLogRegistry':
-        """
-            Retrieve an instance of CommonLogRegistry
-        :return: An object of type CommonLogRegistry
-        """
-        if CommonLogRegistry._LOG_REGISTRY is None:
-            CommonLogRegistry._LOG_REGISTRY = CommonLogRegistry()
-        return CommonLogRegistry._LOG_REGISTRY
 
     def get_registered_log_names(self) -> List[str]:
         """
