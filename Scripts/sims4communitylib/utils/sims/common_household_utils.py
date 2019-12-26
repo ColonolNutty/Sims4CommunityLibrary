@@ -103,7 +103,7 @@ class CommonHouseholdUtils:
             # noinspection PyPropertyAccess
             log.debug('Checking household \'{}\' for match.'.format(household.name))
             # noinspection PyPropertyAccess
-            household_name = getattr(household, name, None)
+            household_name = household.name
             if household_name is None:
                 continue
             if household_name == name:
