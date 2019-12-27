@@ -39,12 +39,13 @@ class CommonLogUtils:
         :return: The file path to 'Documents\Electronic Arts\The Sims 4' folder.
         """
         file_path = ''
-        root_file = os.path.normpath(os.path.dirname(os.path.realpath(__file__))).replace(os.sep, '/')
+        from sims4communitylib.modinfo import ModInfo
+        root_file = os.path.normpath(os.path.dirname(os.path.realpath(ModInfo.get_identity().file_path))).replace(os.sep, '/')
         root_file_split = root_file.split('/')
         # noinspection PyTypeChecker
         exit_index = len(root_file_split) - root_file_split.index('Mods')
         for index in range(0, len(root_file_split) - exit_index):
-            file_path = os.path.join(file_path, str(root_file_split[index]))
+            file_path = os.path.join(file_path + os.sep, str(root_file_split[index]))
         return file_path
 
     @staticmethod
@@ -59,7 +60,7 @@ class CommonLogUtils:
         file_path = os.path.join(root_path, '{}_{}.txt'.format(mod_name, file_name))
         if os.path.exists(file_path) and CommonLogUtils._file_is_too_big(file_path):
             current_date_time = CommonRealDateUtils.get_current_date_string()
-            os.rename(file_path, os.path.join(root_path, 'Old_{}_{}_{}.txt'.format(mod_name, file_name, current_date_time)))
+            os.rename(file_path, os.path.join(root_path, 'Old_{}_{}_{}.txt'.format(mod_name, file_name, str(current_date_time).replace(':', '_'))))
         return file_path
 
     @staticmethod
