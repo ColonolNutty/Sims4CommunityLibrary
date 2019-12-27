@@ -27,7 +27,7 @@ class CommonSimTypeUtils:
 
             Note: A Player Sim is a sim that is a part of the active household.
         """
-        return sim_info.is_player_sim
+        return not CommonSimTypeUtils.is_non_player_sim(sim_info)
 
     @staticmethod
     def is_played_sim(sim_info: SimInfo) -> bool:
