@@ -72,8 +72,8 @@ class CommonIntervalEventRegistry(CommonService):
     def __init__(self):
         self._registered_interval_trackers: List[CommonIntervalDispatcher] = []
 
-    def _add_tracker(self, mod_name: str, milliseconds: int, listening_func: Callable[..., Any]) -> CommonIntervalDispatcher:
-        dispatcher = CommonIntervalDispatcher(mod_name, milliseconds, listening_func)
+    def _add_tracker(self, mod_name: str, milliseconds: int, listening_func: Callable[..., Any], run_once: bool=False) -> CommonIntervalDispatcher:
+        dispatcher = CommonIntervalDispatcher(mod_name, milliseconds, listening_func, run_once=run_once)
         self._registered_interval_trackers.append(dispatcher)
         return dispatcher
 
@@ -102,7 +102,7 @@ class CommonIntervalEventRegistry(CommonService):
         """
 
         def _wrapper(listening_func):
-            CommonIntervalEventRegistry.get()._add_tracker(mod_name, milliseconds, listening_func)
+            CommonIntervalEventRegistry.get()._add_tracker(mod_name, milliseconds, listening_func, run_once=True)
             return listening_func
         return _wrapper
 
