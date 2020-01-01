@@ -40,6 +40,13 @@ class CommonIntervalDispatcher:
         """
         return self._minimum_milliseconds_to_dispatch
 
+    @minimum_milliseconds_to_dispatch.setter
+    def minimum_milliseconds_to_dispatch(self, val: int):
+        """
+            The minimum amount of milliseconds that must pass before this dispatcher will dispatch.
+        """
+        self._minimum_milliseconds_to_dispatch = val
+
     @property
     def mod_name(self) -> str:
         """ The name of the mod that is listening for events. """
@@ -119,4 +126,6 @@ class CommonIntervalEventRegistry(CommonService):
     @staticmethod
     @CommonEventRegistry.handle_events(ModInfo.get_identity().name)
     def _update_game_tick_on_zone_update(event_data: S4CLZoneUpdateEvent):
+        if event_data.is_paused:
+            return
         CommonIntervalEventRegistry.get()._attempt_to_dispatch(event_data.ticks_since_last_update)
