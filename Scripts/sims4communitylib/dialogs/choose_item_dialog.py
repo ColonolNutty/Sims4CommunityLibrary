@@ -79,7 +79,7 @@ class CommonChooseItemDialog:
         if _dialog is None:
             return
 
-        def _on_item_chosen(dialog: UiDialogOkCancel):
+        def _on_item_chosen(dialog: UiObjectPicker):
             if not dialog.accepted:
                 return on_item_chosen(None, CommonChooseItemResult(CommonChooseItemResult.DIALOG_CANCELLED))
             chosen_item = CommonDialogUtils.get_chosen_item(dialog)
