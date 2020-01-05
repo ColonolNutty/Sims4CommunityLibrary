@@ -20,7 +20,6 @@ from sims4communitylib.utils.localization.common_localized_string_colors import 
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-from ui.ui_dialog import UiDialogOkCancel
 from ui.ui_dialog_picker import UiObjectPicker, ObjectPickerRow
 
 log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'choose_item_dialog')
