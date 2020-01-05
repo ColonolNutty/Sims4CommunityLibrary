@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import sims4.commands
-from typing import Tuple, Any, Union
+from typing import Any, Union, Iterator
 from distributor.shared_messages import IconInfoData
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.enums.strings_enum import CommonStringId
@@ -28,8 +28,8 @@ class CommonBasicNotification:
         self,
         title_identifier: Union[int, LocalizedString],
         description_identifier: Union[int, LocalizedString],
-        title_tokens: Tuple[Any]=(),
-        description_tokens: Tuple[Any]=(),
+        title_tokens: Iterator[Any]=(),
+        description_tokens: Iterator[Any]=(),
         urgency: UiDialogNotification.UiDialogNotificationUrgency=UiDialogNotification.UiDialogNotificationUrgency.DEFAULT,
         information_level: UiDialogNotification.UiDialogNotificationLevel=UiDialogNotification.UiDialogNotificationLevel.SIM,
         expand_behavior: UiDialogNotification.UiDialogNotificationExpandBehavior=UiDialogNotification.UiDialogNotificationExpandBehavior.USER_SETTING
@@ -44,8 +44,8 @@ class CommonBasicNotification:
         :param information_level: The information level of the notification.
         :param expand_behavior: Specify how the notification will expand.
         """
-        self.title = CommonLocalizationUtils.create_localized_string(title_identifier, tokens=title_tokens)
-        self.description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=description_tokens)
+        self.title = CommonLocalizationUtils.create_localized_string(title_identifier, tokens=tuple(title_tokens))
+        self.description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=tuple(description_tokens))
         self.visual_type = UiDialogNotification.UiDialogNotificationVisualType.INFORMATION
         self.urgency = urgency
         self.information_level = information_level

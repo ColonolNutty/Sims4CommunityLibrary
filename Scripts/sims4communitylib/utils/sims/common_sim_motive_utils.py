@@ -1,3 +1,10 @@
+"""
+This file is part of the Sims 4 Community Library, licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International public license (CC BY-NC-ND 4.0).
+https://creativecommons.org/licenses/by-nc-nd/4.0/
+https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+
+Copyright (c) COLONOLNUTTY
+"""
 from typing import Dict
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Species
@@ -133,7 +140,7 @@ class CommonSimMotiveUtils:
         return motive_species_mapping[species]
 
     @staticmethod
-    def _get_motive_mappings() -> Dict[CommonMotiveId, Dict[Species, CommonMotiveId]]:
+    def _get_motive_mappings() -> Dict[int, Dict[Species, int]]:
         if CommonSimMotiveUtils._MOTIVE_MAPPINGS is None:
             CommonSimMotiveUtils._MOTIVE_MAPPINGS = {
                 CommonMotiveId.HUNGER: {
