@@ -12,6 +12,7 @@ from typing import Tuple, Any, Callable, Union
 
 from pprint import pformat
 from protocolbuffers.Localization_pb2 import LocalizedString
+from sims.sim_info import SimInfo
 from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
 from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtils
 from sims4communitylib.enums.strings_enum import CommonStringId
@@ -69,13 +70,15 @@ class CommonChooseObjectDialog:
         self,
         on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
-        page: int=1
+        page: int=1,
+        sim_info: SimInfo=None
     ):
         """
             Show the dialog and invoke the callbacks upon the player making a choice.
         :param on_chosen: A callback invoked upon the player choosing something from the list.
         :param picker_type: The layout of the dialog.
         :param page: The page to display. Ignored if there is only one page of choices.
+        :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim.
         """
         log.format_with_message('Attempting to display choices.', page=page)
         _dialog = self._create_dialog(picker_type=picker_type)
@@ -100,11 +103,11 @@ class CommonChooseObjectDialog:
             choice = CommonDialogUtils.get_chosen_item(dialog)
             if choice == 'S4CL_NEXT':
                 log.debug('Next chosen.')
-                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page + 1)
+                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page + 1, sim_info=sim_info)
                 return True
             elif choice == 'S4CL_PREVIOUS':
                 log.debug('Previous chosen.')
-                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page - 1)
+                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page - 1, sim_info=sim_info)
                 return True
             log.format_with_message('Choice made.', choice=choice)
             result = on_chosen(choice, CommonChoiceOutcome.CHOICE_MADE)
@@ -164,10 +167,11 @@ class CommonChooseObjectDialog:
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def _create_dialog(
         self,
-        picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT
+        picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
+        sim_info: SimInfo=None
     ) -> Union[UiObjectPicker, None]:
         return UiObjectPicker.TunableFactory().default(
-            CommonSimUtils.get_active_sim_info(),
+            sim_info or CommonSimUtils.get_active_sim_info(),
             text=lambda *_, **__: self.description,
             title=lambda *_, **__: self.title,
             min_selectable=1,
