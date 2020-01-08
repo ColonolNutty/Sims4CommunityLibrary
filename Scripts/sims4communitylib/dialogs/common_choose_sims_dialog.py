@@ -40,9 +40,7 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
         description_identifier: Union[int, LocalizedString],
         choices: Iterator[SimPickerRow],
         title_tokens: Iterator[Any]=(),
-        description_tokens: Iterator[Any]=(),
-        min_selectable: int=1,
-        max_selectable: int=1
+        description_tokens: Iterator[Any]=()
     ):
         """
             Create a dialog for displaying a list of Sims.
@@ -51,8 +49,6 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
         :param choices: The choices to display in the dialog.
         :param title_tokens: Tokens to format into the title.
         :param description_tokens: Tokens to format into the description.
-        :param min_selectable: The minimum number of Sims that must be chosen.
-        :param max_selectable: The maximum number of Sims that can be chosen.
         """
         super().__init__(
             title_identifier,
@@ -61,12 +57,6 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
             title_tokens=title_tokens,
             description_tokens=description_tokens
         )
-        if min_selectable < 1:
-            raise AttributeError('\'min_selectable\' must be at least 1.')
-        if max_selectable < self._min_selectable:
-            raise AttributeError('\'max_selectable\' must be greater than \'min_selectable\'.')
-        self._min_selectable = min_selectable
-        self._max_selectable = max_selectable
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def add_row(self, choice: SimPickerRow):
@@ -82,7 +72,9 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
         sim_info: SimInfo=None,
         should_show_names: bool=True,
         hide_row_descriptions: bool=False,
-        column_count: int=3
+        column_count: int=3,
+        min_selectable: int=1,
+        max_selectable: int=1
     ):
         """
             Show the dialog and invoke the callbacks upon the player submitting their selection.
@@ -91,13 +83,21 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
         :param should_show_names: If True, then the names of the Sims will display in the dialog.
         :param hide_row_descriptions: A flag to hide the row descriptions.
         :param column_count: The number of columns to display Sims in.
+        :param min_selectable: The minimum number of Sims that must be chosen.
+        :param max_selectable: The maximum number of Sims that can be chosen.
         """
+        if min_selectable < 1:
+            raise AttributeError('\'min_selectable\' must be at least 1.')
+        if max_selectable < min_selectable:
+            raise AttributeError('\'max_selectable\' must be greater than \'min_selectable\'.')
         log.format_with_message('Attempting to display choices.')
         _dialog = self._create_dialog(
             sim_info=sim_info,
             should_show_names=should_show_names,
             hide_row_descriptions=hide_row_descriptions,
-            column_count=column_count
+            column_count=column_count,
+            min_selectable=min_selectable,
+            max_selectable=max_selectable
         )
         if _dialog is None:
             log.error('_dialog was None for some reason.')
@@ -164,11 +164,14 @@ def _common_testing_show_choose_sims_dialog(_connection: int=None):
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             tuple(options),
             title_tokens=title_tokens,
-            description_tokens=description_tokens,
+            description_tokens=description_tokens
+        )
+        dialog.show(
+            on_chosen=_on_chosen,
+            column_count=5,
             min_selectable=2,
             max_selectable=6
         )
-        dialog.show(on_chosen=_on_chosen, column_count=5)
     except Exception as ex:
         log.format_error_with_message('Failed to show dialog', exception=ex)
         output('Failed to show dialog, please locate your exception log file and upload it to the appropriate thread.')

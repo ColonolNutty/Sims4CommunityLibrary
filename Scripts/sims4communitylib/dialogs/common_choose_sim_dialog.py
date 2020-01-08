@@ -52,8 +52,6 @@ class CommonChooseSimDialog:
         self.title = CommonLocalizationUtils.create_localized_string(title_identifier, tokens=tuple(title_tokens))
         self.description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=tuple(description_tokens))
         self._choices = tuple(choices)
-        self._min_selectable = 1
-        self._max_selectable = 1
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def add_row(self, choice: SimPickerRow):
@@ -120,7 +118,9 @@ class CommonChooseSimDialog:
         sim_info: SimInfo=None,
         should_show_names: bool=True,
         hide_row_descriptions: bool=False,
-        column_count: int=3
+        column_count: int=3,
+        min_selectable: int=1,
+        max_selectable: int=1
     ) -> Union[UiSimPicker, None]:
         if column_count < 3:
             raise AttributeError('\'column_count\' must be at least 3 columns.')
@@ -130,8 +130,8 @@ class CommonChooseSimDialog:
             sim_info or CommonSimUtils.get_active_sim_info(),
             title=lambda *_, **__: self.title,
             text=lambda *_, **__: self.description,
-            min_selectable=self._min_selectable,
-            max_selectable=self._max_selectable,
+            min_selectable=min_selectable,
+            max_selectable=max_selectable,
             should_show_names=should_show_names,
             hide_row_description=hide_row_descriptions,
             column_count=column_count
