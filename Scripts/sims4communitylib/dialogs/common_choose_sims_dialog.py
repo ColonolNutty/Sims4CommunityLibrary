@@ -68,7 +68,7 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def show(
         self,
-        on_chosen: Callable[[Union[Tuple[SimInfo], None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        on_chosen: Callable[[Union[Tuple[Any], None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         sim_info: SimInfo=None,
         should_show_names: bool=True,
         hide_row_descriptions: bool=False,
