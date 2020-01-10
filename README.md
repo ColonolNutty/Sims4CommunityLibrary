@@ -38,8 +38,8 @@ Current Features:
 - Custom Dialogs
   - Ok/Cancel - Prompt the player with a message and have them choose either Ok or Cancel
     - The text for both the Ok and the Cancel buttons can be custom text as well. (They could be Yes/No as one custom example)
-  - Choose Item Dialog 
-    - Prompt the player to choose an item from a list of items.
+  - Choose Object Dialog 
+    - Prompt the player to choose an object from a list of items.
     - Custom icons can be used.
   - Custom Icons available for use with dialogs.
     - Right Arrow
@@ -53,12 +53,9 @@ Current Features:
     - Warnings
     - Errors
     - Info
-    - Notifications with Buttons.
   - Story Dialogs (Add custom buttons, add sim icons)
-  - Custom Dialog Boxes
-    - Prompt users to input Numbers/Text
-    - Prompt the user to select from a list of items.
-  - Sim Picker - Prompt the player to choose a sim or a number of sims from a dialog.
+  - Sim Picker
+    - Prompt the player to choose a sim or a number of sims from a dialog.
 - Custom Notifications
   - Basic Notification - Display a notification with a title and description of varying urgency.
 - Interactions
@@ -159,6 +156,8 @@ Planned Features:
   - Bitwise (Support for bitwise operations on custom enums)
 - Notifications
   - Notifications with Buttons.
+- Custom Dialogs
+  - Prompt the player to input Numbers/Text
 
 
 Installation:
