@@ -180,13 +180,16 @@ Note for Modders:
 
 
 What is the workflow for working with S4CL?
-- Put the source folder Scripts/sims4communitylibrary into a folder in your own project PyCharm project (We'll call the folder `S4CL` for reference).
+- Create a project based off of the [Template Project|https://github.com/ColonolNutty/s4cl-template-project]
+- Use the green button in the top right [The Main Page|https://github.com/ColonolNutty/Sims4CommunityLibrary] to download this project as a zip file.
+- In your project, create another directory called `S4CL`.
+- Open the downloaded project and copy the `Scripts/sims4communitylibrary` folder into the `S4CL` folder we created in the previous step.
 - Right click the `S4CL` folder -> Mark Directory as -> Sources Root
-- The S4CL folder should turn a Blue color and the sims4communitylibrary folder should look like a folder with a dot.
-- Your folder structure should look like this: `<Your Project>/S4CL/sims4communitylibrary`
-- Once you've done this you just have to import sims4communitylibrary as you would with any other python files
+  - The `S4CL` folder should turn a blue color and the `sims4communitylibrary` folder should look like a folder with a dot (In other words, it should NOT be blue).
+- Your folder structure should look like this: `<Your Project>/S4CL/sims4communitylibrary` at this point.
 - Ensure you list in the description of your mod a link to the github releases (You may even link a specific release to ensure compatibility.)
-- YOU DO NOT HAVE MY PERMISSION TO BUNDLE S4CL INTO YOUR OWN MOD. So don't do it. Reference the github repository/releases page instead.
+- Ensure you properly attribute S4CL and its author according to the license located at the bottom of this readme.
+- YOU DO NOT HAVE MY PERMISSION TO BUNDLE S4CL INTO YOUR OWN MOD. So don't do it. Redirect the users of your mod to the [github repository|https://github.com/ColonolNutty/Sims4CommunityLibrary] or [releases|https://github.com/ColonolNutty/Sims4CommunityLibrary/releases] pages instead.
 
 Copyright:
 
