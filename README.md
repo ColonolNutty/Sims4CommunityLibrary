@@ -180,8 +180,8 @@ Note for Modders:
 
 
 What is the workflow for working with S4CL?
-- Create a project based off of the [Template Project|https://github.com/ColonolNutty/s4cl-template-project]
-- Use the green button in the top right [The Main Page|https://github.com/ColonolNutty/Sims4CommunityLibrary] to download this project as a zip file.
+- Create a project based off of the [https://github.com/ColonolNutty/s4cl-template-project](Template Project)
+- Use the green button in the top right [https://github.com/ColonolNutty/Sims4CommunityLibrary](The Main Page) to download this project as a zip file.
 - In your project, create another directory called `S4CL`.
 - Open the downloaded project and copy the `Scripts/sims4communitylibrary` folder into the `S4CL` folder we created in the previous step.
 - Right click the `S4CL` folder -> Mark Directory as -> Sources Root
@@ -189,7 +189,7 @@ What is the workflow for working with S4CL?
 - Your folder structure should look like this: `<Your Project>/S4CL/sims4communitylibrary` at this point.
 - Ensure you list in the description of your mod a link to the github releases (You may even link a specific release to ensure compatibility.)
 - Ensure you properly attribute S4CL and its author according to the license located at the bottom of this readme.
-- YOU DO NOT HAVE MY PERMISSION TO BUNDLE S4CL INTO YOUR OWN MOD. So don't do it. Redirect the users of your mod to the [github repository|https://github.com/ColonolNutty/Sims4CommunityLibrary] or [releases|https://github.com/ColonolNutty/Sims4CommunityLibrary/releases] pages instead.
+- YOU DO NOT HAVE MY PERMISSION TO BUNDLE S4CL INTO YOUR OWN MOD. So don't do it. Redirect the users of your mod to the [https://github.com/ColonolNutty/Sims4CommunityLibrary](github repository) or [https://github.com/ColonolNutty/Sims4CommunityLibrary/releases](releases) pages instead.
 
 Copyright:
 
