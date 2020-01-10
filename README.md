@@ -48,6 +48,17 @@ Current Features:
     - Six Sided Dice
     - Checked Box
     - Unchecked Box
+  - Notifications
+    - Sim Icons
+    - Warnings
+    - Errors
+    - Info
+    - Notifications with Buttons.
+  - Story Dialogs (Add custom buttons, add sim icons)
+  - Custom Dialog Boxes
+    - Prompt users to input Numbers/Text
+    - Prompt the user to select from a list of items.
+  - Sim Picker - Prompt the player to choose a sim or a number of sims from a dialog.
 - Custom Notifications
   - Basic Notification - Display a notification with a title and description of varying urgency.
 - Interactions
@@ -78,6 +89,11 @@ Current Features:
   - Interval Events
     - Run functions on millisecond intervals.
     - Run functions once, after an amount of time has passed.
+  - Interaction events (Queued, Started, Ended, Interaction Outcomes)
+  - Sim
+    - Spawn - Occurs when a Sim spawns or is born into the world.
+    - Initialization - Occurs when a Sim is initialized (before being spawned).
+    - Occult Swapping - Occurs when a Sim changes to a different Occult (i.e. Human to Mermaid or Human to Vampire or vice verse)
   - Zone Events
     - Zone Update - Occurs every time the zone updates. (Basically every time the game ticks)
     - Zone Teardown - Occurs every time the zone is torn down. Occurs before a loading screen, but only after a Zone had been previously loaded. (See Zone Early/Late Load)
@@ -117,6 +133,13 @@ Current Features:
       - Red
     - Create Localized Tooltips - Use to display tooltips on interactions (while also displaying the interaction)
       - These can be useful to give more information to the player about why something cannot be performed, instead of simply hiding that something.
+  - Weather
+    - Detect and change weather conditions
+  - Statistic Management
+    - Manage statistics such as motives, mood, etc.
+  - Motive Management
+    - Change motive levels and moods of sims
+  - and Many More, explore to your hearts content!
 - Testing Framework
   - Write tests to test your python code and run the tests via a command within the game.
   - The results will be logged to the 'Documents/The Sims 4/' folder
@@ -127,31 +150,15 @@ Current Features:
 
 Planned Features:
 
-- Many functions, utilities, and services to make coding for the sims 4 much easier. You won't need to reinvent the wheel anymore!
+- Many more functions, utilities, and services to make coding for the sims 4 much easier. You won't need to reinvent the wheel anymore!
 - Exception Handling (stack trace customization)
 - Services & Utilities:
-  - Weather - Detect and change weather conditions
+  - Weather - Change weather conditions
   - Club - Detect sims that are part of a club, whether they are at a club gathering, whether their club encourages or discourages certain things
-  - Statistic Management (Manage statistics such as motives, mood, etc.)
-  - Motive Management (Change motive levels and moods of sims)
-- Event handling
-  - Interaction events (Queued, Started, Ended, Interaction Outcomes)
-  - Sim - (Spawn, Initialization, Occult Swapping)
 - Custom Enum Types
-  - Collections (Tuple, List)
   - Bitwise (Support for bitwise operations on custom enums)
-- Dialogs and Notifications
-  - Notifications
-    - Sim Icons
-    - Warnings
-    - Errors
-    - Info
-    - Notifications with Custom Buttons.
-  - Story Dialogs (Add custom buttons, add sim icons)
-  - Custom Dialog Boxes
-    - Prompt users to input Numbers/Text
-    - Prompt the user to select from a list of items.
-  - Sim Picker - Prompt the player to choose a sim or a number of sims from a dialog.
+- Notifications
+  - Notifications with Buttons.
 
 
 Installation:
@@ -164,7 +171,8 @@ Installation:
 
 Requirements:
 
-- Sims 4 version 1.54.120.1020 (Island Living) or above
+- Sims 4 Patch Version 1.54.120.1020 (Island Living) or above
+- DLCs are NOT required, you only need to have an up to date game (Check the bottom of the main menu for your current version).
 
 
 Note for Modders:
@@ -173,16 +181,18 @@ Note for Modders:
 
 
 What is the workflow for working with S4CL?
-- Simply copy the source folder Scripts/sims4communitylibrary into your own PyCharm project.
-- Right click the copied folder -> Mark Directory as -> Sources Root
+- Put the source folder Scripts/sims4communitylibrary into a folder in your own project PyCharm project (We'll call the folder `S4CL` for reference).
+- Right click the `S4CL` folder -> Mark Directory as -> Sources Root
+- The S4CL folder should turn a Blue color and the sims4communitylibrary folder should look like a folder with a dot.
+- Your folder structure should look like this: `<Your Project>/S4CL/sims4communitylibrary`
 - Once you've done this you just have to import sims4communitylibrary as you would with any other python files
 - Ensure you list in the description of your mod a link to the github releases (You may even link a specific release to ensure compatibility.)
 - YOU DO NOT HAVE MY PERMISSION TO BUNDLE S4CL INTO YOUR OWN MOD. So don't do it. Reference the github repository/releases page instead.
 
 Copyright:
 
-The Sims 4 Community Library is licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International public license (CC BY-NC-ND 4.0).
-https://creativecommons.org/licenses/by-nc-nd/4.0/
-https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+The Sims 4 Community Library is licensed under the Creative Commons Attribution 4.0 International public license (CC BY 4.0).
+https://creativecommons.org/licenses/by/4.0/
+https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
