@@ -219,7 +219,7 @@ class CommonRelationshipUtils:
             else:
                 target_sim_id = relationship.sim_id_b
             target_sim_info = CommonSimUtils.get_sim_info(target_sim_id)
-            if target_sim_info is None or CommonSimUtils.get_sim_instance(target_sim_info) is None:
+            if target_sim_info is None:
                 continue
             for relationship_bit_id in relationship_bit_ids:
                 relationship_bit_instance = CommonResourceUtils.load_instance(Types.RELATIONSHIP_BIT, relationship_bit_id)

@@ -24,6 +24,12 @@ class CommonLocationUtils:
     """
         Utilities for manipulating locations and lots.
     """
+
+    @staticmethod
+    def get_zone_id(zone: Zone) -> int:
+        """ Retrieve the identifier of the specified Zone. """
+        return zone.id
+
     @staticmethod
     def get_current_zone() -> Zone:
         """ Retrieve the current zone. """
