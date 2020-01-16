@@ -227,7 +227,7 @@ def _common_testing_show_choose_object_dialog(_connection: int=None):
             description_tokens=description_tokens,
             per_page=2
         )
-        dialog.show(on_chosen=_on_chosen, keep_open_after_choice=True)
+        dialog.show(on_chosen=_on_chosen)
     except Exception as ex:
         log.format_error_with_message('Failed to show dialog', exception=ex)
         output('Failed to show dialog, please locate your exception log file.')
