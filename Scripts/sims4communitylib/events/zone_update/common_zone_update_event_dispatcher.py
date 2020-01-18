@@ -63,7 +63,7 @@ class CommonZoneUpdateEventDispatcherService(CommonService):
             CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to run internal method \'{}\' at \'{}\'.'.format(CommonZoneUpdateEventDispatcherService._on_zone_update.__name__, Zone.update.__name__), exception=ex)
 
 
-@CommonInjectionUtils.inject_into(Zone, Zone.update.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, Zone, Zone.update.__name__)
 def _common_zone_update(original, self: Zone, *_, **__):
     result = original(self, *_, **__)
     CommonZoneUpdateEventDispatcherService.get()._on_zone_update(self, *_, **__)

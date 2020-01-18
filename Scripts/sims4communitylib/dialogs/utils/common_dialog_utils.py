@@ -6,6 +6,8 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Any, Union, Tuple
+
+from ui.ui_dialog_generic import UiDialogTextInput
 from ui.ui_dialog_multi_picker import UiMultiPicker
 from ui.ui_dialog_picker import UiDialogObjectPicker
 
@@ -21,3 +23,8 @@ class CommonDialogUtils:
     def get_chosen_items(dialog: Union[UiDialogObjectPicker, UiMultiPicker]) -> Tuple[Any]:
         """ Retrieves the items chosen by the player from a dialog. """
         return dialog.get_result_tags()
+
+    @staticmethod
+    def get_input_value(dialog: UiDialogTextInput) -> Union[str, None]:
+        """ Retrieve the value entered by the player from an input dialog. """
+        return str(dialog.text_input_responses.get('text_input'))

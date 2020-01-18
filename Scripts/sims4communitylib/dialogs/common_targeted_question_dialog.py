@@ -11,21 +11,20 @@ from typing import Any, Callable, Union, Iterator
 from event_testing.resolver import DoubleSimResolver
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims.sim_info import SimInfo
+from sims4communitylib.dialogs.common_dialog import CommonDialog
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
-from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog import UiDialogOkCancel
 
 
-log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 's4cl_targeted_question_dialog')
-
-
-class CommonTargetedQuestionDialog:
+class CommonTargetedQuestionDialog(CommonDialog):
     """
         Use to create a Sim to Sim question dialog.
     """
@@ -36,10 +35,11 @@ class CommonTargetedQuestionDialog:
         ok_text_identifier: Union[int, LocalizedString]=CommonStringId.OK,
         ok_text_tokens: Iterator[Any]=(),
         cancel_text_identifier: Union[int, LocalizedString]=CommonStringId.CANCEL,
-        cancel_text_tokens: Iterator[Any]=()
+        cancel_text_tokens: Iterator[Any]=(),
+        mod_identity: CommonModIdentity=None
     ):
         """
-            Create a dialog with two buttons: Ok and Cancel
+            Create a dialog that prompts the player with a question.
         :param question_text: A decimal identifier of the question text.
         :param question_tokens: Tokens to format into the question text.
         :param ok_text_identifier: A decimal identifier for the Ok text.
@@ -47,11 +47,20 @@ class CommonTargetedQuestionDialog:
         :param cancel_text_identifier: A decimal identifier for the Cancel text.
         :param cancel_text_tokens: Tokens to format into the Cancel text.
         """
-        self.description = CommonLocalizationUtils.create_localized_string(question_text, tokens=tuple(question_tokens))
+        super().__init__(
+            0,
+            question_text,
+            description_tokens=question_tokens,
+            mod_identity=mod_identity
+        )
         self.ok_text = CommonLocalizationUtils.create_localized_string(ok_text_identifier, tokens=tuple(ok_text_tokens))
         self.cancel_text = CommonLocalizationUtils.create_localized_string(cancel_text_identifier, tokens=tuple(cancel_text_tokens))
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
+    @property
+    def log_identifier(self) -> str:
+        """ An identifier for the Log of this class. """
+        return 's4cl_targeted_question_dialog'
+
     def show(
         self,
         sim_info: SimInfo,
@@ -66,32 +75,63 @@ class CommonTargetedQuestionDialog:
         :param on_ok_selected: Invoked upon the player clicking the Ok button in the dialog.
         :param on_cancel_selected: Invoked upon the player clicking the Cancel button in the dialog.
         """
+        try:
+            return self._show(
+                sim_info,
+                target_sim_info,
+                on_ok_selected=on_ok_selected,
+                on_cancel_selected=on_cancel_selected
+            )
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, 'show', exception=ex)
+
+    def _show(
+        self,
+        sim_info: SimInfo,
+        target_sim_info: SimInfo,
+        on_ok_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop,
+        on_cancel_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop
+    ):
+        self.log.format_with_message(
+            'Attempting to display dialog.',
+            sim=CommonSimNameUtils.get_full_name(sim_info),
+            target=CommonSimNameUtils.get_full_name(target_sim_info)
+        )
         _dialog = self._create_dialog(sim_info, target_sim_info)
         if _dialog is None:
+            self.log.debug('Failed to create dialog.')
             return
 
+        @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
         def _on_option_selected(dialog: UiDialogOkCancel):
+            self.log.debug('Option selected.')
             if dialog.accepted:
+                self.log.debug('Ok chosen.')
                 return on_ok_selected(dialog)
+            self.log.debug('Cancel chosen.')
             return on_cancel_selected(dialog)
 
         _dialog.add_listener(_on_option_selected)
+        self.log.debug('Displaying dialog.')
         _dialog.show_dialog()
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def _create_dialog(
         self,
         sim_info: SimInfo,
         target_sim_info: SimInfo
     ) -> Union[UiDialogOkCancel, None]:
-        return UiDialogOkCancel.TunableFactory().default(
-            sim_info,
-            text=lambda *_, **__: self.description,
-            text_ok=lambda *_, **__: self.ok_text,
-            text_cancel=lambda *_, **__: self.cancel_text,
-            target_sim_id=CommonSimUtils.get_sim_id(target_sim_info),
-            resolver=DoubleSimResolver(sim_info, target_sim_info)
-        )
+        try:
+            return UiDialogOkCancel.TunableFactory().default(
+                sim_info,
+                text=lambda *_, **__: self.description,
+                text_ok=lambda *_, **__: self.ok_text,
+                text_cancel=lambda *_, **__: self.cancel_text,
+                target_sim_id=CommonSimUtils.get_sim_id(target_sim_info),
+                resolver=DoubleSimResolver(sim_info, target_sim_info)
+            )
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, '_create_dialog', exception=ex)
+        return None
 
 
 @sims4.commands.Command('s4clib_testing.show_targeted_question_dialog', command_type=sims4.commands.CommandType.Live)
@@ -121,6 +161,6 @@ def _common_testing_show_targeted_question_dialog(_connection: int=None):
             on_cancel_selected=_cancel_chosen
         )
     except Exception as ex:
-        log.format_error_with_message('Failed to dialog', exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to show dialog', exception=ex)
         output('Failed to show ok cancel dialog, please locate your exception log file.')
     output('Done showing.')

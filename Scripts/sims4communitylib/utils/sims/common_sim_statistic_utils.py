@@ -152,6 +152,45 @@ class CommonSimStatisticUtils:
         return True
 
     @staticmethod
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    def add_statistic_modifier(sim_info: SimInfo, statistic_id: int, value: float, add_dynamic: bool=True, add: bool=True) -> bool:
+        """ Add a Modifier to the specified Statistic for the specified Sim. """
+        if sim_info is None:
+            return False
+        statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic_id, add_dynamic=add_dynamic, add=add)
+        if statistic is None:
+            return False
+        statistic.add_statistic_modifier(value)
+        return True
+
+    @staticmethod
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    def remove_statistic_modifier(sim_info: SimInfo, statistic_id: int, value: float, add_dynamic: bool=True, add: bool=True) -> bool:
+        """ Remove a Modifier from the specified Statistic for the specified Sim. """
+        if sim_info is None:
+            return False
+        statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic_id, add_dynamic=add_dynamic, add=add)
+        if statistic is None:
+            return False
+        statistic.remove_statistic_modifier(value)
+        return True
+
+    @staticmethod
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    def remove_all_statistic_modifiers_for_statistic(sim_info: SimInfo, statistic_id: int, add_dynamic: bool=True, add: bool=True) -> bool:
+        """ Remove all Modifiers from the specified Statistic for the specified Sim. """
+        if sim_info is None:
+            return False
+        statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic_id, add_dynamic=add_dynamic, add=add)
+        if statistic is None:
+            return False
+        if statistic._statistic_modifiers is None:
+            return False
+        for value in list(statistic._statistic_modifiers):
+            statistic.remove_statistic_modifier(value)
+        return True
+
+    @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def _get_statistics_tracker(sim_info: SimInfo, statistic_id: int, add_dynamic: bool=True) -> CommonGetStatisticTrackerResponse:
         if sim_info is None:

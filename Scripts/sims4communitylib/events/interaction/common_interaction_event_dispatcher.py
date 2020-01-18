@@ -16,6 +16,7 @@ from sims4communitylib.events.event_handling.common_event_registry import Common
 from sims4communitylib.events.interaction.events.interaction_outcome import S4CLInteractionOutcomeEvent
 from sims4communitylib.events.interaction.events.interaction_queued import S4CLInteractionQueuedEvent
 from sims4communitylib.events.interaction.events.interaction_run import S4CLInteractionRunEvent
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 
@@ -44,7 +45,7 @@ class CommonInteractionEventDispatcherService(CommonService):
         return CommonEventRegistry.get().dispatch(S4CLInteractionOutcomeEvent(interaction, outcome, result))
 
 
-@CommonInjectionUtils.inject_into(InteractionQueue, InteractionQueue.run_interaction_gen.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, InteractionQueue, InteractionQueue.run_interaction_gen.__name__)
 def _common_on_interaction_run(original, self, *_, **__):
     result = original(self, *_, **__)
     if result:
@@ -52,7 +53,7 @@ def _common_on_interaction_run(original, self, *_, **__):
     return result
 
 
-@CommonInjectionUtils.inject_into(InteractionQueue, InteractionQueue.append.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, InteractionQueue, InteractionQueue.append.__name__)
 def _common_on_interaction_queued(original, self, *_, **__):
     result = CommonInteractionEventDispatcherService.get()._on_interaction_queued(self, *_, **__)
     if result is None:
@@ -60,7 +61,7 @@ def _common_on_interaction_queued(original, self, *_, **__):
     return result
 
 
-@CommonInjectionUtils.inject_into(Interaction, Interaction.store_result_for_outcome.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, Interaction, Interaction.store_result_for_outcome.__name__)
 def _common_on_interaction_outcome(original, self, *_, **__):
     CommonInteractionEventDispatcherService.get()._on_interaction_outcome(self, *_, **__)
     return original(self, *_, **__)

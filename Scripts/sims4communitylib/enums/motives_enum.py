@@ -9,7 +9,7 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonMotiveId(CommonEnumIntBase):
-    """ Identifiers for vanilla sim motives """
+    """ Identifiers for vanilla Sim motives """
     BLADDER = 16652
     PET_CAT_BLADDER = 151036
     PET_DOG_BLADDER = 151032
@@ -18,6 +18,7 @@ class CommonMotiveId(CommonEnumIntBase):
     ENERGY = 16654
     PET_CAT_ENERGY = 151037
     PET_DOG_ENERGY = 151033
+    SERVO_CHARGE = 218484
     FUN = 16655
     PET_CAT_PLAY = 157718
     PET_DOG_PLAY = 158699
@@ -33,3 +34,4 @@ class CommonMotiveId(CommonEnumIntBase):
     VAMPIRE_POWER = 150238
     VAMPIRE_THIRST = 149541
     PLANT_SIM_WATER = 162675
+    SERVO_DURABILITY = 218485

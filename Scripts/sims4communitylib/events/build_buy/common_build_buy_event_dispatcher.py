@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from sims4communitylib.events.build_buy.events.build_buy_enter import S4CLBuildBuyEnterEvent
 from sims4communitylib.events.build_buy.events.build_buy_exit import S4CLBuildBuyExitEvent
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from zone import Zone
@@ -25,14 +26,14 @@ class CommonBuildBuyEventDispatcherService(CommonService):
         return CommonEventRegistry.get().dispatch(S4CLBuildBuyExitEvent(zone))
 
 
-@CommonInjectionUtils.inject_into(Zone, Zone.on_build_buy_enter.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, Zone, Zone.on_build_buy_enter.__name__)
 def _common_build_buy_enter(original, self, *args, **kwargs):
     result = original(self, *args, **kwargs)
     CommonBuildBuyEventDispatcherService.get()._on_build_buy_enter(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_into(Zone, Zone.on_build_buy_exit.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, Zone, Zone.on_build_buy_exit.__name__)
 def _common_build_buy_exit(original, self, *args, **kwargs):
     result = original(self, *args, **kwargs)
     CommonBuildBuyEventDispatcherService.get()._on_build_buy_exit(self, *args, **kwargs)

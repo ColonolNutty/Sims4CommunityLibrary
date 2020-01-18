@@ -13,6 +13,7 @@ from sims4communitylib.events.zone_spin.events.zone_early_load import S4CLZoneEa
 from sims4communitylib.events.zone_spin.events.zone_late_load import S4CLZoneLateLoadEvent
 from sims4communitylib.events.zone_spin.events.zone_save import S4CLZoneSaveEvent
 from sims4communitylib.events.zone_spin.events.zone_teardown import S4CLZoneTeardownEvent
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from zone import Zone
@@ -50,27 +51,27 @@ class CommonZoneSpinEventDispatcher(CommonService):
         CommonEventRegistry.get().dispatch(S4CLZoneSaveEvent(zone, save_slot_data=save_slot_data, game_loaded=self.game_loaded, game_loading=self.game_loading))
 
 
-@CommonInjectionUtils.inject_into(Zone, Zone.load_zone.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, Zone, Zone.load_zone.__name__)
 def _common_on_early_zone_load(original, self: Zone, *args, **kwargs):
     result = original(self, *args, **kwargs)
     CommonZoneSpinEventDispatcher.get()._on_early_zone_load(self)
     return result
 
 
-@CommonInjectionUtils.inject_into(Zone, Zone.do_zone_spin_up.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, Zone, Zone.do_zone_spin_up.__name__)
 def _common_on_late_zone_load(original, self: Zone, *args, **kwargs):
     result = original(self, *args, **kwargs)
     CommonZoneSpinEventDispatcher.get()._on_late_zone_load(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_into(Zone, Zone.on_teardown.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, Zone, Zone.on_teardown.__name__)
 def _common_on_zone_teardown(original, self: Zone, client):
     CommonZoneSpinEventDispatcher.get()._on_zone_teardown(self, client)
     return original(self, client)
 
 
-@CommonInjectionUtils.inject_into(Zone, Zone.save_zone.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, Zone, Zone.save_zone.__name__)
 def _common_on_zone_save(original, self: Zone, *args, **kwargs):
     CommonZoneSpinEventDispatcher.get()._on_zone_save(self, *args, **kwargs)
     return original(self, *args, **kwargs)
