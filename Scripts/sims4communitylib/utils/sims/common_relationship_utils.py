@@ -198,6 +198,8 @@ class CommonRelationshipUtils:
             The Caregiver has a relationship bit pointed at Toddler (The Caregiver would show "caregiving ward" when hovering over the Toddler in the relationships panel)
             The Toddler would NOT have the relationship bit.
             Sim is Caregiver of Toddler.
+        :param sim_info: The Sim to locate relationship bits on.
+        :param relationship_bit_id: The identifier of the relationship bit to locate connections with.
         :param instanced_only: If True, only Sims that are currently loaded will be returned.
         """
         return CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, (relationship_bit_id, ), instanced_only=instanced_only)
@@ -212,6 +214,8 @@ class CommonRelationshipUtils:
             The Caregiver has a relationship bit pointed at Toddler (The Caregiver would show "caregiving ward" when hovering over the toddler in the relationships panel)
             The toddler would NOT have the relationship bit.
             Sim is Caregiver of Toddler.
+        :param sim_info: The Sim to locate relationship bits on.
+        :param relationship_bit_ids: A collection of identifiers for relationship bits to locate connections with.
         :param instanced_only: If True, only Sims that are currently loaded will be returned.
         """
         sim_id = CommonSimUtils.get_sim_id(sim_info)
@@ -249,6 +253,7 @@ class CommonRelationshipUtils:
     def get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info: SimInfo, instanced_only: bool=True) -> Iterator[SimInfo]:
         """
             Retrieve a SimInfo object for all Sims romantically committed with the specified Sim.
+        :param sim_info: The Sim to locate romantically involved Sims with.
         :param instanced_only: If True, only Sims that are currently loaded will be returned.
         """
         romance_relationship_ids = (

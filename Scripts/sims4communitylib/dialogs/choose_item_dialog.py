@@ -39,6 +39,7 @@ class CommonChooseItemResult(CommonEnumIntBase):
 
 class CommonChooseItemDialog:
     """
+        Obsolete: Please use CommonChooseObjectDialog instead.
         Use to create a dialog that prompts the player to choose a single item from a list of items.
     """
     def __init__(self,

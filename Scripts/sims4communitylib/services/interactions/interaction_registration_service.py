@@ -139,21 +139,21 @@ class CommonInteractionRegistry(CommonService):
         return _wrapper
 
 
-@CommonInjectionUtils.inject_into(ScriptObject, ScriptObject.on_add.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, ScriptObject, ScriptObject.on_add.__name__)
 def _common_script_object_on_add(original, self, *args, **kwargs):
     result = original(self, *args, **kwargs)
     CommonInteractionRegistry.get().on_script_object_add(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_into(TerrainService, TerrainService.start.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, TerrainService, TerrainService.start.__name__)
 def _common_terrain_service_start(original, self, *args, **kwargs):
     result = original(self, *args, **kwargs)
     CommonInteractionRegistry.get().on_terrain_load(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_into(TerrainService, TerrainService.on_zone_load.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, TerrainService, TerrainService.on_zone_load.__name__)
 def _common_terrain_service_on_zone_load(original, self, *args, **kwargs):
     result = original(self, *args, **kwargs)
     CommonInteractionRegistry.get().on_ocean_load(self, *args, **kwargs)

@@ -14,24 +14,23 @@ import random
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims.sim_info import SimInfo
 from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
+from sims4communitylib.dialogs.common_choose_dialog import CommonChooseDialog
 from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtils
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
-from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog_picker import UiSimPicker, SimPickerRow
 
-log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 's4cl_choose_sim_dialog')
 
-
-class CommonChooseSimDialog:
+class CommonChooseSimDialog(CommonChooseDialog):
     """
-        Create a dialog that asks the player to make a choice.
+        Create a dialog to prompt the player to choose a Sim.
     """
     def __init__(
         self,
@@ -39,7 +38,8 @@ class CommonChooseSimDialog:
         description_identifier: Union[int, LocalizedString],
         choices: Iterator[SimPickerRow],
         title_tokens: Iterator[Any]=(),
-        description_tokens: Iterator[Any]=()
+        description_tokens: Iterator[Any]=(),
+        mod_identity: CommonModIdentity=None
     ):
         """
             Create a dialog for displaying a list of Sims.
@@ -49,18 +49,26 @@ class CommonChooseSimDialog:
         :param title_tokens: Tokens to format into the title.
         :param description_tokens: Tokens to format into the description.
         """
-        self.title = CommonLocalizationUtils.create_localized_string(title_identifier, tokens=tuple(title_tokens))
-        self.description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=tuple(description_tokens))
-        self._choices = tuple(choices)
+        super().__init__(
+            title_identifier,
+            description_identifier,
+            choices,
+            title_tokens=title_tokens,
+            description_tokens=description_tokens,
+            mod_identity=mod_identity
+        )
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
+    @property
+    def log_identifier(self) -> str:
+        """ An identifier for the Log of this class. """
+        return 's4cl_choose_sim_dialog'
+
     def add_row(self, choice: SimPickerRow):
         """
-            Add a choice to the dialog.
+            Add a row to the dialog.
         """
-        self._choices += (choice,)
+        return super().add_row(choice)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def show(
         self,
         on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
@@ -77,7 +85,26 @@ class CommonChooseSimDialog:
         :param hide_row_descriptions: A flag to hide the row descriptions.
         :param column_count: The number of columns to display Sims in.
         """
-        log.format_with_message('Attempting to display choices.')
+        try:
+            return self._show(
+                on_chosen=on_chosen,
+                sim_info=sim_info,
+                should_show_names=should_show_names,
+                hide_row_descriptions=hide_row_descriptions,
+                column_count=column_count
+            )
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, 'show', exception=ex)
+
+    def _show(
+        self,
+        on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        sim_info: SimInfo=None,
+        should_show_names: bool=True,
+        hide_row_descriptions: bool=False,
+        column_count: int=3
+    ):
+        self.log.format_with_message('Attempting to display choices.')
         _dialog = self._create_dialog(
             sim_info=sim_info,
             should_show_names=should_show_names,
@@ -85,34 +112,33 @@ class CommonChooseSimDialog:
             column_count=column_count
         )
         if _dialog is None:
-            log.error('_dialog was None for some reason.')
+            self.log.error('_dialog was None for some reason.')
             return
 
         if on_chosen is None:
             raise ValueError('on_chosen was None.')
 
-        if len(self._choices) == 0:
+        if len(self.rows) == 0:
             raise AssertionError('No rows have been provided. Add rows to the dialog before attempting to display it.')
 
-        @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
+        @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
         def _on_chosen(dialog: UiSimPicker):
             if not dialog.accepted:
-                log.debug('Dialog cancelled.')
+                self.log.debug('Dialog cancelled.')
                 return on_chosen(None, CommonChoiceOutcome.CANCEL)
             choice = CommonDialogUtils.get_chosen_item(dialog)
-            log.format_with_message('Choice made.', choice=choice)
+            self.log.format_with_message('Choice made.', choice=choice)
             result = on_chosen(choice, CommonChoiceOutcome.CHOICE_MADE)
-            log.format_with_message('Finished handling choice.', result=result)
+            self.log.format_with_message('Finished handling choice.', result=result)
             return result
 
-        log.debug('Adding all choices')
-        for row in self._choices:
+        self.log.debug('Adding all choices')
+        for row in self.rows:
             _dialog.add_row(row)
 
         _dialog.add_listener(_on_chosen)
         _dialog.show_dialog()
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def _create_dialog(
         self,
         sim_info: SimInfo=None,
@@ -126,16 +152,20 @@ class CommonChooseSimDialog:
             raise AttributeError('\'column_count\' must be at least 3 columns.')
         if column_count > 8:
             raise AttributeError('\'column_count\' can be no more than 8 columns.')
-        return UiSimPicker.TunableFactory().default(
-            sim_info or CommonSimUtils.get_active_sim_info(),
-            title=lambda *_, **__: self.title,
-            text=lambda *_, **__: self.description,
-            min_selectable=min_selectable,
-            max_selectable=max_selectable,
-            should_show_names=should_show_names,
-            hide_row_description=hide_row_descriptions,
-            column_count=column_count
-        )
+        try:
+            return UiSimPicker.TunableFactory().default(
+                sim_info or CommonSimUtils.get_active_sim_info(),
+                title=lambda *_, **__: self.title,
+                text=lambda *_, **__: self.description,
+                min_selectable=min_selectable,
+                max_selectable=max_selectable,
+                should_show_names=should_show_names,
+                hide_row_description=hide_row_descriptions,
+                column_count=column_count
+            )
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, '_create_dialog', exception=ex)
+        return None
 
 
 @sims4.commands.Command('s4clib_testing.show_choose_sim_dialog', command_type=sims4.commands.CommandType.Live)
@@ -179,6 +209,6 @@ def _common_testing_show_choose_sim_dialog(_connection: int=None):
         )
         dialog.show(on_chosen=_on_chosen, column_count=5)
     except Exception as ex:
-        log.format_error_with_message('Failed to show dialog', exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to show dialog', exception=ex)
         output('Failed to show dialog, please locate your exception log file and upload it to the appropriate thread.')
     output('Done showing.')
