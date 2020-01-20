@@ -49,6 +49,7 @@ class CommonStringId(CommonEnumIntBase):
     FEMALE = 2933657479
 
     # Species
+    HUMAN = 3519680994
     SMALL_DOG = 698804483
     LARGE_DOG = 1545624565
     CAT = 1720023562
