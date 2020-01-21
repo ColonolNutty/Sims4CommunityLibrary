@@ -14,10 +14,10 @@ import os
 import sys
 
 script_paths = [
-    '../../Scripts/sims4communitylib'
+    '../Scripts/sims4communitylib'
 ]
 
-sys.path.insert(0, os.path.abspath('../../Scripts'))
+sys.path.insert(0, os.path.abspath('../Scripts'))
 current_index = 1
 for script_path in script_paths:
     for subdir, dirs, files in os.walk(script_path):
