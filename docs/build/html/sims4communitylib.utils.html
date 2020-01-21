@@ -1,0 +1,1069 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Misc Utilities &mdash; sims4communitylib 1.2.6 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="CAS Utilities" href="sims4communitylib.utils.cas.html" />
+    <link rel="prev" title="Testing" href="sims4communitylib.testing.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> sims4communitylib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">The Sims 4 Community Library</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sims4communitylib.html">S4CL API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.classes.html">Inheritable Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.conditionals.html">Conditional Actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.dialogs.html">Custom Dialogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.enums.html">Resource Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.events.html">Event Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.exceptions.html">ExceptionHandling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.mod_support.html">Mod Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.notifications.html">Custom Notifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.services.html">Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.testing.html">Testing</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Misc Utilities</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.cas.html">CAS Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.localization.html">Localization (String Tables)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.location.html">Location Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.resources.html">Resource Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.sims.html">Sim Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commoncollectionutils"><cite>CommonCollectionUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commoncomponentutils"><cite>CommonComponentUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonrealdateutils"><cite>CommonRealDateUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonfunctionutils"><cite>CommonFunctionUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commoniconutils"><cite>CommonIconUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commoninjectionutils"><cite>CommonInjectionUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonioutils"><cite>CommonIOUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonjsonioutils"><cite>CommonJSONIOUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commontimeutils"><cite>CommonTimeUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commontypeutils"><cite>CommonTypeUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonweatherutils"><cite>CommonWeatherUtils</cite></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sims4communitylib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">The Sims 4 Community Library</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.html">S4CL API</a> &raquo;</li>
+        
+      <li>Misc Utilities</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/sims4communitylib.utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="misc-utilities">
+<h1>Misc Utilities<a class="headerlink" href="#misc-utilities" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sims4communitylib.utils.cas.html">CAS Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.cas.html#commoncasutils"><cite>CommonCASUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.cas.html#commonoutfitutils"><cite>CommonOutfitUtils</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sims4communitylib.utils.localization.html">Localization (String Tables)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.localization.html#commonlocalizationutils"><cite>CommonLocalizationUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.localization.html#commonlocalizedstringcolor"><cite>CommonLocalizedStringColor</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sims4communitylib.utils.location.html">Location Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.location.html#commonlocationutils"><cite>CommonLocationUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.location.html#commontravelutils"><cite>CommonTravelUtils</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sims4communitylib.utils.resources.html">Resource Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.resources.html#commonstatisticutils"><cite>CommonStatisticUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.resources.html#commonresourceutils"><cite>CommonResourceUtils</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sims4communitylib.utils.sims.html">Sim Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonagespeciesutils"><cite>CommonAgeSpeciesUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonageutils"><cite>CommonAgeUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonbuffutils"><cite>CommonBuffUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commongenderutils"><cite>CommonGenderUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonhouseholdutils"><cite>CommonHouseholdUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonmoodutils"><cite>CommonMoodUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonoccultutils"><cite>CommonOccultUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonrelationshiputils"><cite>CommonRelationshipUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonsiminteractionutils"><cite>CommonSimInteractionUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonsimlocationutils"><cite>CommonSimLocationUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonsimmotiveutils"><cite>CommonSimMotiveUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonsimnameutils"><cite>CommonSimNameUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonsimpregnancyutils"><cite>CommonSimPregnancyUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonsimskillutils"><cite>CommonSimSkillUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonsimstateutils"><cite>CommonSimStateUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonsimstatisticutils"><cite>CommonSimStatisticUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonsimtypeutils"><cite>CommonSimTypeUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonsimutils"><cite>CommonSimUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonspeciesutils"><cite>CommonSpeciesUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commontraitutils"><cite>CommonTraitUtils</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.utils.sims.html#commonwhimutils"><cite>CommonWhimUtils</cite></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="commoncollectionutils">
+<h2><cite>CommonCollectionUtils</cite><a class="headerlink" href="#commoncollectionutils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.utils.common_collection_utils.CommonCollectionUtils">
+<em class="property">class </em><code class="sig-name descname">CommonCollectionUtils</code><a class="headerlink" href="#sims4communitylib.utils.common_collection_utils.CommonCollectionUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utilities for collections.</p>
+<dl class="method">
+<dt id="sims4communitylib.utils.common_collection_utils.CommonCollectionUtils.add_to_dict_if_not_exist">
+<em class="property">static </em><code class="sig-name descname">add_to_dict_if_not_exist</code><span class="sig-paren">(</span><em class="sig-param">dictionary_one: Dict[Any, Any], dictionary_two: Dict[Any, Any]</em><span class="sig-paren">)</span> &#x2192; Dict[Any, Any]<a class="headerlink" href="#sims4communitylib.utils.common_collection_utils.CommonCollectionUtils.add_to_dict_if_not_exist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine two dictionaries.
+If a key already exists in the first dictionary, the value from the second dictionary is ignored.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dictionary_one</strong> – The first dictionary.</p></li>
+<li><p><strong>dictionary_two</strong> – The second dictionary.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A new combined dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_collection_utils.CommonCollectionUtils.create_possible_combinations">
+<em class="property">static </em><code class="sig-name descname">create_possible_combinations</code><span class="sig-paren">(</span><em class="sig-param">items: Union[List[Any], Tuple[Any]], items_per_combination: int</em><span class="sig-paren">)</span> &#x2192; Set[Tuple[Any]]<a class="headerlink" href="#sims4communitylib.utils.common_collection_utils.CommonCollectionUtils.create_possible_combinations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a collection of all possible combinations of the specified items.
+Example: With items: [1, 2, 3] and combination_length: 2 the result will be: {(1, 2), (1, 3), (2, 3)}</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>items</strong> – A collection of items to create combinations from.</p></li>
+<li><p><strong>items_per_combination</strong> – The number of items in each combination.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A collection of combinations</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_collection_utils.CommonCollectionUtils.flatten">
+<em class="property">static </em><code class="sig-name descname">flatten</code><span class="sig-paren">(</span><em class="sig-param">to_flatten: Any</em><span class="sig-paren">)</span> &#x2192; Union[Any, List[Any]]<a class="headerlink" href="#sims4communitylib.utils.common_collection_utils.CommonCollectionUtils.flatten" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flatten a collection of collections to a single list or itself if already flattened.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>to_flatten</strong> – The collection to flatten</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A single flattened list or to_flatten if already flattened.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_collection_utils.CommonCollectionUtils.intersects">
+<em class="property">static </em><code class="sig-name descname">intersects</code><span class="sig-paren">(</span><em class="sig-param">list_one: List[Any], *list_items: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_collection_utils.CommonCollectionUtils.intersects" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if a list contains any of the specified items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>list_one</strong> (<em>List</em><em>[</em><em>Any</em><em>]</em>) – The list being checked.</p></li>
+<li><p><strong>list_items</strong> – The items being searched for.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the list contains any of the specified items.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_collection_utils.CommonCollectionUtils.is_collection">
+<em class="property">static </em><code class="sig-name descname">is_collection</code><span class="sig-paren">(</span><em class="sig-param">obj: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_collection_utils.CommonCollectionUtils.is_collection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if an object is a collection or not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obj</strong> – An object.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the object is a collection, False if not.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commoncomponentutils">
+<h2><cite>CommonComponentUtils</cite><a class="headerlink" href="#commoncomponentutils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.utils.common_component_utils.CommonComponentUtils">
+<em class="property">class </em><code class="sig-name descname">CommonComponentUtils</code><a class="headerlink" href="#sims4communitylib.utils.common_component_utils.CommonComponentUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utilities for handling components of component containers.</p>
+<dl class="method">
+<dt id="sims4communitylib.utils.common_component_utils.CommonComponentUtils.add_dynamic_component">
+<em class="property">static </em><code class="sig-name descname">add_dynamic_component</code><span class="sig-paren">(</span><em class="sig-param">component_container: objects.components.ComponentContainer</em>, <em class="sig-param">component_type: sims4communitylib.enums.types.component_types.CommonComponentType</em><span class="sig-paren">)</span> &#x2192; Optional[objects.components.Component]<a class="headerlink" href="#sims4communitylib.utils.common_component_utils.CommonComponentUtils.add_dynamic_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a dynamic component to a ComponentContainer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>component_container</strong> – The ComponentContainer to add to.</p></li>
+<li><p><strong>component_type</strong> – The type of component being added.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The added Component or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_component_utils.CommonComponentUtils.get_component">
+<em class="property">static </em><code class="sig-name descname">get_component</code><span class="sig-paren">(</span><em class="sig-param">component_container: objects.components.ComponentContainer</em>, <em class="sig-param">component_type: sims4communitylib.enums.types.component_types.CommonComponentType</em>, <em class="sig-param">add_dynamic: bool = False</em><span class="sig-paren">)</span> &#x2192; Optional[objects.components.Component]<a class="headerlink" href="#sims4communitylib.utils.common_component_utils.CommonComponentUtils.get_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a component from a ComponentContainer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>component_container</strong> – The ComponentContainer to retrieve a component from.</p></li>
+<li><p><strong>component_type</strong> – The type of component being retrieved.</p></li>
+<li><p><strong>add_dynamic</strong> – Whether or not to add the component dynamically.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object of type Component, or None if the specified component type is not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_component_utils.CommonComponentUtils.has_component">
+<em class="property">static </em><code class="sig-name descname">has_component</code><span class="sig-paren">(</span><em class="sig-param">component_container: objects.components.ComponentContainer</em>, <em class="sig-param">component_type: sims4communitylib.enums.types.component_types.CommonComponentType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_component_utils.CommonComponentUtils.has_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if a ComponentContainer has a component of the specified type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>component_container</strong> – The ComponentContainer to check.</p></li>
+<li><p><strong>component_type</strong> – The type of component to locate.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the ComponentContainer contains a component of the specified type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonrealdateutils">
+<h2><cite>CommonRealDateUtils</cite><a class="headerlink" href="#commonrealdateutils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.utils.common_date_utils.CommonRealDateUtils">
+<em class="property">class </em><code class="sig-name descname">CommonRealDateUtils</code><a class="headerlink" href="#sims4communitylib.utils.common_date_utils.CommonRealDateUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A utility for managing real life date and time.</p>
+<dl class="method">
+<dt id="sims4communitylib.utils.common_date_utils.CommonRealDateUtils.get_current_date_string">
+<em class="property">static </em><code class="sig-name descname">get_current_date_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#sims4communitylib.utils.common_date_utils.CommonRealDateUtils.get_current_date_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the current date as a pre-formatted string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The string representation of the current date.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonfunctionutils">
+<h2><cite>CommonFunctionUtils</cite><a class="headerlink" href="#commonfunctionutils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.utils.common_function_utils.CommonFunctionUtils">
+<em class="property">class </em><code class="sig-name descname">CommonFunctionUtils</code><a class="headerlink" href="#sims4communitylib.utils.common_function_utils.CommonFunctionUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utilities for manipulating functions.</p>
+<dl class="method">
+<dt id="sims4communitylib.utils.common_function_utils.CommonFunctionUtils.noop">
+<em class="property">static </em><code class="sig-name descname">noop</code><span class="sig-paren">(</span><em class="sig-param">*_</em>, <em class="sig-param">**__</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#sims4communitylib.utils.common_function_utils.CommonFunctionUtils.noop" title="Permalink to this definition">¶</a></dt>
+<dd><p>An empty function that does nothing. Useful when you need something to do nothing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_function_utils.CommonFunctionUtils.print_arguments">
+<em class="property">static </em><code class="sig-name descname">print_arguments</code><span class="sig-paren">(</span><em class="sig-param">log: sims4communitylib.utils.common_log_registry.CommonLog</em>, <em class="sig-param">func_identifier: str = 'NO_IDENTIFIER_SPECIFIED'</em><span class="sig-paren">)</span> &#x2192; Callable[[...], Any]<a class="headerlink" href="#sims4communitylib.utils.common_function_utils.CommonFunctionUtils.print_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a function that will log the arguments and keyword arguments it receives</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>log</strong> – The log to print the arguments to.</p></li>
+<li><p><strong>func_identifier</strong> – An identifier for the function to determine which function was invoked</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_function_utils.CommonFunctionUtils.run_predicate_with_reversed_result">
+<em class="property">static </em><code class="sig-name descname">run_predicate_with_reversed_result</code><span class="sig-paren">(</span><em class="sig-param">predicate_function: Callable[[...], bool]</em><span class="sig-paren">)</span> &#x2192; Callable[[...], bool]<a class="headerlink" href="#sims4communitylib.utils.common_function_utils.CommonFunctionUtils.run_predicate_with_reversed_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap the specified predicate function and reverse the result of it when the function is invoked.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>predicate_function</strong> – The predicate function to reverse the result of.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A wrapped function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_function_utils.CommonFunctionUtils.run_predicates_as_one">
+<em class="property">static </em><code class="sig-name descname">run_predicates_as_one</code><span class="sig-paren">(</span><em class="sig-param">predicate_functions: Iterator[Callable[[...], bool]], all_must_pass: bool = True</em><span class="sig-paren">)</span> &#x2192; Callable[[...], bool]<a class="headerlink" href="#sims4communitylib.utils.common_function_utils.CommonFunctionUtils.run_predicates_as_one" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap all specified predicate functions into a single predicate function. (See returned value for more information).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>predicate_functions</strong> – The predicate functions to run as one.</p></li>
+<li><p><strong>all_must_pass</strong> – If True, all of the predicates must return a True value. If False, only some of the predicates must return a True value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>If all_must_pass is True a wrapped function that will return a value of:
+- True, if all predicates resulted in a True value.
+- False, if any predicates resulted in a False value.</p>
+<p>If all_must_pass is False a wrapped function that will return a value of:
+- True, if any predicates resulted in a True value.
+- False, if all predicates resulted in a False value.</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_function_utils.CommonFunctionUtils.run_with_arguments">
+<em class="property">static </em><code class="sig-name descname">run_with_arguments</code><span class="sig-paren">(</span><em class="sig-param">primary_function: Callable[[...], Any], *args, **kwargs</em><span class="sig-paren">)</span> &#x2192; Callable[[...], Any]<a class="headerlink" href="#sims4communitylib.utils.common_function_utils.CommonFunctionUtils.run_with_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap a function and run it with additional arguments when something invokes it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>primary_function</strong> – The function that will be run.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A wrapped function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_function_utils.CommonFunctionUtils.safe_run">
+<em class="property">static </em><code class="sig-name descname">safe_run</code><span class="sig-paren">(</span><em class="sig-param">mod_identity: sims4communitylib.mod_support.mod_identity.CommonModIdentity, primary_function: Callable[[...], Any], fallback_function: Callable[[...], Any], *args, **kwargs</em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#sims4communitylib.utils.common_function_utils.CommonFunctionUtils.safe_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Safely run a function, if the primary function throws an exception, the fallback function will be run instead.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mod_identity</strong> – The identity of the mod running a function safely.</p></li>
+<li><p><strong>primary_function</strong> – The primary function to safely run.</p></li>
+<li><p><strong>fallback_function</strong> – A function called when the primary function throws an exception.</p></li>
+<li><p><strong>args</strong> – Arguments to pass to both the primary function and fallback function.</p></li>
+<li><p><strong>kwargs</strong> – Keyword Arguments to pass to both the primary function and fallback function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The result of either the primary function or the fallback function if the primary threw an exception.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commoniconutils">
+<h2><cite>CommonIconUtils</cite><a class="headerlink" href="#commoniconutils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.utils.common_icon_utils.CommonIconUtils">
+<em class="property">class </em><code class="sig-name descname">CommonIconUtils</code><a class="headerlink" href="#sims4communitylib.utils.common_icon_utils.CommonIconUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utilities for handling icons.</p>
+<dl class="method">
+<dt id="sims4communitylib.utils.common_icon_utils.CommonIconUtils.load_arrow_navigate_into_icon">
+<em class="property">static </em><code class="sig-name descname">load_arrow_navigate_into_icon</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#sims4communitylib.utils.common_icon_utils.CommonIconUtils.load_arrow_navigate_into_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Resource Key for the ARROW_NAVIGATE_INTO_ICON.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_icon_utils.CommonIconUtils.load_arrow_right_icon">
+<em class="property">static </em><code class="sig-name descname">load_arrow_right_icon</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#sims4communitylib.utils.common_icon_utils.CommonIconUtils.load_arrow_right_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Resource Key for the ARROW_RIGHT_ICON.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_icon_utils.CommonIconUtils.load_checked_square_icon">
+<em class="property">static </em><code class="sig-name descname">load_checked_square_icon</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#sims4communitylib.utils.common_icon_utils.CommonIconUtils.load_checked_square_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Resource Key for the CHECKED_SQUARE_ICON.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_icon_utils.CommonIconUtils.load_question_mark_icon">
+<em class="property">static </em><code class="sig-name descname">load_question_mark_icon</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#sims4communitylib.utils.common_icon_utils.CommonIconUtils.load_question_mark_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Resource Key for the QUESTION_MARK_ICON.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_icon_utils.CommonIconUtils.load_six_sided_dice_icon">
+<em class="property">static </em><code class="sig-name descname">load_six_sided_dice_icon</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#sims4communitylib.utils.common_icon_utils.CommonIconUtils.load_six_sided_dice_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Resource Key for the SIX_SIDED_DICE_ICON.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_icon_utils.CommonIconUtils.load_unchecked_square_icon">
+<em class="property">static </em><code class="sig-name descname">load_unchecked_square_icon</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#sims4communitylib.utils.common_icon_utils.CommonIconUtils.load_unchecked_square_icon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Resource Key for the UNCHECKED_SQUARE_ICON.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commoninjectionutils">
+<h2><cite>CommonInjectionUtils</cite><a class="headerlink" href="#commoninjectionutils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.utils.common_injection_utils.CommonInjectionUtils">
+<em class="property">class </em><code class="sig-name descname">CommonInjectionUtils</code><a class="headerlink" href="#sims4communitylib.utils.common_injection_utils.CommonInjectionUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utilities to inject custom functionality into other functions.</p>
+<dl class="method">
+<dt id="sims4communitylib.utils.common_injection_utils.CommonInjectionUtils.inject_into">
+<em class="property">static </em><code class="sig-name descname">inject_into</code><span class="sig-paren">(</span><em class="sig-param">target_object: Any</em>, <em class="sig-param">target_function_name: str</em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#sims4communitylib.utils.common_injection_utils.CommonInjectionUtils.inject_into" title="Permalink to this definition">¶</a></dt>
+<dd><p>deprecated:: 1.2.3
+Use <a class="reference internal" href="#sims4communitylib.utils.common_injection_utils.CommonInjectionUtils.inject_safely_into" title="sims4communitylib.utils.common_injection_utils.CommonInjectionUtils.inject_safely_into"><code class="xref py py-func docutils literal notranslate"><span class="pre">inject_safely_into()</span></code></a> instead.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_injection_utils.CommonInjectionUtils.inject_safely_into">
+<em class="property">static </em><code class="sig-name descname">inject_safely_into</code><span class="sig-paren">(</span><em class="sig-param">mod_identity: sims4communitylib.mod_support.mod_identity.CommonModIdentity</em>, <em class="sig-param">target_object: Any</em>, <em class="sig-param">target_function_name: str</em><span class="sig-paren">)</span> &#x2192; Callable<a class="headerlink" href="#sims4communitylib.utils.common_injection_utils.CommonInjectionUtils.inject_safely_into" title="Permalink to this definition">¶</a></dt>
+<dd><p>A decorator used to inject code into another function.
+It will catch and log exceptions and run the original function should any problems occur.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example of cls usage<cite>cls</cite> usage</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># cls usage</span>
+<span class="nd">@CommonInjectionUtils</span><span class="o">.</span><span class="n">inject_safely_into</span><span class="p">(</span><span class="n">SimSpawner</span><span class="p">,</span> <span class="n">SimSpawner</span><span class="o">.</span><span class="n">spawn_sim</span><span class="o">.</span><span class="n">_name__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">do_custom_spawn_sim</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">original</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Example of self usage<cite>self</cite> usage</dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Self usage</span>
+<span class="nd">@CommonInjectionUtils</span><span class="o">.</span><span class="n">inject_safely_into</span><span class="p">(</span><span class="n">SimInfo</span><span class="p">,</span> <span class="n">SimInfo</span><span class="o">.</span><span class="n">load_sim_info</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">do_custom_load_sim_info</span><span class="p">(</span><span class="n">original</span><span class="p">,</span> <span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">original</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Injection WILL work on</p>
+</div>
+<ul class="simple">
+<li><p>Functions decorated with ‘classmethod’</p></li>
+<li><p>Functions with ‘cls’ or ‘self’ as the first argument.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Injection WILL NOT work on</p>
+</div>
+<ul class="simple">
+<li><p>Functions decorated with ‘staticmethod’</p></li>
+<li><p>Global functions, i.e. Functions not contained within a class.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mod_identity</strong> – The identity of the mod injecting into a function.</p></li>
+<li><p><strong>target_object</strong> (<em>Any</em>) – The class that contains the target function.</p></li>
+<li><p><strong>target_function_name</strong> (<em>str</em>) – The name of the function being injected to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A wrapped function.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Callable</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonioutils">
+<h2><cite>CommonIOUtils</cite><a class="headerlink" href="#commonioutils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.utils.common_io_utils.CommonIOUtils">
+<em class="property">class </em><code class="sig-name descname">CommonIOUtils</code><a class="headerlink" href="#sims4communitylib.utils.common_io_utils.CommonIOUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utilities for handling reading/writing to and from files.</p>
+<dl class="method">
+<dt id="sims4communitylib.utils.common_io_utils.CommonIOUtils.load_from_file">
+<em class="property">static </em><code class="sig-name descname">load_from_file</code><span class="sig-paren">(</span><em class="sig-param">file_path: str</em>, <em class="sig-param">buffering: int = 1</em>, <em class="sig-param">encoding: str = 'utf-8'</em><span class="sig-paren">)</span> &#x2192; Optional[str]<a class="headerlink" href="#sims4communitylib.utils.common_io_utils.CommonIOUtils.load_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load string data from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> – The file to read from.</p></li>
+<li><p><strong>encoding</strong> – See the ‘open’ function documentation for more details.</p></li>
+<li><p><strong>buffering</strong> – See the ‘open’ function documentation for more details.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The contents of the file as a string or None if an error occurred.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_io_utils.CommonIOUtils.write_to_file">
+<em class="property">static </em><code class="sig-name descname">write_to_file</code><span class="sig-paren">(</span><em class="sig-param">file_path: str</em>, <em class="sig-param">data: str</em>, <em class="sig-param">buffering: int = 1</em>, <em class="sig-param">encoding: str = 'utf-8'</em>, <em class="sig-param">ignore_errors: bool = False</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_io_utils.CommonIOUtils.write_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write string data to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> – The file to write to.</p></li>
+<li><p><strong>data</strong> – The data to write.</p></li>
+<li><p><strong>encoding</strong> – See the ‘open’ function documentation for more details.</p></li>
+<li><p><strong>buffering</strong> – See the ‘open’ function documentation for more details.</p></li>
+<li><p><strong>ignore_errors</strong> – If True, any exceptions thrown will be ignored (Useful in preventing infinite loops)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if successful. False if not.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonjsonioutils">
+<h2><cite>CommonJSONIOUtils</cite><a class="headerlink" href="#commonjsonioutils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.utils.common_json_io_utils.CommonJSONIOUtils">
+<em class="property">class </em><code class="sig-name descname">CommonJSONIOUtils</code><a class="headerlink" href="#sims4communitylib.utils.common_json_io_utils.CommonJSONIOUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utilities for handling reading/writing JSON data to and from files.</p>
+<dl class="method">
+<dt id="sims4communitylib.utils.common_json_io_utils.CommonJSONIOUtils.load_from_file">
+<em class="property">static </em><code class="sig-name descname">load_from_file</code><span class="sig-paren">(</span><em class="sig-param">file_path: str</em>, <em class="sig-param">buffering: int = 1</em>, <em class="sig-param">encoding: str = 'utf-8'</em><span class="sig-paren">)</span> &#x2192; Optional[Any]<a class="headerlink" href="#sims4communitylib.utils.common_json_io_utils.CommonJSONIOUtils.load_from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deserialize an object from a JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> – The file to read from.</p></li>
+<li><p><strong>encoding</strong> – See the ‘open’ function documentation for more details.</p></li>
+<li><p><strong>buffering</strong> – See the ‘open’ function documentation for more details.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The contents of the file as an object or None if an error occurred.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_json_io_utils.CommonJSONIOUtils.write_to_file">
+<em class="property">static </em><code class="sig-name descname">write_to_file</code><span class="sig-paren">(</span><em class="sig-param">file_path: str</em>, <em class="sig-param">obj: Any</em>, <em class="sig-param">buffering: int = 1</em>, <em class="sig-param">encoding: str = 'utf-8'</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_json_io_utils.CommonJSONIOUtils.write_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serialize an object to a file as JSON.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> – The file to write to.</p></li>
+<li><p><strong>obj</strong> – The object to write as JSON.</p></li>
+<li><p><strong>encoding</strong> – See the ‘open’ function documentation for more details.</p></li>
+<li><p><strong>buffering</strong> – See the ‘open’ function documentation for more details.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if successful. False if not.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commontimeutils">
+<h2><cite>CommonTimeUtils</cite><a class="headerlink" href="#commontimeutils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils">
+<em class="property">class </em><code class="sig-name descname">CommonTimeUtils</code><a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utilities for handling the game clock.</p>
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.advance_current_time">
+<em class="property">static </em><code class="sig-name descname">advance_current_time</code><span class="sig-paren">(</span><em class="sig-param">hours: int = 0</em>, <em class="sig-param">minutes: int = 0</em>, <em class="sig-param">seconds: int = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.advance_current_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Advance the current time by the specified amounts.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.game_is_paused">
+<em class="property">static </em><code class="sig-name descname">game_is_paused</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.game_is_paused" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the game is paused.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.game_is_running_at_speed">
+<em class="property">static </em><code class="sig-name descname">game_is_running_at_speed</code><span class="sig-paren">(</span><em class="sig-param">clock_speed: clock.ClockSpeedMode</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.game_is_running_at_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the game is running at the specified speed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_clock_speed">
+<em class="property">static </em><code class="sig-name descname">get_clock_speed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; clock.ClockSpeedMode<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_clock_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the current clock speed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_clock_speed_scale">
+<em class="property">static </em><code class="sig-name descname">get_clock_speed_scale</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; clock.ClockSpeedMultiplierType<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_clock_speed_scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the current clock speed multiplier.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_current_date_and_time">
+<em class="property">static </em><code class="sig-name descname">get_current_date_and_time</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; date_and_time.DateAndTime<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_current_date_and_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the current date and time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_current_hour">
+<em class="property">static </em><code class="sig-name descname">get_current_hour</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_current_hour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the current sim hour.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_current_minute">
+<em class="property">static </em><code class="sig-name descname">get_current_minute</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_current_minute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the current sim minute.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_current_second">
+<em class="property">static </em><code class="sig-name descname">get_current_second</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_current_second" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the current sim second.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_day_of_week">
+<em class="property">static </em><code class="sig-name descname">get_day_of_week</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_day_of_week" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the current day of the week.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_game_clock">
+<em class="property">static </em><code class="sig-name descname">get_game_clock</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; clock.GameClock<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_game_clock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an instance of the GameClock.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_time_service">
+<em class="property">static </em><code class="sig-name descname">get_time_service</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; time_service.TimeService<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_time_service" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an instance of the TimeService.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_total_days">
+<em class="property">static </em><code class="sig-name descname">get_total_days</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_total_days" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the total sim days since the start of the game.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_total_hours">
+<em class="property">static </em><code class="sig-name descname">get_total_hours</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_total_hours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the total sim hours since the start of the game.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_total_ticks">
+<em class="property">static </em><code class="sig-name descname">get_total_ticks</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_total_ticks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the total sim ticks since the start of the game.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_total_weeks">
+<em class="property">static </em><code class="sig-name descname">get_total_weeks</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.get_total_weeks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the total sim weeks since the start of the game.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.is_day_time">
+<em class="property">static </em><code class="sig-name descname">is_day_time</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.is_day_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if it is currently Day Time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.is_night_time">
+<em class="property">static </em><code class="sig-name descname">is_night_time</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.is_night_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if it is currently Night Time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.is_sun_out">
+<em class="property">static </em><code class="sig-name descname">is_sun_out</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.is_sun_out" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the Sun is currently out.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.pause_the_game">
+<em class="property">static </em><code class="sig-name descname">pause_the_game</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.pause_the_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pause the game.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_clock_speed">
+<em class="property">static </em><code class="sig-name descname">set_clock_speed</code><span class="sig-paren">(</span><em class="sig-param">clock_speed: clock.ClockSpeedMode</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_clock_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the clock speed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_current_time">
+<em class="property">static </em><code class="sig-name descname">set_current_time</code><span class="sig-paren">(</span><em class="sig-param">hours: int</em>, <em class="sig-param">minutes: int</em>, <em class="sig-param">seconds: int</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_current_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the current time.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_game_speed_normal">
+<em class="property">static </em><code class="sig-name descname">set_game_speed_normal</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_game_speed_normal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the game time to Normal speed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_game_speed_to_interaction_startup_speed">
+<em class="property">static </em><code class="sig-name descname">set_game_speed_to_interaction_startup_speed</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_game_speed_to_interaction_startup_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the game time to Interaction Startup Speed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_game_speed_to_speed_three">
+<em class="property">static </em><code class="sig-name descname">set_game_speed_to_speed_three</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_game_speed_to_speed_three" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the game time to Speed Three.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_game_speed_to_speed_two">
+<em class="property">static </em><code class="sig-name descname">set_game_speed_to_speed_two</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_game_speed_to_speed_two" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the game time to Speed Two.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_game_speed_to_super_speed_three">
+<em class="property">static </em><code class="sig-name descname">set_game_speed_to_super_speed_three</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_time_utils.CommonTimeUtils.set_game_speed_to_super_speed_three" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the game time to Super Speed Three.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commontypeutils">
+<h2><cite>CommonTypeUtils</cite><a class="headerlink" href="#commontypeutils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.utils.common_type_utils.CommonTypeUtils">
+<em class="property">class </em><code class="sig-name descname">CommonTypeUtils</code><a class="headerlink" href="#sims4communitylib.utils.common_type_utils.CommonTypeUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utilities for determining the type of an object.</p>
+<dl class="method">
+<dt id="sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_door">
+<em class="property">static </em><code class="sig-name descname">is_door</code><span class="sig-paren">(</span><em class="sig-param">obj: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_door" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if an object is of type Door</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_game_object">
+<em class="property">static </em><code class="sig-name descname">is_game_object</code><span class="sig-paren">(</span><em class="sig-param">obj: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_game_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if an object is of type GameObject</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_ocean">
+<em class="property">static </em><code class="sig-name descname">is_ocean</code><span class="sig-paren">(</span><em class="sig-param">obj: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_ocean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if an object is of type Ocean</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_script_object">
+<em class="property">static </em><code class="sig-name descname">is_script_object</code><span class="sig-paren">(</span><em class="sig-param">obj: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_script_object" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if an object is of type ScriptObject</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_sim_info">
+<em class="property">static </em><code class="sig-name descname">is_sim_info</code><span class="sig-paren">(</span><em class="sig-param">obj: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_sim_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if an object is of type SimInfo</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_sim_info_base_wrapper">
+<em class="property">static </em><code class="sig-name descname">is_sim_info_base_wrapper</code><span class="sig-paren">(</span><em class="sig-param">obj: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_sim_info_base_wrapper" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if an object is of type SimInfo</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_sim_instance">
+<em class="property">static </em><code class="sig-name descname">is_sim_instance</code><span class="sig-paren">(</span><em class="sig-param">obj: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_sim_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if an object is of type Sim</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_sim_or_sim_info">
+<em class="property">static </em><code class="sig-name descname">is_sim_or_sim_info</code><span class="sig-paren">(</span><em class="sig-param">obj: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_sim_or_sim_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if an object is either of type Sim or type SimInfo</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_swimming_pool">
+<em class="property">static </em><code class="sig-name descname">is_swimming_pool</code><span class="sig-paren">(</span><em class="sig-param">obj: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_swimming_pool" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if an object is of type SwimmingPool</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_terrain">
+<em class="property">static </em><code class="sig-name descname">is_terrain</code><span class="sig-paren">(</span><em class="sig-param">obj: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_type_utils.CommonTypeUtils.is_terrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if an object is of type Terrain</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonweatherutils">
+<h2><cite>CommonWeatherUtils</cite><a class="headerlink" href="#commonweatherutils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.utils.common_weather_utils.CommonWeatherUtils">
+<em class="property">class </em><code class="sig-name descname">CommonWeatherUtils</code><a class="headerlink" href="#sims4communitylib.utils.common_weather_utils.CommonWeatherUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utilities for manipulating the weather.</p>
+<dl class="method">
+<dt id="sims4communitylib.utils.common_weather_utils.CommonWeatherUtils.current_temperature_is_cold_or_freezing">
+<em class="property">static </em><code class="sig-name descname">current_temperature_is_cold_or_freezing</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_weather_utils.CommonWeatherUtils.current_temperature_is_cold_or_freezing" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the current temperature is cold or freezing.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_weather_utils.CommonWeatherUtils.current_weather_contains_thunder_or_lightning">
+<em class="property">static </em><code class="sig-name descname">current_weather_contains_thunder_or_lightning</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_weather_utils.CommonWeatherUtils.current_weather_contains_thunder_or_lightning" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the current weather contains lightning or thunder.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_weather_utils.CommonWeatherUtils.get_current_temperature">
+<em class="property">static </em><code class="sig-name descname">get_current_temperature</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; weather.weather_enums.Temperature<a class="headerlink" href="#sims4communitylib.utils.common_weather_utils.CommonWeatherUtils.get_current_temperature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the current temperature.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_weather_utils.CommonWeatherUtils.get_weather_cloud_type">
+<em class="property">static </em><code class="sig-name descname">get_weather_cloud_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; weather.weather_enums.CloudType<a class="headerlink" href="#sims4communitylib.utils.common_weather_utils.CommonWeatherUtils.get_weather_cloud_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the current cloud type.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_weather_utils.CommonWeatherUtils.weather_effect_is_active">
+<em class="property">static </em><code class="sig-name descname">weather_effect_is_active</code><span class="sig-paren">(</span><em class="sig-param">weather_effect_type: weather.weather_enums.WeatherEffectType</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_weather_utils.CommonWeatherUtils.weather_effect_is_active" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the specified weather effect is currently active.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_weather_utils.CommonWeatherUtils.weather_effects_are_active">
+<em class="property">static </em><code class="sig-name descname">weather_effects_are_active</code><span class="sig-paren">(</span><em class="sig-param">weather_effect_types: Iterator[weather.weather_enums.WeatherEffectType]</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.utils.common_weather_utils.CommonWeatherUtils.weather_effects_are_active" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if any of the specified weather effects are currently active.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sims4communitylib.utils.cas.html" class="btn btn-neutral float-right" title="CAS Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sims4communitylib.testing.html" class="btn btn-neutral float-left" title="Testing" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, ColonolNutty
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

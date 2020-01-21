@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Event Handling &mdash; sims4communitylib 1.2.6 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Interaction Event Handling" href="sims4communitylib.events.interaction.html" />
+    <link rel="prev" title="Build/Buy Event Types" href="sims4communitylib.events.build_buy.events.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> sims4communitylib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">The Sims 4 Community Library</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sims4communitylib.html">S4CL API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.classes.html">Inheritable Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.conditionals.html">Conditional Actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.dialogs.html">Custom Dialogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.enums.html">Resource Identifiers</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sims4communitylib.events.html">Event Handling</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.events.build_buy.html">Build/Buy Event Handling</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Event Handling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.events.interaction.html">Interaction Event Handling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.events.interval.html">Interval Event Handling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.events.sim.html">Sim Event Handling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.events.zone_spin.html">Zone Event Handling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.events.zone_update.html">Zone Update Event Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.exceptions.html">ExceptionHandling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.mod_support.html">Mod Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.notifications.html">Custom Notifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.services.html">Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.testing.html">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.utils.html">Misc Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sims4communitylib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">The Sims 4 Community Library</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.html">S4CL API</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.events.html">Event Handling</a> &raquo;</li>
+        
+      <li>Event Handling</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/sims4communitylib.events.event_handling.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="event-handling">
+<h1>Event Handling<a class="headerlink" href="#event-handling" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="commonevent">
+<h2><cite>CommonEvent</cite><a class="headerlink" href="#commonevent" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.events.event_handling.common_event.CommonEvent">
+<em class="property">class </em><code class="sig-name descname">CommonEvent</code><a class="headerlink" href="#sims4communitylib.events.event_handling.common_event.CommonEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A custom event, for use with the Event Handler.</p>
+<dl class="method">
+<dt id="sims4communitylib.events.event_handling.common_event.CommonEvent.event_name">
+<em class="property">property </em><code class="sig-name descname">event_name</code><a class="headerlink" href="#sims4communitylib.events.event_handling.common_event.CommonEvent.event_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of this event.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commoneventhandler">
+<h2><cite>CommonEventHandler</cite><a class="headerlink" href="#commoneventhandler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.events.event_handling.common_event_handler.CommonEventHandler">
+<em class="property">class </em><code class="sig-name descname">CommonEventHandler</code><span class="sig-paren">(</span><em class="sig-param">mod_name: str, event_function: Callable[[...], Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.events.event_handling.common_event_handler.CommonEventHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A handler of events.</p>
+<dl class="method">
+<dt id="sims4communitylib.events.event_handling.common_event_handler.CommonEventHandler.can_handle_event">
+<code class="sig-name descname">can_handle_event</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.events.event_handling.common_event_handler.CommonEventHandler.can_handle_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if this event handler can handle the type of the event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.events.event_handling.common_event_handler.CommonEventHandler.event_function">
+<em class="property">property </em><code class="sig-name descname">event_function</code><a class="headerlink" href="#sims4communitylib.events.event_handling.common_event_handler.CommonEventHandler.event_function" title="Permalink to this definition">¶</a></dt>
+<dd><p>The action to take upon receiving an event.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.events.event_handling.common_event_handler.CommonEventHandler.event_type">
+<em class="property">property </em><code class="sig-name descname">event_type</code><a class="headerlink" href="#sims4communitylib.events.event_handling.common_event_handler.CommonEventHandler.event_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>The class type of events this Event Handler will handle.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.events.event_handling.common_event_handler.CommonEventHandler.handle_event">
+<code class="sig-name descname">handle_event</code><span class="sig-paren">(</span><em class="sig-param">event</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.events.event_handling.common_event_handler.CommonEventHandler.handle_event" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handle the event data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.events.event_handling.common_event_handler.CommonEventHandler.mod_name">
+<em class="property">property </em><code class="sig-name descname">mod_name</code><a class="headerlink" href="#sims4communitylib.events.event_handling.common_event_handler.CommonEventHandler.mod_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the mod this event handler was created for.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commoneventregistry">
+<h2><cite>CommonEventRegistry</cite><a class="headerlink" href="#commoneventregistry" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.events.event_handling.common_event_registry.CommonEventRegistry">
+<em class="property">class </em><code class="sig-name descname">CommonEventRegistry</code><a class="headerlink" href="#sims4communitylib.events.event_handling.common_event_registry.CommonEventRegistry" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="sims4communitylib.services.html#sims4communitylib.services.common_service.CommonService" title="sims4communitylib.services.common_service.CommonService"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.services.common_service.CommonService</span></code></a></p>
+<p>Register event handlers and dispatch events.</p>
+<dl class="method">
+<dt id="sims4communitylib.events.event_handling.common_event_registry.CommonEventRegistry.dispatch">
+<code class="sig-name descname">dispatch</code><span class="sig-paren">(</span><em class="sig-param">event: sims4communitylib.events.event_handling.common_event.CommonEvent</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.events.event_handling.common_event_registry.CommonEventRegistry.dispatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dispatch an event to any event handlers listening for it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.events.event_handling.common_event_registry.CommonEventRegistry.handle_events">
+<em class="property">static </em><code class="sig-name descname">handle_events</code><span class="sig-paren">(</span><em class="sig-param">mod_name: str</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.events.event_handling.common_event_registry.CommonEventRegistry.handle_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorate functions with this static method to register that function to handle an event.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Warning:</dt>
+<dd class="field-odd"><p>Event functions MUST be decorated with staticmethod and must only have a single argument with the name ‘event_data’ (Errors will be thrown upon loading the game otherwise)</p>
+</dd>
+<dt class="field-even">Parameters</dt>
+<dd class="field-even"><p><strong>mod_name</strong> – The name of the mod the class is being registered for.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sims4communitylib.events.interaction.html" class="btn btn-neutral float-right" title="Interaction Event Handling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sims4communitylib.events.build_buy.events.html" class="btn btn-neutral float-left" title="Build/Buy Event Types" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, ColonolNutty
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Inheritable Classes &mdash; sims4communitylib 1.2.6 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Interactions" href="sims4communitylib.classes.interactions.html" />
+    <link rel="prev" title="S4CL API" href="sims4communitylib.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> sims4communitylib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">The Sims 4 Community Library</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sims4communitylib.html">S4CL API</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Inheritable Classes</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.classes.interactions.html">Interactions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonoption"><cite>CommonOption</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#hascommonoption"><cite>HasCommonOption</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.conditionals.html">Conditional Actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.dialogs.html">Custom Dialogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.enums.html">Resource Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.events.html">Event Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.exceptions.html">ExceptionHandling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.mod_support.html">Mod Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.notifications.html">Custom Notifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.services.html">Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.testing.html">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.utils.html">Misc Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sims4communitylib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">The Sims 4 Community Library</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.html">S4CL API</a> &raquo;</li>
+        
+      <li>Inheritable Classes</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/sims4communitylib.classes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="inheritable-classes">
+<h1>Inheritable Classes<a class="headerlink" href="#inheritable-classes" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sims4communitylib.classes.interactions.html">Interactions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.classes.interactions.html#commoninteraction"><cite>CommonInteraction</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.classes.interactions.html#commonimmediatesuperinteraction"><cite>CommonImmediateSuperInteraction</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.classes.interactions.html#commonmixerinteraction"><cite>CommonMixerInteraction</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.classes.interactions.html#commonsocialmixerinteraction"><cite>CommonSocialMixerInteraction</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.classes.interactions.html#commonsuperinteraction"><cite>CommonSuperInteraction</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.classes.interactions.html#commonterraininteraction"><cite>CommonTerrainInteraction</cite></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="commonoption">
+<h2><cite>CommonOption</cite><a class="headerlink" href="#commonoption" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.classes.options.CommonOption">
+<em class="property">class </em><code class="sig-name descname">CommonOption</code><span class="sig-paren">(</span><em class="sig-param">name: str</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.classes.options.CommonOption" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Useful for giving a type to arguments when str just won’t cut it.</p>
+<dl class="method">
+<dt id="sims4communitylib.classes.options.CommonOption.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#sims4communitylib.classes.options.CommonOption.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the option</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The name of the option.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="hascommonoption">
+<h2><cite>HasCommonOption</cite><a class="headerlink" href="#hascommonoption" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.classes.options.HasCommonOptions">
+<em class="property">class </em><code class="sig-name descname">HasCommonOptions</code><span class="sig-paren">(</span><em class="sig-param">options: Dict[sims4communitylib.classes.options.CommonOption, Any]</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.classes.options.HasCommonOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Inherit this class to incorporate options into a class.</p>
+<dl class="method">
+<dt id="sims4communitylib.classes.options.HasCommonOptions.get_option">
+<code class="sig-name descname">get_option</code><span class="sig-paren">(</span><em class="sig-param">option: sims4communitylib.classes.options.CommonOption</em>, <em class="sig-param">default_value: Any = None</em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#sims4communitylib.classes.options.HasCommonOptions.get_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve an option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>option</strong> (<a class="reference internal" href="#sims4communitylib.classes.options.CommonOption" title="sims4communitylib.classes.options.CommonOption"><em>CommonOption</em></a>) – The option to retrieve.</p></li>
+<li><p><strong>default_value</strong> (<em>Any</em>) – A default value to return when an option does not exist.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An option or the default value if not found.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.options.HasCommonOptions.options">
+<em class="property">property </em><code class="sig-name descname">options</code><a class="headerlink" href="#sims4communitylib.classes.options.HasCommonOptions.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A dictionary of options.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Dict[str, Any]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.options.HasCommonOptions.remove_option">
+<code class="sig-name descname">remove_option</code><span class="sig-paren">(</span><em class="sig-param">option: sims4communitylib.classes.options.CommonOption</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.classes.options.HasCommonOptions.remove_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove an option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>option</strong> (<a class="reference internal" href="#sims4communitylib.classes.options.CommonOption" title="sims4communitylib.classes.options.CommonOption"><em>CommonOption</em></a>) – The option to delete.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.options.HasCommonOptions.set_option">
+<code class="sig-name descname">set_option</code><span class="sig-paren">(</span><em class="sig-param">option: sims4communitylib.classes.options.CommonOption</em>, <em class="sig-param">value: Any</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.classes.options.HasCommonOptions.set_option" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set an option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>option</strong> (<a class="reference internal" href="#sims4communitylib.classes.options.CommonOption" title="sims4communitylib.classes.options.CommonOption"><em>CommonOption</em></a>) – The option to set the value of.</p></li>
+<li><p><strong>value</strong> (<em>Any</em>) – The value to set an option to.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sims4communitylib.classes.interactions.html" class="btn btn-neutral float-right" title="Interactions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sims4communitylib.html" class="btn btn-neutral float-left" title="S4CL API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, ColonolNutty
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

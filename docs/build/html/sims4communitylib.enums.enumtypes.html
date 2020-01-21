@@ -1,0 +1,420 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Custom Enum Types &mdash; sims4communitylib 1.2.6 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Resource Identifiers" href="sims4communitylib.enums.types.html" />
+    <link rel="prev" title="Resource Identifiers" href="sims4communitylib.enums.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> sims4communitylib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">The Sims 4 Community Library</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sims4communitylib.html">S4CL API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.classes.html">Inheritable Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.conditionals.html">Conditional Actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.dialogs.html">Custom Dialogs</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sims4communitylib.enums.html">Resource Identifiers</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Custom Enum Types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.types.html">Resource Identifiers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonbuffid"><cite>CommonBuffId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonclubinteractiongroupid"><cite>CommonClubInteractionGroupId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonspecies"><cite>CommonSpecies</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonfurnitureobjectid"><cite>CommonFurnitureObjectId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commoniconid"><cite>CommonIconId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commoninteractionid"><cite>CommonInteractionId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonlottraitid"><cite>CommonLotTraitId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonmoodid"><cite>CommonMoodId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonmotiveid"><cite>CommonMotiveId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonrelationshipbitid"><cite>CommonRelationshipBitId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonrelationshiptrackid"><cite>CommonRelationshipTrackId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonshorttermrelationshiptrackid"><cite>CommonShortTermRelationshipTrackId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonsituationjobid"><cite>CommonSituationJobId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonsituationid"><cite>CommonSituationId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonskillid"><cite>CommonSkillId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonstatisticid"><cite>CommonStatisticId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonstringid"><cite>CommonStringId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commongametag"><cite>CommonGameTag</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commontraitid"><cite>CommonTraitId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonvenuetype"><cite>CommonVenueType</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonwhimsetid"><cite>CommonWhimSetId</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.enums.html#commonworldtypeid"><cite>CommonWorldTypeId</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.events.html">Event Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.exceptions.html">ExceptionHandling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.mod_support.html">Mod Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.notifications.html">Custom Notifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.services.html">Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.testing.html">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.utils.html">Misc Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sims4communitylib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">The Sims 4 Community Library</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.html">S4CL API</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.enums.html">Resource Identifiers</a> &raquo;</li>
+        
+      <li>Custom Enum Types</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/sims4communitylib.enums.enumtypes.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="custom-enum-types">
+<h1>Custom Enum Types<a class="headerlink" href="#custom-enum-types" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="commonenumfloat">
+<h2><cite>CommonEnumFloat</cite><a class="headerlink" href="#commonenumfloat" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.enums.enumtypes.float_enum.CommonEnumFloat">
+<em class="property">class </em><code class="sig-name descname">CommonEnumFloat</code><span class="sig-paren">(</span><em class="sig-param">enum_name: str</em>, <em class="sig-param">enum_value: float</em>, <em class="sig-param">class_name: str</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.enums.enumtypes.float_enum.CommonEnumFloat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+<p>An enum that holds a float value.</p>
+<dl class="method">
+<dt id="sims4communitylib.enums.enumtypes.float_enum.CommonEnumFloat.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#sims4communitylib.enums.enumtypes.float_enum.CommonEnumFloat.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the enum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The name of this enum.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.enums.enumtypes.float_enum.CommonEnumFloat.value">
+<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#sims4communitylib.enums.enumtypes.float_enum.CommonEnumFloat.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of the enum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The value of the enum.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonenumfloatbase">
+<h2><cite>CommonEnumFloatBase</cite><a class="headerlink" href="#commonenumfloatbase" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.enums.enumtypes.float_enum.CommonEnumFloatBase">
+<em class="property">class </em><code class="sig-name descname">CommonEnumFloatBase</code><a class="headerlink" href="#sims4communitylib.enums.enumtypes.float_enum.CommonEnumFloatBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></p>
+<p>A base class for float enums.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="commonenumint">
+<h2><cite>CommonEnumInt</cite><a class="headerlink" href="#commonenumint" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.enums.enumtypes.int_enum.CommonEnumInt">
+<em class="property">class </em><code class="sig-name descname">CommonEnumInt</code><span class="sig-paren">(</span><em class="sig-param">enum_name: str</em>, <em class="sig-param">enum_value: int</em>, <em class="sig-param">class_name: str</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.enums.enumtypes.int_enum.CommonEnumInt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+<p>An enum that holds an integer value.</p>
+<dl class="method">
+<dt id="sims4communitylib.enums.enumtypes.int_enum.CommonEnumInt.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#sims4communitylib.enums.enumtypes.int_enum.CommonEnumInt.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the enum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The name of this enum.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.enums.enumtypes.int_enum.CommonEnumInt.value">
+<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#sims4communitylib.enums.enumtypes.int_enum.CommonEnumInt.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of the enum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The value of the enum.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonenumintbase">
+<h2><cite>CommonEnumIntBase</cite><a class="headerlink" href="#commonenumintbase" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.enums.enumtypes.int_enum.CommonEnumIntBase">
+<em class="property">class </em><code class="sig-name descname">CommonEnumIntBase</code><a class="headerlink" href="#sims4communitylib.enums.enumtypes.int_enum.CommonEnumIntBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></p>
+<p>A base class for integer enums.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="commonenumobject">
+<h2><cite>CommonEnumObject</cite><a class="headerlink" href="#commonenumobject" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.enums.enumtypes.object_enum.CommonEnumObject">
+<em class="property">class </em><code class="sig-name descname">CommonEnumObject</code><span class="sig-paren">(</span><em class="sig-param">enum_name: str</em>, <em class="sig-param">enum_value: object</em>, <em class="sig-param">class_name: str</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.enums.enumtypes.object_enum.CommonEnumObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>An enum that holds an object value.</p>
+<dl class="method">
+<dt id="sims4communitylib.enums.enumtypes.object_enum.CommonEnumObject.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#sims4communitylib.enums.enumtypes.object_enum.CommonEnumObject.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the enum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The name of this enum.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.enums.enumtypes.object_enum.CommonEnumObject.value">
+<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#sims4communitylib.enums.enumtypes.object_enum.CommonEnumObject.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of the enum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The value of the enum.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonenumobjectbase">
+<h2><cite>CommonEnumObjectBase</cite><a class="headerlink" href="#commonenumobjectbase" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.enums.enumtypes.object_enum.CommonEnumObjectBase">
+<em class="property">class </em><code class="sig-name descname">CommonEnumObjectBase</code><a class="headerlink" href="#sims4communitylib.enums.enumtypes.object_enum.CommonEnumObjectBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A base class for object enums.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="commonenumstring">
+<h2><cite>CommonEnumString</cite><a class="headerlink" href="#commonenumstring" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.enums.enumtypes.string_enum.CommonEnumString">
+<em class="property">class </em><code class="sig-name descname">CommonEnumString</code><span class="sig-paren">(</span><em class="sig-param">enum_name: str</em>, <em class="sig-param">enum_value: str</em>, <em class="sig-param">class_name: str</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.enums.enumtypes.string_enum.CommonEnumString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+<p>An enum that holds a string value.</p>
+<dl class="method">
+<dt id="sims4communitylib.enums.enumtypes.string_enum.CommonEnumString.name">
+<em class="property">property </em><code class="sig-name descname">name</code><a class="headerlink" href="#sims4communitylib.enums.enumtypes.string_enum.CommonEnumString.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the enum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The name of this enum.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.enums.enumtypes.string_enum.CommonEnumString.value">
+<em class="property">property </em><code class="sig-name descname">value</code><a class="headerlink" href="#sims4communitylib.enums.enumtypes.string_enum.CommonEnumString.value" title="Permalink to this definition">¶</a></dt>
+<dd><p>The value of the enum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>The value of the enum.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonenumstringbase">
+<h2><cite>CommonEnumStringBase</cite><a class="headerlink" href="#commonenumstringbase" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.enums.enumtypes.string_enum.CommonEnumStringBase">
+<em class="property">class </em><code class="sig-name descname">CommonEnumStringBase</code><a class="headerlink" href="#sims4communitylib.enums.enumtypes.string_enum.CommonEnumStringBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></p>
+<p>A base class for string enums.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sims4communitylib.enums.types.html" class="btn btn-neutral float-right" title="Resource Identifiers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sims4communitylib.enums.html" class="btn btn-neutral float-left" title="Resource Identifiers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, ColonolNutty
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

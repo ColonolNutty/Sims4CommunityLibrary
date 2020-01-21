@@ -1,0 +1,321 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Interaction Event Types &mdash; sims4communitylib 1.2.6 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Interval Event Handling" href="sims4communitylib.events.interval.html" />
+    <link rel="prev" title="Interaction Event Handling" href="sims4communitylib.events.interaction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> sims4communitylib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">The Sims 4 Community Library</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sims4communitylib.html">S4CL API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.classes.html">Inheritable Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.conditionals.html">Conditional Actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.dialogs.html">Custom Dialogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.enums.html">Resource Identifiers</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sims4communitylib.events.html">Event Handling</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.events.build_buy.html">Build/Buy Event Handling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.events.event_handling.html">Event Handling</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="sims4communitylib.events.interaction.html">Interaction Event Handling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.events.interval.html">Interval Event Handling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.events.sim.html">Sim Event Handling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.events.zone_spin.html">Zone Event Handling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.events.zone_update.html">Zone Update Event Handling</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.exceptions.html">ExceptionHandling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.mod_support.html">Mod Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.notifications.html">Custom Notifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.services.html">Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.testing.html">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.utils.html">Misc Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sims4communitylib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">The Sims 4 Community Library</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.html">S4CL API</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.events.html">Event Handling</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.events.interaction.html">Interaction Event Handling</a> &raquo;</li>
+        
+      <li>Interaction Event Types</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/sims4communitylib.events.interaction.events.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="interaction-event-types">
+<h1>Interaction Event Types<a class="headerlink" href="#interaction-event-types" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="s4clinteractionoutcomeevent">
+<h2><cite>S4CLInteractionOutcomeEvent</cite><a class="headerlink" href="#s4clinteractionoutcomeevent" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.events.interaction.events.interaction_outcome.S4CLInteractionOutcomeEvent">
+<em class="property">class </em><code class="sig-name descname">S4CLInteractionOutcomeEvent</code><span class="sig-paren">(</span><em class="sig-param">interaction: interactions.base.interaction.Interaction</em>, <em class="sig-param">outcome: interactions.utils.outcome.InteractionOutcome</em>, <em class="sig-param">outcome_result: interactions.utils.outcome_enums.OutcomeResult</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.events.interaction.events.interaction_outcome.S4CLInteractionOutcomeEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="sims4communitylib.events.event_handling.html#sims4communitylib.events.event_handling.common_event.CommonEvent" title="sims4communitylib.events.event_handling.common_event.CommonEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.events.event_handling.common_event.CommonEvent</span></code></a></p>
+<p>An Event that Occurs upon a Sim running an interaction.</p>
+<dl class="method">
+<dt id="sims4communitylib.events.interaction.events.interaction_outcome.S4CLInteractionOutcomeEvent.interaction">
+<em class="property">property </em><code class="sig-name descname">interaction</code><a class="headerlink" href="#sims4communitylib.events.interaction.events.interaction_outcome.S4CLInteractionOutcomeEvent.interaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>An instance of an Interaction.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.events.interaction.events.interaction_outcome.S4CLInteractionOutcomeEvent.is_failure">
+<code class="sig-name descname">is_failure</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.events.interaction.events.interaction_outcome.S4CLInteractionOutcomeEvent.is_failure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the outcome was a failure.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.events.interaction.events.interaction_outcome.S4CLInteractionOutcomeEvent.is_success">
+<code class="sig-name descname">is_success</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.events.interaction.events.interaction_outcome.S4CLInteractionOutcomeEvent.is_success" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determine if the outcome was a success.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.events.interaction.events.interaction_outcome.S4CLInteractionOutcomeEvent.outcome">
+<em class="property">property </em><code class="sig-name descname">outcome</code><a class="headerlink" href="#sims4communitylib.events.interaction.events.interaction_outcome.S4CLInteractionOutcomeEvent.outcome" title="Permalink to this definition">¶</a></dt>
+<dd><p>The outcome of the interaction.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.events.interaction.events.interaction_outcome.S4CLInteractionOutcomeEvent.outcome_result">
+<em class="property">property </em><code class="sig-name descname">outcome_result</code><a class="headerlink" href="#sims4communitylib.events.interaction.events.interaction_outcome.S4CLInteractionOutcomeEvent.outcome_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>The result of an interaction.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="s4clinteractionqueuedevent">
+<h2><cite>S4CLInteractionQueuedEvent</cite><a class="headerlink" href="#s4clinteractionqueuedevent" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.events.interaction.events.interaction_queued.S4CLInteractionQueuedEvent">
+<em class="property">class </em><code class="sig-name descname">S4CLInteractionQueuedEvent</code><span class="sig-paren">(</span><em class="sig-param">interaction: interactions.base.interaction.Interaction</em>, <em class="sig-param">interaction_queue: interactions.interaction_queue.InteractionQueue</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.events.interaction.events.interaction_queued.S4CLInteractionQueuedEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="sims4communitylib.events.event_handling.html#sims4communitylib.events.event_handling.common_event.CommonEvent" title="sims4communitylib.events.event_handling.common_event.CommonEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.events.event_handling.common_event.CommonEvent</span></code></a></p>
+<p>An Event that Occurs upon a Sim running an interaction.</p>
+<dl class="method">
+<dt id="sims4communitylib.events.interaction.events.interaction_queued.S4CLInteractionQueuedEvent.interaction">
+<em class="property">property </em><code class="sig-name descname">interaction</code><a class="headerlink" href="#sims4communitylib.events.interaction.events.interaction_queued.S4CLInteractionQueuedEvent.interaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>An instance of an Interaction.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.events.interaction.events.interaction_queued.S4CLInteractionQueuedEvent.interaction_queue">
+<em class="property">property </em><code class="sig-name descname">interaction_queue</code><a class="headerlink" href="#sims4communitylib.events.interaction.events.interaction_queued.S4CLInteractionQueuedEvent.interaction_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Interaction Queue of the Sim running the interaction.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="s4clinteractionrunevent">
+<h2><cite>S4CLInteractionRunEvent</cite><a class="headerlink" href="#s4clinteractionrunevent" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.events.interaction.events.interaction_run.S4CLInteractionRunEvent">
+<em class="property">class </em><code class="sig-name descname">S4CLInteractionRunEvent</code><span class="sig-paren">(</span><em class="sig-param">interaction: interactions.base.interaction.Interaction</em>, <em class="sig-param">interaction_queue: interactions.interaction_queue.InteractionQueue</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.events.interaction.events.interaction_run.S4CLInteractionRunEvent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="sims4communitylib.events.event_handling.html#sims4communitylib.events.event_handling.common_event.CommonEvent" title="sims4communitylib.events.event_handling.common_event.CommonEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.events.event_handling.common_event.CommonEvent</span></code></a></p>
+<p>An Event that Occurs upon a Sim running an interaction.</p>
+<dl class="method">
+<dt id="sims4communitylib.events.interaction.events.interaction_run.S4CLInteractionRunEvent.interaction">
+<em class="property">property </em><code class="sig-name descname">interaction</code><a class="headerlink" href="#sims4communitylib.events.interaction.events.interaction_run.S4CLInteractionRunEvent.interaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>An instance of an Interaction.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.events.interaction.events.interaction_run.S4CLInteractionRunEvent.interaction_queue">
+<em class="property">property </em><code class="sig-name descname">interaction_queue</code><a class="headerlink" href="#sims4communitylib.events.interaction.events.interaction_run.S4CLInteractionRunEvent.interaction_queue" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Interaction Queue of the Sim running the interaction.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sims4communitylib.events.interval.html" class="btn btn-neutral float-right" title="Interval Event Handling" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sims4communitylib.events.interaction.html" class="btn btn-neutral float-left" title="Interaction Event Handling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, ColonolNutty
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
