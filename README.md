@@ -2,7 +2,7 @@ Welcome to The Sims 4 Community Library!
 
 This is more of an API than a mod itself. It does nothing on its own and is meant as a framework for other Sims 4 developers to utilize in their own code bases.
 
-
+To see the documentation for S4CL [check out the docs](https://sims4communitylibrary.readthedocs.io/en/latest/)!
 
 Current Features:
 
