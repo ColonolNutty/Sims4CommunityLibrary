@@ -110,3 +110,5 @@ autodoc_mock_imports = [
 ]
 
 add_module_names = False
+
+master_doc = 'index'
