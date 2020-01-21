@@ -1,0 +1,393 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Resource Utilities &mdash; sims4communitylib 1.2.6 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Sim Utilities" href="sims4communitylib.utils.sims.html" />
+    <link rel="prev" title="Location Utilities" href="sims4communitylib.utils.location.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> sims4communitylib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">The Sims 4 Community Library</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sims4communitylib.html">S4CL API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.classes.html">Inheritable Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.conditionals.html">Conditional Actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.dialogs.html">Custom Dialogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.enums.html">Resource Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.events.html">Event Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.exceptions.html">ExceptionHandling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.mod_support.html">Mod Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.notifications.html">Custom Notifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.services.html">Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.testing.html">Testing</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="sims4communitylib.utils.html">Misc Utilities</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.cas.html">CAS Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.localization.html">Localization (String Tables)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.location.html">Location Utilities</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Resource Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.sims.html">Sim Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.html#commoncollectionutils"><cite>CommonCollectionUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.html#commoncomponentutils"><cite>CommonComponentUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.html#commonrealdateutils"><cite>CommonRealDateUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.html#commonfunctionutils"><cite>CommonFunctionUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.html#commoniconutils"><cite>CommonIconUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.html#commoninjectionutils"><cite>CommonInjectionUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.html#commonioutils"><cite>CommonIOUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.html#commonjsonioutils"><cite>CommonJSONIOUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.html#commontimeutils"><cite>CommonTimeUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.html#commontypeutils"><cite>CommonTypeUtils</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.utils.html#commonweatherutils"><cite>CommonWeatherUtils</cite></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sims4communitylib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">The Sims 4 Community Library</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.html">S4CL API</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.utils.html">Misc Utilities</a> &raquo;</li>
+        
+      <li>Resource Utilities</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/sims4communitylib.utils.resources.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="resource-utilities">
+<h1>Resource Utilities<a class="headerlink" href="#resource-utilities" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="commonstatisticutils">
+<h2><cite>CommonStatisticUtils</cite><a class="headerlink" href="#commonstatisticutils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.utils.resources.common_statistic_utils.CommonStatisticUtils">
+<em class="property">class </em><code class="sig-name descname">CommonStatisticUtils</code><a class="headerlink" href="#sims4communitylib.utils.resources.common_statistic_utils.CommonStatisticUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utilities for manipulating the Statistics of Sims.</p>
+<dl class="method">
+<dt id="sims4communitylib.utils.resources.common_statistic_utils.CommonStatisticUtils.get_statistic_initial_value">
+<em class="property">static </em><code class="sig-name descname">get_statistic_initial_value</code><span class="sig-paren">(</span><em class="sig-param">statistic_id: int</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sims4communitylib.utils.resources.common_statistic_utils.CommonStatisticUtils.get_statistic_initial_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the Initial Value of a Statistic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.resources.common_statistic_utils.CommonStatisticUtils.get_statistic_max_value">
+<em class="property">static </em><code class="sig-name descname">get_statistic_max_value</code><span class="sig-paren">(</span><em class="sig-param">statistic_id: int</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sims4communitylib.utils.resources.common_statistic_utils.CommonStatisticUtils.get_statistic_max_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the Maximum Value of a Statistic.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.resources.common_statistic_utils.CommonStatisticUtils.get_statistic_min_value">
+<em class="property">static </em><code class="sig-name descname">get_statistic_min_value</code><span class="sig-paren">(</span><em class="sig-param">statistic_id: int</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#sims4communitylib.utils.resources.common_statistic_utils.CommonStatisticUtils.get_statistic_min_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the Minimum Value of a Statistic.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonresourceutils">
+<h2><cite>CommonResourceUtils</cite><a class="headerlink" href="#commonresourceutils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.utils.common_resource_utils.CommonResourceUtils">
+<em class="property">class </em><code class="sig-name descname">CommonResourceUtils</code><a class="headerlink" href="#sims4communitylib.utils.common_resource_utils.CommonResourceUtils" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Utilities for retrieving the Tuning files and instances of various resources. (Objects, Snippets, Statistics, etc.).</p>
+<dl class="method">
+<dt id="sims4communitylib.utils.common_resource_utils.CommonResourceUtils.get_instance_manager">
+<em class="property">static </em><code class="sig-name descname">get_instance_manager</code><span class="sig-paren">(</span><em class="sig-param">instance_manager_type: sims4.resources.Types</em><span class="sig-paren">)</span> &#x2192; Optional[sims4.tuning.instance_manager.InstanceManager]<a class="headerlink" href="#sims4communitylib.utils.common_resource_utils.CommonResourceUtils.get_instance_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an InstanceManager for the specified type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>instance_manager_type</strong> – The type of InstanceManager to get.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An InstanceManager for the specified type, or None if no InstanceManager is found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_resource_utils.CommonResourceUtils.get_resource_key">
+<em class="property">static </em><code class="sig-name descname">get_resource_key</code><span class="sig-paren">(</span><em class="sig-param">resource_type: sims4.resources.Types</em>, <em class="sig-param">instance_id: int</em><span class="sig-paren">)</span> &#x2192; _resourceman.Key<a class="headerlink" href="#sims4communitylib.utils.common_resource_utils.CommonResourceUtils.get_resource_key" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the resource key of a resource in the format: 00000000:00000000:00000000000000000</p>
+<p>Possible Usages:
+- Retrieve the identifier of an Icon to display next to an Interaction in the Pie Menu.
+- Retrieve the identifier of an Image for display in Dialogs or Notifications.</p>
+<p>Example Usage:
+icon_key = CommonResourceUtils.get_resource_key(Types.PNG, 1234)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>resource_type</strong> – The type of resource being loaded.</p></li>
+<li><p><strong>instance_id</strong> – The decimal identifier of the resource.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The resource key of an instance (format: 00000000(Type):00000000(Group):00000000000000000(Instance Guid)) or None if no instance was found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_resource_utils.CommonResourceUtils.load_all_instances">
+<em class="property">static </em><code class="sig-name descname">load_all_instances</code><span class="sig-paren">(</span><em class="sig-param">instance_type: sims4.resources.Types</em><span class="sig-paren">)</span> &#x2192; ItemsView[Any, Any]<a class="headerlink" href="#sims4communitylib.utils.common_resource_utils.CommonResourceUtils.load_all_instances" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load all instances of the specified type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>instance_type</strong> – The type of instance being loaded.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>All instances of the specified type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_resource_utils.CommonResourceUtils.load_instance">
+<em class="property">static </em><code class="sig-name descname">load_instance</code><span class="sig-paren">(</span><em class="sig-param">instance_type: sims4.resources.Types</em>, <em class="sig-param">instance_id: int</em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#sims4communitylib.utils.common_resource_utils.CommonResourceUtils.load_instance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load an instance of the specified type.</p>
+<dl class="simple">
+<dt>Example Usage 1:</dt><dd><p>mood_instance = CommonResourceUtils.load_instance(Types.MOOD, CommonMoodId.CONFIDENT)
+# This will retrieve an instance for the Confident mood and will be of type statistics.mood.Mood</p>
+</dd>
+<dt>Example Usage 2:</dt><dd><p>buff_instance = CommonResourceUtils.load_instance(Types.BUFF, CommonBuffId.WALK_STYLE_ANGRY)
+# This will retrieve an instance for the Walk Style Angry buff and will be of type buffs.buff.Buff</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>instance_type</strong> – The type of instance being loaded.</p></li>
+<li><p><strong>instance_id</strong> – The decimal identifier of an instance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An instance of the specified type or None if no instance was found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_resource_utils.CommonResourceUtils.load_instance_from_manager">
+<em class="property">static </em><code class="sig-name descname">load_instance_from_manager</code><span class="sig-paren">(</span><em class="sig-param">instance_manager: sims4.tuning.instance_manager.InstanceManager</em>, <em class="sig-param">instance_id: int</em><span class="sig-paren">)</span> &#x2192; Any<a class="headerlink" href="#sims4communitylib.utils.common_resource_utils.CommonResourceUtils.load_instance_from_manager" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load an instance from the specified InstanceManager.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>instance_manager</strong> – The InstanceManager an instance will be loaded from.</p></li>
+<li><p><strong>instance_id</strong> – The decimal identifier of an instance.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An instance of the specified type or None if no instance was found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.utils.common_resource_utils.CommonResourceUtils.load_instances_with_any_tags">
+<em class="property">static </em><code class="sig-name descname">load_instances_with_any_tags</code><span class="sig-paren">(</span><em class="sig-param">resource_type: sims4.resources.Types, tags: Tuple[str]</em><span class="sig-paren">)</span> &#x2192; Tuple[Any]<a class="headerlink" href="#sims4communitylib.utils.common_resource_utils.CommonResourceUtils.load_instances_with_any_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve all resources that contain the specified tag names within their tuning file.</p>
+<p>Possible Usages:
+- Load all Snippet files containing properties with any of the specified tags.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>resource_type</strong> – The type of resource being loaded.</p></li>
+<li><p><strong>tags</strong> – A collection of tag names to locate within a tuning file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A collection of resources that contain any of the specified tags.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sims4communitylib.utils.sims.html" class="btn btn-neutral float-right" title="Sim Utilities" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sims4communitylib.utils.location.html" class="btn btn-neutral float-left" title="Location Utilities" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, ColonolNutty
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

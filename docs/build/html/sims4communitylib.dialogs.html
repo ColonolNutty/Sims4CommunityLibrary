@@ -1,0 +1,421 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Custom Dialogs &mdash; sims4communitylib 1.2.6 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Choose Option Dialogs" href="sims4communitylib.dialogs.option_dialogs.html" />
+    <link rel="prev" title="Conditional Actions" href="sims4communitylib.conditionals.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> sims4communitylib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">The Sims 4 Community Library</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sims4communitylib.html">S4CL API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.classes.html">Inheritable Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.conditionals.html">Conditional Actions</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Custom Dialogs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.html">Choose Option Dialogs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.dialogs.utils.html">Dialog Utilities</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonchooseobjectdialog"><cite>CommonChooseObjectDialog</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonchoiceoutcome"><cite>CommonChoiceOutcome</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonchoosedialog"><cite>CommonChooseDialog</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonchoosesimdialog"><cite>CommonChooseSimDialog</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonchoosesimsdialog"><cite>CommonChooseSimsDialog</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commondialog"><cite>CommonDialog</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commoninputfloatdialog"><cite>CommonInputFloatDialog</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonokdialog"><cite>CommonOkDialog</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commontargetedquestiondialog"><cite>CommonTargetedQuestionDialog</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#commonokcanceldialog"><cite>CommonOkCancelDialog</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.enums.html">Resource Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.events.html">Event Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.exceptions.html">ExceptionHandling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.mod_support.html">Mod Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.notifications.html">Custom Notifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.services.html">Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.testing.html">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.utils.html">Misc Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sims4communitylib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">The Sims 4 Community Library</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.html">S4CL API</a> &raquo;</li>
+        
+      <li>Custom Dialogs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/sims4communitylib.dialogs.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="custom-dialogs">
+<h1>Custom Dialogs<a class="headerlink" href="#custom-dialogs" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.html">Choose Option Dialogs</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.options.html">Choose Dialog Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.options.objects.html">Choose Object Dialogs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.options.objects.html#commondialogactionoption"><cite>CommonDialogActionOption</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.options.objects.html#commondialogbranchoption"><cite>CommonDialogBranchOption</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.options.objects.html#commondialoginputoption"><cite>CommonDialogInputOption</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.options.objects.html#commondialogobjectoption"><cite>CommonDialogObjectOption</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.options.objects.html#commondialogselectoption"><cite>CommonDialogSelectOption</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.options.objects.html#commondialogtoggleoption"><cite>CommonDialogToggleOption</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.options.sims.html">Choose Sim Option Dialog Options</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.options.sims.html#commondialogsimoption"><cite>CommonDialogSimOption</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.options.sims.html#commondialogsimoptioncontext"><cite>CommonDialogSimOptionContext</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.options.html#commondialogoption"><cite>CommonDialogOption</cite></a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.options.html#commondialogoptioncontext"><cite>CommonDialogOptionContext</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.html#commonchooseobjectobjectoptiondialog"><cite>CommonChooseObjectObjectOptionDialog</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.html#commonchooseoptiondialog"><cite>CommonChooseOptionDialog</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.html#commonchooseoptionsdialog"><cite>CommonChooseOptionsDialog</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.html#commonchoosesimoptiondialog"><cite>CommonChooseSimOptionDialog</cite></a></li>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.dialogs.option_dialogs.html#commonchoosesimsoptiondialog"><cite>CommonChooseSimsOptionDialog</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sims4communitylib.dialogs.utils.html">Dialog Utilities</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sims4communitylib.dialogs.utils.html#commondialogutils"><cite>CommonDialogUtils</cite></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="commonchooseobjectdialog">
+<h2><cite>CommonChooseObjectDialog</cite><a class="headerlink" href="#commonchooseobjectdialog" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="commonchoiceoutcome">
+<h2><cite>CommonChoiceOutcome</cite><a class="headerlink" href="#commonchoiceoutcome" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="commonchoosedialog">
+<h2><cite>CommonChooseDialog</cite><a class="headerlink" href="#commonchoosedialog" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.dialogs.common_choose_dialog.CommonChooseDialog">
+<em class="property">class </em><code class="sig-name descname">CommonChooseDialog</code><span class="sig-paren">(</span><em class="sig-param">title_identifier: Union[int, protocolbuffers.Localization_pb2.LocalizedString], description_identifier: Union[int, protocolbuffers.Localization_pb2.LocalizedString], rows: Iterator[ui.ui_dialog_picker.BasePickerRow], title_tokens: Iterator[Any] = (), description_tokens: Iterator[Any] = (), mod_identity: sims4communitylib.mod_support.mod_identity.CommonModIdentity = None</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.dialogs.common_choose_dialog.CommonChooseDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sims4communitylib.dialogs.common_dialog.CommonDialog" title="sims4communitylib.dialogs.common_dialog.CommonDialog"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.dialogs.common_dialog.CommonDialog</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<p>Create a dialog to prompt the player to choose something.</p>
+<dl class="method">
+<dt id="sims4communitylib.dialogs.common_choose_dialog.CommonChooseDialog.add_row">
+<code class="sig-name descname">add_row</code><span class="sig-paren">(</span><em class="sig-param">row: ui.ui_dialog_picker.BasePickerRow</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.dialogs.common_choose_dialog.CommonChooseDialog.add_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a row to the dialog.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.dialogs.common_choose_dialog.CommonChooseDialog.rows">
+<em class="property">property </em><code class="sig-name descname">rows</code><a class="headerlink" href="#sims4communitylib.dialogs.common_choose_dialog.CommonChooseDialog.rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>The rows to display in the dialog.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonchoosesimdialog">
+<h2><cite>CommonChooseSimDialog</cite><a class="headerlink" href="#commonchoosesimdialog" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="commonchoosesimsdialog">
+<h2><cite>CommonChooseSimsDialog</cite><a class="headerlink" href="#commonchoosesimsdialog" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="commondialog">
+<h2><cite>CommonDialog</cite><a class="headerlink" href="#commondialog" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.dialogs.common_dialog.CommonDialog">
+<em class="property">class </em><code class="sig-name descname">CommonDialog</code><span class="sig-paren">(</span><em class="sig-param">title_identifier: Union[int, protocolbuffers.Localization_pb2.LocalizedString], description_identifier: Union[int, protocolbuffers.Localization_pb2.LocalizedString], title_tokens: Iterator[Any] = (), description_tokens: Iterator[Any] = (), mod_identity: sims4communitylib.mod_support.mod_identity.CommonModIdentity = None</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.dialogs.common_dialog.CommonDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="sims4communitylib.logging.html#sims4communitylib.logging.has_log.HasLog" title="sims4communitylib.logging.has_log.HasLog"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.logging.has_log.HasLog</span></code></a></p>
+<p>Create a dialog</p>
+<dl class="method">
+<dt id="sims4communitylib.dialogs.common_dialog.CommonDialog.mod_identity">
+<em class="property">property </em><code class="sig-name descname">mod_identity</code><a class="headerlink" href="#sims4communitylib.dialogs.common_dialog.CommonDialog.mod_identity" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Identity of the mod that owns this class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.dialogs.common_dialog.CommonDialog.show">
+<code class="sig-name descname">show</code><span class="sig-paren">(</span><em class="sig-param">*_</em>, <em class="sig-param">**__</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.dialogs.common_dialog.CommonDialog.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the dialog</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commoninputfloatdialog">
+<h2><cite>CommonInputFloatDialog</cite><a class="headerlink" href="#commoninputfloatdialog" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="commonokdialog">
+<h2><cite>CommonOkDialog</cite><a class="headerlink" href="#commonokdialog" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.dialogs.common_ok_dialog.CommonOkDialog">
+<em class="property">class </em><code class="sig-name descname">CommonOkDialog</code><span class="sig-paren">(</span><em class="sig-param">title_identifier: Union[int, protocolbuffers.Localization_pb2.LocalizedString], description_identifier: Union[int, protocolbuffers.Localization_pb2.LocalizedString], title_tokens: Iterator[Any] = (), description_tokens: Iterator[Any] = (), ok_text_identifier: Union[int, protocolbuffers.Localization_pb2.LocalizedString] = CommonStringId.OK, ok_text_tokens: Iterator[Any] = (), mod_identity: sims4communitylib.mod_support.mod_identity.CommonModIdentity = None</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.dialogs.common_ok_dialog.CommonOkDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sims4communitylib.dialogs.common_dialog.CommonDialog" title="sims4communitylib.dialogs.common_dialog.CommonDialog"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.dialogs.common_dialog.CommonDialog</span></code></a></p>
+<p>Use to create an acknowledgement dialog.</p>
+<dl class="method">
+<dt id="sims4communitylib.dialogs.common_ok_dialog.CommonOkDialog.log_identifier">
+<em class="property">property </em><code class="sig-name descname">log_identifier</code><a class="headerlink" href="#sims4communitylib.dialogs.common_ok_dialog.CommonOkDialog.log_identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>An identifier for the Log of this class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.dialogs.common_ok_dialog.CommonOkDialog.show">
+<code class="sig-name descname">show</code><span class="sig-paren">(</span><em class="sig-param">on_acknowledged: Callable[[ui.ui_dialog.UiDialogOk], Any] = &lt;function CommonFunctionUtils.noop&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.dialogs.common_ok_dialog.CommonOkDialog.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the dialog and invoke the callback upon the player acknowledging the dialog.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>on_acknowledged</strong> – Invoked upon the player acknowledging (Hitting Ok) or closing the dialog.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commontargetedquestiondialog">
+<h2><cite>CommonTargetedQuestionDialog</cite><a class="headerlink" href="#commontargetedquestiondialog" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.dialogs.common_targeted_question_dialog.CommonTargetedQuestionDialog">
+<em class="property">class </em><code class="sig-name descname">CommonTargetedQuestionDialog</code><span class="sig-paren">(</span><em class="sig-param">question_text: Union[int, protocolbuffers.Localization_pb2.LocalizedString], question_tokens: Iterator[Any] = (), ok_text_identifier: Union[int, protocolbuffers.Localization_pb2.LocalizedString] = CommonStringId.OK, ok_text_tokens: Iterator[Any] = (), cancel_text_identifier: Union[int, protocolbuffers.Localization_pb2.LocalizedString] = CommonStringId.CANCEL, cancel_text_tokens: Iterator[Any] = (), mod_identity: sims4communitylib.mod_support.mod_identity.CommonModIdentity = None</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.dialogs.common_targeted_question_dialog.CommonTargetedQuestionDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sims4communitylib.dialogs.common_dialog.CommonDialog" title="sims4communitylib.dialogs.common_dialog.CommonDialog"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.dialogs.common_dialog.CommonDialog</span></code></a></p>
+<p>Use to create a Sim to Sim question dialog.</p>
+<dl class="method">
+<dt id="sims4communitylib.dialogs.common_targeted_question_dialog.CommonTargetedQuestionDialog.log_identifier">
+<em class="property">property </em><code class="sig-name descname">log_identifier</code><a class="headerlink" href="#sims4communitylib.dialogs.common_targeted_question_dialog.CommonTargetedQuestionDialog.log_identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>An identifier for the Log of this class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.dialogs.common_targeted_question_dialog.CommonTargetedQuestionDialog.show">
+<code class="sig-name descname">show</code><span class="sig-paren">(</span><em class="sig-param">sim_info: sims.sim_info.SimInfo, target_sim_info: sims.sim_info.SimInfo, on_ok_selected: Callable[[ui.ui_dialog.UiDialogOkCancel], Any] = &lt;function CommonFunctionUtils.noop&gt;, on_cancel_selected: Callable[[ui.ui_dialog.UiDialogOkCancel], Any] = &lt;function CommonFunctionUtils.noop&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.dialogs.common_targeted_question_dialog.CommonTargetedQuestionDialog.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the dialog and invoke the callbacks upon the player making a choice.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sim_info</strong> – The Sim that is the source of the question.</p></li>
+<li><p><strong>target_sim_info</strong> – The Sim that is the target of the question.</p></li>
+<li><p><strong>on_ok_selected</strong> – Invoked upon the player clicking the Ok button in the dialog.</p></li>
+<li><p><strong>on_cancel_selected</strong> – Invoked upon the player clicking the Cancel button in the dialog.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonokcanceldialog">
+<h2><cite>CommonOkCancelDialog</cite><a class="headerlink" href="#commonokcanceldialog" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.dialogs.ok_cancel_dialog.CommonOkCancelDialog">
+<em class="property">class </em><code class="sig-name descname">CommonOkCancelDialog</code><span class="sig-paren">(</span><em class="sig-param">title_identifier: Union[int, protocolbuffers.Localization_pb2.LocalizedString], description_identifier: Union[int, protocolbuffers.Localization_pb2.LocalizedString], title_tokens: Iterator[Any] = (), description_tokens: Iterator[Any] = (), ok_text_identifier: Union[int, protocolbuffers.Localization_pb2.LocalizedString] = CommonStringId.OK, ok_text_tokens: Iterator[Any] = (), cancel_text_identifier: Union[int, protocolbuffers.Localization_pb2.LocalizedString] = CommonStringId.CANCEL, cancel_text_tokens: Iterator[Any] = (), mod_identity: sims4communitylib.mod_support.mod_identity.CommonModIdentity = None</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.dialogs.ok_cancel_dialog.CommonOkCancelDialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sims4communitylib.dialogs.common_dialog.CommonDialog" title="sims4communitylib.dialogs.common_dialog.CommonDialog"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.dialogs.common_dialog.CommonDialog</span></code></a></p>
+<p>Use to create a prompt dialog.</p>
+<dl class="method">
+<dt id="sims4communitylib.dialogs.ok_cancel_dialog.CommonOkCancelDialog.log_identifier">
+<em class="property">property </em><code class="sig-name descname">log_identifier</code><a class="headerlink" href="#sims4communitylib.dialogs.ok_cancel_dialog.CommonOkCancelDialog.log_identifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>An identifier for the Log of this class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.dialogs.ok_cancel_dialog.CommonOkCancelDialog.show">
+<code class="sig-name descname">show</code><span class="sig-paren">(</span><em class="sig-param">on_ok_selected: Callable[[ui.ui_dialog.UiDialogOkCancel], Any] = &lt;function CommonFunctionUtils.noop&gt;, on_cancel_selected: Callable[[ui.ui_dialog.UiDialogOkCancel], Any] = &lt;function CommonFunctionUtils.noop&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.dialogs.ok_cancel_dialog.CommonOkCancelDialog.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show the dialog and invoke the callbacks upon the player selecting an option.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>on_ok_selected</strong> – Invoked upon the player selecting Ok in the dialog.</p></li>
+<li><p><strong>on_cancel_selected</strong> – Invoked upon the player selecting Cancel in the dialog.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sims4communitylib.dialogs.option_dialogs.html" class="btn btn-neutral float-right" title="Choose Option Dialogs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sims4communitylib.conditionals.html" class="btn btn-neutral float-left" title="Conditional Actions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, ColonolNutty
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

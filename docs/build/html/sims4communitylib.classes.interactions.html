@@ -1,0 +1,481 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Interactions &mdash; sims4communitylib 1.2.6 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Conditional Actions" href="sims4communitylib.conditionals.html" />
+    <link rel="prev" title="Inheritable Classes" href="sims4communitylib.classes.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> sims4communitylib
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">The Sims 4 Community Library</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="sims4communitylib.html">S4CL API</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="sims4communitylib.classes.html">Inheritable Classes</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Interactions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.classes.html#commonoption"><cite>CommonOption</cite></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sims4communitylib.classes.html#hascommonoption"><cite>HasCommonOption</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.conditionals.html">Conditional Actions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.dialogs.html">Custom Dialogs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.enums.html">Resource Identifiers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.events.html">Event Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.exceptions.html">ExceptionHandling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.logging.html">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.mod_support.html">Mod Support</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.notifications.html">Custom Notifications</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.services.html">Services</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.testing.html">Testing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sims4communitylib.utils.html">Misc Utilities</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">sims4communitylib</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">The Sims 4 Community Library</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.html">S4CL API</a> &raquo;</li>
+        
+          <li><a href="sims4communitylib.classes.html">Inheritable Classes</a> &raquo;</li>
+        
+      <li>Interactions</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/sims4communitylib.classes.interactions.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="interactions">
+<h1>Interactions<a class="headerlink" href="#interactions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="commoninteraction">
+<h2><cite>CommonInteraction</cite><a class="headerlink" href="#commoninteraction" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.classes.interactions.common_interaction.CommonInteraction">
+<em class="property">class </em><code class="sig-name descname">CommonInteraction</code><span class="sig-paren">(</span><em class="sig-param">*_</em>, <em class="sig-param">**__</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">interactions.base.interaction.Interaction</span></code>, <a class="reference internal" href="sims4communitylib.logging.html#sims4communitylib.logging.has_log.HasLog" title="sims4communitylib.logging.has_log.HasLog"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.logging.has_log.HasLog</span></code></a></p>
+<p>Enables hooks into the functionality of an Interaction</p>
+<dl class="method">
+<dt id="sims4communitylib.classes.interactions.common_interaction.CommonInteraction.apply_posture_state">
+<code class="sig-name descname">apply_posture_state</code><span class="sig-paren">(</span><em class="sig-param">posture_state: postures.posture_state.PostureState</em>, <em class="sig-param">participant_type: interactions.ParticipantType = interactions.ParticipantType.Actor</em>, <em class="sig-param">sim: sims.sim.Sim = singletons.DEFAULT</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction.apply_posture_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply a posture to a sim.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>posture_state</strong> – The posture state to apply.</p></li>
+<li><p><strong>participant_type</strong> – The ParticipantType of the actor.</p></li>
+<li><p><strong>sim</strong> – The sim to apply posture states to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Unknown</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.interactions.common_interaction.CommonInteraction.cancel">
+<code class="sig-name descname">cancel</code><span class="sig-paren">(</span><em class="sig-param">finishing_type: interactions.interaction_finisher.FinishingType</em>, <em class="sig-param">cancel_reason_msg: str</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction.cancel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cancel the interaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>finishing_type</strong> – The type of cancellation occurring.</p></li>
+<li><p><strong>cancel_reason_msg</strong> – The reason it was cancelled.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if cancellation is successful, False if cancellation failed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.interactions.common_interaction.CommonInteraction.create_test_result">
+<em class="property">static </em><code class="sig-name descname">create_test_result</code><span class="sig-paren">(</span><em class="sig-param">result: bool, reason: str = None, text_tokens: Union[Tuple[Any], List[Any], Set[Any]] = (), tooltip: Union[int, str, sims4communitylib.utils.localization.common_localization_utils.CommonLocalizationUtils.LocalizedTooltip] = None, icon=None, influence_by_active_mood: bool = False</em><span class="sig-paren">)</span> &#x2192; event_testing.results.TestResult<a class="headerlink" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction.create_test_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a TestResult with the specified information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>result</strong> – The result of a test. True for passed, False for failed.</p></li>
+<li><p><strong>reason</strong> – The reason for the Test Result (This is displayed as a tooltip to the player when the interaction is disabled).</p></li>
+<li><p><strong>text_tokens</strong> – Any text tokens to include format into the reason.</p></li>
+<li><p><strong>tooltip</strong> – The tooltip displayed when hovering the interaction while it is disabled.</p></li>
+<li><p><strong>icon</strong> – The icon of the outcome.</p></li>
+<li><p><strong>influence_by_active_mood</strong> – If true, the Test Result will be influenced by the active mood.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>An object of type TestResult.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.interactions.common_interaction.CommonInteraction.kill">
+<code class="sig-name descname">kill</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction.kill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Kill the interaction. (Hard Cancel)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.interactions.common_interaction.CommonInteraction.mod_identity">
+<em class="property">property </em><code class="sig-name descname">mod_identity</code><a class="headerlink" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction.mod_identity" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Identity of the mod that owns this class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.interactions.common_interaction.CommonInteraction.modify_posture_state">
+<code class="sig-name descname">modify_posture_state</code><span class="sig-paren">(</span><em class="sig-param">posture_state: postures.posture_state.PostureState</em>, <em class="sig-param">participant_type: interactions.ParticipantType = interactions.ParticipantType.Actor</em>, <em class="sig-param">sim: sims.sim.Sim = singletons.DEFAULT</em><span class="sig-paren">)</span> &#x2192; Tuple[postures.posture_state.PostureState, interactions.ParticipantType, Any]<a class="headerlink" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction.modify_posture_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify the posture state, participant type or sim of the interaction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>posture_state</strong> – The posture state to modify.</p></li>
+<li><p><strong>participant_type</strong> – The ParticipantType of the actor to modify.</p></li>
+<li><p><strong>sim</strong> – The sim to apply posture states to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Return a modified PostureState, ParticipantType, and Sim.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.interactions.common_interaction.CommonInteraction.on_cancelled">
+<code class="sig-name descname">on_cancelled</code><span class="sig-paren">(</span><em class="sig-param">interaction_sim: sims.sim.Sim</em>, <em class="sig-param">interaction_target: Any</em>, <em class="sig-param">finishing_type: interactions.interaction_finisher.FinishingType</em>, <em class="sig-param">cancel_reason_msg: str</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction.on_cancelled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Occurs upon the interaction being cancelled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interaction_sim</strong> – The sim performing the interaction.</p></li>
+<li><p><strong>interaction_target</strong> – The target of the interaction.</p></li>
+<li><p><strong>finishing_type</strong> – The type of cancellation.</p></li>
+<li><p><strong>cancel_reason_msg</strong> – The reason for the cancellation.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.interactions.common_interaction.CommonInteraction.on_killed">
+<code class="sig-name descname">on_killed</code><span class="sig-paren">(</span><em class="sig-param">interaction_sim: sims.sim.Sim</em>, <em class="sig-param">interaction_target: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction.on_killed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Occurs upon the interaction being killed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interaction_sim</strong> – The sim performing the interaction.</p></li>
+<li><p><strong>interaction_target</strong> – The target of the interaction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the interaction hook was executed successfully.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.interactions.common_interaction.CommonInteraction.on_performed">
+<code class="sig-name descname">on_performed</code><span class="sig-paren">(</span><em class="sig-param">interaction_sim: sims.sim.Sim</em>, <em class="sig-param">interaction_target: Any</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction.on_performed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Occurs after the interaction has been performed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interaction_sim</strong> – The source Sim of the interaction.</p></li>
+<li><p><strong>interaction_target</strong> – The target Sim of the interaction.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.interactions.common_interaction.CommonInteraction.on_reset">
+<code class="sig-name descname">on_reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction.on_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Occurs upon the interaction being reset.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.interactions.common_interaction.CommonInteraction.on_started">
+<code class="sig-name descname">on_started</code><span class="sig-paren">(</span><em class="sig-param">interaction_sim: sims.sim.Sim</em>, <em class="sig-param">interaction_target: Any</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction.on_started" title="Permalink to this definition">¶</a></dt>
+<dd><p>Occurs upon the interaction being started.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interaction_sim</strong> – The sim performing the interaction.</p></li>
+<li><p><strong>interaction_target</strong> – The target of the interaction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the interaction hook was executed successfully.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="sims4communitylib.classes.interactions.common_interaction.CommonInteraction.on_test">
+<em class="property">classmethod </em><code class="sig-name descname">on_test</code><span class="sig-paren">(</span><em class="sig-param">interaction_sim: sims.sim.Sim</em>, <em class="sig-param">interaction_target: Any</em>, <em class="sig-param">interaction_context: interactions.context.InteractionContext</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; event_testing.results.TestResult<a class="headerlink" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction.on_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>A hook that occurs upon the interaction being tested for run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interaction_sim</strong> – The sim performing the interaction.</p></li>
+<li><p><strong>interaction_target</strong> – The target of the interaction.</p></li>
+<li><p><strong>interaction_context</strong> – The context of the interaction.</p></li>
+</ul>
+</dd>
+</dl>
+<p>:return The result of successfully running the test.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonimmediatesuperinteraction">
+<h2><cite>CommonImmediateSuperInteraction</cite><a class="headerlink" href="#commonimmediatesuperinteraction" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.classes.interactions.common_immediate_super_interaction.CommonImmediateSuperInteraction">
+<em class="property">class </em><code class="sig-name descname">CommonImmediateSuperInteraction</code><span class="sig-paren">(</span><em class="sig-param">*_</em>, <em class="sig-param">**__</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.classes.interactions.common_immediate_super_interaction.CommonImmediateSuperInteraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction" title="sims4communitylib.classes.interactions.common_interaction.CommonInteraction"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.classes.interactions.common_interaction.CommonInteraction</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">interactions.base.immediate_interaction.ImmediateSuperInteraction</span></code></p>
+<p>A base for accessing immediate super interaction hooks.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="commonmixerinteraction">
+<h2><cite>CommonMixerInteraction</cite><a class="headerlink" href="#commonmixerinteraction" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.classes.interactions.common_mixer_interaction.CommonMixerInteraction">
+<em class="property">class </em><code class="sig-name descname">CommonMixerInteraction</code><span class="sig-paren">(</span><em class="sig-param">*_</em>, <em class="sig-param">**__</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.classes.interactions.common_mixer_interaction.CommonMixerInteraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction" title="sims4communitylib.classes.interactions.common_interaction.CommonInteraction"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.classes.interactions.common_interaction.CommonInteraction</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">interactions.base.mixer_interaction.MixerInteraction</span></code></p>
+<p>A base for accessing mixer interaction hooks.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="commonsocialmixerinteraction">
+<h2><cite>CommonSocialMixerInteraction</cite><a class="headerlink" href="#commonsocialmixerinteraction" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.classes.interactions.common_social_mixer_interaction.CommonSocialMixerInteraction">
+<em class="property">class </em><code class="sig-name descname">CommonSocialMixerInteraction</code><span class="sig-paren">(</span><em class="sig-param">*_</em>, <em class="sig-param">**__</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.classes.interactions.common_social_mixer_interaction.CommonSocialMixerInteraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction" title="sims4communitylib.classes.interactions.common_interaction.CommonInteraction"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.classes.interactions.common_interaction.CommonInteraction</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">interactions.social.social_mixer_interaction.SocialMixerInteraction</span></code></p>
+<p>A base for accessing social mixer interaction hooks.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="commonsuperinteraction">
+<h2><cite>CommonSuperInteraction</cite><a class="headerlink" href="#commonsuperinteraction" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.classes.interactions.common_super_interaction.CommonSuperInteraction">
+<em class="property">class </em><code class="sig-name descname">CommonSuperInteraction</code><span class="sig-paren">(</span><em class="sig-param">*_</em>, <em class="sig-param">**__</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.classes.interactions.common_super_interaction.CommonSuperInteraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction" title="sims4communitylib.classes.interactions.common_interaction.CommonInteraction"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.classes.interactions.common_interaction.CommonInteraction</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">interactions.base.super_interaction.SuperInteraction</span></code></p>
+<p>A base for accessing super interaction hooks.</p>
+<dl class="method">
+<dt id="sims4communitylib.classes.interactions.common_super_interaction.CommonSuperInteraction.on_run">
+<code class="sig-name descname">on_run</code><span class="sig-paren">(</span><em class="sig-param">interaction_sim: sims.sim.Sim</em>, <em class="sig-param">interaction_target: Any</em>, <em class="sig-param">timeline</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#sims4communitylib.classes.interactions.common_super_interaction.CommonSuperInteraction.on_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Occurs upon the interaction being run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interaction_sim</strong> – The sim performing the interaction.</p></li>
+<li><p><strong>interaction_target</strong> – The target of the interaction.</p></li>
+<li><p><strong>timeline</strong> – The timeline the interaction is running on.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if the interaction hook was executed successfully.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="commonterraininteraction">
+<h2><cite>CommonTerrainInteraction</cite><a class="headerlink" href="#commonterraininteraction" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="sims4communitylib.classes.interactions.common_terrain_interaction.CommonTerrainInteraction">
+<em class="property">class </em><code class="sig-name descname">CommonTerrainInteraction</code><span class="sig-paren">(</span><em class="sig-param">*_</em>, <em class="sig-param">**__</em><span class="sig-paren">)</span><a class="headerlink" href="#sims4communitylib.classes.interactions.common_terrain_interaction.CommonTerrainInteraction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#sims4communitylib.classes.interactions.common_interaction.CommonInteraction" title="sims4communitylib.classes.interactions.common_interaction.CommonInteraction"><code class="xref py py-class docutils literal notranslate"><span class="pre">sims4communitylib.classes.interactions.common_interaction.CommonInteraction</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">objects.terrain.TravelMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">objects.terrain.TerrainInteractionMixin</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">interactions.base.immediate_interaction.ImmediateSuperInteraction</span></code></p>
+<p>A base for accessing terrain interaction hooks.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sims4communitylib.conditionals.html" class="btn btn-neutral float-right" title="Conditional Actions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="sims4communitylib.classes.html" class="btn btn-neutral float-left" title="Inheritable Classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, ColonolNutty
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
