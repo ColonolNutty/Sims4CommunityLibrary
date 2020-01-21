@@ -17,7 +17,9 @@ from sims4communitylib.modinfo import ModInfo
 
 
 class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
-    """ A dialog that displays a list of Sims. """
+    """A dialog that displays a list of Sims.
+
+    """
     def __init__(
         self,
         title_identifier: Union[int, LocalizedString],
@@ -27,8 +29,8 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
         on_close: Callable[..., Any]=CommonFunctionUtils.noop,
         mod_identity: ModInfo=None
     ):
-        """
-            Create a dialog to display a list of Sims.
+        """Create a dialog to display a list of Sims.
+
         :param title_identifier: A decimal identifier of the title text.
         :param description_identifier: A decimal identifier of the description text.
         :param title_tokens: Tokens to format into the title.
@@ -49,11 +51,15 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
 
     @property
     def log_identifier(self) -> str:
-        """ An identifier for the Log of this class. """
+        """An identifier for the Log of this class.
+
+        """
         return 's4cl_choose_sim_option_dialog'
 
     def add_option(self, option: CommonDialogSimOption):
-        """ Add an option to the dialog. """
+        """Add an option to the dialog.
+
+        """
         return super().add_option(option)
 
     def show(
@@ -63,8 +69,8 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
         hide_row_descriptions: bool=False,
         column_count: int=3
     ):
-        """
-            Show the dialog and invoke the callbacks upon the player making a choice.
+        """Show the dialog and invoke the callbacks upon the player making a choice.
+
         :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim.
         :param should_show_names: If True, then the names of the Sims will display in the dialog.
         :param hide_row_descriptions: A flag to hide the row descriptions.

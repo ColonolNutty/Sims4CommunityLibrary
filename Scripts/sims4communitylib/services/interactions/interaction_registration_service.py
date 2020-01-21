@@ -19,18 +19,22 @@ from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 
 
 class CommonInteractionType(CommonEnumIntBase):
-    """ The type of object/area to add interactions to. """
+    """The type of object/area to add interactions to.
+
+    """
     ON_TERRAIN_LOAD = 0
     ON_OCEAN_LOAD = 1
     ON_SCRIPT_OBJECT_LOAD = 2
 
 
 class CommonInteractionHandler:
-    """ An interaction handler that adds interactions to script objects, the terrain, or the ocean. """
+    """An interaction handler that adds interactions to script objects, the terrain, or the ocean.
+
+    """
     @property
     def interactions_to_add(self) -> Tuple[int]:
-        """
-            A tuple of interaction identifiers being added by the interaction handler.
+        """A tuple of interaction identifiers being added by the interaction handler.
+
         """
         raise NotImplementedError()
 
@@ -44,24 +48,28 @@ class CommonInteractionHandler:
 
 
 class CommonScriptObjectInteractionHandler(CommonInteractionHandler):
-    """ An interaction handler that handles script objects, use this instead of the base class when you are adding interactions to script objects. """
+    """A handler used to register interactions to Script Objects.
+
+    """
     @property
     def interactions_to_add(self) -> Tuple[int]:
-        """
-            A tuple of interaction identifiers being added by the interaction handler to the script object.
+        """A tuple of interaction identifiers being added by the interaction handler to the script object.
+
         """
         raise NotImplementedError()
 
     def should_add(self, script_object: ScriptObject, *args, **kwargs) -> bool:
-        """
-            Determine whether to add the interactions of this handler to the script object.
+        """Determine whether to add the interactions of this handler to the script object.
+
         :param script_object: An object of type ScriptObject
         """
         raise NotImplementedError()
 
 
 class CommonInteractionRegistry(CommonService):
-    """ A registry used to register interactions to specific places, whether they are script objects, terrain, or what have you. """
+    """A registry used to register interactions to specific places, whether they are script objects, terrain, or what have you.
+
+    """
     def __init__(self):
         super().__init__()
         self._interaction_handlers = {
@@ -72,8 +80,8 @@ class CommonInteractionRegistry(CommonService):
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_script_object_add(self, script_object: ScriptObject, *args, **kwargs):
-        """
-            Occurs upon a script object being added.
+        """Occurs upon a script object being added.
+
         :param script_object: The script object being added.
         """
         new_super_affordances = []
@@ -90,8 +98,8 @@ class CommonInteractionRegistry(CommonService):
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_terrain_load(self, terrain_service: TerrainService, *_, **__):
-        """
-            Occurs upon the terrain loading
+        """Occurs upon the terrain loading
+
         """
         new_super_affordances = []
         for interaction_handler in self._interaction_handlers[CommonInteractionType.ON_TERRAIN_LOAD]:
@@ -105,8 +113,8 @@ class CommonInteractionRegistry(CommonService):
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_ocean_load(self, terrain_service: TerrainService, *_, **__):
-        """
-            Occurs upon the ocean loading
+        """Occurs upon the ocean loading
+
         """
         new_super_affordances = []
         for interaction_handler in self._interaction_handlers[CommonInteractionType.ON_OCEAN_LOAD]:
@@ -119,8 +127,8 @@ class CommonInteractionRegistry(CommonService):
         terrain_service.OCEAN_DEFINITION.set_class(new_terrain_class)
 
     def register_handler(self, handler: CommonInteractionHandler, interaction_type: CommonInteractionType):
-        """
-            Add an interaction handler to register interactions in specific places.
+        """Add an interaction handler to register interactions in specific places.
+
         :param handler: The interaction handler being registered.
         :param interaction_type: The type of places the interactions will show up.
         """
@@ -128,8 +136,8 @@ class CommonInteractionRegistry(CommonService):
 
     @staticmethod
     def register_interaction_handler(interaction_type: CommonInteractionType):
-        """
-            A decorator for registering interaction handlers.
+        """A decorator for registering interaction handlers.
+
         :param interaction_type: The type of places the interactions will show up.
         :return: A wrapped function.
         """

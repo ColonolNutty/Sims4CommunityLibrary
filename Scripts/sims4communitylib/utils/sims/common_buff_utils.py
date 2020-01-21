@@ -19,19 +19,21 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 
 
 class CommonBuffUtils:
-    """ Utilities for handling buffs on sims. """
+    """Utilities for handling buffs on sims.
+
+    """
     @classmethod
     def has_fertility_boosting_buff(cls, sim_info: SimInfo) -> bool:
-        """
-            Determine if any fertility boosting buffs are currently active on a sim.
+        """Determine if any fertility boosting buffs are currently active on a sim.
 
-            Fertility Boosting Buffs:
-            - Fertility Potion
-            - Fertility Potion Masterwork
-            - Fertility Potion Normal
-            - Fertility Potion Outstanding
-            - Massage Table Fertility Boost
-            - Massage Table Fertility Boost Incense
+        Fertility Boosting Buffs:
+        - Fertility Potion
+        - Fertility Potion Masterwork
+        - Fertility Potion Normal
+        - Fertility Potion Outstanding
+        - Massage Table Fertility Boost
+        - Massage Table Fertility Boost Incense
+
         """
         buff_ids = (
             CommonBuffId.OBJECT_HERBALIST_POTION_FERTILITY_POTION,
@@ -45,8 +47,8 @@ class CommonBuffUtils:
 
     @classmethod
     def has_morning_person_buff(cls, sim_info: SimInfo) -> bool:
-        """
-            Determine if any Morning Person Trait buffs are currently active on a sim.
+        """Determine if any Morning Person Trait buffs are currently active on a sim.
+
         """
         buff_ids = (
             CommonBuffId.TRAIT_MORNING_PERSON,
@@ -57,8 +59,8 @@ class CommonBuffUtils:
 
     @classmethod
     def has_night_owl_buff(cls, sim_info: SimInfo) -> bool:
-        """
-            Determine if any Night Owl Trait buffs are currently active on a sim.
+        """Determine if any Night Owl Trait buffs are currently active on a sim.
+
         """
         buff_ids = (
             CommonBuffId.TRAIT_NIGHT_OWL,
@@ -69,8 +71,8 @@ class CommonBuffUtils:
 
     @classmethod
     def has_buff(cls, sim_info: SimInfo, *buff_ids: int) -> bool:
-        """
-            Determine if any of the specified buffs are currently active on a sim.
+        """Determine if any of the specified buffs are currently active on a sim.
+
         :param sim_info: The sim being checked.
         :param buff_ids: The decimal identifiers of the Buffs being located.
         :return: True if the sim has any of the specified buffs.
@@ -91,8 +93,8 @@ class CommonBuffUtils:
 
     @classmethod
     def get_buffs(cls, sim_info: SimInfo) -> List[Buff]:
-        """
-            Retrieve all buffs currently active on a sim.
+        """Retrieve all buffs currently active on a sim.
+
         """
         if sim_info is None:
             CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'argument sim_info was \'None\' for {} of class {}'.format(CommonBuffUtils.get_buffs.__name__, CommonBuffUtils.__name__))
@@ -103,8 +105,8 @@ class CommonBuffUtils:
 
     @classmethod
     def add_buff(cls, sim_info: SimInfo, *buff_ids: int, buff_reason: [int, str, LocalizedString]=None) -> bool:
-        """
-            Add the specified buffs to a sim.
+        """Add the specified buffs to a sim.
+
         :param sim_info: The sim to add the specified buffs to.
         :param buff_ids: The decimal identifiers of buffs to add.
         :param buff_reason: The text that will display when the player hovers over the buffs. What caused the buffs to be added.
@@ -127,8 +129,8 @@ class CommonBuffUtils:
 
     @classmethod
     def remove_buff(cls, sim_info: SimInfo, *buff_ids: int) -> bool:
-        """
-            Remove the specified buffs from a sim.
+        """Remove the specified buffs from a sim.
+
         :param sim_info: The sim to remove the specified buffs from.
         :param buff_ids: The decimal identifiers of buffs to remove.
         :return: True if all of the specified buffs were successfully removed.

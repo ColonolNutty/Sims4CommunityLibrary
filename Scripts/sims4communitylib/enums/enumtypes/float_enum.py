@@ -10,8 +10,8 @@ from sims4communitylib.enums.common_enum import CommonEnumMetaclass
 
 
 class CommonEnumFloat(float):
-    """
-        An enum that holds a float value.
+    """An enum that holds a float value.
+
     """
     def __init__(self, enum_name: str, enum_value: float, class_name: str):
         super().__init__()
@@ -24,16 +24,16 @@ class CommonEnumFloat(float):
 
     @property
     def name(self) -> str:
-        """
-            The name of the enum.
+        """The name of the enum.
+
         :return: The name of this enum.
         """
         return self._name
 
     @property
     def value(self) -> float:
-        """
-            The value of the enum.
+        """The value of the enum.
+
         :return: The value of the enum.
         """
         return self._value
@@ -55,13 +55,13 @@ class CommonEnumFloat(float):
 
 
 class CommonEnumFloatMetaclass(CommonEnumMetaclass):
-    """
-        A metaclass for float enums.
+    """A metaclass for float enums.
+
     """
     @classmethod
     def get_enum_type(mcs):
-        """
-            Retrieve the expected enum type of this enum.
+        """Retrieve the expected enum type of this enum.
+
         :return: The expected enum type
         """
         return float
@@ -72,6 +72,8 @@ class CommonEnumFloatMetaclass(CommonEnumMetaclass):
 
 
 class CommonEnumFloatBase(float, metaclass=CommonEnumFloatMetaclass):
-    """ A base class for float enums. """
+    """A base class for float enums.
+
+    """
     def __call__(self, val) -> CommonEnumFloat:
         pass

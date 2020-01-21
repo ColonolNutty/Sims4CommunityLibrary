@@ -9,7 +9,9 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonSkillId(CommonEnumIntBase):
-    """ Identifiers for sim skills """
+    """Identifiers for sim skills.
+
+    """
     ADULT_MAJOR_ACTING = 194727
     ADULT_MAJOR_ARCHAEOLOGY = 174237
     ADULT_MAJOR_BAKING = 104198

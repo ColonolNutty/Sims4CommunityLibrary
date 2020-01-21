@@ -15,8 +15,8 @@ from ui.ui_dialog_picker import BasePickerRow
 
 
 class CommonChooseDialog(CommonDialog, ABC):
-    """
-        Create a dialog to prompt the player to choose something.
+    """Create a dialog to prompt the player to choose something.
+
     """
     def __init__(
         self,
@@ -27,8 +27,8 @@ class CommonChooseDialog(CommonDialog, ABC):
         description_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
-        """
-            Create a dialog to prompt the player to choose something.
+        """Create a dialog to prompt the player to choose something.
+
         :param title_identifier: A decimal identifier of the title text.
         :param description_identifier: A decimal identifier of the description text.
         :param rows: The rows to display in the dialog.
@@ -46,12 +46,14 @@ class CommonChooseDialog(CommonDialog, ABC):
 
     @property
     def rows(self) -> Tuple[BasePickerRow]:
-        """ The rows to display in the dialog. """
+        """The rows to display in the dialog.
+
+        """
         return self._rows
 
     def add_row(self, row: BasePickerRow):
-        """
-            Add a row to the dialog.
+        """Add a row to the dialog.
+
         """
         try:
             self._rows += (row,)

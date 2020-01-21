@@ -8,47 +8,60 @@ Copyright (c) COLONOLNUTTY
 import inspect
 from functools import wraps
 from typing import Any, Callable
-
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 
 
 class CommonInjectionUtils:
-    """ Utilities to inject custom functionality into other functions. """
+    """Utilities to inject custom functionality into other functions.
+
+    """
     @staticmethod
     def inject_into(target_object: Any, target_function_name: str) -> Callable:
-        """
-            Obsolete: Please use inject_safely_into instead.
+        """ deprecated:: 1.2.3
+        Use :func:`inject_safely_into` instead.
+
         """
         return CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), target_object, target_function_name)
 
     @staticmethod
     def inject_safely_into(mod_identity: CommonModIdentity, target_object: Any, target_function_name: str) -> Callable:
-        """
-            A decorator used to inject code into another function.
-            It will catch and log exceptions and run the original function should any problems occur.
+        """A decorator used to inject code into another function.
+        It will catch and log exceptions and run the original function should any problems occur.
 
-            Example 'cls' Usage:
+        :Example of `cls` usage:
+        .. code-block:: python
+
+            # cls usage
             @CommonInjectionUtils.inject_safely_into(SimSpawner, SimSpawner.spawn_sim._name__)
             def do_custom_spawn_sim(original, cls, *args, **kwargs):
                 return original(*args, **kwargs)
 
-            Example 'self' Usage:
+        :Example of `self` usage:
+        .. code-block:: python
+
+            # Self usage
             @CommonInjectionUtils.inject_safely_into(SimInfo, SimInfo.load_sim_info.__name__)
             def do_custom_load_sim_info(original, self, *args, **kwargs):
                 return original(self, *args, **kwargs)
 
-            Note:
-             Injection WILL work on:
-               - Functions decorated with 'classmethod'
-               - Functions with 'cls' or 'self' as the first argument.
-             Injection WILL NOT work on:
-               - Functions decorated with 'staticmethod'
-               - Global functions, i.e. Functions not contained within a class.
+        .. note:: Injection WILL work on
+
+        - Functions decorated with 'classmethod'
+        - Functions with 'cls' or 'self' as the first argument.
+
+        .. note:: Injection WILL NOT work on
+
+        - Functions decorated with 'staticmethod'
+        - Global functions, i.e. Functions not contained within a class.
+
         :param mod_identity: The identity of the mod injecting into a function.
         :param target_object: The class that contains the target function.
+        :type target_object: Any
         :param target_function_name: The name of the function being injected to.
+        :type target_function_name: str
         :return: A wrapped function.
+        :rtype: Callable
         """
 
         def _function_wrapper(original_function, new_function):
@@ -70,7 +83,7 @@ class CommonInjectionUtils:
             return _wrapped_function
 
         def _injected(wrap_function):
-            original_function = getattr(target_object, target_function_name)
-            setattr(target_object, target_function_name, _function_wrapper(original_function, wrap_function))
+            original_function = getattr(target_object, str(target_function_name))
+            setattr(target_object, str(target_function_name), _function_wrapper(original_function, wrap_function))
             return wrap_function
         return _injected

@@ -11,16 +11,16 @@ from sims4communitylib.utils.common_collection_utils import CommonCollectionUtil
 
 
 class CommonAssertionUtils:
-    """
-        Utilities for use when asserting data within tests. However, they can be used outside tests.
+    """Utilities for use when asserting data within tests. However, they can be used outside tests.
+
     """
     @staticmethod
     def are_equal(value_one: Any, value_two: Any, message: str= '') -> bool:
-        """
-            Assert the two values are equal to each other.
+        """Assert the two values are equal to each other.
 
-            If the values are both collections, then the values contained within will be asserted to be equal.
-            Note: The order of the values in each collection is asserted.
+        If the values are both collections, then the values contained within will be asserted to be equal.
+        note:: The order of the values in each collection is asserted.
+
         :param value_one: The first value.
         :param value_two: The second value.
         :param message: A custom message to include when the assertion fails.
@@ -35,11 +35,11 @@ class CommonAssertionUtils:
 
     @staticmethod
     def are_similar(value_one: Any, value_two: Any, message: str='') -> bool:
-        """
-            Assert the two values are similar.
+        """Assert the two values are similar.
 
-            If the values are both collections, then the values contained within will be asserted to be similar.
-            Note: The order of the values in each collection is ignored.
+        If the values are both collections, then the values contained within will be asserted to be similar.
+        note:: The order of the values in each collection is ignored.
+
         :param value_one: The first value.
         :param value_two: The second value.
         :param message: A custom message to include when the assertion fails.
@@ -54,9 +54,9 @@ class CommonAssertionUtils:
 
     @staticmethod
     def lists_are_equal(list_one: Union[Tuple[Any], List[Any]], list_two: Union[Tuple[Any], List[Any]], message: str='') -> bool:
-        """
-            Assert the collections contain exactly the same values.
-            Note: The order of the values in each collection is asserted.
+        """Assert the collections contain exactly the same values.
+        note:: The order of the values in each collection is asserted.
+
         :param list_one: The first list. (Can be any collection type)
         :param list_two: The second list. (Can be any collection type)
         :param message: A custom message to include when the assertion fails.
@@ -82,9 +82,9 @@ class CommonAssertionUtils:
 
     @staticmethod
     def list_contents_are_same(list_one: Union[Tuple[Any], List[Any]], list_two: Union[Tuple[Any], List[Any]], message: str='') -> bool:
-        """
-            Assert the values contained within the specified collections are the same.
-            Note: The order of the values in each collection is ignored.
+        """Assert the values contained within the specified collections are the same.
+        note:: The order of the values in each collection is ignored.
+
         :param list_one: The first collection. (Can be any collection type)
         :param list_two: The second collection. (Can be any collection type)
         :param message: A custom message to include when the assertion fails.
@@ -107,8 +107,8 @@ class CommonAssertionUtils:
 
     @staticmethod
     def is_true(value: bool, message: str='') -> bool:
-        """
-            Assert value is True.
+        """Assert value is True.
+
         :param value: The value being asserted.
         :param message: A custom message to include when the assertion fails.
         :return: True if the value is True.
@@ -120,8 +120,8 @@ class CommonAssertionUtils:
 
     @staticmethod
     def is_false(value: bool, message: str='') -> bool:
-        """
-            Assert value is False.
+        """Assert value is False.
+
         :param value: The value being asserted.
         :param message: A custom message to include when the assertion fails.
         :return: True if the value is False.
@@ -133,8 +133,8 @@ class CommonAssertionUtils:
 
     @staticmethod
     def has_length(value, expected_length: int, message: str='') -> bool:
-        """
-            Assert a collection has the specified length.
+        """Assert a collection has the specified length.
+
         :param expected_length: The length expected of the collection.
         :param value: The collection being asserted.
         :param message: A custom message to include when the assertion fails.
@@ -149,8 +149,8 @@ class CommonAssertionUtils:
 
     @staticmethod
     def contains(collection: Union[Tuple[Any], List[Any]], value: Any, message: str='') -> bool:
-        """
-            Assert the value is contained within the collection
+        """Assert the value is contained within the collection
+
         :param collection: The collection being checked.
         :param value: The value being located.
         :param message: A custom message to include when the assertion fails.
@@ -163,8 +163,8 @@ class CommonAssertionUtils:
 
     @staticmethod
     def throws(callback: Callable[..., Any], message: str='') -> Exception:
-        """
-            Assert calling a function will raise an Exception.
+        """Assert calling a function will raise an Exception.
+
         :param callback: The function to invoke.
         :param message: A custom message to include when the assertion fails.
         :return: The exception that was thrown.

@@ -11,17 +11,23 @@ from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
 class S4CLInteractionRunEvent(CommonEvent):
-    """ An Event that Occurs upon a Sim running an interaction. """
+    """An Event that Occurs upon a Sim running an interaction.
+
+    """
     def __init__(self, interaction: Interaction, interaction_queue: InteractionQueue):
         self._interaction = interaction
         self._interaction_queue = interaction_queue
 
     @property
     def interaction(self) -> Interaction:
-        """ An instance of an Interaction. """
+        """An instance of an Interaction.
+
+        """
         return self._interaction
 
     @property
     def interaction_queue(self) -> InteractionQueue:
-        """ The Interaction Queue of the Sim running the interaction. """
+        """The Interaction Queue of the Sim running the interaction.
+
+        """
         return self._interaction_queue

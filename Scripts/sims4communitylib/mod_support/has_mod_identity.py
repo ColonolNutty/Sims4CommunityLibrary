@@ -9,8 +9,12 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 
 
 class HasModIdentity:
-    """ Base class for classes with a mod identity. """
+    """Base class for classes with a mod identity.
+
+    """
     @property
     def mod_identity(self) -> CommonModIdentity:
-        """ The Identity of the mod that owns this class. """
+        """The Identity of the mod that owns this class.
+
+        """
         raise NotImplementedError('Missing \'{}\'.'.format(self.__class__.mod_identity.__name__))

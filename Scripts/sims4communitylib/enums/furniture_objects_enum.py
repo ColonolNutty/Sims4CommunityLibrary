@@ -9,5 +9,7 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonFurnitureObjectId(CommonEnumIntBase):
-    """ Identifiers for vanilla furniture """
+    """Identifiers for vanilla furniture.
+
+    """
     BASSINET_EMPTY_01 = 36210

@@ -10,11 +10,15 @@ from zone import Zone
 
 
 class S4CLBuildBuyEnterEvent(CommonEvent):
-    """ An Event that Occurs upon entering Build/Buy on a lot. """
+    """An Event that Occurs upon entering Build/Buy on a lot.
+
+    """
     def __init__(self, zone: Zone):
         self._zone = zone
 
     @property
     def zone(self) -> Zone:
-        """ The zone being modified. """
+        """The zone being modified.
+
+        """
         return self._zone

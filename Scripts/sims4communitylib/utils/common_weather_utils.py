@@ -12,16 +12,22 @@ from weather.weather_enums import Temperature, WeatherEffectType, CloudType
 
 
 class CommonWeatherUtils:
-    """ Utilities for manipulating the weather. """
+    """Utilities for manipulating the weather.
+
+    """
 
     @staticmethod
     def weather_effect_is_active(weather_effect_type: WeatherEffectType) -> bool:
-        """ Determine if the specified weather effect is currently active. """
+        """Determine if the specified weather effect is currently active.
+
+        """
         return CommonWeatherUtils.weather_effects_are_active((weather_effect_type,))
 
     @staticmethod
     def weather_effects_are_active(weather_effect_types: Iterator[WeatherEffectType]) -> bool:
-        """ Determine if any of the specified weather effects are currently active. """
+        """Determine if any of the specified weather effects are currently active.
+
+        """
         if not hasattr(services, 'weather_service'):
             return False
         weather_service = services.weather_service()
@@ -35,18 +41,24 @@ class CommonWeatherUtils:
 
     @staticmethod
     def current_temperature_is_cold_or_freezing() -> bool:
-        """ Determine if the current temperature is cold or freezing. """
+        """Determine if the current temperature is cold or freezing.
+
+        """
         current_temperature = CommonWeatherUtils.get_current_temperature()
         return current_temperature == Temperature.COLD or current_temperature == Temperature.FREEZING
 
     @staticmethod
     def current_weather_contains_thunder_or_lightning() -> bool:
-        """ Determine if the current weather contains lightning or thunder. """
+        """Determine if the current weather contains lightning or thunder.
+
+        """
         return CommonWeatherUtils.weather_effects_are_active((WeatherEffectType.LIGHTNING, WeatherEffectType.THUNDER))
 
     @staticmethod
     def get_current_temperature() -> Temperature:
-        """ Retrieve the current temperature. """
+        """Retrieve the current temperature.
+
+        """
         from weather.weather_enums import WeatherEffectType, Temperature
         weather_service = services.weather_service()
         if weather_service is not None:
@@ -55,7 +67,9 @@ class CommonWeatherUtils:
 
     @staticmethod
     def get_weather_cloud_type() -> CloudType:
-        """ Retrieve the current cloud type. """
+        """Retrieve the current cloud type.
+
+        """
         weather_service = services.weather_service()
         if weather_service is None:
             return CloudType.CLEAR

@@ -9,7 +9,9 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonRelationshipTrackId(CommonEnumIntBase):
-    """ Identifiers for vanilla sim relationship tracks """
+    """Identifiers for vanilla sim relationship tracks.
+
+    """
     AUTHORITY = 161998
     FEUD = 193901
     FRIENDSHIP = 16650

@@ -20,19 +20,25 @@ from zone import Zone
 
 
 class CommonZoneSpinEventDispatcher(CommonService):
-    """ Dispatches zone spin events (Teardown, Save, Early/Late Load)"""
+    """Dispatches zone spin events (Teardown, Save, Early/Late Load).
+
+    """
     def __init__(self):
         self._game_loaded = False
         self._game_loading = True
 
     @property
     def game_loaded(self) -> bool:
-        """ Determine if the game has loaded. """
+        """Determine if the game has loaded.
+
+        """
         return self._game_loaded
 
     @property
     def game_loading(self):
-        """ Determine if the game is loading. """
+        """Determine if the game is loading.
+
+        """
         return self._game_loading
 
     def _on_early_zone_load(self, zone: Zone):

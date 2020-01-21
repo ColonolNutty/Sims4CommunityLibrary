@@ -14,17 +14,19 @@ from sims4communitylib.services.common_service import CommonService
 
 
 class CommonEventRegistry(CommonService):
-    """ Register event handlers and dispatch events. """
+    """Register event handlers and dispatch events.
+
+    """
 
     def __init__(self):
         self._event_handlers: List[CommonEventHandler] = []
 
     @staticmethod
     def handle_events(mod_name: str):
-        """
-            Decorate functions with this static method to register that function to handle an event.
+        """Decorate functions with this static method to register that function to handle an event.
 
-            Note: Event functions MUST be decorated with staticmethod and must only have a single argument with the name 'event_data' (Errors will be thrown upon loading the game otherwise)
+        :warning:: Event functions MUST be decorated with staticmethod and must only have a single argument with the name 'event_data' (Errors will be thrown upon loading the game otherwise)
+
         :param mod_name: The name of the mod the class is being registered for.
         """
         def _wrapper(event_function):
@@ -37,7 +39,9 @@ class CommonEventRegistry(CommonService):
         self._event_handlers.append(event_handler)
 
     def dispatch(self, event: CommonEvent) -> bool:
-        """ Dispatch an event to any event handlers listening for it. """
+        """Dispatch an event to any event handlers listening for it.
+
+        """
         event_handlers = list(self._event_handlers)
         result = True
         try:

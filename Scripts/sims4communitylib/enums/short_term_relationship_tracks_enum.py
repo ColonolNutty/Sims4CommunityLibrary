@@ -9,7 +9,9 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonShortTermRelationshipTrackId(CommonEnumIntBase):
-    """ Identifiers for vanilla sim short-term relationship tracks """
+    """Identifiers for vanilla sim short-term relationship tracks.
+
+    """
     AWKWARDNESS = 24098
     FRIENDSHIP = 24099
     FUN = 24100

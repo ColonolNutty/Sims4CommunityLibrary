@@ -14,17 +14,23 @@ from sims4communitylib.utils.sims.common_sim_statistic_utils import CommonSimSta
 
 
 class CommonSimSkillUtils:
-    """ Utilities for manipulating the Skills of Sims. """
+    """Utilities for manipulating the Skills of Sims.
+
+    """
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def has_skill(sim_info: SimInfo, skill_id: int) -> bool:
-        """ Determine if the specified Sim has a Skill. """
+        """Determine if the specified Sim has a Skill.
+
+        """
         return CommonSimStatisticUtils.has_statistic(sim_info, skill_id)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def is_at_max_skill_level(sim_info: SimInfo, skill_id: int) -> bool:
-        """ Determine if a Sim has reached the Maximum Level of a Skill. """
+        """Determine if a Sim has reached the Maximum Level of a Skill.
+
+        """
         from statistics.skill import Skill
         statistic: Skill = CommonSimStatisticUtils.get_statistic(sim_info, skill_id)
         if statistic is None:
@@ -34,26 +40,32 @@ class CommonSimSkillUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def remove_skill(sim_info: SimInfo, skill_id: int) -> bool:
-        """ Remove a Skill from the specified Sim. """
+        """Remove a Skill from the specified Sim.
+
+        """
         return CommonSimStatisticUtils.remove_statistic(sim_info, skill_id)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def set_progress_toward_max_skill_level(sim_info: SimInfo, skill_id: int, value: float, add: bool=True) -> bool:
-        """ Set the amount of progress a Sim has made toward the max level of a Skill.  """
+        """Set the amount of progress a Sim has made toward the max level of a Skill.
+
+        """
         return CommonSimStatisticUtils.set_statistic_value(sim_info, skill_id, value, add=add)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def set_current_skill_level(sim_info: SimInfo, skill_id: int, level: float, add: bool=True) -> bool:
-        """ Set the Skill Level of the Skill for the specified Sim. """
+        """Set the Skill Level of the Skill for the specified Sim.
+
+        """
         return CommonSimStatisticUtils.set_statistic_user_value(sim_info, skill_id, level, add=add)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def translate_skill_progress(sim_info: SimInfo, skill_id_from: int, skill_id_to: int, add: bool=True) -> bool:
-        """
-            Translate the total progress of one Skill to the total progress of another Skill for the specified Sim.
+        """Translate the total progress of one Skill to the total progress of another Skill for the specified Sim.
+
         :return: True if successful.
         """
         skill_level_value_from = CommonSimSkillUtils.get_progress_toward_next_skill_level(skill_id_from)
@@ -69,14 +81,16 @@ class CommonSimSkillUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def change_progress_toward_max_skill_level(sim_info: SimInfo, skill_id: int, value: float, add: bool=True) -> bool:
-        """ Modify the amount of progress a Sim has made toward the max level of a Skill. """
+        """Modify the amount of progress a Sim has made toward the max level of a Skill.
+
+        """
         return CommonSimStatisticUtils.add_statistic_value(sim_info, skill_id, value, add=add)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def change_progress_toward_next_skill_level(sim_info: SimInfo, skill_id: int, value: float, add: bool=True) -> bool:
-        """
-            Modify the amount of progress a Sim has made toward the next level of a Skill.
+        """Modify the amount of progress a Sim has made toward the next level of a Skill.
+
         """
         skill = CommonSimSkillUtils.get_skill(sim_info, skill_id, add=add)
         if skill is None or skill.reached_max_level:
@@ -94,20 +108,24 @@ class CommonSimSkillUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
     def get_progress_toward_max_skill_level(sim_info: SimInfo, skill_id: int, add: bool=True) -> float:
-        """ Retrieve the amount of progress a Sim has made toward the max level of a Skill.  """
+        """Retrieve the amount of progress a Sim has made toward the max level of a Skill.
+
+        """
         return CommonSimStatisticUtils.get_statistic_value(sim_info, skill_id, add=add)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
     def get_current_skill_level(sim_info: SimInfo, skill_id: int) -> float:
-        """ Retrieve the Skill Level of a sim. """
+        """Retrieve the Skill Level of a sim.
+
+        """
         return CommonSimStatisticUtils.get_statistic_level(sim_info, skill_id)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
     def get_progress_toward_next_skill_level(sim_info: SimInfo, skill_id: int, add: bool=False) -> float:
-        """
-            Retrieve the amount of progress a Sim has made toward the next level of a Skill.
+        """Retrieve the amount of progress a Sim has made toward the next level of a Skill.
+
         """
         skill = CommonSimSkillUtils.get_skill(sim_info, skill_id, add=add)
         if skill is None:
@@ -123,5 +141,7 @@ class CommonSimSkillUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def get_skill(sim_info: SimInfo, skill_id: int, add: bool=True) -> Union[Skill, None]:
-        """ Retrieve a Skill for the specified Sim. """
+        """Retrieve a Skill for the specified Sim.
+
+        """
         return CommonSimStatisticUtils.get_statistic(sim_info, skill_id, add=add)

@@ -25,8 +25,8 @@ from ui.ui_dialog import UiDialogOkCancel
 
 
 class CommonTargetedQuestionDialog(CommonDialog):
-    """
-        Use to create a Sim to Sim question dialog.
+    """Use to create a Sim to Sim question dialog.
+
     """
     def __init__(
         self,
@@ -38,8 +38,8 @@ class CommonTargetedQuestionDialog(CommonDialog):
         cancel_text_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
-        """
-            Create a dialog that prompts the player with a question.
+        """Create a dialog that prompts the player with a question.
+
         :param question_text: A decimal identifier of the question text.
         :param question_tokens: Tokens to format into the question text.
         :param ok_text_identifier: A decimal identifier for the Ok text.
@@ -58,7 +58,9 @@ class CommonTargetedQuestionDialog(CommonDialog):
 
     @property
     def log_identifier(self) -> str:
-        """ An identifier for the Log of this class. """
+        """An identifier for the Log of this class.
+
+        """
         return 's4cl_targeted_question_dialog'
 
     def show(
@@ -68,8 +70,8 @@ class CommonTargetedQuestionDialog(CommonDialog):
         on_ok_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop,
         on_cancel_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop
     ):
-        """
-            Show the dialog and invoke the callbacks upon the player making a choice.
+        """Show the dialog and invoke the callbacks upon the player making a choice.
+
         :param sim_info: The Sim that is the source of the question.
         :param target_sim_info: The Sim that is the target of the question.
         :param on_ok_selected: Invoked upon the player clicking the Ok button in the dialog.

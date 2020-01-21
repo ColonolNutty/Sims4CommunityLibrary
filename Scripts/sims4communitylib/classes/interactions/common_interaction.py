@@ -23,14 +23,18 @@ from singletons import DEFAULT
 
 
 class CommonInteraction(Interaction, HasLog):
-    """ Enables hooks into the functionality of an Interaction """
+    """Enables hooks into the functionality of an Interaction
+
+    """
     def __init__(self, *_, **__):
         super().__init__(*_, **__)
         HasLog.__init__(self)
 
     @property
     def mod_identity(self) -> CommonModIdentity:
-        """ The Identity of the mod that owns this class. """
+        """The Identity of the mod that owns this class.
+
+        """
         return ModInfo.get_identity()
 
     @classmethod
@@ -71,8 +75,8 @@ class CommonInteraction(Interaction, HasLog):
             CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' on_started.'.format(self.__class__.__name__), exception=ex)
 
     def apply_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT):
-        """
-            Apply a posture to a sim.
+        """Apply a posture to a sim.
+
         :param posture_state: The posture state to apply.
         :param participant_type: The ParticipantType of the actor.
         :param sim: The sim to apply posture states to.
@@ -87,8 +91,8 @@ class CommonInteraction(Interaction, HasLog):
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def kill(self) -> bool:
-        """
-            Kill the interaction. (Hard Cancel)
+        """Kill the interaction. (Hard Cancel)
+
         """
         try:
             self.on_killed(self.sim, self.target)
@@ -98,8 +102,8 @@ class CommonInteraction(Interaction, HasLog):
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def cancel(self, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> bool:
-        """
-            Cancel the interaction.
+        """Cancel the interaction.
+
         :param finishing_type: The type of cancellation occurring.
         :param cancel_reason_msg: The reason it was cancelled.
         :return: True if cancellation is successful, False if cancellation failed.
@@ -112,8 +116,8 @@ class CommonInteraction(Interaction, HasLog):
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_reset(self) -> None:
-        """
-            Occurs upon the interaction being reset.
+        """Occurs upon the interaction being reset.
+
         """
         try:
             self._on_reset(self.sim, self.target)
@@ -134,8 +138,8 @@ class CommonInteraction(Interaction, HasLog):
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=TestResult.NONE)
     def create_test_result(result: bool, reason: str=None, text_tokens: Union[Tuple[Any], List[Any], Set[Any]]=(), tooltip: Union[int, str, CommonLocalizationUtils.LocalizedTooltip]=None, icon=None, influence_by_active_mood: bool=False) -> TestResult:
-        """
-            Create a TestResult with the specified information.
+        """Create a TestResult with the specified information.
+
         :param result: The result of a test. True for passed, False for failed.
         :param reason: The reason for the Test Result (This is displayed as a tooltip to the player when the interaction is disabled).
         :param text_tokens: Any text tokens to include format into the reason.
@@ -149,8 +153,8 @@ class CommonInteraction(Interaction, HasLog):
     # noinspection PyUnusedLocal
     @classmethod
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
-        """
-            A hook that occurs upon the interaction being tested for run.
+        """A hook that occurs upon the interaction being tested for run.
+
         :param interaction_sim: The sim performing the interaction.
         :param interaction_target: The target of the interaction.
         :param interaction_context: The context of the interaction.
@@ -159,8 +163,8 @@ class CommonInteraction(Interaction, HasLog):
         return TestResult.TRUE
 
     def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
-        """
-            Occurs upon the interaction being started.
+        """Occurs upon the interaction being started.
+
         :param interaction_sim: The sim performing the interaction.
         :param interaction_target: The target of the interaction.
         :return: True if the interaction hook was executed successfully.
@@ -169,8 +173,8 @@ class CommonInteraction(Interaction, HasLog):
 
     # noinspection PyUnusedLocal
     def on_killed(self, interaction_sim: Sim, interaction_target: Any) -> bool:
-        """
-            Occurs upon the interaction being killed.
+        """Occurs upon the interaction being killed.
+
         :param interaction_sim: The sim performing the interaction.
         :param interaction_target: The target of the interaction.
         :return: True if the interaction hook was executed successfully.
@@ -178,8 +182,8 @@ class CommonInteraction(Interaction, HasLog):
         return True
 
     def on_cancelled(self, interaction_sim: Sim, interaction_target: Any, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> None:
-        """
-            Occurs upon the interaction being cancelled.
+        """Occurs upon the interaction being cancelled.
+
         :param interaction_sim: The sim performing the interaction.
         :param interaction_target: The target of the interaction.
         :param finishing_type: The type of cancellation.
@@ -188,22 +192,24 @@ class CommonInteraction(Interaction, HasLog):
         pass
 
     def _on_reset(self, interaction_sim: Sim, interaction_target: Any) -> None:
-        """
-            Occurs upon the interaction being reset.
+        """Occurs upon the interaction being reset.
+
+        :param interaction_sim: The source Sim of the interaction.
+        :param interaction_target: The target Sim of the interaction.
         """
         pass
 
     def on_performed(self, interaction_sim: Sim, interaction_target: Any) -> None:
-        """
-            Occurs after the interaction has been performed.
-        :param interaction_sim: The sim performing the interaction.
-        :param interaction_target: The target of the interaction.
+        """Occurs after the interaction has been performed.
+
+        :param interaction_sim: The source Sim of the interaction.
+        :param interaction_target: The target Sim of the interaction.
         """
         pass
 
     def modify_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT) -> Tuple[PostureState, ParticipantType, Any]:
-        """
-            Modify the posture state, participant type or sim of the interaction.
+        """Modify the posture state, participant type or sim of the interaction.
+
         :param posture_state: The posture state to modify.
         :param participant_type: The ParticipantType of the actor to modify.
         :param sim: The sim to apply posture states to.

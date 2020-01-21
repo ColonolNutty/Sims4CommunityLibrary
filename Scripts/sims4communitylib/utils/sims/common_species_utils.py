@@ -18,12 +18,14 @@ log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'common_
 
 
 class CommonSpeciesUtils:
-    """ Utilities for handling sim species. """
+    """Utilities for handling sim species.
+
+    """
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def get_species(sim_info: SimInfo) -> Union[Species, None]:
-        """
-            Retrieve the Species of a sim.
+        """Retrieve the Species of a sim.
+
         """
         if sim_info is None:
             return None
@@ -35,8 +37,8 @@ class CommonSpeciesUtils:
     
     @staticmethod
     def set_species(sim_info: SimInfo, species: Union[Species, int]) -> bool:
-        """
-            Set the Species of a sim.
+        """Set the Species of a sim.
+
         """
         try:
             sim_info.species = species
@@ -47,10 +49,9 @@ class CommonSpeciesUtils:
     
     @staticmethod
     def are_same_species(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:
-        """
-            Determine if two sims are of the same species.
-    
-            Note: Also checks Extended Species (Large Dog, Small Dog, etc.)
+        """Determine if two sims are of the same species.
+        note:: Also checks Extended Species (Large Dog, Small Dog, etc.)
+
         """
         if sim_info is None or other_sim_info is None:
             log.debug('Either sim_info or other_sim_info is None')
@@ -83,50 +84,50 @@ class CommonSpeciesUtils:
     
     @staticmethod
     def is_human_species(species: Union[Species, int]) -> bool:
-        """
-            Determine if a Species is a Human.
+        """Determine if a Species is a Human.
+
         """
         return species == Species.HUMAN
     
     @staticmethod
     def is_pet_species(species: Union[Species, int]) -> bool:
-        """
-            Determine if a Species is a Pet.
+        """Determine if a Species is a Pet.
+
         """
         return CommonSpeciesUtils.is_dog_species(species) or CommonSpeciesUtils.is_cat_species(species)
     
     @staticmethod
     def is_dog_species(species: Union[Species, int]) -> bool:
-        """
-            Determine if a Species is a Dog.
+        """Determine if a Species is a Dog.
+
         """
         return species == Species.DOG
     
     @staticmethod
     def is_cat_species(species: Union[Species, int]) -> bool:
-        """
-            Determine if a Species is a Cat.
+        """Determine if a Species is a Cat.
+
         """
         return species == Species.CAT
     
     @staticmethod
     def is_dog(sim_info: SimInfo) -> bool:
-        """
-            Determine if a sim is a Dog.
+        """Determine if a sim is a Dog.
+
         """
         return CommonSpeciesUtils.get_species(sim_info) == Species.DOG
     
     @staticmethod
     def is_human(sim_info: SimInfo) -> bool:
-        """
-            Determine if a sim is a Human.
+        """Determine if a sim is a Human.
+
         """
         return CommonSpeciesUtils.is_human_species(CommonSpeciesUtils.get_species(sim_info))
     
     @staticmethod
     def is_pet(sim_info: SimInfo) -> bool:
-        """
-            Determine if a sim is a Pet.
+        """Determine if a sim is a Pet.
+
         """
         return CommonSpeciesUtils.is_pet_species(CommonSpeciesUtils.get_species(sim_info))
     
@@ -141,8 +142,8 @@ class CommonSpeciesUtils:
     
     @staticmethod
     def is_small_dog(sim_info: SimInfo) -> bool:
-        """
-            Determine if a sim is a Small Dog.
+        """Determine if a sim is a Small Dog.
+
         """
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId
@@ -150,8 +151,8 @@ class CommonSpeciesUtils:
     
     @staticmethod
     def is_cat(sim_info: SimInfo) -> bool:
-        """
-            Determine if a sim is a Cat.
+        """Determine if a sim is a Cat.
+
         """
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId

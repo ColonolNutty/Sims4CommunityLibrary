@@ -10,7 +10,9 @@ import enum
 
 # noinspection PyUnresolvedReferences
 class CommonChoiceOutcome(enum.Int):
-    """ An outcome of the player being given a choice. """
+    """An outcome of the player being given a choice.
+
+    """
     CANCEL = 0
     CHOICE_MADE = 1
     ERROR = 2

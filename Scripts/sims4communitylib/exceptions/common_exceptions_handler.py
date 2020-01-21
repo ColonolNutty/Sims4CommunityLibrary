@@ -13,14 +13,14 @@ from sims4communitylib.utils.common_io_utils import CommonIOUtils
 
 
 class CommonExceptionHandler:
-    """
-        A class for handling and logging custom exceptions to a file on the system.
+    """A class for handling and logging custom exceptions to a file on the system.
+
     """
 
     @staticmethod
     def log_exception(mod_name: str, exception_message: str, exception: Exception=None) -> bool:
-        """
-            Log an exception with a custom message
+        """Log an exception with a custom message
+
         :param mod_name: The name of the mod logging the exception.
         :param exception_message: A message to log
         :param exception: The exception that was thrown.
@@ -42,8 +42,8 @@ class CommonExceptionHandler:
 
     @staticmethod
     def catch_exceptions(mod_name: str, fallback_return: Any=None):
-        """
-            A decorator for catching exceptions thrown by functions.
+        """A decorator for catching exceptions thrown by functions.
+
         :param mod_name: An identifier to indicate which mod it occurs in.
         :param fallback_return: A value to return upon an exception being thrown.
         :return: A wrapped function.

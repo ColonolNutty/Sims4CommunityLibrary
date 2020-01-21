@@ -23,29 +23,29 @@ log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 's4cl_ho
 
 
 class CommonHouseholdUtils:
-    """
-        Utilities for manipulating households.
+    """Utilities for manipulating households.
+
     """
     @staticmethod
     def get_active_household() -> Union[Household, None]:
-        """
-            Retrieve the Household of the Active Sim.
+        """Retrieve the Household of the Active Sim.
+
         """
         sim_info = CommonSimUtils.get_active_sim_info()
         return CommonHouseholdUtils.get_household(sim_info)
 
     @staticmethod
     def get_active_household_id() -> int:
-        """
-            Retrieve an identifier for the Household of the Active Sim.
+        """Retrieve an identifier for the Household of the Active Sim.
+
         """
         sim_info = CommonSimUtils.get_active_sim_info()
         return CommonHouseholdUtils.get_household_lot_id(sim_info)
 
     @staticmethod
     def get_household_lot_id(sim_info: SimInfo) -> int:
-        """
-            Retrieve an identifier for the home lot of the specified Sim.
+        """Retrieve an identifier for the home lot of the specified Sim.
+
         """
         household = CommonHouseholdUtils.get_household(sim_info)
         if household is None:
@@ -54,8 +54,8 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def get_sim_info_of_all_sims_in_active_household_generator() -> Iterator[SimInfo]:
-        """
-            Retrieve a collection of Sims that are a part of the active household.
+        """Retrieve a collection of Sims that are a part of the active household.
+
         """
         household = CommonHouseholdUtils.get_active_household()
         for sim_info in CommonHouseholdUtils.get_sim_info_of_all_sims_in_household_generator(household):
@@ -63,8 +63,8 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def get_sim_info_of_all_sims_in_household_generator(household: Household) -> Iterator[SimInfo]:
-        """
-            Retrieve a collection of Sims that are a part of the active household.
+        """Retrieve a collection of Sims that are a part of the active household.
+
         """
         if household is None:
             return tuple()
@@ -75,15 +75,15 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def is_part_of_active_household(sim_info: SimInfo) -> bool:
-        """
-            Determine if a Sim is part of the active household.
+        """Determine if a Sim is part of the active household.
+
         """
         return sim_info in CommonHouseholdUtils.get_sim_info_of_all_sims_in_active_household_generator()
 
     @staticmethod
     def get_all_households_generator() -> Iterator[Household]:
-        """
-            Retrieve a collection of all households.
+        """Retrieve a collection of all households.
+
         """
         for household in list(services.household_manager().get_all()):
             if household is None:
@@ -92,8 +92,8 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def locate_household_by_name(name: str, allow_partial_match: bool=False, create_on_missing: bool=False, starting_funds: int=0, as_hidden_household: bool=False) -> Union[Household, None]:
-        """
-            Locate a household with the specified name.
+        """Locate a household with the specified name.
+
         :param name: The name of a household to locate.
         :param create_on_missing: If True, a household will be created if one isn't found with the specified name.
         :param starting_funds: If a household is created, this will be the starting funds of that household.
@@ -113,8 +113,8 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def locate_households_by_name_generator(name: str, allow_partial_match: bool=False) -> Iterator[Household]:
-        """
-            Locate all households with the specified name.
+        """Locate all households with the specified name.
+
         :param name: The name of the households to locate.
         :param allow_partial_match: If True, households only need to contain the name to match.
         :return: A Household with the specified name.
@@ -144,8 +144,8 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def create_empty_household(starting_funds: int=0, as_hidden_household: bool=False) -> Household:
-        """
-            Create an empty household.
+        """Create an empty household.
+
         """
         household = Household(SimSpawner._get_default_account(), starting_funds=starting_funds)
         if as_hidden_household:
@@ -155,16 +155,16 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def add_sim_to_active_household(sim_info: SimInfo, destroy_if_empty_household: bool=True) -> bool:
-        """
-            Add a Sim to the Active Sims household.
+        """Add a Sim to the Active Sims household.
+
         """
         target_sim_info = CommonSimUtils.get_active_sim_info()
         return CommonHouseholdUtils.add_sim_to_target_household(sim_info, target_sim_info, destroy_if_empty_household=destroy_if_empty_household)
 
     @staticmethod
     def add_sim_to_target_household(sim_info: SimInfo, target_sim_info: SimInfo, destroy_if_empty_household: bool=True) -> bool:
-        """
-            Add a Sim to the Target Sims household.
+        """Add a Sim to the Target Sims household.
+
         """
         log.info('Adding Sim to target Sim household.')
         destination_household = target_sim_info.household
@@ -173,8 +173,8 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def move_sim_to_household(sim_info: SimInfo, household_id: int=None, destroy_if_empty_household: bool=True) -> bool:
-        """
-            Move a Sim to the specified household or a new household if no Household is specified.
+        """Move a Sim to the specified household or a new household if no Household is specified.
+
         """
         active_household = services.active_household()
         starting_household = sim_info.household
@@ -231,19 +231,17 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def has_free_household_slots(sim_info: SimInfo) -> bool:
-        """
-            Determine if the Household of the specified Sim has any free Sim slots.
+        """Determine if the Household of the specified Sim has any free Sim slots.
+        note:: Max household slots in vanilla Sims 4 is 8 sims.
 
-            Note: Max household slots in vanilla Sims 4 is 8 sims.
         """
         return CommonHouseholdUtils.get_free_household_slots(sim_info) > 0
 
     @staticmethod
     def get_free_household_slots(sim_info: SimInfo) -> int:
-        """
-            Retrieve the number of free household slots in the Household of the specified Sim.
+        """Retrieve the number of free household slots in the Household of the specified Sim.
+        note:: Max household slots in vanilla Sims 4 is 8 sims.
 
-            Note: Max household slots in vanilla Sims 4 is 8 sims.
         :return: The number of free household slots or -1 if no Household is found for the specified Sim.
         """
         household = CommonHouseholdUtils.get_household(sim_info)
@@ -253,8 +251,8 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def get_household(sim_info: SimInfo) -> Union[Household, None]:
-        """
-            Retrieve the household of a Sim
+        """Retrieve the household of a Sim.
+
         """
         if not CommonHouseholdUtils.has_household(sim_info):
             return None
@@ -262,8 +260,8 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def get_household_id(sim_info: SimInfo) -> int:
-        """
-            Retrieve an identifier for the Household a Sim is a part of.
+        """Retrieve an identifier for the Household a Sim is a part of.
+
         """
         household = CommonHouseholdUtils.get_household(sim_info)
         if household is None:
@@ -272,15 +270,15 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def has_household(sim_info: SimInfo) -> bool:
-        """
-            Determine if the Sim is part of a Household.
+        """Determine if the Sim is part of a Household.
+
         """
         return hasattr(sim_info, 'household') and sim_info.household is not None
 
     @staticmethod
     def is_in_same_household(sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
-        """
-            Determine if two Sims are in the same household.
+        """Determine if two Sims are in the same household.
+
         """
         household = CommonHouseholdUtils.get_household(sim_info)
         if household is None:
@@ -292,8 +290,8 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def delete_household(household: Household) -> bool:
-        """
-            Delete the specified household from the game.
+        """Delete the specified household from the game.
+
         """
         try:
             services.get_persistence_service().del_household_proto_buff(household.id)
@@ -305,8 +303,8 @@ class CommonHouseholdUtils:
 
     @staticmethod
     def delete_households_with_name(name: str, allow_partial_match: bool=False) -> bool:
-        """
-            Delete all households with the specified name.
+        """Delete all households with the specified name.
+
         :param name: The name of the households to delete.
         :param allow_partial_match: If True, households only need to contain the name to match.
         """

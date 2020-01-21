@@ -15,67 +15,69 @@ from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonRelationshipUtils:
-    """ Utilities for managing relationship bits, tracks, etc. """
+    """Utilities for managing relationship bits, tracks, etc.
+
+    """
     @staticmethod
     def has_met(sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
-        """
-            Determine if a Sim has met the Target Sim.
+        """Determine if a Sim has met the Target Sim.
+
         """
         return CommonRelationshipUtils.has_relationship_bit_with_sim(sim_info, target_sim_info, CommonRelationshipBitId.HAS_MET)
 
     @staticmethod
     def is_romantically_committed_to_any_sims(sim_info: SimInfo) -> bool:
-        """
-            Determine if the Sim is romantically committed to any Sims.
+        """Determine if the Sim is romantically committed to any Sims.
+
         """
         return any(CommonRelationshipUtils.get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info))
 
     @staticmethod
     def is_romantically_committed_to(sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
-        """
-            Determine if a Sim is romantically committed to the Target Sim.
+        """Determine if a Sim is romantically committed to the Target Sim.
+
         """
         return target_sim_info in CommonRelationshipUtils.get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info)
 
     @staticmethod
     def get_friendship_level(sim_info: SimInfo, target_sim_info: SimInfo) -> float:
-        """
-            Retrieve the level of Friendship between two Sims.
+        """Retrieve the level of Friendship between two Sims.
+
         """
         return CommonRelationshipUtils.get_relationship_level_of_sims(sim_info, target_sim_info, CommonRelationshipTrackId.FRIENDSHIP)
 
     @staticmethod
     def get_romance_level(sim_info: SimInfo, target_sim_info: SimInfo) -> float:
-        """
-            Retrieve the level of Romance between two Sims.
+        """Retrieve the level of Romance between two Sims.
+
         """
         return CommonRelationshipUtils.get_relationship_level_of_sims(sim_info, target_sim_info, CommonRelationshipTrackId.ROMANCE)
 
     @staticmethod
     def calculate_average_relationship_level(sim_info: SimInfo, target_sim_info: SimInfo) -> float:
-        """
-            Calculate an average level for Friendship and Romance between two Sims.
+        """Calculate an average level for Friendship and Romance between two Sims.
 
-            Math: (Friendship Level + Romance Level)/2
+        Math: (Friendship Level + Romance Level)/2
 
-            Example:
-            Friendship Level: 10
-            Romance Level: 20
-            Average:
+        Example:
+        Friendship Level: 10
+        Romance Level: 20
+        Average: 15
+
         """
         return (CommonRelationshipUtils.get_friendship_level(sim_info, target_sim_info) + CommonRelationshipUtils.get_romance_level(sim_info, target_sim_info)) / 2
 
     @staticmethod
     def has_relationship_bit_with_any_sims(sim_info: SimInfo, relationship_bit_id: int, instanced_only: bool=True) -> bool:
-        """
-            Determine if a Sim has the specified relationship bit with any Sims.
+        """Determine if a Sim has the specified relationship bit with any Sims.
+
         """
         return any(CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bit_generator(sim_info, relationship_bit_id, instanced_only=instanced_only))
 
     @staticmethod
     def has_relationship_bits_with_any_sims(sim_info: SimInfo, relationship_bit_ids: Iterator[int], instanced_only: bool=True) -> bool:
-        """
-            Determine if a Sim has the specified relationship bits with any Sims.
+        """Determine if a Sim has the specified relationship bits with any Sims.
+
         """
         return any(CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, relationship_bit_ids, instanced_only=instanced_only))
 
@@ -85,8 +87,8 @@ class CommonRelationshipUtils:
         target_sim_info: SimInfo,
         relationship_bit_id: int,
     ) -> bool:
-        """
-            Determine if two sims have the specified relationship bit with each other.
+        """Determine if two sims have the specified relationship bit with each other.
+
         """
         return CommonRelationshipUtils.has_relationship_bits_with_sim(sim_info, target_sim_info, (relationship_bit_id,))
 
@@ -96,8 +98,8 @@ class CommonRelationshipUtils:
         target_sim_info: SimInfo,
         relationship_bit_ids: Iterator[int],
     ) -> bool:
-        """
-            Determine if two sims have any of the specified relationship bits with each other.
+        """Determine if two sims have any of the specified relationship bits with each other.
+
         """
         target_sim_id = CommonSimUtils.get_sim_id(target_sim_info)
         relationship_bits = sim_info.relationship_tracker.get_all_bits(target_sim_id)
@@ -113,8 +115,8 @@ class CommonRelationshipUtils:
         target_sim_info: SimInfo,
         relationship_track_id: int
     ) -> float:
-        """
-            Retrieve the level of a relationship track between two sims.
+        """Retrieve the level of a relationship track between two sims.
+
         """
         relationship_track = CommonResourceUtils.load_instance(Types.STATISTIC, relationship_track_id)
         if relationship_track is None:
@@ -129,8 +131,8 @@ class CommonRelationshipUtils:
         relationship_track_id: int,
         level: float
     ) -> bool:
-        """
-            Change a relationship track level between two sims.
+        """Change a relationship track level between two sims.
+
         :param sim_info: The sim that owns the relationship track.
         :param target_sim_info: The target of the relationship track.
         :param relationship_track_id: The relationship track to change.
@@ -150,13 +152,13 @@ class CommonRelationshipUtils:
         target_sim_info: SimInfo,
         relationship_bit_id: int
     ) -> bool:
-        """
-            Add a relationship bit between two sims.
-            Note: If the relationship bit is UNIDIRECTIONAL, it will only be added to sim_info in the direction of the Target.
-            i.e. Sim will have relationship bit towards Target, but Target will not have relationship bit towards Sim.
-            One example is the Caregiver relationship:
-            - Sim is caregiver of Target.
-            - Target is being cared for by Sim.
+        """Add a relationship bit between two sims.
+        note:: If the relationship bit is UNIDIRECTIONAL, it will only be added to sim_info in the direction of the Target.
+        i.e. Sim will have relationship bit towards Target, but Target will not have relationship bit towards Sim.
+        One example is the Caregiver relationship:
+        - Sim is caregiver of Target.
+        - Target is being cared for by Sim.
+
         """
         relationship_bit_instance = CommonResourceUtils.load_instance(Types.RELATIONSHIP_BIT, relationship_bit_id)
         if relationship_bit_instance is None:
@@ -171,15 +173,15 @@ class CommonRelationshipUtils:
         target_sim_info: SimInfo,
         relationship_bit_id: int
     ) -> bool:
-        """
-            Remove a relationship bit between two sims.
+        """Remove a relationship bit between two sims.
 
-            Note: If the relationship bit is UNIDIRECTIONAL, it will only be removed from sim_info in the direction of the Target.
+        note:: If the relationship bit is UNIDIRECTIONAL, it will only be removed from sim_info in the direction of the Target.
 
-            i.e. Sim will have no longer have relationship bit towards Target, but Target will still have relationship bit towards Sim.
-            One example is the Caregiver relationship:
-            - Sim is caregiver of Target.
-            - Target is being cared for by Sim.
+        i.e. Sim will have no longer have relationship bit towards Target, but Target will still have relationship bit towards Sim.
+        One example is the Caregiver relationship:
+        - Sim is caregiver of Target.
+        - Target is being cared for by Sim.
+
         """
         relationship_bit_instance = CommonResourceUtils.load_instance(Types.RELATIONSHIP_BIT, relationship_bit_id)
         if relationship_bit_instance is None:
@@ -190,14 +192,14 @@ class CommonRelationshipUtils:
 
     @staticmethod
     def get_sim_info_of_all_sims_with_relationship_bit_generator(sim_info: SimInfo, relationship_bit_id: int, instanced_only: bool=True) -> Iterator[SimInfo]:
-        """
-            Retrieve an Iterator of SimInfo for all Sims that have the specified relationship bit with the specified Sim.
+        """Retrieve an Iterator of SimInfo for all Sims that have the specified relationship bit with the specified Sim.
 
-            Note: For UNIDIRECTIONAL relationship bits, the direction is sim_info has relationship bit with target_sim_info
-            Caregiver example:
-            The Caregiver has a relationship bit pointed at Toddler (The Caregiver would show "caregiving ward" when hovering over the Toddler in the relationships panel)
-            The Toddler would NOT have the relationship bit.
-            Sim is Caregiver of Toddler.
+        note:: For UNIDIRECTIONAL relationship bits, the direction is sim_info has relationship bit with target_sim_info
+        Caregiver example:
+        The Caregiver has a relationship bit pointed at Toddler (The Caregiver would show "caregiving ward" when hovering over the Toddler in the relationships panel)
+        The Toddler would NOT have the relationship bit.
+        Sim is Caregiver of Toddler.
+
         :param sim_info: The Sim to locate relationship bits on.
         :param relationship_bit_id: The identifier of the relationship bit to locate connections with.
         :param instanced_only: If True, only Sims that are currently loaded will be returned.
@@ -206,14 +208,14 @@ class CommonRelationshipUtils:
 
     @staticmethod
     def get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info: SimInfo, relationship_bit_ids: Iterator[int], instanced_only: bool=True) -> Iterator[SimInfo]:
-        """
-            Retrieve an Iterator of SimInfo for all Sims that have the specified relationship bits with the specified Sim.
+        """Retrieve an Iterator of SimInfo for all Sims that have the specified relationship bits with the specified Sim.
 
-            Note: For UNIDIRECTIONAL relationship bits, the direction is sim_info has relationship bit with target_sim_info
-            Caregiver example:
-            The Caregiver has a relationship bit pointed at Toddler (The Caregiver would show "caregiving ward" when hovering over the toddler in the relationships panel)
-            The toddler would NOT have the relationship bit.
-            Sim is Caregiver of Toddler.
+        note:: For UNIDIRECTIONAL relationship bits, the direction is sim_info has relationship bit with target_sim_info
+         Caregiver example:
+         The Caregiver has a relationship bit pointed at Toddler (The Caregiver would show "caregiving ward" when hovering over the toddler in the relationships panel)
+         The toddler would NOT have the relationship bit.
+         Sim is Caregiver of Toddler.
+
         :param sim_info: The Sim to locate relationship bits on.
         :param relationship_bit_ids: A collection of identifiers for relationship bits to locate connections with.
         :param instanced_only: If True, only Sims that are currently loaded will be returned.
@@ -239,8 +241,8 @@ class CommonRelationshipUtils:
 
     @staticmethod
     def has_positive_romantic_combo_relationship_bit_with(sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
-        """
-            Determine if a Sim has a positive romantic combo with the Target Sim.
+        """Determine if a Sim has a positive romantic combo with the Target Sim.
+
         """
         return CommonRelationshipUtils.has_relationship_bits_with_sim(sim_info, target_sim_info, (
             CommonRelationshipBitId.ROMANTIC_COMBO_SOUL_MATES,
@@ -251,8 +253,8 @@ class CommonRelationshipUtils:
 
     @staticmethod
     def get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info: SimInfo, instanced_only: bool=True) -> Iterator[SimInfo]:
-        """
-            Retrieve a SimInfo object for all Sims romantically committed with the specified Sim.
+        """Retrieve a SimInfo object for all Sims romantically committed with the specified Sim.
+
         :param sim_info: The Sim to locate romantically involved Sims with.
         :param instanced_only: If True, only Sims that are currently loaded will be returned.
         """

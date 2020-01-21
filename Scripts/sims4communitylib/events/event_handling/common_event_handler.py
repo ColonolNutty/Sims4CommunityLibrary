@@ -10,7 +10,9 @@ from typing import Callable, Any
 
 
 class CommonEventHandler:
-    """ A handler of events. """
+    """A handler of events.
+
+    """
     def __init__(self, mod_name: str, event_function: Callable[..., Any]):
         if event_function is None:
             raise RuntimeError('Required parameter \'event_function\' required for event function from mod: {}'.format(mod_name))
@@ -29,26 +31,34 @@ class CommonEventHandler:
 
     @property
     def mod_name(self) -> str:
-        """ The name of the mod this event handler was created for. """
+        """The name of the mod this event handler was created for.
+
+        """
         return self._mod_name
 
     @property
     def event_function(self) -> Callable[..., Any]:
-        """ The action to take upon receiving an event. """
+        """The action to take upon receiving an event.
+
+        """
         return self._event_function
 
     @property
     def event_type(self):
-        """ The class type of events this Event Handler will handle. """
+        """The class type of events this Event Handler will handle.
+
+        """
         return self._event_type
 
     def can_handle_event(self, event) -> bool:
-        """ Determine if this event handler can handle the type of the event. """
+        """Determine if this event handler can handle the type of the event.
+
+        """
         return isinstance(event, self.event_type)
 
     def handle_event(self, event) -> bool:
-        """
-            Handle the event data.
+        """Handle the event data.
+
         """
         return self.event_function(event)
 

@@ -20,7 +20,9 @@ from sims4communitylib.exceptions.common_exceptions_handler import CommonExcepti
 
 
 class CommonGetStatisticTrackerResponse:
-    """ The response given when requesting a statistic tracker for a Sim. """
+    """The response given when requesting a statistic tracker for a Sim.
+
+    """
     def __init__(
         self,
         statistics_tracker: Union[StatisticTracker, None],
@@ -33,20 +35,22 @@ class CommonGetStatisticTrackerResponse:
 
 
 class CommonSimStatisticUtils:
-    """ Utilities for manipulating the Statistics of Sims. """
+    """Utilities for manipulating the Statistics of Sims.
+
+    """
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def has_statistic(sim_info: SimInfo, statistic_id: int) -> bool:
-        """
-            Determine if a sim has any of the specified Statistics.
+        """Determine if a sim has any of the specified Statistics.
+
         """
         return CommonSimStatisticUtils.has_statistics(sim_info, (statistic_id,))
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def has_statistics(sim_info: SimInfo, statistic_ids: Iterator[int]) -> bool:
-        """
-            Determine if a sim has any of the specified Statistics.
+        """Determine if a sim has any of the specified Statistics.
+
         """
         for statistic_id in statistic_ids:
             response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic_id)
@@ -59,7 +63,9 @@ class CommonSimStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def is_statistic_locked(sim_info: SimInfo, statistic_id: int, add_dynamic: bool=True, add: bool= False) -> bool:
-        """ Determine if a statistic is locked for the specified Sim. """
+        """Determine if a statistic is locked for the specified Sim.
+
+        """
         response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic_id, add_dynamic=add_dynamic)
         if response.statistic_instance is None:
             return False
@@ -73,7 +79,9 @@ class CommonSimStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=0.0)
     def get_statistic_level(sim_info: SimInfo, statistic_id: int) -> float:
-        """ Retrieve the User Value of a Statistic for the specified Sim. """
+        """Retrieve the User Value of a Statistic for the specified Sim.
+
+        """
         statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic_id)
         if statistic is None:
             return 0.0
@@ -82,7 +90,9 @@ class CommonSimStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def get_statistic(sim_info: SimInfo, statistic_id: int, add_dynamic: bool=True, add: bool=False) -> Union[BaseStatistic, None]:
-        """ Retrieve a Statistic for the specified Sim. """
+        """Retrieve a Statistic for the specified Sim.
+
+        """
         if sim_info is None:
             return None
         response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic_id, add_dynamic=add_dynamic)
@@ -93,7 +103,9 @@ class CommonSimStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=0.0)
     def get_statistic_value(sim_info: SimInfo, statistic_id: int, add_dynamic: bool=True, add: bool=False) -> float:
-        """ Retrieve the Value of a Statistic for the specified Sim. """
+        """Retrieve the Value of a Statistic for the specified Sim.
+
+        """
         response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic_id, add_dynamic=add_dynamic)
         statistic_instance = response.statistic_instance
         if statistic_instance is None:
@@ -109,7 +121,9 @@ class CommonSimStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def set_statistic_value(sim_info: SimInfo, statistic_id: int, value: float, add_dynamic: bool=True, add: bool=True) -> bool:
-        """ Set the Value of a Statistic for the specified Sim. """
+        """Set the Value of a Statistic for the specified Sim.
+
+        """
         if sim_info is None:
             return False
         response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic_id, add_dynamic=add_dynamic)
@@ -121,7 +135,9 @@ class CommonSimStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def set_statistic_user_value(sim_info: SimInfo, statistic_id: int, value: float, add_dynamic: bool=True, add: bool=True) -> bool:
-        """ Set the User Value of a Statistic for the specified Sim. """
+        """Set the User Value of a Statistic for the specified Sim.
+
+        """
         if sim_info is None:
             return False
         statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic_id, add_dynamic=add_dynamic, add=add)
@@ -132,7 +148,9 @@ class CommonSimStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def add_statistic_value(sim_info: SimInfo, statistic_id: int, value: float, add_dynamic: bool=True, add: bool=True) -> bool:
-        """ Change the Value of a Statistic for the specified Sim. """
+        """Change the Value of a Statistic for the specified Sim.
+
+        """
         if sim_info is None:
             return False
         response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic_id, add_dynamic=add_dynamic)
@@ -144,7 +162,9 @@ class CommonSimStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def remove_statistic(sim_info: SimInfo, statistic_id: int) -> bool:
-        """ Remove a Statistic from the specified Sim. """
+        """Remove a Statistic from the specified Sim.
+
+        """
         response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic_id)
         if response.statistics_tracker is None or response.statistic_instance is None:
             return False
@@ -154,7 +174,9 @@ class CommonSimStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def add_statistic_modifier(sim_info: SimInfo, statistic_id: int, value: float, add_dynamic: bool=True, add: bool=True) -> bool:
-        """ Add a Modifier to the specified Statistic for the specified Sim. """
+        """Add a Modifier to the specified Statistic for the specified Sim.
+
+        """
         if sim_info is None:
             return False
         statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic_id, add_dynamic=add_dynamic, add=add)
@@ -166,7 +188,9 @@ class CommonSimStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def remove_statistic_modifier(sim_info: SimInfo, statistic_id: int, value: float, add_dynamic: bool=True, add: bool=True) -> bool:
-        """ Remove a Modifier from the specified Statistic for the specified Sim. """
+        """Remove a Modifier from the specified Statistic for the specified Sim.
+
+        """
         if sim_info is None:
             return False
         statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic_id, add_dynamic=add_dynamic, add=add)
@@ -178,7 +202,9 @@ class CommonSimStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def remove_all_statistic_modifiers_for_statistic(sim_info: SimInfo, statistic_id: int, add_dynamic: bool=True, add: bool=True) -> bool:
-        """ Remove all Modifiers from the specified Statistic for the specified Sim. """
+        """Remove all Modifiers from the specified Statistic for the specified Sim.
+
+        """
         if sim_info is None:
             return False
         statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic_id, add_dynamic=add_dynamic, add=add)

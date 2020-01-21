@@ -10,8 +10,8 @@ from sims4communitylib.enums.common_enum import CommonEnumMetaclass
 
 
 class CommonEnumObject(object):
-    """
-        An enum that holds an object value.
+    """An enum that holds an object value.
+
     """
     def __init__(self, enum_name: str, enum_value: object, class_name: str):
         super().__init__()
@@ -24,16 +24,16 @@ class CommonEnumObject(object):
 
     @property
     def name(self) -> str:
-        """
-            The name of the enum.
+        """The name of the enum.
+
         :return: The name of this enum.
         """
         return self._name
 
     @property
     def value(self) -> object:
-        """
-            The value of the enum.
+        """The value of the enum.
+
         :return: The value of the enum.
         """
         return self._value
@@ -55,13 +55,13 @@ class CommonEnumObject(object):
 
 
 class CommonEnumObjectMetaclass(CommonEnumMetaclass):
-    """
-        A metaclass for object enums.
+    """A metaclass for object enums.
+
     """
     @classmethod
     def get_enum_type(mcs):
-        """
-            Retrieve the expected enum type of this enum.
+        """Retrieve the expected enum type of this enum.
+
         :return: The expected enum type
         """
         return object
@@ -72,6 +72,8 @@ class CommonEnumObjectMetaclass(CommonEnumMetaclass):
 
 
 class CommonEnumObjectBase(object, metaclass=CommonEnumObjectMetaclass):
-    """ A base class for object enums. """
+    """A base class for object enums.
+
+    """
     def __call__(self, val) -> CommonEnumObject:
         pass

@@ -11,7 +11,9 @@ from zone import Zone
 
 
 class S4CLZoneTeardownEvent(CommonEvent):
-    """ An Event that Occurs upon zone teardown. """
+    """An Event that Occurs upon zone teardown.
+
+    """
     def __init__(self, zone: Zone, client: Client, game_loaded: bool=False, game_loading: bool=False):
         self._zone = zone
         self._client = client
@@ -20,20 +22,28 @@ class S4CLZoneTeardownEvent(CommonEvent):
 
     @property
     def zone(self) -> Zone:
-        """ The zone teardown is occurring on. """
+        """The zone teardown is occurring on.
+
+        """
         return self._zone
 
     @property
     def client(self) -> Client:
-        """ A reference to the client. """
+        """A reference to the client.
+
+        """
         return self._client
 
     @property
     def game_loaded(self) -> bool:
-        """ Determine if the game has loaded. """
+        """Determine if the game has loaded.
+
+        """
         return self._game_loaded
 
     @property
     def game_loading(self) -> bool:
-        """ Determine if the game is loading. """
+        """Determine if the game is loading.
+
+        """
         return self._game_loading

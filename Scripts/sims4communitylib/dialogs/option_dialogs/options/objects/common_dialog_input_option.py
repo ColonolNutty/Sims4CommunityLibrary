@@ -16,7 +16,9 @@ from sims4communitylib.dialogs.common_input_float_dialog import CommonInputFloat
 
 
 class CommonDialogInputFloatOption(CommonDialogObjectOption):
-    """ An option to open a dialog to input a float value. """
+    """An option to open a dialog to input a float value.
+
+    """
     def __init__(
         self,
         option_identifier: str,
@@ -49,7 +51,9 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
 
     @property
     def icon(self) -> Any:
-        """ The icon of the option. """
+        """The icon of the option.
+
+        """
         if super().icon is not None:
             return super().icon
         return CommonIconUtils.load_arrow_right_icon()

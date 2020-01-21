@@ -14,11 +14,15 @@ from sims4.resources import Types
 
 
 class CommonStatisticUtils:
-    """ Utilities for manipulating the Statistics of Sims. """
+    """Utilities for manipulating the Statistics of Sims.
+
+    """
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
     def get_statistic_initial_value(statistic_id: int) -> float:
-        """ Retrieve the Initial Value of a Statistic. """
+        """Retrieve the Initial Value of a Statistic.
+
+        """
         statistic_instance = CommonStatisticUtils._load_statistic_instance(statistic_id)
         if statistic_instance is None:
             return -1.0
@@ -29,7 +33,9 @@ class CommonStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
     def get_statistic_min_value(statistic_id: int) -> float:
-        """ Retrieve the Minimum Value of a Statistic. """
+        """Retrieve the Minimum Value of a Statistic.
+
+        """
         statistic_instance = CommonStatisticUtils._load_statistic_instance(statistic_id)
         if statistic_instance is None:
             return -1.0
@@ -38,7 +44,9 @@ class CommonStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
     def get_statistic_max_value(statistic_id: int) -> float:
-        """ Retrieve the Maximum Value of a Statistic. """
+        """Retrieve the Maximum Value of a Statistic.
+
+        """
         statistic_instance = CommonStatisticUtils._load_statistic_instance(statistic_id)
         if statistic_instance is None:
             return -1.0

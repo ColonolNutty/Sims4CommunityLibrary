@@ -18,7 +18,9 @@ from sims4communitylib.modinfo import ModInfo
 
 
 class CommonChooseSimsOptionDialog(CommonChooseOptionsDialog):
-    """ A dialog that displays a list of Sims. """
+    """A dialog that displays a list of Sims.
+
+    """
     def __init__(
         self,
         title_identifier: Union[int, LocalizedString],
@@ -28,8 +30,8 @@ class CommonChooseSimsOptionDialog(CommonChooseOptionsDialog):
         on_close: Callable[..., Any]=CommonFunctionUtils.noop,
         mod_identity: ModInfo=None
     ):
-        """
-            Create a dialog to display a list of Sims.
+        """Create a dialog to display a list of Sims.
+
         :param title_identifier: A decimal identifier of the title text.
         :param description_identifier: A decimal identifier of the description text.
         :param title_tokens: Tokens to format into the title.
@@ -49,7 +51,9 @@ class CommonChooseSimsOptionDialog(CommonChooseOptionsDialog):
         )
 
     def add_option(self, option: CommonDialogSimOption):
-        """ Add an option to the dialog. """
+        """Add an option to the dialog.
+
+        """
         return super().add_option(option)
 
     def show(
@@ -62,10 +66,9 @@ class CommonChooseSimsOptionDialog(CommonChooseOptionsDialog):
         min_selectable: int=1,
         max_selectable: int=1
     ):
-        """
-            Show the dialog and invoke the callbacks upon the player submitting their selection.
-        :param on_submit: A callback invoked upon the player choosing Sims.
+        """Show the dialog and invoke the callbacks upon the player submitting their selection.
 
+        :param on_submit: A callback invoked upon the player choosing Sims.
         :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim.
         :param should_show_names: If True, then the names of the Sims will display in the dialog.
         :param hide_row_descriptions: A flag to hide the row descriptions.
@@ -85,5 +88,7 @@ class CommonChooseSimsOptionDialog(CommonChooseOptionsDialog):
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def has_options(self) -> bool:
-        """ Determine if the dialog has selectable options. """
+        """Determine if the dialog has selectable options.
+
+        """
         return self.option_count > 0

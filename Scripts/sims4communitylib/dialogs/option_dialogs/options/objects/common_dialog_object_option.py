@@ -14,7 +14,9 @@ from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_conte
 
 
 class CommonDialogObjectOption(CommonDialogOption):
-    """ A option the player can choose within a dialog.  """
+    """A option the player can choose within a dialog.
+
+    """
     def __init__(
         self,
         option_identifier: str,
@@ -34,16 +36,22 @@ class CommonDialogObjectOption(CommonDialogOption):
 
     @property
     def option_identifier(self) -> str:
-        """ Used to identify the option. """
+        """Used to identify the option.
+
+        """
         return self._option_identifier
 
     @property
     def value(self) -> DialogOptionValueType:
-        """ The value of the option. """
+        """The value of the option.
+
+        """
         return self._value
 
     def as_row(self, option_id: int) -> ObjectPickerRow:
-        """ Convert the option into a row. """
+        """Convert the option into a row.
+
+        """
         return ObjectPickerRow(
             option_id=option_id,
             name=self.title,

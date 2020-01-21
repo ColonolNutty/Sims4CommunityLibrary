@@ -17,13 +17,13 @@ FullTraceback = namedtuple('FullTraceback', ('tb_frame', 'tb_lineno', 'tb_next')
 
 
 class CommonStacktraceUtil:
-    """
-        Utilities for accessing the full stack trace of your application.
+    """Utilities for accessing the full stack trace of your application.
+
     """
     @staticmethod
     def current_stack(skip: int=0) -> Any:
-        """
-            Retrieve the current stack
+        """Retrieve the current stack
+
         :param skip: The number of lines to skip
         :return: A collection of the current stack.
         """
@@ -42,7 +42,9 @@ class CommonStacktraceUtil:
 
     @staticmethod
     def _extend_traceback(tb, stack) -> FullTraceback:
-        """ Extend traceback with stack info. """
+        """Extend traceback with stack info.
+
+        """
         head = tb
         for traceback_frame, traceback_line_number in stack:
             head = FullTraceback(traceback_frame, traceback_line_number, head)
@@ -50,15 +52,17 @@ class CommonStacktraceUtil:
 
     @staticmethod
     def full_exception_info() -> Union[type, Any, FullTraceback]:
-        """ Like sys.exc_info, but includes the full traceback. """
+        """Like sys.exc_info, but includes the full traceback.
+
+        """
         exec_type, exec_value, exec_traceback = sys.exc_info()
         full_traceback = CommonStacktraceUtil._extend_traceback(exec_traceback, CommonStacktraceUtil.current_stack(1))
         return exec_type, exec_value, full_traceback
 
     @staticmethod
     def get_full_stack_trace() -> List[str]:
-        """
-            Retrieve the full stacktrace from the current stack.
+        """Retrieve the full stacktrace from the current stack.
+
         :return: A collection of stack trace strings.
         """
         exception_info = CommonStacktraceUtil.full_exception_info()

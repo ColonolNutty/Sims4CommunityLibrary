@@ -11,10 +11,14 @@ from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_obje
 
 
 class CommonDialogToggleOption(CommonDialogObjectOption):
-    """ An option with two states, on or off. """
+    """An option with two states, on or off.
+
+    """
     @property
     def icon(self) -> Any:
-        """ The icon of the option. """
+        """The icon of the option.
+
+        """
         if super().icon is not None:
             return super().icon
         if self.value is True:
@@ -22,7 +26,9 @@ class CommonDialogToggleOption(CommonDialogObjectOption):
         return CommonIconUtils.load_unchecked_square_icon()
 
     def choose(self) -> Any:
-        """ Choose this dialog option. """
+        """Choose this dialog option.
+
+        """
         if self.on_chosen is None:
             return None
         return self.on_chosen(not bool(self.value))

@@ -16,7 +16,9 @@ from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_conte
 
 
 class CommonDialogOption:
-    """ A option the player can choose within a dialog.  """
+    """A option the player can choose within a dialog.
+
+    """
     def __init__(
         self,
         value: DialogOptionValueType,
@@ -32,45 +34,63 @@ class CommonDialogOption:
 
     @property
     def title(self) -> LocalizedString:
-        """ The title of the option. """
+        """The title of the option.
+
+        """
         return self.context.title
 
     @property
     def description(self) -> LocalizedString:
-        """ The description of the option. """
+        """The description of the option.
+
+        """
         return self.context.description
 
     @property
     def tooltip(self) -> Union[CommonLocalizationUtils.LocalizedTooltip, None]:
-        """ The tooltip displayed to the player on hover. """
+        """The tooltip displayed to the player on hover.
+
+        """
         return self.context.tooltip
 
     @property
     def icon(self) -> Any:
-        """ The icon of the option. """
+        """The icon of the option.
+
+        """
         return self.context.icon
 
     @property
     def context(self) -> CommonDialogOptionContext:
-        """ The context of the option. """
+        """The context of the option.
+
+        """
         return self._option_context
 
     @property
     def value(self) -> DialogOptionValueType:
-        """ The value of the option. """
+        """The value of the option.
+
+        """
         return self._value
 
     @property
     def on_chosen(self) -> Callable[[DialogOptionValueType], Any]:
-        """ The action to perform upon choosing this option. """
+        """The action to perform upon choosing this option.
+
+        """
         return self._on_chosen
 
     def choose(self) -> Any:
-        """ Choose this option. """
+        """Choose this option.
+
+        """
         if self.on_chosen is None:
             return None
         return self.on_chosen(self.value)
 
     def as_row(self, option_id: int) -> BasePickerRow:
-        """ Convert the option into a picker row. """
+        """Convert the option into a picker row.
+
+        """
         raise NotImplementedError('\'{}\' not implemented.'.format(self.__class__.as_row.__name__))

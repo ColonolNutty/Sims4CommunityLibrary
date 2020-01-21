@@ -14,11 +14,13 @@ from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonSimInteractionUtils:
-    """ Utilities for managing interactions. """
+    """Utilities for managing interactions.
+
+    """
     @staticmethod
     def is_sitting(sim_info: SimInfo) -> bool:
-        """
-            Determine if a Sim is currently sitting.
+        """Determine if a Sim is currently sitting.
+
         """
         interactions = (
             CommonInteractionId.SEATING_SIT,
@@ -35,37 +37,37 @@ class CommonSimInteractionUtils:
 
     @staticmethod
     def has_interaction_running_or_queued(sim_info: SimInfo, interaction_id: int) -> bool:
-        """
-            Determine if a Sim has the specified interaction running or in their interaction queue.
+        """Determine if a Sim has the specified interaction running or in their interaction queue.
+
         """
         return CommonSimInteractionUtils.has_interactions_running_or_queued(sim_info, (interaction_id, ))
 
     @staticmethod
     def has_interaction_running(sim_info: SimInfo, interaction_id: int) -> bool:
-        """
-            Determine if a Sim is running the specified interaction.
+        """Determine if a Sim is running the specified interaction.
+
         """
         return CommonSimInteractionUtils.has_interactions_running(sim_info, (interaction_id, ))
 
     @staticmethod
     def has_interaction_queued(sim_info: SimInfo, interaction_id: int) -> bool:
-        """
-            Determine if a Sim is running the specified interaction.
+        """Determine if a Sim is running the specified interaction.
+
         """
         return CommonSimInteractionUtils.has_interactions_queued(sim_info, (interaction_id, ))
 
     @staticmethod
     def has_interactions_running_or_queued(sim_info: SimInfo, interaction_ids: Iterator[int]) -> bool:
-        """
-            Determine if a Sim has any of the specified interactions running or in their interaction queue.
+        """Determine if a Sim has any of the specified interactions running or in their interaction queue.
+
         """
         return CommonSimInteractionUtils.has_interactions_running(sim_info, interaction_ids)\
                or CommonSimInteractionUtils.has_interactions_queued(sim_info, interaction_ids)
 
     @staticmethod
     def has_interactions_running(sim_info: SimInfo, interaction_ids: Iterator[int]) -> bool:
-        """
-            Determine if a Sim is running any of the specified interactions.
+        """Determine if a Sim is running any of the specified interactions.
+
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None or sim.si_state is None:
@@ -78,8 +80,8 @@ class CommonSimInteractionUtils:
 
     @staticmethod
     def has_interactions_queued(sim_info: SimInfo, interaction_ids: Iterator[int]) -> bool:
-        """
-            Determine if a Sim has any of the specified interactions in their interaction queue.
+        """Determine if a Sim has any of the specified interactions in their interaction queue.
+
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None or sim.queue is None:

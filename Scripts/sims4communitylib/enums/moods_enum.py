@@ -9,7 +9,9 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonMoodId(CommonEnumIntBase):
-    """ Identifiers for vanilla sim moods """
+    """Identifiers for vanilla sim moods.
+
+    """
     CONFIDENT = 14634
     SLEEPING = 27149
     STRESSED = 14645

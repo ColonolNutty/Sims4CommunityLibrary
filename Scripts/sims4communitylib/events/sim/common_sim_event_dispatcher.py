@@ -25,8 +25,8 @@ from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 
 
 class CommonSimEventDispatcherService(CommonService):
-    """
-        A service for dispatching Sim events.
+    """A service for dispatching Sim events.
+
     """
 
     def _on_sim_init(self, sim_info: SimInfo, *_, **__):

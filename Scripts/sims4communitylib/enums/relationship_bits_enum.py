@@ -9,7 +9,9 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonRelationshipBitId(CommonEnumIntBase):
-    """ Identifiers for vanilla sim relationship bits """
+    """Identifiers for vanilla sim relationship bits.
+
+    """
     ACTOR_CAREER_COWORKER_REL_BITS_COMMERCIAL_DIRECTOR = 194371
     ACTOR_CAREER_COWORKER_REL_BITS_COSTAR1 = 196312
     ACTOR_CAREER_COWORKER_REL_BITS_COSTAR2 = 197701

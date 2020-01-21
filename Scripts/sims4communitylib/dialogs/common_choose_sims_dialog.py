@@ -28,8 +28,8 @@ from ui.ui_dialog_picker import UiSimPicker, SimPickerRow
 
 
 class CommonChooseSimsDialog(CommonChooseSimDialog):
-    """
-        Create a dialog that prompts the player to choose a number of Sims.
+    """Create a dialog that prompts the player to choose a number of Sims.
+
     """
     @property
     def log_identifier(self) -> str:
@@ -46,8 +46,8 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
         min_selectable: int=1,
         max_selectable: int=1
     ):
-        """
-            Show the dialog and invoke the callbacks upon the player submitting their selection.
+        """Show the dialog and invoke the callbacks upon the player submitting their selection.
+
         :param on_chosen: A callback invoked upon the player submitting their chosen Sims from the list.
         :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim.
         :param should_show_names: If True, then the names of the Sims will display in the dialog.

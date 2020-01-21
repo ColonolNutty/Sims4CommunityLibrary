@@ -9,7 +9,9 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonSituationJobId(CommonEnumIntBase):
-    """ Identifiers for vanilla situation jobs """
+    """Identifiers for vanilla situation jobs.
+
+    """
     ACTOR_CAREER_BACKGROUND_ACTOR = 191066
     ACTOR_CAREER_BACKGROUND_PRODUCER = 191067
     ACTOR_CAREER_CO_STAR2 = 189271

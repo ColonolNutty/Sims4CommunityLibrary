@@ -22,8 +22,8 @@ from ui.ui_dialog import UiDialogOkCancel
 
 
 class CommonOkCancelDialog(CommonDialog):
-    """
-        Use to create a prompt dialog.
+    """Use to create a prompt dialog.
+
     """
     def __init__(
         self,
@@ -37,8 +37,8 @@ class CommonOkCancelDialog(CommonDialog):
         cancel_text_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
-        """
-            Create a dialog with two buttons: Ok and Cancel.
+        """Create a dialog with two buttons: Ok and Cancel.
+
         :param title_identifier: A decimal identifier of the title text.
         :param description_identifier: A decimal identifier of the description text.
         :param title_tokens: Tokens to format into the title.
@@ -60,7 +60,9 @@ class CommonOkCancelDialog(CommonDialog):
 
     @property
     def log_identifier(self) -> str:
-        """ An identifier for the Log of this class. """
+        """An identifier for the Log of this class.
+
+        """
         return 's4cl_ok_cancel_dialog'
 
     def show(
@@ -68,8 +70,8 @@ class CommonOkCancelDialog(CommonDialog):
         on_ok_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop,
         on_cancel_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop
     ):
-        """
-            Show the dialog and invoke the callbacks upon the player selecting an option.
+        """Show the dialog and invoke the callbacks upon the player selecting an option.
+
         :param on_ok_selected: Invoked upon the player selecting Ok in the dialog.
         :param on_cancel_selected: Invoked upon the player selecting Cancel in the dialog.
         """

@@ -10,11 +10,15 @@ from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
 class S4CLSimLoadedEvent(CommonEvent):
-    """ An Event that Occurs upon a Sim being loaded. """
+    """An Event that Occurs upon a Sim being loaded.
+
+    """
     def __init__(self, sim_info: SimInfo):
         self._sim_info = sim_info
 
     @property
     def sim_info(self) -> SimInfo:
-        """ The SimInfo of a Sim. """
+        """The SimInfo of a Sim.
+
+        """
         return self._sim_info

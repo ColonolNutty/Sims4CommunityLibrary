@@ -44,12 +44,16 @@ class _CommonUiDialogTextInputOkCancel(UiDialogTextInputOkCancel):
         self.text_input_responses = {}
 
     def on_text_input(self, text_input_name: str='', text_input: str='') -> bool:
-        """ A callback that occurs upon text being entered. """
+        """A callback that occurs upon text being entered.
+
+        """
         self.text_input_responses[text_input_name] = text_input
         return False
 
     def build_msg(self, text_input_overrides=None, additional_tokens: Tuple[Any]=(), **kwargs):
-        """ Build the message. """
+        """Build the message.
+
+        """
         msg = super().build_msg(additional_tokens=(), **kwargs)
         text_input_msg = msg.text_input.add()
         text_input_msg.text_input_name = 'text_input'
@@ -59,8 +63,8 @@ class _CommonUiDialogTextInputOkCancel(UiDialogTextInputOkCancel):
 
 
 class CommonInputFloatDialog(CommonDialog):
-    """
-        Create a dialog that prompts the player to enter a float value.
+    """Create a dialog that prompts the player to enter a float value.
+
     """
     def __init__(
         self,
@@ -73,8 +77,8 @@ class CommonInputFloatDialog(CommonDialog):
         description_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
-        """
-            Create a prompt to enter a float.
+        """Create a prompt to enter a float.
+
         :param title_identifier: A decimal identifier of the title text.
         :param description_identifier: A decimal identifier of the description text.
         :param initial_value: The initial value that will appear in the input box.
@@ -96,15 +100,17 @@ class CommonInputFloatDialog(CommonDialog):
 
     @property
     def log_identifier(self) -> str:
-        """ An identifier for the Log of this class. """
+        """An identifier for the Log of this class.
+
+        """
         return 's4cl_input_float_dialog'
 
     def show(
         self,
         on_submit: Callable[[Union[float, None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop
     ):
-        """
-            Show the dialog and invoke the callbacks upon the player submitting a value.
+        """Show the dialog and invoke the callbacks upon the player submitting a value.
+
         :param on_submit: A callback invoked upon the player submitting a value.
         """
         try:

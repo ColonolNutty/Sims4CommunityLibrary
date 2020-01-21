@@ -12,11 +12,13 @@ from whims.whim_set import WhimSetBaseMixin
 
 
 class CommonWhimUtils:
-    """ Utilities for manipulating the Whims of Sims. """
+    """Utilities for manipulating the Whims of Sims.
+
+    """
     @staticmethod
     def get_current_whims(sim_info: SimInfo) -> Tuple[WhimSetBaseMixin]:
-        """
-            Retrieve the current Whims of the specified Sim.
+        """Retrieve the current Whims of the specified Sim.
+
         """
         whims_tracker = sim_info.whim_tracker
         if whims_tracker is None:

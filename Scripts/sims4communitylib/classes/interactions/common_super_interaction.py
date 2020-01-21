@@ -19,7 +19,9 @@ from sims4communitylib.modinfo import ModInfo
 
 
 class CommonSuperInteraction(CommonInteraction, SuperInteraction):
-    """ A base for accessing super interaction hooks. """
+    """A base for accessing super interaction hooks.
+
+    """
 
     def _run_interaction_gen(self, timeline):
         super()._run_interaction_gen(timeline)
@@ -32,8 +34,8 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
     # noinspection PyUnusedLocal
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
     def on_run(self, interaction_sim: Sim, interaction_target: Any, timeline) -> bool:
-        """
-            Occurs upon the interaction being run.
+        """Occurs upon the interaction being run.
+
         :param interaction_sim: The sim performing the interaction.
         :param interaction_target: The target of the interaction.
         :param timeline: The timeline the interaction is running on.
@@ -43,7 +45,9 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
 
 
 class CommonConstrainedSuperInteraction(SuperInteraction):
-    """ A base for accessing super interaction hooks with constraints. """
+    """A base for accessing super interaction hooks with constraints.
+
+    """
 
     # noinspection PyMethodParameters
     @flexmethod
@@ -57,8 +61,8 @@ class CommonConstrainedSuperInteraction(SuperInteraction):
 
     @classmethod
     def on_constraint_gen(cls, inst: Interaction, sim: Sim, target: Any) -> Constraint:
-        """
-            Occurs upon retrieving an interactions constraints.
+        """Occurs upon retrieving an interactions constraints.
+
         :param inst: An object of type Interaction.
         :param sim: The sim performing the interaction.
         :param target: The target of the interaction.
