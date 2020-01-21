@@ -9,7 +9,9 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonWhimSetId(CommonEnumIntBase):
-    """ Identifiers for vanilla whim sets """
+    """Identifiers for vanilla whim sets.
+
+    """
     APARTMENT_PROBLEMS = 142026
     APARTMENTS_INDOORS_GO_OUTSIDE = 142732
     APARTMENTS_LOT_TRAITS = 142085

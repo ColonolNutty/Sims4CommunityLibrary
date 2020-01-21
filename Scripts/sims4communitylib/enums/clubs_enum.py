@@ -9,7 +9,9 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonClubInteractionGroupId(CommonEnumIntBase):
-    """ Identifiers for vanilla club activities """
+    """Identifiers for vanilla club activities.
+
+    """
     FOOD_AND_DRINK_GRILLED_CHEESE = 132512
     FUN_AND_GAMES_BASKETBALL = 151720
     FUN_AND_GAMES_SLIPPY_SLIDE = 140842

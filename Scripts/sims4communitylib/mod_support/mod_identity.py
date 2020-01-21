@@ -8,7 +8,9 @@ Copyright (c) COLONOLNUTTY
 
 
 class CommonModIdentity:
-    """ Information about a mod. """
+    """Information about a mod.
+
+    """
     def __init__(self, name: str, author: str, base_namespace: str, file_path: str):
         self._name = name.replace(' ', '_')
         self._author = author
@@ -17,26 +19,31 @@ class CommonModIdentity:
 
     @property
     def name(self) -> str:
-        """ The name of a mod without spaces. """
+        """The name of a mod without spaces.
+
+        """
         return str(self._name)
 
     @property
     def author(self) -> str:
-        """ The author of a mod. """
+        """The author of a mod.
+
+        """
         return str(self._author)
 
     @property
     def base_namespace(self) -> str:
-        """
-            The namespace of the ts4script file of a mod.
+        """The namespace of the ts4script file of a mod.
+        Example: S4CL has a base name of sims4communitylib.
 
-            Example: S4CL has a base name of sims4communitylib.
         """
         return str(self._base_namespace)
 
     @property
     def file_path(self) -> str:
-        """ The path to the ts4script file of a mod. """
+        """The path to the ts4script file of a mod.
+
+        """
         return str(self._script_file_path)
 
     def __repr__(self):

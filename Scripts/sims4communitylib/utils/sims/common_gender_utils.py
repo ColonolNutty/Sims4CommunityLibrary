@@ -15,12 +15,14 @@ from sims4communitylib.modinfo import ModInfo
 
 
 class CommonGenderUtils:
-    """ Utilities for handling sim genders. """
+    """Utilities for handling sim genders.
+
+    """
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def get_gender(sim_info: SimInfo) -> Union[Gender, None]:
-        """
-            Retrieve the Gender of a sim.
+        """Retrieve the Gender of a sim.
+
         """
         if sim_info is None:
             return None
@@ -33,8 +35,8 @@ class CommonGenderUtils:
 
     @staticmethod
     def set_gender(sim_info: SimInfo, gender: Union[int, Gender]) -> bool:
-        """
-            Set the Gender of a sim.
+        """Set the Gender of a sim.
+
         """
         try:
             sim_info.gender = gender
@@ -45,35 +47,35 @@ class CommonGenderUtils:
 
     @staticmethod
     def are_same_gender(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:
-        """
-            Determine if two sims are the same Gender.
+        """Determine if two sims are the same Gender.
+
         """
         return CommonGenderUtils.get_gender(sim_info) == CommonGenderUtils.get_gender(other_sim_info)
 
     @staticmethod
     def is_female_gender(gender: Gender) -> bool:
-        """
-            Determine if a Gender is Female.
+        """Determine if a Gender is Female.
+
         """
         return gender == Gender.FEMALE
 
     @staticmethod
     def is_male_gender(gender: Gender) -> bool:
-        """
-            Determine if a Gender is Male.
+        """Determine if a Gender is Male.
+
         """
         return gender == Gender.MALE
 
     @staticmethod
     def is_female(sim_info: SimInfo) -> bool:
-        """
-            Determine if a sim is Female.
+        """Determine if a sim is Female.
+
         """
         return CommonGenderUtils.is_female_gender(CommonGenderUtils.get_gender(sim_info))
 
     @staticmethod
     def is_male(sim_info: SimInfo) -> bool:
-        """
-            Determine if a sim is Male.
+        """Determine if a sim is Male.
+
         """
         return CommonGenderUtils.is_male_gender(CommonGenderUtils.get_gender(sim_info))

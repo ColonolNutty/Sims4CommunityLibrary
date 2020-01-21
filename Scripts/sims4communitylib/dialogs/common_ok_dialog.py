@@ -22,8 +22,7 @@ from ui.ui_dialog import UiDialogOk
 
 
 class CommonOkDialog(CommonDialog):
-    """
-        Use to create an acknowledgement dialog.
+    """Use to create an acknowledgement dialog.
     """
     def __init__(
         self,
@@ -35,8 +34,8 @@ class CommonOkDialog(CommonDialog):
         ok_text_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
-        """
-            Create a dialog with a single button: Ok
+        """Create a dialog with a single button: Ok
+
         :param title_identifier: A decimal identifier of the title text.
         :param description_identifier: A decimal identifier of the description text.
         :param title_tokens: Tokens to format into the title.
@@ -55,15 +54,17 @@ class CommonOkDialog(CommonDialog):
 
     @property
     def log_identifier(self) -> str:
-        """ An identifier for the Log of this class. """
+        """An identifier for the Log of this class.
+
+        """
         return 's4cl_ok_dialog'
 
     def show(
         self,
         on_acknowledged: Callable[[UiDialogOk], Any]=CommonFunctionUtils.noop
     ):
-        """
-            Show the dialog and invoke the callback upon the player acknowledging the dialog.
+        """Show the dialog and invoke the callback upon the player acknowledging the dialog.
+
         :param on_acknowledged: Invoked upon the player acknowledging (Hitting Ok) or closing the dialog.
         """
         try:

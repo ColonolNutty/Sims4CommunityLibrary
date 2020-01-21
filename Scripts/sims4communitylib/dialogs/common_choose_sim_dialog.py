@@ -29,8 +29,8 @@ from ui.ui_dialog_picker import UiSimPicker, SimPickerRow
 
 
 class CommonChooseSimDialog(CommonChooseDialog):
-    """
-        Create a dialog to prompt the player to choose a Sim.
+    """Create a dialog to prompt the player to choose a Sim.
+
     """
     def __init__(
         self,
@@ -41,8 +41,8 @@ class CommonChooseSimDialog(CommonChooseDialog):
         description_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
-        """
-            Create a dialog for displaying a list of Sims.
+        """Create a dialog for displaying a list of Sims.
+
         :param title_identifier: A decimal identifier of the title text.
         :param description_identifier: A decimal identifier of the description text.
         :param choices: The choices to display in the dialog.
@@ -60,12 +60,14 @@ class CommonChooseSimDialog(CommonChooseDialog):
 
     @property
     def log_identifier(self) -> str:
-        """ An identifier for the Log of this class. """
+        """An identifier for the Log of this class.
+
+        """
         return 's4cl_choose_sim_dialog'
 
     def add_row(self, choice: SimPickerRow):
-        """
-            Add a row to the dialog.
+        """Add a row to the dialog.
+
         """
         return super().add_row(choice)
 
@@ -77,8 +79,8 @@ class CommonChooseSimDialog(CommonChooseDialog):
         hide_row_descriptions: bool=False,
         column_count: int=3
     ):
-        """
-            Show the dialog and invoke the callbacks upon the player making a choice.
+        """Show the dialog and invoke the callbacks upon the player making a choice.
+
         :param on_chosen: A callback invoked upon the player choosing a Sim from the list.
         :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim.
         :param should_show_names: If True, then the names of the Sims will display in the dialog.

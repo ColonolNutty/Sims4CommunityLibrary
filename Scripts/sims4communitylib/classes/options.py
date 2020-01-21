@@ -9,15 +9,18 @@ from typing import Dict, Any
 
 
 class CommonOption:
-    """ Useful for typing arguments when str just won't cut it. """
+    """Useful for giving a type to arguments when str just won't cut it.
+
+    """
     def __init__(self, name: str):
         self._name = name
 
     @property
     def name(self) -> str:
-        """
-            The name of the option
-        :return: A string name.
+        """The name of the option
+
+        :return: The name of the option.
+        :rtype: str
         """
         return self._name
 
@@ -38,8 +41,8 @@ class CommonOption:
 
 
 class HasCommonOptions:
-    """
-        Provides a class the ability to store custom data.
+    """Inherit this class to incorporate options into a class.
+
     """
     def __init__(self, options: Dict[CommonOption, Any]):
         self._options = dict()
@@ -49,9 +52,10 @@ class HasCommonOptions:
 
     @property
     def options(self) -> Dict[str, Any]:
-        """
-            Retrieve options.
+        """Retrieve options.
+
         :return: A dictionary of options.
+        :rtype: Dict[str, Any]
         """
         if self._options is None:
             self._options = dict()
@@ -61,27 +65,33 @@ class HasCommonOptions:
     def options(self, options: Dict[str, Any]):
         self._options = options
 
-    def set_option(self, option: CommonOption, value: Any) -> Any:
-        """
-            Set the value of an option
-        :param option: An object of type CommonOption.
-        :param value: The new value for the option.
+    def set_option(self, option: CommonOption, value: Any):
+        """Set an option.
+
+        :param option: The option to set the value of.
+        :type option: CommonOption
+        :param value: The value to set an option to.
+        :type value: Any
         """
         self._options[str(option)] = value
 
     def remove_option(self, option: CommonOption):
-        """
-            Remove an option.
-        :param option: An object of type CommonOption.
+        """Remove an option.
+
+        :param option: The option to delete.
+        :type option: CommonOption
         """
         del self._options[str(option)]
 
     def get_option(self, option: CommonOption, default_value: Any=None) -> Any:
-        """
-            Retrieve the value of an option and give the specified default value if the option does not exist.
-        :param option: An object of type CommonOption.
-        :param default_value: The default value used when the option is not found.
-        :return: The value of the option or the default_value if the option was not found.
+        """Retrieve an option.
+
+        :param option: The option to retrieve.
+        :type option: CommonOption
+        :param default_value: A default value to return when an option does not exist.
+        :type default_value: Any
+        :return: An option or the default value if not found.
+        :rtype: Any
         """
         if str(option) not in self.options and default_value is not None:
             self.set_option(option, default_value)

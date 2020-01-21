@@ -22,8 +22,8 @@ from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 
 
 class CommonInteractionEventDispatcherService(CommonService):
-    """
-        A service for dispatching interaction events.
+    """A service for dispatching interaction events.
+
     """
 
     # noinspection PyUnusedLocal

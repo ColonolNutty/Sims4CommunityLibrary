@@ -17,11 +17,15 @@ from sims4communitylib.utils.sims.common_sim_statistic_utils import CommonSimSta
 
 
 class CommonSimPregnancyUtils:
-    """ Utilities for manipulating the pregnancy status of Sims. """
+    """Utilities for manipulating the pregnancy status of Sims.
+
+    """
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def is_pregnant(sim_info: SimInfo) -> bool:
-        """ Determine if the specified Sim is pregnant. """
+        """Determine if the specified Sim is pregnant.
+
+        """
         pregnancy_tracker = CommonSimPregnancyUtils._get_pregnancy_tracker(sim_info)
         if pregnancy_tracker is None:
             return False
@@ -30,7 +34,9 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def start_pregnancy(sim_info: SimInfo, partner_sim_info: SimInfo) -> bool:
-        """ Start a pregnancy between a Sim and a Partner Sim. """
+        """Start a pregnancy between a Sim and a Partner Sim.
+
+        """
         if not CommonHouseholdUtils.has_free_household_slots(sim_info):
             return False
         pregnancy_tracker = CommonSimPregnancyUtils._get_pregnancy_tracker(sim_info)
@@ -44,7 +50,9 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def clear_pregnancy(sim_info: SimInfo) -> bool:
-        """ Clear the pregnancy status of a Sim. """
+        """Clear the pregnancy status of a Sim.
+
+        """
         pregnancy_tracker = CommonSimPregnancyUtils._get_pregnancy_tracker(sim_info)
         if pregnancy_tracker is None:
             return False
@@ -55,7 +63,9 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def can_be_impregnated(sim_info: SimInfo) -> bool:
-        """ Determine if a Sim can be impregnated. """
+        """Determine if a Sim can be impregnated.
+
+        """
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId
         if CommonSpeciesUtils.is_human(sim_info):
@@ -71,7 +81,9 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def can_impregnate(sim_info: SimInfo) -> bool:
-        """ Determine if a Sim can impregnate other sims. """
+        """Determine if a Sim can impregnate other sims.
+
+        """
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId
         if CommonSpeciesUtils.is_human(sim_info):
@@ -87,7 +99,9 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def get_partner_of_pregnant_sim(sim_info: SimInfo) -> Union[SimInfo, None]:
-        """ Retrieve a SimInfo object of the Sim that impregnated the specified Sim. """
+        """Retrieve a SimInfo object of the Sim that impregnated the specified Sim.
+
+        """
         pregnancy_tracker = CommonSimPregnancyUtils._get_pregnancy_tracker(sim_info)
         if pregnancy_tracker is None:
             return None
@@ -96,7 +110,9 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=0.0)
     def get_pregnancy_progress(sim_info: SimInfo) -> float:
-        """ Retrieve the pregnancy progress of a Sim. """
+        """Retrieve the pregnancy progress of a Sim.
+
+        """
         pregnancy_tracker = CommonSimPregnancyUtils._get_pregnancy_tracker(sim_info)
         if pregnancy_tracker is None or not CommonSimPregnancyUtils.is_pregnant(sim_info):
             return 0.0
@@ -110,7 +126,9 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=0.0)
     def get_pregnancy_rate(sim_info: SimInfo) -> float:
-        """ Retrieve the rate at which pregnancy progresses. """
+        """Retrieve the rate at which pregnancy progresses.
+
+        """
         pregnancy_tracker = CommonSimPregnancyUtils._get_pregnancy_tracker(sim_info)
         if pregnancy_tracker is None:
             return 0.0

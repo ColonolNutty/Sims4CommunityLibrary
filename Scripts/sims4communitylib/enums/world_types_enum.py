@@ -9,7 +9,9 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonWorldTypeId(CommonEnumIntBase):
-    """ Identifiers for various world types """
+    """Identifiers for various world types.
+
+    """
     ACQUISITION_BUTTE = 23279
     ARTS_QUARTER = 121286
     SPICE_MARKET = 117423

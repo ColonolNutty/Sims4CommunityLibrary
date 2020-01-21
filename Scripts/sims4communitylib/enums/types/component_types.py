@@ -8,7 +8,9 @@ Copyright (c) COLONOLNUTTY
 
 
 class CommonComponentType:
-    """ A wrapper for component_types. """
+    """A wrapper for component_types.
+
+    """
     def _get_component_type(*args):
         try:
             import objects.components.types as component_types

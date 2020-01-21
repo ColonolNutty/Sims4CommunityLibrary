@@ -11,7 +11,9 @@ from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
 class S4CLSimChangedAgeEvent(CommonEvent):
-    """ An event that occurs upon a Sim changing to a different age. """
+    """An event that occurs upon a Sim changing to a different age.
+
+    """
     def __init__(self, sim_info: SimInfo, old_age: Age, new_age: Age):
         self._sim_info = sim_info
         self._old_age = old_age
@@ -19,15 +21,21 @@ class S4CLSimChangedAgeEvent(CommonEvent):
 
     @property
     def sim_info(self) -> SimInfo:
-        """ The SimInfo of a Sim. """
+        """The SimInfo of a Sim.
+
+        """
         return self._sim_info
 
     @property
     def old_age(self) -> Age:
-        """ The Age the Sim used to be. """
+        """The Age the Sim used to be.
+
+        """
         return self._old_age
 
     @property
     def new_age(self) -> Age:
-        """ The Age the Sim is now. """
+        """The Age the Sim is now.
+
+        """
         return self._new_age

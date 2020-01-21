@@ -16,59 +16,63 @@ from sims4communitylib.utils.common_log_utils import CommonLogUtils
 
 
 class CommonMessageType(CommonEnumStringBase):
-    """ Message types for use when logging. """
+    """Message types for use when logging.
+
+    """
     DEBUG = 'DEBUG'
     ERROR = 'ERROR'
     INFO = 'INFO'
 
 
 class CommonLog:
-    """ A logging class used to log messages """
+    """A logging class used to log messages.
+
+    """
     def __init__(self, mod_name: str, log_name: str):
         self._log_name = log_name
         self._mod_name = mod_name
         self._enabled = False
 
     def debug(self, message: str):
-        """
-            Log a message with message type DEBUG.
+        """Log a message with message type DEBUG.
+
         :param message: The message to log.
         """
         if self.enabled:
             self._log_message(CommonMessageType.DEBUG, message)
 
     def info(self, message: str):
-        """
-            Log a message with message type INFO.
+        """Log a message with message type INFO.
+
         :param message: The message to log.
         """
         if self.enabled:
             self._log_message(CommonMessageType.INFO, message)
 
     def format_info(self, *args, **kwargs):
-        """
-            Log a non-descriptive message containing pformatted arguments and keyword arguments with message type INFO.
+        """Log a non-descriptive message containing pformatted arguments and keyword arguments with message type INFO.
+
         """
         self.format(*args, message_type=CommonMessageType.INFO, **kwargs)
 
     def format_info_with_message(self, message: str, *args, **kwargs):
-        """
-            Log a message containing pformatted arguments and keyword arguments with message type INFO.
+        """Log a message containing pformatted arguments and keyword arguments with message type INFO.
+
         :param message: The message to log.
         """
         self.format_with_message(message, *args, message_type=CommonMessageType.INFO, **kwargs)
 
     def format(self, *args, message_type: str=CommonMessageType.DEBUG, **kwargs):
-        """
-            Log a non-descriptive message containing pformatted arguments and keyword arguments with the specified message type.
+        """Log a non-descriptive message containing pformatted arguments and keyword arguments with the specified message type.
+
         :param message_type: The MessageType of the logged message.
         """
         if self.enabled:
             self._log_message(message_type, '{}, {}\n'.format(pformat(args), pformat(kwargs)))
 
     def format_with_message(self, message: str, *args, message_type: str=CommonMessageType.DEBUG, **kwargs):
-        """
-            Log a message containing pformatted arguments and keyword arguments with the specified message type.
+        """Log a message containing pformatted arguments and keyword arguments with the specified message type.
+
         :param message: The message to log.
         :param message_type: The type of message being logged.
         """
@@ -76,8 +80,8 @@ class CommonLog:
             self._log_message(message_type, '{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)))
 
     def error(self, message: str, message_type: str=CommonMessageType.ERROR, exception: Exception=None, throw: bool=True):
-        """
-            Log an error message with the specified message type
+        """Log an error message with the specified message type
+
         :param message: The message to log.
         :param message_type: The message type of the error message.
         :param exception: The exception that occurred.
@@ -90,16 +94,16 @@ class CommonLog:
             self._log_message(message_type, pformat(exception))
 
     def format_error(self, *args, exception: Exception=None, throw: bool=True, **kwargs):
-        """
-            Log a non-descriptive error message containing pformatted arguments and keyword arguments.
+        """Log a non-descriptive error message containing pformatted arguments and keyword arguments.
+
         :param exception: The exception that occurred.
         :param throw: If set to True, the exception will be rethrown.
         """
         self.error('{}, {}\n'.format(pformat(args), pformat(kwargs)), exception=exception, throw=throw)
 
     def format_error_with_message(self, message: str, *args, exception: Exception=None, throw: bool=True, **kwargs):
-        """
-            Log an error message containing pformatted arguments and keyword arguments.
+        """Log an error message containing pformatted arguments and keyword arguments.
+
         :param message: The message to log.
         :param exception: The exception that occurred.
         :param throw: If set to True, the exception will be rethrown.
@@ -107,9 +111,8 @@ class CommonLog:
         self.error('{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)), exception=exception, throw=throw)
 
     def log_stack(self):
-        """
-            Log the current stack trace and the calling frames
-        :return: 
+        """Log the current stack trace and the calling frames
+
         """
         if not self.enabled:
             return
@@ -119,36 +122,36 @@ class CommonLog:
         self.format(calling_frame)
 
     def enable(self):
-        """
-            Enable this log for logging.
+        """Enable this log for logging.
+
         """
         self._enabled = True
 
     def disable(self):
-        """
-            Disable this log from logging
+        """Disable this log from logging
+
         """
         self._enabled = False
     
     @property
     def enabled(self) -> bool:
-        """
-            Determine if the log is enabled or not.
+        """Determine if the log is enabled or not.
+
         :return: True if the log is enabled.
         """
         return self._enabled
 
     @property
     def name(self) -> str:
-        """
-            The identifier of this log.
+        """The identifier of this log.
+
         :return: A string identifier.
         """
         return self._log_name
 
     def _log_message(self, message_type: str, message: str):
-        """
-            Log a message with message type.
+        """Log a message with message type.
+
         :param message_type: The type of message being logged.
         :param message: The message being logged.
         """
@@ -166,16 +169,16 @@ class CommonLog:
 
 
 class CommonLogRegistry(CommonService):
-    """
-        A registry for log handlers.
-        To register your own logs, please use CommonLogRegistry.get() to create a CommonLogRegistry.
+    """A registry for log handlers.
+    To register your own logs, please use CommonLogRegistry.get() to create a CommonLogRegistry.
+
     """
     def __init__(self):
         self._registered_logs: Dict[str, List[CommonLog]] = dict()
 
     def get_registered_log_names(self) -> List[str]:
-        """
-            Retrieve the names of all registered logs.
+        """Retrieve the names of all registered logs.
+
         :return: A collection of type str
         """
         if self._registered_logs is None:
@@ -186,8 +189,8 @@ class CommonLogRegistry(CommonService):
         return log_names
 
     def register_log(self, mod_name: str, log_name: str) -> CommonLog:
-        """
-            Create and register a log with the specified name.
+        """Create and register a log with the specified name.
+
         :param mod_name: The name of the mod the log is registered for.
         :param log_name: The name of the log.
         :return: An object of type CommonLog
@@ -203,16 +206,16 @@ class CommonLogRegistry(CommonService):
         return log
 
     def log_exists(self, log_name: str) -> bool:
-        """
-            Determine if logs exist with the specified name.
+        """Determine if logs exist with the specified name.
+
         :param log_name: The name of the logs
         :return: True if a handler exists with the specified name.
         """
         return log_name in self._registered_logs
 
     def enable_logs(self, log_name: str) -> bool:
-        """
-            Enables all logs with the specified name to begin logging.
+        """Enables all logs with the specified name to begin logging.
+
         :param log_name: The name of the logs to enable.
         :return: True if successful
         """
@@ -223,8 +226,8 @@ class CommonLogRegistry(CommonService):
         return True
 
     def disable_logs(self, log_name: str) -> bool:
-        """
-            Disable all logs with the specified name from logging.
+        """Disable all logs with the specified name from logging.
+
         :param log_name: The name of the logs to disable.
         :return: True if successful
         """
@@ -235,8 +238,8 @@ class CommonLogRegistry(CommonService):
         return True
 
     def disable_all_logs(self) -> bool:
-        """
-            Disable all logs from logging
+        """Disable all logs from logging
+
         :return: True if successful
         """
         if self._registered_logs is None:

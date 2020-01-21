@@ -13,7 +13,9 @@ from sims4communitylib.dialogs.option_dialogs.common_choose_object_option_dialog
 
 
 class CommonDialogOpenDialogOption(CommonDialogObjectOption):
-    """ An option that branches into other options. """
+    """An option that branches into other options.
+
+    """
     def __init__(
         self,
         create_dialog_callback: Callable[..., CommonChooseObjectOptionDialog],
@@ -31,7 +33,9 @@ class CommonDialogOpenDialogOption(CommonDialogObjectOption):
 
     @property
     def icon(self) -> Any:
-        """ The icon of the option. """
+        """The icon of the option.
+
+        """
         if super().icon is not None:
             return super().icon
         return CommonIconUtils.load_arrow_navigate_into_icon()

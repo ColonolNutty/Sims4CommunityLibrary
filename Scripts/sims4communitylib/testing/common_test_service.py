@@ -27,34 +27,35 @@ except ModuleNotFoundError:
 
 
 class CommonTestResultType:
-    """ Use to identify the results of running a test. """
+    """Use to identify the results of running a test.
+
+    """
     FAILED = 'FAILED'
     SUCCESS = 'SUCCESS'
 
 
 class CommonTestService(CommonService):
-    """
-        Use to register and run python tests.
+    """Use to register and run python tests.
 
-        Test Registration Example:
+    Test Registration Example:
 
-        @CommonTestService.test_class('mod_name')
-        class TestClass:
-            # Important that it is a static method, you won't get a cls or self value passed in, so don't expect one!
-            @staticmethod
-            @CommonTestService.test(1, 1, 2)
-            @CommonTestService.test(2, 1, 3)
-            def example_add_test(one: int, two: int, expected_value: int):
-                result = one + two
-                CommonAssertionUtils.are_equal(result, expected_value, message='{} plus {} did not equal {}!'.format(one, two, expected_value))
+    @CommonTestService.test_class('mod_name')
+    class TestClass:
+        # Important that it is a static method, you won't get a cls or self value passed in, so don't expect one!
+        @staticmethod
+        @CommonTestService.test(1, 1, 2)
+        @CommonTestService.test(2, 1, 3)
+        def example_add_test(one: int, two: int, expected_value: int):
+            result = one + two
+            CommonAssertionUtils.are_equal(result, expected_value, message='{} plus {} did not equal {}!'.format(one, two, expected_value))
     """
     def __init__(self):
         self._tests = dict()
         self._test_count = 0
 
     def add_test(self, test_name: str, test_function: Callable[..., Any], class_name: str=None):
-        """
-            Adds a test with a test name and class name.
+        """Adds a test with a test name and class name.
+
         :param test_name: The name of the test.
         :param test_function: The test itself.
         :param class_name: The name of the class the test is contained within.
@@ -70,23 +71,23 @@ class CommonTestService(CommonService):
 
     @property
     def total_test_count(self) -> int:
-        """
-            Get total test count.
+        """Get total test count.
+
         :return: A count of how many tests there are.
         """
         return self._test_count
 
     @property
     def all_tests(self) -> Dict[str, Any]:
-        """
-            Get all tests.
+        """Get all tests.
+
         :return: A dictionary of tests.
         """
         return self._tests
 
     def get_tests_by_class_name(self, class_name: str) -> List[Any]:
-        """
-            Retrieve tests by their class name.
+        """Retrieve tests by their class name.
+
         :param class_name: The name of the class to locate tests for.
         :return: A list of tests matching the class name.
         """
@@ -98,8 +99,8 @@ class CommonTestService(CommonService):
 
     @staticmethod
     def test_class(mod_name: str):
-        """
-            Decorator to indicate a test class.
+        """Decorator to indicate a test class.
+
         :param mod_name: The name of the mod this test class is contained within.
         :return: A wrapped function.
         """
@@ -146,9 +147,9 @@ class CommonTestService(CommonService):
 
     @staticmethod
     def test(*args, **kwargs):
-        """
-            Decorator to indicate a test.
-            When the test is run, it will be sent the specified arguments and keyword arguments.
+        """Decorator to indicate a test.
+        When the test is run, it will be sent the specified arguments and keyword arguments.
+
         :return: A wrapped function.
         """
         def _test_func(test_function):
@@ -160,8 +161,8 @@ class CommonTestService(CommonService):
         return _test_func
 
     def run_tests(self, *class_names: str, callback: Callable[..., Any]=print, **__):
-        """
-            Runs the tests of the specified classes.
+        """Runs the tests of the specified classes.
+
         :param class_names: A collection of classes to run tests for.
         :param callback: The callback to send string results to.
         """

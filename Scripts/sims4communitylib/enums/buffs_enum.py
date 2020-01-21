@@ -9,7 +9,9 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonBuffId(CommonEnumIntBase):
-    """ Identifiers for vanilla sim buffs """
+    """Identifiers for vanilla sim buffs
+
+    """
     A_GREAT_SCARE = 103141
     A_GREAT_SCARE_GREAT_STORYTELLER = 109738
     A_NEW_BEGINNING = 100146

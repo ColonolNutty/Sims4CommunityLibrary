@@ -13,7 +13,9 @@ DialogOptionValueType = TypeVar('DialogOptionValueType')
 
 
 class CommonDialogOptionContext:
-    """ A context used by CommonDialogOption that contains options for customization of the option. """
+    """A context used by CommonDialogOption that contains options for customization of the option.
+
+    """
     def __init__(
         self,
         title_identifier: Union[int, str, LocalizedString],
@@ -35,30 +37,42 @@ class CommonDialogOptionContext:
 
     @property
     def is_enabled(self) -> bool:
-        """ Determine if the dialog option is enabled. """
+        """Determine if the dialog option is enabled.
+
+        """
         return self._is_enabled
 
     @property
     def is_selected(self) -> bool:
-        """ Determine if the dialog option is selected. """
+        """Determine if the dialog option is selected.
+
+        """
         return self._is_selected
 
     @property
     def title(self) -> LocalizedString:
-        """ The title of the dialog option. """
+        """The title of the dialog option.
+
+        """
         return self._title
 
     @property
     def description(self) -> LocalizedString:
-        """ A description of what the dialog option does. """
+        """A description of what the dialog option does.
+
+        """
         return self._description
 
     @property
     def tooltip(self) -> Union[CommonLocalizationUtils.LocalizedTooltip, None]:
-        """ The tooltip displayed to the player on hover. """
+        """The tooltip displayed to the player on hover.
+
+        """
         return self._tooltip
 
     @property
     def icon(self) -> Any:
-        """ The icon displayed for this dialog option. """
+        """The icon displayed for this dialog option.
+
+        """
         return self._icon

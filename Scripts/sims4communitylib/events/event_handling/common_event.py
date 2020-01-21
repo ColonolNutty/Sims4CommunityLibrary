@@ -11,8 +11,8 @@ class CommonEvent:
     """ A custom event, for use with the Event Handler. """
     @property
     def event_name(self) -> str:
-        """
-            The name of this event.
+        """The name of this event.
+
         """
         return self.__class__.__name__
 

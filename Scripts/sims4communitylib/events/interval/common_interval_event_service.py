@@ -14,7 +14,9 @@ from sims4communitylib.services.common_service import CommonService
 
 
 class CommonIntervalDispatcher:
-    """ Keeps track of the amount of time that has passed for listeners to trigger. """
+    """Keeps track of the amount of time that has passed for listeners to trigger.
+
+    """
     def __init__(self, mod_name: str, milliseconds: int, listening_func: Callable[..., Any], run_once: bool=False):
         self._mod_name = mod_name
         self._minimum_milliseconds_to_dispatch = milliseconds
@@ -24,8 +26,8 @@ class CommonIntervalDispatcher:
 
     @property
     def total_milliseconds_passed(self) -> float:
-        """
-            The total amount of milliseconds this dispatcher has known to have passed.
+        """The total amount of milliseconds this dispatcher has known to have passed.
+
         """
         return self._total_milliseconds_passed
 
@@ -35,36 +37,44 @@ class CommonIntervalDispatcher:
 
     @property
     def minimum_milliseconds_to_dispatch(self) -> int:
-        """
-            The minimum amount of milliseconds that must pass before this dispatcher will dispatch.
+        """The minimum amount of milliseconds that must pass before this dispatcher will dispatch.
+
         """
         return self._minimum_milliseconds_to_dispatch
 
     @minimum_milliseconds_to_dispatch.setter
     def minimum_milliseconds_to_dispatch(self, val: int):
-        """
-            The minimum amount of milliseconds that must pass before this dispatcher will dispatch.
+        """The minimum amount of milliseconds that must pass before this dispatcher will dispatch.
+
         """
         self._minimum_milliseconds_to_dispatch = val
 
     @property
     def mod_name(self) -> str:
-        """ The name of the mod that is listening for events. """
+        """The name of the mod that is listening for events.
+
+        """
         return self._mod_name
 
     @property
     def listening_func_name(self) -> str:
-        """ The name of the function listening for events. """
+        """The name of the function listening for events.
+
+        """
         return self._listening_func.__name__
 
     @property
     def run_once(self) -> bool:
-        """ Determine if this tracker only runs once. """
+        """Determine if this tracker only runs once.
+
+        """
         return self._run_once
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def try_dispatch(self, milliseconds_since_last_update: int):
-        """ Attempt to trigger the listener based on the amount of time passed. """
+        """Attempt to trigger the listener based on the amount of time passed.
+
+        """
         self.total_milliseconds_passed += milliseconds_since_last_update
         if self.total_milliseconds_passed < self.minimum_milliseconds_to_dispatch:
             return False
@@ -74,7 +84,9 @@ class CommonIntervalDispatcher:
 
 
 class CommonIntervalEventRegistry(CommonService):
-    """ Register functions to run in intervals. """
+    """Register functions to run in intervals.
+
+    """
 
     def __init__(self):
         self._registered_interval_trackers: List[CommonIntervalDispatcher] = []
@@ -86,10 +98,10 @@ class CommonIntervalEventRegistry(CommonService):
 
     @staticmethod
     def run_every(mod_name: str, milliseconds: int=1500) -> Callable[..., Any]:
-        """
-            Register a function to run in intervals of the specified time.
+        """Register a function to run in intervals of the specified time.
 
-            Note: The function will run in intervals every time the amount of time has occurred.
+        note:: The function will run in intervals every time the amount of time has occurred.
+
         :param mod_name: The name of the mod registering this listener.
         :param milliseconds: The amount of time in milliseconds that needs to pass until this function will be run again.
         """
@@ -100,10 +112,10 @@ class CommonIntervalEventRegistry(CommonService):
 
     @staticmethod
     def run_once(mod_name: str, milliseconds: int=1500) -> Callable[..., Any]:
-        """
-            Register a function to run once after the specified milliseconds.
+        """Register a function to run once after the specified milliseconds.
 
-            Note: The function will only run once.
+        note:: The function will only run once.
+
         :param mod_name: The name of the mod registering this listener.
         :param milliseconds: The amount of time in milliseconds that needs to pass until this function is run.
         """

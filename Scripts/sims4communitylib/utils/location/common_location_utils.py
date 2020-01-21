@@ -21,41 +21,49 @@ from sims4.math import Location
 
 
 class CommonLocationUtils:
-    """
-        Utilities for manipulating locations and lots.
+    """Utilities for manipulating locations and lots.
+
     """
 
     @staticmethod
     def get_zone_id(zone: Zone) -> int:
-        """ Retrieve the identifier of the specified Zone. """
+        """Retrieve the identifier of the specified Zone.
+
+        """
         return zone.id
 
     @staticmethod
     def get_current_zone() -> Zone:
-        """ Retrieve the current zone. """
+        """Retrieve the current zone.
+
+        """
         return services.current_zone()
 
     @staticmethod
     def get_current_zone_id() -> int:
-        """ Retrieve the current zone id. """
+        """Retrieve the current zone id.
+
+        """
         return services.current_zone_id()
 
     @staticmethod
     def get_current_lot() -> Lot:
-        """ Retrieve the current lot. """
+        """Retrieve the current lot.
+
+        """
         return CommonLocationUtils.get_current_zone().lot
 
     @staticmethod
     def is_location_outside_current_lot(location: Location) -> bool:
-        """
-            Determine if a location is outside of the current lot or not.
+        """Determine if a location is outside of the current lot or not.
+
         """
         return CommonLocationUtils.is_location_outside_lot(location, CommonLocationUtils.get_current_lot_id())
 
     @staticmethod
     def is_location_outside_lot(location: Location, lot_id: int) -> bool:
-        """
-            Determine if a location is outside of the Lot with the specified identifier.
+        """Determine if a location is outside of the Lot with the specified identifier.
+
         """
         try:
             return build_buy.is_location_outside(lot_id, location.transform.translation, location.level)
@@ -64,43 +72,43 @@ class CommonLocationUtils:
 
     @staticmethod
     def is_position_on_current_lot(position: Vector3) -> bool:
-        """
-            Determine if a sim is on the current lot.
+        """Determine if a sim is on the current lot.
+
         """
         return position is not None and services.active_lot().is_position_on_lot(position)
 
     @staticmethod
     def get_current_lot_id() -> int:
-        """
-            Retrieve the identifier for the Current Lot.
+        """Retrieve the identifier for the Current Lot.
+
         """
         return services.current_zone_id()
 
     @staticmethod
     def get_lot_traits(lot_id: int) -> Tuple[ZoneModifier]:
-        """
-            Retrieve the Lot Traits of a Lot with the specified identifier.
+        """Retrieve the Lot Traits of a Lot with the specified identifier.
+
         """
         return tuple(services.get_zone_modifier_service().get_zone_modifiers(lot_id))
 
     @staticmethod
     def get_lot_traits_of_current_lot() -> Tuple[ZoneModifier]:
-        """
-            Retrieve the Lot Traits of the Current Lot.
+        """Retrieve the Lot Traits of the Current Lot.
+
         """
         return CommonLocationUtils.get_lot_traits(CommonLocationUtils.get_current_lot_id())
 
     @staticmethod
     def current_lot_has_trait(lot_trait_id: int) -> bool:
-        """
-            Determine if the Current Lot has the specified Lot Trait.
+        """Determine if the Current Lot has the specified Lot Trait.
+
         """
         return CommonLocationUtils.current_lot_has_all_traits((lot_trait_id,))
 
     @staticmethod
     def current_lot_has_any_traits(lot_trait_ids: Tuple[int]) -> bool:
-        """
-            Determine if the Current Lot has any of the specified Lot Traits.
+        """Determine if the Current Lot has any of the specified Lot Traits.
+
         """
         current_lot_traits = CommonLocationUtils.get_lot_traits_of_current_lot()
         for current_lot_trait in current_lot_traits:
@@ -111,8 +119,8 @@ class CommonLocationUtils:
 
     @staticmethod
     def current_lot_has_all_traits(lot_trait_ids: Tuple[int]) -> bool:
-        """
-            Determine if the Current Lot has all of the specified Lot Traits.
+        """Determine if the Current Lot has all of the specified Lot Traits.
+
         """
         current_lot_traits = CommonLocationUtils.get_lot_traits_of_current_lot()
         for current_lot_trait in current_lot_traits:
@@ -123,22 +131,22 @@ class CommonLocationUtils:
 
     @staticmethod
     def get_current_venue_type() -> VenueTypes:
-        """
-            Retrieve the type of the current venue.
+        """Retrieve the type of the current venue.
+
         """
         return build_buy.get_current_venue(CommonLocationUtils.get_current_lot_id())
 
     @staticmethod
     def get_venue_of_current_lot() -> Venue:
-        """
-            Retrieve a Venue for the current lot.
+        """Retrieve a Venue for the current lot.
+
         """
         return CommonResourceUtils.load_instance(Types.VENUE, CommonLocationUtils.get_current_venue_type())
 
     @staticmethod
     def is_current_venue_residential() -> bool:
-        """
-            Determine if a venue is residential.
+        """Determine if a venue is residential.
+
         """
         venue_instance = CommonLocationUtils.get_venue_of_current_lot()
         if venue_instance is None:
@@ -148,8 +156,8 @@ class CommonLocationUtils:
 
     @staticmethod
     def current_venue_requires_player_greeting() -> bool:
-        """
-            Determine if the current venue requires player greeting.
+        """Determine if the current venue requires player greeting.
+
         """
         venue_instance = CommonLocationUtils.get_venue_of_current_lot()
         if venue_instance is None:
@@ -158,8 +166,8 @@ class CommonLocationUtils:
 
     @staticmethod
     def current_venue_allows_role_state_routing() -> bool:
-        """
-            Determine if the current venue allows routing for role states.
+        """Determine if the current venue allows routing for role states.
+
         """
         venue_instance = CommonLocationUtils.get_venue_of_current_lot()
         if venue_instance is None:

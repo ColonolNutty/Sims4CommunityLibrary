@@ -12,7 +12,9 @@ from zone import Zone
 
 
 class S4CLZoneSaveEvent(CommonEvent):
-    """ An Event that Occurs upon zone save. """
+    """An Event that Occurs upon zone save.
+
+    """
     def __init__(self, zone: Zone, save_slot_data: Any=None, game_loaded: bool=False, game_loading: bool=False):
         self._zone = zone
         self._save_slot_data = save_slot_data
@@ -21,20 +23,28 @@ class S4CLZoneSaveEvent(CommonEvent):
 
     @property
     def zone(self) -> Zone:
-        """ The zone being saved. """
+        """The zone being saved.
+
+        """
         return self._zone
 
     @property
     def save_slot_data(self) -> Any:
-        """ Data pertaining to the save slot. """
+        """Data pertaining to the save slot.
+
+        """
         return self._save_slot_data
 
     @property
     def game_loaded(self) -> bool:
-        """ Determine if the game has loaded. """
+        """Determine if the game has loaded.
+
+        """
         return self._game_loaded
 
     @property
     def game_loading(self) -> bool:
-        """ Determine if the game is loading. """
+        """Determine if the game is loading.
+
+        """
         return self._game_loading

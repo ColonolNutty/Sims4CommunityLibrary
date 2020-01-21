@@ -21,8 +21,8 @@ log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'common_
 
 
 class CommonBasicNotification:
-    """
-        Use to create a basic notification.
+    """Use to create a basic notification.
+
     """
     def __init__(
         self,
@@ -34,8 +34,8 @@ class CommonBasicNotification:
         information_level: UiDialogNotification.UiDialogNotificationLevel=UiDialogNotification.UiDialogNotificationLevel.SIM,
         expand_behavior: UiDialogNotification.UiDialogNotificationExpandBehavior=UiDialogNotification.UiDialogNotificationExpandBehavior.USER_SETTING
     ):
-        """
-            Create a notification
+        """Create a notification.
+
         :param title_identifier: A decimal identifier of the title text.
         :param description_identifier: A decimal identifier of the description text.
         :param title_tokens: Tokens to format into the title.
@@ -54,8 +54,8 @@ class CommonBasicNotification:
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def show(self, icon: IconInfoData=None, secondary_icon: IconInfoData=None):
-        """
-            Show the notification to the player.
+        """Show the notification to the player.
+
         """
         _notification = self._create_dialog()
         if _notification is None:

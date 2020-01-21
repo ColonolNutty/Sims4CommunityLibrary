@@ -9,7 +9,9 @@ from sims4communitylib.mod_support.common_mod_info import CommonModInfo
 
 
 class ModInfo(CommonModInfo):
-    """ Contains details related to the mod itself. """
+    """Contains details related to the mod itself.
+
+    """
     _FILE_PATH: str = str(__file__)
 
     @property

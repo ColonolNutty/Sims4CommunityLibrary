@@ -9,7 +9,9 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonTraitId(CommonEnumIntBase):
-    """ Identifiers for vanilla sim traits """
+    """Identifiers for vanilla sim traits.
+
+    """
     ACTIVE = 27419
     ACTOR_CAREER_HIDDEN_AUDITION_AWAITING_AUDITION = 198564
     ACTOR_CAREER_HIDDEN_CHECKPOINTS_AUDITION_SUCCESS_COMMERCIAL = 198583

@@ -12,7 +12,9 @@ from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
 class S4CLSimRemovedOccultTypeEvent(CommonEvent):
-    """ An event that occurs upon an Occult Type being removed from a Sim. """
+    """An event that occurs upon an Occult Type being removed from a Sim.
+
+    """
     def __init__(self, sim_info: SimInfo, occult_type: OccultType, occult_tracker: OccultTracker):
         self._sim_info = sim_info
         self._occult_type = occult_type
@@ -20,15 +22,21 @@ class S4CLSimRemovedOccultTypeEvent(CommonEvent):
 
     @property
     def sim_info(self) -> SimInfo:
-        """ The SimInfo of a Sim. """
+        """The SimInfo of a Sim.
+
+        """
         return self._sim_info
 
     @property
     def occult_type(self) -> OccultType:
-        """ The type of occult that has been removed from the Sim. """
+        """The type of occult that has been removed from the Sim.
+
+        """
         return self._occult_type
 
     @property
     def occult_tracker(self) -> OccultTracker:
-        """ The tracker that keeps track of the occult status of a Sim. """
+        """The tracker that keeps track of the occult status of a Sim.
+
+        """
         return self._occult_tracker

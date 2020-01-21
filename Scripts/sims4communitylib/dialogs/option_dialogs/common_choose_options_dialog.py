@@ -16,7 +16,9 @@ from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
 class CommonChooseOptionsDialog(CommonChooseOptionDialog):
-    """ A dialog that displays a list of options. """
+    """A dialog that displays a list of options.
+
+    """
     def show(
         self,
         *_,
@@ -25,7 +27,9 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
         max_selectable: int=1,
         **__
     ):
-        """ Show the dialog. """
+        """Show the dialog.
+
+        """
         @CommonExceptionHandler.catch_exceptions(self.mod_identity.name, fallback_return=False)
         def _on_chosen(chosen_options: Union[Tuple[CommonDialogOption], None], outcome: CommonChoiceOutcome) -> Any:
             if chosen_options is None or len(chosen_options) == 0 or CommonChoiceOutcome.is_error_or_cancel(outcome):

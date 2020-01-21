@@ -10,5 +10,7 @@ from sims4communitylib.classes.interactions.common_interaction import CommonInte
 
 
 class CommonImmediateSuperInteraction(CommonInteraction, ImmediateSuperInteraction):
-    """ A base for accessing immediate super interaction hooks. """
+    """A base for accessing immediate super interaction hooks.
+
+    """
     pass

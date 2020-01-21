@@ -14,13 +14,13 @@ from sims4communitylib.utils.common_io_utils import CommonIOUtils
 
 
 class CommonJSONIOUtils:
-    """
-        Utilities for handling reading/writing JSON data to and from files.
+    """Utilities for handling reading/writing JSON data to and from files.
+
     """
     @staticmethod
     def write_to_file(file_path: str, obj: Any, buffering: int=1, encoding: str= 'utf-8') -> bool:
-        """
-            Serialize an object to a file as JSON.
+        """Serialize an object to a file as JSON.
+
         :param file_path: The file to write to.
         :param obj: The object to write as JSON.
         :param encoding: See the 'open' function documentation for more details.
@@ -39,8 +39,8 @@ class CommonJSONIOUtils:
 
     @staticmethod
     def load_from_file(file_path: str, buffering: int=1, encoding: str= 'utf-8') -> Union[Any, None]:
-        """
-            Deserialize an object from a JSON file.
+        """Deserialize an object from a JSON file.
+
         :param file_path: The file to read from.
         :param encoding: See the 'open' function documentation for more details.
         :param buffering: See the 'open' function documentation for more details.

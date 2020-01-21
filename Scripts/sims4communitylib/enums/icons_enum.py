@@ -9,7 +9,9 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonIconId(CommonEnumIntBase):
-    """ Identifiers for vanilla and Sims 4 Community Library icons. """
+    """Identifiers for vanilla and Sims 4 Community Library icons.
+
+    """
     # S4CL
     S4CLIB_ARROW_RIGHT_ICON = 3589997896388655139
     S4CLIB_ARROW_NAVIGATE_INTO_ICON = 17672018034831121750

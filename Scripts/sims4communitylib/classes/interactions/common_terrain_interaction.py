@@ -11,5 +11,7 @@ from sims4communitylib.classes.interactions.common_interaction import CommonInte
 
 
 class CommonTerrainInteraction(CommonInteraction, TravelMixin, TerrainInteractionMixin, ImmediateSuperInteraction):
-    """ A base for accessing terrain interaction hooks. """
+    """A base for accessing terrain interaction hooks.
+
+    """
     pass

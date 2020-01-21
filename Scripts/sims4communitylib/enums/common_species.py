@@ -12,7 +12,9 @@ from sims.sim_info import SimInfo
 
 # noinspection PyUnresolvedReferences
 class CommonSpecies(enum.Int):
-    """ Custom Species enum containing all species (including extended species). """
+    """Custom Species enum containing all species (including extended species).
+
+    """
     INVALID = 0
     HUMAN = 1
     SMALL_DOG = 2
@@ -21,7 +23,9 @@ class CommonSpecies(enum.Int):
 
     @staticmethod
     def get_species(sim_info: SimInfo) -> int:
-        """ Retrieve the CommonSpecies of a sim. Use this instead of CommonSpeciesUtils.get_species to determine a more specific species. """
+        """Retrieve the CommonSpecies of a sim. Use this instead of CommonSpeciesUtils.get_species to determine a more specific species.
+
+        """
         from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
         if CommonSpeciesUtils.is_human(sim_info):
             return CommonSpecies.HUMAN

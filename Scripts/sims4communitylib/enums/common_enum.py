@@ -9,8 +9,8 @@ from typing import Any, List, Union
 
 
 class CommonEnumMetaclass(type):
-    """
-        A common metaclass for all Enum metaclass types.
+    """A common metaclass for all Enum metaclass types.
+
     """
     def __new__(mcs, cls, bases, class_dict):
         obj_attrs = set(dir(type(cls, (object,), {})))
@@ -46,29 +46,29 @@ class CommonEnumMetaclass(type):
 
     @classmethod
     def get_enum_type(mcs) -> Union[type, None]:
-        """
-            Retrieve the expected enum type of this enum.
+        """Retrieve the expected enum type of this enum.
+
         :return: The expected enum type
         """
         return None
 
     def items(cls) -> List[Any]:
-        """
-            Retrieve all enums of this class
+        """Retrieve all enums of this class
+
         :return: A list of enums in this class
         """
         return [getattr(cls, name) for (name, value) in cls._members_.items()]
 
     def names(cls) -> List[str]:
-        """
-            Retrieve all names of all enums of this class
+        """Retrieve all names of all enums of this class
+
         :return: A list of strings
         """
         return list(cls._members_.keys())
 
     def values(cls) -> List[Any]:
-        """
-            Retrieve all names of all enums of this class
+        """Retrieve all names of all enums of this class
+
         :return: A list of strings
         """
         return list(cls._members_.values())

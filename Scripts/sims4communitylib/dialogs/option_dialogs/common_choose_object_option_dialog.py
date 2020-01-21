@@ -18,7 +18,9 @@ from ui.ui_dialog_picker import UiObjectPicker
 
 
 class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
-    """ A dialog that displays a list of options. """
+    """A dialog that displays a list of options.
+
+    """
     def __init__(
         self,
         title_identifier: Union[int, LocalizedString],
@@ -29,8 +31,8 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         mod_identity: ModInfo=None,
         per_page: int=25
     ):
-        """
-            Create a dialog to display a list of options.
+        """Create a dialog to display a list of options.
+
         :param title_identifier: A decimal identifier of the title text.
         :param description_identifier: A decimal identifier of the description text.
         :param title_tokens: Tokens to format into the title.
@@ -53,11 +55,15 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
 
     @property
     def log_identifier(self) -> str:
-        """ An identifier for the Log of this class. """
+        """An identifier for the Log of this class.
+
+        """
         return 's4cl_choose_object_option_dialog'
 
     def add_option(self, option: CommonDialogObjectOption):
-        """ Add an option to the dialog. """
+        """Add an option to the dialog.
+
+        """
         return super().add_option(option)
 
     def show(
@@ -66,8 +72,8 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         page: int=1,
         sim_info: SimInfo=None
     ):
-        """
-            Show the dialog and invoke the callbacks upon the player making a choice.
+        """Show the dialog and invoke the callbacks upon the player making a choice.
+
         :param picker_type: The layout of the dialog.
         :param page: The page to display. Ignored if there is only one page of choices.
         :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim.

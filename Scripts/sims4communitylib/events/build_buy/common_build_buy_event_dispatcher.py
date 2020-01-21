@@ -15,8 +15,8 @@ from zone import Zone
 
 
 class CommonBuildBuyEventDispatcherService(CommonService):
-    """
-        A service for dispatching Build/Buy events.
+    """A service for dispatching Build/Buy events.
+
     """
 
     def _on_build_buy_enter(self, zone: Zone, *_, **__):

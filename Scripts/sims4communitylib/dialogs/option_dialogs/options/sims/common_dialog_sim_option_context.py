@@ -9,7 +9,9 @@ from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_conte
 
 
 class CommonDialogSimOptionContext(CommonDialogOptionContext):
-    """ A context used by CommonDialogSimOption that contains customization of the option. """
+    """A context used by CommonDialogSimOption that contains customization of the option.
+
+    """
     def __init__(
         self,
         is_enabled: bool=True,

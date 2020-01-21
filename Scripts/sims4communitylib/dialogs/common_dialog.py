@@ -15,8 +15,8 @@ from ui.ui_dialog import UiDialogBase
 
 
 class CommonDialog(HasLog):
-    """
-        Create a dialog
+    """Create a dialog
+
     """
     def __init__(
         self,
@@ -26,8 +26,8 @@ class CommonDialog(HasLog):
         description_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
-        """
-            Create a dialog
+        """Create a dialog
+
         :param title_identifier: A decimal identifier of the title text.
         :param description_identifier: A decimal identifier of the description text.
         :param title_tokens: Tokens to format into the title.
@@ -40,12 +40,14 @@ class CommonDialog(HasLog):
 
     @property
     def mod_identity(self) -> CommonModIdentity:
-        """ The Identity of the mod that owns this class. """
+        """The Identity of the mod that owns this class.
+
+        """
         return self._mod_identity or ModInfo.get_identity()
 
     def show(self, *_, **__):
-        """
-            Show the dialog
+        """Show the dialog
+
         """
         raise NotImplementedError('\'{}\' not implemented.'.format(self.__class__.show.__name__))
 

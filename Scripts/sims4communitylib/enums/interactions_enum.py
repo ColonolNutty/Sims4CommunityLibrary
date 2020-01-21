@@ -9,7 +9,9 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonInteractionId(CommonEnumIntBase):
-    """ Identifiers for vanilla interactions. """
+    """Identifiers for vanilla interactions.
+
+    """
     PICK_UP_SIM = 141018
     PICK_UP_SIM_REVERSED = 141925
     CARRY_PICK_UP_TO_BED = 156217

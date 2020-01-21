@@ -18,14 +18,16 @@ from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
 class CommonChooseOptionDialog(HasLog):
-    """ A dialog that displays a list of options. """
+    """A dialog that displays a list of options.
+
+    """
     def __init__(
         self,
         internal_dialog: CommonChooseDialog,
         on_close: Callable[..., Any]=CommonFunctionUtils.noop
     ):
-        """
-            Create a dialog to display a list of options.
+        """Create a dialog to display a list of options.
+
         :param on_close: A callback invoked upon the dialog closing.
         """
         super().__init__()
@@ -35,22 +37,30 @@ class CommonChooseOptionDialog(HasLog):
 
     @property
     def mod_identity(self) -> CommonModIdentity:
-        """ The Identity of the mod that owns this class. """
+        """The Identity of the mod that owns this class.
+
+        """
         return self._internal_dialog.mod_identity
 
     @property
     def option_count(self) -> int:
-        """ Determine the number of options within this dialog. """
+        """Determine the number of options within this dialog.
+
+        """
         return len(self._options)
 
     @property
     def title(self) -> LocalizedString:
-        """ The title of the dialog. """
+        """The title of the dialog.
+
+        """
         return self._internal_dialog.title
 
     @property
     def description(self) -> LocalizedString:
-        """ The description of the dialog. """
+        """The description of the dialog.
+
+        """
         return self._internal_dialog.description
 
     @property
@@ -58,7 +68,9 @@ class CommonChooseOptionDialog(HasLog):
         return self.__internal_dialog
 
     def has_options(self) -> bool:
-        """ Determine if the dialog has selectable options. """
+        """Determine if the dialog has selectable options.
+
+        """
         try:
             return self.option_count > 0
         except Exception as ex:
@@ -66,7 +78,9 @@ class CommonChooseOptionDialog(HasLog):
         return False
 
     def add_option(self, option: CommonDialogOption):
-        """ Add an option to the dialog. """
+        """Add an option to the dialog.
+
+        """
         try:
             if self._internal_dialog is None or not hasattr(self._internal_dialog, 'add_row'):
                 return
@@ -76,7 +90,9 @@ class CommonChooseOptionDialog(HasLog):
             CommonExceptionHandler.log_exception(self.mod_identity.name, 'add_option', exception=ex)
 
     def show(self, *_, **__):
-        """ Show the dialog. """
+        """Show the dialog.
+
+        """
         try:
             def _on_chosen(chosen_option: CommonDialogOption, outcome: CommonChoiceOutcome) -> bool:
                 if chosen_option is None or CommonChoiceOutcome.is_error_or_cancel(outcome):
@@ -88,5 +104,7 @@ class CommonChooseOptionDialog(HasLog):
             CommonExceptionHandler.log_exception(self.mod_identity.name, 'show', exception=ex)
 
     def close(self) -> bool:
-        """ Close the dialog. """
+        """Close the dialog.
+
+        """
         return self._on_close()

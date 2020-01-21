@@ -12,11 +12,13 @@ from sims4communitylib.enums.types.component_types import CommonComponentType
 
 
 class CommonComponentUtils:
-    """ Utilities for handling components of component containers. """
+    """Utilities for handling components of component containers.
+
+    """
     @staticmethod
     def has_component(component_container: ComponentContainer, component_type: CommonComponentType) -> bool:
-        """
-            Determine if a ComponentContainer has a component of the specified type.
+        """Determine if a ComponentContainer has a component of the specified type.
+
         :param component_container: The ComponentContainer to check.
         :param component_type: The type of component to locate.
         :return: True if the ComponentContainer contains a component of the specified type.
@@ -27,8 +29,8 @@ class CommonComponentUtils:
 
     @staticmethod
     def get_component(component_container: ComponentContainer, component_type: CommonComponentType, add_dynamic: bool=False) -> Union[Component, None]:
-        """
-            Retrieve a component from a ComponentContainer.
+        """Retrieve a component from a ComponentContainer.
+
         :param component_container: The ComponentContainer to retrieve a component from.
         :param component_type: The type of component being retrieved.
         :param add_dynamic: Whether or not to add the component dynamically.
@@ -42,8 +44,8 @@ class CommonComponentUtils:
 
     @staticmethod
     def add_dynamic_component(component_container: ComponentContainer, component_type: CommonComponentType) -> Union[Component, None]:
-        """
-            Add a dynamic component to a ComponentContainer.
+        """Add a dynamic component to a ComponentContainer.
+
         :param component_container: The ComponentContainer to add to.
         :param component_type: The type of component being added.
         :return: The added Component or None

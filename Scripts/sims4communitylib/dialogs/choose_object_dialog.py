@@ -29,8 +29,8 @@ from ui.ui_dialog_picker import UiObjectPicker, ObjectPickerRow
 
 
 class CommonChooseObjectDialog(CommonChooseDialog):
-    """
-        Create a dialog that prompts the player to choose an object.
+    """Create a dialog that prompts the player to choose an object.
+
     """
     def __init__(
         self,
@@ -42,8 +42,8 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         per_page: int=25,
         mod_identity: CommonModIdentity=None
     ):
-        """
-            Create a dialog for displaying a list of objects.
+        """Create a dialog for displaying a list of objects.
+
         :param title_identifier: A decimal identifier of the title text.
         :param description_identifier: A decimal identifier of the description text.
         :param choices: The choices to display in the dialog.
@@ -65,18 +65,22 @@ class CommonChooseObjectDialog(CommonChooseDialog):
 
     @property
     def log_identifier(self) -> str:
-        """ An identifier for the Log of this class. """
+        """An identifier for the Log of this class.
+
+        """
         return 's4cl_choose_object_dialog'
 
     @property
     def rows(self) -> Tuple[ObjectPickerRow]:
-        """ The rows to display in the dialog. """
+        """The rows to display in the dialog.
+
+        """
         result: Tuple[ObjectPickerRow] = super().rows
         return result
 
     def add_row(self, choice: ObjectPickerRow):
-        """
-            Add a row to the dialog.
+        """Add a row to the dialog.
+
         """
         super().add_row(choice)
 
@@ -87,8 +91,8 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         page: int=1,
         sim_info: SimInfo=None
     ):
-        """
-            Show the dialog and invoke the callbacks upon the player making a choice.
+        """Show the dialog and invoke the callbacks upon the player making a choice.
+
         :param on_chosen: A callback invoked upon the player choosing something from the list.
         :param picker_type: The layout of the dialog.
         :param page: The page to display. Ignored if there is only one page of choices.

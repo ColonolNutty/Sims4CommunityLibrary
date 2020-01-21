@@ -15,9 +15,13 @@ from sims4communitylib.utils.localization.common_localized_string_colors import 
 
 
 class CommonLocalizationUtils:
-    """ Utilities for handling localization strings """
+    """Utilities for handling localization strings.
+
+    """
     class LocalizedTooltip(TunableLocalizedStringFactory._Wrapper):
-        """ A LocalizedTooltip used when displaying tooltips. """
+        """A LocalizedTooltip used when displaying tooltips.
+
+        """
         def __init__(self, string_id: Union[int, str, LocalizedString], *tokens: Any):
             super().__init__(string_id)
             self._tokens = tokens
@@ -27,8 +31,8 @@ class CommonLocalizationUtils:
 
     @staticmethod
     def create_localized_tooltip(tooltip_text: Union[int, str, LocalizedString], tooltip_tokens: Tuple[Any]=()) -> 'LocalizedTooltip':
-        """
-            Create a LocalizedTooltip use this when you wish to display a tooltip on various things.
+        """Create a LocalizedTooltip use this when you wish to display a tooltip on various things.
+
         :param tooltip_text: The text that will be displayed.
         :param tooltip_tokens: A collection of objects to format into the localized string. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few)
         :return: An object of type LocalizedTooltip
@@ -39,8 +43,8 @@ class CommonLocalizationUtils:
 
     @staticmethod
     def create_localized_string(identifier: Union[int, str, LocalizedString], tokens: Tuple[Any]=(), localize_tokens: bool=True, text_color: CommonLocalizedStringColor=CommonLocalizedStringColor.DEFAULT) -> LocalizedString:
-        """
-            Create a LocalizedString formatted with the specified tokens.
+        """Create a LocalizedString formatted with the specified tokens.
+
         :param identifier: An identifier to locate a LocalizedString with, text that will be turned into a LocalizedString, or a LocalizedString itself.
         :param tokens: A collection of objects to format into the localized string. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few)
         :param localize_tokens: If True, the specified tokens will be localized. If False, the specified tokens will be formatted into the LocalizedString as they are. Default is True
@@ -66,8 +70,8 @@ class CommonLocalizationUtils:
 
     @staticmethod
     def create_from_string(string_text: str) -> LocalizedString:
-        """
-            Create a LocalizedString from a string.
+        """Create a LocalizedString from a string.
+
         :param string_text: The string to localize. The resulting LocalizedString will be '{0.String}'
         :return: A LocalizedString created from the specified string.
         """
@@ -75,8 +79,8 @@ class CommonLocalizationUtils:
 
     @staticmethod
     def create_from_int(identifier: int, *tokens: Any) -> LocalizedString:
-        """
-            Locate a LocalizedString by an identifier and format tokens into it.
+        """Locate a LocalizedString by an identifier and format tokens into it.
+
         :param identifier: A decimal number that identifies an existing LocalizedString.
         :param tokens: A collection of objects to format into the LocalizedString. (Example types: LocalizedString, str, int, etc.)
         :return: A LocalizedString with the specified tokens formatted into it.
@@ -85,8 +89,8 @@ class CommonLocalizationUtils:
 
     @staticmethod
     def colorize(localized_string: LocalizedString, text_color: CommonLocalizedStringColor=CommonLocalizedStringColor.DEFAULT) -> LocalizedString:
-        """
-            Color the text of a LocalizedString with the specified color.
+        """Color the text of a LocalizedString with the specified color.
+
         :param localized_string: The LocalizedString to set the text color of.
         :param text_color: The text will become this color.
         :return: A LocalizedString with text in the specified color.

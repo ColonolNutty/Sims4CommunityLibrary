@@ -26,20 +26,23 @@ log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'choose_
 
 
 class CommonChooseItemResult(CommonEnumIntBase):
-    """ Different outcomes upon the player choosing or not choosing items in the dialog. """
+    """Different outcomes upon the player choosing or not choosing items in the dialog.
+
+    """
     DIALOG_CANCELLED = 0
     ITEM_CHOSEN = 1
     ITEM_CHOSEN_WITH_ERROR = 2
 
     @staticmethod
     def is_error(result: 'CommonChooseItemResult'):
-        """ Determine whether a result is an error or not. """
+        """Determine whether a result is an error or not.
+
+        """
         return result == CommonChooseItemResult.DIALOG_CANCELLED or result == CommonChooseItemResult.ITEM_CHOSEN_WITH_ERROR
 
 
 class CommonChooseItemDialog:
-    """
-        Obsolete: Please use CommonChooseObjectDialog instead.
+    """Obsolete: Please use CommonChooseObjectDialog instead.
         Use to create a dialog that prompts the player to choose a single item from a list of items.
     """
     def __init__(self,
@@ -48,8 +51,8 @@ class CommonChooseItemDialog:
                  list_items: Tuple[ObjectPickerRow],
                  title_tokens: Tuple[Any]=(),
                  description_tokens: Tuple[Any]=()):
-        """
-            Create a dialog displaying a list of items to choose from.
+        """Create a dialog displaying a list of items to choose from.
+
         :param title_identifier: A decimal identifier of the title text.
         :param description_identifier: A decimal identifier of the description text.
         :param list_items: The items to display in the dialog.
@@ -62,16 +65,16 @@ class CommonChooseItemDialog:
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def add_item(self, item: ObjectPickerRow):
-        """
-            Add a new item to choose from.
+        """Add a new item to choose from.
+
         :param item: The item to add.
         """
         self.list_items += (item,)
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def show(self, on_item_chosen: Callable[[Any, CommonChooseItemResult], Any]=CommonFunctionUtils.noop, picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT):
-        """
-            Show the dialog and invoke the callbacks upon the player selecting an item.
+        """Show the dialog and invoke the callbacks upon the player selecting an item.
+
         :param on_item_chosen: Invoked upon the player choosing an item from the list.
         :param picker_type: Determines how the items appear in the dialog.
         """
