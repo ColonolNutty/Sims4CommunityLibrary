@@ -11,7 +11,7 @@ from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegi
 
 
 class HasLog(HasModIdentity):
-    """Base class for classes with a log.
+    """An inheritable class that will add a log and mod identity to a class.
 
     """
     def __init__(self):
@@ -33,6 +33,7 @@ class HasLog(HasModIdentity):
     def log(self) -> CommonLog:
         """The Log for this class.
 
+        .. note:: It uses the `mod_identity` and `log_identifier` when logging.
         """
         if self._log is None:
             mod_name = 'Missing Mod Name'
@@ -43,7 +44,11 @@ class HasLog(HasModIdentity):
 
     @property
     def log_identifier(self) -> str:
-        """An identifier for the Log of this class.
+        """The string identifier for the Log of this class.
 
+        .. note:: This is the string that will appear when logging messages using this logger
+
+        :return: The identifier for the log
+        :rtype: str
         """
         return self.__class__.__name__

@@ -31,6 +31,71 @@ from ui.ui_dialog_picker import UiObjectPicker, ObjectPickerRow
 class CommonChooseObjectDialog(CommonChooseDialog):
     """Create a dialog that prompts the player to choose an object.
 
+    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_choose_object_dialog` in the in-game console.
+
+    .. highlight:: python
+    .. code-block:: python
+
+        def _common_testing_show_choose_object_dialog():
+
+            def _on_chosen(choice: str, outcome: CommonChoiceOutcome):
+                pass
+
+            try:
+                # LocalizedStrings within other LocalizedStrings
+                title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+                description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+                from sims4communitylib.utils.common_icon_utils import CommonIconUtils
+                options = [
+                    ObjectPickerRow(
+                        option_id=1,
+                        name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
+                        row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE),
+                        row_tooltip=None,
+                        icon=CommonIconUtils.load_checked_square_icon(),
+                        tag='Value 1'
+                    ),
+                    ObjectPickerRow(
+                        option_id=2,
+                        name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
+                        row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
+                        row_tooltip=None,
+                        icon=CommonIconUtils.load_arrow_navigate_into_icon(),
+                        tag='Value 2'
+                    ),
+                    ObjectPickerRow(
+                        option_id=3,
+                        name=CommonLocalizationUtils.create_localized_string('Value 3'),
+                        row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
+                        row_tooltip=None,
+                        icon=CommonIconUtils.load_arrow_navigate_into_icon(),
+                        tag='Value 3'
+                    )
+                ]
+                dialog = CommonChooseObjectDialog(
+                    CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                    CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                    tuple(options),
+                    title_tokens=title_tokens,
+                    description_tokens=description_tokens,
+                    per_page=2
+                )
+                dialog.show(on_chosen=_on_chosen)
+            except Exception as ex:
+                CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to show dialog', exception=ex)
+
+    :param title_identifier: The title to display in the dialog.
+    :type title_identifier: Union[int, LocalizedString]
+    :param description_identifier: The description to display in the dialog.
+    :type description_identifier: Union[int, LocalizedString]
+    :param title_tokens: Tokens to format into the title.
+    :type title_tokens: Iterator[Any], optional
+    :param description_tokens: Tokens to format into the description.
+    :type description_tokens: Iterator[Any], optional
+    :param per_page: The number of rows to display per page. If the number of rows (including rows added after creation) exceeds this value, pagination will be added.
+    :type per_page: int
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
+    :type mod_identity: CommonModIdentity, optional
     """
     def __init__(
         self,
@@ -42,15 +107,6 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         per_page: int=25,
         mod_identity: CommonModIdentity=None
     ):
-        """Create a dialog for displaying a list of objects.
-
-        :param title_identifier: A decimal identifier of the title text.
-        :param description_identifier: A decimal identifier of the description text.
-        :param choices: The choices to display in the dialog.
-        :param title_tokens: Tokens to format into the title.
-        :param description_tokens: Tokens to format into the description.
-        :param per_page: The number of rows to display per page. If the number of rows (including rows added after creation) exceeds this value, pagination will be added.
-        """
         super().__init__(
             title_identifier,
             description_identifier,
@@ -63,24 +119,26 @@ class CommonChooseObjectDialog(CommonChooseDialog):
             raise AssertionError('\'per_page\' must be greater than zero.')
         self._per_page = per_page
 
+    # noinspection PyMissingOrEmptyDocstring
     @property
     def log_identifier(self) -> str:
-        """An identifier for the Log of this class.
-
-        """
         return 's4cl_choose_object_dialog'
 
     @property
     def rows(self) -> Tuple[ObjectPickerRow]:
-        """The rows to display in the dialog.
+        """The choices available in the dialog.
 
+        :return: A collection of choices.
+        :rtype: Tuple[ObjectPickerRow]
         """
         result: Tuple[ObjectPickerRow] = super().rows
         return result
 
     def add_row(self, choice: ObjectPickerRow):
-        """Add a row to the dialog.
+        """Add a choice to the dialog.
 
+        :param choice: A choice to add to the dialog
+        :type choice: ObjectPickerRow
         """
         super().add_row(choice)
 
@@ -94,9 +152,13 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         """Show the dialog and invoke the callbacks upon the player making a choice.
 
         :param on_chosen: A callback invoked upon the player choosing something from the list.
+        :type on_chosen: Callable[[Any, CommonChoiceOutcome]
         :param picker_type: The layout of the dialog.
+        :type picker_type: UiObjectPicker.UiObjectPickerObjectPickerType
         :param page: The page to display. Ignored if there is only one page of choices.
-        :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim.
+        :type page: int
+        :param sim_info: The Sim that will appear in the dialog image. The default Sim is the Active Sim.
+        :type sim_info: SimInfo
         """
         try:
             return self._show(

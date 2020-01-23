@@ -34,16 +34,31 @@ class CommonChooseItemResult(CommonEnumIntBase):
     ITEM_CHOSEN_WITH_ERROR = 2
 
     @staticmethod
-    def is_error(result: 'CommonChooseItemResult'):
+    def is_error(result: 'CommonChooseItemResult') -> bool:
         """Determine whether a result is an error or not.
 
+        :param result: The result to check
+        :type result: CommonChooseItemResult
+        :return: True if the result is an error or cancelled
+        :rtype: bool
         """
         return result == CommonChooseItemResult.DIALOG_CANCELLED or result == CommonChooseItemResult.ITEM_CHOSEN_WITH_ERROR
 
 
 class CommonChooseItemDialog:
-    """Obsolete: Please use CommonChooseObjectDialog instead.
+    """Obsolete: Please use :class:`.CommonChooseObjectDialog` instead.
         Use to create a dialog that prompts the player to choose a single item from a list of items.
+
+    :param title_identifier: A decimal identifier of the title text.
+    :type title_identifier: Union[int, LocalizedString]
+    :param description_identifier: A decimal identifier of the description text.
+    :type description_identifier: Union[int, LocalizedString]
+    :param list_items: The items to display in the dialog.
+    :type list_items: Tuple[ObjectPickerRow]
+    :param title_tokens: Tokens to format into the title.
+    :type title_tokens: Tuple[Any]
+    :param description_tokens: Tokens to format into the description.
+    :type description_tokens: Tuple[Any]
     """
     def __init__(self,
                  title_identifier: Union[int, LocalizedString],
@@ -51,14 +66,6 @@ class CommonChooseItemDialog:
                  list_items: Tuple[ObjectPickerRow],
                  title_tokens: Tuple[Any]=(),
                  description_tokens: Tuple[Any]=()):
-        """Create a dialog displaying a list of items to choose from.
-
-        :param title_identifier: A decimal identifier of the title text.
-        :param description_identifier: A decimal identifier of the description text.
-        :param list_items: The items to display in the dialog.
-        :param title_tokens: Tokens to format into the title.
-        :param description_tokens: Tokens to format into the description.
-        """
         self.title = CommonLocalizationUtils.create_localized_string(title_identifier, tokens=title_tokens)
         self.description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=description_tokens)
         self.list_items = list_items
