@@ -25,11 +25,15 @@ from singletons import DEFAULT
 class CommonInteraction(Interaction, HasLog):
     """An inheritable class that provides a way to create Custom Interactions.
 
-    note: It is recommended to inherit from one of the following classes instead of :class:`CommonInteraction` directly:
+    .. note::
+
+       It is recommended to inherit from one of the following classes instead of :class:`CommonInteraction` directly:
+
        * :class:`CommonImmediateSuperInteraction`
        * :class:`CommonMixerInteraction`
        * :class:`CommonSocialMixerInteraction`
        * :class:`CommonSuperInteraction`
+
        * :class:`CommonTerrainInteraction`
 
     """
@@ -140,7 +144,8 @@ class CommonInteraction(Interaction, HasLog):
     def create_test_result(result: bool, reason: str=None, text_tokens: Union[Tuple[Any], List[Any], Set[Any]]=(), tooltip: Union[int, str, CommonLocalizationUtils.LocalizedTooltip]=None, icon=None, influence_by_active_mood: bool=False) -> TestResult:
         """Create a TestResult with the specified information.
         TestResult is an object used to disable, hide, or display tooltips on interactions.
-        See :func:`~sims4communitylib.classes.interactions.common_interactions.CommonInteraction.on_test` for more information.
+
+        See :func:`~on_test` for more information.
 
         :param result: The result of a test. True for passed, False for failed.
         :type result: bool
@@ -154,7 +159,7 @@ class CommonInteraction(Interaction, HasLog):
         :type icon: _resourceman.Key, optional
         :param influence_by_active_mood: If true, the Test Result will be influenced by the active mood.
         :type influence_by_active_mood: bool, optional
-        :return: The desired outcome for a call of :func:`~sims4communitylib.classes.interactions.common_interactions.CommonInteraction.on_test`, default is `TestResult.NONE`
+        :return: The desired outcome for a call of :func:`~on_test`, default is `TestResult.NONE`
         :rtype: TestResult
         """
         return TestResult(result, reason, *text_tokens, tooltip=tooltip, icon=icon, influence_by_active_mood=influence_by_active_mood)
