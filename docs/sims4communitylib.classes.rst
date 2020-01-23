@@ -1,9 +1,5 @@
-Inheritable Classes
+Options
 =================================
-
-.. toctree::
-
-   sims4communitylib.classes.interactions
 
 `CommonOption`
 ----------------------------------------

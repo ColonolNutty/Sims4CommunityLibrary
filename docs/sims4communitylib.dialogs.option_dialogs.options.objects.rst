@@ -1,6 +1,18 @@
 Choose Object Dialogs
 =================================================================
 
+`CommonChooseObjectOptionDialog`
+---------------------------------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.dialogs.option_dialogs.common_choose_object_option_dialog.CommonChooseObjectOptionDialog
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+***********************************
+Choose Object Dialog Options (Rows)
+***********************************
+
 `CommonDialogActionOption`
 -----------------------------------------------------------------------------------------------
 
@@ -9,18 +21,18 @@ Choose Object Dialogs
    :undoc-members:
    :show-inheritance:
 
-`CommonDialogBranchOption`
+`CommonDialogOpenDialogOption`
 -----------------------------------------------------------------------------------------------
 
-.. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_branch_option.CommonDialogBranchOption
+.. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_branch_option.CommonDialogOpenDialogOption
    :members:
    :undoc-members:
    :show-inheritance:
 
-`CommonDialogInputOption`
+`CommonDialogInputFloatOption`
 ----------------------------------------------------------------------------------------------
 
-.. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_input_option.CommonDialogInputOption
+.. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_input_option.CommonDialogInputFloatOption
    :members:
    :undoc-members:
    :show-inheritance:

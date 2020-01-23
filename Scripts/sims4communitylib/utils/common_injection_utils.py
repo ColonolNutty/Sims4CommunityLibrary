@@ -65,22 +65,27 @@ class CommonInjectionUtils:
         """
 
         def _function_wrapper(original_function, new_function):
-
-            @wraps(original_function)
-            def _wrapped_function(*args, **kwargs):
-                try:
-                    return new_function(original_function, *args, **kwargs)
-                except Exception as ex:
-                    # noinspection PyBroadException
+            # noinspection PyBroadException
+            try:
+                @wraps(original_function)
+                def _wrapped_function(*args, **kwargs):
                     try:
-                        from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-                        CommonExceptionHandler.log_exception(mod_identity.name, 'Error occurred while injecting into function \'{}\' of class'.format(new_function.__name__, target_object.__name__), exception=ex)
-                    except Exception:
-                        pass
-                    return original_function(*args, **kwargs)
-            if inspect.ismethod(original_function):
-                return classmethod(_wrapped_function)
-            return _wrapped_function
+                        return new_function(original_function, *args, **kwargs)
+                    except Exception as ex:
+                        # noinspection PyBroadException
+                        try:
+                            from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+                            CommonExceptionHandler.log_exception(mod_identity.name, 'Error occurred while injecting into function \'{}\' of class'.format(new_function.__name__, target_object.__name__), exception=ex)
+                        except Exception:
+                            pass
+                        return original_function(*args, **kwargs)
+                if inspect.ismethod(original_function):
+                    return classmethod(_wrapped_function)
+                return _wrapped_function
+            except:
+                def _func(*_, **__):
+                    pass
+                return _func
 
         def _injected(wrap_function):
             original_function = getattr(target_object, str(target_function_name))

@@ -1,6 +1,27 @@
 Choose Sim Option Dialog Options
 ==============================================================
 
+
+`CommonChooseSimOptionDialog`
+------------------------------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.dialogs.option_dialogs.common_choose_sim_option_dialog.CommonChooseSimOptionDialog
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`CommonChooseSimsOptionDialog`
+-------------------------------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.dialogs.option_dialogs.common_choose_sims_option_dialog.CommonChooseSimsOptionDialog
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
+Choose Sim Dialog Options (Rows)
+*********************
+
 `CommonDialogSimOption`
 -----------------------------------------------------------------------------------------
 

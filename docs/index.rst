@@ -3,18 +3,22 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to The Sims 4 Community Library's documentation!
+Welcome to The Sims 4 Community Library API!
 =============================================
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-   modules
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   sims4communitylib.classes
+   sims4communitylib.classes.interactions
+   sims4communitylib.conditionals
+   sims4communitylib.dialogs
+   sims4communitylib.enums
+   sims4communitylib.events
+   sims4communitylib.exceptions
+   sims4communitylib.logging
+   sims4communitylib.mod_support
+   sims4communitylib.notifications
+   sims4communitylib.services
+   sims4communitylib.testing
+   sims4communitylib.utils

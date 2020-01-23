@@ -1,11 +1,6 @@
 Custom Dialogs
 =================================
 
-.. toctree::
-
-   sims4communitylib.dialogs.option_dialogs
-   sims4communitylib.dialogs.utils
-
 `CommonChooseObjectDialog`
 -------------------------------------------------------
 
@@ -46,14 +41,6 @@ Custom Dialogs
    :undoc-members:
    :show-inheritance:
 
-`CommonDialog`
------------------------------------------------
-
-.. autoclass:: sims4communitylib.dialogs.common_dialog.CommonDialog
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 `CommonInputFloatDialog`
 -------------------------------------------------------------
 
@@ -85,3 +72,13 @@ Custom Dialogs
    :members:
    :undoc-members:
    :show-inheritance:
+
+**************
+Choose Dialogs
+**************
+
+.. toctree::
+   :caption: Option Dialogs:
+
+   sims4communitylib.dialogs.option_dialogs
+   sims4communitylib.dialogs.utils
