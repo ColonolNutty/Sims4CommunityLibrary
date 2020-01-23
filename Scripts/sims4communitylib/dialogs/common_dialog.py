@@ -1,7 +1,7 @@
 """
-This file is part of the Sims 4 Community Library, licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International public license (CC BY-NC-ND 4.0).
-https://creativecommons.org/licenses/by-nc-nd/4.0/
-https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+The Sims 4 Community Library is licensed under the Creative Commons Attribution 4.0 International public license (CC BY 4.0).
+https://creativecommons.org/licenses/by/4.0/
+https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
@@ -38,11 +38,9 @@ class CommonDialog(HasLog):
         self.description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=tuple(description_tokens))
         self._mod_identity = mod_identity
 
+    # noinspection PyMissingOrEmptyDocstring
     @property
     def mod_identity(self) -> CommonModIdentity:
-        """The Identity of the mod that owns this class.
-
-        """
         return self._mod_identity or ModInfo.get_identity()
 
     def show(self, *_, **__):

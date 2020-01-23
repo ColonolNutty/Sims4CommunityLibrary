@@ -13,7 +13,7 @@ Custom Interactions
 .. autoclass:: sims4communitylib.classes.interactions.common_interaction.CommonInteraction
    :members:
    :show-inheritance:
-   :exclude-members: apply_posture_state, mod_identity, on_reset
+   :exclude-members: apply_posture_state, on_reset
 
 `CommonImmediateSuperInteraction`
 -----------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 """
-This file is part of the Sims 4 Community Library, licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International public license (CC BY-NC-ND 4.0).
-https://creativecommons.org/licenses/by-nc-nd/4.0/
-https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+The Sims 4 Community Library is licensed under the Creative Commons Attribution 4.0 International public license (CC BY 4.0).
+https://creativecommons.org/licenses/by/4.0/
+https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
@@ -11,25 +11,27 @@ from sims4communitylib.modinfo import ModInfo
 
 
 class CommonConditionalAction(HasLog):
-    """Perform an action when a condition is met.
+    """An inheritable class that Performs an action when a condition is met.
+
+    A common usage would be in a factory pattern with a collection of :class:`CommonConditionalAction` objects.
 
     """
+    # noinspection PyMissingOrEmptyDocstring
     @property
     def mod_identity(self) -> CommonModIdentity:
-        """The Identity of the mod that owns this class.
-
-        """
         return ModInfo.get_identity()
 
     def _should_apply(self, *_, **__) -> bool:
-        """Determine if this action should apply.
+        """Determine if the action should apply based on the given arguments.
 
+        .. warning:: The arguments must match the :func:`~try_apply` method.
         """
         return True
 
     def try_apply(self, *_, **__) -> bool:
         """Attempt to apply the action.
 
+        .. note:: Override this method with any arguments you want to.
         """
         if self._should_apply(*_, **__):
             self.log.debug('Applying action \'{}\'.'.format(self.__class__.__name__))
@@ -39,7 +41,8 @@ class CommonConditionalAction(HasLog):
         return False
 
     def _apply(self, *_, **__) -> bool:
-        """Apply this action.
+        """Apply the action.
 
+        .. warning:: The arguments must match the :func:`~try_apply` arguments.
         """
         raise NotImplementedError('\'{}\' not implemented'.format(self.__class__._apply.__name__))
