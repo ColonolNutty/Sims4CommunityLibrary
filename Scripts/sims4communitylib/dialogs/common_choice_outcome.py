@@ -5,11 +5,17 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import enum
+# noinspection PyBroadException
+try:
+    # noinspection PyUnresolvedReferences
+    from enum import Int
+except:
+    # noinspection PyMissingOrEmptyDocstring
+    class Int:
+        pass
 
 
-# noinspection PyUnresolvedReferences
-class CommonChoiceOutcome(enum.Int):
+class CommonChoiceOutcome(Int):
     """An outcome of the player being given a choice.
 
     """

@@ -19,7 +19,40 @@ from sims4communitylib.modinfo import ModInfo
 
 
 class CommonSuperInteraction(CommonInteraction, SuperInteraction):
-    """A base for accessing super interaction hooks.
+    """An inheritable class that provides a way to create custom Super Interactions.
+
+    The main use for this class is to create interactions that wrap sub interactions.
+    One example Super interaction is the `sim-chat` interaction, where other interactions (Such as the `Get To Know` interaction), runs as sub interactions of `sim-chat`
+
+    :Example:
+
+    .. highlight:: python
+    .. code-block:: python
+
+        # The following is an example interaction that varies when it will display, when it will be hidden, and when it will be disabled with a tooltip.
+        class _ExampleInteraction(CommonSuperInteraction):
+            # noinspection PyMissingOrEmptyDocstring
+            @classmethod
+            def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
+                result = 1 + 1
+                if result == 2:
+                    # Interaction will be displayed, but disabled, it will also have a tooltip that displays on hover with the text "Test Tooltip"
+                    return cls.create_test_result(False, reason="Test Tooltip")
+                    # Alternative way to specify a tooltip with the text "Test Tooltip"
+                    # return cls.create_test_result(False, reason="No Reason", tooltip=CommonLocalizationUtils.create_localized_tooltip("Test Tooltip"))
+                if result == 3:
+                    # Interaction will be hidden completely.
+                    return TestResult.NONE
+                # Interaction will display and be enabled.
+                return TestResult.TRUE
+
+            # noinspection PyMissingOrEmptyDocstring
+            def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
+                result = True
+                if not result:
+                    return False
+                # Put here what you want the interaction to do as soon as the player clicks it while it is enabled.
+                return True
 
     """
 
@@ -45,8 +78,9 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
 
 
 class CommonConstrainedSuperInteraction(SuperInteraction):
-    """A base for accessing super interaction hooks with constraints.
+    """An inheritable class that provides a way to create custom Super Interactions that provide custom constraints.
 
+    See also :class:`CommonSuperInteraction`
     """
 
     # noinspection PyMethodParameters
@@ -61,10 +95,16 @@ class CommonConstrainedSuperInteraction(SuperInteraction):
 
     @classmethod
     def on_constraint_gen(cls, inst: Interaction, sim: Sim, target: Any) -> Constraint:
-        """Occurs upon retrieving an interactions constraints.
+        """on_constraint_gen(inst, sim, target)
+        A hook that occurs upon generating the constraints of an interaction.
 
-        :param inst: An object of type Interaction.
-        :param sim: The sim performing the interaction.
-        :param target: The target of the interaction.
+        :param inst: An instance of the interaction.
+        :type inst: Interaction
+        :param sim: The source Sim of the interaction.
+        :type sim: Sim
+        :param target: The target Object of the interaction.
+        :type target: Any
+        :return: The constraints of the interaction.
+        :rtype: Constraint
         """
         raise NotImplementedError()

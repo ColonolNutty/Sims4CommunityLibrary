@@ -5,13 +5,19 @@ https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import enum
+# noinspection PyBroadException
+try:
+    # noinspection PyUnresolvedReferences
+    from enum import Int
+except:
+    # noinspection PyMissingOrEmptyDocstring
+    class Int:
+        pass
 
 from sims.sim_info import SimInfo
 
 
-# noinspection PyUnresolvedReferences
-class CommonSpecies(enum.Int):
+class CommonSpecies(Int):
     """Custom Species enum containing all species (including extended species).
 
     """

@@ -1,4 +1,4 @@
-Interactions
+Custom Interactions
 ==============================================
 
 `CommonInteraction`
@@ -6,8 +6,8 @@ Interactions
 
 .. autoclass:: sims4communitylib.classes.interactions.common_interaction.CommonInteraction
    :members:
-   :undoc-members:
    :show-inheritance:
+   :exclude-members: apply_posture_state, mod_identity, on_reset
 
 `CommonImmediateSuperInteraction`
 -----------------------------------------------------------------------------------
