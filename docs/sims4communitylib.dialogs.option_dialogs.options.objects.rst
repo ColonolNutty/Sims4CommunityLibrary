@@ -1,4 +1,4 @@
-Choose Object Dialogs
+Objects
 =================================================================
 
 `CommonChooseObjectOptionDialog`
@@ -9,12 +9,11 @@ Choose Object Dialogs
    :undoc-members:
    :show-inheritance:
 
-***********************************
-Choose Object Dialog Options (Rows)
-***********************************
+`Options`
+---------------------------------------------------------------------------------------
 
 `CommonDialogActionOption`
------------------------------------------------------------------------------------------------
+""""""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_action_option.CommonDialogActionOption
    :members:
@@ -22,7 +21,7 @@ Choose Object Dialog Options (Rows)
    :show-inheritance:
 
 `CommonDialogOpenDialogOption`
------------------------------------------------------------------------------------------------
+""""""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_branch_option.CommonDialogOpenDialogOption
    :members:
@@ -30,7 +29,7 @@ Choose Object Dialog Options (Rows)
    :show-inheritance:
 
 `CommonDialogInputFloatOption`
-----------------------------------------------------------------------------------------------
+""""""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_input_option.CommonDialogInputFloatOption
    :members:
@@ -38,7 +37,7 @@ Choose Object Dialog Options (Rows)
    :show-inheritance:
 
 `CommonDialogObjectOption`
------------------------------------------------------------------------------------------------
+""""""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_object_option.CommonDialogObjectOption
    :members:
@@ -46,7 +45,7 @@ Choose Object Dialog Options (Rows)
    :show-inheritance:
 
 `CommonDialogSelectOption`
------------------------------------------------------------------------------------------------
+""""""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_select_option.CommonDialogSelectOption
    :members:
@@ -54,7 +53,7 @@ Choose Object Dialog Options (Rows)
    :show-inheritance:
 
 `CommonDialogToggleOption`
------------------------------------------------------------------------------------------------
+""""""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_toggle_option.CommonDialogToggleOption
    :members:
