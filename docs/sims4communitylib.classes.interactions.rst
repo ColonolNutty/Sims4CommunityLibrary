@@ -1,6 +1,12 @@
 Custom Interactions
 ==============================================
 
+.. note::
+
+    To add Custom Interactions to various objects and places, take a look at :class:`.CommonInteractionRegistry`
+
+    For an example on creating a Custom Interaction, take a look at this `Custom Interaction Tutorial`_
+
 `CommonInteraction`
 -----------------------------------------------------------------
 
@@ -48,3 +54,11 @@ Custom Interactions
    :members:
    :undoc-members:
    :show-inheritance:
+
+
+References
+--------------------------------------------------------------------------
+
+.. target-notes::
+
+.. _`Custom Interaction Tutorial`: https://github.com/ColonolNutty/Sims4CommunityLibrary/wiki/Custom-Interactions
