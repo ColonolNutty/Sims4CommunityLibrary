@@ -1,4 +1,4 @@
-Conditional Actions
+Conditionals
 ======================================
 
 `CommonConditionalAction`

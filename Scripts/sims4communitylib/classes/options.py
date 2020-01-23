@@ -17,7 +17,7 @@ class CommonOption:
 
     @property
     def name(self) -> str:
-        """The name of the option
+        """The name and string value of the option.
 
         :return: The name of the option.
         :rtype: str
@@ -41,7 +41,7 @@ class CommonOption:
 
 
 class HasCommonOptions:
-    """Inherit this class to incorporate options into a class.
+    """An inheritable class that provides a dictionary of custom options.
 
     """
     def __init__(self, options: Dict[CommonOption, Any]):
@@ -52,7 +52,7 @@ class HasCommonOptions:
 
     @property
     def options(self) -> Dict[str, Any]:
-        """Retrieve options.
+        """Retrieve all options.
 
         :return: A dictionary of options.
         :rtype: Dict[str, Any]
@@ -66,7 +66,7 @@ class HasCommonOptions:
         self._options = options
 
     def set_option(self, option: CommonOption, value: Any):
-        """Set an option.
+        """Set an option to have the specified value.
 
         :param option: The option to set the value of.
         :type option: CommonOption
@@ -84,7 +84,7 @@ class HasCommonOptions:
         del self._options[str(option)]
 
     def get_option(self, option: CommonOption, default_value: Any=None) -> Any:
-        """Retrieve an option.
+        """Retrieve the value of an option.
 
         :param option: The option to retrieve.
         :type option: CommonOption
