@@ -33,7 +33,6 @@ class CommonInteraction(Interaction, HasLog):
        * :class:`CommonMixerInteraction`
        * :class:`CommonSocialMixerInteraction`
        * :class:`CommonSuperInteraction`
-
        * :class:`CommonTerrainInteraction`
 
     """
