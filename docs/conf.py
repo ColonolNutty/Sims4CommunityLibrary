@@ -70,7 +70,7 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 autodoc_mock_imports = [
-    'sims4', 'google', 'native', 'shared_commands', 'ui', 'cas', 'vet', 'vfx', 'fame', 'fire',
+    'pip', 'lib', 'sims4', 'google', 'native', 'shared_commands', 'ui', 'cas', 'vet', 'vfx', 'fame', 'fire',
     'pets', 'plex', 'role', 'sims', 'audio', 'audio.voice', 'bucks', 'buffs', 'carry', 'clubs',
     'whims', 'world', 'curfew', 'relics', 'retail', 'server', 'spells', 'temple', 'topics', 'traits', 'trends',
     'venues', 'balloon', 'careers', 'filters', 'fishing', 'laundry', 'objects', 'rewards', 'routing',
