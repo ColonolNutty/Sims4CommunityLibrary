@@ -1,7 +1,7 @@
 """
-This file is part of the Sims 4 Community Library, licensed under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International public license (CC BY-NC-ND 4.0).
-https://creativecommons.org/licenses/by-nc-nd/4.0/
-https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
+The Sims 4 Community Library is licensed under the Creative Commons Attribution 4.0 International public license (CC BY 4.0).
+https://creativecommons.org/licenses/by/4.0/
+https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
@@ -20,7 +20,11 @@ class HasLog(HasModIdentity):
 
     @property
     def mod_identity(self) -> CommonModIdentity:
-        """The Identity of the mod that owns this class.
+        """The identity of the mod that owns this property
+
+        .. warning:: Override this property with the :class:`.CommonModIdentity` of your mod.
+
+            This is a *MUST* override to allow for proper Exception Handling and Logging!
 
         """
         raise NotImplementedError('Missing \'{}\'.'.format(self.__class__.mod_identity.__name__))
