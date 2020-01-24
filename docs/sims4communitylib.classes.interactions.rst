@@ -57,6 +57,5 @@ Custom Interactions
 
 
 .. target-notes::
-   :hidden:
 
 .. _`Custom Interaction Tutorial`: https://github.com/ColonolNutty/Sims4CommunityLibrary/wiki/Custom-Interaction-Tutorial

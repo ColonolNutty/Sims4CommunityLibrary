@@ -105,7 +105,7 @@ class CommonInteraction(Interaction, HasLog):
         return super().kill()
 
     def cancel(self, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> bool:
-        """cancel(finishing_type, cancel_reason_msg, **kwargs)
+        """cancel(finishing_type, cancel_reason_msg, kwargs)
         Cancel the interaction. (Soft Cancel)
 
         :param finishing_type: The type of cancellation occurring.
@@ -169,7 +169,7 @@ class CommonInteraction(Interaction, HasLog):
 
     @classmethod
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
-        """on_test(interaction_sim, interaction_target, interaction_context, **kwargs)
+        """on_test(interaction_sim, interaction_target, interaction_context, kwargs)
         A hook that occurs upon the interaction being tested for availability.
 
         :param interaction_sim: The source Sim of the interaction.
@@ -211,7 +211,7 @@ class CommonInteraction(Interaction, HasLog):
         return True
 
     def on_cancelled(self, interaction_sim: Sim, interaction_target: Any, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> None:
-        """on_cancelled(interaction_sim, interaction_target, finishing_type, cancel_reason_msg, **kwargs)
+        """on_cancelled(interaction_sim, interaction_target, finishing_type, cancel_reason_msg, kwargs)
         A hook that occurs upon the interaction being cancelled.
 
 
