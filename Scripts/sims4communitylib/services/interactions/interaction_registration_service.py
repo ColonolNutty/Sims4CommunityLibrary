@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import services
-from typing import Tuple, Iterator
+from typing import Tuple, Iterator, Callable, Any
 from interactions.base.interaction import Interaction
 from objects.script_object import ScriptObject
 from services.terrain_service import TerrainService
@@ -48,26 +48,57 @@ class CommonInteractionHandler:
 
 
 class CommonScriptObjectInteractionHandler(CommonInteractionHandler):
-    """A handler used to register interactions to Script Objects.
+    """An inheritable class that enables registration of interactions to script objects.
+
+    .. note:: Script Objects can be both Sims and Furniture.
+
+    :Example usage:
+
+    .. highlight:: python
+    .. code-block:: python
+
+       # In this example, the interaction `sim-chat` will be added to any script object that is a `Sim`.
+       @CommonInteractionRegistry.register_interaction_handler(CommonInteractionType.ON_SCRIPT_OBJECT_LOAD)
+       class ExampleInteractionHandler(CommonScriptObjectInteractionHandler):
+           @property
+           def interactions_to_add(self) -> Tuple[int]:
+               # Interaction Ids
+               # These are the decimal identifiers of the interactions from a package file.
+               from sims4communitylib.enums.interactions_enum import CommonInteractionId
+               return tuple([int(CommonInteractionId.SIM_CHAT), 2])
+
+           def should_add(self, script_object: ScriptObject, *args, **kwargs) -> bool:
+               # Verify it is the object your are expecting. Return True, if it is.
+               # In this case we are adding these interactions to Sims.
+               from sims.sim import Sim
+               return isinstance(script_object, Sim)
 
     """
     @property
     def interactions_to_add(self) -> Tuple[int]:
-        """A tuple of interaction identifiers being added by the interaction handler to the script object.
+        """A collection of interactions that will be added to the script objects that pass the :func:`~should_add` check.
 
+        :return: A collection of interaction decimal identifiers.
+        :rtype: Tuple[int]
         """
         raise NotImplementedError()
 
     def should_add(self, script_object: ScriptObject, *args, **kwargs) -> bool:
-        """Determine whether to add the interactions of this handler to the script object.
+        """should_add(script_object, args, kwargs)
+        Determine whether to add the interactions of this handler to the script object.
 
         :param script_object: An object of type ScriptObject
+        :param script_object: ScriptObject
+        :return: True if the interactions specified by `interactions_to_add` should be added to the `script_object`. False if not.
+        :rtype: bool
         """
         raise NotImplementedError()
 
 
 class CommonInteractionRegistry(CommonService):
-    """A registry used to register interactions to specific places, whether they are script objects, terrain, or what have you.
+    """A registry used to register interactions to show up at different places, whether they are script objects, terrain, or what have you.
+
+    Take a look at :class:`.CommonScriptObjectInteractionHandler` for more info and usage.
 
     """
     def __init__(self):
@@ -127,19 +158,27 @@ class CommonInteractionRegistry(CommonService):
         terrain_service.OCEAN_DEFINITION.set_class(new_terrain_class)
 
     def register_handler(self, handler: CommonInteractionHandler, interaction_type: CommonInteractionType):
-        """Add an interaction handler to register interactions in specific places.
+        """register_handler(handler, interaction_type)
+        Add an interaction handler to the registry.
 
         :param handler: The interaction handler being registered.
-        :param interaction_type: The type of places the interactions will show up.
+        :type handler: CommonInteractionHandler
+        :param interaction_type: The type of place the interactions will show up.
+        :type interaction_type: CommonInteractionType
         """
         self._interaction_handlers[interaction_type].append(handler)
 
     @staticmethod
-    def register_interaction_handler(interaction_type: CommonInteractionType):
-        """A decorator for registering interaction handlers.
+    def register_interaction_handler(interaction_type: CommonInteractionType) -> Callable[..., Any]:
+        """register_interaction_handler(interaction_type)
+        A decorator for registering interaction handlers.
 
-        :param interaction_type: The type of places the interactions will show up.
+        Take a look at :class:`.CommonScriptObjectInteractionHandler` for more info and usage.
+
+        :param interaction_type: The type of place the interactions will show up.
+        :type interaction_type: CommonInteractionType
         :return: A wrapped function.
+        :rtype: Callable[..., Any]
         """
         def _wrapper(interaction_handler):
             CommonInteractionRegistry.get().register_handler(interaction_handler(), interaction_type)

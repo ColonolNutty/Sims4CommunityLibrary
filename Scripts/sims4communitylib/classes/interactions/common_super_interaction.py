@@ -31,7 +31,6 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
 
         # The following is an example interaction that varies when it will display, when it will be hidden, and when it will be disabled with a tooltip.
         class _ExampleInteraction(CommonSuperInteraction):
-            # noinspection PyMissingOrEmptyDocstring
             @classmethod
             def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
                 result = 1 + 1
@@ -46,7 +45,6 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
                 # Interaction will display and be enabled.
                 return TestResult.TRUE
 
-            # noinspection PyMissingOrEmptyDocstring
             def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
                 result = True
                 if not result:

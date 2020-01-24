@@ -18,7 +18,6 @@ class CommonMixerInteraction(CommonInteraction, MixerInteraction):
 
         # The following is an example interaction that varies when it will display, when it will be hidden, and when it will be disabled with a tooltip.
         class _ExampleInteraction(CommonMixerInteraction):
-            # noinspection PyMissingOrEmptyDocstring
             @classmethod
             def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
                 result = 1 + 1
@@ -33,7 +32,6 @@ class CommonMixerInteraction(CommonInteraction, MixerInteraction):
                 # Interaction will display and be enabled.
                 return TestResult.TRUE
 
-            # noinspection PyMissingOrEmptyDocstring
             def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
                 result = True
                 if not result:
@@ -41,7 +39,6 @@ class CommonMixerInteraction(CommonInteraction, MixerInteraction):
                 # Put here what you want the interaction to do as soon as the player clicks it while it is enabled.
                 return True
 
-            # noinspection PyMissingOrEmptyDocstring
             def on_cancelled(self, interaction_sim: Sim, interaction_target: Any, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs):
                 result = True
                 if not result:
