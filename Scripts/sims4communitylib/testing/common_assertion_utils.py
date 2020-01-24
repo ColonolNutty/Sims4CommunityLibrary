@@ -11,21 +11,28 @@ from sims4communitylib.utils.common_collection_utils import CommonCollectionUtil
 
 
 class CommonAssertionUtils:
-    """Utilities for use when asserting data within tests. However, they can be used outside tests.
+    """Utilities for used to assert within tests. They can be used outside tests if need be.
 
     """
     @staticmethod
     def are_equal(value_one: Any, value_two: Any, message: str= '') -> bool:
-        """Assert the two values are equal to each other.
+        """are_equal(value_one, value_two, message='')
+
+        Assert two values are equal to each other.
 
         If the values are both collections, then the values contained within will be asserted to be equal.
-        note:: The order of the values in each collection is asserted.
+
+        .. note:: The order of the values in each collection is asserted.
 
         :param value_one: The first value.
+        :type value_one: Any
         :param value_two: The second value.
+        :type value_two: Any
         :param message: A custom message to include when the assertion fails.
-        :return: True if the assertion succeeds.
-        :exception AssertionError when the assertion fails.
+        :type message: str
+        :return: True, if the assertion succeeds.
+        :rtype: bool
+        :exception AssertionError: when the assertion fails.
         """
         if CommonCollectionUtils.is_collection(value_one) or CommonCollectionUtils.is_collection(value_two):
             return CommonAssertionUtils.lists_are_equal(value_one, value_two, message=message)
@@ -35,16 +42,23 @@ class CommonAssertionUtils:
 
     @staticmethod
     def are_similar(value_one: Any, value_two: Any, message: str='') -> bool:
-        """Assert the two values are similar.
+        """are_similar(value_one, value_two, message='')
+
+        Assert two values are similar.
 
         If the values are both collections, then the values contained within will be asserted to be similar.
-        note:: The order of the values in each collection is ignored.
+
+        .. note:: The order of the values in each collection is ignored.
 
         :param value_one: The first value.
+        :type value_one: Any
         :param value_two: The second value.
+        :type value_two: Any
         :param message: A custom message to include when the assertion fails.
-        :return: True if the assertion succeeds.
-        :exception AssertionError when the assertion fails.
+        :type message: str
+        :return: True, if the assertion succeeds.
+        :rtype: bool
+        :exception AssertionError: when the assertion fails.
         """
         if CommonCollectionUtils.is_collection(value_one) or CommonCollectionUtils.is_collection(value_two):
             return CommonAssertionUtils.list_contents_are_same(value_one, value_two, message=message)
@@ -54,14 +68,21 @@ class CommonAssertionUtils:
 
     @staticmethod
     def lists_are_equal(list_one: Union[Tuple[Any], List[Any]], list_two: Union[Tuple[Any], List[Any]], message: str='') -> bool:
-        """Assert the collections contain exactly the same values.
-        note:: The order of the values in each collection is asserted.
+        """lists_are_equal(list_one, list_two, message='')
 
-        :param list_one: The first list. (Can be any collection type)
-        :param list_two: The second list. (Can be any collection type)
+        Assert two collections contain tbe exact same values.
+
+        .. note:: The order of the values in each collection will be asserted.
+
+        :param list_one: The first value. (Can be any collection type)
+        :type list_one: Union[Tuple[Any], List[Any]]
+        :param list_two: The second value. (Can be any collection type)
+        :type list_two: Union[Tuple[Any], List[Any]]
         :param message: A custom message to include when the assertion fails.
-        :return: True if the assertion succeeds.
-        :exception AssertionError when the assertion fails.
+        :type message: str
+        :return: True, if the assertion succeeds.
+        :rtype: bool
+        :exception AssertionError: when the assertion fails.
         """
         if not CommonCollectionUtils.is_collection(list_one):
             raise AssertionError('{}: expected\n  {}\n  to be equal to\n  {}'.format(message, list_one, list_two))
@@ -82,14 +103,21 @@ class CommonAssertionUtils:
 
     @staticmethod
     def list_contents_are_same(list_one: Union[Tuple[Any], List[Any]], list_two: Union[Tuple[Any], List[Any]], message: str='') -> bool:
-        """Assert the values contained within the specified collections are the same.
-        note:: The order of the values in each collection is ignored.
+        """list_contents_are_same(list_one, list_two, message='')
 
-        :param list_one: The first collection. (Can be any collection type)
-        :param list_two: The second collection. (Can be any collection type)
+        Assert the values contained within two collections are the same.
+
+        .. note:: The order of the values in each collection is ignored.
+
+        :param list_one: The first value. (Can be any collection type)
+        :type list_one: Union[Tuple[Any], List[Any]]
+        :param list_two: The second value. (Can be any collection type)
+        :type list_two: Union[Tuple[Any], List[Any]]
         :param message: A custom message to include when the assertion fails.
-        :return: True if the assertion succeeds.
-        :exception AssertionError when the assertion fails.
+        :type message: str
+        :return: True, if the assertion succeeds.
+        :rtype: bool
+        :exception AssertionError: when the assertion fails.
         """
         if not CommonCollectionUtils.is_collection(list_one):
             raise AssertionError('{}: {} is not a collection'.format(message, list_one))
@@ -107,12 +135,17 @@ class CommonAssertionUtils:
 
     @staticmethod
     def is_true(value: bool, message: str='') -> bool:
-        """Assert value is True.
+        """is_true(value, message='')
+
+        Assert a value is True.
 
         :param value: The value being asserted.
+        :type value: bool
         :param message: A custom message to include when the assertion fails.
+        :type message: str
         :return: True if the value is True.
-        :exception AssertionError when the assertion fails.
+        :rtype: bool
+        :exception AssertionError: when the assertion fails.
         """
         if value is not True:
             raise AssertionError('{}: expected True, but was {}'.format(message, value))
@@ -120,26 +153,37 @@ class CommonAssertionUtils:
 
     @staticmethod
     def is_false(value: bool, message: str='') -> bool:
-        """Assert value is False.
+        """is_false(value, message='')
+
+        Assert value is False.
 
         :param value: The value being asserted.
+        :type value: bool
         :param message: A custom message to include when the assertion fails.
+        :type message: str
         :return: True if the value is False.
-        :exception AssertionError when the assertion fails.
+        :rtype: bool
+        :exception AssertionError: when the assertion fails.
         """
         if value is not False:
             raise AssertionError('{}: expected False, but was {}'.format(message, value))
         return True
 
     @staticmethod
-    def has_length(value, expected_length: int, message: str='') -> bool:
-        """Assert a collection has the specified length.
+    def has_length(value: Union[Tuple[Any], List[Any]], expected_length: int, message: str='') -> bool:
+        """has_length(value, expected_length, message='')
 
+        Assert a collection has the specified length.
+
+        :param value: The collection being asserted. (Any collection that works with `len()` can be used)
+        :type value: Union[Tuple[Any], List[Any]]
         :param expected_length: The length expected of the collection.
-        :param value: The collection being asserted.
+        :type expected_length: int
         :param message: A custom message to include when the assertion fails.
+        :type message: str
         :return: True if the length matches.
-        :exception AssertionError when the assertion fails.
+        :rtype: bool
+        :exception AssertionError: when the assertion fails.
         """
         if not CommonCollectionUtils.is_collection(value):
             raise AssertionError('{}: expected collection {} to have length {}, but was not a collection'.format(message, value, expected_length))
@@ -149,13 +193,19 @@ class CommonAssertionUtils:
 
     @staticmethod
     def contains(collection: Union[Tuple[Any], List[Any]], value: Any, message: str='') -> bool:
-        """Assert the value is contained within the collection
+        """contains(collection, value, message='')
 
-        :param collection: The collection being checked.
+        Assert a value is contained within a collection
+
+        :param collection: The collection being checked (Any collection that works with `len()` can be used)
+        :type collection: Union[Tuple[Any], List[Any]]
         :param value: The value being located.
+        :type value: Any
         :param message: A custom message to include when the assertion fails.
+        :type message: str
         :return: True if the value is contained within the collection.
-        :exception AssertionError when the assertion fails.
+        :rtype: bool
+        :exception AssertionError: when the assertion fails.
         """
         if value not in collection:
             raise AssertionError('{}: expected {} to contain {}, but it did not'.format(message, collection, value))
@@ -163,14 +213,40 @@ class CommonAssertionUtils:
 
     @staticmethod
     def throws(callback: Callable[..., Any], message: str='') -> Exception:
-        """Assert calling a function will raise an Exception.
+        """throws(callback, message='')
+
+        Assert calling a function will raise an Exception.
 
         :param callback: The function to invoke.
+        :type callback: Callable[..., Any]
         :param message: A custom message to include when the assertion fails.
+        :type message: str
         :return: The exception that was thrown.
+        :rtype: Exception
+        :exception AssertionError: when the assertion fails.
         """
         try:
             callback()
         except Exception as ex:
             return ex
         raise AssertionError('{}: expected function to throw an exception, but it did not.'.format(message))
+
+    @staticmethod
+    def not_throws(callback: Callable[..., Any], message: str='') -> bool:
+        """not_throws(callback, message='')
+
+        Assert calling a function will not raise an Exception.
+
+        :param callback: The function to invoke.
+        :type callback: Callable[..., Any]
+        :param message: A custom message to include when the assertion fails.
+        :type message: str
+        :return: True, if the assertion was successful.
+        :rtype: bool
+        :exception AssertionError: when the assertion fails.
+        """
+        try:
+            callback()
+        except Exception as ex:
+            raise AssertionError('{}: expected function to not throw an exception, but it did. Exception: {}'.format(message, ex))
+        return True

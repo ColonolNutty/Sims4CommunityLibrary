@@ -16,3 +16,4 @@ Testing
    :members:
    :undoc-members:
    :show-inheritance:
+   :exclude-members: add_test, total_test_count, all_tests, get_tests_by_class_name,
