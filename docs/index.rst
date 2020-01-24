@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to The Sims 4 Community Library Documentation!
-=============================================
+=========================================================
 
 .. toctree::
    :maxdepth: 2

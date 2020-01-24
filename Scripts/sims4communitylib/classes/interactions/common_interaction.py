@@ -92,7 +92,8 @@ class CommonInteraction(Interaction, HasLog):
         return super().apply_posture_state(new_posture_state, participant_type=new_participant_type, sim=new_sim)
 
     def kill(self) -> bool:
-        """Kill the interaction. (Hard Cancel)
+        """kill()
+        Kill the interaction. (Hard Cancel)
 
         :return: True, if the interaction was killed successfully. False, if the interaction was not killed successfully.
         :rtype: bool
@@ -104,7 +105,8 @@ class CommonInteraction(Interaction, HasLog):
         return super().kill()
 
     def cancel(self, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> bool:
-        """Cancel the interaction. (Soft Cancel)
+        """cancel(finishing_type, cancel_reason_msg, **kwargs)
+        Cancel the interaction. (Soft Cancel)
 
         :param finishing_type: The type of cancellation occurring.
         :type finishing_type: FinishingType
@@ -120,7 +122,8 @@ class CommonInteraction(Interaction, HasLog):
             CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' cancel.'.format(self.__class__.__name__), exception=ex)
 
     def on_reset(self):
-        """A function that occurs upon an interaction being reset.
+        """on_reset()
+        A function that occurs upon an interaction being reset.
 
         """
         try:
@@ -141,7 +144,8 @@ class CommonInteraction(Interaction, HasLog):
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=TestResult.NONE)
     def create_test_result(result: bool, reason: str=None, text_tokens: Union[Tuple[Any], List[Any], Set[Any]]=(), tooltip: Union[int, str, CommonLocalizationUtils.LocalizedTooltip]=None, icon=None, influence_by_active_mood: bool=False) -> TestResult:
-        """Create a TestResult with the specified information.
+        """create_test_result(result, reason=None, text_tokens=(), tooltip=None, icon=None, influence_by_active_mood=False)
+        Create a TestResult with the specified information.
         TestResult is an object used to disable, hide, or display tooltips on interactions.
 
         See :func:`~on_test` for more information.
@@ -165,7 +169,8 @@ class CommonInteraction(Interaction, HasLog):
 
     @classmethod
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
-        """A hook that occurs upon the interaction being tested for availability.
+        """on_test(interaction_sim, interaction_target, interaction_context, **kwargs)
+        A hook that occurs upon the interaction being tested for availability.
 
         :param interaction_sim: The source Sim of the interaction.
         :type interaction_sim: Sim
@@ -179,7 +184,8 @@ class CommonInteraction(Interaction, HasLog):
         return TestResult.TRUE
 
     def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
-        """A hook that occurs upon the interaction being started.
+        """on_started(interaction_sim, interaction_target)
+        A hook that occurs upon the interaction being started.
 
         :param interaction_sim: The source Sim of the interaction.
         :type interaction_sim: Sim
@@ -192,7 +198,8 @@ class CommonInteraction(Interaction, HasLog):
 
     # noinspection PyUnusedLocal
     def on_killed(self, interaction_sim: Sim, interaction_target: Any) -> bool:
-        """A hook that occurs upon the interaction being killed.
+        """on_killed(interaction_sim, interaction_target)
+        A hook that occurs upon the interaction being killed.
 
         :param interaction_sim: The source Sim of the interaction.
         :type interaction_sim: Sim
@@ -204,7 +211,8 @@ class CommonInteraction(Interaction, HasLog):
         return True
 
     def on_cancelled(self, interaction_sim: Sim, interaction_target: Any, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> None:
-        """A hook that occurs upon the interaction being cancelled.
+        """on_cancelled(interaction_sim, interaction_target, finishing_type, cancel_reason_msg, **kwargs)
+        A hook that occurs upon the interaction being cancelled.
 
 
         :param interaction_sim: The source Sim of the interaction.
@@ -219,7 +227,8 @@ class CommonInteraction(Interaction, HasLog):
         pass
 
     def _on_reset(self, interaction_sim: Sim, interaction_target: Any) -> None:
-        """A hook that occurs upon the interaction being reset.
+        """_on_reset(interaction_sim, interaction_target)
+        hook that occurs upon the interaction being reset.
 
         :param interaction_sim: The source Sim of the interaction.
         :type interaction_sim: Sim
@@ -229,7 +238,8 @@ class CommonInteraction(Interaction, HasLog):
         pass
 
     def on_performed(self, interaction_sim: Sim, interaction_target: Any) -> None:
-        """A hook that occurs after the interaction has been performed.
+        """on_performed(interaction_sim, interaction_target)
+        A hook that occurs after the interaction has been performed.
 
         :param interaction_sim: The source Sim of the interaction.
         :type interaction_sim: Sim
@@ -239,7 +249,8 @@ class CommonInteraction(Interaction, HasLog):
         pass
 
     def modify_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT) -> Tuple[PostureState, ParticipantType, Sim]:
-        """A hook that allows modification of the posture state of the interactions participants.
+        """modify_posture_state(posture_state, participant_type=ParticipantType.Actor, sim=DEFAULT)
+        A hook that allows modification of the posture state of the interactions participants.
 
         :param posture_state: The posture state being modified.
         :type posture_state: PostureState

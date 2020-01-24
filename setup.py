@@ -64,8 +64,7 @@ setup(
     author='ColonolNutty',
     author_email='',
     description='An open source library with a focus on providing utilities and services to the larger Sims 4 modding community. Let\'s not reinvent the wheel! ',
-    long_description=(open('README.md').read() if exists('README.md')
-                      else ''),
+    long_description=(open('README.md').read() if exists('README.md') else ''),
     extras_require={
           'docs': [
               'sphinx',
