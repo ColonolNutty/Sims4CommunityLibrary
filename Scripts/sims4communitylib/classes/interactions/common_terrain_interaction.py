@@ -22,7 +22,6 @@ class CommonTerrainInteraction(CommonInteraction, TravelMixin, TerrainInteractio
 
         # The following is an example interaction that varies when it will display, when it will be hidden, and when it will be disabled with a tooltip.
         class _ExampleInteraction(CommonTerrainInteraction):
-            # noinspection PyMissingOrEmptyDocstring
             @classmethod
             def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
                 result = 1 + 1
@@ -37,8 +36,14 @@ class CommonTerrainInteraction(CommonInteraction, TravelMixin, TerrainInteractio
                 # Interaction will display and be enabled.
                 return TestResult.TRUE
 
-            # noinspection PyMissingOrEmptyDocstring
             def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
+                result = True
+                if not result:
+                    return False
+                # Put here what you want the interaction to do as soon as the player clicks it while it is enabled.
+                return True
+
+            def on_cancelled(self, interaction_sim: Sim, interaction_target: Any, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs):
                 result = True
                 if not result:
                     return False

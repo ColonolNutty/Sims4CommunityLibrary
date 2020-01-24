@@ -8,7 +8,7 @@ Custom Dialogs
    sims4communitylib.dialogs.basic_dialogs
    sims4communitylib.dialogs.option_dialogs
 
-`Enums`
+Enums
 -------------------------------------------------------
 
 *********************
@@ -20,7 +20,7 @@ Custom Dialogs
    :undoc-members:
    :show-inheritance:
 
-`Utilities`
+Utilities
 -------------------------------------------------------
 
 *******************

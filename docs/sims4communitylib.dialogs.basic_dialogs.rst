@@ -1,4 +1,4 @@
-`Basic Dialogs`
+Basic Dialogs
 =================================
 
 `CommonChooseObjectDialog`
