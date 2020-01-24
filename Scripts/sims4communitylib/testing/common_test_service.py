@@ -37,24 +37,29 @@ class CommonTestResultType:
 class CommonTestService(CommonService):
     """Use to register and run python tests.
 
-    Test Registration Example:
+    :Example Test Registration:
 
-    @CommonTestService.test_class('mod_name')
-    class TestClass:
-        # Important that it is a static method, you won't get a cls or self value passed in, so don't expect one!
-        @staticmethod
-        @CommonTestService.test(1, 1, 2)
-        @CommonTestService.test(2, 1, 3)
-        def example_add_test(one: int, two: int, expected_value: int):
-            result = one + two
-            CommonAssertionUtils.are_equal(result, expected_value, message='{} plus {} did not equal {}!'.format(one, two, expected_value))
+    .. highlight:: python
+    .. code-block:: python
+
+        @CommonTestService.test_class('mod_name')
+        class TestClass:
+            # Important that it is a static method, you won't get a cls or self value passed in, so don't expect one!
+            @staticmethod
+            @CommonTestService.test(1, 1, expected_value=2)
+            @CommonTestService.test(2, 1, expected_value=3)
+            def example_add_test(one: int, two: int, expected_value: int=24):
+                result = one + two
+                CommonAssertionUtils.are_equal(result, expected_value, message='{} plus {} did not equal {}!'.format(one, two, expected_value))
+
     """
     def __init__(self):
         self._tests = dict()
         self._test_count = 0
 
     def add_test(self, test_name: str, test_function: Callable[..., Any], class_name: str=None):
-        """Adds a test with a test name and class name.
+        """add_test(test_name, test_function, class_name=None)
+        Register a test with the specified name and class name.
 
         :param test_name: The name of the test.
         :param test_function: The test itself.
@@ -71,25 +76,31 @@ class CommonTestService(CommonService):
 
     @property
     def total_test_count(self) -> int:
-        """Get total test count.
+        """Get a count of the number of tests.
 
-        :return: A count of how many tests there are.
+        :return: The number of registered tests.
+        :rtype: int
         """
         return self._test_count
 
     @property
     def all_tests(self) -> Dict[str, Any]:
-        """Get all tests.
+        """Get all registered tests.
 
         :return: A dictionary of tests.
+        :rtype: Dict[str, Any]
         """
         return self._tests
 
     def get_tests_by_class_name(self, class_name: str) -> List[Any]:
-        """Retrieve tests by their class name.
+        """get_tests_by_class_name(class_name)
+
+        Retrieve tests by their class name.
 
         :param class_name: The name of the class to locate tests for.
+        :type class_name: str
         :return: A list of tests matching the class name.
+        :rtype: Any
         """
         return self._tests.get(class_name, list())
 
@@ -99,10 +110,12 @@ class CommonTestService(CommonService):
 
     @staticmethod
     def test_class(mod_name: str):
-        """Decorator to indicate a test class.
+        """test_class(mod_name)
+        Decorate a class with this to register a class as containing tests.
 
-        :param mod_name: The name of the mod this test class is contained within.
-        :return: A wrapped function.
+        :param mod_name: The name of the mod that owns the tests within the class.
+        :param mod_name: str
+        :return: A class wrapped to run tests.
         """
         @CommonExceptionHandler.catch_exceptions(mod_name)
         def _inner_test_class(cls):
@@ -147,10 +160,16 @@ class CommonTestService(CommonService):
 
     @staticmethod
     def test(*args, **kwargs):
-        """Decorator to indicate a test.
+        """test(args, kwargs)
+
+        Decorate a function with this to register that function as a test.
         When the test is run, it will be sent the specified arguments and keyword arguments.
 
-        :return: A wrapped function.
+        .. warning:: The function being registered MUST be a staticmethod.
+
+        :param args: The arguments that will be sent to the function upon run.
+        :param kwargs: The keyword arguments that will be sent to the function upon run.
+        :return: A function wrapped to run a test upon invocation.
         """
         def _test_func(test_function):
             test_function.is_test = True
@@ -161,10 +180,14 @@ class CommonTestService(CommonService):
         return _test_func
 
     def run_tests(self, *class_names: str, callback: Callable[..., Any]=print, **__):
-        """Runs the tests of the specified classes.
+        """run_tests(*class_names, callback)
+
+        Run the tests for the specified classes names.
 
         :param class_names: A collection of classes to run tests for.
-        :param callback: The callback to send string results to.
+        :type class_names: str
+        :param callback: Any time a message needs to be printed or logged, it will be sent to this callback.
+        :type callback: Callable[str, Any]
         """
         total_run_test_count = 0
         total_failed_test_count = 0
