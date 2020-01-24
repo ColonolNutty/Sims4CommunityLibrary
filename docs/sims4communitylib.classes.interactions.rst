@@ -53,9 +53,9 @@ Custom Interactions
 .. autoclass:: sims4communitylib.classes.interactions.common_terrain_interaction.CommonTerrainInteraction
    :members:
    :undoc-members:
-   :show-inheritance:
 
 
 .. target-notes::
+   :hidden:
 
 .. _`Custom Interaction Tutorial`: https://github.com/ColonolNutty/Sims4CommunityLibrary/wiki/Custom-Interaction-Tutorial
