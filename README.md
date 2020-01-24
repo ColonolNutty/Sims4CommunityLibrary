@@ -162,7 +162,7 @@ Planned Features:
 
 Installation:
 
-- Download the zip archive from the download link
+- Download the latest zip archive from the [releases](https://github.com/ColonolNutty/Sims4CommunityLibrary/releases) page (It is the one with the version number in it Example: sims4communitylib.v0.0.0.zip) (Ignore the ones that say Source Code)
 - Unpack the archive using your favorite archiving tool.
 - Drag the files/folders to your Mods directory.
 - Keep in mind the ts4script file MUST be either top level (Directly in the Mods/<ts4script file> folder) or one folder deep (Mods/Blah/<ts4script file>). Any deeper and it will not work.
