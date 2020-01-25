@@ -75,7 +75,7 @@ class CommonExceptionHandler:
         return _catch_exception
 
     @staticmethod
-    def _notify_exception_occurred(file_path: str, mod_name: str=ModInfo.get_identity().name):
+    def _notify_exception_occurred(file_path: str, mod_name: str=None):
         from ui.ui_dialog_notification import UiDialogNotification
         from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
         from sims4communitylib.enums.strings_enum import CommonStringId
