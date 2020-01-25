@@ -9,7 +9,7 @@ from typing import Any, List, Union
 
 
 class CommonEnumMetaclass(type):
-    """A common metaclass for all Enum metaclass types.
+    """A metaclass that converts the properties of a class into enum objects and allows iteration of those properties.
 
     """
     def __new__(mcs, cls, bases, class_dict):
@@ -46,30 +46,34 @@ class CommonEnumMetaclass(type):
 
     @classmethod
     def get_enum_type(mcs) -> Union[type, None]:
-        """Retrieve the expected enum type of this enum.
+        """Retrieve the enum type of this class.
 
-        :return: The expected enum type
+        :return: The expected enum type.
+        :rtype: A base type.
         """
         return None
 
     def items(cls) -> List[Any]:
-        """Retrieve all enums of this class
+        """Retrieve all enum items of the class
 
-        :return: A list of enums in this class
+        :return: A collection of the enum items of all enums of the class.
+        :rtype: List[Any]
         """
         return [getattr(cls, name) for (name, value) in cls._members_.items()]
 
     def names(cls) -> List[str]:
-        """Retrieve all names of all enums of this class
+        """Retrieve all names of all enums of the class.
 
-        :return: A list of strings
+        :return: A collection of the names of all enums of the class.
+        :rtype: List[str]
         """
         return list(cls._members_.keys())
 
     def values(cls) -> List[Any]:
-        """Retrieve all names of all enums of this class
+        """Retrieve all enum values of all enums of this class
 
-        :return: A list of strings
+        :return: A collection of the enum values of all enums of the class.
+        :rtype: List[Any]
         """
         return list(cls._members_.values())
 

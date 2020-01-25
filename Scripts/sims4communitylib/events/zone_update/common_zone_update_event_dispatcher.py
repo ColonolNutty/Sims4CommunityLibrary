@@ -16,7 +16,10 @@ from zone import Zone
 
 
 class CommonZoneUpdateEventDispatcherService(CommonService):
-    """A service for dispatching zone update events.
+    """A service that dispatches zone update events.
+
+    .. warning:: Do not use this service directly to listen for events!\
+        Use the :class:`.CommonEventRegistry` to listen for dispatched events.
 
     """
 
@@ -27,9 +30,10 @@ class CommonZoneUpdateEventDispatcherService(CommonService):
 
     @property
     def ticks_since_last_zone_update(self) -> int:
-        """The Amount of time that has passed since the last update
+        """The amount of time that has passed since the last zone update.
 
-        :return: An integer indicating an amount of time
+        :return: The amount of time that has passed in milliseconds
+        :rtype: int
         """
         return self._ticks_since_last_zone_update
 

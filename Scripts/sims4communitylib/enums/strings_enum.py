@@ -11,9 +11,12 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 class CommonStringId(CommonEnumIntBase):
     """Identifiers for vanilla localization strings.
 
+    .. note:: These identifiers point to strings within String Tables within package files.
+
     """
     # Notifications
     EXCEPTION_OCCURRED_TITLE = 3506527463
+    EXCEPTION_OCCURRED_TITLE_FOR_MOD = 1541569535
     # 0.String
     EXCEPTION_OCCURRED_TEXT = 1656389837
 

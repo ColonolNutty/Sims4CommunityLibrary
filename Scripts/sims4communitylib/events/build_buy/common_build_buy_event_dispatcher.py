@@ -15,7 +15,10 @@ from zone import Zone
 
 
 class CommonBuildBuyEventDispatcherService(CommonService):
-    """A service for dispatching Build/Buy events.
+    """A service that dispatches Build/Buy events.
+
+    .. warning:: Do not use this service directly to listen for events!\
+        Use the :class:`.CommonEventRegistry` to listen for dispatched events.
 
     """
 

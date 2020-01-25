@@ -25,7 +25,10 @@ from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 
 
 class CommonSimEventDispatcherService(CommonService):
-    """A service for dispatching Sim events.
+    """A service that dispatches Sim events (Init, Spawn, Add Occult, Remove Occult, etc.).
+
+    .. warning:: Do not use this service directly to listen for events!\
+        Use the :class:`.CommonEventRegistry` to listen for dispatched events.
 
     """
 
