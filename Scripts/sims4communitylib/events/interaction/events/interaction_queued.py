@@ -11,23 +11,54 @@ from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
 class S4CLInteractionQueuedEvent(CommonEvent):
-    """An Event that Occurs upon a Sim running an interaction.
+    """S4CLInteractionQueuedEvent(interaction, interaction_queue)
 
+    An event that occurs upon a Sim adding an interaction to their interaction queue.
+
+    :Example usage:
+
+    .. highlight:: python
+    .. code-block:: python
+
+        from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
+        from sims4communitylib.modinfo import ModInfo
+
+        class ExampleEventListener:
+
+            # In order to listen to an event, your function must match these criteria:
+            # - The function is static (staticmethod).
+            # - The first and only required argument has the name "event_data".
+            # - The first and only required argument has the Type Hint for the event you are listening for.
+            # - The argument passed to "handle_events" is the name of your Mod.
+            @staticmethod
+            @CommonEventRegistry.handle_events(ModInfo.get_identity().name)
+            def handle_event(event_data: S4CLInteractionQueuedEvent):
+                pass
+
+    :param interaction: The interaction that was queued.
+    :type interaction: Interaction
+    :param interaction_queue: The interaction queue of the Sim.
+    :type interaction_queue: InteractionQueue
     """
+
     def __init__(self, interaction: Interaction, interaction_queue: InteractionQueue):
         self._interaction = interaction
         self._interaction_queue = interaction_queue
 
     @property
     def interaction(self) -> Interaction:
-        """An instance of an Interaction.
+        """The interaction that was queued.
 
+        :return: The interaction that was queued.
+        :rtype: Interaction
         """
         return self._interaction
 
     @property
     def interaction_queue(self) -> InteractionQueue:
-        """The Interaction Queue of the Sim running the interaction.
+        """The interaction queue of the Sim that queued the interaction.
 
+        :return: The interaction queue of the Sim that queued the interaction.
+        :rtype: InteractionQueue
         """
         return self._interaction_queue

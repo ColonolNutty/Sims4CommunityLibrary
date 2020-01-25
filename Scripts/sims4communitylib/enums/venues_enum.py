@@ -9,7 +9,7 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonVenueType(CommonEnumIntBase):
-    """Identifiers for venue types.
+    """Identifiers for vanilla venue types.
 
      """
     ACTING_STUDIO = 190058

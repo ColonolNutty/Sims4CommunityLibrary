@@ -10,8 +10,16 @@ from sims4communitylib.enums.common_enum import CommonEnumMetaclass
 
 
 class CommonEnumString(str):
-    """An enum that holds a string value.
+    """CommonEnumString(enum_name, enum_value, class_name)
 
+    An enum that holds a string value.
+
+    :param enum_name: The name of the enum.
+    :type enum_name: str
+    :param enum_value: The value of the enum.
+    :type enum_value: str
+    :param class_name: The name of the class containing the enum.
+    :type class_name: str
     """
     def __init__(self, enum_name: str, enum_value: str, class_name: str):
         super().__init__()
@@ -26,7 +34,8 @@ class CommonEnumString(str):
     def name(self) -> str:
         """The name of the enum.
 
-        :return: The name of this enum.
+        :return: The name of the enum.
+        :rtype: str
         """
         return self._name
 
@@ -35,6 +44,7 @@ class CommonEnumString(str):
         """The value of the enum.
 
         :return: The value of the enum.
+        :rtype: str
         """
         return self._value
 
@@ -58,12 +68,10 @@ class CommonEnumStringMetaclass(CommonEnumMetaclass):
     """A metaclass for string enums.
 
     """
+
+    # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_enum_type(mcs):
-        """Retrieve the expected enum type of this enum.
-
-        :return: The expected enum type
-        """
         return str
 
     @classmethod
@@ -72,7 +80,7 @@ class CommonEnumStringMetaclass(CommonEnumMetaclass):
 
 
 class CommonEnumStringBase(str, metaclass=CommonEnumStringMetaclass):
-    """A base class for string enums.
+    """An inheritable class to turn properties into string enums.
 
     """
     def __call__(self, val) -> CommonEnumString:

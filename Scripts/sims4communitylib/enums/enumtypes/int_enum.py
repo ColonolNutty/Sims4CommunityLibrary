@@ -11,8 +11,16 @@ from sims4communitylib.enums.common_enum import CommonEnumMetaclass
 
 
 class CommonEnumInt(int):
-    """An enum that holds an integer value.
+    """CommonEnumInt(enum_name, enum_value, class_name)
 
+    An enum that holds an integer value.
+
+    :param enum_name: The name of the enum.
+    :type enum_name: str
+    :param enum_value: The value of the enum.
+    :type enum_value: int
+    :param class_name: The name of the class containing the enum.
+    :type class_name: str
     """
     def __init__(self, enum_name: str, enum_value: int, class_name: str):
         super().__init__()
@@ -27,7 +35,8 @@ class CommonEnumInt(int):
     def name(self) -> str:
         """The name of the enum.
 
-        :return: The name of this enum.
+        :return: The name of the enum.
+        :rtype: str
         """
         return self._name
 
@@ -36,6 +45,7 @@ class CommonEnumInt(int):
         """The value of the enum.
 
         :return: The value of the enum.
+        :rtype: int
         """
         return self._value
 
@@ -59,12 +69,10 @@ class CommonEnumIntMetaclass(CommonEnumMetaclass):
     """A metaclass for integer enums.
 
     """
+
+    # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_enum_type(mcs):
-        """Retrieve the expected enum type of this enum.
-
-        :return: The expected enum type
-        """
         return int
 
     @classmethod
@@ -73,7 +81,7 @@ class CommonEnumIntMetaclass(CommonEnumMetaclass):
 
 
 class CommonEnumIntBase(int, metaclass=CommonEnumIntMetaclass):
-    """A base class for integer enums.
+    """An inheritable class to turn properties into integer enums.
 
     """
     def __call__(self, val) -> CommonEnumInt:

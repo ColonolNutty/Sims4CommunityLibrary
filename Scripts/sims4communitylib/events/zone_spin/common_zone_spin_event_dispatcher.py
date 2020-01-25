@@ -20,7 +20,10 @@ from zone import Zone
 
 
 class CommonZoneSpinEventDispatcher(CommonService):
-    """Dispatches zone spin events (Teardown, Save, Early/Late Load).
+    """A service that dispatches zone spin events (Teardown, Save, Early/Late Load).
+
+    .. warning:: Do not use this service directly to listen for events!\
+        Use the :class:`.CommonEventRegistry` to listen for dispatched events.
 
     """
     def __init__(self):
@@ -31,6 +34,8 @@ class CommonZoneSpinEventDispatcher(CommonService):
     def game_loaded(self) -> bool:
         """Determine if the game has loaded.
 
+        :return: True, if the game has loaded. False, if the game has not loaded.
+        :rtype: bool
         """
         return self._game_loaded
 
@@ -38,6 +43,8 @@ class CommonZoneSpinEventDispatcher(CommonService):
     def game_loading(self):
         """Determine if the game is loading.
 
+        :return: True, if the game is currently loading. False, if the game is not currently loading.
+        :rtype: bool
         """
         return self._game_loading
 

@@ -10,7 +10,7 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 # noinspection SpellCheckingInspection
 class CommonGameTag(CommonEnumIntBase):
-    """Identifiers for vanilla game tags (These have been gathered dynamically from the Tag enum).
+    """Identifiers for vanilla game tags (These have been gathered dynamically from the :class:`.Tag` enum).
 
     """
     MOOD_OPTIMISM = 64

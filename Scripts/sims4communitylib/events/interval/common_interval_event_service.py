@@ -14,8 +14,22 @@ from sims4communitylib.services.common_service import CommonService
 
 
 class CommonIntervalDispatcher:
-    """Keeps track of the amount of time that has passed for listeners to trigger.
+    """CommonIntervalDispatcher(mod_name, milliseconds, listening_func, run_once=False)
 
+    A dispatcher that invokes a callback based on the amount of time passed.
+
+    .. note:: The dispatcher will only keep track of the amount of time passed while the game was not paused.\
+        It will never dispatch while the game is paused.
+
+    :param mod_name: The name of the mod the dispatcher belongs to.
+    :type mod_name: str
+    :param milliseconds: The number of milliseconds that need to pass before `listening_func` will be invoked.
+    :type milliseconds: int
+    :param listening_func: A callback invoked after an amount of time has passed.
+    :type listening_func: Callable[..., Any]
+    :param run_once: If set to True, the dispatcher will only invoke `listening_func` once before it stops listening.\
+    If set to False, the dispatcher will invoke `listening_func` every time the specified number of milliseconds has passed.
+    :type run_once: bool
     """
     def __init__(self, mod_name: str, milliseconds: int, listening_func: Callable[..., Any], run_once: bool=False):
         self._mod_name = mod_name
@@ -26,8 +40,10 @@ class CommonIntervalDispatcher:
 
     @property
     def total_milliseconds_passed(self) -> float:
-        """The total amount of milliseconds this dispatcher has known to have passed.
+        """The amount of time in milliseconds that has passed since the dispatcher started keeping track.
 
+        :return: The amount of time in milliseconds that has passed since the dispatcher started keeping track.
+        :rtype: float
         """
         return self._total_milliseconds_passed
 
@@ -37,43 +53,52 @@ class CommonIntervalDispatcher:
 
     @property
     def minimum_milliseconds_to_dispatch(self) -> int:
-        """The minimum amount of milliseconds that must pass before this dispatcher will dispatch.
+        """The minimum amount of time in milliseconds that must pass before `listening_func` will be run.
 
+        :return: The minimum amount of time in milliseconds that must pass before `listening_func` will be run.
+        :rtype: int
         """
         return self._minimum_milliseconds_to_dispatch
 
     @minimum_milliseconds_to_dispatch.setter
     def minimum_milliseconds_to_dispatch(self, val: int):
-        """The minimum amount of milliseconds that must pass before this dispatcher will dispatch.
-
-        """
         self._minimum_milliseconds_to_dispatch = val
 
     @property
     def mod_name(self) -> str:
-        """The name of the mod that is listening for events.
+        """The name of the mod the dispatcher belongs to.
 
+        :return: The name of the mod the dispatcher belongs to.
+        :rtype: str
         """
         return self._mod_name
 
     @property
     def listening_func_name(self) -> str:
-        """The name of the function listening for events.
+        """The name of the function waiting for invocation.
 
+        :return: The name of the function waiting for invocation.
+        :rtype: str
         """
         return self._listening_func.__name__
 
     @property
     def run_once(self) -> bool:
-        """Determine if this tracker only runs once.
+        """Determine if the dispatch will run only once.
 
+        :return: True, if the dispatcher will only run once. False, if the dispatcher runs more than once.
+        :rtype: bool
         """
         return self._run_once
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
-    def try_dispatch(self, milliseconds_since_last_update: int):
-        """Attempt to trigger the listener based on the amount of time passed.
+    def try_dispatch(self, milliseconds_since_last_update: int) -> bool:
+        """Attempt to run the dispatcher.
 
+        :param milliseconds_since_last_update: The amount of time in milliseconds that has passed since the last update.
+        :type milliseconds_since_last_update: int
+        :return: True, if the event was run. False, if the event was not run or not enough time has passed.
+        :rtype: bool
         """
         self.total_milliseconds_passed += milliseconds_since_last_update
         if self.total_milliseconds_passed < self.minimum_milliseconds_to_dispatch:
@@ -84,7 +109,26 @@ class CommonIntervalDispatcher:
 
 
 class CommonIntervalEventRegistry(CommonService):
-    """Register functions to run in intervals.
+    """A registry that will run functions based on an amount of time.
+
+    :Example usage:
+
+    .. highlight:: python
+    .. code-block:: python
+
+        # This is an example showing how you may register your functions to run on intervals.
+        class ExampleIntervalListener:
+            # This function will run only once, after 200 milliseconds have passed. It will then stop listening.
+            @staticmethod
+            @CommonIntervalEventRegistry.run_once(ModInfo.get_identity().name, milliseconds=200)
+            def _example_run_once():
+                pass
+
+            # This function will run every 500 milliseconds. It will continue listening until the game is closed or until it is manually unregistered.
+            @staticmethod
+            @CommonIntervalEventRegistry.run_every(ModInfo.get_identity().name, milliseconds=500)
+            def _example_run_every():
+                pass
 
     """
 
@@ -98,12 +142,16 @@ class CommonIntervalEventRegistry(CommonService):
 
     @staticmethod
     def run_every(mod_name: str, milliseconds: int=1500) -> Callable[..., Any]:
-        """Register a function to run in intervals of the specified time.
+        """run_every(mod_name, milliseconds=1500)
 
-        note:: The function will run in intervals every time the amount of time has occurred.
+        Register a function to run in intervals of the specified time.
 
-        :param mod_name: The name of the mod registering this listener.
-        :param milliseconds: The amount of time in milliseconds that needs to pass until this function will be run again.
+        .. note:: The function will run in intervals every time the amount of time has occurred.
+
+        :param mod_name: The name of the mod registering the listener.
+        :type mod_name: str
+        :param milliseconds: The amount of time in milliseconds that must pass before the decorated function will be run.
+        :type milliseconds: int
         """
         def _wrapper(listening_func):
             CommonIntervalEventRegistry.get()._add_tracker(mod_name, milliseconds, listening_func)
@@ -112,12 +160,16 @@ class CommonIntervalEventRegistry(CommonService):
 
     @staticmethod
     def run_once(mod_name: str, milliseconds: int=1500) -> Callable[..., Any]:
-        """Register a function to run once after the specified milliseconds.
+        """run_once(mod_name, milliseconds=1500)
 
-        note:: The function will only run once.
+        Register a function to run a single time after a certain amount of time.
 
-        :param mod_name: The name of the mod registering this listener.
-        :param milliseconds: The amount of time in milliseconds that needs to pass until this function is run.
+        .. note:: A function decorated with this decorator will only run once.
+
+        :param mod_name: The name of the mod registering the listener.
+        :type mod_name: str
+        :param milliseconds: The amount of time in milliseconds that must pass before the decorated function will be run.
+        :type milliseconds: int
         """
 
         def _wrapper(listening_func):
@@ -141,3 +193,17 @@ class CommonIntervalEventRegistry(CommonService):
         if event_data.is_paused:
             return
         CommonIntervalEventRegistry.get()._attempt_to_dispatch(event_data.ticks_since_last_update)
+
+
+class ExampleIntervalListener:
+    # This function will run once after 200 milliseconds have passed. Then it stops listening.
+    @staticmethod
+    # @CommonIntervalEventRegistry.run_once(ModInfo.get_identity().name, milliseconds=200)
+    def _example_run_once():
+        pass
+
+    # This function will run every 500 milliseconds. It will continue listening until the game is closed or until it is manually unregistered.
+    @staticmethod
+    # @CommonIntervalEventRegistry.run_every(ModInfo.get_identity().name, milliseconds=500)
+    def _example_run_every():
+        pass

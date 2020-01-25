@@ -10,8 +10,16 @@ from sims4communitylib.enums.common_enum import CommonEnumMetaclass
 
 
 class CommonEnumFloat(float):
-    """An enum that holds a float value.
+    """CommonEnumFloat(enum_name, enum_value, class_name)
 
+    An enum that holds a float value.
+
+    :param enum_name: The name of the enum.
+    :type enum_name: str
+    :param enum_value: The value of the enum.
+    :type enum_value: float
+    :param class_name: The name of the class containing the enum.
+    :type class_name: str
     """
     def __init__(self, enum_name: str, enum_value: float, class_name: str):
         super().__init__()
@@ -26,7 +34,8 @@ class CommonEnumFloat(float):
     def name(self) -> str:
         """The name of the enum.
 
-        :return: The name of this enum.
+        :return: The name of the enum.
+        :rtype: str
         """
         return self._name
 
@@ -35,6 +44,7 @@ class CommonEnumFloat(float):
         """The value of the enum.
 
         :return: The value of the enum.
+        :rtype: float
         """
         return self._value
 
@@ -58,12 +68,10 @@ class CommonEnumFloatMetaclass(CommonEnumMetaclass):
     """A metaclass for float enums.
 
     """
+
+    # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_enum_type(mcs):
-        """Retrieve the expected enum type of this enum.
-
-        :return: The expected enum type
-        """
         return float
 
     @classmethod
@@ -72,7 +80,7 @@ class CommonEnumFloatMetaclass(CommonEnumMetaclass):
 
 
 class CommonEnumFloatBase(float, metaclass=CommonEnumFloatMetaclass):
-    """A base class for float enums.
+    """An inheritable class to turn properties into float enums.
 
     """
     def __call__(self, val) -> CommonEnumFloat:

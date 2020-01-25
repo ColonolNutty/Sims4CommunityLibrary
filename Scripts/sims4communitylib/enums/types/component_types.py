@@ -8,7 +8,9 @@ Copyright (c) COLONOLNUTTY
 
 
 class CommonComponentType:
-    """A wrapper for component_types.
+    """Various component types of vanilla Sims 4
+
+    Components are essentially just Tuning files in package files.
 
     """
     def _get_component_type(*args):

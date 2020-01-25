@@ -9,7 +9,7 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonMotiveId(CommonEnumIntBase):
-    """Identifiers for vanilla Sim motives.
+    """Identifiers for vanilla sim motives.
 
     """
     BLADDER = 16652
