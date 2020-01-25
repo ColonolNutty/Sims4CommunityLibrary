@@ -35,6 +35,8 @@ class CommonInteractionHandler:
     def interactions_to_add(self) -> Tuple[int]:
         """A tuple of interaction identifiers being added by the interaction handler.
 
+        :return: A collection of interaction identifiers.
+        :rtype: Tuple[int]
         """
         raise NotImplementedError()
 
@@ -96,9 +98,9 @@ class CommonScriptObjectInteractionHandler(CommonInteractionHandler):
 
 
 class CommonInteractionRegistry(CommonService):
-    """A registry used to register interactions to show up at different places, whether they are script objects, terrain, or what have you.
+    """Manages the registration of interactions to script objects, terrain, sims, etc.
 
-    Take a look at :class:`.CommonScriptObjectInteractionHandler` for more info and usage.
+    Take a look at :class:`.CommonScriptObjectInteractionHandler` for more info and an example of usage.
 
     """
     def __init__(self):
@@ -111,9 +113,12 @@ class CommonInteractionRegistry(CommonService):
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_script_object_add(self, script_object: ScriptObject, *args, **kwargs):
-        """Occurs upon a script object being added.
+        """on_script_object_add(script_object, *args, **kwargs)
+
+        Occurs upon a script object being added.
 
         :param script_object: The script object being added.
+        :type script_object: ScriptObject
         """
         new_super_affordances = []
         for interaction_handler in self._interaction_handlers[CommonInteractionType.ON_SCRIPT_OBJECT_LOAD]:
@@ -129,8 +134,12 @@ class CommonInteractionRegistry(CommonService):
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_terrain_load(self, terrain_service: TerrainService, *_, **__):
-        """Occurs upon the terrain loading
+        """on_terrain_load(terrain_service, *_, **__)
 
+        Occurs upon the terrain loading
+
+        :param terrain_service: The terrain service
+        :type terrain_service: TerrainService
         """
         new_super_affordances = []
         for interaction_handler in self._interaction_handlers[CommonInteractionType.ON_TERRAIN_LOAD]:
@@ -144,8 +153,12 @@ class CommonInteractionRegistry(CommonService):
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_ocean_load(self, terrain_service: TerrainService, *_, **__):
-        """Occurs upon the ocean loading
+        """on_ocean_load(terrain_service, *_, **__)
 
+        Occurs upon the ocean loading
+
+        :param terrain_service: The terrain service
+        :type terrain_service: TerrainService
         """
         new_super_affordances = []
         for interaction_handler in self._interaction_handlers[CommonInteractionType.ON_OCEAN_LOAD]:
@@ -159,7 +172,11 @@ class CommonInteractionRegistry(CommonService):
 
     def register_handler(self, handler: CommonInteractionHandler, interaction_type: CommonInteractionType):
         """register_handler(handler, interaction_type)
-        Add an interaction handler to the registry.
+
+        Manually register an interaction handler.
+
+        .. note:: It is recommended to decorate classes with :func:`~register_interaction_handler`\
+            instead of manually registering interaction handlers.
 
         :param handler: The interaction handler being registered.
         :type handler: CommonInteractionHandler
@@ -171,9 +188,10 @@ class CommonInteractionRegistry(CommonService):
     @staticmethod
     def register_interaction_handler(interaction_type: CommonInteractionType) -> Callable[..., Any]:
         """register_interaction_handler(interaction_type)
-        A decorator for registering interaction handlers.
 
-        Take a look at :class:`.CommonScriptObjectInteractionHandler` for more info and usage.
+        Decorate a class to register that class as an interaction handler.
+
+        Take a look at :class:`.CommonScriptObjectInteractionHandler` for more info and example usage.
 
         :param interaction_type: The type of place the interactions will show up.
         :type interaction_type: CommonInteractionType
