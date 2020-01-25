@@ -11,14 +11,32 @@ ServiceType = TypeVar('ServiceType', bound=object)
 
 
 class CommonService:
-    """A class used as a common structure for singleton services.
+    """An inheritable class that turns a class into a singleton, create an instance by invoking :func:`~get`.
+
+
+    :Example usage:
+
+    .. highlight:: python
+    .. code-block:: python
+
+        class ExampleService(CommonService):
+            @property
+            def first_value(self) -> str:
+                return 'yes'
+
+        # ExampleService.get() returns an instance of ExampleService.
+        # Calling ExampleService.get() again, will return the same instance.
+        ExampleService.get().first_value
 
     """
     @classmethod
     def get(cls: Type[ServiceType]) -> ServiceType:
-        """Retrieve an instance of the service
+        """get()
+
+        Retrieve an instance of the service
 
         :return: An instance of the service
+        :rtype: The type of the inheriting class
         """
         if getattr(cls, '_SERVICE', None) is None:
             setattr(cls, '_SERVICE', cls())
