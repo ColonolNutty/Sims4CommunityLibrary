@@ -55,12 +55,17 @@ class CommonDialog(HasLog):
         """Display the dialog to the player.
 
         .. note:: Override this method with any arguments you want to.
+
         """
         raise NotImplementedError('\'{}\' not implemented.'.format(self.__class__.show.__name__))
 
     def _create_dialog(self, *_, **__) -> Union[UiDialogBase, None]:
-        """Create a dialog for use in :func:``show`.
+        """_create_dialog()
+        Create a dialog for use in :func:``show`.
 
         .. note:: Override this method with any arguments you want to.
+
+        :return: An instance of the dialog being shown or None if a problem occurs.
+        :rtype: Union[UiDialogBase, None]
         """
         raise NotImplementedError('\'{}\' not implemented.'.format(self.__class__._create_dialog.__name__))

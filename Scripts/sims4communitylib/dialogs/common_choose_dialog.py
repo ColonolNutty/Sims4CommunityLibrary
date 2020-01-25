@@ -15,8 +15,29 @@ from ui.ui_dialog_picker import BasePickerRow
 
 
 class CommonChooseDialog(CommonDialog, ABC):
-    """Create a dialog to prompt the player to choose something.
+    """CommonChooseDialog(\
+        title_identifier,\
+        description_identifier,\
+        rows,\
+        title_tokens=(),\
+        description_tokens=(),\
+        mod_identity=None\
+    )
 
+    A dialog that prompts the player to choose something.
+
+    :param title_identifier: The title to display in the dialog.
+    :type title_identifier: Union[int, LocalizedString]
+    :param description_identifier: The description to display in the dialog.
+    :type description_identifier: Union[int, LocalizedString]
+    :param rows: The rows to display in the dialog.
+    :type rows: Iterator[BasePickerRow]
+    :param title_tokens: Tokens to format into the title.
+    :type title_tokens: Iterator[Any], optional
+    :param description_tokens: Tokens to format into the description.
+    :type description_tokens: Iterator[Any], optional
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
+    :type mod_identity: CommonModIdentity, optional
     """
     def __init__(
         self,
@@ -27,14 +48,6 @@ class CommonChooseDialog(CommonDialog, ABC):
         description_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
-        """Create a dialog to prompt the player to choose something.
-
-        :param title_identifier: A decimal identifier of the title text.
-        :param description_identifier: A decimal identifier of the description text.
-        :param rows: The rows to display in the dialog.
-        :param title_tokens: Tokens to format into the title.
-        :param description_tokens: Tokens to format into the description.
-        """
         super().__init__(
             title_identifier,
             description_identifier,
@@ -48,12 +61,18 @@ class CommonChooseDialog(CommonDialog, ABC):
     def rows(self) -> Tuple[BasePickerRow]:
         """The rows to display in the dialog.
 
+        :return: A collection of rows added to the dialog.
+        :rtype: Tuple[BasePickerRow]
         """
         return self._rows
 
     def add_row(self, row: BasePickerRow):
-        """Add a row to the dialog.
+        """add_row(row)
 
+        Add a row to the dialog.
+
+        :param row: The row to add.
+        :type row: BasePickerRow
         """
         try:
             self._rows += (row,)
