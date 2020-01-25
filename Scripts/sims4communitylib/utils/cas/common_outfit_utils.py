@@ -20,218 +20,400 @@ from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 
 
 class CommonOutfitUtils:
-    """Utilities for handling sim outfits.
+    """Utilities for handling Sim outfits.
 
     """
     @staticmethod
     def is_every_day_category(outfit_category: OutfitCategory) -> bool:
-        """Determine if an OutfitCategory is EVERYDAY
+        """is_every_day_category(outfit_category)
 
+        Determine if an OutfitCategory is EVERYDAY
+
+        :param outfit_category: The OutfitCategory to check.
+        :type outfit_category: OutfitCategory
+        :return: True, if the OutfitCategory is OutfitCategory.EVERYDAY. False, if it is not.
+        :rtype: bool
         """
         return outfit_category == OutfitCategory.EVERYDAY
 
     @staticmethod
     def is_formal_category(outfit_category: OutfitCategory) -> bool:
-        """Determine if an OutfitCategory is FORMAL
+        """is_formal_category(outfit_category)
 
+        Determine if an OutfitCategory is FORMAL
+
+        :param outfit_category: The OutfitCategory to check.
+        :type outfit_category: OutfitCategory
+        :return: True, if the OutfitCategory is OutfitCategory.FORMAL. False, if it is not.
+        :rtype: bool
         """
         return outfit_category == OutfitCategory.FORMAL
 
     @staticmethod
     def is_athletic_category(outfit_category: OutfitCategory) -> bool:
-        """Determine if an OutfitCategory is ATHLETIC
+        """is_athletic_category(outfit_category)
 
+        Determine if an OutfitCategory is ATHLETIC
+
+        :param outfit_category: The OutfitCategory to check.
+        :type outfit_category: OutfitCategory
+        :return: True, if the OutfitCategory is OutfitCategory.ATHLETIC. False, if it is not.
+        :rtype: bool
         """
         return outfit_category == OutfitCategory.ATHLETIC
 
     @staticmethod
     def is_sleep_category(outfit_category: OutfitCategory) -> bool:
-        """Determine if an OutfitCategory is SLEEP
+        """is_sleep_category(outfit_category)
 
+        Determine if an OutfitCategory is SLEEP
+
+        :param outfit_category: The OutfitCategory to check.
+        :type outfit_category: OutfitCategory
+        :return: True, if the OutfitCategory is OutfitCategory.SLEEP. False, if it is not.
+        :rtype: bool
         """
         return outfit_category == OutfitCategory.SLEEP
 
     @staticmethod
     def is_party_category(outfit_category: OutfitCategory) -> bool:
-        """Determine if an OutfitCategory is PARTY
+        """is_party_category(outfit_category)
 
+        Determine if an OutfitCategory is PARTY
+
+        :param outfit_category: The OutfitCategory to check.
+        :type outfit_category: OutfitCategory
+        :return: True, if the OutfitCategory is OutfitCategory.PARTY. False, if it is not.
+        :rtype: bool
         """
         return outfit_category == OutfitCategory.PARTY
 
     @staticmethod
     def is_bathing_category(outfit_category: OutfitCategory) -> bool:
-        """Determine if an OutfitCategory is BATHING
+        """is_bathing_category(outfit_category)
 
+        Determine if an OutfitCategory is BATHING
+
+        :param outfit_category: The OutfitCategory to check.
+        :type outfit_category: OutfitCategory
+        :return: True, if the OutfitCategory is OutfitCategory.BATHING. False, if it is not.
+        :rtype: bool
         """
         return outfit_category == OutfitCategory.BATHING
 
     @staticmethod
     def is_career_category(outfit_category: OutfitCategory) -> bool:
-        """Determine if an OutfitCategory is CAREER
+        """is_career_category(outfit_category)
 
+        Determine if an OutfitCategory is CAREER
+
+        :param outfit_category: The OutfitCategory to check.
+        :type outfit_category: OutfitCategory
+        :return: True, if the OutfitCategory is OutfitCategory.CAREER. False, if it is not.
+        :rtype: bool
         """
         return outfit_category == OutfitCategory.CAREER
 
     @staticmethod
     def is_situation_category(outfit_category: OutfitCategory) -> bool:
-        """Determine if an OutfitCategory is SITUATION
+        """is_situation_category(outfit_category)
 
+        Determine if an OutfitCategory is SITUATION
+
+        :param outfit_category: The OutfitCategory to check.
+        :type outfit_category: OutfitCategory
+        :return: True, if the OutfitCategory is OutfitCategory.SITUATION. False, if it is not.
+        :rtype: bool
         """
         return outfit_category == OutfitCategory.SITUATION
 
     @staticmethod
     def is_special_category(outfit_category: OutfitCategory) -> bool:
-        """Determine if an OutfitCategory is SPECIAL
+        """is_special_category(outfit_category)
 
+        Determine if an OutfitCategory is SPECIAL
+
+        :param outfit_category: The OutfitCategory to check.
+        :type outfit_category: OutfitCategory
+        :return: True, if the OutfitCategory is OutfitCategory.SPECIAL. False, if it is not.
+        :rtype: bool
         """
         return outfit_category == OutfitCategory.SPECIAL
 
     @staticmethod
     def is_swimwear_category(outfit_category: OutfitCategory) -> bool:
-        """Determine if an OutfitCategory is SWIMWEAR
+        """is_swimwear_category(outfit_category)
 
+        Determine if an OutfitCategory is SWIMWEAR
+
+        :param outfit_category: The OutfitCategory to check.
+        :type outfit_category: OutfitCategory
+        :return: True, if the OutfitCategory is OutfitCategory.SWIMWEAR. False, if it is not.
+        :rtype: bool
         """
         return outfit_category == OutfitCategory.SWIMWEAR
 
     @staticmethod
     def is_hot_weather_category(outfit_category: OutfitCategory) -> bool:
-        """Determine if an OutfitCategory is HOT_WEATHER
+        """is_hot_weather_category(outfit_category)
 
+        Determine if an OutfitCategory is HOT_WEATHER
+
+        :param outfit_category: The OutfitCategory to check.
+        :type outfit_category: OutfitCategory
+        :return: True, if the OutfitCategory is OutfitCategory.HOT_WEATHER. False, if it is not.
+        :rtype: bool
         """
         return outfit_category == OutfitCategory.HOT_WEATHER
 
     @staticmethod
     def is_cold_weather_category(outfit_category: OutfitCategory) -> bool:
-        """Determine if an OutfitCategory is COLD_WEATHER
+        """is_cold_weather_category(outfit_category)
 
+        Determine if an OutfitCategory is COLD_WEATHER
+
+        :param outfit_category: The OutfitCategory to check.
+        :type outfit_category: OutfitCategory
+        :return: True, if the OutfitCategory is OutfitCategory.COLD_WEATHER. False, if it is not.
+        :rtype: bool
         """
         return outfit_category == OutfitCategory.COLD_WEATHER
 
     @staticmethod
     def get_all_outfit_categories() -> Tuple[OutfitCategory]:
-        """Retrieve a collection of all OutfitCategory types.
+        """get_all_outfit_categories()
 
+        Retrieve a collection of all OutfitCategory types.
+
+        :return: A collection of all OutfitCategories.
+        :rtype: Tuple[OutfitCategory]
         """
         return tuple(OutfitCategory.values)
 
     @staticmethod
     def is_wearing_everyday_outfit(sim_info: SimInfo) -> bool:
-        """Determine if a sim is wearing an Everyday outfit.
+        """is_wearing_everyday_outfit(sim_info)
 
+        Determine if a Sim is wearing an Everyday outfit.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing an everyday outfit. False, if not.
+        :rtype: bool
         """
         return CommonOutfitUtils.is_every_day_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @staticmethod
     def is_wearing_formal_outfit(sim_info: SimInfo) -> bool:
-        """Determine if a sim is wearing a Formal outfit.
+        """is_wearing_formal_outfit(sim_info)
 
+        Determine if a Sim is wearing a Formal outfit.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing a formal outfit. False, if not.
+        :rtype: bool
         """
         return CommonOutfitUtils.is_formal_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @staticmethod
     def is_wearing_athletic_outfit(sim_info: SimInfo) -> bool:
-        """Determine if a sim is wearing an Athletic outfit.
+        """is_wearing_athletic_outfit(sim_info)
 
+        Determine if a Sim is wearing an Athletic outfit.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing an athletic outfit. False, if not.
+        :rtype: bool
         """
         return CommonOutfitUtils.is_athletic_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @staticmethod
     def is_wearing_sleep_outfit(sim_info: SimInfo) -> bool:
-        """Determine if a sim is wearing a Sleep outfit.
+        """is_wearing_sleep_outfit(sim_info)
 
+        Determine if a Sim is wearing a Sleep outfit.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing a sleep outfit. False, if not.
+        :rtype: bool
         """
         return CommonOutfitUtils.is_sleep_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @staticmethod
     def is_wearing_party_outfit(sim_info: SimInfo) -> bool:
-        """Determine if a sim is wearing a Party outfit.
+        """is_wearing_party_outfit(sim_info)
 
+        Determine if a Sim is wearing a Party outfit.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing a party outfit. False, if not.
+        :rtype: bool
         """
         return CommonOutfitUtils.is_party_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @staticmethod
     def is_wearing_bathing_outfit(sim_info: SimInfo) -> bool:
-        """Determine if a sim is wearing a Bathing outfit.
+        """is_wearing_bathing_outfit(sim_info)
 
+        Determine if a Sim is wearing a Bathing outfit.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing their bathing/nude outfit. False, if not.
+        :rtype: bool
         """
         return CommonOutfitUtils.is_bathing_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @staticmethod
     def is_wearing_career_outfit(sim_info: SimInfo) -> bool:
-        """Determine if a sim is wearing a Career outfit.
+        """is_wearing_career_outfit(sim_info)
 
+        Determine if a Sim is wearing a Career outfit.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing a career outfit. False, if not.
+        :rtype: bool
         """
         return CommonOutfitUtils.is_career_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @staticmethod
     def is_wearing_situation_outfit(sim_info: SimInfo) -> bool:
-        """Determine if a sim is wearing a Situation outfit.
+        """is_wearing_situation_outfit(sim_info)
 
+        Determine if a Sim is wearing a Situation outfit.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing a situation outfit. False, if not.
+        :rtype: bool
         """
         return CommonOutfitUtils.is_situation_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @staticmethod
     def is_wearing_special_outfit(sim_info: SimInfo) -> bool:
-        """Determine if a sim is wearing a Special outfit.
+        """is_wearing_special_outfit(sim_info)
 
+        Determine if a Sim is wearing a Special outfit.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing a special outfit. False, if not.
+        :rtype: bool
         """
         return CommonOutfitUtils.is_special_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @staticmethod
     def is_wearing_swimwear_outfit(sim_info: SimInfo) -> bool:
-        """Determine if a sim is wearing a Swimwear outfit.
+        """is_wearing_swimwear_outfit(sim_info)
 
+        Determine if a Sim is wearing a Swimwear outfit.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing a swimwear outfit. False, if not.
+        :rtype: bool
         """
         return CommonOutfitUtils.is_swimwear_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @staticmethod
     def is_wearing_hot_weather_outfit(sim_info: SimInfo) -> bool:
-        """Determine if a sim is wearing a Hot Weather outfit.
+        """is_wearing_hot_weather_outfit(sim_info)
 
+        Determine if a Sim is wearing a Hot Weather outfit.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing a hot weather outfit. False, if not.
+        :rtype: bool
         """
         return CommonOutfitUtils.is_hot_weather_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @staticmethod
     def is_wearing_cold_weather_outfit(sim_info: SimInfo) -> bool:
-        """Determine if a sim is wearing a Cold Weather outfit.
+        """is_wearing_cold_weather_outfit(sim_info)
 
+        Determine if a Sim is wearing a Cold Weather outfit.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing a cold weather outfit. False, if not.
+        :rtype: bool
         """
         return CommonOutfitUtils.is_cold_weather_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @staticmethod
     def is_wearing_towel(sim_info: SimInfo) -> bool:
-        """Determine if a sim is currently wearing a towel.
+        """is_wearing_towel(sim_info)
 
+        Determine if a Sim is currently wearing a towel.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing a towel. False, if not.
+        :rtype: bool
         """
         return CommonBuffUtils.has_buff(sim_info, CommonBuffId.IS_WEARING_TOWEL)
 
     @staticmethod
     def get_current_outfit_category(sim_info: SimInfo) -> OutfitCategory:
-        """Retrieve the current OutfitCategory and Index of the current sim.
+        """get_current_outfit_category(sim_info)
 
+        Retrieve the current OutfitCategory and Index of a Sim.
+
+        :param sim_info: The Sim to get the outfit category of.
+        :type sim_info: SimInfo
+        :return: The OutfitCategory of the current outfit a Sim is wearing.
+        :rtype: OutfitCategory
         """
         return CommonOutfitUtils.get_current_outfit(sim_info)[0]
 
     @staticmethod
     def get_current_outfit_index(sim_info: SimInfo) -> int:
-        """Retrieve the current OutfitCategory and Index of the current sim.
+        """get_current_outfit_index(sim_info)
 
+        Retrieve the current OutfitCategory and Index of a Sim.
+
+        .. note:: If a Sim has two Athletic outfits and they are wearing the second outfit, the index would be `1`.
+
+        :param sim_info: The Sim to get the outfit index of.
+        :type sim_info: SimInfo
+        :return: The index of their current outfit relative to the outfits a Sim has in the current OutfitCategory.
+        :rtype: int
         """
         return CommonOutfitUtils.get_current_outfit(sim_info)[1]
 
     @staticmethod
     def get_current_outfit(sim_info: SimInfo) -> Tuple[OutfitCategory, int]:
-        """Retrieve the current OutfitCategory and Index of the current sim.
+        """get_current_outfit(sim_info)
 
+        Retrieve the current OutfitCategory and Index of the current sim.
+
+        .. note:: If a Sim has two Athletic outfits and they are wearing the second outfit, the index would be `1`.
+
+        :param sim_info: The Sim to get the current outfit of.
+        :type sim_info: SimInfo
+        :return: The OutfitCategory and index of the current outfit a Sim is wearing.
+        :rtype: Tuple[OutfitCategory, int]
         """
         return sim_info.get_current_outfit()
 
     @staticmethod
     def get_outfit_data(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> OutfitData:
-        """Retrieve OutfitData for the specified OutfitCategory and Index of a sim.
+        """get_outfit_data(sim_info, outfit_category_and_index=None)
 
-        :param sim_info: The sim to retrieve outfit data of.
+        Retrieve OutfitData for the specified OutfitCategory and Index of a Sim.
+
+        :param sim_info: The Sim to retrieve outfit data of.
+        :type sim_info: SimInfo
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
+        :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
+        :return: Outfit Data for the specified outfit.
+        :rtype: OutfitData
         """
         if outfit_category_and_index is None:
             outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
@@ -239,10 +421,16 @@ class CommonOutfitUtils:
 
     @staticmethod
     def get_outfit_parts(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[BodyType, int]:
-        """Retrieve Outfit Parts for the specified OutfitCategory and Index of a sim.
+        """get_outfit_parts(sim_info, outfit_category_and_index=None)
 
-        :param sim_info: The sim to retrieve outfit parts of.
+        Retrieve Outfit Parts for the specified OutfitCategory and Index of a Sim.
+
+        :param sim_info: The Sim to retrieve outfit parts of.
+        :type sim_info: SimInfo
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
+        :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
+        :return: A dictionary of body types and cas parts in those body types for the outfit of a Sim.
+        :rtype: Dict[BodyType, int]
         """
         if outfit_category_and_index is None:
             outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
@@ -253,82 +441,146 @@ class CommonOutfitUtils:
 
     @staticmethod
     def set_current_outfit(sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]):
-        """Set the current outfit of a sim to the specified OutfitCategory and Index.
+        """set_current_outfit(sim_info, outfit_category_and_index)
 
-        :param sim_info: The sim to change the outfit of.
+        Set the current outfit of a Sim to the specified OutfitCategory and Index.
+
+        :param sim_info: The Sim to change the outfit of.
+        :type sim_info: SimInfo
         :param outfit_category_and_index: The OutfitCategory and index to change to.
+        :type outfit_category_and_index: Tuple[OutfitCategory, int]
         """
         sim_info.set_current_outfit(outfit_category_and_index)
 
     @staticmethod
     def set_outfit_dirty(sim_info: SimInfo, outfit_category: OutfitCategory):
-        """Flag the specified OutfitCategory of a sim as dirty.
+        """set_outfit_dirty(sim_info, outfit_category)
+
+        Flag the specified OutfitCategory of a Sim as dirty.
         This will tell the game that it needs to be updated.
 
-        :param sim_info: The sim to flag the OutfitCategory for.
+        :param sim_info: The Sim to flag the OutfitCategory for.
+        :type sim_info: SimInfo
         :param outfit_category: The OutfitCategory being flagged.
+        :type outfit_category: OutfitCategory
         """
         sim_info.set_outfit_dirty(outfit_category)
 
     @staticmethod
     def set_outfit_clean(sim_info: SimInfo, outfit_category: OutfitCategory):
-        """Flag the specified OutfitCategory of a sim as clean.
+        """set_outfit_clean(sim_info, outfit_category)
 
-        :param sim_info: The sim to flag the OutfitCategory for.
+        Flag the specified OutfitCategory of a Sim as clean.
+
+        :param sim_info: The Sim to flag the OutfitCategory for.
+        :type sim_info: SimInfo
         :param outfit_category: The OutfitCategory being flagged.
+        :type outfit_category: OutfitCategory
         """
         sim_info.clear_outfit_dirty(outfit_category)
 
     @staticmethod
-    def generate_outfit(sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]):
-        """Generate an outfit for a sim for the specified OutfitCategory and Index.
-        note:: If an outfit exists in the specified OutfitCategory and index, already, it will be overwritten.
+    def generate_outfit(sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]) -> bool:
+        """generate_outfit(sim_info, outfit_category_and_index)
 
+        Generate an outfit for a Sim for the specified OutfitCategory and Index.
+
+        .. note:: If an outfit exists in the specified OutfitCategory and Index, already, it will be overridden.
+
+        :param sim_info: The Sim to generate an outfit for.
+        :type sim_info: SimInfo
+        :param outfit_category_and_index: The OutfitCategory and Index of the outfit to generate.
+        :type outfit_category_and_index: Tuple[OutfitCategory, int]
+        :return: True, if an outfit was generated successfully. False, if not.
+        :rtype: bool
         """
-        sim_info.on_outfit_generated(sim_info, CommonOutfitUtils.get_current_outfit(sim_info))
-        sim_info.generate_outfit(*outfit_category_and_index)
+        try:
+            sim_info.on_outfit_generated(sim_info, CommonOutfitUtils.get_current_outfit(sim_info))
+            sim_info.generate_outfit(*outfit_category_and_index)
+            return True
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Problem occurred running function \'{}\'.'.format(CommonOutfitUtils.generate_outfit.__name__), exception=ex)
+        return False
 
     @staticmethod
-    def resend_outfits(sim_info: SimInfo):
-        """Resend outfit data to a sim to refresh their outfits.
+    def resend_outfits(sim_info: SimInfo) -> bool:
+        """resend_outfits(sim_info)
 
+        Resend outfit data to a Sim to refresh their outfits.
+
+        :param sim_info: The Sim to resend the outfit for.
+        :type sim_info: SimInfo
+        :return: True, if outfits were resent successfully. False, if not.
+        :rtype: bool
         """
-        sim_info.resend_outfits()
+        try:
+            sim_info.resend_outfits()
+            return True
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Problem occurred running function \'{}\'.'.format(CommonOutfitUtils.resend_outfits.__name__), exception=ex)
+        return False
 
     @staticmethod
     def get_previous_outfit(sim_info: SimInfo, default_outfit_category_and_index: Tuple[OutfitCategory, int]=(OutfitCategory.EVERYDAY, 0)) -> Tuple[OutfitCategory, int]:
-        """Retrieve the previous outfit a sim was wearing before their current outfit.
+        """get_previous_outfit(sim_info, default_outfit_category_and_index=(OutfitCategory.EVERYDAY, 0))
 
-        :param sim_info: The sim to get the previous outfit of.
+        Retrieve the previous outfit a Sim was wearing before their current outfit.
+
+        :param sim_info: The Sim to get the previous outfit of.
+        :type sim_info: SimInfo
         :param default_outfit_category_and_index: A default OutfitCategory and index if no previous outfit was found.
+        :type default_outfit_category_and_index: Tuple[OutfitCategory, int], optional
+        :return: The OutfitCategory and Index of the outfit a Sim was wearing before their current outfit or the default if none was found.
+        :rtype: Tuple[OutfitCategory, int]
         """
         return sim_info.get_previous_outfit() or default_outfit_category_and_index
 
     @staticmethod
     def remove_previous_outfit(sim_info: SimInfo):
-        """Remove the previous outfit of a sim.
+        """remove_previous_outfit(sim_info)
 
+        Remove the outfit a Sim was wearing before their current outfit, from the cache.
+
+        :param sim_info: The Sim to remove the outfit from.
+        :type sim_info: SimInfo
         """
         sim_info.set_previous_outfit(None, force=True)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def has_outfit(sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]) -> bool:
-        """Determine if a sim has an existing outfit in the specified OutfitCategory and Index.
+        """has_outfit(sim_info, outfit_category_and_index)
 
-        :param sim_info: The sim to check.
+        Determine if a Sim has an existing outfit in the specified OutfitCategory and Index.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
         :param outfit_category_and_index: The OutfitCategory and index to locate.
+        :type outfit_category_and_index: Tuple[OutfitCategory, int], optional
+        :return: True, if the Sim has the specified OutfitCategory and Index. False, if not.
+        :rtype: bool
         """
         return sim_info.has_outfit(outfit_category_and_index)
 
     @staticmethod
-    def update_outfits(sim_info: SimInfo):
-        """Update all outfits of a sim.
+    def update_outfits(sim_info: SimInfo) -> bool:
+        """update_outfits(sim_info)
 
+        Update all outfits of a Sim.
+
+        :param sim_info: The Sim to update outfits for.
+        :type sim_info: SimInfo
+        :return: True, if the outfits were updated successfully. False, if not.
+        :rtype: bool
         """
-        sim_info.on_outfit_changed(sim_info, CommonOutfitUtils.get_current_outfit(sim_info))
-        CommonOutfitUtils.resend_outfits(sim_info)
-        sim_info.appearance_tracker.evaluate_appearance_modifiers()
+        try:
+            sim_info.on_outfit_changed(sim_info, CommonOutfitUtils.get_current_outfit(sim_info))
+            CommonOutfitUtils.resend_outfits(sim_info)
+            sim_info.appearance_tracker.evaluate_appearance_modifiers()
+            return True
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Problem occurred running function \'{}\'.'.format(CommonOutfitUtils.update_outfits.__name__), exception=ex)
+        return False
 
 
 @sims4.commands.Command('s4clib_testing.show_all_outfit_categories', command_type=sims4.commands.CommandType.Live)

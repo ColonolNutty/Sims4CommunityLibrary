@@ -10,7 +10,9 @@ from sims4communitylib.enums.strings_enum import CommonStringId
 
 
 class CommonLocalizedStringColor(CommonEnumIntBase):
-    """Colors for adding color to the text of LocalizedStrings.
+    """Used to set the text color of LocalizedString.
+
+    See the :func:`.CommonLocalizationUtils.colorize` function for more details.
 
     """
     DEFAULT = -1
