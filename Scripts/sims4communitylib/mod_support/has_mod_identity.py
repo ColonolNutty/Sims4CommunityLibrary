@@ -9,10 +9,17 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 
 
 class HasModIdentity:
-    """Base class for classes with a mod identity.
+    """An inheritable class that provides Mod Info for a class.
 
     """
-    # noinspection PyMissingOrEmptyDocstring
     @property
     def mod_identity(self) -> CommonModIdentity:
+        """The identity of a mod
+
+        .. note:: It contains information about a mod such as Mod Name, Mod Author,\
+            the script base namespace, and the file path to your mod.
+
+        :return: The identity of a mod.
+        :rtype: CommonModIdentity
+        """
         raise NotImplementedError('Missing \'{}\'.'.format(self.__class__.mod_identity.__name__))

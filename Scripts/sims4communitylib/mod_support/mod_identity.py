@@ -8,8 +8,21 @@ Copyright (c) COLONOLNUTTY
 
 
 class CommonModIdentity:
-    """Information about a mod.
+    """CommonModIdentity(name, author, base_namespace, file_path)
 
+    The identity of a mod
+
+    .. note:: It contains information about a mod such as Mod Name, Mod Author,\
+        the script base namespace, and the file path to your mod.
+
+    :param name: The name of a mod.
+    :type name: str
+    :param author: The author of a mod.
+    :type author: str
+    :param base_namespace: The base namespace of the `.ts4script` file of a mod.
+    :type base_namespace: str
+    :param file_path: The path to the ts4script file of a mod.
+    :type file_path: str
     """
     def __init__(self, name: str, author: str, base_namespace: str, file_path: str):
         self._name = name.replace(' ', '_')
@@ -19,8 +32,12 @@ class CommonModIdentity:
 
     @property
     def name(self) -> str:
-        """The name of a mod without spaces.
+        """The name of a mod.
 
+        .. note:: The name should not contain spaces.
+
+        :return: The name of a mod.
+        :rtype: str
         """
         return str(self._name)
 
@@ -28,14 +45,19 @@ class CommonModIdentity:
     def author(self) -> str:
         """The author of a mod.
 
+        :return: The name of the author of a mod.
+        :rtype: str
         """
         return str(self._author)
 
     @property
     def base_namespace(self) -> str:
-        """The namespace of the ts4script file of a mod.
-        Example: S4CL has a base name of sims4communitylib.
+        """The base namespace of the `.ts4script` file of a mod.
 
+        .. note:: S4CL has the base namespace of `sims4communitylib`.
+
+        :return: The base script namespace of a mod.
+        :rtype: str
         """
         return str(self._base_namespace)
 
@@ -43,6 +65,13 @@ class CommonModIdentity:
     def file_path(self) -> str:
         """The path to the ts4script file of a mod.
 
+        .. note::
+
+           A good override value can be `__file__`, it will retrieve the file path automatically,\
+           assuming the inheriting class is at the root of the mod.
+
+        :return: The file path to a mod.
+        :rtype: str
         """
         return str(self._script_file_path)
 
