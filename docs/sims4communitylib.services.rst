@@ -5,7 +5,7 @@ Services
 
    sims4communitylib.services.interactions
 
-`CommonService`
+`Common Service`
 -------------------------------------------------
 
 .. autoclass:: sims4communitylib.services.common_service.CommonService

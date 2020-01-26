@@ -1,7 +1,7 @@
 ExceptionHandling
 ====================================
 
-`CommonExceptionHandler`
+`Exception Handler`
 ---------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.exceptions.common_exceptions_handler.CommonExceptionHandler
@@ -9,7 +9,7 @@ ExceptionHandling
    :undoc-members:
    :show-inheritance:
 
-`CommonStacktraceUtil`
+`Stacktrace Util`
 -------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.exceptions.common_stacktrace_utils.CommonStacktraceUtil

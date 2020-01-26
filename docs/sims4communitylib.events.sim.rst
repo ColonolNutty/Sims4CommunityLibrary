@@ -5,7 +5,7 @@ Sim Event Handling
 
    sims4communitylib.events.sim.events
 
-`CommonSimEventDispatcherService`
+`Sim Event Dispatcher`
 ------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.common_sim_event_dispatcher.CommonSimEventDispatcherService

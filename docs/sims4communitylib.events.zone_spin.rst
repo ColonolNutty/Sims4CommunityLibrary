@@ -5,7 +5,7 @@ Zone Event Handling
 
    sims4communitylib.events.zone_spin.events
 
-`CommonZoneSpinEventDispatcher`
+`Zone Spin Event Dispatcher`
 --------------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.zone_spin.common_zone_spin_event_dispatcher.CommonZoneSpinEventDispatcher

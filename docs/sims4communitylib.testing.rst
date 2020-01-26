@@ -1,7 +1,7 @@
 Testing
 =================================
 
-`CommonAssertionUtils`
+`Assertion Utils`
 ---------------------------------------------------------
 
 .. autoclass:: sims4communitylib.testing.common_assertion_utils.CommonAssertionUtils
@@ -9,7 +9,7 @@ Testing
    :undoc-members:
    :show-inheritance:
 
-`CommonTestService`
+`Test Service`
 ------------------------------------------------------
 
 .. autoclass:: sims4communitylib.testing.common_test_service.CommonTestService

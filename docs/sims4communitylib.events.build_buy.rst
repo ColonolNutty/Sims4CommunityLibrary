@@ -5,7 +5,7 @@ Build/Buy Event Handling
 
    sims4communitylib.events.build_buy.events
 
-`CommonBuildBuyEventDispatcherService`
+`Build/Buy Event Dispatcher`
 --------------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.build_buy.common_build_buy_event_dispatcher.CommonBuildBuyEventDispatcherService

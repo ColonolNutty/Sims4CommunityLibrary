@@ -7,7 +7,7 @@ Custom Interactions
 
     For an example on creating a Custom Interaction, take a look at this `Custom Interaction Tutorial`_
 
-`CommonInteraction`
+`Interaction`
 -----------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.classes.interactions.common_interaction.CommonInteraction
@@ -15,7 +15,7 @@ Custom Interactions
    :show-inheritance:
    :exclude-members: apply_posture_state, on_reset
 
-`CommonImmediateSuperInteraction`
+`Immediate Super Interaction`
 -----------------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.classes.interactions.common_immediate_super_interaction.CommonImmediateSuperInteraction
@@ -23,7 +23,7 @@ Custom Interactions
    :undoc-members:
    :show-inheritance:
 
-`CommonMixerInteraction`
+`Mixer Interaction`
 ------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.classes.interactions.common_mixer_interaction.CommonMixerInteraction
@@ -31,7 +31,7 @@ Custom Interactions
    :undoc-members:
    :show-inheritance:
 
-`CommonSocialMixerInteraction`
+`Social Mixer Interaction`
 --------------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.classes.interactions.common_social_mixer_interaction.CommonSocialMixerInteraction
@@ -39,7 +39,7 @@ Custom Interactions
    :undoc-members:
    :show-inheritance:
 
-`CommonSuperInteraction`
+`Super Interaction`
 ------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.classes.interactions.common_super_interaction.CommonSuperInteraction
@@ -47,7 +47,7 @@ Custom Interactions
    :undoc-members:
    :show-inheritance:
 
-`CommonTerrainInteraction`
+`Terrain Interaction`
 --------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.classes.interactions.common_terrain_interaction.CommonTerrainInteraction

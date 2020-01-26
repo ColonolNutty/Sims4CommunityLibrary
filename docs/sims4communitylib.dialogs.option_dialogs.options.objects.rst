@@ -1,7 +1,7 @@
 Objects
 =================================================================
 
-`CommonChooseObjectOptionDialog`
+`Choose Object Option Dialog`
 ---------------------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.common_choose_object_option_dialog.CommonChooseObjectOptionDialog
@@ -12,7 +12,7 @@ Objects
 `Options`
 ---------------------------------------------------------------------------------------
 
-`CommonDialogActionOption`
+`Action Option`
 """"""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_action_option.CommonDialogActionOption
@@ -20,7 +20,7 @@ Objects
    :undoc-members:
    :show-inheritance:
 
-`CommonDialogOpenDialogOption`
+`Open Dialog Option`
 """"""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_branch_option.CommonDialogOpenDialogOption
@@ -28,7 +28,7 @@ Objects
    :undoc-members:
    :show-inheritance:
 
-`CommonDialogInputFloatOption`
+`Input Float Option`
 """"""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_input_option.CommonDialogInputFloatOption
@@ -36,7 +36,7 @@ Objects
    :undoc-members:
    :show-inheritance:
 
-`CommonDialogObjectOption`
+`Object Option`
 """"""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_object_option.CommonDialogObjectOption
@@ -44,7 +44,7 @@ Objects
    :undoc-members:
    :show-inheritance:
 
-`CommonDialogSelectOption`
+`Select Option`
 """"""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_select_option.CommonDialogSelectOption
@@ -52,7 +52,7 @@ Objects
    :undoc-members:
    :show-inheritance:
 
-`CommonDialogToggleOption`
+`Toggle Option`
 """"""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_toggle_option.CommonDialogToggleOption

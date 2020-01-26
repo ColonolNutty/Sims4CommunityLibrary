@@ -1,7 +1,7 @@
 Zone Spin Event Types
 ==================================================
 
-`S4CLZoneEarlyLoadEvent`
+`Zone Early Load Event`
 -------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.zone_spin.events.zone_early_load.S4CLZoneEarlyLoadEvent
@@ -9,7 +9,7 @@ Zone Spin Event Types
    :undoc-members:
    :show-inheritance:
 
-`S4CLZoneLateLoadEvent`
+`Zone Late Load Event`
 ------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.zone_spin.events.zone_late_load.S4CLZoneLateLoadEvent
@@ -17,7 +17,7 @@ Zone Spin Event Types
    :undoc-members:
    :show-inheritance:
 
-`S4CLZoneSaveEvent`
+`Zone Save Event`
 ------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.zone_spin.events.zone_save.S4CLZoneSaveEvent
@@ -25,7 +25,7 @@ Zone Spin Event Types
    :undoc-members:
    :show-inheritance:
 
-`S4CLZoneTeardownEvent`
+`Zone Teardown Event`
 ----------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.zone_spin.events.zone_teardown.S4CLZoneTeardownEvent

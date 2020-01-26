@@ -1,7 +1,7 @@
 Misc Utilities
 ===============================
 
-`CommonCollectionUtils`
+`Collection Utils`
 --------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_collection_utils.CommonCollectionUtils
@@ -9,7 +9,7 @@ Misc Utilities
    :undoc-members:
    :show-inheritance:
 
-`CommonComponentUtils`
+`Component Utils`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_component_utils.CommonComponentUtils
@@ -17,15 +17,7 @@ Misc Utilities
    :undoc-members:
    :show-inheritance:
 
-`CommonRealDateUtils`
---------------------------------------------------
-
-.. autoclass:: sims4communitylib.utils.common_date_utils.CommonRealDateUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-`CommonFunctionUtils`
+`Function Utils`
 ------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_function_utils.CommonFunctionUtils
@@ -33,7 +25,7 @@ Misc Utilities
    :undoc-members:
    :show-inheritance:
 
-`CommonIconUtils`
+`Icon Utils`
 --------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_icon_utils.CommonIconUtils
@@ -41,7 +33,7 @@ Misc Utilities
    :undoc-members:
    :show-inheritance:
 
-`CommonInjectionUtils`
+`Injection Utils`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_injection_utils.CommonInjectionUtils
@@ -49,7 +41,7 @@ Misc Utilities
    :undoc-members:
    :show-inheritance:
 
-`CommonIOUtils`
+`IO Utils`
 ------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_io_utils.CommonIOUtils
@@ -57,7 +49,7 @@ Misc Utilities
    :undoc-members:
    :show-inheritance:
 
-`CommonJSONIOUtils`
+`JSON IO Utils`
 ------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_json_io_utils.CommonJSONIOUtils
@@ -65,7 +57,15 @@ Misc Utilities
    :undoc-members:
    :show-inheritance:
 
-`CommonTimeUtils`
+`Real Date Utils`
+--------------------------------------------------
+
+.. autoclass:: sims4communitylib.utils.common_date_utils.CommonRealDateUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Time Utils`
 --------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_time_utils.CommonTimeUtils
@@ -73,7 +73,7 @@ Misc Utilities
    :undoc-members:
    :show-inheritance:
 
-`CommonTypeUtils`
+`Type Utils`
 --------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_type_utils.CommonTypeUtils
@@ -81,7 +81,7 @@ Misc Utilities
    :undoc-members:
    :show-inheritance:
 
-`CommonWeatherUtils`
+`Weather Utils`
 -----------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_weather_utils.CommonWeatherUtils

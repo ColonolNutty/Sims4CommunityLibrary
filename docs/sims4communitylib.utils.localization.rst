@@ -1,7 +1,7 @@
 Localization (String Table Manipulation)
 ============================================
 
-`CommonLocalizationUtils`
+`Localization Utils`
 -----------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.localization.common_localization_utils.CommonLocalizationUtils
@@ -9,7 +9,7 @@ Localization (String Table Manipulation)
    :undoc-members:
    :show-inheritance:
 
-`CommonLocalizationUtils.LocalizedTooltip`
+`Localized Tooltip`
 -----------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.localization.common_localization_utils.CommonLocalizationUtils.LocalizedTooltip
@@ -17,7 +17,7 @@ Localization (String Table Manipulation)
    :undoc-members:
    :show-inheritance:
 
-`CommonLocalizedStringColor`
+`LocalizedString Colors`
 -----------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.localization.common_localized_string_colors.CommonLocalizedStringColor

@@ -1,7 +1,7 @@
 Mod Support
 ======================================
 
-`CommonModInfo`
+`Mod Info`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.mod_support.common_mod_info.CommonModInfo
@@ -9,7 +9,7 @@ Mod Support
    :undoc-members:
    :show-inheritance:
 
-`HasModIdentity`
+`Has Mod Identity`
 --------------------------------------------------------
 
 .. autoclass:: sims4communitylib.mod_support.has_mod_identity.HasModIdentity
@@ -17,7 +17,7 @@ Mod Support
    :undoc-members:
    :show-inheritance:
 
-`CommonModIdentity`
+`Mod Identity`
 ---------------------------------------------------
 
 .. autoclass:: sims4communitylib.mod_support.mod_identity.CommonModIdentity

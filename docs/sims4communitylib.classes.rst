@@ -1,7 +1,7 @@
 Options
 =================================
 
-`CommonOption`
+`Option`
 ----------------------------------------
 
 .. autoclass:: sims4communitylib.classes.options.CommonOption
@@ -9,7 +9,7 @@ Options
    :undoc-members:
    :show-inheritance:
 
-`HasCommonOption`
+`Has Option`
 ----------------------------------------
 
 .. autoclass:: sims4communitylib.classes.options.HasCommonOptions

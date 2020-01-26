@@ -1,7 +1,7 @@
 Build/Buy Event Types
 ==================================================
 
-`S4CLBuildBuyEnterEvent`
+`Build/Buy Enter Event`
 -------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.build_buy.events.build_buy_enter.S4CLBuildBuyEnterEvent
@@ -9,7 +9,7 @@ Build/Buy Event Types
    :undoc-members:
    :show-inheritance:
 
-`S4CLBuildBuyExitEvent`
+`Build/Buy Exit Event`
 ------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.build_buy.events.build_buy_exit.S4CLBuildBuyExitEvent

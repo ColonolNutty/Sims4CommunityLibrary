@@ -5,7 +5,7 @@ Zone Update Event Handling
 
    sims4communitylib.events.zone_update.events
 
-`CommonZoneUpdateEventDispatcherService`
+`Zone Update Event Dispatcher`
 ------------------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.zone_update.common_zone_update_event_dispatcher.CommonZoneUpdateEventDispatcherService

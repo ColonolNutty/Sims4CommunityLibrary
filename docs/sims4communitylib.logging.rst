@@ -1,7 +1,7 @@
 Logging
 =================================
 
-`HasLog`
+`Has Log`
 -----------------------------------------
 
 .. autoclass:: sims4communitylib.logging.has_log.HasLog
@@ -9,7 +9,7 @@ Logging
    :undoc-members:
    :show-inheritance:
 
-`CommonLogUtils`
+`Log Utils`
 -------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_log_utils.CommonLogUtils
@@ -17,7 +17,7 @@ Logging
    :undoc-members:
    :show-inheritance:
 
-`CommonLog`
+`Common Log`
 ----------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_log_registry.CommonLog
@@ -25,7 +25,7 @@ Logging
    :undoc-members:
    :show-inheritance:
 
-`CommonLogRegistry`
+`Log Registry`
 ----------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_log_registry.CommonLogRegistry
@@ -33,7 +33,7 @@ Logging
    :undoc-members:
    :show-inheritance:
 
-`CommonMessageType`
+`Message Type`
 ----------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_log_registry.CommonMessageType

@@ -1,7 +1,7 @@
 Sim Event Types
 ===========================================
 
-`S4CLSimAddedOccultTypeEvent`
+`Sim Added Occult Type Event`
 -------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_added_occult_type.S4CLSimAddedOccultTypeEvent
@@ -9,7 +9,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`S4CLSimChangedAgeEvent`
+`Sim Changed Age Event`
 ------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_changed_age.S4CLSimChangedAgeEvent
@@ -17,7 +17,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`S4CLSimChangedOccultTypeEvent`
+`Sim Changed Occult Type Event`
 ---------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_changed_occult_type.S4CLSimChangedOccultTypeEvent
@@ -25,7 +25,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`S4CLSimInitializedEvent`
+`Sim Initialized Event`
 -----------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_initialized.S4CLSimInitializedEvent
@@ -33,7 +33,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`S4CLSimLoadedEvent`
+`Sim Loaded Event`
 ------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_loaded.S4CLSimLoadedEvent
@@ -41,7 +41,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`S4CLSimRemovedOccultTypeEvent`
+`Sim Removed Occult Type Event`
 ---------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_removed_occult_type.S4CLSimRemovedOccultTypeEvent
@@ -49,7 +49,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`S4CLSimSpawnedEvent`
+`Sim Spawned Event`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_spawned.S4CLSimSpawnedEvent

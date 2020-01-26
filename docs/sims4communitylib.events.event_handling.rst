@@ -1,7 +1,7 @@
 Event Handling
 ================================================
 
-`CommonEvent`
+`Event`
 -------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.event_handling.common_event.CommonEvent
@@ -9,7 +9,7 @@ Event Handling
    :undoc-members:
    :show-inheritance:
 
-`CommonEventHandler`
+`Event Handler`
 ----------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.event_handling.common_event_handler.CommonEventHandler
@@ -17,7 +17,7 @@ Event Handling
    :undoc-members:
    :show-inheritance:
 
-`CommonEventRegistry`
+`Event Registry`
 -----------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.event_handling.common_event_registry.CommonEventRegistry
