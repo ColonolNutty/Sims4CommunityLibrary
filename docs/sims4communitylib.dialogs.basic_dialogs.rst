@@ -1,7 +1,7 @@
 Basic Dialogs
 =================================
 
-`CommonChooseObjectDialog`
+`Choose Object Dialog`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.choose_object_dialog.CommonChooseObjectDialog
@@ -9,7 +9,7 @@ Basic Dialogs
    :undoc-members:
    :show-inheritance:
 
-`CommonChooseSimDialog`
+`Choose Sim Dialog`
 ------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.common_choose_sim_dialog.CommonChooseSimDialog
@@ -17,7 +17,7 @@ Basic Dialogs
    :undoc-members:
    :show-inheritance:
 
-`CommonChooseSimsDialog`
+`Choose Sims Dialog`
 -------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.common_choose_sims_dialog.CommonChooseSimsDialog
@@ -25,7 +25,7 @@ Basic Dialogs
    :undoc-members:
    :show-inheritance:
 
-`CommonInputFloatDialog`
+`Input Float Dialog`
 -------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.common_input_float_dialog.CommonInputFloatDialog
@@ -33,7 +33,7 @@ Basic Dialogs
    :undoc-members:
    :show-inheritance:
 
-`CommonOkDialog`
+`Ok Dialog`
 ---------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.common_ok_dialog.CommonOkDialog
@@ -41,7 +41,7 @@ Basic Dialogs
    :undoc-members:
    :show-inheritance:
 
-`CommonTargetedQuestionDialog`
+`Targeted Question Dialog`
 -------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.common_targeted_question_dialog.CommonTargetedQuestionDialog
@@ -49,7 +49,7 @@ Basic Dialogs
    :undoc-members:
    :show-inheritance:
 
-`CommonOkCancelDialog`
+`Ok/Cancel Dialog`
 ---------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.ok_cancel_dialog.CommonOkCancelDialog
@@ -57,7 +57,7 @@ Basic Dialogs
    :undoc-members:
    :show-inheritance:
 
-`CommonDialog`
+`Dialog`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.common_dialog.CommonDialog
@@ -65,7 +65,7 @@ Basic Dialogs
    :undoc-members:
    :show-inheritance:
 
-`CommonChooseDialog`
+`Choose Dialog`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.common_choose_dialog.CommonChooseDialog

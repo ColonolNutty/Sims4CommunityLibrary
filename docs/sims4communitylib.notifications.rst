@@ -1,7 +1,7 @@
 Custom Notifications
 =======================================
 
-`CommonBasicNotification`
+`Basic Notification`
 ------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.notifications.common_basic_notification.CommonBasicNotification

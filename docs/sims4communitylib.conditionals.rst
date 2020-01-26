@@ -1,7 +1,7 @@
 Conditionals
 ======================================
 
-`CommonConditionalAction`
+`Conditional Action`
 -----------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.conditionals.common_conditional_action.CommonConditionalAction

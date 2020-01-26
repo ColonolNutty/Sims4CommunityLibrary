@@ -6,7 +6,7 @@ Option Dialogs
    sims4communitylib.dialogs.option_dialogs.options.objects
    sims4communitylib.dialogs.option_dialogs.options.sims
 
-`CommonChooseOptionDialog`
+`Choose Option Dialog`
 -------------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.common_choose_option_dialog.CommonChooseOptionDialog
@@ -14,7 +14,7 @@ Option Dialogs
    :undoc-members:
    :show-inheritance:
 
-`CommonChooseOptionsDialog`
+`Choose Options Dialog`
 --------------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.common_choose_options_dialog.CommonChooseOptionsDialog
@@ -25,7 +25,7 @@ Option Dialogs
 `Options`
 --------------------------------------------------------------------------------
 
-`CommonDialogOption`
+`Dialog Option`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.common_dialog_option.CommonDialogOption
@@ -33,7 +33,7 @@ Option Dialogs
    :undoc-members:
    :show-inheritance:
 
-`CommonDialogOptionContext`
+`Dialog Option Context`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_context.CommonDialogOptionContext

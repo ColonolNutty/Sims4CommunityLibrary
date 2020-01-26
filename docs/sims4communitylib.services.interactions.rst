@@ -1,7 +1,7 @@
 Interaction Registration
 ===============================================
 
-`CommonInteractionRegistry`
+`Interaction Registry`
 ---------------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.services.interactions.interaction_registration_service.CommonInteractionRegistry
@@ -10,7 +10,7 @@ Interaction Registration
    :show-inheritance:
    :exclude-members: on_script_object_add, on_terrain_load, on_ocean_load
 
-`CommonScriptObjectInteractionHandler`
+`Script Object Interaction Handler`
 ---------------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.services.interactions.interaction_registration_service.CommonScriptObjectInteractionHandler

@@ -1,7 +1,7 @@
 CAS Utilities
 ===================================
 
-`CommonCASUtils`
+`CAS Utils`
 -----------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.cas.common_cas_utils.CommonCASUtils
@@ -9,7 +9,7 @@ CAS Utilities
    :undoc-members:
    :show-inheritance:
 
-`CommonOutfitUtils`
+`Outfit Utils`
 --------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.cas.common_outfit_utils.CommonOutfitUtils

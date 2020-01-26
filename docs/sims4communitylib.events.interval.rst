@@ -1,7 +1,7 @@
 Interval Event Handling
 =========================================
 
-`CommonIntervalEventRegistry`
+`Interval Event Registry`
 -------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.interval.common_interval_event_service.CommonIntervalEventRegistry

@@ -5,7 +5,7 @@ Interaction Event Handling
 
    sims4communitylib.events.interaction.events
 
-`CommonInteractionEventDispatcherService`
+`Interaction Event Dispatcher`
 ----------------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.interaction.common_interaction_event_dispatcher.CommonInteractionEventDispatcherService

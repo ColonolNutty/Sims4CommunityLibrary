@@ -6,7 +6,7 @@ Resource Identifiers
    sims4communitylib.enums.enumtypes
    sims4communitylib.enums.types
 
-`CommonBuffId`
+`Buffs`
 ------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.buffs_enum.CommonBuffId
@@ -14,7 +14,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonClubInteractionGroupId`
+`Club Interaction Groups`
 ------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.clubs_enum.CommonClubInteractionGroupId
@@ -22,7 +22,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonSpecies`
+`Species`
 ----------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.common_species.CommonSpecies
@@ -30,7 +30,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonFurnitureObjectId`
+`Furniture`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.furniture_objects_enum.CommonFurnitureObjectId
@@ -38,7 +38,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonIconId`
+`Icons`
 ------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.icons_enum.CommonIconId
@@ -46,7 +46,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonInteractionId`
+`Interactions`
 -------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.interactions_enum.CommonInteractionId
@@ -54,7 +54,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonLotTraitId`
+`Lot Traits`
 ------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.lot_traits_enum.CommonLotTraitId
@@ -62,7 +62,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonMoodId`
+`Moods`
 ------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.moods_enum.CommonMoodId
@@ -70,7 +70,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonMotiveId`
+`Motives`
 --------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.motives_enum.CommonMotiveId
@@ -78,7 +78,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonRelationshipBitId`
+`Relationship Bits`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.relationship_bits_enum.CommonRelationshipBitId
@@ -86,7 +86,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonRelationshipTrackId`
+`Relationship Tracks`
 ---------------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.relationship_tracks_enum.CommonRelationshipTrackId
@@ -94,7 +94,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonShortTermRelationshipTrackId`
+`Short-Term Relationship Tracks`
 ----------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.short_term_relationship_tracks_enum.CommonShortTermRelationshipTrackId
@@ -102,15 +102,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonSituationJobId`
-----------------------------------------------------
-
-.. autoclass:: sims4communitylib.enums.situation_jobs_enum.CommonSituationJobId
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-`CommonSituationId`
+`Situations`
 -----------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.situations_enum.CommonSituationId
@@ -118,7 +110,15 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonSkillId`
+`Situation Jobs`
+----------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.situation_jobs_enum.CommonSituationJobId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Skills`
 -------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.skills_enum.CommonSkillId
@@ -126,7 +126,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonStatisticId`
+`Statistics`
 -----------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.statistics_enum.CommonStatisticId
@@ -134,7 +134,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonStringId`
+`Strings`
 --------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.strings_enum.CommonStringId
@@ -142,7 +142,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonGameTag`
+`Game Tags`
 -----------------------------------------
 
 .. autoclass:: sims4communitylib.enums.tags_enum.CommonGameTag
@@ -150,7 +150,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonTraitId`
+`Traits`
 -------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.traits_enum.CommonTraitId
@@ -158,7 +158,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonVenueType`
+`Venue Types`
 -------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.venues_enum.CommonVenueType
@@ -166,7 +166,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonWhimSetId`
+`Whim Sets`
 ------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.whims_enum.CommonWhimSetId
@@ -174,7 +174,7 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`CommonWorldTypeId`
+`World Types`
 -------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.world_types_enum.CommonWorldTypeId

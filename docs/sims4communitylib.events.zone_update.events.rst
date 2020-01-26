@@ -1,7 +1,7 @@
 Zone Update Event Types
 ====================================================
 
-`S4CLZoneUpdateEvent`
+`Zone Update Event`
 -----------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.zone_update.events.zone_update_event.S4CLZoneUpdateEvent

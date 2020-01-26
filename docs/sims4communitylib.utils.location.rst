@@ -1,7 +1,7 @@
 Location Utilities
 ========================================
 
-`CommonLocationUtils`
+`Location Utils`
 ---------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.location.common_location_utils.CommonLocationUtils
@@ -9,7 +9,7 @@ Location Utilities
    :undoc-members:
    :show-inheritance:
 
-`CommonTravelUtils`
+`Travel Utils`
 -------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.location.common_travel_utils.CommonTravelUtils

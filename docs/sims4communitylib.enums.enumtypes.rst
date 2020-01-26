@@ -1,7 +1,7 @@
 Custom Enum Types
 =========================================
 
-`CommonEnumFloat`
+`Float Enum`
 ----------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.enumtypes.float_enum.CommonEnumFloat
@@ -9,7 +9,7 @@ Custom Enum Types
    :undoc-members:
    :show-inheritance:
 
-`CommonEnumFloatBase`
+`Float Enum Base`
 ----------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.enumtypes.float_enum.CommonEnumFloatBase
@@ -17,7 +17,7 @@ Custom Enum Types
    :undoc-members:
    :show-inheritance:
 
-`CommonEnumInt`
+`Int Enum`
 --------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.enumtypes.int_enum.CommonEnumInt
@@ -25,7 +25,7 @@ Custom Enum Types
    :undoc-members:
    :show-inheritance:
 
-`CommonEnumIntBase`
+`Int Enum Base`
 --------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.enumtypes.int_enum.CommonEnumIntBase
@@ -33,7 +33,7 @@ Custom Enum Types
    :undoc-members:
    :show-inheritance:
 
-`CommonEnumObject`
+`Object Enum`
 -----------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.enumtypes.object_enum.CommonEnumObject
@@ -41,7 +41,7 @@ Custom Enum Types
    :undoc-members:
    :show-inheritance:
 
-`CommonEnumObjectBase`
+`Object Enum Base`
 -----------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.enumtypes.object_enum.CommonEnumObjectBase
@@ -49,7 +49,7 @@ Custom Enum Types
    :undoc-members:
    :show-inheritance:
 
-`CommonEnumString`
+`String Enum`
 -----------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.enumtypes.string_enum.CommonEnumString
@@ -57,7 +57,7 @@ Custom Enum Types
    :undoc-members:
    :show-inheritance:
 
-`CommonEnumStringBase`
+`String Enum Base`
 -----------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.enumtypes.string_enum.CommonEnumStringBase

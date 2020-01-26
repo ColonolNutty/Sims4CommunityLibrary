@@ -1,7 +1,7 @@
 Interaction Event Types
 ===================================================
 
-`S4CLInteractionOutcomeEvent`
+`Interaction Outcome Event`
 -----------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.interaction.events.interaction_outcome.S4CLInteractionOutcomeEvent
@@ -9,7 +9,7 @@ Interaction Event Types
    :undoc-members:
    :show-inheritance:
 
-`S4CLInteractionQueuedEvent`
+`Interaction Queued Event`
 ----------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.interaction.events.interaction_queued.S4CLInteractionQueuedEvent
@@ -17,7 +17,7 @@ Interaction Event Types
    :undoc-members:
    :show-inheritance:
 
-`S4CLInteractionRunEvent`
+`Interaction Run Event`
 -------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.interaction.events.interaction_run.S4CLInteractionRunEvent

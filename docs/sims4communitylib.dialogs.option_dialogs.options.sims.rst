@@ -1,7 +1,7 @@
 Sims
 ==============================================================
 
-`CommonChooseSimOptionDialog`
+`Choose Sim Option Dialog`
 ------------------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.common_choose_sim_option_dialog.CommonChooseSimOptionDialog
@@ -9,7 +9,7 @@ Sims
    :undoc-members:
    :show-inheritance:
 
-`CommonChooseSimsOptionDialog`
+`Choose Sims Option Dialog`
 -------------------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.common_choose_sims_option_dialog.CommonChooseSimsOptionDialog
@@ -20,7 +20,7 @@ Sims
 `Options`
 --------------------------------------------------------------------------------
 
-`CommonDialogSimOption`
+`Sim Option`
 """"""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.sims.common_dialog_sim_option.CommonDialogSimOption
@@ -28,7 +28,7 @@ Sims
    :undoc-members:
    :show-inheritance:
 
-`CommonDialogSimOptionContext`
+`Sim Option Context`
 """"""""""""""""""""""""""""""""""""
 
 .. autoclass:: sims4communitylib.dialogs.option_dialogs.options.sims.common_dialog_sim_option_context.CommonDialogSimOptionContext

@@ -1,7 +1,7 @@
 Resource Identifiers
 =====================================
 
-`CommonComponentType`
+`Component Type`
 -----------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.types.component_types.CommonComponentType

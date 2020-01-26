@@ -12,7 +12,7 @@ Enums
 -------------------------------------------------------
 
 *********************
-`CommonChoiceOutcome`
+`Choice Outcome`
 *********************
 
 .. autoclass:: sims4communitylib.dialogs.common_choice_outcome.CommonChoiceOutcome
@@ -24,7 +24,7 @@ Utilities
 -------------------------------------------------------
 
 *******************
-`CommonDialogUtils`
+`Dialog Utils`
 *******************
 
 .. autoclass:: sims4communitylib.dialogs.utils.common_dialog_utils.CommonDialogUtils

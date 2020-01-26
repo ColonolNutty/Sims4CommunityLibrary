@@ -1,7 +1,7 @@
 Resource Utilities
 =========================================
 
-`CommonStatisticUtils`
+`Statistic Utils`
 -----------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.resources.common_statistic_utils.CommonStatisticUtils
@@ -9,7 +9,7 @@ Resource Utilities
    :undoc-members:
    :show-inheritance:
 
-`CommonResourceUtils`
+`Resource Utils`
 ------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_resource_utils.CommonResourceUtils
