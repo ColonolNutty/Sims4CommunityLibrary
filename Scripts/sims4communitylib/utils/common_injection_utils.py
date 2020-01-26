@@ -13,23 +13,29 @@ from sims4communitylib.modinfo import ModInfo
 
 
 class CommonInjectionUtils:
-    """Utilities to inject custom functionality into other functions.
+    """Utilities to inject custom functionality into functions.
 
     """
     @staticmethod
     def inject_into(target_object: Any, target_function_name: str) -> Callable:
-        """ deprecated:: 1.2.3
-        Use :func:`inject_safely_into` instead.
+        """inject_into(target_object, target_function_name)
+
+        This function is DEPRECATED.
+        Use :func:`~inject_safely_into` instead.
 
         """
         return CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), target_object, target_function_name)
 
     @staticmethod
     def inject_safely_into(mod_identity: CommonModIdentity, target_object: Any, target_function_name: str) -> Callable:
-        """A decorator used to inject code into another function.
-        It will catch and log exceptions and run the original function should any problems occur.
+        """inject_safely_into(mod_identity, target_object, target_function_name)
 
-        :Example of `cls` usage:
+        A decorator used to inject code into a function.
+        It will catch and log exceptions, as well as run the original function should any problems occur.
+
+        :Example of cls usage:
+
+        .. highlight:: python
         .. code-block:: python
 
             # cls usage
@@ -37,7 +43,9 @@ class CommonInjectionUtils:
             def do_custom_spawn_sim(original, cls, *args, **kwargs):
                 return original(*args, **kwargs)
 
-        :Example of `self` usage:
+        :Example of self usage:
+
+        .. highlight:: python
         .. code-block:: python
 
             # Self usage
@@ -45,17 +53,22 @@ class CommonInjectionUtils:
             def do_custom_load_sim_info(original, self, *args, **kwargs):
                 return original(self, *args, **kwargs)
 
-        .. note:: Injection WILL work on
+        .. note::
 
-        - Functions decorated with 'classmethod'
-        - Functions with 'cls' or 'self' as the first argument.
+           Injection WILL work on
 
-        .. note:: Injection WILL NOT work on
+           - Functions decorated with 'classmethod'
+           - Functions with 'cls' or 'self' as the first argument.
 
-        - Functions decorated with 'staticmethod'
-        - Global functions, i.e. Functions not contained within a class.
+        .. note::
 
-        :param mod_identity: The identity of the mod injecting into a function.
+           Injection WILL NOT work on
+
+           - Functions decorated with 'staticmethod'
+           - Global functions, i.e. Functions not contained within a class.
+
+        :param mod_identity: The identity of the Mod that is injecting custom code.
+        :type mod_identity: CommonModIdentity
         :param target_object: The class that contains the target function.
         :type target_object: Any
         :param target_function_name: The name of the function being injected to.
