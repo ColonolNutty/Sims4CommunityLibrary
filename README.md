@@ -1,13 +1,13 @@
-Welcome to The Sims 4 Community Library!
+# Welcome to The Sims 4 Community Library!
 
 This is more of an API than a mod itself. It does nothing on its own and is meant as a framework for other Sims 4 developers to utilize in their own code bases.
 
 To see the documentation for S4CL [check out the docs](https://sims4communitylibrary.readthedocs.io/en/latest/)!
 
-# Looking to install S4CL?
+## Looking to install S4CL?
 Follow the installation instructions below for details. 
 
-Current Features:
+### Current Features:
 
 - Access to Vanilla Tuning identifiers for:
   - Buffs
@@ -149,7 +149,7 @@ Current Features:
   - If no class names are provided, all of the tests will run.
 
 
-Installation:
+### Installation:
 
 - Download the latest zip archive from the [releases](https://github.com/ColonolNutty/Sims4CommunityLibrary/releases) page (It is the one with the version number in it Example: sims4communitylib.v0.0.0.zip) (Ignore the ones that say Source Code)
 - Unpack the archive using your favorite archiving tool.
@@ -157,12 +157,12 @@ Installation:
 - Keep in mind the ts4script file MUST be either top level (Directly in the Mods/<ts4script file>�folder) or one folder deep (Mods/Blah/<ts4script file>). Any deeper and it will not work.
 
 
-Requirements:
+### Requirements:
 
 - Sims 4 Patch Version 1.54.120.1020 (Island Living) or above
 - DLCs are NOT required, you only need to have an up to date game (Check the bottom of the main menu for your current version).
 
-Planned Features:
+### Planned Features:
 
 - Many more functions, utilities, and�services to make coding for the sims 4 much easier. You won't need to reinvent the wheel anymore!
 - Exception Handling (stack trace customization)
@@ -177,13 +177,13 @@ Planned Features:
   - Prompt the player to input Numbers/Text
 
 
-Note for Modders:
+### Note for Modders:
 
 - If you have ideas for additions to add or want one of the planned features sooner rather than later, I'm all ears! Let's work together to create a library that we all can use!
 - To see the documentation for S4CL [check out the docs](https://sims4communitylibrary.readthedocs.io/en/latest/)!
 
 
-What is the workflow for working with S4CL?
+### What is the workflow for working with S4CL?
 - Create a project based off of the [Template Project](https://github.com/ColonolNutty/s4cl-template-project)
 - Use the green button in the top right [The Main Page](https://github.com/ColonolNutty/Sims4CommunityLibrary) to download this project as a zip file.
 - In your project, create another directory called `S4CL`.
@@ -195,7 +195,7 @@ What is the workflow for working with S4CL?
 - Ensure you properly attribute S4CL and its author according to the license located at the bottom of this readme.
 - YOU DO NOT HAVE MY PERMISSION TO BUNDLE S4CL INTO YOUR OWN MOD. So don't do it. Redirect the users of your mod to the [github repository](https://github.com/ColonolNutty/Sims4CommunityLibrary) or [releases](https://github.com/ColonolNutty/Sims4CommunityLibrary/releases) pages instead.
 
-Copyright:
+### Copyright:
 
 The Sims 4 Community Library is licensed under the Creative Commons Attribution 4.0 International public license (CC BY 4.0).
 https://creativecommons.org/licenses/by/4.0/
