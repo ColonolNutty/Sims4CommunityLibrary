@@ -16,8 +16,29 @@ from sims4communitylib.dialogs.common_input_float_dialog import CommonInputFloat
 
 
 class CommonDialogInputFloatOption(CommonDialogObjectOption):
-    """An option to open a dialog to input a float value.
+    """CommonDialogInputFloatOption(\
+        option_identifier,\
+        initial_value,\
+        context,\
+        min_value=0.0,\
+        max_value=2147483647.0,\
+        on_chosen=CommonFunctionUtils.noop\
+    )
 
+    An option to open a dialog to input a float value.
+
+    :param option_identifier: A string that identifies the option from other options.
+    :type option_identifier: str
+    :param initial_value: The value the option will have initia0lly
+    :type initial_value: float
+    :param context: A context to customize the dialog option.
+    :type context: CommonDialogOptionContext
+    :param min_value: The minimum value allowed to be entered.
+    :type min_value: float, optional
+    :param max_value: The maximum value allowed to be entered.
+    :type max_value: float, optional
+    :param on_chosen: A callback invoked when the dialog option is chosen. args: (option_identifier, entered value, outcome)
+    :type on_chosen: Callable[[str, float, CommonChoiceOutcome], Any], optional
     """
     def __init__(
         self,
@@ -49,11 +70,9 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
             on_chosen=_on_chosen
         )
 
+    # noinspection PyMissingOrEmptyDocstring
     @property
     def icon(self) -> Any:
-        """The icon of the option.
-
-        """
         if super().icon is not None:
             return super().icon
         return CommonIconUtils.load_arrow_right_icon()

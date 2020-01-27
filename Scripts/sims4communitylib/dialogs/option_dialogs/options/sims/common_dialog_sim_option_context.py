@@ -9,8 +9,14 @@ from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_conte
 
 
 class CommonDialogSimOptionContext(CommonDialogOptionContext):
-    """A context used by CommonDialogSimOption that contains customization of the option.
+    """CommonDialogSimOptionContext(is_enabled=True, is_selected=False)
 
+    A context used by CommonDialogSimOption that contains customization of the option.
+
+    :param is_enabled: If True, the Sim will be selectable in the dialog. If False, the Sim will be disabled in the dialog.
+    :type is_enabled: bool, optional
+    :param is_selected: If True, the Sim will already be selected in the dialog. If False, the Sim will not be selected in the dialog.
+    :type is_selected: bool, optional
     """
     def __init__(
         self,

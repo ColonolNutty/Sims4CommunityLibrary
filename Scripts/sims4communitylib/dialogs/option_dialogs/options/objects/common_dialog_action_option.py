@@ -13,8 +13,14 @@ from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_sele
 
 
 class CommonDialogActionOption(CommonDialogSelectOption):
-    """An option that invokes a callback upon being chosen.
+    """CommonDialogActionOption(context, on_chosen=CommonFunctionUtils.noop)
 
+    An option that invokes a callback upon being chosen.
+
+    :param context: A context to customize the dialog option.
+    :type context: CommonDialogOptionContext
+    :param on_chosen: A callback invoked when the dialog option is chosen.
+    :type on_chosen: Callable[..., Any], optional
     """
     def __init__(
         self,

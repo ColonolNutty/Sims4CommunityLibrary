@@ -19,8 +19,14 @@ class CommonSimInteractionUtils:
     """
     @staticmethod
     def is_sitting(sim_info: SimInfo) -> bool:
-        """Determine if a Sim is currently sitting.
+        """is_sitting(sim_info)
 
+        Determine if a Sim is currently sitting.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is sitting. False, if not.
+        :rtype: bool
         """
         interactions = (
             CommonInteractionId.SEATING_SIT,
@@ -37,37 +43,77 @@ class CommonSimInteractionUtils:
 
     @staticmethod
     def has_interaction_running_or_queued(sim_info: SimInfo, interaction_id: int) -> bool:
-        """Determine if a Sim has the specified interaction running or in their interaction queue.
+        """has_interaction_running_or_queued(sim_info, interaction_id)
 
+        Determine if a Sim has the specified interaction running or in their interaction queue.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param interaction_id: The identifier of the interaction to check for.
+        :type interaction_id: int
+        :return: True, if the Sim has the specified interaction running or queued. False, if not.
+        :rtype: bool
         """
         return CommonSimInteractionUtils.has_interactions_running_or_queued(sim_info, (interaction_id, ))
 
     @staticmethod
     def has_interaction_running(sim_info: SimInfo, interaction_id: int) -> bool:
-        """Determine if a Sim is running the specified interaction.
+        """has_interaction_running(sim_info, interaction_id)
 
+        Determine if a Sim is running the specified interaction.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param interaction_id: The identifier of the interaction to check for.
+        :type interaction_id: int
+        :return: True, if the Sim has the specified interaction running. False, if not.
+        :rtype: bool
         """
         return CommonSimInteractionUtils.has_interactions_running(sim_info, (interaction_id, ))
 
     @staticmethod
     def has_interaction_queued(sim_info: SimInfo, interaction_id: int) -> bool:
-        """Determine if a Sim is running the specified interaction.
+        """has_interaction_queued(sim_info, interaction_id)
 
+        Determine if a Sim is running the specified interaction.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param interaction_id: The identifier of the interaction to check for.
+        :type interaction_id: int
+        :return: True, if the Sim has the specified interaction queued. False, if not.
+        :rtype: bool
         """
         return CommonSimInteractionUtils.has_interactions_queued(sim_info, (interaction_id, ))
 
     @staticmethod
     def has_interactions_running_or_queued(sim_info: SimInfo, interaction_ids: Iterator[int]) -> bool:
-        """Determine if a Sim has any of the specified interactions running or in their interaction queue.
+        """has_interactions_running_or_queued(sim_info, interaction_ids)
 
+        Determine if a Sim has any of the specified interactions running or in their interaction queue.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param interaction_ids: An iterable of identifiers of the interactions to check for.
+        :type interaction_ids: int
+        :return: True, if the Sim has any of the specified interactions running or queued. False, if not.
+        :rtype: bool
         """
         return CommonSimInteractionUtils.has_interactions_running(sim_info, interaction_ids)\
                or CommonSimInteractionUtils.has_interactions_queued(sim_info, interaction_ids)
 
     @staticmethod
     def has_interactions_running(sim_info: SimInfo, interaction_ids: Iterator[int]) -> bool:
-        """Determine if a Sim is running any of the specified interactions.
+        """has_interactions_running(sim_info, interaction_ids)
 
+        Determine if a Sim is running any of the specified interactions.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param interaction_ids: An iterable of identifiers of the interactions to check for.
+        :type interaction_ids: int
+        :return: True, if the Sim has any of the specified interactions running. False, if not.
+        :rtype: bool
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None or sim.si_state is None:
@@ -80,8 +126,16 @@ class CommonSimInteractionUtils:
 
     @staticmethod
     def has_interactions_queued(sim_info: SimInfo, interaction_ids: Iterator[int]) -> bool:
-        """Determine if a Sim has any of the specified interactions in their interaction queue.
+        """has_interactions_queued(sim_info, interaction_ids)
 
+        Determine if a Sim has any of the specified interactions in their interaction queue.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param interaction_ids: An iterable of identifiers of the interactions to check for.
+        :type interaction_ids: int
+        :return: True, if the Sim has any of the specified interactions queued. False, if not.
+        :rtype: bool
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None or sim.queue is None:

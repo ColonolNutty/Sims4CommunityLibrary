@@ -17,20 +17,25 @@ except ModuleNotFoundError:
 
 
 class CommonOccultUtils:
-    """Utilities for handling sim occults.
+    """Utilities for manipulating the Occults of Sims.
 
     """
 
     @staticmethod
     def get_sim_info_of_all_occults_gen(sim_info: SimInfo, *exclude_occult_types: OccultType) -> Iterator[SimInfo]:
-        """Retrieve a generator of SimInfo objects for all Occults of a sim.
+        """get_sim_info_of_all_occults_gen(sim_info, *exclude_occult_types)
 
-        note:: Results include the occult type of the sim_info specified.
-        If they are Human by default, the Human occult sim info will be included.
+        Retrieve a generator of SimInfo objects for all Occults of a sim.
 
-        :param sim_info: The sim to locate Occults in
+        .. note:: Results include the occult type of the sim_info specified.\
+            If they are Human by default, the Human occult sim info will be included.
+
+        :param sim_info: The Sim to locate the Occults of.
+        :type sim_info: SimInfo
         :param exclude_occult_types: A collection of OccultTypes to exclude from the resulting SimInfo list.
-        :return: An iterator of SimInfo objects for all occult types of a sim.
+        :type exclude_occult_types: OccultType
+        :return: An iterable of Sims for all occult types of the Sim.
+        :rtype: Iterator[SimInfo]
         """
         if sim_info is None:
             return tuple()
@@ -50,29 +55,53 @@ class CommonOccultUtils:
 
     @staticmethod
     def is_vampire(sim_info: SimInfo) -> bool:
-        """Determine if a sim is a Vampire.
+        """is_vampire(sim_info)
 
+        Determine if a sim is a Vampire.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is the Occult. False, if not.
+        :rtype: bool
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_VAMPIRE)
 
     @staticmethod
     def is_alien(sim_info: SimInfo) -> bool:
-        """Determine if a sim is an Alien.
+        """is_alien(sim_info)
 
+        Determine if a sim is an Alien.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is the Occult. False, if not.
+        :rtype: bool
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_ALIEN)
 
     @staticmethod
     def is_plant_sim(sim_info: SimInfo) -> bool:
-        """Determine if a sim is a Plant Sim.
+        """is_plant_sim(sim_info)
 
+        Determine if a sim is a Plant Sim.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is the Occult. False, if not.
+        :rtype: bool
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.PLANT_SIM)
 
     @staticmethod
     def is_ghost(sim_info: SimInfo) -> bool:
-        """Determine if a sim is a Ghost.
+        """is_ghost(sim_info)
 
+        Determine if a sim is a Ghost.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is the Occult. False, if not.
+        :rtype: bool
         """
         equipped_sim_traits = CommonTraitUtils.get_equipped_traits(sim_info)
         for trait in equipped_sim_traits:
@@ -83,8 +112,14 @@ class CommonOccultUtils:
 
     @staticmethod
     def is_robot(sim_info: SimInfo) -> bool:
-        """Determine if a sim is a Robot.
+        """is_robot(sim_info)
 
+        Determine if a sim is a Robot.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is the Occult. False, if not.
+        :rtype: bool
         """
         if not hasattr(TraitType, 'ROBOT'):
             return False
@@ -97,36 +132,66 @@ class CommonOccultUtils:
 
     @staticmethod
     def is_witch(sim_info: SimInfo) -> bool:
-        """Determine if a sim is a Mermaid
+        """is_witch(sim_info)
 
+        Determine if a sim is a Mermaid
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is the Occult. False, if not.
+        :rtype: bool
         """
         return CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_WITCH)
 
     @staticmethod
     def is_mermaid(sim_info: SimInfo) -> bool:
-        """Determine if a sim is a Mermaid
+        """is_mermaid(sim_info)
 
+        Determine if a sim is a Mermaid
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is the Occult. False, if not.
+        :rtype: bool
         """
         return CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_MERMAID)
 
     @staticmethod
     def is_in_mermaid_form(sim_info: SimInfo) -> bool:
-        """Determine if a sim is in Mermaid Form (The Sim has a visible Tail).
+        """is_in_mermaid_form(sim_info)
 
+        Determine if a sim is in Mermaid Form (The Sim has a visible Tail).
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim has their mermaid tail out. False, if not.
+        :rtype: bool
         """
         return CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_MERMAID_MERMAID_FORM)
 
     @staticmethod
     def is_mermaid_in_mermaid_form(sim_info: SimInfo) -> bool:
-        """Determine if a sim is a Mermaid and is in Mermaid Form (Their Tail is visible).
+        """is_mermaid_in_mermaid_form(sim_info)
 
+        Determine if a sim is a Mermaid and is in Mermaid Form (Their Tail is visible).
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Mermaid with their tail out. False, if not.
+        :rtype: bool
         """
         return CommonOccultUtils.is_mermaid(sim_info) and CommonOccultUtils.is_in_mermaid_form(sim_info)
 
     @staticmethod
     def is_currently_human(sim_info: SimInfo) -> bool:
-        """Determine if a sim is currently Human (Not an Occult)
+        """is_currently_human(sim_info)
 
+        Determine if a sim is currently Human (Not an Occult)
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is currently the Occult. False, if not.
+        :rtype: bool
         """
         if not hasattr(OccultType, 'HUMAN'):
             return False
@@ -134,11 +199,17 @@ class CommonOccultUtils:
 
     @staticmethod
     def is_currently_a_mermaid(sim_info: SimInfo) -> bool:
-        """Determine if a sim is currently a Mermaid
+        """is_currently_a_mermaid(sim_info)
 
-        note:: This only checks their occult status, it does not check for a visible Tail.
-        Use :func: `is_in_mermaid_form` to check for a visible Tail.
+        Determine if a sim is currently a Mermaid
 
+        .. note:: This only checks their occult status, it does not check for a visible Tail.\
+            Use :func:`~is_in_mermaid_form` to check for a visible Tail.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is currently the Occult. False, if not.
+        :rtype: bool
         """
         if not hasattr(OccultType, 'MERMAID'):
             return False
@@ -146,8 +217,14 @@ class CommonOccultUtils:
 
     @staticmethod
     def is_currently_a_vampire(sim_info: SimInfo) -> bool:
-        """Determine if a sim is currently a Vampire
+        """is_currently_a_vampire(sim_info)
 
+        Determine if a sim is currently a Vampire
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is currently the Occult. False, if not.
+        :rtype: bool
         """
         if not hasattr(OccultType, 'VAMPIRE'):
             return False
@@ -155,8 +232,14 @@ class CommonOccultUtils:
 
     @staticmethod
     def is_currently_an_alien(sim_info: SimInfo) -> bool:
-        """Determine if a sim is currently an Alien
+        """is_currently_an_alien(sim_info)
 
+        Determine if a sim is currently an Alien
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is currently the Occult. False, if not.
+        :rtype: bool
         """
         if not hasattr(OccultType, 'ALIEN'):
             return False
@@ -164,8 +247,14 @@ class CommonOccultUtils:
 
     @staticmethod
     def is_currently_a_witch(sim_info: SimInfo) -> bool:
-        """Determine if a sim is currently a Witch
+        """is_currently_a_witch(sim_info)
 
+        Determine if a sim is currently a Witch
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is currently the Occult. False, if not.
+        :rtype: bool
         """
         if not hasattr(OccultType, 'WITCH'):
             return False

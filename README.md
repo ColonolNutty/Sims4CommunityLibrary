@@ -4,6 +4,9 @@ This is more of an API than a mod itself. It does nothing on its own and is mean
 
 To see the documentation for S4CL [check out the docs](https://sims4communitylibrary.readthedocs.io/en/latest/)!
 
+# Looking to install S4CL?
+Follow the installation instructions below for details. 
+
 Current Features:
 
 - Access to Vanilla Tuning identifiers for:
@@ -24,7 +27,7 @@ Current Features:
   - Log custom exceptions
   - Log the current stack trace, find out who or what is calling your functions!
   - Useful when debugging code!
-    - Enable/Disable logs via a command in-game. `s4clib.enable_log <log_name>`
+    - Enable/Disable logs via a command in-game. `s4clib.enable_logï¿½<log_name>`
 - Exception Handling
   - Log to a file exceptions that are thrown
   - Catch exceptions within your functions via a decorator
@@ -101,7 +104,7 @@ Current Features:
   - Sim utilities
     - Get the Active Sim
     - Get Sim Info, Sim Instance, and Sim Ids
-    - Get All Sims nearby and filter which types of sims to get (Age, Species, Occult, Traits, Buffs, etc.)
+    - Get All Sims nearby andï¿½filter which types of sims to getï¿½(Age, Species, Occult, Traits, Buffs, etc.)
     - Occults - Check Occult Types of sims.
     - Ages - Get/Set/Check Ages of sims.
     - Genders - Get/Set/Check Genders of sims.
@@ -120,11 +123,11 @@ Current Features:
   - Collections - Determine if an object is a collection, combine collections, flatten collections, etc.
   - Injection - Inject custom functionality into functions
   - IO (Input/Output) - Write string data to a file or load string data from a file.
-  - Stack Trace - Retrieve the complete and full stack trace.
+  - Stack Traceï¿½- Retrieve theï¿½complete and full stack trace.
   - Localization utilities
     - Retrieve LocalizedStrings from StringTables of .package files.
     - Format tokens into LocalizedStrings
-    - Display text in specific colors (Colors can be added by request)
+    - Display textï¿½inï¿½specific colors (Colors can be added by request)
       - Blue
       - Green
       - Red
@@ -139,15 +142,29 @@ Current Features:
   - and Many More, explore to your hearts content!
 - Testing Framework
   - Write tests to test your python code and run the tests via a command within the game.
-  - The results will be logged to the 'Documents/The Sims 4/' folder
+  - The results will be logged to the 'Documents/The Sims 4/'ï¿½folder
   - A single function can handle multiple tests utilizing the same code with different arguments.
   - Run tests via the command: `s4clib.run_tests <class_names_separated_by_a_space>`
   - Class Names are the names of the classes decorated with 'test_class'
   - If no class names are provided, all of the tests will run.
 
+
+Installation:
+
+- Download the latest zip archive from the [releases](https://github.com/ColonolNutty/Sims4CommunityLibrary/releases) page (It is the one with the version number in it Example: sims4communitylib.v0.0.0.zip) (Ignore the ones that say Source Code)
+- Unpack the archive using your favorite archiving tool.
+- Drag the files/folders to your Mods directory.
+- Keep in mind the ts4script file MUST be either top level (Directly in the Mods/<ts4script file>ï¿½folder) or one folder deep (Mods/Blah/<ts4script file>). Any deeper and it will not work.
+
+
+Requirements:
+
+- Sims 4 Patch Version 1.54.120.1020 (Island Living) or above
+- DLCs are NOT required, you only need to have an up to date game (Check the bottom of the main menu for your current version).
+
 Planned Features:
 
-- Many more functions, utilities, and services to make coding for the sims 4 much easier. You won't need to reinvent the wheel anymore!
+- Many more functions, utilities, andï¿½services to make coding for the sims 4 much easier. You won't need to reinvent the wheel anymore!
 - Exception Handling (stack trace customization)
 - Services & Utilities:
   - Weather - Change weather conditions
@@ -160,33 +177,20 @@ Planned Features:
   - Prompt the player to input Numbers/Text
 
 
-Installation:
-
-- Download the latest zip archive from the [releases](https://github.com/ColonolNutty/Sims4CommunityLibrary/releases) page (It is the one with the version number in it Example: sims4communitylib.v0.0.0.zip) (Ignore the ones that say Source Code)
-- Unpack the archive using your favorite archiving tool.
-- Drag the files/folders to your Mods directory.
-- Keep in mind the ts4script file MUST be either top level (Directly in the Mods/<ts4script file> folder) or one folder deep (Mods/Blah/<ts4script file>). Any deeper and it will not work.
-
-
-Requirements:
-
-- Sims 4 Patch Version 1.54.120.1020 (Island Living) or above
-- DLCs are NOT required, you only need to have an up to date game (Check the bottom of the main menu for your current version).
-
-
 Note for Modders:
 
 - If you have ideas for additions to add or want one of the planned features sooner rather than later, I'm all ears! Let's work together to create a library that we all can use!
+- To see the documentation for S4CL [check out the docs](https://sims4communitylibrary.readthedocs.io/en/latest/)!
 
 
 What is the workflow for working with S4CL?
 - Create a project based off of the [Template Project](https://github.com/ColonolNutty/s4cl-template-project)
 - Use the green button in the top right [The Main Page](https://github.com/ColonolNutty/Sims4CommunityLibrary) to download this project as a zip file.
 - In your project, create another directory called `S4CL`.
-- Open the downloaded project and copy the `Scripts/sims4communitylibrary` folder into the `S4CL` folder we created in the previous step.
+- Open the downloaded project and copy the `Scripts/sims4communitylib` folder into the `S4CL` folder we created in the previous step. The folder structure should then be: `<Your Project>/S4CL/sims4communitylib`
 - Right click the `S4CL` folder -> Mark Directory as -> Sources Root
-  - The `S4CL` folder should turn a blue color and the `sims4communitylibrary` folder should look like a folder with a dot (In other words, it should NOT be blue).
-- Your folder structure should look like this: `<Your Project>/S4CL/sims4communitylibrary` at this point.
+  - The `S4CL` folder should turn a blue color and the `sims4communitylib` folder should look like a folder with a dot (In other words, it should NOT be blue).
+- Your folder structure should look like this: `<Your Project>/S4CL/sims4communitylib` at this point.
 - Ensure you list in the description of your mod a link to the github releases (You may even link a specific release to ensure compatibility.)
 - Ensure you properly attribute S4CL and its author according to the license located at the bottom of this readme.
 - YOU DO NOT HAVE MY PERMISSION TO BUNDLE S4CL INTO YOUR OWN MOD. So don't do it. Redirect the users of your mod to the [github repository](https://github.com/ColonolNutty/Sims4CommunityLibrary) or [releases](https://github.com/ColonolNutty/Sims4CommunityLibrary/releases) pages instead.
