@@ -6,6 +6,8 @@
 Welcome to The Sims 4 Community Library Documentation!
 =========================================================
 
+To see the readme and the actual code, take a look at the repository on `Github`_
+
 .. toctree::
    :maxdepth: 2
 
@@ -22,3 +24,9 @@ Welcome to The Sims 4 Community Library Documentation!
    sims4communitylib.services
    sims4communitylib.testing
    sims4communitylib.utils
+
+
+.. target-notes::
+   :hidden:
+
+.. _`Github`: https://github.com/ColonolNutty/Sims4CommunityLibrary
