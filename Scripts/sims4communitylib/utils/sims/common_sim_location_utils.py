@@ -5,6 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from event_testing.results import EnqueueResult
 from server.pick_info import PickType
 import sims4.math
 import objects.terrain
@@ -29,8 +30,14 @@ class CommonSimLocationUtils:
 
     @staticmethod
     def get_position(sim_info: SimInfo) -> Union[Vector3, None]:
-        """Retrieve the current position of a Sim.
+        """get_position(sim_info)
 
+        Retrieve the current position of a Sim.
+
+        :param sim_info: The Sim to get the position of.
+        :type sim_info: SimInfo
+        :return: The current position of the Sim or None if the Sim does not have a position.
+        :rtype: Union[Vector3, None]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
@@ -39,8 +46,14 @@ class CommonSimLocationUtils:
 
     @staticmethod
     def get_location(sim_info: SimInfo) -> Union[Location, None]:
-        """Retrieve the current location of a Sim.
+        """get_location(sim_info)
 
+        Retrieve the current location of a Sim.
+
+        :param sim_info: The Sim to get the location of.
+        :type sim_info: SimInfo
+        :return: The current location of the Sim or None if the Sim does not have a location.
+        :rtype: Union[Vector3, None]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
@@ -49,8 +62,16 @@ class CommonSimLocationUtils:
 
     @staticmethod
     def can_swim_at_location(sim_info: SimInfo, location: Location) -> bool:
-        """Determine if a Sim can swim at the specified location.
+        """can_swim_at_location(sim_info, location)
 
+        Determine if a Sim can swim at the specified location.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param location: The Location to check.
+        :type location: Location
+        :return: True, if the Sim can swim at the specified location. False, if not.
+        :rtype: bool
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
@@ -59,43 +80,77 @@ class CommonSimLocationUtils:
 
     @staticmethod
     def can_swim_at_current_location(sim_info: SimInfo) -> bool:
-        """Determine if a Sim can swim at their current location.
+        """can_swim_at_current_location(sim_info)
 
+        Determine if a Sim can swim at their current location.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim can swim at their current location. False, if not.
+        :rtype: bool
         """
         location = CommonSimLocationUtils.get_location(sim_info)
         return CommonSimLocationUtils.can_swim_at_location(sim_info, location)
 
     @staticmethod
     def is_on_current_lot(sim_info: SimInfo) -> bool:
-        """Determine if a sim is on the current lot.
+        """is_on_current_lot(sim_info)
 
+        Determine if a sim is on the current lot.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is on the active lot. False, if not.
+        :rtype: bool
         """
         sim_position = CommonSimLocationUtils.get_position(sim_info)
         return sim_position is not None and services.active_lot().is_position_on_lot(sim_position)
 
     @staticmethod
     def is_renting_current_lot(sim_info: SimInfo) -> bool:
-        """Determine if a Sim is renting the current lot.
+        """is_renting_current_lot(sim_info)
 
+        Determine if a Sim is renting the current lot.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is renting the active lot. False, if not.
+        :rtype: bool
         """
         return sim_info.is_renting_zone(CommonLocationUtils.get_current_lot_id())
 
     @staticmethod
     def is_at_home(sim_info: SimInfo) -> bool:
-        """Determine if a Sim is currently at home.
+        """is_at_home(sim_info)
 
+        Determine if a Sim is currently at home.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is at their home lot. False, if not.
+        :rtype: bool
         """
         active_lot = CommonLocationUtils.get_current_lot()
         return CommonLocationUtils.get_current_zone_id() == CommonHouseholdUtils.get_household_lot_id(sim_info) and active_lot.is_position_on_lot(CommonSimLocationUtils.get_position(sim_info))
 
     @staticmethod
-    def send_to_position(sim_info: SimInfo, location_position: Vector3, level: int):
-        """Send a sim to the specified location.
+    def send_to_position(sim_info: SimInfo, location_position: Vector3, level: int) -> EnqueueResult:
+        """send_to_position(sim_info, location_position, level)
 
+        Send a Sim to the specified location.
+
+        :param sim_info: The Sim to send.
+        :type sim_info: SimInfo
+        :param location_position: The position to send the sim to.
+        :type location_position: Vector3
+        :param level: The level at which the position is.
+        :type level: int
+        :return: The result of sending the Sim to the specified location or None if they could not go there.
+        :rtype: EnqueueResult
         """
         from server_commands.sim_commands import _build_terrain_interaction_target_and_context, CommandTuning
         if location_position is None:
-            return False
+            return None
         sim = CommonSimUtils.get_sim_instance(sim_info)
         # noinspection PyUnresolvedReferences
         pos = sims4.math.Vector3(location_position.x, location_position.y, location_position.z)
@@ -105,8 +160,14 @@ class CommonSimLocationUtils:
 
     @staticmethod
     def is_allowed_on_current_lot(sim_info: SimInfo) -> bool:
-        """Determine if a Sim is allowed on the current lot.
+        """is_allowed_on_current_lot(sim_info)
 
+        Determine if a Sim is allowed on the current lot.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is allowed on the current lot. False, if not.
+        :rtype: bool
         """
         from sims4communitylib.utils.common_component_utils import CommonComponentUtils
         from sims4communitylib.enums.types.component_types import CommonComponentType

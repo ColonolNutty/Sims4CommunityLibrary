@@ -14,8 +14,18 @@ from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_conte
 
 
 class CommonDialogObjectOption(CommonDialogOption):
-    """A option the player can choose within a dialog.
+    """CommonDialogObjectOption(option_identifier, value, context, on_chosen=CommonFunctionUtils.noop)
 
+    A option the player can choose within a dialog.
+
+    :param option_identifier: A string that identifies the option from other options.
+    :type option_identifier: str
+    :param value: The value of the option.
+    :type value: DialogOptionValueType
+    :param context: A context to customize the dialog option.
+    :type context: CommonDialogOptionContext
+    :param on_chosen: A callback invoked when the dialog option is chosen.
+    :type on_chosen: Callable[..., Any], optional
     """
     def __init__(
         self,

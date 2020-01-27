@@ -15,10 +15,8 @@ from sims4communitylib.exceptions.common_exceptions_handler import CommonExcepti
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
+# noinspection PyMissingOrEmptyDocstring
 class CommonChooseOptionsDialog(CommonChooseOptionDialog):
-    """A dialog that displays a list of options.
-
-    """
     def show(
         self,
         *_,
@@ -27,8 +25,23 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
         max_selectable: int=1,
         **__
     ):
-        """Show the dialog.
+        """show(*_,\
+            on_submit=CommonFunctionUtils.noop,\
+            min_selectable=1,\
+            max_selectable=1,\
+            **__\
+        )
 
+        Show the dialog.
+
+        .. note:: Override this function and provide your own arguments.
+
+        :param on_submit: When the dialog is submit, this callback will be invoked with the selected options.
+        :type on_submit: Callable[[Tuple[DialogOptionValueType]], Any], optional
+        :param min_selectable: The minimum number of options that can be chosen.
+        :type min_selectable: int, optional
+        :param max_selectable: The maximum number of options that can be chosen.
+        :type max_selectable: int, optional
         """
         @CommonExceptionHandler.catch_exceptions(self.mod_identity.name, fallback_return=False)
         def _on_chosen(chosen_options: Union[Tuple[CommonDialogOption], None], outcome: CommonChoiceOutcome) -> Any:

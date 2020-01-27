@@ -19,21 +19,30 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 
 
 class CommonBuffUtils:
-    """Utilities for handling buffs on sims.
+    """Utilities for manipulating Buffs on Sims.
 
     """
-    @classmethod
-    def has_fertility_boosting_buff(cls, sim_info: SimInfo) -> bool:
-        """Determine if any fertility boosting buffs are currently active on a sim.
+    @staticmethod
+    def has_fertility_boosting_buff(sim_info: SimInfo) -> bool:
+        """has_fertility_boosting_buff(sim_info)
 
-        Fertility Boosting Buffs:
-        - Fertility Potion
-        - Fertility Potion Masterwork
-        - Fertility Potion Normal
-        - Fertility Potion Outstanding
-        - Massage Table Fertility Boost
-        - Massage Table Fertility Boost Incense
+        Determine if any fertility boosting buffs are currently active on a sim.
 
+        .. note::
+
+            Fertility Boosting Buffs:
+
+            - Fertility Potion
+            - Fertility Potion Masterwork
+            - Fertility Potion Normal
+            - Fertility Potion Outstanding
+            - Massage Table Fertility Boost
+            - Massage Table Fertility Boost Incense
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if they have any fertility boosting buffs. False, if not.
+        :rtype: bool
         """
         buff_ids = (
             CommonBuffId.OBJECT_HERBALIST_POTION_FERTILITY_POTION,
@@ -45,10 +54,16 @@ class CommonBuffUtils:
         )
         return CommonBuffUtils.has_buff(sim_info, *buff_ids)
 
-    @classmethod
-    def has_morning_person_buff(cls, sim_info: SimInfo) -> bool:
-        """Determine if any Morning Person Trait buffs are currently active on a sim.
+    @staticmethod
+    def has_morning_person_buff(sim_info: SimInfo) -> bool:
+        """has_morning_person_buff(sim_info)
 
+        Determine if any Morning Person Trait buffs are currently active on a Sim.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if they have any morning person buffs. False, if not.
+        :rtype: bool
         """
         buff_ids = (
             CommonBuffId.TRAIT_MORNING_PERSON,
@@ -57,10 +72,16 @@ class CommonBuffUtils:
         )
         return CommonBuffUtils.has_buff(sim_info, *buff_ids)
 
-    @classmethod
-    def has_night_owl_buff(cls, sim_info: SimInfo) -> bool:
-        """Determine if any Night Owl Trait buffs are currently active on a sim.
+    @staticmethod
+    def has_night_owl_buff(sim_info: SimInfo) -> bool:
+        """has_night_owl_buff(sim_info)
 
+        Determine if any Night Owl Trait buffs are currently active on a sim.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if they have any night owl buffs. False, if not.
+        :rtype: bool
         """
         buff_ids = (
             CommonBuffId.TRAIT_NIGHT_OWL,
@@ -69,16 +90,21 @@ class CommonBuffUtils:
         )
         return CommonBuffUtils.has_buff(sim_info, *buff_ids)
 
-    @classmethod
-    def has_buff(cls, sim_info: SimInfo, *buff_ids: int) -> bool:
-        """Determine if any of the specified buffs are currently active on a sim.
+    @staticmethod
+    def has_buff(sim_info: SimInfo, *buff_ids: int) -> bool:
+        """has_buff(sim_info, *buff_ids)
+
+        Determine if any of the specified buffs are currently active on a sim.
 
         :param sim_info: The sim being checked.
-        :param buff_ids: The decimal identifiers of the Buffs being located.
+        :type sim_info: SimInfo
+        :param buff_ids: The decimal identifiers of Buffs.
+        :type buff_ids: int
         :return: True if the sim has any of the specified buffs.
+        :rtype: int
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'argument sim_info was \'None\' for {} of class {}'.format(CommonBuffUtils.has_buff.__name__, CommonBuffUtils.__name__))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.has_buff.__name__, CommonBuffUtils.__name__))
             return False
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
@@ -91,29 +117,41 @@ class CommonBuffUtils:
                 return True
         return False
 
-    @classmethod
-    def get_buffs(cls, sim_info: SimInfo) -> List[Buff]:
-        """Retrieve all buffs currently active on a sim.
+    @staticmethod
+    def get_buffs(sim_info: SimInfo) -> List[Buff]:
+        """get_buffs(sim_info)
 
+        Retrieve all buffs currently active on a Sim.
+
+        :param sim_info: The Sim to retrieve the buffs of.
+        :type sim_info: SimInfo
+        :return: A collection of currently active buffs on the Sim.
+        :rtype: Tuple[Buff]
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'argument sim_info was \'None\' for {} of class {}'.format(CommonBuffUtils.get_buffs.__name__, CommonBuffUtils.__name__))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.get_buffs.__name__, CommonBuffUtils.__name__))
             return list()
         if not hasattr(sim_info, 'get_active_buff_types'):
             return list()
         return list(sim_info.get_active_buff_types())
 
-    @classmethod
-    def add_buff(cls, sim_info: SimInfo, *buff_ids: int, buff_reason: [int, str, LocalizedString]=None) -> bool:
-        """Add the specified buffs to a sim.
+    @staticmethod
+    def add_buff(sim_info: SimInfo, *buff_ids: int, buff_reason: Union[int, str, LocalizedString]=None) -> bool:
+        """add_buff(sim_info, *buff_ids, buff_reason=None)
+
+        Add the specified buffs to a sim.
 
         :param sim_info: The sim to add the specified buffs to.
+        :type sim_info: SimInfo
         :param buff_ids: The decimal identifiers of buffs to add.
+        :type buff_ids: int
         :param buff_reason: The text that will display when the player hovers over the buffs. What caused the buffs to be added.
-        :return: True if all of the specified buffs were successfully added.
+        :type buff_reason: Union[int, str, LocalizedString], optional
+        :return: True, if all of the specified buffs were successfully added. False, if not.
+        :rtype: bool
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'argument sim_info was \'None\' for {} of class {}'.format(CommonBuffUtils.add_buff.__name__, CommonBuffUtils.__name__))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.add_buff.__name__, CommonBuffUtils.__name__))
             return False
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
@@ -127,16 +165,21 @@ class CommonBuffUtils:
                 success = False
         return success
 
-    @classmethod
-    def remove_buff(cls, sim_info: SimInfo, *buff_ids: int) -> bool:
-        """Remove the specified buffs from a sim.
+    @staticmethod
+    def remove_buff(sim_info: SimInfo, *buff_ids: int) -> bool:
+        """remove_buff(sim_info, *buff_ids)
+
+        Remove the specified buffs from a sim.
 
         :param sim_info: The sim to remove the specified buffs from.
-        :param buff_ids: The decimal identifiers of buffs to remove.
-        :return: True if all of the specified buffs were successfully removed.
+        :type sim_info: SimInfo
+        :param buff_ids: The decimal identifiers of Buffs to remove.
+        :type buff_ids: int
+        :return: True, if all of the specified buffs were successfully removed. False, if not.
+        :rtype: bool
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Argument sim_info was \'None\' for {} of class {}'.format(CommonBuffUtils.remove_buff.__name__, CommonBuffUtils.__name__))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.remove_buff.__name__, CommonBuffUtils.__name__))
             return False
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False

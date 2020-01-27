@@ -17,21 +17,43 @@ from sims4communitylib.enums.motives_enum import CommonMotiveId
 class CommonSimMotiveUtils:
     """Utilities for Sim motives.
 
+    .. note:: Motives are just another name for Sim Needs (Bladder, Hunger, Energy, etc.)
+
     """
     _MOTIVE_MAPPINGS: Dict[int, Dict[Species, int]] = None
 
     @staticmethod
     def has_motive(sim_info: SimInfo, motive_id: int) -> bool:
-        """Determine if a Sim has the specified motive.
+        """has_motive(sim_info, motive_id)
 
+        Determine if a Sim has the specified Motive.
+
+        .. note:: For example, you could use this to determine if a Sim has a vampire power level.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param motive_id: The identifier of the Motive to look for.
+        :type motive_id: int
+        :return: True, if the Sim has the specified Motive. False, if not.
+        :rtype: bool
         """
         mapped_motive_id = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
         return CommonSimStatisticUtils.has_statistic(sim_info, mapped_motive_id)
 
     @staticmethod
     def increase_motive_level(sim_info: SimInfo, motive_id: int, amount: float) -> bool:
-        """Increase the current level of the Motive of a Sim.
+        """increase_motive_level(sim_info, motive_id, amount)
 
+        Increase the current level of a Motive of a Sim.
+
+        :param sim_info: The Sim to modify.
+        :type sim_info: SimInfo
+        :param motive_id: The identifier of the Motive to change.
+        :type motive_id: int
+        :param amount: The amount to increase the motive by.
+        :type amount: float
+        :return: True, if the specified Motive was changed successfully. False, if not.
+        :rtype: bool
         """
         mapped_motive_id = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
         if not CommonSimMotiveUtils.has_motive(sim_info, mapped_motive_id):
@@ -41,8 +63,18 @@ class CommonSimMotiveUtils:
 
     @staticmethod
     def decrease_motive_level(sim_info: SimInfo, motive_id: int, amount: float) -> bool:
-        """Decrease the current level of the Motive of a Sim.
+        """decrease_motive_level(sim_info, motive_id, amount)
 
+        Decrease the current level of a Motive of a Sim.
+
+        :param sim_info: The Sim to modify.
+        :type sim_info: SimInfo
+        :param motive_id: The identifier of the Motive to change.
+        :type motive_id: int
+        :param amount: The amount to decrease the motive by.
+        :type amount: float
+        :return: True, if the specified Motive was changed successfully. False, if not.
+        :rtype: bool
         """
         mapped_motive_id = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
         if not CommonSimMotiveUtils.has_motive(sim_info, mapped_motive_id):
@@ -52,8 +84,14 @@ class CommonSimMotiveUtils:
 
     @staticmethod
     def get_hunger_level(sim_info: SimInfo) -> float:
-        """Retrieve the hunger level of a Sim.
+        """get_hunger_level(sim_info)
 
+        Retrieve the hunger level of a Sim.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim.
+        :rtype: float
         """
         motive_level = CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.HUNGER)
         if motive_level is None:
@@ -62,8 +100,14 @@ class CommonSimMotiveUtils:
 
     @staticmethod
     def get_hygiene_level(sim_info: SimInfo) -> float:
-        """Retrieve the hygiene level of a Sim.
+        """get_hygiene_level(sim_info)
 
+        Retrieve the hygiene level of a Sim.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim.
+        :rtype: float
         """
         motive_level = CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.HYGIENE)
         if motive_level is None:
@@ -72,8 +116,14 @@ class CommonSimMotiveUtils:
 
     @staticmethod
     def get_energy_level(sim_info: SimInfo) -> float:
-        """Retrieve the energy level of a Sim.
+        """get_energy_level(sim_info)
 
+        Retrieve the energy level of a Sim.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim.
+        :rtype: float
         """
         motive_level = CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.ENERGY)
         if motive_level is None:
@@ -82,8 +132,14 @@ class CommonSimMotiveUtils:
 
     @staticmethod
     def get_bladder_level(sim_info: SimInfo) -> float:
-        """Retrieve the bladder level of a Sim.
+        """get_bladder_level(sim_info)
 
+        Retrieve the bladder level of a Sim.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim.
+        :rtype: float
         """
         motive_level = CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.BLADDER)
         if motive_level is None:
@@ -92,8 +148,14 @@ class CommonSimMotiveUtils:
 
     @staticmethod
     def get_bowels_level(sim_info: SimInfo) -> float:
-        """Retrieve the bowels level of a Sim.
+        """get_bowels_level(sim_info)
 
+        Retrieve the bowels level of a Sim.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim.
+        :rtype: float
         """
         if CommonSpeciesUtils.is_human(sim_info):
             return -1.0
@@ -105,8 +167,14 @@ class CommonSimMotiveUtils:
 
     @staticmethod
     def get_social_level(sim_info: SimInfo) -> float:
-        """Retrieve the social level of a Sim.
+        """get_social_level(sim_info)
 
+        Retrieve the social level of a Sim.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim.
+        :rtype: float
         """
         motive_level = CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.SOCIAL)
         if motive_level is None:
@@ -115,8 +183,14 @@ class CommonSimMotiveUtils:
 
     @staticmethod
     def get_fun_level(sim_info: SimInfo) -> float:
-        """Retrieve the fun level of a Sim.
+        """get_fun_level(sim_info)
 
+        Retrieve the fun level of a Sim.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim.
+        :rtype: float
         """
         motive_level = CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.FUN)
         if motive_level is None:
@@ -125,8 +199,14 @@ class CommonSimMotiveUtils:
 
     @staticmethod
     def get_vampire_power_level(sim_info: SimInfo) -> float:
-        """Retrieve the vampire power level of a Sim.
+        """get_vampire_power_level(sim_info)
 
+        Retrieve the vampire power level of a Sim.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim or `-1.0` if the Sim is not a Vampire.
+        :rtype: float
         """
         if not CommonOccultUtils.is_vampire(sim_info):
             return -1.0
@@ -134,8 +214,14 @@ class CommonSimMotiveUtils:
 
     @staticmethod
     def get_vampire_thirst_level(sim_info: SimInfo) -> float:
-        """Retrieve the vampire thirst level of a Sim.
+        """get_vampire_thirst_level(sim_info)
 
+        Retrieve the vampire thirst level of a Sim.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim or `-1.0` if the Sim is not a Vampire.
+        :rtype: float
         """
         if not CommonOccultUtils.is_vampire(sim_info):
             return -1.0
@@ -143,8 +229,14 @@ class CommonSimMotiveUtils:
 
     @staticmethod
     def get_plant_sim_water_level(sim_info: SimInfo) -> float:
-        """Retrieve the plant sim water level of a Sim.
+        """get_plant_sim_water_level(sim_info)
 
+        Retrieve the plant sim water level of a Sim.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim or `-1.0` if the Sim is not a Plant Sim.
+        :rtype: float
         """
         if not CommonOccultUtils.is_plant_sim(sim_info):
             return -1.0

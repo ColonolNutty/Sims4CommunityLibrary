@@ -23,8 +23,14 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def is_pregnant(sim_info: SimInfo) -> bool:
-        """Determine if the specified Sim is pregnant.
+        """is_pregnant(sim_info)
 
+        Determine if the specified Sim is pregnant.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is pregnant. False, if not.
+        :rtype: bool
         """
         pregnancy_tracker = CommonSimPregnancyUtils._get_pregnancy_tracker(sim_info)
         if pregnancy_tracker is None:
@@ -34,8 +40,16 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def start_pregnancy(sim_info: SimInfo, partner_sim_info: SimInfo) -> bool:
-        """Start a pregnancy between a Sim and a Partner Sim.
+        """start_pregnancy(sim_info, partner_sim_info)
 
+        Start a pregnancy between a Sim and a Partner Sim.
+
+        :param sim_info: The Sim getting pregnant.
+        :type sim_info: SimInfo
+        :param partner_sim_info: The Sim that is getting the other Sim pregnant.
+        :type partner_sim_info: SimInfo
+        :return: True, if successful. False, if not.
+        :rtype: bool
         """
         if not CommonHouseholdUtils.has_free_household_slots(sim_info):
             return False
@@ -50,8 +64,14 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def clear_pregnancy(sim_info: SimInfo) -> bool:
-        """Clear the pregnancy status of a Sim.
+        """clear_pregnancy(sim_info)
 
+        Clear the pregnancy status of a Sim.
+
+        :param sim_info: The Sim being cleared.
+        :type sim_info: SimInfo
+        :return: True, if successful. False, if not.
+        :rtype: bool
         """
         pregnancy_tracker = CommonSimPregnancyUtils._get_pregnancy_tracker(sim_info)
         if pregnancy_tracker is None:
@@ -63,8 +83,14 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def can_be_impregnated(sim_info: SimInfo) -> bool:
-        """Determine if a Sim can be impregnated.
+        """can_be_impregnated(sim_info)
 
+        Determine if a Sim can be impregnated.
+
+        :param sim_info: The Sim being checked.
+        :type sim_info: SimInfo
+        :return: True, if they can. False, if they cannot.
+        :rtype: bool
         """
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId
@@ -81,8 +107,14 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def can_impregnate(sim_info: SimInfo) -> bool:
-        """Determine if a Sim can impregnate other sims.
+        """can_impregnate(sim_info)
 
+        Determine if a Sim can impregnate other sims.
+
+        :param sim_info: The Sim being checked.
+        :type sim_info: SimInfo
+        :return: True, if they can. False, if they cannot.
+        :rtype: bool
         """
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId
@@ -99,8 +131,14 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def get_partner_of_pregnant_sim(sim_info: SimInfo) -> Union[SimInfo, None]:
-        """Retrieve a SimInfo object of the Sim that impregnated the specified Sim.
+        """get_partner_of_pregnant_sim(sim_info)
 
+        Retrieve a SimInfo object of the Sim that impregnated the specified Sim.
+
+        :param sim_info: The Sim being checked.
+        :type sim_info: SimInfo
+        :return: The Sim that has impregnated the specified Sim or None if the Sim does not have a partner.
+        :rtype: Union[SimInfo, None]
         """
         pregnancy_tracker = CommonSimPregnancyUtils._get_pregnancy_tracker(sim_info)
         if pregnancy_tracker is None:
@@ -110,8 +148,14 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=0.0)
     def get_pregnancy_progress(sim_info: SimInfo) -> float:
-        """Retrieve the pregnancy progress of a Sim.
+        """get_pregnancy_progress(sim_info)
 
+        Retrieve the pregnancy progress of a Sim.
+
+        :param sim_info: The Sim being checked.
+        :type sim_info: SimInfo
+        :return: The current progress of the pregnancy of a Sim.
+        :rtype: float
         """
         pregnancy_tracker = CommonSimPregnancyUtils._get_pregnancy_tracker(sim_info)
         if pregnancy_tracker is None or not CommonSimPregnancyUtils.is_pregnant(sim_info):
@@ -126,8 +170,14 @@ class CommonSimPregnancyUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=0.0)
     def get_pregnancy_rate(sim_info: SimInfo) -> float:
-        """Retrieve the rate at which pregnancy progresses.
+        """get_pregnancy_rate(sim_info)
 
+        Retrieve the rate at which pregnancy progresses.
+
+        :param sim_info: The Sim being checked.
+        :type sim_info: SimInfo
+        :return: The rate at which the pregnancy state of a Sim is progressing.
+        :rtype: float
         """
         pregnancy_tracker = CommonSimPregnancyUtils._get_pregnancy_tracker(sim_info)
         if pregnancy_tracker is None:

@@ -11,14 +11,15 @@ from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_obje
 
 
 class CommonDialogSelectOption(CommonDialogObjectOption):
-    """An option that invokes a callback, passing in its value.
+    """CommonDialogSelectOption(option_identifier, value, context, on_chosen=CommonFunctionUtils.noop)
+
+    An option that invokes a callback, passing in its value.
 
     """
+
+    # noinspection PyMissingOrEmptyDocstring
     @property
     def icon(self) -> Any:
-        """The icon of the option.
-
-        """
         if super().icon is not None:
             return super().icon
         return CommonIconUtils.load_arrow_right_icon()

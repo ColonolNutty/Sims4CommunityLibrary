@@ -15,14 +15,20 @@ from sims4communitylib.modinfo import ModInfo
 
 
 class CommonGenderUtils:
-    """Utilities for handling sim genders.
+    """Utilities for manipulating Genders of Sims.
 
     """
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def get_gender(sim_info: SimInfo) -> Union[Gender, None]:
-        """Retrieve the Gender of a sim.
+        """get_gender(sim_info)
 
+        Retrieve the Gender of a Sim.
+
+        :param sim_info: The Sim to retrieve the gender of.
+        :type sim_info: SimInfo
+        :return: The Gender of the Sim or None if a problem occurs.
+        :rtype: Union[Gender, None]
         """
         if sim_info is None:
             return None
@@ -35,8 +41,16 @@ class CommonGenderUtils:
 
     @staticmethod
     def set_gender(sim_info: SimInfo, gender: Union[int, Gender]) -> bool:
-        """Set the Gender of a sim.
+        """set_gender(sim_info, gender)
 
+        Set the Gender of a Sim.
+
+        :param sim_info: The Sim to set the Gender of.
+        :type sim_info: SimInfo
+        :param gender: The Gender to set the Sim to.
+        :type gender: Union[int, Gender]
+        :return: True, if the Gender of the Sim was set successfully. False, if not.
+        :rtype: bool
         """
         try:
             sim_info.gender = gender
@@ -47,35 +61,67 @@ class CommonGenderUtils:
 
     @staticmethod
     def are_same_gender(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:
-        """Determine if two sims are the same Gender.
+        """are_same_gender(sim_info, other_sim_info)
 
+        Determine if two Sims are the same Gender.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param other_sim_info: The Sim to compare to.
+        :type other_sim_info: SimInfo
+        :return: True, if both Sims are the same Gender. False, if not.
+        :rtype: bool
         """
         return CommonGenderUtils.get_gender(sim_info) == CommonGenderUtils.get_gender(other_sim_info)
 
     @staticmethod
     def is_female_gender(gender: Gender) -> bool:
-        """Determine if a Gender is Female.
+        """is_female_gender(gender)
 
+        Determine if a Gender is Female.
+
+        :param gender: The gender to check.
+        :type gender: Gender
+        :return: True, if the gender is female. False, if the gender is not female.
+        :rtype: bool
         """
         return gender == Gender.FEMALE
 
     @staticmethod
     def is_male_gender(gender: Gender) -> bool:
-        """Determine if a Gender is Male.
+        """is_male_gender(gender)
 
+        Determine if a Gender is Male.
+
+        :param gender: The gender to check.
+        :type gender: Gender
+        :return: True, if the gender is male. False, if the gender is not male.
+        :rtype: bool
         """
         return gender == Gender.MALE
 
     @staticmethod
     def is_female(sim_info: SimInfo) -> bool:
-        """Determine if a sim is Female.
+        """is_female(sim_info)
 
+        Determine if a Sim is Female.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is female. False, if the Sim is not female.
+        :rtype: bool
         """
         return CommonGenderUtils.is_female_gender(CommonGenderUtils.get_gender(sim_info))
 
     @staticmethod
     def is_male(sim_info: SimInfo) -> bool:
-        """Determine if a sim is Male.
+        """is_male(sim_info)
 
+        Determine if a Sim is Male.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is male. False, if the Sim is not male.
+        :rtype: bool
         """
         return CommonGenderUtils.is_male_gender(CommonGenderUtils.get_gender(sim_info))

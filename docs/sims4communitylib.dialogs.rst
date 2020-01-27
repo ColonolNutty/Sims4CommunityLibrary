@@ -11,9 +11,9 @@ Custom Dialogs
 Enums
 -------------------------------------------------------
 
-*********************
-`Choice Outcome`
-*********************
+***********************
+`Choose Dialog Outcome`
+***********************
 
 .. autoclass:: sims4communitylib.dialogs.common_choice_outcome.CommonChoiceOutcome
    :members:

@@ -18,18 +18,22 @@ from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
 class CommonChooseOptionDialog(HasLog):
-    """A dialog that displays a list of options.
+    """CommonChooseOptionDialog(internal_dialog, on_close=CommonFunctionUtils.noop)
 
+    A dialog that displays a list of options.
+
+    .. warning:: Unless you know what you are doing, do not create an instance of this class directly!
+
+    :param internal_dialog: The dialog this option dialog wraps.
+    :type internal_dialog: CommonChooseDialog
+    :param on_close: A callback invoked upon the dialog closing.
+    :type on_close: Callable[..., Any], optional
     """
     def __init__(
         self,
         internal_dialog: CommonChooseDialog,
         on_close: Callable[..., Any]=CommonFunctionUtils.noop
     ):
-        """Create a dialog to display a list of options.
-
-        :param on_close: A callback invoked upon the dialog closing.
-        """
         super().__init__()
         self._on_close = on_close
         self._options = []
@@ -42,8 +46,10 @@ class CommonChooseOptionDialog(HasLog):
 
     @property
     def option_count(self) -> int:
-        """Determine the number of options within this dialog.
+        """The number of options within the dialog.
 
+        :return: The number of options within the dialog.
+        :rtype: int
         """
         return len(self._options)
 
@@ -51,6 +57,8 @@ class CommonChooseOptionDialog(HasLog):
     def title(self) -> LocalizedString:
         """The title of the dialog.
 
+        :return: The title of the dialog.
+        :rtype: LocalizedString
         """
         return self._internal_dialog.title
 
@@ -58,6 +66,8 @@ class CommonChooseOptionDialog(HasLog):
     def description(self) -> LocalizedString:
         """The description of the dialog.
 
+        :return: The description of the dialog.
+        :rtype: LocalizedString
         """
         return self._internal_dialog.description
 
@@ -66,8 +76,12 @@ class CommonChooseOptionDialog(HasLog):
         return self.__internal_dialog
 
     def has_options(self) -> bool:
-        """Determine if the dialog has selectable options.
+        """has_options()
 
+        Determine if the dialog has selectable options.
+
+        :return: True, if the dialog has any options in it. False, if not.
+        :rtype: bool
         """
         try:
             return self.option_count > 0
@@ -76,8 +90,12 @@ class CommonChooseOptionDialog(HasLog):
         return False
 
     def add_option(self, option: CommonDialogOption):
-        """Add an option to the dialog.
+        """add_option(option)
 
+        Add an option to the dialog.
+
+        :param option: The option to add.
+        :type option: CommonDialogOption
         """
         try:
             if self._internal_dialog is None or not hasattr(self._internal_dialog, 'add_row'):
@@ -89,6 +107,8 @@ class CommonChooseOptionDialog(HasLog):
 
     def show(self, *_, **__):
         """Show the dialog.
+
+        .. note:: Override this function and provide your own arguments.
 
         """
         try:

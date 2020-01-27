@@ -13,8 +13,14 @@ from sims4communitylib.dialogs.option_dialogs.common_choose_object_option_dialog
 
 
 class CommonDialogOpenDialogOption(CommonDialogObjectOption):
-    """An option that branches into other options.
+    """CommonDialogOpenDialogOption(create_dialog_callback, context)
 
+    An option that branches into other options.
+
+    :param create_dialog_callback: A callback invoked when the dialog option is chosen. It should open a dialog.
+    :type create_dialog_callback: Callable[..., CommonChooseObjectOptionDialog]
+    :param context: A context to customize the dialog option.
+    :type context: CommonDialogOptionContext
     """
     def __init__(
         self,
@@ -31,11 +37,9 @@ class CommonDialogOpenDialogOption(CommonDialogObjectOption):
             on_chosen=_on_chosen
         )
 
+    # noinspection PyMissingOrEmptyDocstring
     @property
     def icon(self) -> Any:
-        """The icon of the option.
-
-        """
         if super().icon is not None:
             return super().icon
         return CommonIconUtils.load_arrow_navigate_into_icon()
