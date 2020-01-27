@@ -27,57 +27,105 @@ class CommonTypeUtils:
     """
     @staticmethod
     def is_sim_or_sim_info(obj: Any) -> bool:
-        """Determine if an object is either of type Sim or type SimInfo
+        """is_sim_or_sim_info(obj)
 
+        Determine if an object is either of type Sim or type SimInfo
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
         """
         return CommonTypeUtils.is_sim_info(obj) or CommonTypeUtils.is_sim_instance(obj)
 
     @staticmethod
     def is_sim_instance(obj: Any) -> bool:
-        """Determine if an object is of type Sim
+        """is_sim_instance(obj)
 
+        Determine if an object is of type Sim
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
         """
         return isinstance(obj, Sim)
 
     @staticmethod
     def is_sim_info(obj: Any) -> bool:
-        """Determine if an object is of type SimInfo
+        """is_sim_info(obj)
 
+        Determine if an object is of type SimInfo
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
         """
         return isinstance(obj, SimInfo)
 
     @staticmethod
     def is_sim_info_base_wrapper(obj: Any) -> bool:
-        """Determine if an object is of type SimInfo
+        """is_sim_info_base_wrapper(obj)
 
+        Determine if an object is of type SimInfo
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
         """
         return isinstance(obj, SimInfoBaseWrapper)
 
     @staticmethod
     def is_script_object(obj: Any) -> bool:
-        """Determine if an object is of type ScriptObject
+        """is_script_object(obj)
 
+        Determine if an object is of type ScriptObject
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
         """
         return isinstance(obj, ScriptObject)
 
     @staticmethod
     def is_game_object(obj: Any) -> bool:
-        """Determine if an object is of type GameObject
+        """is_game_object(obj)
 
+        Determine if an object is of type GameObject
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
         """
         return isinstance(obj, GameObject)
 
     @staticmethod
     def is_terrain(obj: Any) -> bool:
-        """Determine if an object is of type Terrain
+        """is_terrain(obj)
 
+        Determine if an object is of type Terrain
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
         """
         return isinstance(obj, Terrain)
 
     @staticmethod
     def is_ocean(obj: Any) -> bool:
-        """Determine if an object is of type Ocean
+        """is_ocean(obj)
 
+        Determine if an object is of type Ocean
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
         """
         if Ocean is None:
             return False
@@ -85,14 +133,26 @@ class CommonTypeUtils:
 
     @staticmethod
     def is_swimming_pool(obj: Any) -> bool:
-        """Determine if an object is of type SwimmingPool
+        """is_swimming_pool(obj)
 
+        Determine if an object is of type SwimmingPool
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
         """
         return isinstance(obj, SwimmingPool)
 
     @staticmethod
     def is_door(obj: Any) -> bool:
-        """Determine if an object is of type Door
+        """is_door(obj)
 
+        Determine if an object is of type Door
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
         """
         return isinstance(obj, Door)

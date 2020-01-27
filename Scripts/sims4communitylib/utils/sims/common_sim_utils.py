@@ -16,27 +16,51 @@ from objects import ALL_HIDDEN_REASONS
 class CommonSimUtils:
     """Utilities for retrieving sims in different ways.
 
+    .. note::
+
+        Available commands:
+
+        - `s4clib_testing.display_name_of_currently_active_sim`
+        - `s4clib_testing.display_names_of_all_sims`
+
     """
     @staticmethod
     def get_active_sim() -> Sim:
-        """Retrieve a Sim object of the Currently Active Sim.
+        """get_active_sim()
 
+        Retrieve a Sim object of the Currently Active Sim.
+
+        .. note:: The Active Sim is the Sim with the Plumbob above their head.
+
+        :return: An instance of the Active Sim.
+        :rtype: Sim
         """
         client = services.client_manager().get_first_client()
         return client.active_sim
 
     @staticmethod
     def get_active_sim_info() -> SimInfo:
-        """Retrieve a SimInfo object of the Currently Active Sim.
+        """get_active_sim_info()
 
+        Retrieve a SimInfo object of the Currently Active Sim.
+
+        :return: The SimInfo of the Active Sim.
+        :rtype: SimInfo
         """
         return CommonSimUtils.get_active_sim().sim_info
 
     @staticmethod
     def get_sim_info_of_sim_with_name(first_name: str, last_name: str) -> Union[SimInfo, None]:
-        """Retrieve a SimInfo object for the first Sim with the specified First and Last Name.
+        """get_sim_info_of_sim_with_name(first_name, last_name)
 
+        Retrieve a SimInfo object for the first Sim with the specified First and Last Name.
+
+        :param first_name: A first name to look for.
+        :type first_name: str
+        :param last_name: A last name to look for.
+        :type last_name: str
         :return: The first Sim found with the specified first and last name or None if no Sim is found.
+        :rtype: Union[SimInfo, None]
         """
         for sim_info in CommonSimUtils.get_sim_info_for_all_sims_with_name_generator(first_name, last_name):
             return sim_info
@@ -44,8 +68,16 @@ class CommonSimUtils:
 
     @staticmethod
     def get_sim_info_for_all_sims_with_name_generator(first_name: str, last_name: str) -> Iterator[SimInfo]:
-        """Retrieve a SimInfo object for each and every Sim with the specified First and Last Name.
+        """get_sim_info_for_all_sims_with_name_generator(first_name, last_name)
 
+        Retrieve a SimInfo object for each and every Sim with the specified First and Last Name.
+
+        :param first_name: A first name to look for.
+        :type first_name: str
+        :param last_name: A last name to look for.
+        :type last_name: str
+        :return: An iterable of Sims found with the specified first and last name.
+        :rtype: Iterator[SimInfo]
         """
         from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
         first_name = first_name.lower()
@@ -58,9 +90,14 @@ class CommonSimUtils:
 
     @staticmethod
     def get_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None) -> Iterator[Sim]:
-        """Retrieve a Sim object for each and every Sim (including hidden Sims).
+        """get_all_sims_generator(include_sim_callback=None)
+
+        Retrieve a Sim object for each and every Sim (including hidden Sims).
 
         :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. If set to None, All sims will be included.
+        :type include_sim_callback: Callable[[SimInfo], bool], optional
+        :return: An iterable of all Sims matching the `include_sim_callback` filter.
+        :rtype: Iterator[Sim]
         """
         for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
             sim_instance = sim_info.get_sim_instance(allow_hidden_flags=ALL_HIDDEN_REASONS)
@@ -70,9 +107,14 @@ class CommonSimUtils:
 
     @staticmethod
     def get_sim_info_for_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None) -> Iterator[SimInfo]:
-        """Retrieve a SimInfo object for each and every sim.
+        """get_sim_info_for_all_sims_generator(include_sim_callback=None)
+
+        Retrieve a SimInfo object for each and every sim.
 
         :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. If set to None, All sims will be included.
+        :type include_sim_callback: Callable[[SimInfo], bool], optional
+        :return: An iterable of all Sims matching the `include_sim_callback` filter.
+        :rtype: Iterator[SimInfo]
         """
         sim_info_list = list(services.sim_info_manager().get_all())
         for sim_info in sim_info_list:
@@ -84,10 +126,16 @@ class CommonSimUtils:
 
     @staticmethod
     def get_instanced_sim_info_for_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None) -> Iterator[SimInfo]:
-        """Retrieve a SimInfo object for each and every sim.
-        note:: Only SimInfo with a Sim instance (get_sim_instance) will be returned.
+        """get_instanced_sim_info_for_all_sims_generator(include_sim_callback=None)
+
+        Retrieve a SimInfo object for each and every sim.
+
+        .. note:: Only SimInfo with a Sim instance (:func:`~get_sim_instance`) will be returned.
 
         :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. If set to None, All sims will be included.
+        :type include_sim_callback: Callable[[SimInfo], bool], optional
+        :return: An iterable of all Sims matching the `include_sim_callback` filter.
+        :rtype: Iterator[SimInfo]
         """
         for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
             sim_instance = sim_info.get_sim_instance(allow_hidden_flags=ALL_HIDDEN_REASONS)
@@ -97,8 +145,14 @@ class CommonSimUtils:
 
     @staticmethod
     def get_sim_id(sim_identifier: Union[int, Sim, SimInfo]) -> int:
-        """Retrieve a SimId (int) from a sim identifier.
+        """get_sim_id(sim_identifier)
 
+        Retrieve a SimId (int) from a sim identifier.
+
+        :param sim_identifier: The identifier or instance of a Sim to use.
+        :type sim_identifier: Union[int, Sim, SimInfo]
+        :return: An identifier for the Sim instance.
+        :rtype: int
         """
         if sim_identifier is None:
             return 0
@@ -112,8 +166,14 @@ class CommonSimUtils:
 
     @staticmethod
     def get_sim_info(sim_identifier: Union[int, Sim, SimInfo]) -> Union[SimInfo, None]:
-        """Retrieve a SimInfo instance from a sim identifier.
+        """get_sim_info(sim_identifier)
 
+        Retrieve a SimInfo instance from a sim identifier.
+
+        :param sim_identifier: The identifier or instance of a Sim to use.
+        :type sim_identifier: Union[int, Sim, SimInfo]
+        :return: The SimInfo of the specified Sim instance or None if SimInfo is not found.
+        :rtype: Union[SimInfo, None]
         """
         if sim_identifier is None or isinstance(sim_identifier, SimInfo):
             return sim_identifier
@@ -125,8 +185,14 @@ class CommonSimUtils:
 
     @staticmethod
     def get_sim_instance(sim_identifier: Union[int, Sim, SimInfo]) -> Union[Sim, None]:
-        """Retrieve a Sim instance from a sim identifier.
+        """get_sim_instance(sim_identifier)
 
+        Retrieve a Sim instance from a sim identifier.
+
+        :param sim_identifier: The identifier or instance of a Sim to use.
+        :type sim_identifier: Union[int, Sim, SimInfo]
+        :return: The instance of the specified Sim or None if no instance was found.
+        :rtype: Union[Sim, None]
         """
         if sim_identifier is None or isinstance(sim_identifier, Sim):
             return sim_identifier

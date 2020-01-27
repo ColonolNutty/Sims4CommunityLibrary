@@ -17,8 +17,14 @@ class CommonWhimUtils:
     """
     @staticmethod
     def get_current_whims(sim_info: SimInfo) -> Tuple[WhimSetBaseMixin]:
-        """Retrieve the current Whims of the specified Sim.
+        """get_current_whims(sim_info)
 
+        Retrieve the current Whims of the specified Sim.
+
+        :param sim_info: The Sim to get the Whim Sets of.
+        :type sim_info: SimInfo
+        :return: A collection of Whims Sets for the specified Sim.
+        :rtype: Tuple[WhimSetBaseMixin]
         """
         whims_tracker = sim_info.whim_tracker
         if whims_tracker is None:

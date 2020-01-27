@@ -14,14 +14,20 @@ from sims4.resources import Types
 
 
 class CommonStatisticUtils:
-    """Utilities for manipulating the Statistics of Sims.
+    """Utilities for manipulating Statistics.
 
     """
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
     def get_statistic_initial_value(statistic_id: int) -> float:
-        """Retrieve the Initial Value of a Statistic.
+        """get_statistic_initial_value(statistic_id)
 
+        Retrieve the Initial Value of a Statistic.
+
+        :param statistic_id: The identifier of the Statistic to use.
+        :type statistic_id: int
+        :return: The initial value of the statistic.
+        :rtype: float
         """
         statistic_instance = CommonStatisticUtils._load_statistic_instance(statistic_id)
         if statistic_instance is None:
@@ -33,8 +39,14 @@ class CommonStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
     def get_statistic_min_value(statistic_id: int) -> float:
-        """Retrieve the Minimum Value of a Statistic.
+        """get_statistic_min_value(statistic_id)
 
+        Retrieve the Minimum Value of a Statistic.
+
+        :param statistic_id: The identifier of the Statistic to use.
+        :type statistic_id: int
+        :return: The minimum value of the statistic.
+        :rtype: float
         """
         statistic_instance = CommonStatisticUtils._load_statistic_instance(statistic_id)
         if statistic_instance is None:
@@ -44,8 +56,14 @@ class CommonStatisticUtils:
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
     def get_statistic_max_value(statistic_id: int) -> float:
-        """Retrieve the Maximum Value of a Statistic.
+        """get_statistic_max_value(statistic_id)
 
+        Retrieve the Maximum Value of a Statistic.
+
+        :param statistic_id: The identifier of the Statistic to use.
+        :type statistic_id: int
+        :return: The maximum value of the statistic.
+        :rtype: float
         """
         statistic_instance = CommonStatisticUtils._load_statistic_instance(statistic_id)
         if statistic_instance is None:

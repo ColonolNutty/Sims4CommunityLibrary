@@ -18,15 +18,27 @@ class CommonWeatherUtils:
 
     @staticmethod
     def weather_effect_is_active(weather_effect_type: WeatherEffectType) -> bool:
-        """Determine if the specified weather effect is currently active.
+        """weather_effect_is_active(weather_effect_type)
 
+        Determine if the specified weather effect is currently active.
+
+        :param weather_effect_type: The weather effect to check for.
+        :type weather_effect_type: WeatherEffectType
+        :return: True, if the weather is active. False, if it is not.
+        :rtype: bool
         """
         return CommonWeatherUtils.weather_effects_are_active((weather_effect_type,))
 
     @staticmethod
     def weather_effects_are_active(weather_effect_types: Iterator[WeatherEffectType]) -> bool:
-        """Determine if any of the specified weather effects are currently active.
+        """weather_effects_are_active(weather_effect_types)
 
+        Determine if any of the specified weather effects are currently active.
+
+        :param weather_effect_types: An iterable of weather effects to check for.
+        :type weather_effect_types: Iterator[WeatherEffectType]
+        :return: True, if any of the weathers is active. False, if none of the weathers are active.
+        :rtype: bool
         """
         if not hasattr(services, 'weather_service'):
             return False
@@ -41,23 +53,35 @@ class CommonWeatherUtils:
 
     @staticmethod
     def current_temperature_is_cold_or_freezing() -> bool:
-        """Determine if the current temperature is cold or freezing.
+        """current_temperature_is_cold_or_freezing()
 
+        Determine if the current temperature is cold or freezing.
+
+        :return: True, if the current temperature contains cold or freezing. False, if not.
+        :rtype: bool
         """
         current_temperature = CommonWeatherUtils.get_current_temperature()
         return current_temperature == Temperature.COLD or current_temperature == Temperature.FREEZING
 
     @staticmethod
     def current_weather_contains_thunder_or_lightning() -> bool:
-        """Determine if the current weather contains lightning or thunder.
+        """current_weather_contains_thunder_or_lightning()
 
+        Determine if the current weather contains lightning or thunder.
+
+        :return: True, if the current weather contains thunder or lightning. False, if not.
+        :rtype: bool
         """
         return CommonWeatherUtils.weather_effects_are_active((WeatherEffectType.LIGHTNING, WeatherEffectType.THUNDER))
 
     @staticmethod
     def get_current_temperature() -> Temperature:
-        """Retrieve the current temperature.
+        """get_current_temperature()
 
+        Retrieve the current temperature.
+
+        :return: The current temperature.
+        :rtype: Temperature
         """
         from weather.weather_enums import WeatherEffectType, Temperature
         weather_service = services.weather_service()
@@ -67,8 +91,12 @@ class CommonWeatherUtils:
 
     @staticmethod
     def get_weather_cloud_type() -> CloudType:
-        """Retrieve the current cloud type.
+        """get_weather_cloud_type()
 
+        Retrieve the current cloud type.
+
+        :return: The current cloud type.
+        :rtype: CloudType
         """
         weather_service = services.weather_service()
         if weather_service is None:

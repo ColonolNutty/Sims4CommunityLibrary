@@ -11,19 +11,27 @@ from sims4communitylib.modinfo import ModInfo
 
 
 class CommonIOUtils:
-    """Utilities for handling reading/writing to and from files.
+    """Utilities for reading/writing to and from files.
 
     """
     @staticmethod
     def write_to_file(file_path: str, data: str, buffering: int=1, encoding: str='utf-8', ignore_errors: bool=False) -> bool:
-        """Write string data to a file.
+        """write_to_file(file_path, data, buffering=1, encoding='utf-8', ignore_errors=False)
+
+        Write string data to a file.
 
         :param file_path: The file to write to.
+        :type file_path: str
         :param data: The data to write.
-        :param encoding: See the 'open' function documentation for more details.
-        :param buffering: See the 'open' function documentation for more details.
+        :type data: str
+        :param buffering: See the built-in python :func:`~open` function documentation for more details.
+        :type buffering: int, optional
+        :param encoding: See the built-in python :func:`~open` function documentation for more details.
+        :type encoding: str, optional
         :param ignore_errors: If True, any exceptions thrown will be ignored (Useful in preventing infinite loops)
+        :type ignore_errors: bool, optional
         :return: True if successful. False if not.
+        :rtype: bool
         """
         if file_path is None or data is None:
             return False
@@ -42,12 +50,18 @@ class CommonIOUtils:
 
     @staticmethod
     def load_from_file(file_path: str, buffering: int=1, encoding: str='utf-8') -> Union[str, None]:
-        """Load string data from a file.
+        """load_from_file(file_path, buffering=1, encoding='utf-8')
+
+        Load string data from a file.
 
         :param file_path: The file to read from.
-        :param encoding: See the 'open' function documentation for more details.
-        :param buffering: See the 'open' function documentation for more details.
+        :type file_path: str
+        :param buffering: See the built-in python :func:`~open` function documentation for more details.
+        :type buffering: int, optional
+        :param encoding: See the built-in python :func:`~open` function documentation for more details.
+        :type encoding: str, optional
         :return: The contents of the file as a string or None if an error occurred.
+        :rtype: Union[str, None]
         """
         if not os.path.isfile(file_path):
             return None

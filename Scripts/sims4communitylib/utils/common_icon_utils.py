@@ -17,49 +17,70 @@ class CommonIconUtils:
     """
     @staticmethod
     def load_arrow_right_icon() -> Any:
-        """Get the Resource Key for the ARROW_RIGHT_ICON.
+        """load_arrow_right_icon()
 
+        Get the Resource Key for the ARROW_RIGHT_ICON.
+
+        :return: An identifier for the icon.
+        :rtype: Any
         """
         return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_ARROW_RIGHT_ICON)
 
     @staticmethod
     def load_arrow_navigate_into_icon() -> Any:
-        """Get the Resource Key for the ARROW_NAVIGATE_INTO_ICON.
+        """load_arrow_navigate_into_icon()
 
+        Get the Resource Key for the ARROW_NAVIGATE_INTO_ICON.
+
+        :return: An identifier for the icon.
+        :rtype: Any
         """
         return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_ARROW_NAVIGATE_INTO_ICON)
 
     @staticmethod
     def load_question_mark_icon() -> Any:
-        """Get the Resource Key for the QUESTION_MARK_ICON.
+        """load_question_mark_icon()
 
+        Get the Resource Key for the QUESTION_MARK_ICON.
+
+        :return: An identifier for the icon.
+        :rtype: Any
         """
         return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_QUESTION_MARK_ICON)
 
     @staticmethod
     def load_checked_square_icon() -> Any:
-        """Get the Resource Key for the CHECKED_SQUARE_ICON.
+        """load_checked_square_icon()
 
+        Get the Resource Key for the CHECKED_SQUARE_ICON.
+
+        :return: An identifier for the icon.
+        :rtype: Any
         """
         return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_CHECKED_SQUARE_ICON)
 
     @staticmethod
     def load_unchecked_square_icon() -> Any:
-        """Get the Resource Key for the UNCHECKED_SQUARE_ICON.
+        """load_unchecked_square_icon()
 
+        Get the Resource Key for the UNCHECKED_SQUARE_ICON.
+
+        :return: An identifier for the icon.
+        :rtype: Any
         """
         return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_UNCHECKED_SQUARE_ICON)
 
     @staticmethod
     def load_six_sided_dice_icon() -> Any:
-        """Get the Resource Key for the SIX_SIDED_DICE_ICON.
+        """load_six_sided_dice_icon()
 
+        Get the Resource Key for the SIX_SIDED_DICE_ICON.
+
+        :return: An identifier for the icon.
+        :rtype: Any
         """
         return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_SIX_SIDED_DICE_ICON)
     
     @staticmethod
     def _load_icon(icon_id: int) -> Any:
-        """Get a Resource Key for an icon.
-
-        """
         return CommonResourceUtils.get_resource_key(Types.PNG, icon_id)

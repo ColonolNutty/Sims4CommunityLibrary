@@ -10,7 +10,7 @@ from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
 
 
 class CommonLogUtils:
-    """Utilities for getting paths used for logging.
+    """Utilities for retrieving the paths used for logging.
 
     """
     # 10 MB
@@ -18,27 +18,38 @@ class CommonLogUtils:
 
     @staticmethod
     def get_exceptions_file_path(mod_name: str) -> str:
-        """Retrieve the file path to the Exceptions file used for logging error messages.
+        """get_exceptions_file_path(mod_name)
+
+        Retrieve the file path to the Exceptions file used for logging error messages.
 
         :param mod_name: The name of the mod requesting the file path.
+        :type mod_name: str
         :return: An str file path to the Exceptions file.
+        :rtype: str
         """
         return CommonLogUtils._get_file_path(mod_name, 'Exceptions')
 
     @staticmethod
     def get_message_file_path(mod_name: str) -> str:
-        """Retrieve the file path to the Messages file used for logging info/debug messages.
+        """get_message_file_path(mod_name)
+
+        Retrieve the file path to the Messages file used for logging info/debug messages.
 
         :param mod_name: The name of the mod requesting the file path.
+        :type mod_name: str
         :return: An str file path to the Messages file.
+        :rtype: str
         """
         return CommonLogUtils._get_file_path(mod_name, 'Messages')
 
     @staticmethod
     def get_sims_documents_location_path() -> str:
-        """Retrieves the folder path of the folder 'Documents\Electronic Arts\The Sims 4'
+        """get_sims_documents_location_path()
+
+        Retrieves the folder path of the folder 'Documents\Electronic Arts\The Sims 4'
 
         :return: The file path to 'Documents\Electronic Arts\The Sims 4' folder.
+        :rtype: str
         """
         file_path = ''
         from sims4communitylib.modinfo import ModInfo

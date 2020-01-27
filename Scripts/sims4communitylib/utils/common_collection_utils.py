@@ -15,10 +15,14 @@ class CommonCollectionUtils:
     """
     @staticmethod
     def is_collection(obj: Any) -> bool:
-        """Determine if an object is a collection or not.
+        """is_collection(obj)
+
+        Determine if an object is a collection or not.
 
         :param obj: An object.
-        :return: True if the object is a collection, False if not.
+        :type obj: Any
+        :return: True, if the object is a collection, False, if not.
+        :rtype: bool
         """
         if obj is None:
             return False
@@ -30,12 +34,16 @@ class CommonCollectionUtils:
 
     @staticmethod
     def intersects(list_one: List[Any], *list_items: Any) -> bool:
-        """Determine if a list contains any of the specified items.
+        """intersects(list_one, *list_items)
+
+        Determine if a list contains any of the specified items.
 
         :param list_one: The list being checked.
         :type list_one: List[Any]
-        :param list_items: The items being searched for.
-        :return: True if the list contains any of the specified items.
+        :param list_items: An iterable of items being searched for.
+        :type list_items: Any
+        :return: True, if the list contains any of the specified items. False, if not.
+        :rtype: bool
         """
         if list_one is None or list_items is None:
             return False
@@ -47,12 +55,18 @@ class CommonCollectionUtils:
 
     @staticmethod
     def add_to_dict_if_not_exist(dictionary_one: Dict[Any, Any], dictionary_two: Dict[Any, Any]) -> Dict[Any, Any]:
-        """Combine two dictionaries.
-        If a key already exists in the first dictionary, the value from the second dictionary is ignored.
+        """add_to_dict_if_not_exist(dictionary_one, dictionary_two)
+
+        Combine two dictionaries.
+
+        .. note:: If a key already exists in the first dictionary, the value from the second dictionary is ignored.
 
         :param dictionary_one: The first dictionary.
+        :type dictionary_one: Dict[Any, Any]
         :param dictionary_two: The second dictionary.
+        :type dictionary_two: Dict[Any, Any]
         :return: A new combined dictionary.
+        :rtype: Dict[Any, Any]
         """
         if dictionary_one is None or dictionary_two is None:
             return dict()
@@ -71,10 +85,14 @@ class CommonCollectionUtils:
 
     @staticmethod
     def flatten(to_flatten: Any) -> Union[Any, List[Any]]:
-        """Flatten a collection of collections to a single list or itself if already flattened.
+        """flatten(to_flatten)
 
-        :param to_flatten: The collection to flatten
-        :return: A single flattened list or to_flatten if already flattened.
+        Flatten a collection of collections to a single list or itself if already flattened.
+
+        :param to_flatten: A collection of items.
+        :type to_flatten: Any
+        :return: A single flattened list or `to_flatten` if already flattened.
+        :rtype: Union[Any, List[Any]]
         """
         if not CommonCollectionUtils.is_collection(to_flatten):
             return to_flatten
@@ -85,12 +103,18 @@ class CommonCollectionUtils:
 
     @staticmethod
     def create_possible_combinations(items: Union[List[Any], Tuple[Any]], items_per_combination: int) -> Set[Tuple[Any]]:
-        """Create a collection of all possible combinations of the specified items.
-        Example: With items: [1, 2, 3] and combination_length: 2 the result will be: {(1, 2), (1, 3), (2, 3)}
+        """create_possible_combinations(items, items_per_combination)
+
+        Create a collection of all possible combinations of the specified items.
+
+        .. note:: Example: With items: [1, 2, 3] and combination_length: 2 the result will be: {(1, 2), (1, 3), (2, 3)}
 
         :param items: A collection of items to create combinations from.
+        :type items: Union[List[Any], Tuple[Any]]
         :param items_per_combination: The number of items in each combination.
+        :type items_per_combination: int
         :return: A collection of combinations
+        :rtype: Set[Tuple[Any]]
         """
         possible_combinations = set()
         combinations = itertools.combinations(items, items_per_combination)
