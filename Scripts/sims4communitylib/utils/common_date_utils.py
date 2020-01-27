@@ -11,11 +11,16 @@ from datetime import datetime
 class CommonRealDateUtils:
     """A utility for managing real life date and time.
 
+    .. note:: This utility is used to handle the Real Time and not the Game Time.
+
     """
     @staticmethod
     def get_current_date_string() -> str:
-        """Retrieve the current date as a pre-formatted string.
+        """get_current_date_string()
 
-        :return: The string representation of the current date.
+        Retrieve the current date as a pre-formatted string.
+
+        :return: The string representation of the current real date.
+        :rtype: str
         """
         return str(datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'))

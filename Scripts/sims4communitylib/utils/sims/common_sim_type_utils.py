@@ -15,25 +15,46 @@ class CommonSimTypeUtils:
 
     @staticmethod
     def is_non_player_sim(sim_info: SimInfo) -> bool:
-        """Determine if a Sim is a Non Player Sim.
-        note:: An NPC Sim is a sim that is not a part of the active household.
+        """is_non_player_sim(sim_info)
 
+        Determine if a Sim is a Non Player Sim.
+
+        .. note:: An NPC Sim is a sim that is not a part of the active household.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is an NPC. False, if not.
+        :rtype: bool
         """
         return sim_info.is_npc
 
     @staticmethod
     def is_player_sim(sim_info: SimInfo) -> bool:
-        """Determine if a Sim is a Player Sim.
-        note:: A Player Sim is a sim that is a part of the active household.
+        """is_player_sim(sim_info)
 
+        Determine if a Sim is a Player Sim.
+
+        .. note:: A Player Sim is a Sim that is a part of the active household.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Player Sim. False, if not.
+        :rtype: bool
         """
         return not CommonSimTypeUtils.is_non_player_sim(sim_info)
 
     @staticmethod
     def is_played_sim(sim_info: SimInfo) -> bool:
-        """Determine if a Sim is a Played Sim.
-        note:: This does not indicate whether or not a Sim is a Player Sim or Non Player Sim.
+        """is_played_sim(sim_info)
 
+        Determine if a Sim is a Played Sim.
+
+        .. note:: This does not indicate whether or not a Sim is a Player Sim or Non Player Sim.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Played Sim. False, if not.
+        :rtype: bool
         """
         return sim_info.is_played_sim
 
@@ -41,25 +62,32 @@ class CommonSimTypeUtils:
     def is_service_sim(sim_info: SimInfo) -> bool:
         """Determine if a Sim is a Service Sim.
 
-        Service Sims:
-        - Butler
-        - Chalet
-        - City Repair
-        - Forest Ranger
-        - Gardener
-        - Grim Reaper
-        - Maid
-        - Mailman
-        - Massage Therapist
-        - Master Fisherman
-        - Master Gardener
-        - Master Herbalist
-        - Nanny
-        - Pizza Delivery
-        - Repairman
-        - Restaurant Critic
-        - Statue Busker
+        .. note::
 
+            Service Sims:
+
+            - Butler
+            - Chalet
+            - City Repair
+            - Forest Ranger
+            - Gardener
+            - Grim Reaper
+            - Maid
+            - Mailman
+            - Massage Therapist
+            - Master Fisherman
+            - Master Gardener
+            - Master Herbalist
+            - Nanny
+            - Pizza Delivery
+            - Repairman
+            - Restaurant Critic
+            - Statue Busker
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Service Sim. False, if not.
+        :rtype: bool
         """
         from sims4communitylib.enums.traits_enum import CommonTraitId
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils

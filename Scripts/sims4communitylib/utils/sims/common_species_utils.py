@@ -18,14 +18,20 @@ log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'common_
 
 
 class CommonSpeciesUtils:
-    """Utilities for handling sim species.
+    """Utilities for manipulating and checking the Species of Sims.
 
     """
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
     def get_species(sim_info: SimInfo) -> Union[Species, None]:
-        """Retrieve the Species of a sim.
+        """get_species(sim_info)
 
+        Retrieve the Species of a sim.
+
+        :param sim_info: The Sim to get the Species of.
+        :type sim_info: SimInfo
+        :return: The Species of the Sim or None if the Sim does not have a Species.
+        :rtype: Union[Species, None]
         """
         if sim_info is None:
             return None
@@ -37,8 +43,16 @@ class CommonSpeciesUtils:
     
     @staticmethod
     def set_species(sim_info: SimInfo, species: Union[Species, int]) -> bool:
-        """Set the Species of a sim.
+        """set_species(sim_info, species)
 
+        Set the Species of a sim.
+
+        :param sim_info: The Sim to set the Species of.
+        :type sim_info: SimInfo
+        :param species: The Species to set the Sim to.
+        :type species: Union[Species, int]
+        :return: True, if successful. False, if not.
+        :rtype: bool
         """
         try:
             sim_info.species = species
@@ -49,9 +63,18 @@ class CommonSpeciesUtils:
     
     @staticmethod
     def are_same_species(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:
-        """Determine if two sims are of the same species.
-        note:: Also checks Extended Species (Large Dog, Small Dog, etc.)
+        """are_same_species(sim_info, other_sim_info)
 
+        Determine if two sims are of the same species.
+
+        .. note:: Extended Species are also compared (Large Dog, Small Dog, etc.)
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param other_sim_info: The Sim to compare to.
+        :type other_sim_info: SimInfo
+        :return: True, if both Sims are the same species. False, if not.
+        :rtype: bool
         """
         if sim_info is None or other_sim_info is None:
             log.debug('Either sim_info or other_sim_info is None')
@@ -84,57 +107,105 @@ class CommonSpeciesUtils:
     
     @staticmethod
     def is_human_species(species: Union[Species, int]) -> bool:
-        """Determine if a Species is a Human.
+        """is_human_species(species)
 
+        Determine if a Species is a Human.
+
+        :param species: The Species to check.
+        :type species: Union[Species, int]
+        :return: True, if the Species is Human. False, if not.
+        :rtype: bool
         """
         return species == Species.HUMAN
     
     @staticmethod
     def is_pet_species(species: Union[Species, int]) -> bool:
-        """Determine if a Species is a Pet.
+        """is_pet_species(species)
 
+        Determine if a Species is a Pet.
+
+        :param species: The Species to check.
+        :type species: Union[Species, int]
+        :return: True, if the Species is a Pet Species (Large Dog, Small Dog, Cat). False, if not.
+        :rtype: bool
         """
         return CommonSpeciesUtils.is_dog_species(species) or CommonSpeciesUtils.is_cat_species(species)
     
     @staticmethod
     def is_dog_species(species: Union[Species, int]) -> bool:
-        """Determine if a Species is a Dog.
+        """is_dog_species(species)
 
+        Determine if a Species is a Dog.
+
+        :param species: The Species to check.
+        :type species: Union[Species, int]
+        :return: True, if the Species is a Dog Species (Large Dog, Small Dog). False, if not.
+        :rtype: bool
         """
         return species == Species.DOG
     
     @staticmethod
     def is_cat_species(species: Union[Species, int]) -> bool:
-        """Determine if a Species is a Cat.
+        """is_cat_species(species)
 
+        Determine if a Species is a Cat.
+
+        :param species: The Species to check.
+        :type species: Union[Species, int]
+        :return: True, if the Species is a Cat Species. False, if not.
+        :rtype: bool
         """
         return species == Species.CAT
     
     @staticmethod
     def is_dog(sim_info: SimInfo) -> bool:
-        """Determine if a sim is a Dog.
+        """is_dog(sim_info)
 
+        Determine if a sim is a Dog.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Dog (Large Dog, Small Dog). False, if not.
+        :rtype: bool
         """
         return CommonSpeciesUtils.get_species(sim_info) == Species.DOG
     
     @staticmethod
     def is_human(sim_info: SimInfo) -> bool:
-        """Determine if a sim is a Human.
+        """is_human(sim_info)
 
+        Determine if a sim is a Human.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Human. False, if not.
+        :rtype: bool
         """
         return CommonSpeciesUtils.is_human_species(CommonSpeciesUtils.get_species(sim_info))
     
     @staticmethod
     def is_pet(sim_info: SimInfo) -> bool:
-        """Determine if a sim is a Pet.
+        """is_pet(sim_info)
 
+        Determine if a sim is a Pet.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Pet (Large Dog, Small Dog, Cat). False, if not.
+        :rtype: bool
         """
         return CommonSpeciesUtils.is_pet_species(CommonSpeciesUtils.get_species(sim_info))
     
     @staticmethod
     def is_large_dog(sim_info: SimInfo) -> bool:
-        """
-            Determine if a sim is a Large Dog.
+        """is_large_dog(sim_info)
+
+        Determine if a sim is a Large Dog.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Large Dog. False, if not.
+        :rtype: bool
         """
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId
@@ -142,8 +213,14 @@ class CommonSpeciesUtils:
     
     @staticmethod
     def is_small_dog(sim_info: SimInfo) -> bool:
-        """Determine if a sim is a Small Dog.
+        """is_small_dog(sim_info)
 
+        Determine if a sim is a Small Dog.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Small Dog. False, if not.
+        :rtype: bool
         """
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId
@@ -151,8 +228,14 @@ class CommonSpeciesUtils:
     
     @staticmethod
     def is_cat(sim_info: SimInfo) -> bool:
-        """Determine if a sim is a Cat.
+        """is_cat(sim_info)
 
+        Determine if a sim is a Cat.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Cat. False, if not.
+        :rtype: bool
         """
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId

@@ -18,17 +18,27 @@ class CommonFunctionUtils:
 
     @staticmethod
     def noop(*_, **__) -> None:
-        """An empty function that does nothing. Useful when you need something to do nothing.
+        """noop(*_, **__)
+
+        An empty function that does nothing. Useful when you need something to do nothing.
+
+        .. note:: Use this when you want something to do nothing.
 
         """
         pass
 
     @staticmethod
     def print_arguments(log: CommonLog, func_identifier: str='NO_IDENTIFIER_SPECIFIED') -> Callable[..., Any]:
-        """Create a function that will log the arguments and keyword arguments it receives
+        """print_arguments(log, func_identifier='NO_IDENTIFIER_SPECIFIED')
+
+        Create a function that will log the arguments and keyword arguments it receives
 
         :param log: The log to print the arguments to.
+        :type log: CommonLog
         :param func_identifier: An identifier for the function to determine which function was invoked
+        :type func_identifier: str
+        :return: A function that will print the arguments sent to it when the original function is invoked.
+        :rtype: Callable[..., Any]
         """
 
         def _print_arguments(*_, **__):
@@ -40,14 +50,22 @@ class CommonFunctionUtils:
 
     @staticmethod
     def safe_run(mod_identity: CommonModIdentity, primary_function: Callable[..., Any], fallback_function: Callable[..., Any], *args, **kwargs) -> Any:
-        """Safely run a function, if the primary function throws an exception, the fallback function will be run instead.
+        """safe_run(mod_identity, primary_function, fallback_function, *args, **kwargs)
+
+        Safely run a function, if the primary function throws an exception, the fallback function will be run instead.
 
         :param mod_identity: The identity of the mod running a function safely.
+        :type mod_identity: CommonModIdentity
         :param primary_function: The primary function to safely run.
+        :type primary_function: Callable[..., Any]
         :param fallback_function: A function called when the primary function throws an exception.
+        :type fallback_function: Callable[..., Any]
         :param args: Arguments to pass to both the primary function and fallback function.
+        :type args: Any
         :param kwargs: Keyword Arguments to pass to both the primary function and fallback function.
+        :type kwargs: Any
         :return: The result of either the primary function or the fallback function if the primary threw an exception.
+        :rtype: Any
         """
         try:
             return primary_function(*args, **kwargs)
@@ -63,18 +81,28 @@ class CommonFunctionUtils:
 
     @staticmethod
     def run_predicates_as_one(predicate_functions: Iterator[Callable[..., bool]], all_must_pass: bool=True) -> Callable[..., bool]:
-        """Wrap all specified predicate functions into a single predicate function. (See returned value for more information).
+        """run_predicates_as_one(predicate_functions, all_must_pass=True)
+
+        Wrap all predicate functions into a single predicate function. (See returned value for more information).
+
+        .. note::
+
+            If `all_must_pass` is True a wrapped function that will return a value of:
+
+            - True, if all predicates resulted in a True value.
+            - False, if any predicates resulted in a False value.
+
+            If `all_must_pass` is False a wrapped function that will return a value of:
+
+            - True, if any predicates resulted in a True value.
+            - False, if all predicates resulted in a False value.
 
         :param predicate_functions: The predicate functions to run as one.
+        :type predicate_functions: Iterator[Callable[..., bool]]
         :param all_must_pass: If True, all of the predicates must return a True value. If False, only some of the predicates must return a True value.
-        :return: If all_must_pass is True a wrapped function that will return a value of:
-          - True, if all predicates resulted in a True value.
-          - False, if any predicates resulted in a False value.
-
-          If all_must_pass is False a wrapped function that will return a value of:
-          - True, if any predicates resulted in a True value.
-          - False, if all predicates resulted in a False value.
-
+        :type all_must_pass: bool, optional
+        :return: The result of running all functions.
+        :rtype: bool
         """
         def _wrapper(*_, **__):
             if all_must_pass:
@@ -91,10 +119,14 @@ class CommonFunctionUtils:
 
     @staticmethod
     def run_predicate_with_reversed_result(predicate_function: Callable[..., bool]) -> Callable[..., bool]:
-        """Wrap the specified predicate function and reverse the result of it when the function is invoked.
+        """run_predicate_with_reversed_result(predicate_function)
+
+        Wrap the specified predicate function and reverse the result of it when the function is invoked.
 
         :param predicate_function: The predicate function to reverse the result of.
-        :return: A wrapped function.
+        :type predicate_function: Callable[..., bool]
+        :return: A function that will reverse the result of `predicate_function` upon invocation.
+        :rtype: Callable[..., bool]
         """
         def _wrapper(*_, **__):
             return not predicate_function(*_, **__)
@@ -102,10 +134,14 @@ class CommonFunctionUtils:
 
     @staticmethod
     def run_with_arguments(primary_function: Callable[..., Any], *args, **kwargs) -> Callable[..., Any]:
-        """Wrap a function and run it with additional arguments when something invokes it.
+        """run_with_arguments(primary_function, *args, **kwargs)
+
+        Wrap a function and run it with additional arguments when something invokes it.
 
         :param primary_function: The function that will be run.
-        :return: A wrapped function.
+        :type primary_function: Callable[..., Any]
+        :return: A function that will send extra arguments upon invocation.
+        :rtype: Callable[..., Any]
         """
         def _wrapper(*_, **__):
             return primary_function(*_, *args, **__, **kwargs)
