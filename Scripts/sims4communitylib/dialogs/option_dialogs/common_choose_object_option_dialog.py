@@ -40,10 +40,15 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
 
     A dialog that displays a list of options.
 
+    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_choose_object_option_dialog` in the in-game console.
+
     :Example usage:
 
     .. highlight:: python
     .. code-block:: python
+
+        def _on_option_chosen(option_identifier: str, choice: str):
+            output('Chose option {} with value: {}.'.format(pformat(option_identifier), pformat(choice)))
 
         # LocalizedStrings within other LocalizedStrings
         title_tokens = (
