@@ -15,6 +15,7 @@ To see the readme and the actual code, take a look at the repository on `Github`
    sims4communitylib.classes.interactions
    sims4communitylib.conditionals
    sims4communitylib.dialogs
+   sims4communitylib.injection
    sims4communitylib.enums
    sims4communitylib.events
    sims4communitylib.exceptions

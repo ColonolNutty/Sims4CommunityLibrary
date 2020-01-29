@@ -50,9 +50,35 @@ Custom Interactions
 `Terrain Interaction`
 --------------------------------------------------------------------------
 
+An inheritable class that provides a way to create custom Terrain Interactions.
+
+The main use for this class is to create interactions that occur when clicking on the ground.
+
 .. autoclass:: sims4communitylib.classes.interactions.common_terrain_interaction.CommonTerrainInteraction
    :members:
    :undoc-members:
+
+`Interaction Registration`
+--------------------------------------------------------------------------
+
+**********************
+`Interaction Registry`
+**********************
+
+.. autoclass:: sims4communitylib.services.interactions.interaction_registration_service.CommonInteractionRegistry
+   :members:
+   :undoc-members:
+   :show-inheritance:
+   :exclude-members: on_script_object_add, on_terrain_load, on_ocean_load
+
+********************************************
+`Script Object Interaction Handler`
+********************************************
+
+.. autoclass:: sims4communitylib.services.interactions.interaction_registration_service.CommonScriptObjectInteractionHandler
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 
 .. target-notes::

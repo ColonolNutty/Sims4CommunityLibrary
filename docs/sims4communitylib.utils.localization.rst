@@ -1,5 +1,6 @@
 Localization (String Table Manipulation)
 ============================================
+LocalizedStrings are created from text inside StringTables within package files.
 
 `Localization Utils`
 -----------------------------------------------------------------------
@@ -9,7 +10,7 @@ Localization (String Table Manipulation)
    :undoc-members:
    :show-inheritance:
 
-`Localized Tooltip`
+`Tooltips`
 -----------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.localization.common_localization_utils.CommonLocalizationUtils.LocalizedTooltip
@@ -17,7 +18,7 @@ Localization (String Table Manipulation)
    :undoc-members:
    :show-inheritance:
 
-`LocalizedString Colors`
+`Colors`
 -----------------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.localization.common_localized_string_colors.CommonLocalizedStringColor

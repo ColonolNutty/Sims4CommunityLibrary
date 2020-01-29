@@ -1,10 +1,6 @@
 Services
 ==================================
 
-.. toctree::
-
-   sims4communitylib.services.interactions
-
 `Common Service`
 -------------------------------------------------
 
