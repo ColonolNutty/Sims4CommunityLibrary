@@ -12,8 +12,9 @@ Custom Interactions
 
 .. autoclass:: sims4communitylib.classes.interactions.common_interaction.CommonInteraction
    :members:
+   :private-members:
    :show-inheritance:
-   :exclude-members: apply_posture_state, on_reset
+   :exclude-members: apply_posture_state, on_reset, send_current_progress, setup_asm_default, _test, _trigger_interaction_start_event, _post_perform
 
 `Immediate Super Interaction`
 -----------------------------------------------------------------------------------

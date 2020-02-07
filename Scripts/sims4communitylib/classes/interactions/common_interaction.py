@@ -12,6 +12,7 @@ from interactions import ParticipantType
 from interactions.base.interaction import Interaction
 from interactions.context import InteractionContext
 from interactions.interaction_finisher import FinishingType
+from native.animation import NativeAsm
 from postures.posture_state import PostureState
 from sims.sim import Sim
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
@@ -139,6 +140,38 @@ class CommonInteraction(Interaction, HasLog):
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' _post_perform.'.format(self.__class__.__name__), exception=ex)
 
+    def send_current_progress(self, *args, **kwargs):
+        """send_current_progress(*args, **kwargs)
+
+        A function that occurs upon a progress update.
+
+        """
+        try:
+            result = self._send_current_progress(self.sim, self.target, *args, **kwargs)
+            if result is not None:
+                return result
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' send_current_progress.'.format(self.__class__.__name__), exception=ex)
+        return super().send_current_progress(*args, **kwargs)
+
+    def setup_asm_default(self, asm: NativeAsm, *args, **kwargs) -> bool:
+        """setup_asm_default(asm, *args, **kwargs)
+
+        A function that occurs when setting up the Animation State Machine.
+
+        :param asm: An instance of the Animation State Machine
+        :type asm: NativeAsm
+        :return: True, if the ASM was setup properly. False, if not.
+        :rtype: bool
+        """
+        try:
+            result = self._setup_asm_default(self.sim, self.target, asm, *args, **kwargs)
+            if result is not None:
+                return result
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' setup_asm_default.'.format(self.__class__.__name__), exception=ex)
+        return super().setup_asm_default(asm, *args, **kwargs)
+
     # The following functions are hooks into various parts of an interaction override them in your own interaction to provide custom functionality.
 
     @staticmethod
@@ -262,6 +295,59 @@ class CommonInteraction(Interaction, HasLog):
         :rtype: Tuple[PostureState, ParticipantType, Sim]
         """
         return posture_state, participant_type, sim
+
+    # noinspection PyUnusedLocal
+    def _setup_asm_default(self, interaction_sim: Sim, interaction_target: Any, interaction_asm: NativeAsm, *args, **kwargs) -> Union[bool, None]:
+        """_setup_asm_default(interaction_sim, interaction_target, asm, *args, **kwargs)
+
+        A hook that occurs upon the animation state machine being setup for the interaction.
+
+        .. warning:: The returned value from here replaces the original returned value.
+
+        :param interaction_sim: The source Sim of the interaction.
+        :type interaction_sim: Sim
+        :param interaction_target: The target Object of the interaction.
+        :type interaction_target: Any
+        :param interaction_asm: An instance of an Animation State Machine
+        :type interaction_asm: NativeAsm
+        :return: True, if the ASM was setup properly. False, if not. or None to run through the original code.
+        :rtype: bool
+        """
+        return None
+
+    # noinspection PyUnusedLocal
+    def _send_current_progress(self, interaction_sim: Sim, interaction_target: Any, *args, **kwargs) -> Union[bool, None]:
+        """_send_current_progress(interaction_sim, interaction_target, *args, **kwargs)
+
+        A hook that occurs upon sending the current progress for the interaction.
+
+        .. warning:: The returned value from here replaces the original returned value.
+
+        :param interaction_sim: The source Sim of the interaction.
+        :type interaction_sim: Sim
+        :param interaction_target: The target Object of the interaction.
+        :type interaction_target: Any
+        :return: True, if progress was sent successfully. False, if not. Return None to run the original code.
+        :rtype: bool
+        """
+        return None
+
+    def set_current_progress_bar(self, percent: float, rate_change: float, start_message: bool=True):
+        """set_current_progress_bar(initial_value, progress_rate)
+
+        Set the current progress rate of the interaction.
+
+        :param percent: A percentage indicating the starting progress.
+        :type percent: float
+        :param rate_change: A value that indicates how fast progress will be made.
+        :type rate_change: float
+        :param start_message: If True, progress will begin changing immediately. If False, it will not. Default is True.
+        :type start_message: bool, optional
+        """
+        try:
+            self._send_progress_bar_update_msg(percent, rate_change, start_msg=start_message)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' set_current_progress_bar.'.format(self.__class__.__name__), exception=ex)
 
 
 # The following is an example interaction that varies when it will display, when it will be hidden, and when it will be disabled with a tooltip.
