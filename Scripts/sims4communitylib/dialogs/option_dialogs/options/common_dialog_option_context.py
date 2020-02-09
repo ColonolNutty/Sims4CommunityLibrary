@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, Tuple, Any, TypeVar, Iterator
+from typing import Union, Any, TypeVar, Iterator
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 

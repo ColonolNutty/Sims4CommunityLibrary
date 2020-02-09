@@ -195,6 +195,7 @@ class CommonIntervalEventRegistry(CommonService):
         CommonIntervalEventRegistry.get()._attempt_to_dispatch(event_data.ticks_since_last_update)
 
 
+# noinspection PyMissingOrEmptyDocstring
 class ExampleIntervalListener:
     # This function will run once after 200 milliseconds have passed. Then it stops listening.
     @staticmethod

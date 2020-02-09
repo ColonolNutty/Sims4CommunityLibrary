@@ -134,7 +134,7 @@ class CommonSimLocationUtils:
         return CommonLocationUtils.get_current_zone_id() == CommonHouseholdUtils.get_household_lot_id(sim_info) and active_lot.is_position_on_lot(CommonSimLocationUtils.get_position(sim_info))
 
     @staticmethod
-    def send_to_position(sim_info: SimInfo, location_position: Vector3, level: int) -> EnqueueResult:
+    def send_to_position(sim_info: SimInfo, location_position: Vector3, level: int) -> Union[EnqueueResult, None]:
         """send_to_position(sim_info, location_position, level)
 
         Send a Sim to the specified location.
