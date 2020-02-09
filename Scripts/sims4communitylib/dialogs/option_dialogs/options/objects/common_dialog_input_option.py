@@ -29,7 +29,7 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
 
     :param option_identifier: A string that identifies the option from other options.
     :type option_identifier: str
-    :param initial_value: The value the option will have initia0lly
+    :param initial_value: The value the option will have initially
     :type initial_value: float
     :param context: A context to customize the dialog option.
     :type context: CommonDialogOptionContext
