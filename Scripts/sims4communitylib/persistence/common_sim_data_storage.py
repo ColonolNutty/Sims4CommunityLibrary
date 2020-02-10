@@ -26,7 +26,7 @@ class _CommonSimDataStorage:
     def __new__(cls, sim_info: SimInfo) -> '_CommonSimDataStorage':
         sim_id = CommonSimUtils.get_sim_id(sim_info)
         if sim_id not in cls._instances:
-            cls._instances[sim_id] = super(_CommonSimDataStorage, cls).__new__(cls, sim_info)
+            cls._instances[sim_id] = super(_CommonSimDataStorage, cls).__new__(cls)
         return cls._instances[sim_id]
 
     @property
@@ -53,7 +53,7 @@ class _CommonSimDataStorage:
         key = key or str(sys._getframe(1).f_code.co_name)
         if key not in self._data:
             self._data[key] = default
-        return self._data.get(key, default=default)
+        return self._data.get(key, default)
 
     def set_data(self, value: Any, key: str=None):
         """set_data(value, key=None)
