@@ -5,15 +5,21 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from sims4communitylib.mod_support.has_mod_identity import HasModIdentity
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 
 
-class HasModIdentity:
+class HasClassModIdentity(HasModIdentity):
     """An inheritable class that provides Mod Info for a class.
 
     """
+    # noinspection PyMissingOrEmptyDocstring
     @property
     def mod_identity(self) -> CommonModIdentity:
+        return self.__class__.get_mod_identity()
+
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
         """The identity of a mod.
 
         .. note:: It contains information about a mod such as Mod Name, Mod Author,\
@@ -22,4 +28,4 @@ class HasModIdentity:
         :return: The identity of a mod.
         :rtype: CommonModIdentity
         """
-        raise NotImplementedError('Missing \'{}\'.'.format(self.__class__.mod_identity.__name__))
+        raise NotImplementedError('Missing \'{}\'.'.format(cls.get_mod_identity.__name__))

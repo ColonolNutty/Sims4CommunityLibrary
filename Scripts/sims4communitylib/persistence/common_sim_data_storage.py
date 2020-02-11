@@ -6,28 +6,70 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import sys
-from sims4.commands import Command, CommandType, CheatOutput
 from pprint import pformat
 from typing import Dict, Any
 from typing import Union
 from sims.sim_info import SimInfo
-from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+from sims4communitylib.logging.has_class_log import HasClassLog
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
-class _CommonSimDataStorage:
-    _instances: Dict[int, '_CommonSimDataStorage'] = {}
+class _CommonSimDataStorageMetaclass(type):
+    _sim_storage_instances: Dict[str, Dict[int, '_CommonSimDataStorageMetaclass']] = {}
 
+    def __call__(cls, sim_info: SimInfo) -> Union['_CommonSimDataStorageMetaclass', None]:
+        mod_identity = cls.get_mod_identity()
+        sim_id = CommonSimUtils.get_sim_id(sim_info)
+        mod_name = mod_identity.name
+        if mod_name is None:
+            return None
+        if mod_name not in cls._sim_storage_instances:
+            cls._sim_storage_instances[mod_name] = dict()
+        if sim_id not in cls._sim_storage_instances[mod_name]:
+            cls._sim_storage_instances[mod_name][sim_id] = super(_CommonSimDataStorageMetaclass, cls).__call__(sim_info)
+        return cls._sim_storage_instances[mod_name][sim_id]
+
+    @classmethod
+    def get_mod_identity(mcs) -> CommonModIdentity:
+        """get_mod_identity()
+
+        The identity of a mod.
+
+        .. note:: It contains information about a mod such as Mod Name, Mod Author,\
+            the script base namespace, and the file path to your mod.
+
+        :return: The identity of a mod.
+        :rtype: CommonModIdentity
+        """
+        raise NotImplementedError('Missing \'{}\'.'.format(mcs.get_mod_identity.__name__))
+
+
+class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclass):
     def __init__(self, sim_info: SimInfo):
+        super().__init__()
         self._sim_id = CommonSimUtils.get_sim_id(sim_info)
         self._sim_info = sim_info
         self._data = dict()
 
-    def __new__(cls, sim_info: SimInfo) -> '_CommonSimDataStorage':
-        sim_id = CommonSimUtils.get_sim_id(sim_info)
-        if sim_id not in cls._instances:
-            cls._instances[sim_id] = super(_CommonSimDataStorage, cls).__new__(cls)
-        return cls._instances[sim_id]
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_log_identifier(cls):
+        return '{}_sim_data_storage'.format(cls.get_mod_identity().base_namespace)
+
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
+        """get_mod_identity()
+
+        The identity of a mod.
+
+        .. note:: It contains information about a mod such as Mod Name, Mod Author,\
+            the script base namespace, and the file path to your mod.
+
+        :return: The identity of a mod.
+        :rtype: CommonModIdentity
+        """
+        raise NotImplementedError('Missing \'{}\'.'.format(cls.get_mod_identity.__name__))
 
     @property
     def sim_info(self) -> SimInfo:
@@ -51,9 +93,11 @@ class _CommonSimDataStorage:
         :rtype: Dict[Any, Any]
         """
         key = key or str(sys._getframe(1).f_code.co_name)
+        self.log.format_with_message('getting data', key=key)
         if key not in self._data:
+            self.log.format_with_message('Key not found in data.', data=self._data)
             self._data[key] = default
-        return self._data.get(key, default)
+        return self._data.get(key)
 
     def set_data(self, value: Any, key: str=None):
         """set_data(value, key=None)
@@ -66,6 +110,7 @@ class _CommonSimDataStorage:
         :type key: str, optional
         """
         key = key or str(sys._getframe(1).f_code.co_name)
+        self.log.format_with_message('setting data', key=key, value=value)
         self._data[key] = value
 
     def remove_data(self, key: str=None):
@@ -77,8 +122,11 @@ class _CommonSimDataStorage:
         :type key: str, optional
         """
         key = key or str(sys._getframe(1).f_code.co_name)
+        self.log.format_with_message('removing data', key=key)
         if key not in self._data:
+            self.log.format_with_message('Key not found in data.', data=self._data)
             return
+        self.log.debug('Key found, deleting it now.')
         del self._data[key]
 
     def __repr__(self) -> str:
@@ -98,15 +146,11 @@ class CommonSimDataStorage(_CommonSimDataStorage):
     :param sim_info: The SimInfo of a Sim.
     :type sim_info: SimInfo
     """
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
+        return super().get_mod_identity()
+
     def __init__(self, sim_info: SimInfo):
         super().__init__(sim_info)
-
-
-@Command('s4clib.print_sim_data', command_type=CommandType.Live)
-def _common_command_print_sim_data(_connection=None):
-    output = CheatOutput(_connection)
-    sim_info = CommonSimUtils.get_active_sim_info()
-    output('Sim Data for Sim: Name: \'{}\' Id: \'{}\''.format(CommonSimNameUtils.get_full_name(sim_info), CommonSimUtils.get_sim_id(sim_info)))
-    sim_storage = CommonSimDataStorage(sim_info)
-    for (key, value) in sim_storage._data.items():
-        output(' > {}: {}'.format(pformat(key), pformat(value)))
