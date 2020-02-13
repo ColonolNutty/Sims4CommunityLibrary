@@ -12,6 +12,8 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 class HasClassModIdentity(HasModIdentity):
     """An inheritable class that provides Mod Info for a class.
 
+    .. note:: This class inherits from :class:`.HasModIdentity` and may be used as an alternative to it.
+
     """
     # noinspection PyMissingOrEmptyDocstring
     @property

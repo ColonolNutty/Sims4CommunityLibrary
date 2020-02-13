@@ -142,6 +142,30 @@ class CommonSimDataStorage(_CommonSimDataStorage):
     A wrapper for Sim instances that allows storing of data.
 
     .. warning:: Data stored within is not persisted when closing and reopening the game!
+    .. warning:: DO NOT CREATE THIS CLASS DIRECTLY, IT IS ONLY MEANT TO INHERIT FROM!
+
+    :Example usage:
+
+    .. highlight:: python
+    .. code-block:: python
+
+        # Inherit from CommonSimDataStorage
+        class ExampleSimDataStorage(CommonSimDataStorage):
+            @classmethod
+            def get_mod_identity(cls) -> CommonModIdentity:
+                # !!!Override with the CommonModIdentity of your own mod!!!
+                from sims4communitylib.modinfo import ModInfo
+                return ModInfo.get_identity()
+
+            @property
+            def example_property_one(self) -> bool:
+                # Could also be written self.get_data(default=False, key='example_property_one') and it would do the same thing.
+                return self.get_data(default=False)
+
+            @example_property_one.setter
+            def example_property_one(self, value: bool):
+                # Could also be written self.set_data(value, key='example_property_one') and it would do the same thing.
+                self.set_data(value)
 
     :param sim_info: The SimInfo of a Sim.
     :type sim_info: SimInfo
@@ -154,3 +178,25 @@ class CommonSimDataStorage(_CommonSimDataStorage):
 
     def __init__(self, sim_info: SimInfo):
         super().__init__(sim_info)
+        if self.__class__.__name__ is CommonSimDataStorage.__name__:
+            raise RuntimeError('{} cannot be created directly. You must inherit from it to create an instance of it.'.format(self.__class__.__name__))
+
+
+# noinspection PyMissingOrEmptyDocstring
+class ExampleSimDataStorage(CommonSimDataStorage):
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
+        # !!!Override with the CommonModIdentity of your own mod!!!
+        from sims4communitylib.modinfo import ModInfo
+        return ModInfo.get_identity()
+
+    @property
+    def example_property_one(self) -> bool:
+        # Could also be written self.get_data(default=False, key='example_property_one') and it would do the same thing.
+        return self.get_data(default=False)
+
+    @example_property_one.setter
+    def example_property_one(self, value: bool):
+        # Could also be written self.set_data(value, key='example_property_one') and it would do the same thing.
+        self.set_data(value)

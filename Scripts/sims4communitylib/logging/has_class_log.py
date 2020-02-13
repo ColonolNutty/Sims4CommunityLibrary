@@ -14,6 +14,8 @@ from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegi
 class HasClassLog(HasClassModIdentity, HasLog):
     """An inheritable class that will add a log and mod identity to a class.
 
+    .. note:: This class inherits from :class:`.HasLog` and may be used as an alternative to it.
+
     """
     def __init__(self):
         super().__init__()
