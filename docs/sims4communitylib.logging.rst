@@ -9,6 +9,14 @@ Logging
    :undoc-members:
    :show-inheritance:
 
+`Has Class Log`
+-----------------------------------------
+
+.. autoclass:: sims4communitylib.logging.has_class_log.HasClassLog
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Log Utils`
 -------------------------------------------------
 

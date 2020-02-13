@@ -17,6 +17,14 @@ Mod Support
    :undoc-members:
    :show-inheritance:
 
+`Has Class Mod Identity`
+--------------------------------------------------------
+
+.. autoclass:: sims4communitylib.mod_support.has_class_mod_identity.HasClassModIdentity
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Mod Identity`
 ---------------------------------------------------
 

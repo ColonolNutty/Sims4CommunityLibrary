@@ -203,6 +203,7 @@ class CommonInteraction(Interaction, HasLog):
     @classmethod
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
         """on_test(interaction_sim, interaction_target, interaction_context, kwargs)
+
         A hook that occurs upon the interaction being tested for availability.
 
         :param interaction_sim: The source Sim of the interaction.
@@ -218,6 +219,7 @@ class CommonInteraction(Interaction, HasLog):
 
     def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
         """on_started(interaction_sim, interaction_target)
+
         A hook that occurs upon the interaction being started.
 
         :param interaction_sim: The source Sim of the interaction.
@@ -232,6 +234,7 @@ class CommonInteraction(Interaction, HasLog):
     # noinspection PyUnusedLocal
     def on_killed(self, interaction_sim: Sim, interaction_target: Any) -> bool:
         """on_killed(interaction_sim, interaction_target)
+
         A hook that occurs upon the interaction being killed.
 
         :param interaction_sim: The source Sim of the interaction.
@@ -245,6 +248,7 @@ class CommonInteraction(Interaction, HasLog):
 
     def on_cancelled(self, interaction_sim: Sim, interaction_target: Any, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> None:
         """on_cancelled(interaction_sim, interaction_target, finishing_type, cancel_reason_msg, kwargs)
+
         A hook that occurs upon the interaction being cancelled.
 
 
@@ -261,7 +265,8 @@ class CommonInteraction(Interaction, HasLog):
 
     def _on_reset(self, interaction_sim: Sim, interaction_target: Any) -> None:
         """_on_reset(interaction_sim, interaction_target)
-        hook that occurs upon the interaction being reset.
+
+        A hook that occurs upon the interaction being reset.
 
         :param interaction_sim: The source Sim of the interaction.
         :type interaction_sim: Sim
@@ -272,6 +277,7 @@ class CommonInteraction(Interaction, HasLog):
 
     def on_performed(self, interaction_sim: Sim, interaction_target: Any) -> None:
         """on_performed(interaction_sim, interaction_target)
+
         A hook that occurs after the interaction has been performed.
 
         :param interaction_sim: The source Sim of the interaction.
@@ -283,6 +289,7 @@ class CommonInteraction(Interaction, HasLog):
 
     def modify_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT) -> Tuple[PostureState, ParticipantType, Sim]:
         """modify_posture_state(posture_state, participant_type=ParticipantType.Actor, sim=DEFAULT)
+
         A hook that allows modification of the posture state of the interactions participants.
 
         :param posture_state: The posture state being modified.
