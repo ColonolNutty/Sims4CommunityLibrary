@@ -8,7 +8,10 @@ Copyright (c) COLONOLNUTTY
 from typing import Any, Callable, Iterator
 
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.utils.common_log_registry import CommonLog
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegistry
+
+func_utils_log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 's4clib_common_function_utils')
 
 
 class CommonFunctionUtils:
@@ -41,7 +44,7 @@ class CommonFunctionUtils:
         :rtype: Callable[..., Any]
         """
 
-        def _print_arguments(*_, **__):
+        def _print_arguments(*_: Any, **__: Any):
             log.enable()
             log.format_with_message('print_arguments invoked for identifier \'{}\':'.format(func_identifier), argles=_, kwargles=__)
             log.disable()
@@ -49,7 +52,7 @@ class CommonFunctionUtils:
         return _print_arguments
 
     @staticmethod
-    def safe_run(mod_identity: CommonModIdentity, primary_function: Callable[..., Any], fallback_function: Callable[..., Any], *args, **kwargs) -> Any:
+    def safe_run(mod_identity: CommonModIdentity, primary_function: Callable[..., Any], fallback_function: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
         """safe_run(mod_identity, primary_function, fallback_function, *args, **kwargs)
 
         Safely run a function, if the primary function throws an exception, the fallback function will be run instead.
@@ -68,6 +71,10 @@ class CommonFunctionUtils:
         :rtype: Any
         """
         try:
+            if primary_function is None:
+                if fallback_function is None:
+                    return
+                return fallback_function(*args, **kwargs)
             return primary_function(*args, **kwargs)
         except Exception as ex:
             # noinspection PyBroadException
@@ -77,6 +84,8 @@ class CommonFunctionUtils:
                                                             .format(primary_function.__name__), exception=ex)
             except Exception:
                 pass
+            if fallback_function is None:
+                return
             return fallback_function(*args, **kwargs)
 
     @staticmethod
@@ -104,17 +113,24 @@ class CommonFunctionUtils:
         :return: The result of running all functions.
         :rtype: bool
         """
-        def _wrapper(*_, **__):
+        def _wrapper(*_: Any, **__: Any):
             if all_must_pass:
                 for primary_function in predicate_functions:
+                    if primary_function is None:
+                        continue
                     if not primary_function(*_, **__):
+                        func_utils_log.format_with_message('Function failed.', function_name=primary_function.__name__)
                         return False
                 return True
             else:
                 for primary_function in predicate_functions:
+                    if primary_function is None:
+                        continue
                     if primary_function(*_, **__):
+                        func_utils_log.format_with_message('Function passed.', function_name=primary_function.__name__)
                         return True
                 return False
+        _wrapper.__name__ = ', '.join([func.__name__ for func in predicate_functions if func is not None])
         return _wrapper
 
     @staticmethod
@@ -128,12 +144,16 @@ class CommonFunctionUtils:
         :return: A function that will reverse the result of `predicate_function` upon invocation.
         :rtype: Callable[..., bool]
         """
-        def _wrapper(*_, **__):
+        def _wrapper(*_: Any, **__: Any) -> Any:
+            if predicate_function is None:
+                return False
             return not predicate_function(*_, **__)
+        if predicate_function is not None:
+            _wrapper.__name__ = predicate_function.__name__
         return _wrapper
 
     @staticmethod
-    def run_with_arguments(primary_function: Callable[..., Any], *args, **kwargs) -> Callable[..., Any]:
+    def run_with_arguments(primary_function: Callable[..., Any], *args: Any, **kwargs: Any) -> Callable[..., Any]:
         """run_with_arguments(primary_function, *args, **kwargs)
 
         Wrap a function and run it with additional arguments when something invokes it.
@@ -143,6 +163,10 @@ class CommonFunctionUtils:
         :return: A function that will send extra arguments upon invocation.
         :rtype: Callable[..., Any]
         """
-        def _wrapper(*_, **__):
+        def _wrapper(*_: Any, **__: Any) -> Any:
+            if primary_function is None:
+                return False
             return primary_function(*_, *args, **__, **kwargs)
+        if primary_function is not None:
+            _wrapper.__name__ = primary_function.__name__
         return _wrapper

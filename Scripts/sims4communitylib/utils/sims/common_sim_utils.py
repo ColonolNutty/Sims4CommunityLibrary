@@ -11,6 +11,7 @@ from typing import Iterator, Callable, Union
 from sims.sim import Sim
 from sims.sim_info import SimInfo
 from objects import ALL_HIDDEN_REASONS
+from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
 class CommonSimUtils:
@@ -137,10 +138,11 @@ class CommonSimUtils:
         :return: An iterable of all Sims matching the `include_sim_callback` filter.
         :rtype: Iterator[SimInfo]
         """
+        def _is_instanced(_sim_info: SimInfo) -> bool:
+            return _sim_info.get_sim_instance(allow_hidden_flags=ALL_HIDDEN_REASONS) is not None
+
+        include_sim_callback = CommonFunctionUtils.run_predicates_as_one((_is_instanced, include_sim_callback))
         for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
-            sim_instance = sim_info.get_sim_instance(allow_hidden_flags=ALL_HIDDEN_REASONS)
-            if sim_instance is None:
-                continue
             yield sim_info
 
     @staticmethod

@@ -51,7 +51,7 @@ class CommonDialog(HasLog):
     def mod_identity(self) -> CommonModIdentity:
         return self._mod_identity or ModInfo.get_identity()
 
-    def show(self, *_, **__):
+    def show(self, *_: Any, **__: Any):
         """Display the dialog to the player.
 
         .. note:: Override this method with any arguments you want to.
