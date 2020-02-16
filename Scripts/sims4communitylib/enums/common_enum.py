@@ -5,14 +5,14 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any, List, Union
+from typing import Any, List, Union, Iterator
 
 
 class CommonEnumMetaclass(type):
     """A metaclass that converts the properties of a class into enum objects and allows iteration of those properties.
 
     """
-    def __new__(mcs, cls, bases, class_dict):
+    def __new__(mcs, cls: Any, bases: Any, class_dict: Any) -> Any:
         obj_attrs = set(dir(type(cls, (object,), {})))
         enum_cls = super().__new__(mcs, cls, bases, class_dict)
         member_names = set(class_dict.keys()) - obj_attrs
@@ -33,7 +33,7 @@ class CommonEnumMetaclass(type):
 
         return enum_cls
 
-    def __call__(cls, val):
+    def __call__(cls, val: Any) -> Any:
         for (enum_name, enum_value) in cls._members_.items():
             if val == enum_name or val == enum_value:
                 return getattr(cls, enum_name)
@@ -80,11 +80,11 @@ class CommonEnumMetaclass(type):
     def __getitem__(cls, key: str):
         return getattr(cls._members_, key.upper())
 
-    def __iter__(cls):
+    def __iter__(cls) -> Iterator[Any]:
         return cls._members_.__iter__()
 
-    def __len__(cls):
+    def __len__(cls) -> int:
         return len(cls._members_)
 
-    def __repr__(cls):
+    def __repr__(cls) -> str:
         return '{}'.format(cls.__name__)
