@@ -48,6 +48,8 @@ class CommonDialogObjectOption(CommonDialogOption):
     def option_identifier(self) -> str:
         """Used to identify the option.
 
+        :return: The identity of the option.
+        :rtype: str
         """
         return self._option_identifier
 
@@ -55,12 +57,20 @@ class CommonDialogObjectOption(CommonDialogOption):
     def value(self) -> DialogOptionValueType:
         """The value of the option.
 
+        :return: The value of the option.
+        :rtype: DialogOptionValueType
         """
         return self._value
 
     def as_row(self, option_id: int) -> ObjectPickerRow:
-        """Convert the option into a row.
+        """as_row(option_id)
 
+        Convert the option into a picker row.
+
+        :param option_id: The index of the option.
+        :type option_id: int
+        :return: The option as a Picker Row
+        :rtype: ObjectPickerRow
         """
         return ObjectPickerRow(
             option_id=option_id,
