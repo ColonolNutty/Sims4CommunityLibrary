@@ -7,6 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Any, Callable, Iterator
 
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegistry
@@ -84,9 +85,13 @@ class CommonFunctionUtils:
                                                             .format(primary_function.__name__), exception=ex)
             except Exception:
                 pass
-            if fallback_function is None:
-                return
-            return fallback_function(*args, **kwargs)
+            # noinspection PyBroadException
+            try:
+                if fallback_function is None:
+                    return
+                return fallback_function(*args, **kwargs)
+            except:
+                pass
 
     @staticmethod
     def run_predicates_as_one(predicate_functions: Iterator[Callable[..., bool]], all_must_pass: bool=True) -> Callable[..., bool]:
@@ -118,17 +123,25 @@ class CommonFunctionUtils:
                 for primary_function in predicate_functions:
                     if primary_function is None:
                         continue
-                    if not primary_function(*_, **__):
-                        func_utils_log.format_with_message('Function failed.', function_name=primary_function.__name__)
+                    try:
+                        if not primary_function(*_, **__):
+                            func_utils_log.format_with_message('Function failed.', function_name=primary_function.__name__)
+                            return False
+                    except Exception as ex:
+                        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while running function: {}'.format(primary_function.__name__), exception=ex)
                         return False
                 return True
             else:
                 for primary_function in predicate_functions:
                     if primary_function is None:
                         continue
-                    if primary_function(*_, **__):
-                        func_utils_log.format_with_message('Function passed.', function_name=primary_function.__name__)
-                        return True
+                    try:
+                        if primary_function(*_, **__):
+                            func_utils_log.format_with_message('Function passed.', function_name=primary_function.__name__)
+                            return True
+                    except Exception as ex:
+                        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while running function: {}'.format(primary_function.__name__), exception=ex)
+                        return False
                 return False
         _wrapper.__name__ = ', '.join([func.__name__ for func in predicate_functions if func is not None])
         return _wrapper
@@ -147,7 +160,10 @@ class CommonFunctionUtils:
         def _wrapper(*_: Any, **__: Any) -> Any:
             if predicate_function is None:
                 return False
-            return not predicate_function(*_, **__)
+            try:
+                return not predicate_function(*_, **__)
+            except Exception as ex:
+                CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while running function: {}'.format(predicate_function.__name__), exception=ex)
         if predicate_function is not None:
             _wrapper.__name__ = predicate_function.__name__
         return _wrapper
@@ -166,7 +182,10 @@ class CommonFunctionUtils:
         def _wrapper(*_: Any, **__: Any) -> Any:
             if primary_function is None:
                 return False
-            return primary_function(*_, *args, **__, **kwargs)
+            try:
+                return primary_function(*_, *args, **__, **kwargs)
+            except Exception as ex:
+                CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while running function: {}'.format(primary_function.__name__), exception=ex)
         if primary_function is not None:
             _wrapper.__name__ = primary_function.__name__
         return _wrapper
