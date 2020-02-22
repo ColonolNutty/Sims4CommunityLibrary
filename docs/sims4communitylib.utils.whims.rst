@@ -8,7 +8,7 @@ Whim Utilities
 `Satisfaction Rewards Store`
 ******************************
 
-.. autoclass:: sims4communitylib.utils.whims.common_satisfaction_reward_store.CommonSatisfactionRewardStoreUtils
+.. autoclass:: sims4communitylib.utils.whims.common_satisfaction_reward_store_utils.CommonSatisfactionRewardStoreUtils
    :members:
    :undoc-members:
    :show-inheritance:
