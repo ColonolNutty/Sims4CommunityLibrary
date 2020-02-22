@@ -9,7 +9,7 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonAnimationStateMachineId(CommonEnumIntBase):
-    """Identifiers for vanilla interactions.
+    """Identifiers for vanilla animation state machines (ASM).
 
     """
     STAND_POSTURE = 15425961973529743787
