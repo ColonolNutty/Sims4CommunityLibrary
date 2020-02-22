@@ -166,6 +166,18 @@ Sim Utilities
    :undoc-members:
    :show-inheritance:
 
+`Creation`
+------------------------------------------------------
+
+***************************
+`Spawn, Despawn, Destroy`
+***************************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_spawn_utils.CommonSimSpawnUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Misc`
 ------------------------------------------------------
 
