@@ -8,7 +8,7 @@ Object Utilities
 `Spawn, Despawn, Destroy`
 ***************************
 
-.. autoclass:: sims4communitylib.utils.sims.common_object_spawn_utils.CommonObjectSpawnUtils
+.. autoclass:: sims4communitylib.utils.objects.common_object_spawn_utils.CommonObjectSpawnUtils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -20,7 +20,7 @@ Object Utilities
 `Household Ownership`
 *************************
 
-.. autoclass:: sims4communitylib.utils.sims.common_object_household_utils.CommonObjectHouseholdUtils
+.. autoclass:: sims4communitylib.utils.objects.common_object_household_utils.CommonObjectHouseholdUtils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -29,7 +29,7 @@ Object Utilities
 `Location`
 *************************
 
-.. autoclass:: sims4communitylib.utils.sims.common_object_location_utils.CommonObjectLocationUtils
+.. autoclass:: sims4communitylib.utils.objects.common_object_location_utils.CommonObjectLocationUtils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -41,7 +41,7 @@ Object Utilities
 `Visibility`
 *************************
 
-.. autoclass:: sims4communitylib.utils.sims.common_object_visibility_utils.CommonObjectVisibilityUtils
+.. autoclass:: sims4communitylib.utils.objects.common_object_visibility_utils.CommonObjectVisibilityUtils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -53,7 +53,7 @@ Object Utilities
 `Tags`
 *************************
 
-.. autoclass:: sims4communitylib.utils.sims.common_object_tag_utils.CommonObjectTagUtils
+.. autoclass:: sims4communitylib.utils.objects.common_object_tag_utils.CommonObjectTagUtils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -65,7 +65,7 @@ Object Utilities
 `Object`
 *************************
 
-.. autoclass:: sims4communitylib.utils.sims.common_object_utils.CommonObjectUtils
+.. autoclass:: sims4communitylib.utils.objects.common_object_utils.CommonObjectUtils
    :members:
    :undoc-members:
    :show-inheritance:
