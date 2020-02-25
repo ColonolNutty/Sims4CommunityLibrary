@@ -28,8 +28,8 @@ class CommonAssertionUtils:
         :type value_one: Any
         :param value_two: The second value.
         :type value_two: Any
-        :param message: A custom message to include when the assertion fails.
-        :type message: str
+        :param message: A custom message to include when the assertion fails. Default is Empty String.
+        :type message: str, optional
         :return: True, if the assertion succeeds.
         :rtype: bool
         :exception AssertionError: when the assertion fails.
@@ -54,8 +54,8 @@ class CommonAssertionUtils:
         :type value_one: Any
         :param value_two: The second value.
         :type value_two: Any
-        :param message: A custom message to include when the assertion fails.
-        :type message: str
+        :param message: A custom message to include when the assertion fails. Default is Empty String.
+        :type message: str, optional
         :return: True, if the assertion succeeds.
         :rtype: bool
         :exception AssertionError: when the assertion fails.
@@ -78,8 +78,8 @@ class CommonAssertionUtils:
         :type list_one: Union[Tuple[Any], List[Any]]
         :param list_two: The second value. (Can be any collection type)
         :type list_two: Union[Tuple[Any], List[Any]]
-        :param message: A custom message to include when the assertion fails.
-        :type message: str
+        :param message: A custom message to include when the assertion fails. Default is Empty String.
+        :type message: str, optional
         :return: True, if the assertion succeeds.
         :rtype: bool
         :exception AssertionError: when the assertion fails.
@@ -113,8 +113,8 @@ class CommonAssertionUtils:
         :type list_one: Union[Tuple[Any], List[Any]]
         :param list_two: The second value. (Can be any collection type)
         :type list_two: Union[Tuple[Any], List[Any]]
-        :param message: A custom message to include when the assertion fails.
-        :type message: str
+        :param message: A custom message to include when the assertion fails. Default is Empty String.
+        :type message: str, optional
         :return: True, if the assertion succeeds.
         :rtype: bool
         :exception AssertionError: when the assertion fails.
@@ -141,8 +141,8 @@ class CommonAssertionUtils:
 
         :param value: The value being asserted.
         :type value: bool
-        :param message: A custom message to include when the assertion fails.
-        :type message: str
+        :param message: A custom message to include when the assertion fails. Default is Empty String.
+        :type message: str, optional
         :return: True if the value is True.
         :rtype: bool
         :exception AssertionError: when the assertion fails.
@@ -160,7 +160,7 @@ class CommonAssertionUtils:
         :param value: The value being asserted.
         :type value: bool
         :param message: A custom message to include when the assertion fails.
-        :type message: str
+        :type message: str, optional
         :return: True if the value is False.
         :rtype: bool
         :exception AssertionError: when the assertion fails.
@@ -179,8 +179,8 @@ class CommonAssertionUtils:
         :type value: Union[Tuple[Any], List[Any]]
         :param expected_length: The length expected of the collection.
         :type expected_length: int
-        :param message: A custom message to include when the assertion fails.
-        :type message: str
+        :param message: A custom message to include when the assertion fails. Default is Empty String.
+        :type message: str, optional
         :return: True if the length matches.
         :rtype: bool
         :exception AssertionError: when the assertion fails.
@@ -201,8 +201,8 @@ class CommonAssertionUtils:
         :type collection: Union[Tuple[Any], List[Any]]
         :param value: The value being located.
         :type value: Any
-        :param message: A custom message to include when the assertion fails.
-        :type message: str
+        :param message: A custom message to include when the assertion fails. Default is Empty String.
+        :type message: str, optional
         :return: True if the value is contained within the collection.
         :rtype: bool
         :exception AssertionError: when the assertion fails.
@@ -219,8 +219,8 @@ class CommonAssertionUtils:
 
         :param callback: The function to invoke.
         :type callback: Callable[..., Any]
-        :param message: A custom message to include when the assertion fails.
-        :type message: str
+        :param message: A custom message to include when the assertion fails. Default is Empty String.
+        :type message: str, optional
         :return: The exception that was thrown.
         :rtype: Exception
         :exception AssertionError: when the assertion fails.
@@ -239,8 +239,8 @@ class CommonAssertionUtils:
 
         :param callback: The function to invoke.
         :type callback: Callable[..., Any]
-        :param message: A custom message to include when the assertion fails.
-        :type message: str
+        :param message: A custom message to include when the assertion fails. Default is Empty String.
+        :type message: str, optional
         :return: True, if the assertion was successful.
         :rtype: bool
         :exception AssertionError: when the assertion fails.
