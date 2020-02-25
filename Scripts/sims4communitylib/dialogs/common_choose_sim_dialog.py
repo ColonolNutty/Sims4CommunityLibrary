@@ -29,8 +29,31 @@ from ui.ui_dialog_picker import UiSimPicker, SimPickerRow
 
 
 class CommonChooseSimDialog(CommonChooseDialog):
-    """Create a dialog to prompt the player to choose a Sim.
+    """CommonChooseSimDialog(\
+        title_identifier,\
+        description_identifier,\
+        choices,\
+        title_tokens=(),\
+        description_tokens=(),\
+        mod_identity=None\
+    )
 
+    Create a dialog to display a list of Sims to choose.
+
+    .. note:: To see an example dialog, run the command `s4clib_testing.show_choose_sim_dialog` in-game.
+
+    :param title_identifier: A decimal identifier of the title text.
+    :type title_identifier: Union[int, LocalizedString]
+    :param description_identifier: A decimal identifier of the description text.
+    :type description_identifier: Union[int, LocalizedString]
+    :param choices: The choices to display in the dialog.
+    :type choices: Iterator[SimPickerRow]
+    :param title_tokens: Tokens to format into the title.
+    :type title_tokens: Iterator[Any], optional
+    :param description_tokens: Tokens to format into the description.
+    :type description_tokens: Iterator[Any], optional,
+    :param mod_identity: The identity of the Mod that owns this dialog.
+    :type mod_identity: CommonModIdentity, optional
     """
     def __init__(
         self,
@@ -41,14 +64,6 @@ class CommonChooseSimDialog(CommonChooseDialog):
         description_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
-        """Create a dialog for displaying a list of Sims.
-
-        :param title_identifier: A decimal identifier of the title text.
-        :param description_identifier: A decimal identifier of the description text.
-        :param choices: The choices to display in the dialog.
-        :param title_tokens: Tokens to format into the title.
-        :param description_tokens: Tokens to format into the description.
-        """
         super().__init__(
             title_identifier,
             description_identifier,
@@ -58,17 +73,13 @@ class CommonChooseSimDialog(CommonChooseDialog):
             mod_identity=mod_identity
         )
 
+    # noinspection PyMissingOrEmptyDocstring
     @property
     def log_identifier(self) -> str:
-        """An identifier for the Log of this class.
-
-        """
         return 's4cl_choose_sim_dialog'
 
+    # noinspection PyMissingOrEmptyDocstring
     def add_row(self, choice: SimPickerRow):
-        """Add a row to the dialog.
-
-        """
         return super().add_row(choice)
 
     def show(
@@ -79,13 +90,27 @@ class CommonChooseSimDialog(CommonChooseDialog):
         hide_row_descriptions: bool=False,
         column_count: int=3
     ):
-        """Show the dialog and invoke the callbacks upon the player making a choice.
+        """show(
+            on_chosen=CommonFunctionUtils.noop,\
+            sim_info=None,\
+            should_show_names=True,\
+            hide_row_descriptions=False,\
+            column_count=3\
+        )
 
-        :param on_chosen: A callback invoked upon the player choosing a Sim from the list.
+        Show the dialog and invoke the callbacks upon the player making a choice.
+
+        :param on_chosen: A callback invoked upon the player choosing a Sim from the list. Cannot be None.
+        :type on_chosen: Callable[[Any, CommonChoiceOutcome], Any], optional
         :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim.
+        :type sim_info: SimInfo, optional
         :param should_show_names: If True, then the names of the Sims will display in the dialog.
+        :type should_show_names: bool, optional
         :param hide_row_descriptions: A flag to hide the row descriptions.
-        :param column_count: The number of columns to display Sims in.
+        :type hide_row_descriptions: bool, optional
+        :param column_count: The number of columns to display Sims in. Minimum: 3, Maximum: 8
+        :type column_count: int, optional
+        :exception AssertionError: when something is wrong with the arguments or no rows were added to the dialog.
         """
         try:
             return self._show(
@@ -118,7 +143,7 @@ class CommonChooseSimDialog(CommonChooseDialog):
             return
 
         if on_chosen is None:
-            raise ValueError('on_chosen was None.')
+            raise AssertionError('\'on_chosen\' was None.')
 
         if len(self.rows) == 0:
             raise AssertionError('No rows have been provided. Add rows to the dialog before attempting to display it.')

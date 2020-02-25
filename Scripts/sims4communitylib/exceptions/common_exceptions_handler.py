@@ -22,14 +22,14 @@ class CommonExceptionHandler:
     def log_exception(mod_name: str, exception_message: str, exception: Exception=None) -> bool:
         """log_exception(mod_name, exception_message, exception=None)
 
-        Log an exception with a custom message
+        Manually log an exception with a custom message.
 
         :param mod_name: The name of the mod logging the exception.
         :type mod_name: str
-        :param exception_message: The message to log alongside the exception.
+        :param exception_message: A message to log alongside the exception.
         :type exception_message: str
-        :param exception: The exception being logged.
-        :type exception: Exception
+        :param exception: The exception being logged. Default is None.
+        :type exception: Exception, optional
         :return: True, if the message was successfully logged. False, if the message was not successfully logged.
         :rtype: bool
         """
@@ -51,21 +51,21 @@ class CommonExceptionHandler:
     def catch_exceptions(mod_name: str, fallback_return: Any=None) -> Callable[..., Any]:
         """catch_exceptions(mod_name, fallback_return=None)
 
-        A decorator for catching exceptions thrown by functions.
+        Automatically catch exceptions thrown by the decorated function, log them to a file, and notify the player about the exception.
 
-        Decorate functions with this decorator to catch and log exceptions
+        .. note:: Decorate functions with this decorator to catch and log exceptions
 
         :param mod_name: An identifier to indicate which mod it occurs in.
         :type mod_name: str
-        :param fallback_return: A value to return upon an exception being caught.
-        :type fallback_return: Any
+        :param fallback_return: A value to return upon an exception being caught. Default is None.
+        :type fallback_return: Any, optional
         :return: A function wrapped to catch and log exceptions.
         :rtype: Callable[..., Any]
         """
 
-        def _catch_exception(exception_function):
+        def _catch_exception(exception_function: Callable[..., Any]):
             @wraps(exception_function)
-            def _wrapper(*args, **kwargs):
+            def _wrapper(*args, **kwargs) -> Any:
                 try:
                     return exception_function(*args, **kwargs)
                 except Exception as ex:
