@@ -63,8 +63,58 @@ class _CommonUiDialogTextInputOkCancel(UiDialogTextInputOkCancel):
 
 
 class CommonInputFloatDialog(CommonDialog):
-    """Create a dialog that prompts the player to enter a float value.
+    """CommonInputFloatDialog(\
+        title_identifier,\
+        description_identifier,\
+        initial_value,\
+        min_value=0.0,\
+        max_value=2147483647.0,\
+        title_tokens=(),\
+        description_tokens=(),\
+        mod_identity=None\
+    )
 
+    Create a dialog that prompts the player to enter a float value.
+
+    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_input_float_dialog` in the in-game console.
+
+    .. highlight:: python
+    .. code-block:: python
+
+        def _common_testing_show_input_float_dialog():
+
+            def _on_chosen(choice: float, outcome: CommonChoiceOutcome):
+                pass
+
+            # LocalizedStrings within other LocalizedStrings
+            title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+            description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+            from sims4communitylib.utils.common_icon_utils import CommonIconUtils
+            dialog = CommonInputFloatDialog(
+                CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                2.0,
+                title_tokens=title_tokens,
+                description_tokens=description_tokens
+            )
+            dialog.show(on_submit=_on_chosen)
+
+    :param title_identifier: A decimal identifier of the title text.
+    :type title_identifier: Union[int, LocalizedString]
+    :param description_identifier: A decimal identifier of the description text.
+    :type description_identifier: Union[int, LocalizedString]
+    :param initial_value: The initial value that will appear in the input box.
+    :type initial_value: float
+    :param min_value: The minimum value allowed to be entered by the player. Default is 0.0
+    :type min_value: float, optional
+    :param max_value: The maximum value allowed to be entered by the player. Default is Max Int.
+    :type max_value: float, optional
+    :param title_tokens: Tokens to format into the title.
+    :type title_tokens: Iterator[Any], optional
+    :param description_tokens: Tokens to format into the description.
+    :type description_tokens: Iterator[Any], optional
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
+    :type mod_identity: CommonModIdentity, optional
     """
     def __init__(
         self,
@@ -77,16 +127,6 @@ class CommonInputFloatDialog(CommonDialog):
         description_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
-        """Create a prompt to enter a float.
-
-        :param title_identifier: A decimal identifier of the title text.
-        :param description_identifier: A decimal identifier of the description text.
-        :param initial_value: The initial value that will appear in the input box.
-        :param min_value: The minimum value allowed to be entered by the player.
-        :param max_value: The maximum value allowed to be entered by the player.
-        :param title_tokens: Tokens to format into the title.
-        :param description_tokens: Tokens to format into the description.
-        """
         super().__init__(
             title_identifier,
             description_identifier,
@@ -98,20 +138,23 @@ class CommonInputFloatDialog(CommonDialog):
         self.min_value = min_value
         self.max_value = max_value
 
+    # noinspection PyMissingOrEmptyDocstring
     @property
     def log_identifier(self) -> str:
-        """An identifier for the Log of this class.
-
-        """
         return 's4cl_input_float_dialog'
 
     def show(
         self,
         on_submit: Callable[[Union[float, None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop
     ):
-        """Show the dialog and invoke the callbacks upon the player submitting a value.
+        """show(\
+            on_submit=CommonFunctionUtils.noop\
+        )
 
-        :param on_submit: A callback invoked upon the player submitting a value.
+        Show the dialog and invoke the callbacks upon the player submitting a value.
+
+        :param on_submit: A callback invoked upon the player submitting a value. Default is CommonFunctionUtils.noop.
+        :type on_submit: Callable[[Union[float, None], CommonChoiceOutcome], Any], optional
         """
         try:
             return self._show(

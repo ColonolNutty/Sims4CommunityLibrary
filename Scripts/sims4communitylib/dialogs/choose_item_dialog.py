@@ -35,19 +35,62 @@ class CommonChooseItemResult(CommonEnumIntBase):
 
     @staticmethod
     def is_error(result: 'CommonChooseItemResult') -> bool:
-        """Determine whether a result is an error or not.
+        """is_error(result)
+
+        Determine whether a result is an error or not.
 
         :param result: The result to check
         :type result: CommonChooseItemResult
-        :return: True if the result is an error or cancelled
+        :return: True, if the result is an error or cancelled. False, if not.
         :rtype: bool
         """
         return result == CommonChooseItemResult.DIALOG_CANCELLED or result == CommonChooseItemResult.ITEM_CHOSEN_WITH_ERROR
 
 
 class CommonChooseItemDialog:
-    """Obsolete: Please use :class:`.CommonChooseObjectDialog` instead.
+    """CommonChooseItemDialog(\
+        title_identifier,\
+        description_identifier,\
+        list_items,\
+        title_tokens=(),\
+        description_tokens=()\
+    )
+
+    Create a dialog that prompts the player to choose an item.
+
+    .. warning:: Obsolete: Please use :class:`.CommonChooseObjectDialog` instead.
         Use to create a dialog that prompts the player to choose a single item from a list of items.
+
+    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_choose_item_dialog` in the in-game console.
+
+    .. highlight:: python
+    .. code-block:: python
+
+        def _common_testing_show_choose_item_dialog():
+
+            def _item_chosen(chosen_item: str, result: CommonChooseItemResult):
+                pass
+
+            # LocalizedStrings within other LocalizedStrings
+            title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+            description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+            from sims4communitylib.utils.common_icon_utils import CommonIconUtils
+            options = [ObjectPickerRow(option_id=1, name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
+                                       row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE),
+                                       row_tooltip=None,
+                                       icon=CommonIconUtils.load_checked_square_icon(),
+                                       tag='Value 1'),
+                       ObjectPickerRow(option_id=2, name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
+                                       row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
+                                       row_tooltip=None,
+                                       icon=CommonIconUtils.load_arrow_navigate_into_icon(),
+                                       tag='Value 2')]
+            dialog = CommonChooseItemDialog(CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                                            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                                            tuple(options),
+                                            title_tokens=title_tokens,
+                                            description_tokens=description_tokens)
+            dialog.show(on_item_chosen=_item_chosen)
 
     :param title_identifier: A decimal identifier of the title text.
     :type title_identifier: Union[int, LocalizedString]
@@ -56,34 +99,50 @@ class CommonChooseItemDialog:
     :param list_items: The items to display in the dialog.
     :type list_items: Tuple[ObjectPickerRow]
     :param title_tokens: Tokens to format into the title.
-    :type title_tokens: Tuple[Any]
+    :type title_tokens: Tuple[Any], optional
     :param description_tokens: Tokens to format into the description.
-    :type description_tokens: Tuple[Any]
+    :type description_tokens: Tuple[Any], optional
     """
-    def __init__(self,
-                 title_identifier: Union[int, LocalizedString],
-                 description_identifier: Union[int, LocalizedString],
-                 list_items: Tuple[ObjectPickerRow],
-                 title_tokens: Tuple[Any]=(),
-                 description_tokens: Tuple[Any]=()):
+    def __init__(
+        self,
+        title_identifier: Union[int, LocalizedString],
+        description_identifier: Union[int, LocalizedString],
+        list_items: Tuple[ObjectPickerRow],
+        title_tokens: Tuple[Any]=(),
+        description_tokens: Tuple[Any]=()
+    ):
         self.title = CommonLocalizationUtils.create_localized_string(title_identifier, tokens=title_tokens)
         self.description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=description_tokens)
         self.list_items = list_items
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def add_item(self, item: ObjectPickerRow):
-        """Add a new item to choose from.
+        """add_item(item)
+
+        Add a new item to choose from.
 
         :param item: The item to add.
+        :type item: ObjectPickerRow
         """
         self.list_items += (item,)
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
-    def show(self, on_item_chosen: Callable[[Any, CommonChooseItemResult], Any]=CommonFunctionUtils.noop, picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT):
-        """Show the dialog and invoke the callbacks upon the player selecting an item.
+    def show(
+        self,
+        on_item_chosen: Callable[[Any, CommonChooseItemResult], Any]=CommonFunctionUtils.noop,
+        picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT
+    ):
+        """show(\
+            on_item_chosen=CommonFunctionUtils.noop,\
+            picker_type=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT\
+        )
+
+        Show the dialog and invoke the callbacks upon the player selecting an item.
 
         :param on_item_chosen: Invoked upon the player choosing an item from the list.
+        :type on_item_chosen: Callable[[Any, CommonChooseItemResult], Any], optional
         :param picker_type: Determines how the items appear in the dialog.
+        :type picker_type: UiObjectPicker.UiObjectPickerObjectPickerType, optional
         """
         _dialog = self._create_dialog(picker_type=picker_type)
         if _dialog is None:

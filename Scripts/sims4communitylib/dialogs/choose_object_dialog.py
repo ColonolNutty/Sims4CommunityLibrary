@@ -29,7 +29,17 @@ from ui.ui_dialog_picker import UiObjectPicker, ObjectPickerRow
 
 
 class CommonChooseObjectDialog(CommonChooseDialog):
-    """Create a dialog that prompts the player to choose an object.
+    """CommonChooseObjectDialog(\
+        title_identifier,\
+        description_identifier,\
+        choices,\
+        title_tokens=(),\
+        description_tokens=(),\
+        per_page=25,\
+        mod_identity=None\
+    )
+
+    Create a dialog that prompts the player to choose an object.
 
     .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_choose_object_dialog` in the in-game console.
 
@@ -41,53 +51,52 @@ class CommonChooseObjectDialog(CommonChooseDialog):
             def _on_chosen(choice: str, outcome: CommonChoiceOutcome):
                 pass
 
-            try:
-                # LocalizedStrings within other LocalizedStrings
-                title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
-                description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
-                from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-                options = [
-                    ObjectPickerRow(
-                        option_id=1,
-                        name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
-                        row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE),
-                        row_tooltip=None,
-                        icon=CommonIconUtils.load_checked_square_icon(),
-                        tag='Value 1'
-                    ),
-                    ObjectPickerRow(
-                        option_id=2,
-                        name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
-                        row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
-                        row_tooltip=None,
-                        icon=CommonIconUtils.load_arrow_navigate_into_icon(),
-                        tag='Value 2'
-                    ),
-                    ObjectPickerRow(
-                        option_id=3,
-                        name=CommonLocalizationUtils.create_localized_string('Value 3'),
-                        row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
-                        row_tooltip=None,
-                        icon=CommonIconUtils.load_arrow_navigate_into_icon(),
-                        tag='Value 3'
-                    )
-                ]
-                dialog = CommonChooseObjectDialog(
-                    CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-                    CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-                    tuple(options),
-                    title_tokens=title_tokens,
-                    description_tokens=description_tokens,
-                    per_page=2
+            # LocalizedStrings within other LocalizedStrings
+            title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+            description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+            from sims4communitylib.utils.common_icon_utils import CommonIconUtils
+            options = [
+                ObjectPickerRow(
+                    option_id=1,
+                    name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
+                    row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE),
+                    row_tooltip=None,
+                    icon=CommonIconUtils.load_checked_square_icon(),
+                    tag='Value 1'
+                ),
+                ObjectPickerRow(
+                    option_id=2,
+                    name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
+                    row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
+                    row_tooltip=None,
+                    icon=CommonIconUtils.load_arrow_navigate_into_icon(),
+                    tag='Value 2'
+                ),
+                ObjectPickerRow(
+                    option_id=3,
+                    name=CommonLocalizationUtils.create_localized_string('Value 3'),
+                    row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
+                    row_tooltip=None,
+                    icon=CommonIconUtils.load_arrow_navigate_into_icon(),
+                    tag='Value 3'
                 )
-                dialog.show(on_chosen=_on_chosen)
-            except Exception as ex:
-                CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to show dialog', exception=ex)
+            ]
+            dialog = CommonChooseObjectDialog(
+                CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                tuple(options),
+                title_tokens=title_tokens,
+                description_tokens=description_tokens,
+                per_page=2
+            )
+            dialog.show(on_chosen=_on_chosen)
 
     :param title_identifier: The title to display in the dialog.
     :type title_identifier: Union[int, LocalizedString]
     :param description_identifier: The description to display in the dialog.
     :type description_identifier: Union[int, LocalizedString]
+    :param choices: The choices that can be chosen.
+    :type choices: Iterator[ObjectPickerRow]
     :param title_tokens: Tokens to format into the title.
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: Tokens to format into the description.
@@ -124,22 +133,14 @@ class CommonChooseObjectDialog(CommonChooseDialog):
     def log_identifier(self) -> str:
         return 's4cl_choose_object_dialog'
 
+    # noinspection PyMissingOrEmptyDocstring
     @property
     def rows(self) -> Tuple[ObjectPickerRow]:
-        """The choices available in the dialog.
-
-        :return: A collection of choices.
-        :rtype: Tuple[ObjectPickerRow]
-        """
         result: Tuple[ObjectPickerRow] = super().rows
         return result
 
+    # noinspection PyMissingOrEmptyDocstring
     def add_row(self, choice: ObjectPickerRow):
-        """Add a choice to the dialog.
-
-        :param choice: A choice to add to the dialog
-        :type choice: ObjectPickerRow
-        """
         super().add_row(choice)
 
     def show(
@@ -149,7 +150,14 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         page: int=1,
         sim_info: SimInfo=None
     ):
-        """Show the dialog and invoke the callbacks upon the player making a choice.
+        """show(\
+            on_chosen=CommonFunctionUtils.noop,\
+            picker_type=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,\
+            page=1,\
+            sim_info=None\
+        )
+
+        Show the dialog and invoke the callbacks upon the player making a choice.
 
         :param on_chosen: A callback invoked upon the player choosing something from the list.
         :type on_chosen: Callable[[Any, CommonChoiceOutcome]

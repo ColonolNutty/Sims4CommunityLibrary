@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from typing import Union, Tuple, Any, Callable, List
 
 from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
+from sims4communitylib.dialogs.common_choose_dialog import CommonChooseDialog
 from sims4communitylib.dialogs.option_dialogs.common_choose_option_dialog import CommonChooseOptionDialog
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option import CommonDialogOption
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_context import DialogOptionValueType
@@ -17,6 +18,30 @@ from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 # noinspection PyMissingOrEmptyDocstring
 class CommonChooseOptionsDialog(CommonChooseOptionDialog):
+    """CommonChooseOptionsDialog(\
+        internal_dialog,\
+        on_close=CommonFunctionUtils.noop\
+    )
+
+    A dialog that displays a list of options and prompts to select multiple items.
+
+    .. warning:: Unless you know what you are doing, do not create an instance of this class directly!
+
+    :param internal_dialog: The dialog this option dialog wraps.
+    :type internal_dialog: CommonChooseDialog
+    :param on_close: A callback invoked upon the dialog closing.
+    :type on_close: Callable[..., Any], optional
+    """
+    def __init__(
+        self,
+        internal_dialog: CommonChooseDialog,
+        on_close: Callable[..., Any]=CommonFunctionUtils.noop
+    ):
+        super().__init__(
+            internal_dialog,
+            on_close=on_close
+        )
+
     def show(
         self,
         *_,
@@ -25,7 +50,8 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
         max_selectable: int=1,
         **__
     ):
-        """show(*_,\
+        """show(\
+            *_,\
             on_submit=CommonFunctionUtils.noop,\
             min_selectable=1,\
             max_selectable=1,\
@@ -34,7 +60,7 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
 
         Show the dialog.
 
-        .. note:: Override this function and provide your own arguments.
+        .. note:: Override this function to provide your own arguments.
 
         :param on_submit: When the dialog is submit, this callback will be invoked with the selected options.
         :type on_submit: Callable[[Tuple[DialogOptionValueType]], Any], optional

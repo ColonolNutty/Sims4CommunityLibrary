@@ -37,7 +37,7 @@ class CommonChooseSimsOptionDialog(CommonChooseOptionsDialog):
         mod_identity=None\
     )
 
-    A dialog that displays a list of Sims for selection.
+    A dialog that displays a list of Sims for selection and prompts to select multiple Sims.
 
     .. note:: This dialog allows selection of multiple Sims.
 
@@ -49,7 +49,7 @@ class CommonChooseSimsOptionDialog(CommonChooseOptionsDialog):
     .. code-block:: python
 
         def _on_submit(sim_info_list: Tuple[SimInfo]):
-            output('Chose Sims with names {}'.format(CommonSimNameUtils.get_full_names(sim_info_list)))
+            pass
 
         # LocalizedStrings within other LocalizedStrings
         title_tokens = (
@@ -110,7 +110,7 @@ class CommonChooseSimsOptionDialog(CommonChooseOptionsDialog):
     :type description_tokens: Iterator[Any], optional
     :param on_close: A callback invoked upon the dialog closing.
     :type on_close: Callable[..., Any], optional
-    :param mod_identity: The identity of the Mod that created this dialog.
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
     :type mod_identity: CommonModIdentity, optional
     """
     def __init__(

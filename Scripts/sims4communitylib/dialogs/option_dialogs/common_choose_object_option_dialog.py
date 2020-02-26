@@ -48,7 +48,7 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
     .. code-block:: python
 
         def _on_option_chosen(option_identifier: str, choice: str):
-            output('Chose option {} with value: {}.'.format(pformat(option_identifier), pformat(choice)))
+            pass
 
         # LocalizedStrings within other LocalizedStrings
         title_tokens = (
@@ -131,8 +131,8 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
     :type description_tokens: Iterator[Any], optional
     :param on_close: A callback invoked upon the dialog closing.
     :type on_close: Callable[..., Any], optional
-    :param mod_identity: The identity of the Mod that created this dialog.
-    :type mod_identity: CommonModIdentity
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
+    :type mod_identity: CommonModIdentity, optional
     :param per_page: The number of rows to display per page. If the number of rows (including rows added after creation) exceeds this value, pagination will be added.
     :type per_page: int, optional
     """
@@ -180,7 +180,11 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         page: int=1,
         sim_info: SimInfo=None
     ):
-        """show(picker_type=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT, page=1, sim_info=None)
+        """show(\
+            picker_type=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,\
+            page=1,\
+            sim_info=None\
+        )
 
         Show the dialog and invoke the callbacks upon the player making a choice.
 

@@ -22,7 +22,58 @@ from ui.ui_dialog import UiDialogOk
 
 
 class CommonOkDialog(CommonDialog):
-    """Use to create an acknowledgement dialog.
+    """CommonOkDialog(\
+        title_identifier,\
+        description_identifier,\
+        title_tokens=(),\
+        description_tokens=(),\
+        ok_text_identifier=CommonStringId.OK,\
+        ok_text_tokens=(),
+        mod_identity=None\
+    )
+
+    Use to create an acknowledgement dialog.
+
+    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_ok_dialog` in the in-game console.
+
+    .. highlight:: python
+    .. code-block:: python
+
+        def _common_testing_show_ok_dialog():
+
+            def _on_acknowledged(_dialog: UiDialogOk):
+                if _dialog.accepted:
+                    pass
+                else:
+                    pass
+
+            # LocalizedStrings within other LocalizedStrings
+            title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+            description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+            dialog = CommonOkDialog(
+                CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                title_tokens=title_tokens,
+                description_tokens=description_tokens,
+                ok_text_identifier=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE, text_color=CommonLocalizedStringColor.RED)
+            )
+            dialog.show(on_acknowledged=_on_acknowledged)
+
+
+    :param title_identifier: A decimal identifier of the title text.
+    :type title_identifier: Union[int, LocalizedString]
+    :param description_identifier: A decimal identifier of the description text.
+    :type description_identifier: Union[int, LocalizedString]
+    :param title_tokens: Tokens to format into the title.
+    :type title_tokens: Iterator[Any], optional
+    :param description_tokens: Tokens to format into the description.
+    :type description_tokens: Iterator[Any], optional
+    :param ok_text_identifier: A decimal identifier for the Ok button text.
+    :type ok_text_identifier: Union[int, LocalizedString], optional
+    :param ok_text_tokens: Tokens to format into the Ok button text.
+    :type ok_text_tokens: Iterator[Any], optional
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
+    :type mod_identity: CommonModIdentity, optional
     """
     def __init__(
         self,
@@ -34,15 +85,6 @@ class CommonOkDialog(CommonDialog):
         ok_text_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
-        """Create a dialog with a single button: Ok
-
-        :param title_identifier: A decimal identifier of the title text.
-        :param description_identifier: A decimal identifier of the description text.
-        :param title_tokens: Tokens to format into the title.
-        :param description_tokens: Tokens to format into the description.
-        :param ok_text_identifier: A decimal identifier for the Ok button text.
-        :param ok_text_tokens: Tokens to format into the Ok button text.
-        """
         super().__init__(
             title_identifier,
             description_identifier,
@@ -52,20 +94,23 @@ class CommonOkDialog(CommonDialog):
         )
         self.ok_text = CommonLocalizationUtils.create_localized_string(ok_text_identifier, tokens=tuple(ok_text_tokens))
 
+    # noinspection PyMissingOrEmptyDocstring
     @property
     def log_identifier(self) -> str:
-        """An identifier for the Log of this class.
-
-        """
         return 's4cl_ok_dialog'
 
     def show(
         self,
         on_acknowledged: Callable[[UiDialogOk], Any]=CommonFunctionUtils.noop
     ):
-        """Show the dialog and invoke the callback upon the player acknowledging the dialog.
+        """show(\
+            on_acknowledged=CommonFunctionUtils.noop\
+        )
+
+        Show the dialog and invoke the callback upon the player acknowledging the dialog.
 
         :param on_acknowledged: Invoked upon the player acknowledging (Hitting Ok) or closing the dialog.
+        :type on_acknowledged: Callable[[UiDialogOk], Any], optional
         """
         try:
             return self._show(
