@@ -47,7 +47,7 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
     .. code-block:: python
 
         def _on_chosen(_sim_info: SimInfo):
-            output('Chose Sim with name \'{}\''.format(CommonSimNameUtils.get_full_name(_sim_info)))
+            pass
 
         # LocalizedStrings within other LocalizedStrings
         title_tokens = (
@@ -107,7 +107,7 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
     :type description_tokens: Iterator[Any], optional
     :param on_close: A callback invoked upon the dialog closing.
     :type on_close: Callable[..., Any], optional
-    :param mod_identity: The identity of the Mod that created this dialog.
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
     :type mod_identity: CommonModIdentity, optional
     """
     def __init__(

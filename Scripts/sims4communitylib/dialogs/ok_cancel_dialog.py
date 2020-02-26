@@ -22,8 +22,64 @@ from ui.ui_dialog import UiDialogOkCancel
 
 
 class CommonOkCancelDialog(CommonDialog):
-    """Use to create a prompt dialog.
+    """CommonOkCancelDialog(\
+        title_identifier,\
+        description_identifier,\
+        title_tokens=(),\
+        description_tokens=(),\
+        ok_text_identifier=CommonStringId.OK,\
+        ok_text_tokens=(),\
+        cancel_text_identifier=CommonStringId.CANCEL,\
+        cancel_text_tokens=(),\
+        mod_identity=None\
+    )
 
+    Use to create a prompt dialog.
+
+    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_ok_cancel_dialog` in the in-game console.
+
+    .. highlight:: python
+    .. code-block:: python
+
+        def _common_testing_show_ok_cancel_dialog():
+
+            def _ok_chosen(_: UiDialogOkCancel):
+                pass
+
+            def _cancel_chosen(_: UiDialogOkCancel):
+                pass
+
+            # LocalizedStrings within other LocalizedStrings
+            title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+            description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+            dialog = CommonOkCancelDialog(
+                CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                title_tokens=title_tokens,
+                description_tokens=description_tokens,
+                ok_text_identifier=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE, text_color=CommonLocalizedStringColor.RED),
+                cancel_text_identifier=CommonStringId.TESTING_TEST_BUTTON_TWO
+            )
+            dialog.show(on_ok_selected=_ok_chosen, on_cancel_selected=_cancel_chosen)
+
+    :param title_identifier: A decimal identifier of the title text.
+    :type title_identifier: Union[int, LocalizedString]
+    :param description_identifier: A decimal identifier of the description text.
+    :type description_identifier: Union[int, LocalizedString]
+    :param title_tokens: Tokens to format into the title.
+    :type title_tokens: Iterator[Any], optional
+    :param description_tokens: Tokens to format into the description.
+    :type description_tokens: Iterator[Any], optional
+    :param ok_text_identifier: A decimal identifier for the Ok text.
+    :type ok_text_identifier: Union[int, LocalizedString], optional
+    :param ok_text_tokens: Tokens to format into the Ok text.
+    :type ok_text_tokens: Iterator[Any], optional
+    :param cancel_text_identifier: A decimal identifier for the Cancel text.
+    :type cancel_text_identifier: Union[int, LocalizedString], optional
+    :param cancel_text_tokens: Tokens to format into the Cancel text.
+    :type cancel_text_tokens: Iterator[Any], optional
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
+    :type mod_identity: CommonModIdentity, optional
     """
     def __init__(
         self,
@@ -37,17 +93,6 @@ class CommonOkCancelDialog(CommonDialog):
         cancel_text_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
-        """Create a dialog with two buttons: Ok and Cancel.
-
-        :param title_identifier: A decimal identifier of the title text.
-        :param description_identifier: A decimal identifier of the description text.
-        :param title_tokens: Tokens to format into the title.
-        :param description_tokens: Tokens to format into the description.
-        :param ok_text_identifier: A decimal identifier for the Ok text.
-        :param ok_text_tokens: Tokens to format into the Ok text.
-        :param cancel_text_identifier: A decimal identifier for the Cancel text.
-        :param cancel_text_tokens: Tokens to format into the Cancel text.
-        """
         super().__init__(
             title_identifier,
             description_identifier,
@@ -58,11 +103,9 @@ class CommonOkCancelDialog(CommonDialog):
         self.ok_text = CommonLocalizationUtils.create_localized_string(ok_text_identifier, tokens=tuple(ok_text_tokens))
         self.cancel_text = CommonLocalizationUtils.create_localized_string(cancel_text_identifier, tokens=tuple(cancel_text_tokens))
 
+    # noinspection PyMissingOrEmptyDocstring
     @property
     def log_identifier(self) -> str:
-        """An identifier for the Log of this class.
-
-        """
         return 's4cl_ok_cancel_dialog'
 
     def show(
@@ -70,10 +113,17 @@ class CommonOkCancelDialog(CommonDialog):
         on_ok_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop,
         on_cancel_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop
     ):
-        """Show the dialog and invoke the callbacks upon the player selecting an option.
+        """show(\
+            on_ok_selected=CommonFunctionUtils.noop,\
+            on_cancel_selected=CommonFunctionUtils.noop\
+        )
+
+        Show the dialog and invoke the callbacks upon the player selecting an option.
 
         :param on_ok_selected: Invoked upon the player selecting Ok in the dialog.
+        :type on_ok_selected: Callable[[UiDialogOkCancel], Any], optional
         :param on_cancel_selected: Invoked upon the player selecting Cancel in the dialog.
+        :type on_cancel_selected: Callable[[UiDialogOkCancel], Any], optional
         """
         try:
             return self._show(

@@ -24,6 +24,14 @@ class CommonChoiceOutcome(Int):
     ERROR = 2
 
     @staticmethod
-    def is_error_or_cancel(result: 'CommonChoiceOutcome'):
-        """ Determine if an outcome is either Error or Cancel. """
+    def is_error_or_cancel(result: 'CommonChoiceOutcome') -> bool:
+        """is_error_or_cancel(result)
+
+        Determine if an outcome is either Error or Cancel.
+
+        :param result: The result to check.
+        :type result: CommonChoiceOutcome
+        :return: True, if result is either an Error or Cancel. False, if not.
+        :rtype: bool
+        """
         return result == CommonChoiceOutcome.ERROR or result == CommonChoiceOutcome.CANCEL

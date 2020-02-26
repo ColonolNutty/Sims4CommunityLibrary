@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import sims4.commands
-from typing import Any, Callable, Union, Iterator
+from typing import Any, Callable, Union, Iterator, Tuple
 
 from pprint import pformat
 
@@ -40,7 +40,47 @@ class CommonChooseSimDialog(CommonChooseDialog):
 
     Create a dialog to display a list of Sims to choose.
 
-    .. note:: To see an example dialog, run the command `s4clib_testing.show_choose_sim_dialog` in-game.
+    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_choose_sim_dialog` in the in-game console.
+
+    .. highlight:: python
+    .. code-block:: python
+
+        def _common_testing_show_choose_sim_dialog():
+
+            def _on_chosen(choice: Union[SimInfo, None], outcome: CommonChoiceOutcome):
+                pass
+
+            # LocalizedStrings within other LocalizedStrings
+            title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+            description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+            from sims4communitylib.utils.common_icon_utils import CommonIconUtils
+            current_count = 0
+            count = 25
+            options = []
+            for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
+                if current_count >= count:
+                    break
+                sim_id = CommonSimUtils.get_sim_id(sim_info)
+                should_select = random.choice((True, False))
+                is_enabled = random.choice((True, False))
+                options.append(
+                    SimPickerRow(
+                        sim_id,
+                        select_default=should_select,
+                        tag=sim_info,
+                        is_enable=is_enabled
+                    )
+                )
+                current_count += 1
+
+            dialog = CommonChooseSimDialog(
+                CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                tuple(options),
+                title_tokens=title_tokens,
+                description_tokens=description_tokens
+            )
+            dialog.show(on_chosen=_on_chosen, column_count=5)
 
     :param title_identifier: A decimal identifier of the title text.
     :type title_identifier: Union[int, LocalizedString]
@@ -51,8 +91,8 @@ class CommonChooseSimDialog(CommonChooseDialog):
     :param title_tokens: Tokens to format into the title.
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: Tokens to format into the description.
-    :type description_tokens: Iterator[Any], optional,
-    :param mod_identity: The identity of the Mod that owns this dialog.
+    :type description_tokens: Iterator[Any], optional
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
     :type mod_identity: CommonModIdentity, optional
     """
     def __init__(
@@ -79,6 +119,12 @@ class CommonChooseSimDialog(CommonChooseDialog):
         return 's4cl_choose_sim_dialog'
 
     # noinspection PyMissingOrEmptyDocstring
+    @property
+    def rows(self) -> Tuple[SimPickerRow]:
+        result: Tuple[SimPickerRow] = super().rows
+        return result
+
+    # noinspection PyMissingOrEmptyDocstring
     def add_row(self, choice: SimPickerRow):
         return super().add_row(choice)
 
@@ -90,7 +136,7 @@ class CommonChooseSimDialog(CommonChooseDialog):
         hide_row_descriptions: bool=False,
         column_count: int=3
     ):
-        """show(
+        """show(\
             on_chosen=CommonFunctionUtils.noop,\
             sim_info=None,\
             should_show_names=True,\

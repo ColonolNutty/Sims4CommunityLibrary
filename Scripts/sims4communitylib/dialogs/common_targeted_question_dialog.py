@@ -25,8 +25,61 @@ from ui.ui_dialog import UiDialogOkCancel
 
 
 class CommonTargetedQuestionDialog(CommonDialog):
-    """Use to create a Sim to Sim question dialog.
+    """CommonTargetedQuestionDialog(\
+        question_text,\
+        question_tokens=(),\
+        ok_text_identifier=CommonStringId.OK,\
+        ok_text_tokens=(),\
+        cancel_text_identifier=CommonStringId.CANCEL,\
+        cancel_text_tokens=(),\
+        mod_identity=None\
+    )
 
+    A Sim to Sim question dialog.
+
+    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_targeted_question_dialog` in the in-game console.
+
+    .. highlight:: python
+    .. code-block:: python
+
+        def _common_testing_show_targeted_question_dialog():
+
+            def _ok_chosen(_: UiDialogOkCancel):
+                pass
+
+            def _cancel_chosen(_: UiDialogOkCancel):
+                pass
+
+            # LocalizedStrings within other LocalizedStrings
+            description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+            dialog = CommonTargetedQuestionDialog(
+                CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                question_tokens=description_tokens,
+                ok_text_identifier=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE, text_color=CommonLocalizedStringColor.RED),
+                cancel_text_identifier=CommonStringId.TESTING_TEST_BUTTON_TWO
+            )
+            dialog.show(
+                CommonSimUtils.get_active_sim_info(),
+                tuple(CommonSimUtils.get_sim_info_for_all_sims_generator())[0],
+                on_ok_selected=_ok_chosen,
+                on_cancel_selected=_cancel_chosen
+            )
+
+
+    :param question_text: A decimal identifier of the question text.
+    :type question_text: Union[int, LocalizedString]
+    :param question_tokens: Tokens to format into the question text.
+    :type question_tokens: Iterator[Any], optional
+    :param ok_text_identifier: A decimal identifier for the Ok text.
+    :type ok_text_identifier: Union[int, LocalizedString], optional
+    :param ok_text_tokens: Tokens to format into the Ok text.
+    :type ok_text_tokens: Iterator[Any], optional
+    :param cancel_text_identifier: A decimal identifier for the Cancel text.
+    :type cancel_text_identifier: Union[int, LocalizedString], optional
+    :param cancel_text_tokens: Tokens to format into the Cancel text.
+    :type cancel_text_tokens: Iterator[Any], optional
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
+    :type mod_identity: CommonModIdentity, optional
     """
     def __init__(
         self,
@@ -38,15 +91,6 @@ class CommonTargetedQuestionDialog(CommonDialog):
         cancel_text_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
-        """Create a dialog that prompts the player with a question.
-
-        :param question_text: A decimal identifier of the question text.
-        :param question_tokens: Tokens to format into the question text.
-        :param ok_text_identifier: A decimal identifier for the Ok text.
-        :param ok_text_tokens: Tokens to format into the Ok text.
-        :param cancel_text_identifier: A decimal identifier for the Cancel text.
-        :param cancel_text_tokens: Tokens to format into the Cancel text.
-        """
         super().__init__(
             0,
             question_text,
@@ -56,11 +100,9 @@ class CommonTargetedQuestionDialog(CommonDialog):
         self.ok_text = CommonLocalizationUtils.create_localized_string(ok_text_identifier, tokens=tuple(ok_text_tokens))
         self.cancel_text = CommonLocalizationUtils.create_localized_string(cancel_text_identifier, tokens=tuple(cancel_text_tokens))
 
+    # noinspection PyMissingOrEmptyDocstring
     @property
     def log_identifier(self) -> str:
-        """An identifier for the Log of this class.
-
-        """
         return 's4cl_targeted_question_dialog'
 
     def show(
@@ -70,12 +112,23 @@ class CommonTargetedQuestionDialog(CommonDialog):
         on_ok_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop,
         on_cancel_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop
     ):
-        """Show the dialog and invoke the callbacks upon the player making a choice.
+        """show(\
+            sim_info,\
+            target_sim_info,\
+            on_ok_selected=CommonFunctionUtils.noop,\
+            on_cancel_selected=CommonFunctionUtils.noop\
+        )
+
+        Show the dialog and invoke the callbacks upon the player making a choice.
 
         :param sim_info: The Sim that is the source of the question.
+        :type sim_info: SimInfo
         :param target_sim_info: The Sim that is the target of the question.
+        :type target_sim_info: SimInfo
         :param on_ok_selected: Invoked upon the player clicking the Ok button in the dialog.
+        :type on_ok_selected: Callable[[UiDialogOkCancel], Any], optional
         :param on_cancel_selected: Invoked upon the player clicking the Cancel button in the dialog.
+        :type on_cancel_selected: Callable[[UiDialogOkCancel], Any], optional
         """
         try:
             return self._show(

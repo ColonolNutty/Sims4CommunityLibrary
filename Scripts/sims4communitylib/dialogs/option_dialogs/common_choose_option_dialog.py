@@ -18,7 +18,10 @@ from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
 class CommonChooseOptionDialog(HasLog):
-    """CommonChooseOptionDialog(internal_dialog, on_close=CommonFunctionUtils.noop)
+    """CommonChooseOptionDialog(\
+        internal_dialog,\
+        on_close=CommonFunctionUtils.noop\
+    )
 
     A dialog that displays a list of options.
 
@@ -105,10 +108,12 @@ class CommonChooseOptionDialog(HasLog):
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_identity.name, 'add_option', exception=ex)
 
-    def show(self, *_, **__):
-        """Show the dialog.
+    def show(self, *_: Any, **__: Any):
+        """show(*_, **__)
 
-        .. note:: Override this function and provide your own arguments.
+        Show the dialog.
+
+        .. note:: Override this function to provide your own arguments.
 
         """
         try:
@@ -122,7 +127,11 @@ class CommonChooseOptionDialog(HasLog):
             CommonExceptionHandler.log_exception(self.mod_identity.name, 'show', exception=ex)
 
     def close(self) -> bool:
-        """Close the dialog.
+        """close()
 
+        Close the dialog.
+
+        :return: True, if the dialog closed successfully. False, if not.
+        :rtype: bool
         """
         return self._on_close()

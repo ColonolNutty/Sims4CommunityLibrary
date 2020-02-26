@@ -15,11 +15,17 @@ from ui.ui_dialog import UiDialogBase
 
 
 class CommonDialog(HasLog):
-    """An inheritable class for creating a dialog.
+    """CommonDialog(\
+        title_identifier,\
+        description_identifier,\
+        title_tokens=(),\
+        description_tokens=(),\
+        mod_identity=None\
+    )
 
-    .. note::
+    An inheritable class for creating a dialog.
 
-       It is recommended to utilize one of the ready made dialogs, instead of creating a custom :class:`CommonDialog`
+    .. note:: It is recommended to utilize one of the ready made dialogs, instead of creating a custom :class:`CommonDialog`
 
     :param title_identifier: The title to display in the dialog.
     :type title_identifier: Union[int, LocalizedString]
@@ -52,15 +58,18 @@ class CommonDialog(HasLog):
         return self._mod_identity or ModInfo.get_identity()
 
     def show(self, *_: Any, **__: Any):
-        """Display the dialog to the player.
+        """show(*_, **__)
+
+        Display the dialog to the player.
 
         .. note:: Override this method with any arguments you want to.
 
         """
         raise NotImplementedError('\'{}\' not implemented.'.format(self.__class__.show.__name__))
 
-    def _create_dialog(self, *_, **__) -> Union[UiDialogBase, None]:
-        """_create_dialog()
+    def _create_dialog(self, *_: Any, **__: Any) -> Union[UiDialogBase, None]:
+        """_create_dialog(*_, **__)
+
         Create a dialog for use in :func:``show`.
 
         .. note:: Override this method with any arguments you want to.
