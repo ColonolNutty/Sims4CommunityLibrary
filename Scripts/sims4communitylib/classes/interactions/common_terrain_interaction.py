@@ -16,18 +16,28 @@ from sims4communitylib.classes.interactions.common_interaction import CommonInte
 # ReadTheDocs
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-# If on Read The Docs, don't extend from all these classes.
+# If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
 if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
-    class TravelMixin:
+    class MockClass(object):
+        # noinspection PyMissingTypeHints
+        def __init__(self, *args, **kwargs):
+            super(MockClass, self).__init__()
+
+        # noinspection PyMissingTypeHints
+        def __call__(self, *args, **kwargs):
+            return None
+
+    # noinspection PyMissingOrEmptyDocstring
+    class TravelMixin(MockClass):
         pass
 
     # noinspection PyMissingOrEmptyDocstring
-    class TerrainInteractionMixin:
+    class TerrainInteractionMixin(MockClass):
         pass
 
     # noinspection PyMissingOrEmptyDocstring
-    class ImmediateSuperInteraction:
+    class ImmediateSuperInteraction(MockClass):
         pass
 else:
     from interactions.base.immediate_interaction import ImmediateSuperInteraction
@@ -39,7 +49,12 @@ class CommonTerrainInteraction(CommonInteraction, TravelMixin, TerrainInteractio
 
     An inheritable class that provides a way to create custom Terrain Interactions.
 
-    .. note:: The main use for this class is to create interactions that occur when clicking on the ground.
+    .. note::
+
+        The main use for this class is to create interactions that appear when clicking on the ground.\
+        However, it can also be used for interactions that appear when clicking on Sims.
+
+    .. warning:: Due to an issue with how Read The Docs functions, the base classes of this class will have different namespaces than they do in the source code!
 
     :Example:
 
