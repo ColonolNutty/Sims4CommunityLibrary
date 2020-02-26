@@ -11,9 +11,11 @@ from sims4communitylib.modinfo import ModInfo
 
 
 class CommonConditionalAction(HasLog):
-    """An inheritable class that Performs an action when a condition is met.
+    """CommonConditionalAction()
 
-    A common usage would be in a factory pattern with a collection of :class:`CommonConditionalAction` objects.
+    An inheritable class that Performs an action when a condition is met.
+
+    .. note:: A common usage would be in a factory pattern with a collection of :class:`CommonConditionalAction` objects.
 
     """
     # noinspection PyMissingOrEmptyDocstring
@@ -22,16 +24,26 @@ class CommonConditionalAction(HasLog):
         return ModInfo.get_identity()
 
     def _should_apply(self, *_, **__) -> bool:
-        """Determine if the action should apply based on the given arguments.
+        """_should_apply(*_, **__)
+
+        Determine if the action should apply based on the given arguments.
 
         .. warning:: The arguments must match the :func:`~try_apply` method.
+
+        :return: True, if the action should be applied. False, if not.
+        :rtype: bool
         """
         return True
 
     def try_apply(self, *_, **__) -> bool:
-        """Attempt to apply the action.
+        """try_apply(*_, **__)
+
+        Attempt to apply the action.
 
         .. note:: Override this method with any arguments you want to.
+
+        :return: True, if the action was applied. False, if not.
+        :rtype: bool
         """
         if self._should_apply(*_, **__):
             self.log.debug('Applying action \'{}\'.'.format(self.__class__.__name__))
@@ -41,8 +53,13 @@ class CommonConditionalAction(HasLog):
         return False
 
     def _apply(self, *_, **__) -> bool:
-        """Apply the action.
+        """_apply(*_, **__)
+
+        Apply the action.
 
         .. warning:: The arguments must match the :func:`~try_apply` arguments.
+
+        :return: True, if the action was applied. False, if not.
+        :rtype: bool
         """
         raise NotImplementedError('\'{}\' not implemented'.format(self.__class__._apply.__name__))
