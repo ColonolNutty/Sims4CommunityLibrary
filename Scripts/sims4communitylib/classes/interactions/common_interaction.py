@@ -24,7 +24,9 @@ from singletons import DEFAULT
 
 
 class CommonInteraction(Interaction, HasLog):
-    """An inheritable class that provides a way to create Custom Interactions.
+    """CommonInteraction(...)
+
+    An inheritable class that provides a way to create Custom Interactions.
 
     .. note::
 
@@ -37,7 +39,7 @@ class CommonInteraction(Interaction, HasLog):
        * :class:`CommonTerrainInteraction`
 
     """
-    def __init__(self, *_, **__):
+    def __init__(self, *_: Any, **__: Any):
         super().__init__(*_, **__)
         HasLog.__init__(self)
 
@@ -76,7 +78,7 @@ class CommonInteraction(Interaction, HasLog):
             return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
         return super()._test(target, context, **kwargs)
 
-    def _trigger_interaction_start_event(self):
+    def _trigger_interaction_start_event(self: 'CommonInteraction'):
         try:
             super()._trigger_interaction_start_event()
             self.on_started(self.sim, self.target)
@@ -94,6 +96,7 @@ class CommonInteraction(Interaction, HasLog):
 
     def kill(self) -> bool:
         """kill()
+
         Kill the interaction. (Hard Cancel)
 
         :return: True, if the interaction was killed successfully. False, if the interaction was not killed successfully.
@@ -106,7 +109,8 @@ class CommonInteraction(Interaction, HasLog):
         return super().kill()
 
     def cancel(self, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> bool:
-        """cancel(finishing_type, cancel_reason_msg, kwargs)
+        """cancel(finishing_type, cancel_reason_msg, **kwargs)
+
         Cancel the interaction. (Soft Cancel)
 
         :param finishing_type: The type of cancellation occurring.
@@ -122,8 +126,9 @@ class CommonInteraction(Interaction, HasLog):
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' cancel.'.format(self.__class__.__name__), exception=ex)
 
-    def on_reset(self):
+    def on_reset(self: 'CommonInteraction'):
         """on_reset()
+
         A function that occurs upon an interaction being reset.
 
         """
@@ -133,17 +138,17 @@ class CommonInteraction(Interaction, HasLog):
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' on_reset.'.format(self.__class__.__name__), exception=ex)
 
-    def _post_perform(self):
+    def _post_perform(self: 'CommonInteraction'):
         try:
             self.on_performed(self.sim, self.target)
             return super()._post_perform()
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' _post_perform.'.format(self.__class__.__name__), exception=ex)
 
-    def send_current_progress(self, *args, **kwargs):
+    def send_current_progress(self, *args: Any, **kwargs: Any):
         """send_current_progress(*args, **kwargs)
 
-        A function that occurs upon a progress update.
+        A function that occurs upon a progress bar update.
 
         """
         try:
@@ -176,19 +181,33 @@ class CommonInteraction(Interaction, HasLog):
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=TestResult.NONE)
-    def create_test_result(result: bool, reason: str=None, text_tokens: Union[Tuple[Any], List[Any], Set[Any]]=(), tooltip: Union[int, str, CommonLocalizationUtils.LocalizedTooltip]=None, icon=None, influence_by_active_mood: bool=False) -> TestResult:
-        """create_test_result(result, reason=None, text_tokens=(), tooltip=None, icon=None, influence_by_active_mood=False)
-        Create a TestResult with the specified information.
-        TestResult is an object used to disable, hide, or display tooltips on interactions.
+    def create_test_result(
+        result: bool,
+        reason: str=None,
+        text_tokens: Union[Tuple[Any], List[Any], Set[Any]]=(),
+        tooltip: Union[int, str, CommonLocalizationUtils.LocalizedTooltip]=None,
+        icon=None,
+        influence_by_active_mood: bool=False
+    ) -> TestResult:
+        """create_test_result(\
+            result,\
+            reason=None,\
+            text_tokens=(),\
+            tooltip=None,\
+            icon=None,\
+            influence_by_active_mood=False\
+        )
 
-        See :func:`~on_test` for more information.
+        Create a TestResult with the specified information.
+
+        .. note:: TestResult is an object used to disable, hide, or display tooltips on interactions. See :func:`~on_test` for more information.
 
         :param result: The result of a test. True for passed, False for failed.
         :type result: bool
         :param reason: The reason for the Test Result (This is displayed as a tooltip to the player when the interaction is disabled).
         :type reason: str, optional
         :param text_tokens: Any text tokens to include format into the reason.
-        :type text_tokens: Any, optional
+        :type text_tokens: Union[Tuple[Any], List[Any], Set[Any]], optional
         :param tooltip: The tooltip displayed when hovering the interaction while it is disabled.
         :type tooltip: Union[int, str, LocalizedTooltip], optional
         :param icon: The icon of the outcome.
@@ -198,7 +217,14 @@ class CommonInteraction(Interaction, HasLog):
         :return: The desired outcome for a call of :func:`~on_test`, default is `TestResult.NONE`
         :rtype: TestResult
         """
-        return TestResult(result, reason, *text_tokens, tooltip=tooltip, icon=icon, influence_by_active_mood=influence_by_active_mood)
+        return TestResult(
+            result,
+            reason,
+            *text_tokens,
+            tooltip=tooltip,
+            icon=icon,
+            influence_by_active_mood=influence_by_active_mood
+        )
 
     @classmethod
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
@@ -250,7 +276,6 @@ class CommonInteraction(Interaction, HasLog):
         """on_cancelled(interaction_sim, interaction_target, finishing_type, cancel_reason_msg, kwargs)
 
         A hook that occurs upon the interaction being cancelled.
-
 
         :param interaction_sim: The source Sim of the interaction.
         :type interaction_sim: Sim
@@ -309,7 +334,7 @@ class CommonInteraction(Interaction, HasLog):
 
         A hook that occurs upon the animation state machine being setup for the interaction.
 
-        .. warning:: The returned value from here replaces the original returned value.
+        .. warning:: The returned value from here replaces the original returned value. Return None from here to return the original value.
 
         :param interaction_sim: The source Sim of the interaction.
         :type interaction_sim: Sim
