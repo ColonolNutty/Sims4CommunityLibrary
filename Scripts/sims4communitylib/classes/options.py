@@ -9,8 +9,12 @@ from typing import Dict, Any
 
 
 class CommonOption:
-    """Useful for giving a type to arguments when str just won't cut it.
+    """CommonOption(name)
 
+    Useful for giving a type to arguments when str just won't cut it.
+
+    :param name: The name of the option. It is also considered as the value of the option.
+    :type name: str
     """
     def __init__(self, name: str):
         self._name = name
@@ -41,8 +45,12 @@ class CommonOption:
 
 
 class HasCommonOptions:
-    """An inheritable class that provides a dictionary of custom options.
+    """HasCommonOptions(options)
 
+    An inheritable class that provides a dictionary of custom options.
+
+    :param options: The options contained within the class.
+    :type options: Dict[CommonOption, Any]
     """
     def __init__(self, options: Dict[CommonOption, Any]):
         self._options = dict()
@@ -66,7 +74,9 @@ class HasCommonOptions:
         self._options = options
 
     def set_option(self, option: CommonOption, value: Any):
-        """Set an option to have the specified value.
+        """set_option(option, value)
+
+        Set an option to have the specified value.
 
         :param option: The option to set the value of.
         :type option: CommonOption
@@ -76,7 +86,9 @@ class HasCommonOptions:
         self._options[str(option)] = value
 
     def remove_option(self, option: CommonOption):
-        """Remove an option.
+        """remove_option(option)
+
+        Remove an option.
 
         :param option: The option to delete.
         :type option: CommonOption
@@ -84,11 +96,13 @@ class HasCommonOptions:
         del self._options[str(option)]
 
     def get_option(self, option: CommonOption, default_value: Any=None) -> Any:
-        """Retrieve the value of an option.
+        """get_option(option, default_value=None)
+
+        Retrieve the value of an option.
 
         :param option: The option to retrieve.
         :type option: CommonOption
-        :param default_value: A default value to return when an option does not exist.
+        :param default_value: A default value to return when an option does not exist. Default is None.
         :type default_value: Any
         :return: An option or the default value if not found.
         :rtype: Any

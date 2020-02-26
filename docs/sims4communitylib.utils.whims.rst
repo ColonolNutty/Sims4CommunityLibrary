@@ -13,9 +13,9 @@ Whim Utilities
    :undoc-members:
    :show-inheritance:
 
-********************
+***********************************
 `Satisfaction Reward Store Item`
-********************
+***********************************
 
 .. autoclass:: sims4communitylib.utils.whims.common_satisfaction_reward_store_item.CommonSatisfactionRewardStoreItem
    :members:

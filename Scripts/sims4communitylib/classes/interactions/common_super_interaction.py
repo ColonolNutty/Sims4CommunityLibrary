@@ -21,8 +21,10 @@ from sims4communitylib.modinfo import ModInfo
 class CommonSuperInteraction(CommonInteraction, SuperInteraction):
     """An inheritable class that provides a way to create custom Super Interactions.
 
-    The main use for this class is to create interactions that wrap sub interactions.
-    One example Super interaction is the `sim-chat` interaction, where other interactions (Such as the `Get To Know` interaction), runs as sub interactions of `sim-chat`
+    .. note::
+
+        The main use for this class is to create interactions that wrap sub interactions.
+        One example Super interaction is the `sim-chat` interaction, where other interactions (Such as the `Get To Know` interaction), run as sub interactions of `sim-chat`
 
     :Example:
 
@@ -54,7 +56,7 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
 
     """
 
-    def _run_interaction_gen(self, timeline):
+    def _run_interaction_gen(self, timeline: Any):
         super()._run_interaction_gen(timeline)
         try:
             return self.on_run(self.sim, self.target, timeline)
@@ -66,6 +68,7 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
     def on_run(self, interaction_sim: Sim, interaction_target: Any, timeline) -> bool:
         """on_run(interaction_sim, interaction_target, timeline)
+
         Occurs upon the interaction being run.
 
         :param interaction_sim: The sim performing the interaction.
@@ -99,6 +102,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction):
     @classmethod
     def on_constraint_gen(cls, inst: Interaction, sim: Sim, target: Any) -> Constraint:
         """on_constraint_gen(inst, sim, target)
+
         A hook that occurs when generating the constraints of an interaction to enable modification or replacement of the constraints.
 
         :param inst: An instance of the interaction.

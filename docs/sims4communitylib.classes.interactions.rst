@@ -58,6 +58,7 @@ The main use for this class is to create interactions that occur when clicking o
 .. autoclass:: sims4communitylib.classes.interactions.common_terrain_interaction.CommonTerrainInteraction
    :members:
    :undoc-members:
+   :show-inheritance:
 
 `Interaction Registration`
 --------------------------------------------------------------------------

@@ -12,8 +12,9 @@ from sims4communitylib.classes.interactions.common_interaction import CommonInte
 class CommonImmediateSuperInteraction(CommonInteraction, ImmediateSuperInteraction):
     """An inheritable class that provides a way to create Custom Immediate Super Interactions.
 
+    .. note::
 
-    The main use for this class is to create interactions that do something upon starting the interaction, without the Sim needing to anything.
-    One example would be the `Replace` interaction to replace objects that were destroyed in a fire.
+        The main use for this class is to create interactions that do something upon starting the interaction, without the Sim needing to queue the interaction.
+        One example would be the `Replace` interaction to replace objects that were destroyed in a fire.
     """
     pass
