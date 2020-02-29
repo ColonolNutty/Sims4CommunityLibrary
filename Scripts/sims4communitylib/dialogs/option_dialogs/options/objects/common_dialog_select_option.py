@@ -11,7 +11,7 @@ from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_obje
 
 
 class CommonDialogSelectOption(CommonDialogObjectOption):
-    """CommonDialogSelectOption(option_identifier, value, context, on_chosen=CommonFunctionUtils.noop)
+    """CommonDialogSelectOption(option_identifier, value, context, on_chosen=CommonFunctionUtils.noop, always_visible=False)
 
     An option that invokes a callback, passing in its value.
 

@@ -137,7 +137,9 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
         return 's4cl_choose_sim_option_dialog'
 
     def add_option(self, option: CommonDialogSimOption):
-        """Add an option to the dialog.
+        """add_option(option)
+
+        Add an option to the dialog.
 
         :param option: The option to add.
         :type option: CommonDialogSimOption

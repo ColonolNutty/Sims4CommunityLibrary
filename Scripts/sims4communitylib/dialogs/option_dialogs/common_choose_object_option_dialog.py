@@ -164,6 +164,16 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
     def log_identifier(self) -> str:
         return 's4cl_choose_object_option_dialog'
 
+    @property
+    def current_page(self) -> int:
+        """Retrieve the current page.
+
+        :return: A number indicating the current page.
+        :rtype: int
+        """
+        dialog: CommonChooseObjectDialog = self._internal_dialog
+        return dialog.current_page
+
     def add_option(self, option: CommonDialogObjectOption):
         """add_option(option)
 
@@ -173,6 +183,9 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         :type option: CommonDialogObjectOption
         """
         return super().add_option(option)
+
+    def _add_row(self, option: CommonDialogObjectOption):
+        self._internal_dialog.add_row(option.as_row(len(self._options)), always_visible=option.always_visible)
 
     def show(
         self,

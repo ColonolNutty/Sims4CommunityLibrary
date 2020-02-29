@@ -104,9 +104,12 @@ class CommonChooseOptionDialog(HasLog):
             if self._internal_dialog is None or not hasattr(self._internal_dialog, 'add_row'):
                 return
             self._options.append(option)
-            self._internal_dialog.add_row(option.as_row(len(self._options)))
+            self._add_row(option)
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_identity.name, 'add_option', exception=ex)
+
+    def _add_row(self, option: CommonDialogOption):
+        self._internal_dialog.add_row(option.as_row(len(self._options)))
 
     def show(self, *_: Any, **__: Any):
         """show(*_, **__)

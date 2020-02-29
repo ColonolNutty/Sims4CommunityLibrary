@@ -125,8 +125,8 @@ class CommonChooseSimDialog(CommonChooseDialog):
         return result
 
     # noinspection PyMissingOrEmptyDocstring
-    def add_row(self, choice: SimPickerRow):
-        return super().add_row(choice)
+    def add_row(self, choice: SimPickerRow, *_, **__):
+        return super().add_row(choice, *_, **__)
 
     def show(
         self,

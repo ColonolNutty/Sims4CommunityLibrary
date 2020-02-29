@@ -26,18 +26,23 @@ class CommonDialogObjectOption(CommonDialogOption):
     :type context: CommonDialogOptionContext
     :param on_chosen: A callback invoked when the dialog option is chosen.
     :type on_chosen: Callable[..., Any], optional
+    :param always_visible: If set to True, the option will always appear in the dialog no matter which page.\
+    If False, the option will act as normal. Default is False.
+    :type always_visible: bool, optional
     """
     def __init__(
         self,
         option_identifier: str,
         value: DialogOptionValueType,
         context: CommonDialogOptionContext,
-        on_chosen: Callable[[str, DialogOptionValueType], Any]=CommonFunctionUtils.noop
+        on_chosen: Callable[[str, DialogOptionValueType], Any]=CommonFunctionUtils.noop,
+        always_visible: bool=False
     ):
         if option_identifier is None:
             raise AttributeError('Missing required argument \'option_identifier\'')
 
         self._option_identifier = option_identifier
+        self._always_visible = always_visible
 
         def _on_chosen(val: DialogOptionValueType) -> Any:
             return on_chosen(self.option_identifier, val)
@@ -61,6 +66,16 @@ class CommonDialogObjectOption(CommonDialogOption):
         :rtype: DialogOptionValueType
         """
         return self._value
+
+    @property
+    def always_visible(self) -> bool:
+        """Determine if the option will always be visible.
+
+        :return: If set to True, the option will always appear in the dialog no matter which page.\
+        If False, the option will act as normal.
+        :rtype: bool
+        """
+        return self._always_visible
 
     def as_row(self, option_id: int) -> ObjectPickerRow:
         """as_row(option_id)

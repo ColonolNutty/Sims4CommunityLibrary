@@ -22,7 +22,8 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
         context,\
         min_value=0.0,\
         max_value=2147483647.0,\
-        on_chosen=CommonFunctionUtils.noop\
+        on_chosen=CommonFunctionUtils.noop,\
+        always_visible=False\
     )
 
     An option to open a dialog to input a float value.
@@ -39,6 +40,9 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
     :type max_value: float, optional
     :param on_chosen: A callback invoked when the dialog option is chosen. args: (option_identifier, entered value, outcome)
     :type on_chosen: Callable[[str, float, CommonChoiceOutcome], Any], optional
+    :param always_visible: If set to True, the option will always appear in the dialog no matter which page.\
+    If False, the option will act as normal. Default is False.
+    :type always_visible: bool, optional
     """
     def __init__(
         self,
@@ -47,7 +51,8 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
         context: CommonDialogOptionContext,
         min_value: float=0.0,
         max_value: float=2147483647.0,
-        on_chosen: Callable[[str, float, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop
+        on_chosen: Callable[[str, float, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        always_visible: bool=False
     ):
         self._dialog = CommonInputFloatDialog(
             context.title,
@@ -60,14 +65,15 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
         def _on_submit(_: float, __: CommonChoiceOutcome):
             on_chosen(self.option_identifier, _, __)
 
-        def _on_chosen(_, __):
+        def _on_chosen(_, __) -> None:
             self._dialog.show(on_submit=_on_submit)
 
         super().__init__(
             option_identifier,
             None,
             context,
-            on_chosen=_on_chosen
+            on_chosen=_on_chosen,
+            always_visible=always_visible
         )
 
     # noinspection PyMissingOrEmptyDocstring
