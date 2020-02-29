@@ -255,7 +255,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                     name=CommonLocalizationUtils.create_localized_string(CommonStringId.PREVIOUS),
                     row_description=None,
                     row_tooltip=None,
-                    icon=CommonIconUtils.load_arrow_right_icon(),
+                    icon=CommonIconUtils.load_arrow_left_icon(),
                     tag='S4CL_PREVIOUS'
                 )
                 _dialog.add_row(previous_choice)
