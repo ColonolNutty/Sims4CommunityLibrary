@@ -127,6 +127,17 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         if per_page <= 0:
             raise AssertionError('\'per_page\' must be greater than zero.')
         self._per_page = per_page
+        self._always_visible_rows = tuple()
+        self._current_page = 1
+
+    @property
+    def current_page(self) -> int:
+        """Retrieve the current page.
+
+        :return: A number indicating the current page.
+        :rtype: int
+        """
+        return self._current_page
 
     # noinspection PyMissingOrEmptyDocstring
     @property
@@ -139,9 +150,35 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         result: Tuple[ObjectPickerRow] = super().rows
         return result
 
+    @property
+    def always_visible_rows(self) -> Tuple[ObjectPickerRow]:
+        """A collection of rows that will always appear in the dialog no matter which page.
+
+        .. note:: These rows are added to the dialog before the normal rows are added to the dialog.
+
+        :return: A collection of rows added to the dialog that will always appear.
+        :rtype: Tuple[ObjectPickerRow]
+        """
+        return self._always_visible_rows
+
     # noinspection PyMissingOrEmptyDocstring
-    def add_row(self, choice: ObjectPickerRow):
-        super().add_row(choice)
+    def add_row(self, choice: ObjectPickerRow, *_, always_visible: bool=False, **__):
+        """add_row(row, *_, always_on_visible=False, **__)
+
+        Add a row to the dialog.
+
+        :param choice: The row to add.
+        :type choice: ObjectPickerRow
+        :param always_visible: If set to True, the row will always appear in the dialog no matter which page. If False, the row will act as normal.
+        :type always_visible: bool, optional
+        """
+        if not always_visible:
+            super().add_row(choice, *_, **__)
+            return
+        try:
+            self._always_visible_rows += (choice,)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity.name, 'add_row', exception=ex)
 
     def show(
         self,
@@ -168,6 +205,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         :param sim_info: The Sim that will appear in the dialog image. The default Sim is the Active Sim.
         :type sim_info: SimInfo
         """
+        self._current_page = page
         try:
             return self._show(
                 on_chosen=on_chosen,
@@ -194,7 +232,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         if on_chosen is None:
             raise ValueError('on_chosen was None.')
 
-        if len(self.rows) == 0:
+        if len(self.always_visible_rows) == 0 and len(self.rows) == 0:
             raise AssertionError('No rows have been provided. Add rows to the dialog before attempting to display it.')
 
         if page < 0:
@@ -226,7 +264,11 @@ class CommonChooseObjectDialog(CommonChooseDialog):
 
             if page > number_of_pages:
                 raise AssertionError('page was out of range. Number of Pages: {}, Requested Page: {}'.format(str(number_of_pages), str(page)))
+            # Add the rows that are always visible.
+            for always_visible_rows in self.always_visible_rows:
+                _dialog.add_row(always_visible_rows)
 
+            # Add the rows that should show on the current page.
             start_index = (page - 1) * self._per_page
             end_index = page * self._per_page
             self.log.format(start_index=start_index, end_index=end_index)
@@ -235,34 +277,36 @@ class CommonChooseObjectDialog(CommonChooseDialog):
             for row in current_choices:
                 _dialog.add_row(row)
 
-            if page < number_of_pages:
-                self.log.format_with_message('Adding Next.', page=page, number_of_pages=number_of_pages)
-                next_choice = ObjectPickerRow(
-                    option_id=len(self.rows) + 1,
-                    name=CommonLocalizationUtils.create_localized_string(CommonStringId.NEXT),
-                    row_description=None,
-                    row_tooltip=None,
-                    icon=CommonIconUtils.load_arrow_right_icon(),
-                    tag='S4CL_NEXT'
-                )
-                _dialog.add_row(next_choice)
-            else:
-                self.log.format_with_message('Not adding Next.', page=page, number_of_pages=number_of_pages)
             if page > 1:
                 self.log.format_with_message('Adding Previous.', page=page, number_of_pages=number_of_pages)
                 previous_choice = ObjectPickerRow(
                     option_id=len(self.rows) + 2,
                     name=CommonLocalizationUtils.create_localized_string(CommonStringId.PREVIOUS),
                     row_description=None,
-                    row_tooltip=None,
+                    row_tooltip=CommonLocalizationUtils.create_localized_tooltip(CommonStringId.PREVIOUS),
                     icon=CommonIconUtils.load_arrow_left_icon(),
                     tag='S4CL_PREVIOUS'
                 )
                 _dialog.add_row(previous_choice)
             else:
                 self.log.format_with_message('Not adding Previous.', page=page)
+            if page < number_of_pages:
+                self.log.format_with_message('Adding Next.', page=page, number_of_pages=number_of_pages)
+                next_choice = ObjectPickerRow(
+                    option_id=len(self.rows) + 1,
+                    name=CommonLocalizationUtils.create_localized_string(CommonStringId.NEXT),
+                    row_description=None,
+                    row_tooltip=CommonLocalizationUtils.create_localized_tooltip(CommonStringId.NEXT),
+                    icon=CommonIconUtils.load_arrow_right_icon(),
+                    tag='S4CL_NEXT'
+                )
+                _dialog.add_row(next_choice)
+            else:
+                self.log.format_with_message('Not adding Next.', page=page, number_of_pages=number_of_pages)
         else:
             self.log.debug('Adding all choices')
+            for always_visible_rows in self.always_visible_rows:
+                _dialog.add_row(always_visible_rows)
             for row in self.rows:
                 _dialog.add_row(row)
 

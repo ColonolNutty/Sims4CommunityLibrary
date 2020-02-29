@@ -11,7 +11,7 @@ from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_obje
 
 
 class CommonDialogToggleOption(CommonDialogObjectOption):
-    """CommonDialogObjectOption(option_identifier, value, context, on_chosen=CommonFunctionUtils.noop)
+    """CommonDialogObjectOption(option_identifier, value, context, on_chosen=CommonFunctionUtils.noop, always_visible=False)
 
     An option with two states, on or off.
     """

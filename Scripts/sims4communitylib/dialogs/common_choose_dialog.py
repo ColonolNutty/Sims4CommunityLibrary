@@ -66,8 +66,8 @@ class CommonChooseDialog(CommonDialog, ABC):
         """
         return self._rows
 
-    def add_row(self, row: BasePickerRow):
-        """add_row(row)
+    def add_row(self, row: BasePickerRow, *_, **__):
+        """add_row(row, *_, **__)
 
         Add a row to the dialog.
 
