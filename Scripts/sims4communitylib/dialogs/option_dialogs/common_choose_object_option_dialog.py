@@ -15,6 +15,8 @@ from sims.sim_info import SimInfo
 from sims4communitylib.dialogs.choose_object_dialog import CommonChooseObjectDialog
 from sims4communitylib.dialogs.option_dialogs.common_choose_option_dialog import CommonChooseOptionDialog
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_context import CommonDialogOptionContext
+from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_option_category import \
+    CommonDialogObjectOptionCategory
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
@@ -191,7 +193,8 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         self,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
-        sim_info: SimInfo=None
+        sim_info: SimInfo=None,
+        categories: Iterator[CommonDialogObjectOptionCategory]=()
     ):
         """show(\
             picker_type=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,\
@@ -207,11 +210,14 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         :type page: int, optional
         :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim.
         :type sim_info: SimInfo, optional
+        :param categories: A collection of categories do display in the dialog.
+        :type categories: Iterator[CommonDialogObjectOptionCategory]
         """
         return super().show(
             picker_type=picker_type,
             page=page,
-            sim_info=sim_info
+            sim_info=sim_info,
+            categories=categories
         )
 
 

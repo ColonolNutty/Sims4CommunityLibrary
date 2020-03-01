@@ -11,10 +11,17 @@ import sims4.commands
 from typing import Tuple, Any, Callable, Union, Iterator
 
 from pprint import pformat
+
+from distributor.shared_messages import IconInfoData
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims.sim_info import SimInfo
 from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
 from sims4communitylib.dialogs.common_choose_dialog import CommonChooseDialog
+from sims4communitylib.dialogs.custom_dialogs.picker_dialogs.common_ui_object_category_picker import \
+    CommonUiObjectCategoryPicker
+
+from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_option_category import \
+    CommonDialogObjectOptionCategory
 from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtils
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
@@ -185,7 +192,8 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
-        sim_info: SimInfo=None
+        sim_info: SimInfo=None,
+        categories: Iterator[CommonDialogObjectOptionCategory]=()
     ):
         """show(\
             on_chosen=CommonFunctionUtils.noop,\
@@ -204,6 +212,8 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         :type page: int
         :param sim_info: The Sim that will appear in the dialog image. The default Sim is the Active Sim.
         :type sim_info: SimInfo
+        :param categories: A collection of categories do display in the dialog.
+        :type categories: Iterator[CommonDialogObjectOptionCategory]
         """
         self._current_page = page
         try:
@@ -211,7 +221,8 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                 on_chosen=on_chosen,
                 picker_type=picker_type,
                 page=page,
-                sim_info=sim_info
+                sim_info=sim_info,
+                categories=categories
             )
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_identity.name, 'show', exception=ex)
@@ -221,10 +232,11 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
-        sim_info: SimInfo=None
+        sim_info: SimInfo=None,
+        categories: Iterator[CommonDialogObjectOptionCategory]=()
     ):
         self.log.format_with_message('Attempting to display choices.', page=page)
-        _dialog = self._create_dialog(picker_type=picker_type)
+        _dialog = self._create_dialog(picker_type=picker_type, categories=categories)
         if _dialog is None:
             self.log.error('_dialog was None for some reason.')
             return
@@ -246,11 +258,11 @@ class CommonChooseObjectDialog(CommonChooseDialog):
             choice = CommonDialogUtils.get_chosen_item(dialog)
             if choice == 'S4CL_NEXT':
                 self.log.debug('Next chosen.')
-                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page + 1, sim_info=sim_info)
+                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page + 1, sim_info=sim_info, categories=categories)
                 return True
             elif choice == 'S4CL_PREVIOUS':
                 self.log.debug('Previous chosen.')
-                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page - 1, sim_info=sim_info)
+                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page - 1, sim_info=sim_info, categories=categories)
                 return True
             self.log.format_with_message('Choice made.', choice=choice)
             result = on_chosen(choice, CommonChoiceOutcome.CHOICE_MADE)
@@ -277,6 +289,8 @@ class CommonChooseObjectDialog(CommonChooseDialog):
             for row in current_choices:
                 _dialog.add_row(row)
 
+            tag_list = [(abs(hash(category.object_category)) % (10 ** 8)) for category in categories]
+
             if page > 1:
                 self.log.format_with_message('Adding Previous.', page=page, number_of_pages=number_of_pages)
                 previous_choice = ObjectPickerRow(
@@ -285,6 +299,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                     row_description=None,
                     row_tooltip=CommonLocalizationUtils.create_localized_tooltip(CommonStringId.PREVIOUS),
                     icon=CommonIconUtils.load_arrow_left_icon(),
+                    tag_list=tag_list,
                     tag='S4CL_PREVIOUS'
                 )
                 _dialog.add_row(previous_choice)
@@ -298,6 +313,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                     row_description=None,
                     row_tooltip=CommonLocalizationUtils.create_localized_tooltip(CommonStringId.NEXT),
                     icon=CommonIconUtils.load_arrow_right_icon(),
+                    tag_list=tag_list,
                     tag='S4CL_NEXT'
                 )
                 _dialog.add_row(next_choice)
@@ -316,17 +332,36 @@ class CommonChooseObjectDialog(CommonChooseDialog):
     def _create_dialog(
         self,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
-        sim_info: SimInfo=None
+        sim_info: SimInfo=None,
+        categories: Iterator[CommonDialogObjectOptionCategory]=()
     ) -> Union[UiObjectPicker, None]:
         try:
-            return UiObjectPicker.TunableFactory().default(
-                sim_info or CommonSimUtils.get_active_sim_info(),
-                text=lambda *_, **__: self.description,
-                title=lambda *_, **__: self.title,
-                min_selectable=1,
-                max_selectable=1,
-                picker_type=picker_type
-            )
+            from collections import namedtuple
+            object_category_type = namedtuple('object_category_type', ('object_category', 'icon', 'category_name'))
+            object_categories = list()
+            for category in tuple(categories):
+                object_categories.append(object_category_type(category.object_category, lambda *_, **__: IconInfoData(icon_resource=CommonIconUtils._load_icon(category.icon)), CommonLocalizationUtils.create_localized_string(category.category_name)))
+
+            if len(object_categories) > 0:
+                return CommonUiObjectCategoryPicker.TunableFactory().default(
+                    sim_info or CommonSimUtils.get_active_sim_info(),
+                    text=lambda *_, **__: self.description,
+                    title=lambda *_, **__: self.title,
+                    min_selectable=1,
+                    max_selectable=1,
+                    picker_type=picker_type,
+                    use_dropdown_filter=True,
+                    object_categories=tuple(object_categories)
+                )
+            else:
+                return UiObjectPicker.TunableFactory().default(
+                    sim_info or CommonSimUtils.get_active_sim_info(),
+                    text=lambda *_, **__: self.description,
+                    title=lambda *_, **__: self.title,
+                    min_selectable=1,
+                    max_selectable=1,
+                    picker_type=picker_type
+                )
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_identity.name, '_create_dialog', exception=ex)
         return None

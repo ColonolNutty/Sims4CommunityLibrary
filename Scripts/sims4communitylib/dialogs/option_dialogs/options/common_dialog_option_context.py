@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, Any, TypeVar, Iterator
+from typing import Union, Any, TypeVar, Iterator, Tuple, List
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 
@@ -21,7 +21,8 @@ class CommonDialogOptionContext:
         tooltip_tokens=(),\
         icon=None,\
         is_enabled=True,\
-        is_selected=False\
+        is_selected=False,\
+        tag_list=()
     )
 
     A context used by CommonDialogOption that contains options for customization of the option.
@@ -55,7 +56,8 @@ class CommonDialogOptionContext:
         tooltip_tokens: Iterator[Any]=(),
         icon: Any=None,
         is_enabled: bool=True,
-        is_selected: bool=False
+        is_selected: bool=False,
+        tag_list: Iterator[str]=()
     ):
         self._title = CommonLocalizationUtils.create_localized_string(title_identifier, tokens=tuple(title_tokens))
         self._description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=tuple(description_tokens))
@@ -63,6 +65,7 @@ class CommonDialogOptionContext:
         self._icon = icon
         self._is_enabled = is_enabled
         self._is_selected = is_selected
+        self._tag_list = tuple(tag_list)
 
     @property
     def is_enabled(self) -> bool:
@@ -108,6 +111,27 @@ class CommonDialogOptionContext:
         :rtype: Union[CommonLocalizationUtils.LocalizedTooltip, None]
         """
         return self._tooltip
+
+    @property
+    def tag_list(self) -> Tuple[str]:
+        """A collection of tags used to filter the option.
+
+        :return: A collection of tags used to filter the option.
+        :rtype: Tuple[str]
+        """
+        return self._tag_list
+
+    @property
+    def hashed_tag_list(self) -> Tuple[int]:
+        """Same as tag_list, but the values are hashed.
+
+        :return: Same as tag_list, but the values are hashed.
+        :rtype: Tuple[str]
+        """
+        hashed_tag_list: List[int] = list()
+        for tag in self.tag_list:
+            hashed_tag_list.append((abs(hash(tag)) % (10 ** 8)))
+        return tuple(hashed_tag_list)
 
     @property
     def icon(self) -> Any:
