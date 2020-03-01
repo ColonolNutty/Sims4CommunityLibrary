@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any, Callable, Union
+from typing import Any, Callable, Union, Tuple
 
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
@@ -75,6 +75,24 @@ class CommonDialogOption:
         :rtype: Any
         """
         return self.context.icon
+
+    @property
+    def tag_list(self) -> Tuple[str]:
+        """A collection of tags used to filter the option.
+
+        :return: A collection of tags used to filter the option.
+        :rtype: Tuple[str]
+        """
+        return self.context.tag_list
+
+    @property
+    def hashed_tag_list(self) -> Tuple[int]:
+        """Same as tag_list, but the values are hashed.
+
+        :return: Same as tag_list, but the values are hashed.
+        :rtype: Tuple[str]
+        """
+        return self.context.hashed_tag_list
 
     @property
     def context(self) -> CommonDialogOptionContext:
