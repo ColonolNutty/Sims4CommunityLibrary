@@ -15,7 +15,7 @@ log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 's4cl_ag
 
 
 class CommonAgeSpeciesUtils:
-    """Utilities for checking the age and species of Sims.
+    """Utilities for checking the Age and Species of Sims.
 
     """
     @staticmethod
