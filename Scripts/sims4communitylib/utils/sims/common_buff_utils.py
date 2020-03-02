@@ -112,7 +112,7 @@ class CommonBuffUtils:
             return False
         sim_buffs = CommonBuffUtils.get_buffs(sim_info)
         for buff in sim_buffs:
-            buff_id = getattr(buff, 'guid64', None)
+            buff_id = CommonBuffUtils.get_buff_id(buff)
             if buff_id in buff_ids:
                 return True
         return False
@@ -191,6 +191,21 @@ class CommonBuffUtils:
             if not sim_info.remove_buff_by_type(buff_instance):
                 success = False
         return success
+
+    @staticmethod
+    def get_buff_id(buff_identifier: Union[int, Buff]) -> Union[int, None]:
+        """get_buff_id(buff_identifier)
+
+        Retrieve the decimal identifier of a Buff.
+
+        :param buff_identifier: The identifier or instance of a Buff.
+        :type buff_identifier: Union[int, Buff]
+        :return: The decimal identifier of the Buff or None if the Buff does not have an id.
+        :rtype: Union[int, None]
+        """
+        if isinstance(buff_identifier, int):
+            return buff_identifier
+        return getattr(buff_identifier, 'guid64', None)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)

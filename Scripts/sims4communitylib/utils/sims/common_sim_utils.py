@@ -149,9 +149,9 @@ class CommonSimUtils:
     def get_sim_id(sim_identifier: Union[int, Sim, SimInfo]) -> int:
         """get_sim_id(sim_identifier)
 
-        Retrieve a SimId (int) from a sim identifier.
+        Retrieve a SimId (int) from a Sim identifier.
 
-        :param sim_identifier: The identifier or instance of a Sim to use.
+        :param sim_identifier: The identifier or instance of a Sim.
         :type sim_identifier: Union[int, Sim, SimInfo]
         :return: An identifier for the Sim instance.
         :rtype: int

@@ -994,7 +994,7 @@ class CommonTraitUtils:
         """
         trait_ids = []
         for trait in CommonTraitUtils.get_traits(sim_info):
-            trait_id = getattr(trait, 'guid64', None)
+            trait_id = CommonTraitUtils.get_trait_id(trait)
             if trait_id is None:
                 continue
             trait_ids.append(trait_id)
@@ -1019,11 +1019,11 @@ class CommonTraitUtils:
     def get_equipped_traits(sim_info: SimInfo) -> List[Trait]:
         """get_equipped_traits(sim_info)
 
-        Retrieve sims currently equipped traits.
+        Retrieve Sims currently equipped traits.
 
         .. note:: The main use of this function is to check Occult Types.
 
-        :param sim_info: The sim to check.
+        :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :return: A collection of equipped Traits on a Sim.
         :rtype: List[int]
@@ -1036,13 +1036,13 @@ class CommonTraitUtils:
     def add_trait(sim_info: SimInfo, *trait_ids: int) -> bool:
         """add_trait(sim_info, *trait_ids)
 
-        Add the specified traits to a sim.
+        Add the specified traits to a Sim.
 
-        :param sim_info: The sim to add the specified traits to.
+        :param sim_info: The Sim to add the specified traits to.
         :type sim_info: SimInfo
         :param trait_ids: An iterable of Trait identifiers of traits being added.
         :type trait_ids: int
-        :return: True, if all specified traits were successfully added to the sim. False, if not.
+        :return: True, if all specified traits were successfully added to the Sim. False, if not.
         :rtype: bool
         """
         success = True
@@ -1058,13 +1058,13 @@ class CommonTraitUtils:
     def remove_trait(sim_info: SimInfo, *trait_ids: int) -> bool:
         """remove_trait(sim_info, *trait_ids)
 
-        Remove the specified traits from a sim.
+        Remove the specified traits from a Sim.
 
-        :param sim_info: The sim to remove the specified traits from.
+        :param sim_info: The Sim to remove the specified traits from.
         :type sim_info: SimInfo
         :param trait_ids: The decimal identifier of the trait being removed.
         :type trait_ids: int
-        :return: True, if all specified traits were successfully removed from the sim. False, if not.
+        :return: True, if all specified traits were successfully removed from the Sim. False, if not.
         :rtype: bool
         """
         success = True
@@ -1085,7 +1085,7 @@ class CommonTraitUtils:
         .. note:: If `trait_id_one` exists on the Sim, it will be removed and `trait_id_two` will be added.
         .. note:: If `trait_id_two` exists on the Sim, it will be removed and `trait_id_one` will be added.
 
-        :param sim_info: The sim to remove the specified traits from.
+        :param sim_info: The Sim to remove the specified traits from.
         :type sim_info: SimInfo
         :param trait_id_one: The first trait to remove/add
         :type trait_id_one: int
@@ -1112,11 +1112,11 @@ class CommonTraitUtils:
     def add_trait_to_all_sims(trait_id: int, include_sim_callback: Callable[[SimInfo], bool]=None):
         """add_trait_to_all_sims(trait_id, include_sim_callback=None)
 
-        Add a trait to all sims that match the specified include filter.
+        Add a trait to all Sims that match the specified include filter.
 
         :param trait_id: The identifier of the Trait to add to all Sims.
         :type trait_id: int
-        :param include_sim_callback: Only sims that match this filter will have the Trait added.
+        :param include_sim_callback: Only Sims that match this filter will have the Trait added.
         :type include_sim_callback: Callback[[SimInfo], bool], optional
         """
         for sim_info in CommonSimUtils.get_instanced_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
@@ -1132,13 +1132,28 @@ class CommonTraitUtils:
 
         :param trait_id: The identifier of the Trait to remove from all Sims.
         :type trait_id: int
-        :param include_sim_callback: Only sims that match this filter will have the Trait removed.
+        :param include_sim_callback: Only Sims that match this filter will have the Trait removed.
         :type include_sim_callback: Callback[[SimInfo], bool], optional
         """
         for sim_info in CommonSimUtils.get_instanced_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
             if not CommonTraitUtils.has_trait(sim_info, trait_id):
                 continue
             CommonTraitUtils.remove_trait(sim_info, trait_id)
+
+    @staticmethod
+    def get_trait_id(trait_identifier: Union[int, Trait]) -> Union[int, None]:
+        """get_trait_id(trait_identifier)
+
+        Retrieve the decimal identifier of a Trait.
+
+        :param trait_identifier: The identifier or instance of a Trait.
+        :type trait_identifier: Union[int, Trait]
+        :return: The decimal identifier of the Trait or None if the Trait does not have an id.
+        :rtype: Union[int, None]
+        """
+        if isinstance(trait_identifier, int):
+            return trait_identifier
+        return getattr(trait_identifier, 'guid64', None)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
