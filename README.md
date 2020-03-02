@@ -4,6 +4,8 @@ This is more of an API than a mod itself. It does nothing on its own and is mean
 
 To see the documentation for S4CL [check out the docs](https://sims4communitylibrary.readthedocs.io/en/latest/)!
 
+To start creating mods using S4CL [check out the template project](https://github.com/ColonolNutty/s4cl-template-project)!
+
 ## Looking to install S4CL?
 Follow the installation instructions below for details. 
 
