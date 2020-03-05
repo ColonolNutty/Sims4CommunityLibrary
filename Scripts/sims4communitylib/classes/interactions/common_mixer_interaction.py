@@ -8,7 +8,7 @@ from interactions.base.mixer_interaction import MixerInteraction
 from sims4communitylib.classes.interactions.common_interaction import CommonInteraction
 
 
-class CommonMixerInteraction(CommonInteraction, MixerInteraction):
+class CommonMixerInteraction(MixerInteraction, CommonInteraction):
     """An inheritable class that provides a way to create Custom Mixer Interactions.
 
     :Example:
