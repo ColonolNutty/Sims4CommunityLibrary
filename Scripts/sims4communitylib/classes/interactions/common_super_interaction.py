@@ -56,6 +56,11 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
 
     """
 
+    # noinspection PyMissingTypeHints
+    @classmethod
+    def _tuning_loaded_callback(cls):
+        return super()._tuning_loaded_callback()
+
     def _run_interaction_gen(self, timeline: Any):
         super()._run_interaction_gen(timeline)
         try:
@@ -97,7 +102,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction):
             yield cls.on_constraint_gen(interaction_instance, sim or interaction_instance.sim, target or interaction_instance.target)
         except Exception as ex:
             CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while running interaction \'{}\' on_constraint_gen.'.format(cls.__name__), exception=ex)
-        return None
+        return super(CommonConstrainedSuperInteraction, interaction_instance)._constraint_gen(sim, interaction_instance.get_constraint_target(target), participant_type=participant_type)
 
     @classmethod
     def on_constraint_gen(cls, inst: Interaction, sim: Sim, target: Any) -> Constraint:

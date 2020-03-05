@@ -16,14 +16,14 @@ from native.animation import NativeAsm
 from postures.posture_state import PostureState
 from sims.sim import Sim
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.logging.has_log import HasLog
+from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from singletons import DEFAULT
 
 
-class CommonInteraction(Interaction, HasLog):
+class CommonInteraction(Interaction, HasClassLog):
     """CommonInteraction(...)
 
     An inheritable class that provides a way to create Custom Interactions.
@@ -39,14 +39,15 @@ class CommonInteraction(Interaction, HasLog):
        * :class:`CommonTerrainInteraction`
 
     """
-    def __init__(self, *_: Any, **__: Any):
-        super().__init__(*_, **__)
-        HasLog.__init__(self)
 
     # noinspection PyMissingOrEmptyDocstring
-    @property
-    def mod_identity(self) -> CommonModIdentity:
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
         return ModInfo.get_identity()
+
+    def __init__(self, *_: Any, **__: Any):
+        super().__init__(*_, **__)
+        HasClassLog.__init__(self)
 
     @classmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=TestResult.NONE)
@@ -54,14 +55,7 @@ class CommonInteraction(Interaction, HasLog):
         try:
             test_result = cls.on_test(context.sim, target, context, **kwargs)
         except Exception as ex:
-            try:
-                if hasattr(cls, 'mod_identity'):
-                    mod_identity = cls.mod_identity
-                else:
-                    mod_identity = ModInfo.get_identity()
-            except Exception as ex1:
-                mod_identity = ModInfo.get_identity()
-                CommonExceptionHandler.log_exception(mod_identity.name, 'Error occurred attempting to retrieve mod info for interaction {}.'.format(cls.__name__), exception=ex1)
+            mod_identity = cls.get_mod_identity()
             CommonExceptionHandler.log_exception(mod_identity.name, 'Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
             return TestResult.NONE
         if test_result is None:
@@ -228,7 +222,7 @@ class CommonInteraction(Interaction, HasLog):
 
     @classmethod
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
-        """on_test(interaction_sim, interaction_target, interaction_context, kwargs)
+        """on_test(interaction_sim, interaction_target, interaction_context, **kwargs)
 
         A hook that occurs upon the interaction being tested for availability.
 
@@ -273,7 +267,7 @@ class CommonInteraction(Interaction, HasLog):
         return True
 
     def on_cancelled(self, interaction_sim: Sim, interaction_target: Any, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> None:
-        """on_cancelled(interaction_sim, interaction_target, finishing_type, cancel_reason_msg, kwargs)
+        """on_cancelled(interaction_sim, interaction_target, finishing_type, cancel_reason_msg, **kwargs)
 
         A hook that occurs upon the interaction being cancelled.
 
