@@ -56,6 +56,17 @@ Misc Utilities
    :undoc-members:
    :show-inheritance:
 
+*******************
+`Interactions`
+*******************
+
+.. note:: To manipulate interactions of Sims, take a look at :class:`.CommonSimInteractionUtils`
+
+.. autoclass:: sims4communitylib.utils.resources.common_interaction_utils.CommonInteractionUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Misc`
 --------------------------------------------------------
 
