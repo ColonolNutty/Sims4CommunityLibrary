@@ -18,7 +18,7 @@ class CommonStatisticUtils:
 
     """
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=-1.0)
     def get_statistic_initial_value(statistic_id: int) -> float:
         """get_statistic_initial_value(statistic_id)
 
@@ -37,7 +37,7 @@ class CommonStatisticUtils:
         return statistic_instance.get_initial_value()
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=-1.0)
     def get_statistic_min_value(statistic_id: int) -> float:
         """get_statistic_min_value(statistic_id)
 
@@ -54,7 +54,7 @@ class CommonStatisticUtils:
         return statistic_instance.min_value
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=-1.0)
     def get_statistic_max_value(statistic_id: int) -> float:
         """get_statistic_max_value(statistic_id)
 
@@ -71,7 +71,7 @@ class CommonStatisticUtils:
         return statistic_instance.max_value
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def _load_statistic_instance(statistic_id: int) -> Union[Statistic, None]:
         statistic_instance = CommonResourceUtils.load_instance(Types.STATISTIC, statistic_id)
         if statistic_instance is None:

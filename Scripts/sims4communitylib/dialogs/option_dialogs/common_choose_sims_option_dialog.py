@@ -242,6 +242,6 @@ def _common_testing_show_choose_sims_option_dialog(_connection: int=None):
             on_submit=_on_submit
         )
     except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to show dialog', exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
         output('Failed to show dialog, please locate your exception log file.')
     output('Done showing.')

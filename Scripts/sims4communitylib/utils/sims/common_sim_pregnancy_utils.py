@@ -21,7 +21,7 @@ class CommonSimPregnancyUtils:
 
     """
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def is_pregnant(sim_info: SimInfo) -> bool:
         """is_pregnant(sim_info)
 
@@ -38,7 +38,7 @@ class CommonSimPregnancyUtils:
         return pregnancy_tracker.is_pregnant
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def start_pregnancy(sim_info: SimInfo, partner_sim_info: SimInfo) -> bool:
         """start_pregnancy(sim_info, partner_sim_info)
 
@@ -62,7 +62,7 @@ class CommonSimPregnancyUtils:
         return True
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def clear_pregnancy(sim_info: SimInfo) -> bool:
         """clear_pregnancy(sim_info)
 
@@ -81,7 +81,7 @@ class CommonSimPregnancyUtils:
         return True
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def can_be_impregnated(sim_info: SimInfo) -> bool:
         """can_be_impregnated(sim_info)
 
@@ -105,7 +105,7 @@ class CommonSimPregnancyUtils:
         return False
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def can_impregnate(sim_info: SimInfo) -> bool:
         """can_impregnate(sim_info)
 
@@ -129,7 +129,7 @@ class CommonSimPregnancyUtils:
         return False
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def get_partner_of_pregnant_sim(sim_info: SimInfo) -> Union[SimInfo, None]:
         """get_partner_of_pregnant_sim(sim_info)
 
@@ -146,7 +146,7 @@ class CommonSimPregnancyUtils:
         return pregnancy_tracker.get_partner()
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=0.0)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=0.0)
     def get_pregnancy_progress(sim_info: SimInfo) -> float:
         """get_pregnancy_progress(sim_info)
 
@@ -168,7 +168,7 @@ class CommonSimPregnancyUtils:
         return pregnancy_commodity.get_value()
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=0.0)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=0.0)
     def get_pregnancy_rate(sim_info: SimInfo) -> float:
         """get_pregnancy_rate(sim_info)
 
@@ -185,7 +185,7 @@ class CommonSimPregnancyUtils:
         return pregnancy_tracker.PREGNANCY_RATE
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def _get_pregnancy_tracker(sim_info: SimInfo) -> Union[PregnancyTracker, None]:
         if sim_info is None:
             return None

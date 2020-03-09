@@ -161,7 +161,7 @@ class CommonInputFloatDialog(CommonDialog):
                 on_submit=on_submit
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'show', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
 
     def _show(
         self,
@@ -214,7 +214,7 @@ class CommonInputFloatDialog(CommonDialog):
                 title=lambda *_, **__: self.title
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, '_create_dialog', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, '_create_dialog', exception=ex)
         return None
 
 
@@ -240,6 +240,6 @@ def _common_testing_show_input_float_dialog(_connection: int=None):
         )
         dialog.show(on_submit=_on_chosen)
     except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to show dialog', exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
         output('Failed to show dialog, please locate your exception log file.')
     output('Done showing.')

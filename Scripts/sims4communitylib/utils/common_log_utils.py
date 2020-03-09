@@ -6,6 +6,9 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
+from typing import Union
+
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
 
 
@@ -17,36 +20,36 @@ class CommonLogUtils:
     _MAX_FILE_SIZE = 1048576
 
     @staticmethod
-    def get_exceptions_file_path(mod_name: str) -> str:
-        """get_exceptions_file_path(mod_name)
+    def get_exceptions_file_path(mod_identifier: Union[str, CommonModIdentity]) -> str:
+        """get_exceptions_file_path(mod_identifier)
 
         Retrieve the file path to the Exceptions file used for logging error messages.
 
-        :param mod_name: The name of the mod requesting the file path.
-        :type mod_name: str
+        :param mod_identifier: The name or identity of the mod requesting the file path.
+        :type mod_identifier: Union[str, CommonModIdentity]
         :return: An str file path to the Exceptions file.
         :rtype: str
         """
-        return CommonLogUtils._get_file_path(mod_name, 'Exceptions')
+        return CommonLogUtils._get_file_path(mod_identifier, 'Exceptions')
 
     @staticmethod
-    def get_message_file_path(mod_name: str) -> str:
-        """get_message_file_path(mod_name)
+    def get_message_file_path(mod_identifier: Union[str, CommonModIdentity]) -> str:
+        """get_message_file_path(mod_identifier)
 
         Retrieve the file path to the Messages file used for logging info/debug messages.
 
-        :param mod_name: The name of the mod requesting the file path.
-        :type mod_name: str
+        :param mod_identifier: The name of the mod requesting the file path.
+        :type mod_identifier: Union[str, CommonModIdentity]
         :return: An str file path to the Messages file.
         :rtype: str
         """
-        return CommonLogUtils._get_file_path(mod_name, 'Messages')
+        return CommonLogUtils._get_file_path(mod_identifier, 'Messages')
 
     @staticmethod
     def get_sims_documents_location_path() -> str:
         """get_sims_documents_location_path()
 
-        Retrieves the folder path of the folder 'Documents\Electronic Arts\The Sims 4'
+        Retrieve the full path of the folder 'Documents\Electronic Arts\The Sims 4'
 
         :return: The file path to 'Documents\Electronic Arts\The Sims 4' folder.
         :rtype: str
@@ -62,12 +65,14 @@ class CommonLogUtils:
         return file_path
 
     @staticmethod
-    def _get_file_path(mod_name: str, file_name: str) -> str:
+    def _get_file_path(mod_identifier: Union[str, CommonModIdentity], file_name: str) -> str:
+        if isinstance(mod_identifier, CommonModIdentity):
+            mod_identifier = mod_identifier.name
         root_path = CommonLogUtils.get_sims_documents_location_path()
-        file_path = os.path.join(root_path, '{}_{}.txt'.format(mod_name, file_name))
+        file_path = os.path.join(root_path, '{}_{}.txt'.format(mod_identifier, file_name))
         if os.path.exists(file_path) and CommonLogUtils._file_is_too_big(file_path):
             current_date_time = CommonRealDateUtils.get_current_date_string()
-            os.rename(file_path, os.path.join(root_path, 'Old_{}_{}_{}.txt'.format(mod_name, file_name, str(current_date_time).replace(':', '_'))))
+            os.rename(file_path, os.path.join(root_path, 'Old_{}_{}_{}.txt'.format(mod_identifier, file_name, str(current_date_time).replace(':', '_'))))
         return file_path
 
     @staticmethod

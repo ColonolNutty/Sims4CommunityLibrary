@@ -131,7 +131,7 @@ class CommonOkCancelDialog(CommonDialog):
                 on_cancel_selected=on_cancel_selected
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'show', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
 
     def _show(
         self,
@@ -167,7 +167,7 @@ class CommonOkCancelDialog(CommonDialog):
                 text_cancel=lambda *_, **__: self.cancel_text
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, '_create_dialog', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, '_create_dialog', exception=ex)
         return None
 
 
@@ -196,6 +196,6 @@ def _common_testing_show_ok_cancel_dialog(_connection: int=None):
         )
         dialog.show(on_ok_selected=_ok_chosen, on_cancel_selected=_cancel_chosen)
     except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to show dialog', exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
         output('Failed to show ok cancel dialog, please locate your exception log file.')
     output('Done showing.')

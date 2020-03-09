@@ -40,7 +40,7 @@ class CommonJSONIOUtils:
             with open(file_path, mode='w+', buffering=buffering, encoding=encoding) as file:
                 json.dump(obj, file)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while writing JSON to file \'{}\''.format(file_path), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while writing JSON to file \'{}\''.format(file_path), exception=ex)
             return False
         return True
 
@@ -65,5 +65,5 @@ class CommonJSONIOUtils:
         try:
             return json.loads(file_contents)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while reading JSON from file \'{}\''.format(file_path), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while reading JSON from file \'{}\''.format(file_path), exception=ex)
             return None

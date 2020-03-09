@@ -77,4 +77,4 @@ class CommonChooseDialog(CommonDialog, ABC):
         try:
             self._rows += (row,)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'add_row', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'add_row', exception=ex)

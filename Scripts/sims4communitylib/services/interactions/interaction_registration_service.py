@@ -103,7 +103,7 @@ class CommonInteractionRegistry(CommonService):
     Take a look at :class:`.CommonScriptObjectInteractionHandler` for more info and an example of usage.
 
     """
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self._interaction_handlers = {
             CommonInteractionType.ON_TERRAIN_LOAD: [],
@@ -147,9 +147,9 @@ class CommonInteractionRegistry(CommonService):
                 if interaction_instance in new_super_affordances:
                     continue
                 new_super_affordances.append(interaction_instance)
-        new_terrain_class = terrain_service.TERRAIN_DEFINITION.cls
-        new_terrain_class._super_affordances += tuple(new_super_affordances)
-        terrain_service.TERRAIN_DEFINITION.set_class(new_terrain_class)
+        new_terrain_definition_class = terrain_service.TERRAIN_DEFINITION.cls
+        new_terrain_definition_class._super_affordances += tuple(new_super_affordances)
+        terrain_service.TERRAIN_DEFINITION.set_class(new_terrain_definition_class)
 
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_ocean_load(self, terrain_service: TerrainService, *_, **__):
@@ -166,9 +166,9 @@ class CommonInteractionRegistry(CommonService):
                 if interaction_instance in new_super_affordances:
                     continue
                 new_super_affordances.append(interaction_instance)
-        new_terrain_class = terrain_service.OCEAN_DEFINITION.cls
-        new_terrain_class._super_affordances += tuple(new_super_affordances)
-        terrain_service.OCEAN_DEFINITION.set_class(new_terrain_class)
+        new_ocean_definition_class = terrain_service.OCEAN_DEFINITION.cls
+        new_ocean_definition_class._super_affordances += tuple(new_super_affordances)
+        terrain_service.OCEAN_DEFINITION.set_class(new_ocean_definition_class)
 
     def register_handler(self, handler: CommonInteractionHandler, interaction_type: CommonInteractionType):
         """register_handler(handler, interaction_type)
@@ -198,28 +198,28 @@ class CommonInteractionRegistry(CommonService):
         :return: A wrapped function.
         :rtype: Callable[..., Any]
         """
-        def _wrapper(interaction_handler):
+        def _wrapper(interaction_handler) -> CommonInteractionHandler:
             CommonInteractionRegistry.get().register_handler(interaction_handler(), interaction_type)
             return interaction_handler
         return _wrapper
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, ScriptObject, ScriptObject.on_add.__name__)
-def _common_script_object_on_add(original, self, *args, **kwargs):
+def _common_script_object_on_add(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonInteractionRegistry.get().on_script_object_add(self, *args, **kwargs)
     return result
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, TerrainService, TerrainService.start.__name__)
-def _common_terrain_service_start(original, self, *args, **kwargs):
+def _common_terrain_service_start(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonInteractionRegistry.get().on_terrain_load(self, *args, **kwargs)
     return result
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, TerrainService, TerrainService.on_zone_load.__name__)
-def _common_terrain_service_on_zone_load(original, self, *args, **kwargs):
+def _common_terrain_service_on_zone_load(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonInteractionRegistry.get().on_ocean_load(self, *args, **kwargs)
     return result

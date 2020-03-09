@@ -5,10 +5,13 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import services
 from typing import Union
-
 from interactions.base.interaction import Interaction
+from interactions.interaction_instance_manager import InteractionInstanceManager
 from sims4.resources import Types
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
 
@@ -31,6 +34,11 @@ class CommonInteractionUtils:
         if isinstance(interaction_identifier, int):
             return interaction_identifier
         return getattr(interaction_identifier, 'guid64', None)
+
+    @staticmethod
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), )
+    def _load_interaction_instance_manager() -> Union[InteractionInstanceManager, None]:
+        return services.get_instance_manager(Types.INTERACTION)
 
     @staticmethod
     def _load_interaction_instance(interaction_identifier: int) -> Union[Interaction, None]:

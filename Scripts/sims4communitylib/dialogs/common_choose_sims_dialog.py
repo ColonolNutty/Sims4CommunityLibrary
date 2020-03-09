@@ -174,7 +174,7 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
                 max_selectable=max_selectable
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'show', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
 
     def _show(
         self,
@@ -273,6 +273,6 @@ def _common_testing_show_choose_sims_dialog(_connection: int=None):
             max_selectable=6
         )
     except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to show dialog', exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
         output('Failed to show dialog, please locate your exception log file and upload it to the appropriate thread.')
     output('Done showing.')

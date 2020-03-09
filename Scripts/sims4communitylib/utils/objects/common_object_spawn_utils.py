@@ -59,7 +59,7 @@ class CommonObjectSpawnUtils:
         return game_object
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def destroy_object(game_object: GameObject, source: str=None, cause: str=None) -> bool:
         """destroy_object(game_object, source=None, cause=None)
 
@@ -101,5 +101,5 @@ def _common_testing_spawn_object_on_lot(object_id: str='20359', _connection: Any
         else:
             output('Object spawned successfully. Can you see it? Object Id: {}'.format(CommonObjectUtils.get_object_id(game_object)))
     except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred trying to spawn object.', exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to spawn object.', exception=ex)
     output('Done spawning object.')

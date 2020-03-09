@@ -12,12 +12,14 @@ from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegi
 
 
 class HasClassLog(HasClassModIdentity, HasLog):
-    """An inheritable class that will add a log and mod identity to a class.
+    """HasClassLog()
+
+    An inheritable class that will add a log and mod identity to a class.
 
     .. note:: This class inherits from :class:`.HasLog` and may be used as an alternative to it.
 
     """
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         HasLog.__init__(self)
 
@@ -40,12 +42,15 @@ class HasClassLog(HasClassModIdentity, HasLog):
     def get_mod_identity(cls) -> CommonModIdentity:
         """get_mod_identity()
 
-        The identity of the mod that owns this class.
+        Retrieve the identity of the mod that owns the class.
 
         .. warning:: Override this function with the :class:`.CommonModIdentity` of your mod.
 
         This is a *MUST* override to allow for proper Exception Handling and Logging!
 
+        :return: An instance of CommonModIdentity
+        :rtype: CommonModIdentity
+        :exception NotImplementedError: Thrown when the function is not implemented.
         """
         raise NotImplementedError('Missing \'{}\'.'.format(cls.get_mod_identity.__name__))
 
@@ -53,9 +58,12 @@ class HasClassLog(HasClassModIdentity, HasLog):
     def get_log(cls) -> CommonLog:
         """get_log()
 
-        The Log for this class.
+        Retrieve a log for the class.
 
-        .. note:: It uses the `mod_identity` and `log_identifier` when logging.
+        .. note:: This function uses the :func:`~get_mod_identity` and :func:`~get_log_identifier` functions when logging.
+
+        :return: An instance of CommonLog
+        :rtype: CommonLog
         """
         if not hasattr(cls, '_log') or getattr(cls, '_log', None) is None:
             mod_name = 'Missing Mod Name'
@@ -68,9 +76,9 @@ class HasClassLog(HasClassModIdentity, HasLog):
     def get_log_identifier(cls) -> str:
         """get_log_identifier()
 
-        The string identifier for the Log of this class.
+        A string identifier for the log of the class.
 
-        .. note:: This is the string that will appear when logging messages using this logger
+        .. note:: This is the text that will appear when logging messages.
 
         :return: The identifier for the log
         :rtype: str

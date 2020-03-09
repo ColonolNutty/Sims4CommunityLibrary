@@ -81,7 +81,7 @@ class CommonFunctionUtils:
             # noinspection PyBroadException
             try:
                 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-                CommonExceptionHandler.log_exception(mod_identity.name, 'Error occurred while running \'{}\''
+                CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while running \'{}\''
                                                             .format(primary_function.__name__), exception=ex)
             except Exception:
                 pass
@@ -128,7 +128,7 @@ class CommonFunctionUtils:
                             func_utils_log.format_with_message('Function failed.', function_name=primary_function.__name__)
                             return False
                     except Exception as ex:
-                        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while running function: {}'.format(primary_function.__name__), exception=ex)
+                        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running function: {}'.format(primary_function.__name__), exception=ex)
                         return False
                 return True
             else:
@@ -140,7 +140,7 @@ class CommonFunctionUtils:
                             func_utils_log.format_with_message('Function passed.', function_name=primary_function.__name__)
                             return True
                     except Exception as ex:
-                        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while running function: {}'.format(primary_function.__name__), exception=ex)
+                        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running function: {}'.format(primary_function.__name__), exception=ex)
                         return False
                 return False
         _wrapper.__name__ = ', '.join([func.__name__ for func in predicate_functions if func is not None])
@@ -163,7 +163,7 @@ class CommonFunctionUtils:
             try:
                 return not predicate_function(*_, **__)
             except Exception as ex:
-                CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while running function: {}'.format(predicate_function.__name__), exception=ex)
+                CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running function: {}'.format(predicate_function.__name__), exception=ex)
         if predicate_function is not None:
             _wrapper.__name__ = predicate_function.__name__
         return _wrapper
@@ -185,7 +185,7 @@ class CommonFunctionUtils:
             try:
                 return primary_function(*_, *args, **__, **kwargs)
             except Exception as ex:
-                CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while running function: {}'.format(primary_function.__name__), exception=ex)
+                CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running function: {}'.format(primary_function.__name__), exception=ex)
         if primary_function is not None:
             _wrapper.__name__ = primary_function.__name__
         return _wrapper

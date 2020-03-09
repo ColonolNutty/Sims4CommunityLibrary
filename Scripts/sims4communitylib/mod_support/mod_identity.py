@@ -75,8 +75,8 @@ class CommonModIdentity:
         """
         return str(self._script_file_path)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return 'mod_{}_author_{}_namespace_{}'.format(self.name, self.author, self.base_namespace)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return 'Identity:\n Mod Name: {}\n Mod Author: {}\n Base Namespace: {}\n Path To Mod: {}'.format(self.name, self.author, self.base_namespace, self.file_path)

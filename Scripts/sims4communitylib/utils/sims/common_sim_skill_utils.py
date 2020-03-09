@@ -18,7 +18,7 @@ class CommonSimSkillUtils:
 
     """
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def has_skill(sim_info: SimInfo, skill_id: int) -> bool:
         """has_skill(sim_info, skill_id)
 
@@ -34,7 +34,7 @@ class CommonSimSkillUtils:
         return CommonSimStatisticUtils.has_statistic(sim_info, skill_id)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def is_at_max_skill_level(sim_info: SimInfo, skill_id: int) -> bool:
         """is_at_max_skill_level(sim_info, skill_id)
 
@@ -56,7 +56,7 @@ class CommonSimSkillUtils:
         return statistic.reached_max_level
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def remove_skill(sim_info: SimInfo, skill_id: int) -> bool:
         """remove_skill(sim_info, skill_id)
 
@@ -72,7 +72,7 @@ class CommonSimSkillUtils:
         return CommonSimStatisticUtils.remove_statistic(sim_info, skill_id)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def set_progress_toward_max_skill_level(sim_info: SimInfo, skill_id: int, value: float, add: bool=True) -> bool:
         """set_progress_toward_max_skill_level(sim_info, skill_id, value, add=True)
 
@@ -92,7 +92,7 @@ class CommonSimSkillUtils:
         return CommonSimStatisticUtils.set_statistic_value(sim_info, skill_id, value, add=add)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def set_current_skill_level(sim_info: SimInfo, skill_id: int, level: float, add: bool=True) -> bool:
         """set_current_skill_level(sim_info, skill_id, level, add=True)
 
@@ -112,7 +112,7 @@ class CommonSimSkillUtils:
         return CommonSimStatisticUtils.set_statistic_user_value(sim_info, skill_id, level, add=add)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def translate_skill_progress(sim_info: SimInfo, skill_id_from: int, skill_id_to: int, add: bool=True) -> bool:
         """translate_skill_progress(sim_info, skill_id_from, skill_id_to, add=True)
 
@@ -140,7 +140,7 @@ class CommonSimSkillUtils:
         return CommonSimSkillUtils.set_progress_toward_max_skill_level(sim_info, skill_id_to, level_of_new_skill)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def change_progress_toward_max_skill_level(sim_info: SimInfo, skill_id: int, value: float, add: bool=True) -> bool:
         """change_progress_toward_max_skill_level(sim_info, skill_id, value, add=True)
 
@@ -160,7 +160,7 @@ class CommonSimSkillUtils:
         return CommonSimStatisticUtils.add_statistic_value(sim_info, skill_id, value, add=add)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def change_progress_toward_next_skill_level(sim_info: SimInfo, skill_id: int, value: float, add: bool=True) -> bool:
         """change_progress_toward_next_skill_level(sim_info, skill_id, value, add=True)
 
@@ -191,7 +191,7 @@ class CommonSimSkillUtils:
         return CommonSimSkillUtils.change_progress_toward_max_skill_level(sim_info, skill_id, experience_gained_or_lost)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=-1.0)
     def get_progress_toward_max_skill_level(sim_info: SimInfo, skill_id: int, add: bool=True) -> float:
         """get_progress_toward_max_skill_level(sim_info, skill_id, add=True)
 
@@ -209,7 +209,7 @@ class CommonSimSkillUtils:
         return CommonSimStatisticUtils.get_statistic_value(sim_info, skill_id, add=add)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=-1.0)
     def get_current_skill_level(sim_info: SimInfo, skill_id: int) -> float:
         """get_current_skill_level(sim_info, skill_id)
 
@@ -225,7 +225,7 @@ class CommonSimSkillUtils:
         return CommonSimStatisticUtils.get_statistic_level(sim_info, skill_id)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=-1.0)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=-1.0)
     def get_progress_toward_next_skill_level(sim_info: SimInfo, skill_id: int, add: bool=False) -> float:
         """get_progress_toward_next_skill_level(sim_info, skill_id, add=False)
 
@@ -252,7 +252,7 @@ class CommonSimSkillUtils:
         return 0.0
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def get_skill(sim_info: SimInfo, skill_id: int, add: bool=True) -> Union[Skill, None]:
         """get_skill(sim_info, skill_id, add=True)
 

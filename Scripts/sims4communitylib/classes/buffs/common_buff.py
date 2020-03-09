@@ -63,7 +63,7 @@ class CommonBuff(Buff, HasClassLog):
         try:
             self.on_added(self.sim, from_load=from_load, apply_buff_loot=apply_buff_loot)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running buff \'{}\' on_added.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running buff \'{}\' on_added.'.format(self.__class__.__name__), exception=ex)
 
     def on_remove(self, apply_loot_on_remove: bool=True):
         """on_remove(apply_loot_on_remove=True)
@@ -77,7 +77,7 @@ class CommonBuff(Buff, HasClassLog):
         try:
             self.on_removed(self.sim, apply_loot_on_remove=apply_loot_on_remove)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running buff \'{}\' on_removed.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running buff \'{}\' on_removed.'.format(self.__class__.__name__), exception=ex)
 
     # The following functions are hooks into various parts of a buff, override them in your own buff to provide custom functionality.
 

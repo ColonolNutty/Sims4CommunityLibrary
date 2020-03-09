@@ -160,7 +160,7 @@ class CommonChooseItemDialog:
         _dialog.add_listener(_on_item_chosen)
         _dialog.show_dialog()
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def _create_dialog(self, picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT) -> Union[UiObjectPicker, None]:
         return UiObjectPicker.TunableFactory().default(CommonSimUtils.get_active_sim_info(),
                                                        text=lambda *_, **__: self.description,

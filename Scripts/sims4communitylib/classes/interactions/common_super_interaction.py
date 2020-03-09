@@ -66,11 +66,11 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
         try:
             return self.on_run(self.sim, self.target, timeline)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while running interaction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running interaction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
         return False
 
     # noinspection PyUnusedLocal
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=True)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=True)
     def on_run(self, interaction_sim: Sim, interaction_target: Any, timeline) -> bool:
         """on_run(interaction_sim, interaction_target, timeline)
 
@@ -101,7 +101,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction):
         try:
             yield cls.on_constraint_gen(interaction_instance, sim or interaction_instance.sim, target or interaction_instance.target)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while running interaction \'{}\' on_constraint_gen.'.format(cls.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running interaction \'{}\' on_constraint_gen.'.format(cls.__name__), exception=ex)
         return super(CommonConstrainedSuperInteraction, interaction_instance)._constraint_gen(sim, interaction_instance.get_constraint_target(target), participant_type=participant_type)
 
     @classmethod

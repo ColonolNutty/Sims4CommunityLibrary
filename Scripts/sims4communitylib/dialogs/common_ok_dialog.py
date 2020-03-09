@@ -117,7 +117,7 @@ class CommonOkDialog(CommonDialog):
                 on_acknowledged=on_acknowledged
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'show', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
 
     def _show(
         self,
@@ -142,7 +142,7 @@ class CommonOkDialog(CommonDialog):
                 text_ok=lambda *_, **__: self.ok_text
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, '_create_dialog', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, '_create_dialog', exception=ex)
         return None
 
 
@@ -170,6 +170,6 @@ def _common_testing_show_ok_dialog(_connection: int=None):
         )
         dialog.show(on_acknowledged=_on_acknowledged)
     except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to show dialog', exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
         output('Failed to show ok dialog, please locate your exception log file.')
     output('Done showing.')

@@ -120,7 +120,7 @@ class CommonBasicNotification:
             secondary_icon_override=secondary_icon
         )
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def _create_dialog(self) -> Union[UiDialogNotification, None]:
         """_create_dialog()
         Create a dialog for use in :func:``show`.

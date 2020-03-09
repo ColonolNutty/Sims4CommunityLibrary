@@ -423,7 +423,7 @@ class CommonHouseholdUtils:
             services.get_persistence_service().del_household_proto_buff(household.id)
             services.household_manager().remove(household)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to delete household \'{}\'.'.format(pformat(household)), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to delete household \'{}\'.'.format(pformat(household)), exception=ex)
             return False
         return True
 

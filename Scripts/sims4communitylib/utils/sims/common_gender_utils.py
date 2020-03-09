@@ -19,7 +19,7 @@ class CommonGenderUtils:
 
     """
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def get_gender(sim_info: SimInfo) -> Union[Gender, None]:
         """get_gender(sim_info)
 
@@ -56,7 +56,7 @@ class CommonGenderUtils:
             sim_info.gender = gender
             return True
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to set gender of Sim {} to {}.'.format(pformat(sim_info), gender), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set gender of Sim {} to {}.'.format(pformat(sim_info), gender), exception=ex)
             return False
 
     @staticmethod
