@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import inspect
-from typing import Callable, Any, Union, Type
+from typing import Callable, Any, Union
 
 from sims4communitylib.events.event_handling.common_event import CommonEvent
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity

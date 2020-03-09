@@ -27,7 +27,7 @@ class CommonUiObjectCategoryPicker(UiObjectPicker):
     """
     FACTORY_TUNABLES = {
         'object_categories': TunableList(
-            description='\n            The categories to display in the dropdown for this picker.\n            ',
+            description='\n            The categories to display in the drop down for this picker.\n            ',
             tunable=TunableTuple(
                 object_category=Tunable(
                     tunable_type=str,
