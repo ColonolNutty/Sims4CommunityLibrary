@@ -323,6 +323,7 @@ class CommonLogRegistry(CommonService):
         self._registered_logs[log_name] = logs
         return log
 
+    # noinspection PyUnusedLocal
     def log_exists(self, log_name: str, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
         """log_exists(log_name, mod_identifier=None)
 
@@ -337,6 +338,7 @@ class CommonLogRegistry(CommonService):
         """
         return log_name in self._registered_logs
 
+    # noinspection PyUnusedLocal
     def enable_logs(self, log_name: str, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
         """enable_logs(log_name, mod_identifier=None)
 
@@ -355,6 +357,7 @@ class CommonLogRegistry(CommonService):
             log.enable()
         return True
 
+    # noinspection PyUnusedLocal
     def disable_logs(self, log_name: str, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
         """disable_logs(log_name, mod_identifier=None)
 
@@ -373,6 +376,7 @@ class CommonLogRegistry(CommonService):
             log.disable()
         return True
 
+    # noinspection PyUnusedLocal
     def disable_all_logs(self, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
         """disable_all_logs(mod_identifier=None)
 

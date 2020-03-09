@@ -20,7 +20,7 @@ ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class MockClass(object):
-        # noinspection PyMissingTypeHints
+        # noinspection PyMissingTypeHints,PyUnusedLocal
         def __init__(self, *args, **kwargs):
             super(MockClass, self).__init__()
 

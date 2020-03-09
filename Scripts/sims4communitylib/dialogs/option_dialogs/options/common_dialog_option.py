@@ -25,7 +25,7 @@ class CommonDialogOption:
     :param context: A context to customize the dialog option.
     :type context: CommonDialogOptionContext
     :param on_chosen: A callback invoked when the dialog option is chosen.
-    :type on_chosen: Callable[..., Any], optional
+    :type on_chosen: Callable[[DialogOptionValueType], Any], optional
     """
     def __init__(
         self,
