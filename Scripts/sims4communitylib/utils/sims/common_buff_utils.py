@@ -104,7 +104,7 @@ class CommonBuffUtils:
         :rtype: int
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.has_buff.__name__, CommonBuffUtils.__name__))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.has_buff.__name__, CommonBuffUtils.__name__))
             return False
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
@@ -129,7 +129,7 @@ class CommonBuffUtils:
         :rtype: Tuple[Buff]
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.get_buffs.__name__, CommonBuffUtils.__name__))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.get_buffs.__name__, CommonBuffUtils.__name__))
             return list()
         if not hasattr(sim_info, 'get_active_buff_types'):
             return list()
@@ -151,7 +151,7 @@ class CommonBuffUtils:
         :rtype: bool
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.add_buff.__name__, CommonBuffUtils.__name__))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.add_buff.__name__, CommonBuffUtils.__name__))
             return False
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
@@ -179,7 +179,7 @@ class CommonBuffUtils:
         :rtype: bool
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.remove_buff.__name__, CommonBuffUtils.__name__))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.remove_buff.__name__, CommonBuffUtils.__name__))
             return False
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
@@ -208,7 +208,7 @@ class CommonBuffUtils:
         return getattr(buff_identifier, 'guid64', None)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def _load_buff_instance(buff_identifier: int) -> Union[Buff, None]:
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils

@@ -22,7 +22,7 @@ class CommonSpeciesUtils:
 
     """
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def get_species(sim_info: SimInfo) -> Union[Species, None]:
         """get_species(sim_info)
 
@@ -58,7 +58,7 @@ class CommonSpeciesUtils:
             sim_info.species = species
             return True
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to set species of sim {} to {}.'.format(pformat(sim_info), species), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set species of sim {} to {}.'.format(pformat(sim_info), species), exception=ex)
             return False
     
     @staticmethod

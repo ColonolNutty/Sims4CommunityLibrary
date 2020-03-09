@@ -89,7 +89,7 @@ class CommonChooseOptionDialog(HasLog):
         try:
             return self.option_count > 0
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'has_options', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'has_options', exception=ex)
         return False
 
     def add_option(self, option: CommonDialogOption):
@@ -106,7 +106,7 @@ class CommonChooseOptionDialog(HasLog):
             self._options.append(option)
             self._add_row(option)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'add_option', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'add_option', exception=ex)
 
     def _add_row(self, option: CommonDialogOption):
         self._internal_dialog.add_row(option.as_row(len(self._options)))
@@ -127,7 +127,7 @@ class CommonChooseOptionDialog(HasLog):
                 return chosen_option.choose()
             self._internal_dialog.show(*_, on_chosen=_on_chosen, **__)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'show', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
 
     def close(self) -> bool:
         """close()

@@ -185,7 +185,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         try:
             self._always_visible_rows += (choice,)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'add_row', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'add_row', exception=ex)
 
     def show(
         self,
@@ -225,7 +225,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                 categories=categories
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'show', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
 
     def _show(
         self,
@@ -363,7 +363,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                     picker_type=picker_type
                 )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, '_create_dialog', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, '_create_dialog', exception=ex)
         return None
 
 
@@ -416,6 +416,6 @@ def _common_testing_show_choose_object_dialog(_connection: int=None):
         )
         dialog.show(on_chosen=_on_chosen)
     except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to show dialog', exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
         output('Failed to show dialog, please locate your exception log file.')
     output('Done showing.')

@@ -30,18 +30,9 @@ class _CommonSimDataStorageMetaclass(type):
             cls._sim_storage_instances[mod_name][sim_id] = super(_CommonSimDataStorageMetaclass, cls).__call__(sim_info)
         return cls._sim_storage_instances[mod_name][sim_id]
 
+    # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(mcs) -> CommonModIdentity:
-        """get_mod_identity()
-
-        The identity of a mod.
-
-        .. note:: It contains information about a mod such as Mod Name, Mod Author,\
-            the script base namespace, and the file path to your mod.
-
-        :return: The identity of a mod.
-        :rtype: CommonModIdentity
-        """
         raise NotImplementedError('Missing \'{}\'.'.format(mcs.get_mod_identity.__name__))
 
 
@@ -54,21 +45,12 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
-    def get_log_identifier(cls):
+    def get_log_identifier(cls) -> str:
         return '{}_sim_data_storage'.format(cls.get_mod_identity().base_namespace)
 
+    # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(cls) -> CommonModIdentity:
-        """get_mod_identity()
-
-        The identity of a mod.
-
-        .. note:: It contains information about a mod such as Mod Name, Mod Author,\
-            the script base namespace, and the file path to your mod.
-
-        :return: The identity of a mod.
-        :rtype: CommonModIdentity
-        """
         raise NotImplementedError('Missing \'{}\'.'.format(cls.get_mod_identity.__name__))
 
     @property

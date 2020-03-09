@@ -499,7 +499,7 @@ class CommonOutfitUtils:
             sim_info.generate_outfit(*outfit_category_and_index)
             return True
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Problem occurred running function \'{}\'.'.format(CommonOutfitUtils.generate_outfit.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Problem occurred running function \'{}\'.'.format(CommonOutfitUtils.generate_outfit.__name__), exception=ex)
         return False
 
     @staticmethod
@@ -517,7 +517,7 @@ class CommonOutfitUtils:
             sim_info.resend_outfits()
             return True
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Problem occurred running function \'{}\'.'.format(CommonOutfitUtils.resend_outfits.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Problem occurred running function \'{}\'.'.format(CommonOutfitUtils.resend_outfits.__name__), exception=ex)
         return False
 
     @staticmethod
@@ -547,7 +547,7 @@ class CommonOutfitUtils:
         sim_info.set_previous_outfit(None, force=True)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def has_outfit(sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]) -> bool:
         """has_outfit(sim_info, outfit_category_and_index)
 
@@ -579,7 +579,7 @@ class CommonOutfitUtils:
             sim_info.appearance_tracker.evaluate_appearance_modifiers()
             return True
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Problem occurred running function \'{}\'.'.format(CommonOutfitUtils.update_outfits.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Problem occurred running function \'{}\'.'.format(CommonOutfitUtils.update_outfits.__name__), exception=ex)
         return False
 
 

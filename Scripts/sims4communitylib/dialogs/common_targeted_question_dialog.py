@@ -138,7 +138,7 @@ class CommonTargetedQuestionDialog(CommonDialog):
                 on_cancel_selected=on_cancel_selected
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'show', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
 
     def _show(
         self,
@@ -185,7 +185,7 @@ class CommonTargetedQuestionDialog(CommonDialog):
                 resolver=DoubleSimResolver(sim_info, target_sim_info)
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, '_create_dialog', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, '_create_dialog', exception=ex)
         return None
 
 
@@ -216,6 +216,6 @@ def _common_testing_show_targeted_question_dialog(_connection: int=None):
             on_cancel_selected=_cancel_chosen
         )
     except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to show dialog', exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
         output('Failed to show ok cancel dialog, please locate your exception log file.')
     output('Done showing.')

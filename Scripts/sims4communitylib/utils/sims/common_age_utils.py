@@ -19,7 +19,7 @@ class CommonAgeUtils:
 
     """
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def get_age(sim_info: SimInfo) -> Union[Age, None]:
         """get_age(sim_info)
 
@@ -60,7 +60,7 @@ class CommonAgeUtils:
             sim_info.apply_age(age)
             return True
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to set age of sim {} to {}.'.format(pformat(sim_info), age), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set age of sim {} to {}.'.format(pformat(sim_info), age), exception=ex)
             return False
 
     @staticmethod

@@ -5,10 +5,11 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import List, Callable, Any
+from typing import List, Callable, Any, Union
 from sims4communitylib.events.event_handling.common_event import CommonEvent
 from sims4communitylib.events.event_handling.common_event_handler import CommonEventHandler
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 
@@ -18,29 +19,40 @@ class CommonEventRegistry(CommonService):
 
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._event_handlers: List[CommonEventHandler] = []
 
     @staticmethod
-    def handle_events(mod_name: str):
-        """Decorate functions with this static method to register that function to handle an event.
+    def handle_events(mod_identifier: Union[str, CommonModIdentity]) -> Callable[[Callable[[CommonEvent], bool]], Callable[[CommonEvent], bool]]:
+        """handle_events(mod_identifier)
+
+        Decorate functions with this static method to register that function to handle an event.
 
         :warning:: Event functions MUST be decorated with staticmethod and must only have a single argument with the name 'event_data' (Errors will be thrown upon loading the game otherwise)
 
-        :param mod_name: The name of the mod the class is being registered for.
+        :param mod_identifier: The name or identity of the mod the class is being registered for.
+        :type mod_identifier: Union[str, CommonModIdentity]
+        :return: A function wrapped to handle events.
+        :rtype: Callable[[Callable[[CommonEvent], bool]], Callable[[CommonEvent], bool]]
         """
-        def _wrapper(event_function):
-            CommonEventRegistry.get()._register_event_handler(mod_name, event_function)
+        def _wrapper(event_function: Callable[[CommonEvent], bool]) -> Callable[..., Any]:
+            CommonEventRegistry.get()._register_event_handler(mod_identifier, event_function)
             return event_function
         return _wrapper
 
-    def _register_event_handler(self, mod_name: str, event_function: Callable[..., Any]):
-        event_handler = CommonEventHandler(mod_name, event_function)
+    def _register_event_handler(self, mod_identifier: Union[str, CommonModIdentity], event_function: Callable[[CommonEvent], bool]):
+        event_handler = CommonEventHandler(mod_identifier, event_function)
         self._event_handlers.append(event_handler)
 
     def dispatch(self, event: CommonEvent) -> bool:
-        """Dispatch an event to any event handlers listening for it.
+        """dispatch(event)
 
+        Dispatch an event to any event handlers listening for it.
+
+        :param event: An instance of the event to dispatch to listeners.
+        :type event: CommonEvent
+        :return: True, if the event was dispatched successfully. False, if not.
+        :rtype: bool
         """
         event_handlers = list(self._event_handlers)
         result = True
@@ -53,9 +65,9 @@ class CommonEventRegistry(CommonService):
                     if not handle_result:
                         result = False
                 except Exception as ex:
-                    CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred when attempting to handle event type \'{}\' via event handler \'{}\''.format(type(event), str(event_handler)), exception=ex)
+                    CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred when attempting to handle event type \'{}\' via event handler \'{}\''.format(type(event), str(event_handler)), exception=ex)
                     continue
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to dispatch event \'{}\''.format(event), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to dispatch event \'{}\''.format(event), exception=ex)
             return False
         return result

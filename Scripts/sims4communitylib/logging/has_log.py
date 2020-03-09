@@ -11,10 +11,12 @@ from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegi
 
 
 class HasLog(HasModIdentity):
-    """An inheritable class that will add a log and mod identity to a class.
+    """HasLog()
+
+    An inheritable class that will add a log and mod identity to a class.
 
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self._log: CommonLog = None
         self._mod_identity: CommonModIdentity = None
 
@@ -26,14 +28,20 @@ class HasLog(HasModIdentity):
 
             This is a *MUST* override to allow for proper Exception Handling and Logging!
 
+        :return: An instance of CommonModIdentity
+        :rtype: CommonModIdentity
+        :exception NotImplementedError: Thrown when the property is not implemented.
         """
         raise NotImplementedError('Missing \'{}\'.'.format(self.__class__.mod_identity.__name__))
 
     @property
     def log(self) -> CommonLog:
-        """The Log for this class.
+        """The log for instances of the class.
 
         .. note:: It uses the `mod_identity` and `log_identifier` when logging.
+
+        :return: An instance of CommonLog
+        :rtype: CommonLog
         """
         if self._log is None:
             mod_name = 'Missing Mod Name'
@@ -44,11 +52,11 @@ class HasLog(HasModIdentity):
 
     @property
     def log_identifier(self) -> str:
-        """The string identifier for the Log of this class.
+        """A string identifier for the log used by instances of the class.
 
-        .. note:: This is the string that will appear when logging messages using this logger
+        .. note:: This is the text that will appear when logging messages.
 
-        :return: The identifier for the log
+        :return: The identifier of the log
         :rtype: str
         """
         return self.__class__.__name__

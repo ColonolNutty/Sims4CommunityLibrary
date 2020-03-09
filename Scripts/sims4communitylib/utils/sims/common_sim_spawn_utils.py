@@ -22,7 +22,7 @@ class CommonSimSpawnUtils:
     """
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def create_human_sim_info(
         gender: Gender=None,
         age: Age=None,
@@ -86,7 +86,7 @@ class CommonSimSpawnUtils:
         try:
             SimSpawner.spawn_sim(sim_info, sim_location=location)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Failed to spawn Sim with SimInfo \'{}\' at location \'{}\'.'.format(sim_info, location), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to spawn Sim with SimInfo \'{}\' at location \'{}\'.'.format(sim_info, location), exception=ex)
             return False
         return True
 

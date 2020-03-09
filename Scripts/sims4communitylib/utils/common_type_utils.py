@@ -83,6 +83,8 @@ class CommonTypeUtils:
 
         Determine if an object is of type ScriptObject
 
+        .. note:: GameObjects, Terrain, and Sims are all ScriptObjects. Try also :func:`~is_game_object`, :func:`~is_terrain`, and :func:`~is_sim_instance`
+
         :param obj: The object to check.
         :type obj: Any
         :return: True, if it is. False, if it is not.

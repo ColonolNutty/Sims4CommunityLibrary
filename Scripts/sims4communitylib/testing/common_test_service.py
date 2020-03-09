@@ -5,10 +5,11 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Callable, Any, Dict, List
+from typing import Callable, Any, Dict, List, Union
 from functools import wraps
 from traceback import format_exc
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 try:
@@ -53,7 +54,7 @@ class CommonTestService(CommonService):
                 CommonAssertionUtils.are_equal(result, expected_value, message='{} plus {} did not equal {}!'.format(one, two, expected_value))
 
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self._tests = dict()
         self._test_count = 0
 
@@ -109,19 +110,21 @@ class CommonTestService(CommonService):
         return 'TEST {}: {} {}'.format(test_result, test_name, stacktrace or '')
 
     @staticmethod
-    def test_class(mod_name: str):
-        """test_class(mod_name)
+    def test_class(mod_identifier: Union[str, CommonModIdentity]) -> Any:
+        """test_class(mod_identifier)
+
         Decorate a class with this to register a class as containing tests.
 
-        :param mod_name: The name of the mod that owns the tests within the class.
-        :param mod_name: str
+        :param mod_identifier: The name or identity of the mod that owns the tests within the class.
+        :param mod_identifier: Union[str, CommonModIdentity]
         :return: A class wrapped to run tests.
+        :rtype: Any
         """
-        @CommonExceptionHandler.catch_exceptions(mod_name)
-        def _inner_test_class(cls):
+        @CommonExceptionHandler.catch_exceptions(mod_identifier)
+        def _inner_test_class(cls) -> Any:
             name_of_class = cls.__name__
             if CommonLogRegistry is not None:
-                cls.test_log_log = CommonLogRegistry.get().register_log(mod_name, name_of_class)
+                cls.test_log_log = CommonLogRegistry.get().register_log(mod_identifier, name_of_class)
                 cls.test_log_log.enable()
                 cls.test_log = lambda val: cls.test_log_log.debug(val)
             else:
@@ -131,9 +134,9 @@ class CommonTestService(CommonService):
                 if not hasattr(method, 'is_test'):
                     continue
 
-                def _test_function(class_name, test_name, test_method, *_, **__):
+                def _test_function(class_name, test_name, test_method, *_, **__) -> None:
                     @wraps(test_method)
-                    def _wrapper(*args, **kwargs):
+                    def _wrapper(*args, **kwargs) -> str:
                         arguments = (_ + args)
                         new_test_name = '{} (Arguments: {}, Keyword Arguments: {})'.format(test_name, arguments, (kwargs, __))
                         # noinspection PyBroadException
@@ -159,7 +162,7 @@ class CommonTestService(CommonService):
         return _inner_test_class
 
     @staticmethod
-    def test(*args, **kwargs):
+    def test(*args, **kwargs) -> Callable[..., Any]:
         """test(args, kwargs)
 
         Decorate a function with this to register that function as a test.
@@ -168,10 +171,13 @@ class CommonTestService(CommonService):
         .. warning:: The function being registered MUST be a staticmethod.
 
         :param args: The arguments that will be sent to the function upon run.
+        :type args: Any
         :param kwargs: The keyword arguments that will be sent to the function upon run.
+        :type kwargs: Any
         :return: A function wrapped to run a test upon invocation.
+        :rtype: Callable[..., Any]
         """
-        def _test_func(test_function):
+        def _test_func(test_function) -> Any:
             test_function.is_test = True
             if not hasattr(test_function, 'test_parameters'):
                 test_function.test_parameters = list()
@@ -180,13 +186,13 @@ class CommonTestService(CommonService):
         return _test_func
 
     def run_tests(self, *class_names: str, callback: Callable[..., Any]=print, **__):
-        """run_tests(*class_names, callback)
+        """run_tests(*class_names, callback=print, **__)
 
-        Run the tests for the specified classes names.
+        Run all tests for the specified classes names.
 
         :param class_names: A collection of classes to run tests for.
         :type class_names: str
-        :param callback: Any time a message needs to be printed or logged, it will be sent to this callback.
+        :param callback: Any time a message needs to be printed or logged, it will be sent to this callback. Default is print.
         :type callback: Callable[str, Any]
         """
         total_run_test_count = 0

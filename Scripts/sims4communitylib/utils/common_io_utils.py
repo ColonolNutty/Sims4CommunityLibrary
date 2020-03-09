@@ -44,7 +44,7 @@ class CommonIOUtils:
             if ignore_errors:
                 return False
             from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while writing to file \'{}\''.format(file_path), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while writing to file \'{}\''.format(file_path), exception=ex)
             return False
         return True
 
@@ -70,5 +70,5 @@ class CommonIOUtils:
                 return file.read()
         except Exception as ex:
             from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-            CommonExceptionHandler.log_exception(ModInfo.get_identity().name, 'Error occurred while reading from file \'{}\''.format(file_path), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while reading from file \'{}\''.format(file_path), exception=ex)
             return None

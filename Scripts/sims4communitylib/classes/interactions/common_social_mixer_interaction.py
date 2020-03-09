@@ -82,7 +82,7 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, CommonInteraction):
             target = self.get_participant(ParticipantType.TargetSim)
             self.on_started(self.context.sim, target)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' on_started.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' on_started.'.format(self.__class__.__name__), exception=ex)
 
     # noinspection PyMissingOrEmptyDocstring
     def setup_asm_default(self, asm: NativeAsm, *args, **kwargs) -> bool:
@@ -91,7 +91,7 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, CommonInteraction):
             if result is not None:
                 return result
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' setup_asm_default.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' setup_asm_default.'.format(self.__class__.__name__), exception=ex)
         return super().setup_asm_default(asm, *args, **kwargs)
 
     # SocialMixerInteraction has a different signature for its _test function, so we override it in here.
@@ -107,7 +107,7 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, CommonInteraction):
             test_result = cls.on_test(context.sim, target, context, *args, **kwargs)
         except Exception as ex:
             mod_identity = cls.get_mod_identity()
-            CommonExceptionHandler.log_exception(mod_identity.name, 'Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
             return TestResult.NONE
         if test_result is None:
             return super()._test(target, context, *args, **kwargs)

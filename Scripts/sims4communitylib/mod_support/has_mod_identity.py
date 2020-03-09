@@ -21,5 +21,6 @@ class HasModIdentity:
 
         :return: The identity of a mod.
         :rtype: CommonModIdentity
+        :exception NotImplementedError: Thrown when the property is not implemented.
         """
         raise NotImplementedError('Missing \'{}\'.'.format(self.__class__.mod_identity.__name__))

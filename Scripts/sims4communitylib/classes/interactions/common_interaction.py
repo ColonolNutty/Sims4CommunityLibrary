@@ -50,13 +50,13 @@ class CommonInteraction(Interaction, HasClassLog):
         HasClassLog.__init__(self)
 
     @classmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=TestResult.NONE)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=TestResult.NONE)
     def _test(cls, target: Any, context: InteractionContext, **kwargs) -> TestResult:
         try:
             test_result = cls.on_test(context.sim, target, context, **kwargs)
         except Exception as ex:
             mod_identity = cls.get_mod_identity()
-            CommonExceptionHandler.log_exception(mod_identity.name, 'Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
             return TestResult.NONE
         if test_result is None:
             return super()._test(target, context, **kwargs)
@@ -77,14 +77,14 @@ class CommonInteraction(Interaction, HasClassLog):
             super()._trigger_interaction_start_event()
             self.on_started(self.sim, self.target)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' on_started.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' on_started.'.format(self.__class__.__name__), exception=ex)
 
     # noinspection PyMissingOrEmptyDocstring
     def apply_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT):
         try:
             (new_posture_state, new_participant_type, new_sim) = self.modify_posture_state(posture_state, participant_type=participant_type, sim=sim)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' modify_posture_state.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' modify_posture_state.'.format(self.__class__.__name__), exception=ex)
             return None, None, None
         return super().apply_posture_state(new_posture_state, participant_type=new_participant_type, sim=new_sim)
 
@@ -99,7 +99,7 @@ class CommonInteraction(Interaction, HasClassLog):
         try:
             self.on_killed(self.sim, self.target)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' on_killed.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' on_killed.'.format(self.__class__.__name__), exception=ex)
         return super().kill()
 
     def cancel(self, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> bool:
@@ -118,7 +118,7 @@ class CommonInteraction(Interaction, HasClassLog):
             self.on_cancelled(self.sim, self.target, finishing_type, cancel_reason_msg, **kwargs)
             return super().cancel(finishing_type, cancel_reason_msg, **kwargs)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' cancel.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' cancel.'.format(self.__class__.__name__), exception=ex)
 
     def on_reset(self: 'CommonInteraction'):
         """on_reset()
@@ -130,14 +130,14 @@ class CommonInteraction(Interaction, HasClassLog):
             self._on_reset(self.sim, self.target)
             return super().on_reset()
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' on_reset.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' on_reset.'.format(self.__class__.__name__), exception=ex)
 
     def _post_perform(self: 'CommonInteraction'):
         try:
             self.on_performed(self.sim, self.target)
             return super()._post_perform()
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' _post_perform.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' _post_perform.'.format(self.__class__.__name__), exception=ex)
 
     def send_current_progress(self, *args: Any, **kwargs: Any):
         """send_current_progress(*args, **kwargs)
@@ -150,7 +150,7 @@ class CommonInteraction(Interaction, HasClassLog):
             if result is not None:
                 return result
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' send_current_progress.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' send_current_progress.'.format(self.__class__.__name__), exception=ex)
         return super().send_current_progress(*args, **kwargs)
 
     def setup_asm_default(self, asm: NativeAsm, *args, **kwargs) -> bool:
@@ -168,13 +168,13 @@ class CommonInteraction(Interaction, HasClassLog):
             if result is not None:
                 return result
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' setup_asm_default.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' setup_asm_default.'.format(self.__class__.__name__), exception=ex)
         return super().setup_asm_default(asm, *args, **kwargs)
 
     # The following functions are hooks into various parts of an interaction override them in your own interaction to provide custom functionality.
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=TestResult.NONE)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=TestResult.NONE)
     def create_test_result(
         result: bool,
         reason: str=None,
@@ -373,7 +373,7 @@ class CommonInteraction(Interaction, HasClassLog):
         try:
             self._send_progress_bar_update_msg(percent, rate_change, start_msg=start_message)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while running interaction \'{}\' set_current_progress_bar.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' set_current_progress_bar.'.format(self.__class__.__name__), exception=ex)
 
 
 # The following is an example interaction that varies when it will display, when it will be hidden, and when it will be disabled with a tooltip.

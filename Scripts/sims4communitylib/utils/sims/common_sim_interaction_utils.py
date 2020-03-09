@@ -156,7 +156,7 @@ class CommonSimInteractionUtils:
         return False
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=EnqueueResult.NONE)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=EnqueueResult.NONE)
     def queue_interaction(
         sim_info: SimInfo,
         interaction_id: int,
@@ -233,7 +233,7 @@ class CommonSimInteractionUtils:
         )
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=EnqueueResult.NONE)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=EnqueueResult.NONE)
     def queue_super_interaction(
         sim_info: SimInfo,
         super_interaction_id: int,
@@ -283,7 +283,7 @@ class CommonSimInteractionUtils:
         )
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=EnqueueResult.NONE)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=EnqueueResult.NONE)
     def queue_social_mixer_interaction(
         sim_info: SimInfo,
         social_mixer_interaction_id: int,
@@ -374,7 +374,7 @@ class CommonSimInteractionUtils:
         return aop.test_and_execute(context)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=EnqueueResult.NONE)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=EnqueueResult.NONE)
     def queue_mixer_interaction(
         sim_info: SimInfo,
         mixer_interaction_id: int,
@@ -449,7 +449,7 @@ class CommonSimInteractionUtils:
             return aop.execute(interaction_context, **kwargs)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=None)
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def create_interaction_context(
         sim_info: SimInfo,
         interaction_source: InteractionSource=InteractionContext.SOURCE_SCRIPT_WITH_USER_INTENT,

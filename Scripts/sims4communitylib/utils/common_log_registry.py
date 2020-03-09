@@ -6,11 +6,12 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import sims4.commands
-from typing import List, Dict
+from typing import List, Dict, Any, Union
 from pprint import pformat
 
 from sims4communitylib.enums.enumtypes.string_enum import CommonEnumStringBase
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_log_utils import CommonLogUtils
 
@@ -25,18 +26,18 @@ class CommonMessageType(CommonEnumStringBase):
 
 
 class CommonLog:
-    """CommonLog(mod_name, log_name)
+    """CommonLog(mod_identifier, log_name)
 
     A class used to log messages.
 
-    :param mod_name: The name of the Mod that owns the log.
-    :type mod_name: str
+    :param mod_identifier: The name or identity of the Mod that owns the log.
+    :type mod_identifier: Union[str, CommonModIdentity]
     :param log_name: The name of the log, used when enabling/disabling logs via commands
     :type log_name: str
     """
-    def __init__(self, mod_name: str, log_name: str):
+    def __init__(self, mod_identifier: Union[str, CommonModIdentity], log_name: str):
         self._log_name = log_name
-        self._mod_name = mod_name
+        self._mod_name = mod_identifier.name if isinstance(mod_identifier, CommonModIdentity) else mod_identifier
         self._enabled = False
 
     def debug(self, message: str):
@@ -61,7 +62,7 @@ class CommonLog:
         if self.enabled:
             self._log_message(CommonMessageType.INFO, message)
 
-    def format_info(self, *args, **kwargs):
+    def format_info(self, *args: Any, **kwargs: Any):
         """format_info(*args, **kwargs)
 
         Log a non-descriptive message containing pformatted arguments and keyword arguments with message type INFO.
@@ -133,7 +134,7 @@ class CommonLog:
         :type throw: bool, optional
         """
         if throw:
-            CommonExceptionHandler.log_exception(self._mod_name, message, exception=exception)
+            CommonExceptionHandler.log_exception(self.mod_name, message, exception=exception)
         self._log_message(message_type, message)
         if exception is not None:
             self._log_message(message_type, pformat(exception))
@@ -172,8 +173,10 @@ class CommonLog:
         """
         self.error('{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)), exception=exception, throw=throw)
 
-    def log_stack(self):
-        """Log the current stack trace and the calling frames
+    def log_stack(self) -> None:
+        """log_stack()
+
+        Log the current stack trace and the calling frames
 
         .. note:: The best use for this is to find the path of invocation to the location this function is called at.
 
@@ -185,21 +188,25 @@ class CommonLog:
         calling_frame = inspect.getouterframes(current_frame, 2)
         self.format(calling_frame)
 
-    def enable(self):
-        """Enable the log
+    def enable(self) -> None:
+        """enable()
+
+        Enable the log
 
         """
         self._enabled = True
 
-    def disable(self):
-        """Disable the log
+    def disable(self) -> None:
+        """disable()
+
+        Disable the log
 
         """
         self._enabled = False
     
     @property
     def enabled(self) -> bool:
-        """Determine if the log is enabled or not.
+        """Determine whether the log is enabled or not.
 
         .. note:: All logs are disabled by default.
 
@@ -217,23 +224,35 @@ class CommonLog:
         """
         return self._log_name
 
+    @property
+    def mod_name(self) -> str:
+        """The name of the mod that owns the log.
+
+        :return: The name of the mod that owns the log
+        :rtype: str
+        """
+        return self._mod_name
+
     def _log_message(self, message_type: str, message: str):
         from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
         from pprint import pformat
         from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
         current_date_time = CommonRealDateUtils.get_current_date_string()
-        new_message = '{} [{}] {}: [{}]: {}\n'.format(current_date_time, self._mod_name, str(message_type), self.name, message)
+        new_message = '{} [{}] {}: [{}]: {}\n'.format(current_date_time, self.mod_name, str(message_type), self.name, message)
         try:
             from sims4communitylib.utils.common_io_utils import CommonIOUtils
-            file_path = CommonLogUtils.get_message_file_path(self._mod_name)
+            file_path = CommonLogUtils.get_message_file_path(self.mod_name)
             CommonIOUtils.write_to_file(file_path, new_message, ignore_errors=True)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self._mod_name, 'Error occurred while attempting to log message: {}'.format(pformat(message)), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_name, 'Error occurred while attempting to log message: {}'.format(pformat(message)), exception=ex)
 
 
 class CommonLogRegistry(CommonService):
-    """A registry for log handlers.
-    To register your own logs, please use CommonLogRegistry.get() to create a CommonLogRegistry.
+    """CommonLogRegistry()
+
+    Used to register logs.
+
+    .. note:: To register your own logs, please use :func:`~get` to create a CommonLogRegistry (CommonLogRegistry.get()).
 
 
     :Example Usage:
@@ -262,7 +281,7 @@ class CommonLogRegistry(CommonService):
         - `s4clib.logs`
 
     """
-    def __init__(self):
+    def __init__(self) -> None:
         self._registered_logs: Dict[str, List[CommonLog]] = dict()
 
     def get_registered_log_names(self) -> List[str]:
@@ -280,15 +299,15 @@ class CommonLogRegistry(CommonService):
             log_names.append(log_name)
         return log_names
 
-    def register_log(self, mod_name: str, log_name: str) -> CommonLog:
-        """register_log(mod_name, log_name)
+    def register_log(self, mod_identifier: Union[str, CommonModIdentity], log_name: str) -> CommonLog:
+        """register_log(mod_identifier, log_name)
 
         Create and register a log with the specified name.
 
         .. note:: If `log_name` matches the name of a Log already registered, that log will be returned rather than creating a new Log.
 
-        :param mod_name: The name of the mod the log is registered for.
-        :type mod_name: str
+        :param mod_identifier: The name or identifier of the mod the log is registered for.
+        :type mod_identifier: str
         :param log_name: The name of the log.
         :type log_name: str
         :return: An object of type CommonLog
@@ -299,31 +318,35 @@ class CommonLogRegistry(CommonService):
         logs = list()
         if log_name in self._registered_logs:
             logs = self._registered_logs[log_name]
-        log = CommonLog(mod_name, log_name)
+        log = CommonLog(mod_identifier, log_name)
         logs.append(log)
         self._registered_logs[log_name] = logs
         return log
 
-    def log_exists(self, log_name: str) -> bool:
-        """log_exists(log_name)
+    def log_exists(self, log_name: str, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
+        """log_exists(log_name, mod_identifier=None)
 
         Determine if logs exist with the specified name.
 
-        :param log_name: The name of the logs
+        :param log_name: The name of the log to locate.
         :type log_name: str
+        :param mod_identifier: The name or identity of the mod the log belongs to. Default is None.
+        :type mod_identifier: Union[str, CommonModIdentity], optional
         :return: True, if a handler exists with the specified name.
         :rtype: bool
         """
         return log_name in self._registered_logs
 
-    def enable_logs(self, log_name: str) -> bool:
-        """enable_logs(log_name)
+    def enable_logs(self, log_name: str, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
+        """enable_logs(log_name, mod_identifier=None)
 
-        Enables all logs with the specified name to begin logging.
+        Enable all logs with the specified name.
 
         :param log_name: The name of the logs to enable.
         :type log_name: str
-        :return: True, if successful
+        :param mod_identifier: The name or identity of the mod the log belongs to. Default is None.
+        :type mod_identifier: Union[str, CommonModIdentity], optional
+        :return: True, if successful. False, if not.
         :rtype: bool
         """
         if self._registered_logs is None:
@@ -332,13 +355,15 @@ class CommonLogRegistry(CommonService):
             log.enable()
         return True
 
-    def disable_logs(self, log_name: str) -> bool:
-        """disable_logs(log_name)
+    def disable_logs(self, log_name: str, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
+        """disable_logs(log_name, mod_identifier=None)
 
-        Disable all logs with the specified name from logging.
+        Disable all logs with the specified name.
 
         :param log_name: The name of the logs to disable.
         :type log_name: str
+        :param mod_identifier: The name or identity of the mod to disable logs for. Default is None.
+        :type mod_identifier: Union[str, CommonModIdentity], optional
         :return: True, if successful. False, if not.
         :rtype: bool
         """
@@ -348,11 +373,13 @@ class CommonLogRegistry(CommonService):
             log.disable()
         return True
 
-    def disable_all_logs(self) -> bool:
-        """disable_all_logs()
+    def disable_all_logs(self, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
+        """disable_all_logs(mod_identifier=None)
 
         Disable all logs from logging
 
+        :param mod_identifier: The name or identity of the mod to disable logs for. Default is None.
+        :type mod_identifier: Union[str, CommonModIdentity], optional
         :return: True, if successful. False, if not.
         :rtype: bool
         """
