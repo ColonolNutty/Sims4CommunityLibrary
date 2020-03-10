@@ -37,5 +37,7 @@ class CommonImmediateSuperInteraction(CommonInteraction, ImmediateSuperInteracti
 
         The main use for this class is to create interactions that do something upon starting the interaction, without the Sim needing to queue the interaction.
         One example would be the `Replace` interaction to replace objects that were destroyed in a fire.
+
+    .. warning:: Due to an issue with how Read The Docs functions, the base classes of this class will have different namespaces than they do in the source code!
     """
     pass
