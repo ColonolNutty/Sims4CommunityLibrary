@@ -21,7 +21,9 @@ from sims4communitylib.modinfo import ModInfo
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-if ON_RTD:
+if not ON_RTD:
+    from interactions.base.super_interaction import SuperInteraction
+else:
     # noinspection PyMissingOrEmptyDocstring
     class MockClass(object):
         # noinspection PyMissingTypeHints,PyUnusedLocal
@@ -35,8 +37,6 @@ if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class SuperInteraction(MockClass):
         pass
-else:
-    from interactions.base.super_interaction import SuperInteraction
 
 
 class CommonSuperInteraction(CommonInteraction, SuperInteraction):
@@ -97,7 +97,7 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
     def on_run(self, interaction_sim: Sim, interaction_target: Any, timeline) -> bool:
         """on_run(interaction_sim, interaction_target, timeline)
 
-        Occurs upon the interaction being run.
+        A hook that occurs upon the interaction being run.
 
         :param interaction_sim: The sim performing the interaction.
         :type interaction_sim: Sim
@@ -114,7 +114,10 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
 class CommonConstrainedSuperInteraction(SuperInteraction):
     """An inheritable class that provides a way to create custom Super Interactions that provide custom constraints.
 
-    See also :class:`CommonSuperInteraction`
+    .. note:: For more information see :class:`.CommonSuperInteraction`.
+
+    .. warning:: Due to an issue with how Read The Docs functions, the base classes of this class will have different namespaces than they do in the source code!
+
     """
 
     # noinspection PyMethodParameters
@@ -124,7 +127,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction):
         try:
             yield cls.on_constraint_gen(interaction_instance, sim or interaction_instance.sim, target or interaction_instance.target)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running interaction \'{}\' on_constraint_gen.'.format(cls.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running interaction \'{}\' _on_constraint_gen.'.format(cls.__name__), exception=ex)
         return super(CommonConstrainedSuperInteraction, interaction_instance)._constraint_gen(sim, interaction_instance.get_constraint_target(target), participant_type=participant_type)
 
     @classmethod

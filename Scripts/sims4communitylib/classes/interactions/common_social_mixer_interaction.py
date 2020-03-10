@@ -21,7 +21,9 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-if ON_RTD:
+if not ON_RTD:
+    from interactions.social.social_mixer_interaction import SocialMixerInteraction
+else:
     # noinspection PyMissingOrEmptyDocstring
     class MockClass(object):
         # noinspection PyMissingTypeHints,PyUnusedLocal
@@ -35,8 +37,6 @@ if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class SocialMixerInteraction(MockClass):
         pass
-else:
-    from interactions.social.social_mixer_interaction import SocialMixerInteraction
 
 
 class CommonSocialMixerInteraction(SocialMixerInteraction, CommonInteraction):

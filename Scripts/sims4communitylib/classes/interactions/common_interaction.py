@@ -26,7 +26,9 @@ from singletons import DEFAULT
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-if ON_RTD:
+if not ON_RTD:
+    from interactions.base.interaction import Interaction
+else:
     # noinspection PyMissingOrEmptyDocstring
     class MockClass(object):
         # noinspection PyMissingTypeHints,PyUnusedLocal
@@ -40,8 +42,6 @@ if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class Interaction(MockClass):
         pass
-else:
-    from interactions.base.interaction import Interaction
 
 
 class CommonInteraction(Interaction, HasClassLog):
