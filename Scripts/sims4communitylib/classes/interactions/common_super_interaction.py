@@ -5,17 +5,38 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import os
 from typing import Any
 
 from interactions import ParticipantType
 from interactions.base.interaction import Interaction
-from interactions.base.super_interaction import SuperInteraction
 from interactions.constraints import Constraint
 from sims.sim import Sim
 from sims4.utils import flexmethod
 from sims4communitylib.classes.interactions.common_interaction import CommonInteraction
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
+
+# ReadTheDocs
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+# If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
+if ON_RTD:
+    # noinspection PyMissingOrEmptyDocstring
+    class MockClass(object):
+        # noinspection PyMissingTypeHints,PyUnusedLocal
+        def __init__(self, *args, **kwargs):
+            super(MockClass, self).__init__()
+
+        # noinspection PyMissingTypeHints
+        def __call__(self, *args, **kwargs):
+            return None
+
+    # noinspection PyMissingOrEmptyDocstring
+    class SuperInteraction(MockClass):
+        pass
+else:
+    from interactions.base.super_interaction import SuperInteraction
 
 
 class CommonSuperInteraction(CommonInteraction, SuperInteraction):

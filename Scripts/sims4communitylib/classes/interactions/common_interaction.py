@@ -5,11 +5,11 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import os
 from pprint import pformat
 from typing import Tuple, Any, Union, List, Set
 from event_testing.results import TestResult
 from interactions import ParticipantType
-from interactions.base.interaction import Interaction
 from interactions.context import InteractionContext
 from interactions.interaction_finisher import FinishingType
 from native.animation import NativeAsm
@@ -21,6 +21,27 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from singletons import DEFAULT
+
+# ReadTheDocs
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+# If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
+if ON_RTD:
+    # noinspection PyMissingOrEmptyDocstring
+    class MockClass(object):
+        # noinspection PyMissingTypeHints,PyUnusedLocal
+        def __init__(self, *args, **kwargs):
+            super(MockClass, self).__init__()
+
+        # noinspection PyMissingTypeHints
+        def __call__(self, *args, **kwargs):
+            return None
+
+    # noinspection PyMissingOrEmptyDocstring
+    class Interaction(MockClass):
+        pass
+else:
+    from interactions.base.interaction import Interaction
 
 
 class CommonInteraction(Interaction, HasClassLog):
