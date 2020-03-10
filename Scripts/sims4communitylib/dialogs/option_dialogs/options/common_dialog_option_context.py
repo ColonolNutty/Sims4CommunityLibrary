@@ -22,10 +22,10 @@ class CommonDialogOptionContext:
         icon=None,\
         is_enabled=True,\
         is_selected=False,\
-        tag_list=()
+        tag_list=()\
     )
 
-    A context used by CommonDialogOption that contains options for customization of the option.
+    A context used by :class:`.CommonDialogOption` that provides customization of options.
 
     :param title_identifier: The title of the option.
     :type title_identifier: Union[int, str, LocalizedString]
@@ -125,7 +125,7 @@ class CommonDialogOptionContext:
     def hashed_tag_list(self) -> Tuple[int]:
         """Same as tag_list, but the values are hashed.
 
-        :return: Same as tag_list, but the values are hashed.
+        :return: Same as :py:attr:`~tag_list`, but the values are hashed.
         :rtype: Tuple[str]
         """
         hashed_tag_list: List[int] = list()
