@@ -11,7 +11,9 @@ from sims4communitylib.classes.interactions.common_interaction import CommonInte
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-if ON_RTD:
+if not ON_RTD:
+    from interactions.base.mixer_interaction import MixerInteraction
+else:
     # noinspection PyMissingOrEmptyDocstring
     class MockClass(object):
         # noinspection PyMissingTypeHints,PyUnusedLocal
@@ -25,8 +27,6 @@ if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class MixerInteraction(MockClass):
         pass
-else:
-    from interactions.base.mixer_interaction import MixerInteraction
 
 
 class CommonMixerInteraction(MixerInteraction, CommonInteraction):
