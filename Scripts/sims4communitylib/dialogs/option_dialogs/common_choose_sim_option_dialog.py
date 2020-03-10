@@ -28,7 +28,7 @@ from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
-    """CommonChooseSimOptionDialog(
+    """CommonChooseSimOptionDialog(\
         title_identifier,\
         description_identifier,\
         title_tokens=(),\
