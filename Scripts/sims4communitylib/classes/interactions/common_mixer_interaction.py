@@ -4,8 +4,29 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from interactions.base.mixer_interaction import MixerInteraction
+import os
 from sims4communitylib.classes.interactions.common_interaction import CommonInteraction
+
+# ReadTheDocs
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+# If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
+if ON_RTD:
+    # noinspection PyMissingOrEmptyDocstring
+    class MockClass(object):
+        # noinspection PyMissingTypeHints,PyUnusedLocal
+        def __init__(self, *args, **kwargs):
+            super(MockClass, self).__init__()
+
+        # noinspection PyMissingTypeHints
+        def __call__(self, *args, **kwargs):
+            return None
+
+    # noinspection PyMissingOrEmptyDocstring
+    class MixerInteraction(MockClass):
+        pass
+else:
+    from interactions.base.mixer_interaction import MixerInteraction
 
 
 class CommonMixerInteraction(MixerInteraction, CommonInteraction):
