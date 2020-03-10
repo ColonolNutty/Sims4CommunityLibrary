@@ -47,6 +47,8 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
         The main use for this class is to create interactions that wrap sub interactions.
         One example Super interaction is the `sim-chat` interaction, where other interactions (Such as the `Get To Know` interaction), run as sub interactions of `sim-chat`
 
+    .. warning:: Due to an issue with how Read The Docs functions, the base classes of this class will have different namespaces than they do in the source code!
+
     :Example:
 
     .. highlight:: python

@@ -42,7 +42,9 @@ else:
 class CommonSocialMixerInteraction(SocialMixerInteraction, CommonInteraction):
     """An inheritable class that provides a way to create Custom Social Mixer Interactions.
 
-    The main use for this class is to create interactions that involve two or more Sims interacting with each other.
+    .. note:: The main use for this class is to create interactions that involve two or more Sims interacting with each other.
+
+    .. warning:: Due to an issue with how Read The Docs functions, the base classes of this class will have different namespaces than they do in the source code!
 
     :Example:
 

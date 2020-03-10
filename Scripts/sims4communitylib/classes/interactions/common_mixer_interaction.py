@@ -32,6 +32,8 @@ else:
 class CommonMixerInteraction(MixerInteraction, CommonInteraction):
     """An inheritable class that provides a way to create Custom Mixer Interactions.
 
+    .. warning:: Due to an issue with how Read The Docs functions, the base classes of this class will have different namespaces than they do in the source code!
+
     :Example:
 
     .. highlight:: python
