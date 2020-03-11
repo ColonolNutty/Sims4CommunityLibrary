@@ -21,6 +21,9 @@ class CommonEventHandler:
     :type mod_identifier: Union[str, CommonModIdentity]
     :param event_function: The function this handler invokes.
     :type event_function: Callable[[CommonEvent], Any]
+    :exception RuntimeError: When event_function is None.
+    :exception TypeError: When event_function is not a callable function.
+    :exception AssertionError: When the event_function is missing the event_data argument, when the event_function contains a self or cls argument, or when more than one argument is found.
     """
     def __init__(self, mod_identifier: Union[str, CommonModIdentity], event_function: Callable[[CommonEvent], Any]):
         if event_function is None:
@@ -52,7 +55,7 @@ class CommonEventHandler:
         """The action to take upon receiving an event.
 
         :return: The function that handles events.
-        :rtype: Callable[..., Any]
+        :rtype: Callable[[CommonEvent], Any]
         """
         return self._event_function
 

@@ -36,7 +36,7 @@ class CommonChooseDialog(CommonDialog, ABC):
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: Tokens to format into the description.
     :type description_tokens: Iterator[Any], optional
-    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information. Default is None.
     :type mod_identity: CommonModIdentity, optional
     """
     def __init__(

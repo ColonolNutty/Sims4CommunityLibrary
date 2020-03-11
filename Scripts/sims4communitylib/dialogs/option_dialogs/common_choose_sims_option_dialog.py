@@ -66,7 +66,7 @@ class CommonChooseSimsOptionDialog(CommonChooseOptionsDialog):
             ),
         )
 
-        # Create the dialog and only showing 2 options per page.
+        # Create the dialog and show a number of Sims in 4 columns and being able to select up to 5 Sims.
         option_dialog = CommonChooseSimsOptionDialog(
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
@@ -210,7 +210,7 @@ def _common_testing_show_choose_sims_option_dialog(_connection: int=None):
             ),
         )
 
-        # Create the dialog and only showing 2 options per page.
+        # Create the dialog and show a number of Sims in 4 columns and being able to select up to 5 Sims.
         option_dialog = CommonChooseSimsOptionDialog(
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,

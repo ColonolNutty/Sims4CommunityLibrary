@@ -17,7 +17,7 @@ from sims4communitylib.dialogs.option_dialogs.options.sims.common_dialog_sim_opt
 class CommonDialogSimOption(CommonDialogOption):
     """CommonDialogSimOption(sim_info, context, on_chosen=CommonFunctionUtils.noop)
 
-    A option the player can choose within a dialog.
+    An option the player can choose within a dialog.
 
     :param sim_info: The Sim that will be chosen when the option is chosen.
     :type sim_info: SimInfo

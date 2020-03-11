@@ -137,6 +137,11 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         self._always_visible_rows = tuple()
         self._current_page = 1
 
+    # noinspection PyMissingOrEmptyDocstring
+    @property
+    def log_identifier(self) -> str:
+        return 's4cl_choose_object_dialog'
+
     @property
     def current_page(self) -> int:
         """Retrieve the current page.
@@ -145,11 +150,6 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         :rtype: int
         """
         return self._current_page
-
-    # noinspection PyMissingOrEmptyDocstring
-    @property
-    def log_identifier(self) -> str:
-        return 's4cl_choose_object_dialog'
 
     # noinspection PyMissingOrEmptyDocstring
     @property
@@ -185,7 +185,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         try:
             self._always_visible_rows += (choice,)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'add_row', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'An error occurred while running \'{}\''.format(CommonChooseObjectDialog.add_row.__name__), exception=ex)
 
     def show(
         self,
@@ -199,7 +199,8 @@ class CommonChooseObjectDialog(CommonChooseDialog):
             on_chosen=CommonFunctionUtils.noop,\
             picker_type=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,\
             page=1,\
-            sim_info=None\
+            sim_info=None,\
+            categories=()\
         )
 
         Show the dialog and invoke the callbacks upon the player making a choice.
@@ -212,7 +213,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         :type page: int
         :param sim_info: The Sim that will appear in the dialog image. The default Sim is the Active Sim.
         :type sim_info: SimInfo
-        :param categories: A collection of categories do display in the dialog.
+        :param categories: A collection of categories to display in the dialog. They will appear in a drop down above the rows.
         :type categories: Iterator[CommonDialogObjectOptionCategory]
         """
         self._current_page = page
@@ -225,7 +226,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                 categories=categories
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'An error occurred while running \'{}\''.format(CommonChooseObjectDialog.show.__name__), exception=ex)
 
     def _show(
         self,
@@ -235,7 +236,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         sim_info: SimInfo=None,
         categories: Iterator[CommonDialogObjectOptionCategory]=()
     ):
-        self.log.format_with_message('Attempting to display choices.', page=page)
+        self.log.format_with_message('Attempting to display choices.', page=page, categories=categories)
         _dialog = self._create_dialog(picker_type=picker_type, categories=categories)
         if _dialog is None:
             self.log.error('_dialog was None for some reason.')
@@ -290,9 +291,10 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                 _dialog.add_row(row)
 
             tag_list = [(abs(hash(category.object_category)) % (10 ** 8)) for category in categories]
+            self.log.format_with_message('Found tags.', tag_list=tag_list)
 
             if page > 1:
-                self.log.format_with_message('Adding Previous.', page=page, number_of_pages=number_of_pages)
+                self.log.format_with_message('Adding Previous row.', page=page, number_of_pages=number_of_pages)
                 previous_choice = ObjectPickerRow(
                     option_id=len(self.rows) + 2,
                     name=CommonLocalizationUtils.create_localized_string(CommonStringId.PREVIOUS),
@@ -304,9 +306,9 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                 )
                 _dialog.add_row(previous_choice)
             else:
-                self.log.format_with_message('Not adding Previous.', page=page)
+                self.log.format_with_message('Not adding Previous row.', page=page)
             if page < number_of_pages:
-                self.log.format_with_message('Adding Next.', page=page, number_of_pages=number_of_pages)
+                self.log.format_with_message('Adding Next row.', page=page, number_of_pages=number_of_pages)
                 next_choice = ObjectPickerRow(
                     option_id=len(self.rows) + 1,
                     name=CommonLocalizationUtils.create_localized_string(CommonStringId.NEXT),
@@ -320,13 +322,16 @@ class CommonChooseObjectDialog(CommonChooseDialog):
             else:
                 self.log.format_with_message('Not adding Next.', page=page, number_of_pages=number_of_pages)
         else:
-            self.log.debug('Adding all choices')
+            self.log.debug('Adding always visible rows.')
             for always_visible_rows in self.always_visible_rows:
                 _dialog.add_row(always_visible_rows)
+            self.log.debug('Adding rows.')
             for row in self.rows:
                 _dialog.add_row(row)
 
+        self.log.debug('Adding listener.')
         _dialog.add_listener(_on_chosen)
+        self.log.debug('Showing dialog.')
         _dialog.show_dialog()
 
     def _create_dialog(

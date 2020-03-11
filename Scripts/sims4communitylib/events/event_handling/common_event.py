@@ -8,16 +8,18 @@ Copyright (c) COLONOLNUTTY
 
 
 class CommonEvent:
-    """ A custom event, for use with the Event Handler. """
+    """ A custom event, for use with the :class:`.CommonEventHandler`. """
     @property
     def event_name(self) -> str:
         """The name of this event.
 
+        :return: The name of the event.
+        :rtype: str
         """
         return self.__class__.__name__
 
-    def __str__(self):
+    def __str__(self) -> str:
         return 'CommonEvent[Name:{}]'.format(self.event_name)
 
-    def __repr__(self):
-        return super().__repr__()
+    def __repr__(self) -> str:
+        return 'common_event_name_{}'.format(self.event_name)

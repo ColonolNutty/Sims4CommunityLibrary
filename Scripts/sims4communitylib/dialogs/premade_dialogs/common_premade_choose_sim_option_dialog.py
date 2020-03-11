@@ -1,18 +1,9 @@
-"""
-The Sims 4 Community Library is licensed under the Creative Commons Attribution 4.0 International public license (CC BY 4.0).
-https://creativecommons.org/licenses/by/4.0/
-https://creativecommons.org/licenses/by/4.0/legalcode
-
-Copyright (c) COLONOLNUTTY
-"""
-import random
 import sims4.commands
-from typing import Any, Union, Callable, Iterator
-
+from typing import Union, Any, Iterator, Callable
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims.sim_info import SimInfo
-from sims4communitylib.dialogs.common_choose_sim_dialog import CommonChooseSimDialog
-from sims4communitylib.dialogs.option_dialogs.common_choose_option_dialog import CommonChooseOptionDialog
+from sims4communitylib.dialogs.option_dialogs.common_choose_sim_option_dialog import CommonChooseSimOptionDialog
+from sims4communitylib.dialogs.option_dialogs.options.sims.common_dialog_sim_option import CommonDialogSimOption
 from sims4communitylib.dialogs.option_dialogs.options.sims.common_dialog_sim_option_context import \
     CommonDialogSimOptionContext
 from sims4communitylib.enums.strings_enum import CommonStringId
@@ -20,26 +11,29 @@ from sims4communitylib.exceptions.common_exceptions_handler import CommonExcepti
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
-from sims4communitylib.dialogs.option_dialogs.options.sims.common_dialog_sim_option import CommonDialogSimOption
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
+from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
-class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
-    """CommonChooseSimOptionDialog(\
+class CommonPremadeChooseSimOptionDialog(CommonChooseSimOptionDialog):
+    """CommonPremadeChooseSimOptionDialog(\
         title_identifier,\
         description_identifier,\
         title_tokens=(),\
         description_tokens=(),\
         on_close=CommonFunctionUtils.noop,\
-        mod_identity=None\
+        mod_identity=None,\
+        include_sim_callback=None,\
+        instanced_sims_only=True,\
+        on_sim_chosen=CommonFunctionUtils.noop\
     )
 
-    A dialog that displays a list of Sims for selection.
+    A premade dialog that will display a list of Sims based on a filter and will prompt the player to choose a single Sim.
 
-    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_choose_sim_option_dialog` in the in-game console.
+    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_premade_choose_sim_option_dialog` in the in-game console.
 
     :Example usage:
 
@@ -64,33 +58,17 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
             ),
         )
 
-        # Create the dialog and show a number of Sims in 4 columns.
-        option_dialog = CommonChooseSimOptionDialog(
+        # Create the dialog that will only show adult Sims in the current area.
+        option_dialog = CommonPremadeChooseSimOptionDialog(
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             title_tokens=title_tokens,
             description_tokens=description_tokens,
-            mod_identity=ModInfo.get_identity()
+            mod_identity=ModInfo.get_identity(),
+            include_sim_callback=CommonAgeUtils.is_adult,
+            instanced_sims_only=True,
+            on_sim_chosen=_on_chosen
         )
-
-        current_count = 0
-        count = 25
-
-        for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
-            if current_count >= count:
-                break
-            should_select = random.choice((True, False))
-            is_enabled = random.choice((True, False))
-            option_dialog.add_option(
-                CommonDialogSimOption(
-                    sim_info,
-                    CommonDialogSimOptionContext(
-                        is_enabled=is_enabled,
-                        is_selected=should_select
-                    ),
-                    on_chosen=_on_chosen
-                )
-            )
 
         option_dialog.show(
             sim_info=CommonSimUtils.get_active_sim_info(),
@@ -109,6 +87,12 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
     :type on_close: Callable[..., Any], optional
     :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
     :type mod_identity: CommonModIdentity, optional
+    :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. If set to None, All sims will be included.
+    :type include_sim_callback: Callable[[SimInfo], bool], optional
+    :param instanced_sims_only: If True, only Sims that are currently spawned will be shown. If False, all Sims will be shown. Default is True.
+    :type instanced_sims_only: bool, optional
+    :param on_sim_chosen: Called upon a Sim being chosen. Default is :func:`~CommonFunctionUtils.noop`.
+    :type on_sim_chosen: Callable[[SimInfo], Any], optional
     """
     def __init__(
         self,
@@ -117,67 +101,44 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
         on_close: Callable[..., Any]=CommonFunctionUtils.noop,
-        mod_identity: CommonModIdentity=None
+        mod_identity: CommonModIdentity=None,
+        include_sim_callback: Callable[[SimInfo], bool]=None,
+        instanced_sims_only: bool=True,
+        on_sim_chosen: Callable[[SimInfo], Any]=CommonFunctionUtils.noop
     ):
         super().__init__(
-            CommonChooseSimDialog(
-                title_identifier,
-                description_identifier,
-                tuple(),
-                title_tokens=title_tokens,
-                description_tokens=description_tokens,
-                mod_identity=mod_identity
-            ),
-            on_close=on_close
+            title_identifier,
+            description_identifier,
+            title_tokens=title_tokens,
+            description_tokens=description_tokens,
+            on_close=on_close,
+            mod_identity=mod_identity
         )
+
+        if instanced_sims_only:
+            _sim_info_list = CommonSimUtils.get_instanced_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback)
+        else:
+            _sim_info_list = CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback)
+
+        for _sim_info in _sim_info_list:
+            self.add_option(
+                CommonDialogSimOption(
+                    _sim_info,
+                    CommonDialogSimOptionContext(),
+                    on_chosen=on_sim_chosen
+                )
+            )
 
     # noinspection PyMissingOrEmptyDocstring
     @property
     def log_identifier(self) -> str:
-        return 's4cl_choose_sim_option_dialog'
-
-    def add_option(self, option: CommonDialogSimOption):
-        """add_option(option)
-
-        Add an option to the dialog.
-
-        :param option: The option to add.
-        :type option: CommonDialogSimOption
-        """
-        return super().add_option(option)
-
-    def show(
-        self,
-        sim_info: SimInfo=None,
-        should_show_names: bool=True,
-        hide_row_descriptions: bool=False,
-        column_count: int=3
-    ):
-        """show(sim_info=None, should_show_names=True, hide_row_descriptions=False, column_count=3)
-
-        Show the dialog.
-
-        :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim.
-        :type sim_info: SimInfo, optional
-        :param should_show_names: If True, then the names of the Sims will display in the dialog.
-        :type should_show_names: bool, optional
-        :param hide_row_descriptions: A flag to hide the row descriptions.
-        :type hide_row_descriptions: bool, optional
-        :param column_count: The number of columns to display Sims in.
-        :type column_count: int, optional
-        """
-        super().show(
-            sim_info=sim_info,
-            should_show_names=should_show_names,
-            hide_row_descriptions=hide_row_descriptions,
-            column_count=column_count
-        )
+        return 's4cl_premade_choose_sim_option_dialog'
 
 
-@sims4.commands.Command('s4clib_testing.show_choose_sim_option_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_choose_sim_option_dialog(_connection: int=None):
+@sims4.commands.Command('s4clib_testing.show_premade_choose_sim_option_dialog', command_type=sims4.commands.CommandType.Live)
+def _common_testing_show_premade_choose_sim_option_dialog(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
-    output('Showing test choose sim option dialog.')
+    output('Showing test premade choose sim option dialog.')
 
     def _on_chosen(_sim_info: SimInfo):
         output('Chose Sim with name \'{}\''.format(CommonSimNameUtils.get_full_name(_sim_info)))
@@ -198,33 +159,17 @@ def _common_testing_show_choose_sim_option_dialog(_connection: int=None):
             ),
         )
 
-        # Create the dialog and show a number of Sims in 4 columns.
-        option_dialog = CommonChooseSimOptionDialog(
+        # Create the dialog that will only show adult Sims in the current area.
+        option_dialog = CommonPremadeChooseSimOptionDialog(
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             title_tokens=title_tokens,
             description_tokens=description_tokens,
-            mod_identity=ModInfo.get_identity()
+            mod_identity=ModInfo.get_identity(),
+            include_sim_callback=CommonAgeUtils.is_adult,
+            instanced_sims_only=True,
+            on_sim_chosen=_on_chosen
         )
-
-        current_count = 0
-        count = 25
-
-        for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
-            if current_count >= count:
-                break
-            should_select = random.choice((True, False))
-            is_enabled = random.choice((True, False))
-            option_dialog.add_option(
-                CommonDialogSimOption(
-                    sim_info,
-                    CommonDialogSimOptionContext(
-                        is_enabled=is_enabled,
-                        is_selected=should_select
-                    ),
-                    on_chosen=_on_chosen
-                )
-            )
 
         option_dialog.show(
             sim_info=CommonSimUtils.get_active_sim_info(),

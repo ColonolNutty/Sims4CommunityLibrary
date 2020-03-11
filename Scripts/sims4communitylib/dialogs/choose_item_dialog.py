@@ -37,7 +37,7 @@ class CommonChooseItemResult(CommonEnumIntBase):
     def is_error(result: 'CommonChooseItemResult') -> bool:
         """is_error(result)
 
-        Determine whether a result is an error or not.
+        Determine if a result is an error or cancel.
 
         :param result: The result to check
         :type result: CommonChooseItemResult

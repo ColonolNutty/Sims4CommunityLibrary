@@ -16,7 +16,7 @@ from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_conte
 class CommonDialogObjectOption(CommonDialogOption):
     """CommonDialogObjectOption(option_identifier, value, context, on_chosen=CommonFunctionUtils.noop)
 
-    A option the player can choose within a dialog.
+    An option the player can choose within a dialog.
 
     :param option_identifier: A string that identifies the option from other options.
     :type option_identifier: str
