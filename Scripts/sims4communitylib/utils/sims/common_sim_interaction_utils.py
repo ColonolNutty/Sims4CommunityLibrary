@@ -643,8 +643,8 @@ class CommonSimInteractionUtils:
         :type target: Any, optional
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
         :type interaction_context: InteractionContext, optional
-        :return: The result of pushing the interaction to the queue of a Sim.
-        :rtype: EnqueueResult
+        :return: The result of testing a push of the interaction to the queue of a Sim.
+        :rtype: TestResult
         """
         if social_super_interaction_id is not None and social_mixer_interaction_id is None:
             return CommonSimInteractionUtils.test_super_interaction(social_super_interaction_id, target=target, interaction_context=interaction_context)
@@ -730,8 +730,8 @@ class CommonSimInteractionUtils:
         :type target: Any, optional
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
         :type interaction_context: InteractionContext, optional
-        :return: The result of pushing the interaction to the queue of a Sim.
-        :rtype: EnqueueResult
+        :return: The result of testing a push of the interaction to the queue of a Sim.
+        :rtype: TestResult
         """
         from autonomy.content_sets import get_valid_aops_gen
 

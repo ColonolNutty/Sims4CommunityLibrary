@@ -7,6 +7,7 @@ Custom Dialogs
 
    sims4communitylib.dialogs.basic_dialogs
    sims4communitylib.dialogs.option_dialogs
+   sims4communitylib.dialogs.premade_dialogs
 
 Enums
 -------------------------------------------------------

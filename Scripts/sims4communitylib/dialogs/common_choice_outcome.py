@@ -16,7 +16,7 @@ except:
 
 
 class CommonChoiceOutcome(Int):
-    """An outcome of the player being given a choice.
+    """The outcome of the player being given a choice.
 
     """
     CANCEL = 0
@@ -27,7 +27,7 @@ class CommonChoiceOutcome(Int):
     def is_error_or_cancel(result: 'CommonChoiceOutcome') -> bool:
         """is_error_or_cancel(result)
 
-        Determine if an outcome is either Error or Cancel.
+        Determine if an outcome is either :py:attr:`~ERROR` or :py:attr:`~CANCEL`.
 
         :param result: The result to check.
         :type result: CommonChoiceOutcome

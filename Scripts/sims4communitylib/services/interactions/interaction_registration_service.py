@@ -33,7 +33,7 @@ class CommonInteractionHandler:
     """
     @property
     def interactions_to_add(self) -> Tuple[int]:
-        """A tuple of interaction identifiers being added by the interaction handler.
+        """A collection of interaction identifiers being added by the interaction handler.
 
         :return: A collection of interaction identifiers.
         :rtype: Tuple[int]
@@ -98,9 +98,9 @@ class CommonScriptObjectInteractionHandler(CommonInteractionHandler):
 
 
 class CommonInteractionRegistry(CommonService):
-    """Manages the registration of interactions to script objects, terrain, sims, etc.
+    """Manage the registration of interactions to script objects, terrain, sims, etc.
 
-    Take a look at :class:`.CommonScriptObjectInteractionHandler` for more info and an example of usage.
+    .. note:: Take a look at :class:`.CommonScriptObjectInteractionHandler` for more info and an example of usage.
 
     """
     def __init__(self) -> None:
@@ -115,7 +115,7 @@ class CommonInteractionRegistry(CommonService):
     def on_script_object_add(self, script_object: ScriptObject, *args, **kwargs):
         """on_script_object_add(script_object, *args, **kwargs)
 
-        Occurs upon a script object being added.
+        A hook that occurs upon a Script Object being added.
 
         :param script_object: The script object being added.
         :type script_object: ScriptObject
@@ -136,7 +136,7 @@ class CommonInteractionRegistry(CommonService):
     def on_terrain_load(self, terrain_service: TerrainService, *_, **__):
         """on_terrain_load(terrain_service, *_, **__)
 
-        Occurs upon the terrain loading
+        A hook that occurs upon the Terrain loading
 
         :param terrain_service: The terrain service
         :type terrain_service: TerrainService
@@ -155,7 +155,7 @@ class CommonInteractionRegistry(CommonService):
     def on_ocean_load(self, terrain_service: TerrainService, *_, **__):
         """on_ocean_load(terrain_service, *_, **__)
 
-        Occurs upon the ocean loading
+        A hook that occurs upon the Ocean loading
 
         :param terrain_service: The terrain service
         :type terrain_service: TerrainService
@@ -191,7 +191,7 @@ class CommonInteractionRegistry(CommonService):
 
         Decorate a class to register that class as an interaction handler.
 
-        Take a look at :class:`.CommonScriptObjectInteractionHandler` for more info and example usage.
+        .. note:: Take a look at :class:`.CommonScriptObjectInteractionHandler` for more info and example usage.
 
         :param interaction_type: The type of place the interactions will show up.
         :type interaction_type: CommonInteractionType
