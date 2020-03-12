@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from objects.game_object import GameObject
 from typing import Union
 from objects.components.live_drag_component import LiveDragComponent
+from objects.script_object import ScriptObject
 from protocolbuffers.Math_pb2 import Vector3
 from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
@@ -106,3 +107,18 @@ class CommonObjectLocationUtils:
         if game_object is None:
             return None
         return game_object.location
+
+    @staticmethod
+    def get_position(script_object: ScriptObject) -> Union[Vector3, None]:
+        """get_position(game_object)
+
+        Retrieve the position of an Object.
+
+        :param script_object: An instance of an Object.
+        :type script_object: ScriptObject
+        :return: The position of the Object or None if the Object does not have a position.
+        :rtype: Vector3
+        """
+        if script_object is None:
+            return None
+        return script_object.position

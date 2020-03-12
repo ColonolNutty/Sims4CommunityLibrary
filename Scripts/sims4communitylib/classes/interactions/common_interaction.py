@@ -41,7 +41,20 @@ else:
 
     # noinspection PyMissingOrEmptyDocstring
     class Interaction(MockClass):
-        pass
+        # noinspection PyPropertyDefinition
+        @property
+        def sim(self) -> Sim:
+            pass
+
+        # noinspection PyPropertyDefinition
+        @property
+        def target(self) -> Any:
+            pass
+
+        # noinspection PyPropertyDefinition
+        @property
+        def context(self) -> InteractionContext:
+            pass
 
 
 class CommonInteraction(Interaction, HasClassLog):
