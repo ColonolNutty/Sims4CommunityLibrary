@@ -584,7 +584,7 @@ class CommonOutfitUtils:
 
 
 @sims4.commands.Command('s4clib_testing.show_all_outfit_categories', command_type=sims4.commands.CommandType.Live)
-def _s4clib_testing_show_all_outfit_categories(_connection=None):
+def _s4clib_testing_show_all_outfit_categories(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
     output('Showing all outfit categories.')
     categories = CommonOutfitUtils.get_all_outfit_categories()
