@@ -58,6 +58,15 @@ Sim Utilities
    :undoc-members:
    :show-inheritance:
 
+*******************
+`Body`
+*******************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_body_utils.CommonSimBodyUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Outfits`
 ------------------------------------------------------
 
