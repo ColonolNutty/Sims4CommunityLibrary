@@ -9,7 +9,7 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonInteractionId(CommonEnumIntBase):
-    """Identifiers for vanilla interactions.
+    """Identifiers for interactions.
 
     """
     PICK_UP_SIM = 141018
@@ -96,3 +96,9 @@ class CommonInteractionId(CommonEnumIntBase):
     BATHTUB_NAP_MERMAID = 215915
     BATHTUB_PLAY_MERMAID = 215876
     IDLE_HYGIENE_MERMAID = 215764
+
+    # S4CL
+    S4CL_DEBUG_SHOW_RUNNING_AND_QUEUED_INTERACTIONS = 5900237111545222349
+    S4CL_DEBUG_SHOW_ACTIVE_BUFFS = 12481803320243318715
+    S4CL_DEBUG_SHOW_TRAITS = 2108116777929577381
+    S4CL_DEBUG_SHOW_RUNNING_SITUATIONS = 10355438442708473961

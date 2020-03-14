@@ -9,7 +9,7 @@ from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
 
 
 class CommonStringId(CommonEnumIntBase):
-    """Identifiers for vanilla localization strings.
+    """Identifiers for localization strings.
 
     .. note:: These identifiers point to strings within String Tables within package files.
 
@@ -91,3 +91,6 @@ class CommonStringId(CommonEnumIntBase):
     TESTING_TEST_TEXT_WITH_STRING_TOKEN = 2977195159
     # 0.Number
     TESTING_TEST_TEXT_WITH_NUMBER_TOKEN = 4138001347
+
+    # S4CL
+    S4CL_SIMS_4_COMMUNITY_LIBRARY = 1638558923

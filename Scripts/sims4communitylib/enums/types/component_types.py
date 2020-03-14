@@ -5,6 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from typing import Any
 
 
 class CommonComponentType:
@@ -13,7 +14,7 @@ class CommonComponentType:
     Components are essentially just Tuning files in package files.
 
     """
-    def _get_component_type(*args):
+    def _get_component_type(*args) -> Any:
         try:
             import objects.components.types as component_types
             return getattr(component_types, args[0])

@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import services
-from typing import Union, Iterator, Any
+from typing import Union, Iterator, Any, Tuple, List
 from interactions.base.interaction import Interaction
 from interactions.interaction_instance_manager import InteractionInstanceManager
 from protocolbuffers.Localization_pb2 import LocalizedString
@@ -29,7 +29,7 @@ class CommonInteractionUtils:
 
         :param interaction_identifier: The identifier or instance of a Interaction.
         :type interaction_identifier: Union[int, Interaction]
-        :return: The decimal identifier of the Buff or None if the Buff does not have an id.
+        :return: The decimal identifier of the Interaction or None if the Interaction does not have an id.
         :rtype: Union[int, None]
         """
         if isinstance(interaction_identifier, int):
@@ -97,7 +97,37 @@ class CommonInteractionUtils:
         """
         if interaction is None:
             return None
-        return str(interaction.shortname() or '')
+        # noinspection PyBroadException
+        try:
+            return str(interaction.shortname() or '') or interaction.__class__.__name__
+        except:
+            return ''
+
+    @staticmethod
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
+    def get_interaction_short_names(interactions: Iterator[Interaction]) -> Tuple[str]:
+        """get_interaction_short_names(interactions)
+
+        Retrieve the Short Names of a collection of Interactions.
+
+        :param interactions: A collection of interaction instances.
+        :type interactions: Iterator[Interaction]
+        :return: A collection of short names of all interaction instances.
+        :rtype: Tuple[str]
+        """
+        if interactions is None or not interactions:
+            return tuple()
+        short_names: List[str] = []
+        for interaction in interactions:
+            # noinspection PyBroadException
+            try:
+                short_name = CommonInteractionUtils.get_interaction_short_name(interaction)
+                if not short_name:
+                    continue
+            except:
+                continue
+            short_names.append(short_name)
+        return tuple(short_names)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), )

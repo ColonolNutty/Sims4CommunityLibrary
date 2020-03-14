@@ -25,5 +25,5 @@ class CommonFloatEnumTests:
     @CommonTestService.test(TestEnum.TEST_VALUE_ONE, 1.0)
     @CommonTestService.test(TestEnum.TEST_VALUE_TWO, 2.0)
     @CommonTestService.test(TestEnum.TEST_VALUE_THREE, 3.0)
-    def enum_should_convert_properly(enum_val, expected_value):
+    def _enum_should_convert_properly(enum_val, expected_value) -> None:
         CommonAssertionUtils.are_equal(float(enum_val), expected_value)

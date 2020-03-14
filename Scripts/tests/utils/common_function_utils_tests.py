@@ -5,6 +5,8 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from typing import Any
+
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.testing.common_assertion_utils import CommonAssertionUtils
 from sims4communitylib.testing.common_test_service import CommonTestService
@@ -20,10 +22,10 @@ class CommonFunctionUtilsTests:
     @CommonTestService.test(True, False, False, True)
     @CommonTestService.test(False, False, False, False)
     def run_predicates_as_one_should_work_properly(func_result_one: bool, func_result_two: bool, all_must_pass: bool, expected_result: bool):
-        def _function_one(*_, **__):
+        def _function_one(*_, **__) -> Any:
             return func_result_one
 
-        def _function_two(*_, **__):
+        def _function_two(*_, **__) -> Any:
             return func_result_two
 
         result = CommonFunctionUtils.run_predicates_as_one((_function_one, _function_two), all_must_pass=all_must_pass)()
@@ -33,7 +35,7 @@ class CommonFunctionUtilsTests:
     @CommonTestService.test(True, False)
     @CommonTestService.test(False, True)
     def run_predicate_with_reversed_result_should_work_properly(func_result: bool, expected_result: bool):
-        def _function(*_, **__):
+        def _function(*_, **__) -> Any:
             return func_result
 
         result = CommonFunctionUtils.run_predicate_with_reversed_result(_function)()
@@ -41,14 +43,13 @@ class CommonFunctionUtilsTests:
 
     @staticmethod
     @CommonTestService.test()
-    def run_with_arguments_should_work_properly():
-
+    def run_with_arguments_should_work_properly() -> None:
         _additional_value = 'No'
         _additional_key_word_value = 'What'
         normal_val = 'one'
         normal_key_val = 'two'
 
-        def _function(normal_arg: str, value_one: str, normal_key_arg: str=None, key_value: str=None):
+        def _function(normal_arg: str, value_one: str, normal_key_arg: str=None, key_value: str=None) -> Any:
             CommonAssertionUtils.are_equal(value_one, _additional_value)
             CommonAssertionUtils.are_equal(key_value, _additional_key_word_value)
             CommonAssertionUtils.are_equal(normal_arg, normal_val)

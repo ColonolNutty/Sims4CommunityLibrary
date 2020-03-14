@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import List, Union, Callable
+from typing import List, Union, Callable, Iterator, Tuple
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
@@ -1014,6 +1014,50 @@ class CommonTraitUtils:
         if not hasattr(sim_info, 'get_traits'):
             return list()
         return list(sim_info.get_traits())
+
+    @staticmethod
+    def get_trait_name(trait: Trait) -> Union[str, None]:
+        """get_trait_name(trait)
+
+        Retrieve the Name of a Trait.
+
+        :param trait: An instance of a Trait.
+        :type trait: Trait
+        :return: The name of a Trait or None if a problem occurs.
+        :rtype: Union[str, None]
+        """
+        if trait is None:
+            return None
+        # noinspection PyBroadException
+        try:
+            return trait.__name__ or ''
+        except:
+            return ''
+
+    @staticmethod
+    def get_trait_names(traits: Iterator[Trait]) -> Tuple[str]:
+        """get_trait_names(traits)
+
+        Retrieve the Names of a collection of Trait.
+
+        :param traits: A collection of Trait instances.
+        :type traits: Iterator[Trait]
+        :return: A collection of names for all specified Traits.
+        :rtype: Tuple[str]
+        """
+        if traits is None or not traits:
+            return tuple()
+        names: List[str] = []
+        for trait in traits:
+            # noinspection PyBroadException
+            try:
+                name = CommonTraitUtils.get_trait_name(trait)
+                if not name:
+                    continue
+            except:
+                continue
+            names.append(name)
+        return tuple(names)
 
     @staticmethod
     def get_equipped_traits(sim_info: SimInfo) -> List[Trait]:

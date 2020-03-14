@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from pprint import pformat
-from typing import Union
+from typing import Union, Any
 from event_testing.results import TestResult
 from interactions.base.interaction import Interaction
 from interactions.interaction_queue import InteractionQueue
@@ -49,7 +49,7 @@ class CommonInteractionEventDispatcherService(CommonService):
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, InteractionQueue, InteractionQueue.run_interaction_gen.__name__)
-def _common_on_interaction_run(original, self, *_, **__):
+def _common_on_interaction_run(original, self, *_, **__) -> Any:
     result = original(self, *_, **__)
     if result:
         CommonInteractionEventDispatcherService.get()._on_interaction_run(self, *_, **__)
@@ -57,7 +57,7 @@ def _common_on_interaction_run(original, self, *_, **__):
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, InteractionQueue, InteractionQueue.append.__name__)
-def _common_on_interaction_queued(original, self, *_, **__):
+def _common_on_interaction_queued(original, self, *_, **__) -> Any:
     result = CommonInteractionEventDispatcherService.get()._on_interaction_queued(self, *_, **__)
     if result is None:
         return original(self, *_, **__)
@@ -65,6 +65,6 @@ def _common_on_interaction_queued(original, self, *_, **__):
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, Interaction, Interaction.store_result_for_outcome.__name__)
-def _common_on_interaction_outcome(original, self, *_, **__):
+def _common_on_interaction_outcome(original, self, *_, **__) -> Any:
     CommonInteractionEventDispatcherService.get()._on_interaction_outcome(self, *_, **__)
     return original(self, *_, **__)

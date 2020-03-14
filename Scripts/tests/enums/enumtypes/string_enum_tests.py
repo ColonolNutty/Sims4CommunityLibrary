@@ -25,5 +25,5 @@ class CommonStringEnumTests:
     @CommonTestService.test(TestEnum.TEST_VALUE_ONE, 'TestEnum.TEST_VALUE_ONE')
     @CommonTestService.test(TestEnum.TEST_VALUE_TWO, 'TestEnum.TEST_VALUE_TWO')
     @CommonTestService.test(TestEnum.TEST_VALUE_THREE, 'TestEnum.TEST_VALUE_THREE')
-    def enum_should_convert_properly(enum_val, expected_value):
+    def _enum_should_convert_properly(enum_val, expected_value) -> None:
         CommonAssertionUtils.are_equal(expected_value, str(enum_val))

@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 
-from typing import Iterator, Union, Any
+from typing import Iterator, Union, Any, Callable
 
 from event_testing.results import EnqueueResult, TestResult
 from interactions.aop import AffordanceObjectPair
@@ -165,11 +165,8 @@ class CommonSimInteractionUtils:
         :return: True, if the Sim has any of the specified interactions running. False, if not.
         :rtype: bool
         """
-        sim = CommonSimUtils.get_sim_instance(sim_info)
-        if sim is None or sim.si_state is None:
-            return False
-        for interaction in sim.si_state:
-            interaction_id = getattr(interaction, 'guid64', None)
+        for interaction in CommonSimInteractionUtils.get_running_interactions_gen(sim_info):
+            interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
             if interaction_id in interaction_ids:
                 return True
         return False
@@ -187,14 +184,57 @@ class CommonSimInteractionUtils:
         :return: True, if the Sim has any of the specified interactions queued. False, if not.
         :rtype: bool
         """
-        sim = CommonSimUtils.get_sim_instance(sim_info)
-        if sim is None or sim.queue is None:
-            return False
-        for interaction in sim.queue:
-            interaction_id = getattr(interaction, 'guid64', None)
+        for interaction in CommonSimInteractionUtils.get_queued_interactions_gen(sim_info):
+            interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
             if interaction_id in interaction_ids:
                 return True
         return False
+
+    @staticmethod
+    def get_running_interactions_gen(sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
+        """get_running_interactions_gen(sim_info, include_interaction_callback=None)
+
+        Retrieve all interactions that a Sim is currently running.
+
+        :param sim_info: An instance of a Sim
+        :type sim_info: SimInfo
+        :param include_interaction_callback: If the result of this callback is True, the Interaction will be included in the results. If set to None, All interactions will be included. Default is None.
+        :type include_interaction_callback: Callable[[Interaction], bool], optional
+        :return: An iterable of Interactions that pass the include callback filter.
+        :rtype: Iterator[Interaction]
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return tuple()
+        if sim.si_state is None or not tuple(sim.si_state):
+            return tuple()
+        for interaction in sim.si_state:
+            if include_interaction_callback is not None and not include_interaction_callback(interaction):
+                continue
+            yield interaction
+
+    @staticmethod
+    def get_queued_interactions_gen(sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
+        """get_queued_interactions_gen(sim_info, include_interaction_callback=None)
+
+        Retrieve all interactions that a Sim currently has queued.
+
+        :param sim_info: An instance of a Sim
+        :type sim_info: SimInfo
+        :param include_interaction_callback: If the result of this callback is True, the Interaction will be included in the results. If set to None, All interactions will be included. Default is None.
+        :type include_interaction_callback: Callable[[Interaction], bool], optional
+        :return: An iterable of Interactions that pass the include callback filter.
+        :rtype: Iterator[Interaction]
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return tuple()
+        if sim.queue is None or not tuple(sim.queue):
+            return tuple()
+        for interaction in sim.queue:
+            if include_interaction_callback is not None and not include_interaction_callback(interaction):
+                continue
+            yield interaction
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=EnqueueResult.NONE)
@@ -379,13 +419,13 @@ class CommonSimInteractionUtils:
                     continue
                 return si.super_interaction
 
+        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
         super_interaction = _get_existing_social_super_interaction(sim.si_state) or _get_existing_social_super_interaction(sim.queue)
         if super_interaction is None:
-            si_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
             si_result = sim.push_super_affordance(
                 super_affordance_instance,
                 target,
-                si_context,
+                interaction_context,
                 picked_object=target,
                 **kwargs
             )
@@ -668,13 +708,13 @@ class CommonSimInteractionUtils:
                     continue
                 return si.super_interaction
 
+        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
         super_interaction = _get_existing_social_super_interaction(sim.si_state) or _get_existing_social_super_interaction(sim.queue)
         if super_interaction is None:
-            si_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
             si_result = sim.test_super_affordance(
                 super_affordance_instance,
                 target,
-                si_context,
+                interaction_context,
                 picked_object=target,
                 **kwargs
             )

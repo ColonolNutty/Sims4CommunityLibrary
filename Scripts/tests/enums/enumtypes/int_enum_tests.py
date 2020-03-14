@@ -25,5 +25,5 @@ class CommonIntEnumTests:
     @CommonTestService.test(TestEnum.TEST_VALUE_ONE, 1)
     @CommonTestService.test(TestEnum.TEST_VALUE_TWO, 2)
     @CommonTestService.test(TestEnum.TEST_VALUE_THREE, 3)
-    def enum_should_convert_properly(enum_val, expected_value):
+    def _enum_should_convert_properly(enum_val, expected_value) -> None:
         CommonAssertionUtils.are_equal(int(enum_val), expected_value)
