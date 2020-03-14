@@ -54,13 +54,13 @@ class CommonEnumObject(object):
             other_value = other.value
         return self.value.__eq__(other_value)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return '{}.{}'.format(self._class_name, self.name)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.__repr__()
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.value)
 
 
@@ -71,7 +71,7 @@ class CommonEnumObjectMetaclass(CommonEnumMetaclass):
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
-    def get_enum_type(mcs):
+    def get_enum_type(mcs) -> Any:
         return object
 
     @classmethod

@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, List
+from typing import Union, List, Tuple, Iterator
 
 from buffs.buff import Buff
 from protocolbuffers.Localization_pb2 import LocalizedString
@@ -131,9 +131,16 @@ class CommonBuffUtils:
         if sim_info is None:
             CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.get_buffs.__name__, CommonBuffUtils.__name__))
             return list()
-        if not hasattr(sim_info, 'get_active_buff_types'):
+        if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return list()
-        return list(sim_info.get_active_buff_types())
+        from objects.components.buff_component import BuffComponent
+        buff_component: BuffComponent = CommonComponentUtils.get_component(sim_info, CommonComponentType.BUFF)
+        buffs = list()
+        for buff in buff_component:
+            if buff is None or not isinstance(buff, Buff):
+                continue
+            buffs.append(buff)
+        return buffs
 
     @staticmethod
     def add_buff(sim_info: SimInfo, *buff_ids: int, buff_reason: Union[int, str, LocalizedString]=None) -> bool:
@@ -206,6 +213,50 @@ class CommonBuffUtils:
         if isinstance(buff_identifier, int):
             return buff_identifier
         return getattr(buff_identifier, 'guid64', None)
+
+    @staticmethod
+    def get_buff_name(buff: Buff) -> Union[str, None]:
+        """get_buff_name(buff)
+
+        Retrieve the Name of a Buff.
+
+        :param buff: An instance of a Buff.
+        :type buff: Buff
+        :return: The name of a Buff or None if a problem occurs.
+        :rtype: Union[str, None]
+        """
+        if buff is None:
+            return None
+        # noinspection PyBroadException
+        try:
+            return buff.__class__.__name__ or ''
+        except:
+            return ''
+
+    @staticmethod
+    def get_buff_names(buffs: Iterator[Buff]) -> Tuple[str]:
+        """get_buff_names(buffs)
+
+        Retrieve the Names of a collection of Buffs.
+
+        :param buffs: A collection of Buff instances.
+        :type buffs: Iterator[Buff]
+        :return: A collection of names for all specified Buffs.
+        :rtype: Tuple[str]
+        """
+        if buffs is None or not buffs:
+            return tuple()
+        names: List[str] = []
+        for buff in buffs:
+            # noinspection PyBroadException
+            try:
+                name = CommonBuffUtils.get_buff_name(buff)
+                if not name:
+                    continue
+            except:
+                continue
+            names.append(name)
+        return tuple(names)
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)

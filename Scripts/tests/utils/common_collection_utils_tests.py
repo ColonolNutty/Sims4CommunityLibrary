@@ -20,19 +20,19 @@ class CommonCollectionUtilsTests:
     @CommonTestService.test((1, 2, 3), (2,))
     @CommonTestService.test((1, 2, 3), (4,), (2,))
     @CommonTestService.test((1, 2, 3), (4, 7), (5, 6), (3,))
-    def should_intersect_true(list_one, *list_items):
+    def _should_intersect_true(list_one, *list_items) -> None:
         result = CommonCollectionUtils.intersects(list_one, *list_items)
         CommonAssertionUtils.is_true(result)
 
     @staticmethod
     @CommonTestService.test((1, 2, 3), (4, 8))
     @CommonTestService.test((1, 2, 3), (5, 9,), (10, 4))
-    def should_intersect_false(list_one: List[int], *list_items: int):
+    def _should_intersect_false(list_one: List[int], *list_items: int) -> None:
         result = CommonCollectionUtils.intersects(list_one, *list_items)
         CommonAssertionUtils.is_false(result)
 
     @staticmethod
     @CommonTestService.test([1, 2, 3], 2, {(1, 2), (1, 3), (2, 3)})
-    def should_combine(items: List[int], combination_length: int, expected_outcome: Set[Tuple[int]]):
+    def _should_combine(items: List[int], combination_length: int, expected_outcome: Set[Tuple[int]]) -> None:
         result = CommonCollectionUtils.create_possible_combinations(items, combination_length)
         CommonAssertionUtils.are_equal(result, expected_outcome)

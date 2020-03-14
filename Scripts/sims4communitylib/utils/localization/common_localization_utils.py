@@ -32,7 +32,7 @@ class CommonLocalizationUtils:
             super().__init__(string_id)
             self._tokens = tokens
 
-        def __call__(self, *_):
+        def __call__(self, *_) -> LocalizedString:
             return CommonLocalizationUtils.create_localized_string(self._string_id, tokens=self._tokens)
 
     @staticmethod

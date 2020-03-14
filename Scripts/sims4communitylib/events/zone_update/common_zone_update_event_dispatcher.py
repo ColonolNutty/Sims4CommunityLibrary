@@ -23,7 +23,7 @@ class CommonZoneUpdateEventDispatcherService(CommonService):
 
     """
 
-    def __init__(self):
+    def __init__(self: 'CommonZoneUpdateEventDispatcherService'):
         self._last_absolute_ticks = 0
         self._ticks_since_last_zone_update = 0
         self._ticks_since_last_zone_update_error = 0

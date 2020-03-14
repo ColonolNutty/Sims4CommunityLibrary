@@ -329,7 +329,7 @@ class CommonTimeUtils:
 
 
 @sims4.commands.Command('s4clib_testing.test_game_pause', command_type=sims4.commands.CommandType.Live)
-def _s4clib_testing_test_game_pause(_connection=None):
+def _s4clib_testing_test_game_pause(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
     output('Attempting to pause the game.')
     try:

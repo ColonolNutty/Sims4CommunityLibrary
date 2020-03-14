@@ -26,7 +26,7 @@ class CommonZoneSpinEventDispatcher(CommonService):
         Use the :class:`.CommonEventRegistry` to listen for dispatched events.
 
     """
-    def __init__(self):
+    def __init__(self: 'CommonZoneSpinEventDispatcher'):
         self._game_loaded = False
         self._game_loading = True
 
@@ -40,7 +40,7 @@ class CommonZoneSpinEventDispatcher(CommonService):
         return self._game_loaded
 
     @property
-    def game_loading(self):
+    def game_loading(self) -> bool:
         """Determine if the game is loading.
 
         :return: True, if the game is currently loading. False, if the game is not currently loading.

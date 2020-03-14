@@ -23,7 +23,7 @@ class CommonObjectInteractionUtils:
 
         :param script_object: An instance of a ScriptObject
         :type script_object: ScriptObject
-        :param include_interaction_callback: If the result of this callback is True, the Interaction will be included in the results. If set to None, All sims will be included. Default is None.
+        :param include_interaction_callback: If the result of this callback is True, the Interaction will be included in the results. If set to None, All Interactions will be included. Default is None.
         :type include_interaction_callback: Callable[[Interaction], bool], optional
         :return: An iterable of Interactions that pass the include callback filter.
         :rtype: Iterator[Interaction]
