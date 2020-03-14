@@ -200,6 +200,15 @@ Sim Utilities
    :show-inheritance:
 
 *********************
+`Situations`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_situation_utils.CommonSimSituationUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
 `Relationships`
 *********************
 

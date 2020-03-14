@@ -39,6 +39,17 @@ Misc Utilities
    :show-inheritance:
 
 *******************
+`Situations`
+*******************
+
+.. note:: To manipulate situations of Sims, take a look at :class:`.CommonSimSituationUtils`
+
+.. autoclass:: sims4communitylib.utils.resources.common_situation_utils.CommonSituationUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*******************
 `Resources`
 *******************
 
