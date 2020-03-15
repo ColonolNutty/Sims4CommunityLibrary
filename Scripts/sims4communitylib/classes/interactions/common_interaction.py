@@ -56,6 +56,11 @@ else:
         def context(self) -> InteractionContext:
             pass
 
+        # noinspection PyPropertyDefinition
+        @property
+        def super_affordance(self) -> Any:
+            pass
+
 
 class CommonInteraction(Interaction, HasClassLog):
     """CommonInteraction(...)
