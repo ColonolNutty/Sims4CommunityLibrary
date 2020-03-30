@@ -63,6 +63,17 @@ class CommonLocationUtils:
         return services.current_zone_id()
 
     @staticmethod
+    def get_current_lot_id() -> int:
+        """get_current_lot_id()
+
+        Retrieve the identifier for the Current Lot.
+
+        :return: The identifier of the current lot.
+        :rtype: int
+        """
+        return services.current_zone_id()
+
+    @staticmethod
     def get_current_lot() -> Lot:
         """get_current_lot()
 
@@ -116,17 +127,6 @@ class CommonLocationUtils:
         :rtype: bool
         """
         return position is not None and services.active_lot().is_position_on_lot(position)
-
-    @staticmethod
-    def get_current_lot_id() -> int:
-        """get_current_lot_id()
-
-        Retrieve the identifier for the Current Lot.
-
-        :return: The identifier of the current lot.
-        :rtype: int
-        """
-        return services.current_zone_id()
 
     @staticmethod
     def get_lot_traits(lot_id: int) -> Tuple[ZoneModifier]:

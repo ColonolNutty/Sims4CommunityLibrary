@@ -131,7 +131,7 @@ class CommonSimLocationUtils:
         :rtype: bool
         """
         active_lot = CommonLocationUtils.get_current_lot()
-        return CommonLocationUtils.get_current_zone_id() == CommonHouseholdUtils.get_household_lot_id(sim_info) and active_lot.is_position_on_lot(CommonSimLocationUtils.get_position(sim_info))
+        return CommonLocationUtils.get_current_lot_id() == CommonHouseholdUtils.get_household_lot_id(sim_info) and active_lot.is_position_on_lot(CommonSimLocationUtils.get_position(sim_info))
 
     @staticmethod
     def send_to_position(sim_info: SimInfo, location_position: Vector3, level: int) -> Union[EnqueueResult, None]:
@@ -154,7 +154,7 @@ class CommonSimLocationUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         # noinspection PyUnresolvedReferences
         pos = sims4.math.Vector3(location_position.x, location_position.y, location_position.z)
-        routing_surface = routing.SurfaceIdentifier(CommonLocationUtils.get_current_zone_id(), level, routing.SurfaceType.SURFACETYPE_WORLD)
+        routing_surface = routing.SurfaceIdentifier(CommonLocationUtils.get_current_lot_id(), level, routing.SurfaceType.SURFACETYPE_WORLD)
         (target, context) = _build_terrain_interaction_target_and_context(sim, pos, routing_surface, PickType.PICK_TERRAIN, objects.terrain.TerrainPoint)
         return sim.push_super_affordance(CommandTuning.TERRAIN_GOHERE_AFFORDANCE, target, context)
 
