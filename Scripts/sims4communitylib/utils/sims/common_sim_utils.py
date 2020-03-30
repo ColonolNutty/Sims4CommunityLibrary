@@ -48,7 +48,8 @@ class CommonSimUtils:
         :return: The SimInfo of the Active Sim.
         :rtype: SimInfo
         """
-        return CommonSimUtils.get_active_sim().sim_info
+        client = services.client_manager().get_first_client()
+        return client.active_sim_info
 
     @staticmethod
     def get_sim_info_of_sim_with_name(first_name: str, last_name: str) -> Union[SimInfo, None]:
