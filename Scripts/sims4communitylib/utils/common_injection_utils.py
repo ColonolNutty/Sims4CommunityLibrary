@@ -57,14 +57,15 @@ class CommonInjectionUtils:
 
            Injection WILL work on
 
+           - Functions decorated with 'property'
            - Functions decorated with 'classmethod'
+           - Functions decorated with 'staticmethod'
            - Functions with 'cls' or 'self' as the first argument.
 
         .. note::
 
            Injection WILL NOT work on
 
-           - Functions decorated with 'staticmethod'
            - Global functions, i.e. Functions not contained within a class.
 
         :param mod_identity: The identity of the Mod that is injecting custom code.
@@ -77,12 +78,14 @@ class CommonInjectionUtils:
         :rtype: Callable
         """
 
-        def _function_wrapper(original_function, new_function) -> Any:
+        def _function_wrapper(original_function, new_function: Callable[..., Any]) -> Any:
             # noinspection PyBroadException
             try:
                 @wraps(original_function)
                 def _wrapped_function(*args, **kwargs) -> Any:
                     try:
+                        if type(original_function) is property:
+                            return new_function(original_function.fget, *args, **kwargs)
                         return new_function(original_function, *args, **kwargs)
                     except Exception as ex:
                         # noinspection PyBroadException
@@ -94,6 +97,8 @@ class CommonInjectionUtils:
                         return original_function(*args, **kwargs)
                 if inspect.ismethod(original_function):
                     return classmethod(_wrapped_function)
+                if type(original_function) is property:
+                    return property(_wrapped_function)
                 return _wrapped_function
             except:
                 def _func(*_, **__) -> Any:
