@@ -38,11 +38,15 @@ class CommonService:
         :return: An instance of the service
         :rtype: The type of the inheriting class
         """
-        if getattr(cls, '_SERVICE', None) is None:
-            setattr(cls, '_SERVICE', cls())
-        return getattr(cls, '_SERVICE')
+        cls_name = cls.__name__
+        prop_name = '_SERVICE_{}'.format(cls_name)
+        if getattr(cls, prop_name, None) is None:
+            setattr(cls, prop_name, cls())
+        return getattr(cls, prop_name)
 
     def __new__(cls, *args, **kwargs) -> 'CommonService':
-        if getattr(cls, '_SERVICE', None) is None:
-            setattr(cls, '_SERVICE', super().__new__(cls))
-        return getattr(cls, '_SERVICE')
+        cls_name = cls.__name__
+        prop_name = '_SERVICE_{}'.format(cls_name)
+        if getattr(cls, prop_name, None) is None:
+            setattr(cls, prop_name, super().__new__(cls))
+        return getattr(cls, prop_name)
