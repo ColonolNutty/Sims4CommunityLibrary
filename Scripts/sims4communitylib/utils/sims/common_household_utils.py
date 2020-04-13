@@ -47,7 +47,7 @@ class CommonHouseholdUtils:
         :rtype: int
         """
         household = CommonHouseholdUtils.get_active_household()
-        return CommonHouseholdUtils.get_household_id(household)
+        return CommonHouseholdUtils.get_household_home_zone_id(household)
 
     @staticmethod
     def get_household_lot_id(sim_info: SimInfo) -> int:
@@ -61,17 +61,17 @@ class CommonHouseholdUtils:
         :rtype: int
         """
         household = CommonHouseholdUtils.get_household(sim_info)
-        return CommonHouseholdUtils.get_household_id(household)
+        return CommonHouseholdUtils.get_household_home_zone_id(household)
 
     @staticmethod
-    def get_household_id(household: Household) -> int:
-        """get_household_zone_id(household)
+    def get_household_home_zone_id(household: Household) -> int:
+        """get_household_home_zone_id(household)
 
-        Retrieve an identifier for a Household.
+        Retrieve the home zone identifier for a Household.
 
         :param household: An instance of a Household.
         :type household: Household
-        :return: The decimal identifier of the specified Household.
+        :return: The home zone identifier of the specified Household.
         :rtype: int
         """
         if household is None:
