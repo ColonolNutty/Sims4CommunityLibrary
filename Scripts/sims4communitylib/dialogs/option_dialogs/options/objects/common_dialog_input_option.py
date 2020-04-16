@@ -25,7 +25,9 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
         min_value=0.0,\
         max_value=2147483647.0,\
         on_chosen=CommonFunctionUtils.noop,\
-        always_visible=False\
+        always_visible=False,\
+        dialog_description_identifier=None,\
+        dialog_description_tokens=()\
     )
 
     An option to open a dialog to input a float value.
