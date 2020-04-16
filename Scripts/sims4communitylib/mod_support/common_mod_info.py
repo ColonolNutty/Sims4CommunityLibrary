@@ -60,16 +60,16 @@ class CommonModInfo(CommonService):
 
     @property
     def _name(self) -> str:
-        raise NotImplementedError('Missing \'{}\'.'.format(self.__class__._name.__name__))
+        raise NotImplementedError('Missing \'{}._name\'.'.format(self.__class__.__name__))
 
     @property
     def _author(self) -> str:
-        raise NotImplementedError('Missing \'{}\'.'.format(self.__class__._author.__name__))
+        raise NotImplementedError('Missing \'{}._author\'.'.format(self.__class__.__name__))
 
     @property
     def _base_namespace(self) -> str:
-        raise NotImplementedError('Missing \'{}\'.'.format(self.__class__._base_namespace.__name__))
+        raise NotImplementedError('Missing \'{}._base_namespace\'.'.format(self.__class__.__name__))
 
     @property
     def _file_path(self) -> str:
-        raise NotImplementedError('Missing \'{}\'.'.format(self.__class__._file_path.__name__))
+        raise NotImplementedError('Missing \'{}._file_path\'.'.format(self.__class__.__name__))
