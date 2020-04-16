@@ -23,4 +23,4 @@ class HasModIdentity:
         :rtype: CommonModIdentity
         :exception NotImplementedError: Thrown when the property is not implemented.
         """
-        raise NotImplementedError('Missing \'{}\'.'.format(self.__class__.mod_identity.__name__))
+        raise NotImplementedError('Missing \'{}.mod_identity\'.'.format(self.__class__.__name__))

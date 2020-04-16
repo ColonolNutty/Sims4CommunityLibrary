@@ -33,7 +33,7 @@ class _CommonSimDataStorageMetaclass(type):
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(mcs) -> CommonModIdentity:
-        raise NotImplementedError('Missing \'{}\'.'.format(mcs.get_mod_identity.__name__))
+        raise NotImplementedError()
 
 
 class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclass):

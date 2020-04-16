@@ -5,14 +5,16 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any, Callable
+from typing import Any, Callable, Union, Iterator
 
+from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.common_icon_utils import CommonIconUtils
 from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_object_option import CommonDialogObjectOption
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_context import CommonDialogOptionContext
 from sims4communitylib.dialogs.common_input_float_dialog import CommonInputFloatDialog
+from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 
 
 class CommonDialogInputFloatOption(CommonDialogObjectOption):
@@ -43,6 +45,11 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
     :param always_visible: If set to True, the option will always appear in the dialog no matter which page.\
     If False, the option will act as normal. Default is False.
     :type always_visible: bool, optional
+    :param dialog_description_identifier: The description that will display in the input dialog separately from the option.\
+    If not provided the description from the provided context will be used instead.
+    :type dialog_description_identifier: Union[int, str, LocalizedString], optional
+    :param dialog_description_tokens: An iterable of Tokens that will be formatted into the dialog description.
+    :type dialog_description_tokens: Iterator[Any], optional
     """
     def __init__(
         self,
@@ -52,11 +59,17 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
         min_value: float=0.0,
         max_value: float=2147483647.0,
         on_chosen: Callable[[str, float, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
-        always_visible: bool=False
+        always_visible: bool=False,
+        dialog_description_identifier: Union[int, str, LocalizedString]=None,
+        dialog_description_tokens: Iterator[Any]=()
     ):
+        if dialog_description_identifier is not None:
+            dialog_description = CommonLocalizationUtils.create_localized_string(dialog_description_identifier, tokens=tuple(dialog_description_tokens))
+        else:
+            dialog_description = context.description
         self._dialog = CommonInputFloatDialog(
             context.title,
-            context.description,
+            dialog_description,
             initial_value,
             min_value=min_value,
             max_value=max_value
