@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/EA_missing" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/Scripts" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/Release" />
+      <excludeFolder url="file://$MODULE_DIR$/docs/build" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.7" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
