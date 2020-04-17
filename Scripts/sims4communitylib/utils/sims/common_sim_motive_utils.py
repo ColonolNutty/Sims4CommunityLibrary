@@ -41,6 +41,27 @@ class CommonSimMotiveUtils:
         return CommonSimStatisticUtils.has_statistic(sim_info, mapped_motive_id)
 
     @staticmethod
+    def set_motive_level(sim_info: SimInfo, motive_id: int, amount: float) -> bool:
+        """set_motive_level(sim_info, motive_id, amount)
+
+        Set the current level of a Motive of a Sim.
+
+        :param sim_info: The Sim to modify.
+        :type sim_info: SimInfo
+        :param motive_id: The identifier of the Motive to change.
+        :type motive_id: int
+        :param amount: The amount to set the motive level to.
+        :type amount: float
+        :return: True, if the specified Motive was changed successfully. False, if not.
+        :rtype: bool
+        """
+        mapped_motive_id = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
+        if not CommonSimMotiveUtils.has_motive(sim_info, mapped_motive_id):
+            return False
+        CommonSimStatisticUtils.set_statistic_value(sim_info, mapped_motive_id, amount, add=True)
+        return True
+
+    @staticmethod
     def increase_motive_level(sim_info: SimInfo, motive_id: int, amount: float) -> bool:
         """increase_motive_level(sim_info, motive_id, amount)
 
