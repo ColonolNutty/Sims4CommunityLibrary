@@ -282,22 +282,31 @@ class CommonLogRegistry(CommonService):
 
     """
     def __init__(self) -> None:
-        self._registered_logs: Dict[str, List[CommonLog]] = dict()
+        self._registered_logs: Dict[str, Dict[str, CommonLog]] = dict()
 
-    def get_registered_log_names(self) -> List[str]:
+    def get_registered_log_names(self, mod_identifier: Union[str, CommonModIdentity]=None) -> List[str]:
         """get_registered_log_names()
 
         Retrieve the names of all registered logs.
 
+        :param mod_identifier: The name or identifier of the mod the log is registered for. Default is None.
+        :type mod_identifier: Union[str, CommonModIdentity], optional
         :return: A collection of registered logs.
         :rtype: List[str]
         """
         if self._registered_logs is None:
-            return []
-        log_names = []
-        for log_name in self._registered_logs:
-            log_names.append(log_name)
-        return log_names
+            return list()
+        mod_name = CommonModIdentity._get_mod_name(mod_identifier)
+        if mod_name is None:
+            log_names = []
+            for log_mod_name in self._registered_logs:
+                for log_name in self._registered_logs[log_mod_name]:
+                    log_names.append(log_name)
+            return log_names
+        else:
+            if mod_name not in self._registered_logs:
+                return list()
+            return list(self._registered_logs[mod_name].keys())
 
     def register_log(self, mod_identifier: Union[str, CommonModIdentity], log_name: str) -> CommonLog:
         """register_log(mod_identifier, log_name)
@@ -307,7 +316,7 @@ class CommonLogRegistry(CommonService):
         .. note:: If `log_name` matches the name of a Log already registered, that log will be returned rather than creating a new Log.
 
         :param mod_identifier: The name or identifier of the mod the log is registered for.
-        :type mod_identifier: str
+        :type mod_identifier: Union[str, CommonModIdentity]
         :param log_name: The name of the log.
         :type log_name: str
         :return: An object of type CommonLog
@@ -315,12 +324,17 @@ class CommonLogRegistry(CommonService):
         """
         if self._registered_logs is None:
             self._registered_logs = dict()
-        logs = list()
-        if log_name in self._registered_logs:
-            logs = self._registered_logs[log_name]
+        mod_name = CommonModIdentity._get_mod_name(mod_identifier)
+        if mod_name is None:
+            mod_name = 'Unknown_Mod_Name'
+        # Dict[str, Dict[str, CommonLog]]
+        if mod_name not in self._registered_logs:
+            self._registered_logs[mod_name] = dict()
+        # Dict[str, CommonLog]
+        if log_name in self._registered_logs[mod_name]:
+            return self._registered_logs[mod_name][log_name]
         log = CommonLog(mod_identifier, log_name)
-        logs.append(log)
-        self._registered_logs[log_name] = logs
+        self._registered_logs[mod_name][log_name] = log
         return log
 
     # noinspection PyUnusedLocal
@@ -336,7 +350,14 @@ class CommonLogRegistry(CommonService):
         :return: True, if a handler exists with the specified name.
         :rtype: bool
         """
-        return log_name in self._registered_logs
+        mod_name = CommonModIdentity._get_mod_name(mod_identifier)
+        if mod_name is None:
+            for log_mod_name in self._registered_logs:
+                if log_name not in self._registered_logs[log_mod_name]:
+                    continue
+                return True
+        else:
+            return mod_name in self._registered_logs and log_name in self._registered_logs[mod_name]
 
     # noinspection PyUnusedLocal
     def enable_logs(self, log_name: str, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
@@ -353,8 +374,16 @@ class CommonLogRegistry(CommonService):
         """
         if self._registered_logs is None:
             self._registered_logs = dict()
-        for log in self._registered_logs.get(log_name, list()):
-            log.enable()
+        mod_name = CommonModIdentity._get_mod_name(mod_identifier)
+        if mod_name is None:
+            for log_mod_name in self._registered_logs:
+                if log_name not in self._registered_logs[log_mod_name]:
+                    continue
+                log = self._registered_logs[log_mod_name][log_name]
+                log.enable()
+        else:
+            for log_name in self._registered_logs.get(mod_name, dict()):
+                self._registered_logs[mod_name][log_name].enable()
         return True
 
     # noinspection PyUnusedLocal
@@ -372,8 +401,16 @@ class CommonLogRegistry(CommonService):
         """
         if self._registered_logs is None:
             self._registered_logs = dict()
-        for log in self._registered_logs.get(log_name, list()):
-            log.disable()
+        mod_name = CommonModIdentity._get_mod_name(mod_identifier)
+        if mod_name is None:
+            for log_mod_name in self._registered_logs:
+                if log_name not in self._registered_logs[log_mod_name]:
+                    continue
+                log = self._registered_logs[log_mod_name][log_name]
+                log.disable()
+        else:
+            for log_name in self._registered_logs.get(mod_name, dict()):
+                self._registered_logs[mod_name][log_name].disable()
         return True
 
     # noinspection PyUnusedLocal
@@ -389,52 +426,89 @@ class CommonLogRegistry(CommonService):
         """
         if self._registered_logs is None:
             self._registered_logs = dict()
-        for log_name in self._registered_logs:
-            for log in self._registered_logs.get(log_name):
-                log.disable()
+        mod_name = CommonModIdentity._get_mod_name(mod_identifier)
+        if mod_name is None:
+            for log_mod_name in self._registered_logs:
+                for log_name in self._registered_logs[log_mod_name]:
+                    self._registered_logs[log_mod_name][log_name].disable()
+        else:
+            for log_name in self._registered_logs.get(mod_name, dict()):
+                self._registered_logs[mod_name][log_name].disable()
         return True
 
 
 @sims4.commands.Command('s4clib.enable_log', 's4clib.enablelog', command_type=sims4.commands.CommandType.Live)
-def _common_command_enable_log(*args, _connection: int=None):
+def _common_command_enable_log(log_name: str=None, mod_name: str=None, _connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
-    if len(args) == 0 or args[0] is None:
-        output('specify a log name (See all logs via "s4clib.logs" command)')
-        return
-    if CommonLogRegistry.get().log_exists(args[0]) and CommonLogRegistry.get().enable_logs(args[0]):
-        output('Log enabled: ' + str(args[0]))
-    else:
-        output('No log found: ' + str(args[0]))
+    try:
+        if log_name is None:
+            output('specify a log name (See all logs via "s4clib.logs" command)')
+            return
+        output('Attempting to enable log with name \'{}\''.format(log_name))
+        if CommonLogRegistry.get().log_exists(log_name, mod_identifier=mod_name):
+            if CommonLogRegistry.get().enable_logs(log_name, mod_identifier=mod_name):
+                output('Log enabled: {}'.format(log_name))
+            else:
+                if mod_name is None:
+                    output('Failed to enable log with name \'{}\', did you forget to specify a mod name?'.format(log_name))
+                else:
+                    output('Failed to enable log with name \'{}\' for mod \'{}\''.format(log_name, mod_name))
+        else:
+            if mod_name is None:
+                output('No log found with name \'{}\''.format(log_name))
+            else:
+                output('No log found with name \'{}\' for mod \'{}\''.format(log_name, mod_name))
+    except Exception as ex:
+        output('Failed to enable log: {}'.format(pformat(ex)))
 
 
 @sims4.commands.Command('s4clib.disable_log', 's4clib.disablelog', command_type=sims4.commands.CommandType.Live)
-def _common_command_disable_log(*args, _connection: int=None):
+def _common_command_disable_log(log_name: str=None, mod_name: str=None, _connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
-    if len(args) == 0 or args[0] is None:
-        output('specify a log name (See all logs via "s4clib.logs" command)')
-        return
-    if CommonLogRegistry.get().log_exists(args[0]) and CommonLogRegistry.get().disable_logs(args[0]):
-        output('Log disabled: ' + str(args[0]))
-    else:
-        output('No log found: ' + str(args[0]))
+    try:
+        if log_name is None:
+            output('specify a log name (See all logs via "s4clib.logs" command)')
+            return
+        output('Attempting to disable log with name \'{}\''.format(log_name))
+        if CommonLogRegistry.get().log_exists(log_name, mod_identifier=mod_name):
+            if CommonLogRegistry.get().disable_logs(log_name, mod_identifier=mod_name):
+                output('Log disabled: {}'.format(log_name))
+            else:
+                if mod_name is None:
+                    output('Failed to disable log with name \'{}\', did you forget to specify a mod name?'.format(log_name))
+                else:
+                    output('Failed to disable log with name \'{}\' for mod \'{}\''.format(log_name, mod_name))
+        else:
+            if mod_name is None:
+                output('No log found with name \'{}\''.format(log_name))
+            else:
+                output('No log found with name \'{}\' for mod \'{}\''.format(log_name, mod_name))
+    except Exception as ex:
+        output('Failed to disable log: {}'.format(pformat(ex)))
 
 
 @sims4.commands.Command('s4clib.disable_all_logs', 's4clib.disablealllogs', command_type=sims4.commands.CommandType.Live)
-def _common_command_disable_all_logs(_connection: int=None):
+def _common_command_disable_all_logs(mod_name: str=None, _connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
     output('Disabling all logs')
-    CommonLogRegistry.get().disable_all_logs()
+    try:
+        CommonLogRegistry.get().disable_all_logs(mod_identifier=mod_name)
+    except Exception as ex:
+        output('Failed to disable all logs: {}'.format(pformat(ex)))
     output('All logs disabled')
 
 
 @sims4.commands.Command('s4clib.logs', command_type=sims4.commands.CommandType.Live)
-def _common_command_show_all_logs(_connection: int=None):
+def _common_command_show_all_logs(mod_identifier: str=None, _connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
-    log_names = CommonLogRegistry.get().get_registered_log_names()
-    if log_names is None or output is None:
-        return
-    if len(log_names) == 0:
-        output('No registered logs found')
-        return
-    for log_name in log_names:
-        output('' + str(log_name))
+    try:
+        log_names = CommonLogRegistry.get().get_registered_log_names(mod_identifier=mod_identifier)
+        if log_names is None or output is None:
+            return
+        if len(log_names) == 0:
+            output('No registered logs found')
+            return
+        for log_name in log_names:
+            output('' + str(log_name))
+    except Exception as ex:
+        output('Failed to show logs: {}'.format(pformat(ex)))
