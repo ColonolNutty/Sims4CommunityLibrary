@@ -5,6 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from typing import Union
 
 
 class CommonModIdentity:
@@ -74,6 +75,16 @@ class CommonModIdentity:
         :rtype: str
         """
         return str(self._script_file_path)
+
+    @staticmethod
+    def _get_mod_name(mod_identifier: Union[str, 'CommonModIdentity']) -> Union[str, None]:
+        if mod_identifier is None:
+            return None
+        if isinstance(mod_identifier, CommonModIdentity):
+            return mod_identifier.name
+        if isinstance(mod_identifier, str):
+            return mod_identifier
+        return str(mod_identifier)
 
     def __repr__(self) -> str:
         return 'mod_{}_author_{}_namespace_{}'.format(self.name, self.author, self.base_namespace)
