@@ -304,6 +304,7 @@ class CommonLogRegistry(CommonService):
                     log_names.append(log_name)
             return log_names
         else:
+            mod_name = mod_name.lower()
             if mod_name not in self._registered_logs:
                 return list()
             return list(self._registered_logs[mod_name].keys())
@@ -327,6 +328,7 @@ class CommonLogRegistry(CommonService):
         mod_name = CommonModIdentity._get_mod_name(mod_identifier)
         if mod_name is None:
             mod_name = 'Unknown_Mod_Name'
+        mod_name = mod_name.lower()
         # Dict[str, Dict[str, CommonLog]]
         if mod_name not in self._registered_logs:
             self._registered_logs[mod_name] = dict()
@@ -357,6 +359,7 @@ class CommonLogRegistry(CommonService):
                     continue
                 return True
         else:
+            mod_name = mod_name.lower()
             return mod_name in self._registered_logs and log_name in self._registered_logs[mod_name]
 
     # noinspection PyUnusedLocal
@@ -382,8 +385,10 @@ class CommonLogRegistry(CommonService):
                 log = self._registered_logs[log_mod_name][log_name]
                 log.enable()
         else:
-            for log_name in self._registered_logs.get(mod_name, dict()):
-                self._registered_logs[mod_name][log_name].enable()
+            mod_name = mod_name.lower()
+            if log_name not in self._registered_logs[mod_name]:
+                return False
+            self._registered_logs[mod_name][log_name].enable()
         return True
 
     # noinspection PyUnusedLocal
@@ -409,8 +414,10 @@ class CommonLogRegistry(CommonService):
                 log = self._registered_logs[log_mod_name][log_name]
                 log.disable()
         else:
-            for log_name in self._registered_logs.get(mod_name, dict()):
-                self._registered_logs[mod_name][log_name].disable()
+            mod_name = mod_name.lower()
+            if log_name not in self._registered_logs[mod_name]:
+                return False
+            self._registered_logs[mod_name][log_name].disable()
         return True
 
     # noinspection PyUnusedLocal
@@ -432,6 +439,7 @@ class CommonLogRegistry(CommonService):
                 for log_name in self._registered_logs[log_mod_name]:
                     self._registered_logs[log_mod_name][log_name].disable()
         else:
+            mod_name = mod_name.lower()
             for log_name in self._registered_logs.get(mod_name, dict()):
                 self._registered_logs[mod_name][log_name].disable()
         return True
