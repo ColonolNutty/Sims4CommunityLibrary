@@ -25,6 +25,7 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from ui.ui_dialog import UiDialogBase
 
 
 class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
@@ -166,7 +167,36 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
         :param column_count: The number of columns to display Sims in.
         :type column_count: int, optional
         """
-        super().show(
+        return super().show(
+            sim_info=sim_info,
+            should_show_names=should_show_names,
+            hide_row_descriptions=hide_row_descriptions,
+            column_count=column_count
+        )
+
+    def build_dialog(
+        self,
+        sim_info: SimInfo=None,
+        should_show_names: bool=True,
+        hide_row_descriptions: bool=False,
+        column_count: int=3
+    ) -> Union[UiDialogBase, None]:
+        """build_dialog(sim_info=None, should_show_names=True, hide_row_descriptions=False, column_count=3)
+
+        Build the dialog.
+
+        :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim. Default is None.
+        :type sim_info: SimInfo, optional
+        :param should_show_names: If True, then the names of the Sims will display in the dialog. Default is True.
+        :type should_show_names: bool, optional
+        :param hide_row_descriptions: A flag to hide the row descriptions. Default is False.
+        :type hide_row_descriptions: bool, optional
+        :param column_count: The number of columns to display Sims in. Default is 3.
+        :type column_count: int, optional
+        :return: The built dialog or None if a problem occurs.
+        :rtype: Union[UiDialogBase, None]
+        """
+        return super().build_dialog(
             sim_info=sim_info,
             should_show_names=should_show_names,
             hide_row_descriptions=hide_row_descriptions,

@@ -17,6 +17,9 @@ from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
 # noinspection PyMissingOrEmptyDocstring
+from ui.ui_dialog import UiDialogBase
+
+
 class CommonChooseOptionsDialog(CommonChooseOptionDialog):
     """CommonChooseOptionsDialog(\
         internal_dialog,\
@@ -62,15 +65,75 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
 
         .. note:: Override this function to provide your own arguments.
 
-        :param on_submit: When the dialog is submit, this callback will be invoked with the selected options.
+        :param on_submit: When the dialog is submitted, this callback will be invoked with the chosen options.
         :type on_submit: Callable[[Tuple[DialogOptionValueType]], Any], optional
         :param min_selectable: The minimum number of options that can be chosen.
         :type min_selectable: int, optional
         :param max_selectable: The maximum number of options that can be chosen.
         :type max_selectable: int, optional
         """
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity.name, fallback_return=False)
-        def _on_chosen(chosen_options: Union[Tuple[CommonDialogOption], None], outcome: CommonChoiceOutcome) -> Any:
+        try:
+            return self._internal_dialog.show(
+                *_,
+                on_chosen=self._on_submit(on_submit),
+                min_selectable=min_selectable,
+                max_selectable=max_selectable,
+                **__
+            )
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity, 'choose_options.show', exception=ex)
+
+    def build_dialog(
+        self,
+        *_: Any,
+        on_submit: Callable[[Tuple[DialogOptionValueType]], Any]=CommonFunctionUtils.noop,
+        min_selectable: int=1,
+        max_selectable: int=1,
+        **__: Any
+    ) -> Union[UiDialogBase, None]:
+        """build_dialog(\
+            *_,\
+            on_submit=CommonFunctionUtils.noop,\
+            min_selectable=1,\
+            max_selectable=1,\
+            **__\
+        )
+
+        Build the dialog.
+
+        .. note:: Override this function to provide your own arguments.
+
+        :param on_submit: When the dialog is submitted, this callback will be invoked with the chosen options.
+        :type on_submit: Callable[[Tuple[DialogOptionValueType]], Any], optional
+        :param min_selectable: The minimum number of options that can be chosen.
+        :type min_selectable: int, optional
+        :param max_selectable: The maximum number of options that can be chosen.
+        :type max_selectable: int, optional
+        :return: The built dialog or None if a problem occurs.
+        :rtype: Union[UiDialogBase, None]
+        """
+        try:
+
+            return self._internal_dialog.build_dialog(
+                *_,
+                on_chosen=self._on_submit(on_submit),
+                min_selectable=min_selectable,
+                max_selectable=max_selectable,
+                **__
+            )
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity, 'choose_options.build_dialog', exception=ex)
+        return None
+
+    def _on_chosen(self) -> Callable[[Union[Tuple[CommonDialogOption], None], CommonChoiceOutcome], bool]:
+        return self._on_submit()
+
+    def _on_submit(
+        self,
+        on_submit: Callable[[Tuple[DialogOptionValueType]], Any]=CommonFunctionUtils.noop
+    ) -> Callable[[Union[Tuple[CommonDialogOption], None], CommonChoiceOutcome], bool]:
+        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
+        def _on_submit(chosen_options: Union[Tuple[CommonDialogOption], None], outcome: CommonChoiceOutcome) -> Any:
             if chosen_options is None or len(chosen_options) == 0 or CommonChoiceOutcome.is_error_or_cancel(outcome):
                 self.close()
                 return None
@@ -79,5 +142,4 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
                 chosen_values.append(chosen_option.value)
                 chosen_option.choose()
             return on_submit(tuple(chosen_values))
-
-        self._internal_dialog.show(*_, on_chosen=_on_chosen, min_selectable=min_selectable, max_selectable=max_selectable, **__)
+        return _on_submit
