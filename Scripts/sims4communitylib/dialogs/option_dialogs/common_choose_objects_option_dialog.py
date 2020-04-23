@@ -8,13 +8,14 @@ Copyright (c) COLONOLNUTTY
 from pprint import pformat
 
 import sims4.commands
-from typing import Any, Union, Callable, Iterator
+from typing import Any, Union, Callable, Iterator, Tuple
 
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims.sim_info import SimInfo
-from sims4communitylib.dialogs.choose_object_dialog import CommonChooseObjectDialog
-from sims4communitylib.dialogs.option_dialogs.common_choose_option_dialog import CommonChooseOptionDialog
-from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_context import CommonDialogOptionContext
+from sims4communitylib.dialogs.choose_objects_dialog import CommonChooseObjectsDialog
+from sims4communitylib.dialogs.option_dialogs.common_choose_options_dialog import CommonChooseOptionsDialog
+from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_context import CommonDialogOptionContext, \
+    DialogOptionValueType
 from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_option_category import \
     CommonDialogObjectOptionCategory
 from sims4communitylib.enums.strings_enum import CommonStringId
@@ -30,20 +31,22 @@ from ui.ui_dialog import UiDialogBase
 from ui.ui_dialog_picker import UiObjectPicker
 
 
-class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
-    """CommonChooseObjectOptionDialog(\
+class CommonChooseObjectsOptionDialog(CommonChooseOptionsDialog):
+    """CommonChooseObjectsOptionDialog(\
+        mod_identity,\
         title_identifier,\
         description_identifier,\
         title_tokens=(),\
         description_tokens=(),\
         on_close=CommonFunctionUtils.noop,\
-        mod_identity=None,\
         per_page=25\
     )
 
-    A dialog that displays a list of options.
+    A dialog that displays a list of options and prompts to select multiple options.
 
-    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_choose_object_option_dialog` in the in-game console.
+    .. note:: This dialog allows selection of multiple Options.
+
+    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_choose_objects_option_dialog` in the in-game console.
 
     :Example usage:
 
@@ -51,6 +54,9 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
     .. code-block:: python
 
         def _on_option_chosen(option_identifier: str, choice: str):
+            pass
+
+        def _on_submit(choices: Tuple[str]):
             pass
 
         # LocalizedStrings within other LocalizedStrings
@@ -69,7 +75,7 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         )
 
         # Create the dialog and only showing 2 options per page.
-        option_dialog = CommonChooseObjectOptionDialog(
+        option_dialog = CommonChooseObjectsOptionDialog(
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             title_tokens=title_tokens,
@@ -120,10 +126,13 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         )
 
         option_dialog.show(
+            on_submit=_on_submit,
             sim_info=CommonSimUtils.get_active_sim_info()
         )
 
 
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
+    :type mod_identity: CommonModIdentity
     :param title_identifier: A decimal identifier of the title text.
     :type title_identifier: Union[int, LocalizedString]
     :param description_identifier: A decimal identifier of the description text.
@@ -134,8 +143,6 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
     :type description_tokens: Iterator[Any], optional
     :param on_close: A callback invoked upon the dialog closing. Default is CommonFunctionUtils.noop.
     :type on_close: Callable[..., Any], optional
-    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information. Default is None.
-    :type mod_identity: CommonModIdentity, optional
     :param per_page: The number of rows to display per page. If the number of rows (including rows added after creation) exceeds this value, pagination will be added. Default is 25.
     :type per_page: int, optional
     """
@@ -150,7 +157,7 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         per_page: int=25
     ):
         super().__init__(
-            CommonChooseObjectDialog(
+            CommonChooseObjectsDialog(
                 title_identifier,
                 description_identifier,
                 tuple(),
@@ -165,7 +172,7 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
     # noinspection PyMissingOrEmptyDocstring
     @property
     def log_identifier(self) -> str:
-        return 's4cl_choose_object_option_dialog'
+        return 's4cl_choose_objects_option_dialog'
 
     @property
     def current_page(self) -> int:
@@ -174,8 +181,12 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         :return: A number indicating the current page.
         :rtype: int
         """
-        dialog: CommonChooseObjectDialog = self._internal_dialog
-        return dialog.current_page
+        return self._internal_dialog.current_page
+
+    @property
+    def _internal_dialog(self) -> CommonChooseObjectsDialog:
+        result: CommonChooseObjectsDialog = super()._internal_dialog
+        return result
 
     def add_option(self, option: CommonDialogObjectOption):
         """add_option(option)
@@ -192,60 +203,87 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
 
     def show(
         self,
+        on_submit: Callable[[Tuple[DialogOptionValueType]], Any]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
         sim_info: SimInfo=None,
-        categories: Iterator[CommonDialogObjectOptionCategory]=()
+        categories: Iterator[CommonDialogObjectOptionCategory]=(),
+        min_selectable: int=1,
+        max_selectable: int=1
     ):
         """show(\
+            on_submit=CommonFunctionUtils.noop,\
             picker_type=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,\
             page=1,\
             sim_info=None,\
-            categories=()\
+            categories=(),\
+            min_selectable=1,\
+            max_selectable=1\
         )
 
-        Show the dialog and invoke the callbacks upon the player making a choice.
+        Show the dialog and invoke the callbacks upon the player submitting their selection.
 
+        :param on_submit: When the dialog is submitted, this callback will be invoked with the chosen options.
+        :type on_submit: Callable[[Tuple[DialogOptionValueType]], Any], optional
         :param picker_type: The layout of the dialog. Default is UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT.
         :type picker_type: UiObjectPicker.UiObjectPickerObjectPickerType, optional
         :param page: The page to display. Ignored if there is only one page of choices. Default is 1.
         :type page: int, optional
-        :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim. Default is None.
+        :param sim_info: The SimInfo of the Sim that will appear in the dialog image. If None, it will be the active Sim. Default is None.
         :type sim_info: SimInfo, optional
         :param categories: A collection of categories do display in the dialog. Default is an empty collection.
         :type categories: Iterator[CommonDialogObjectOptionCategory], optional
+        :param min_selectable: The minimum number of options that can be chosen.
+        :type min_selectable: int, optional
+        :param max_selectable: The maximum number of options that can be chosen.
+        :type max_selectable: int, optional
         """
         return super().show(
             picker_type=picker_type,
             page=page,
             sim_info=sim_info,
-            categories=categories
+            categories=categories,
+            on_submit=on_submit,
+            min_selectable=min_selectable,
+            max_selectable=max_selectable
         )
 
     def build_dialog(
         self,
+        on_submit: Callable[[Tuple[DialogOptionValueType]], Any]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
         sim_info: SimInfo=None,
-        categories: Iterator[CommonDialogObjectOptionCategory]=()
+        categories: Iterator[CommonDialogObjectOptionCategory]=(),
+        min_selectable: int=1,
+        max_selectable: int=1
     ) -> Union[UiDialogBase, None]:
         """build_dialog(\
+            on_submit=CommonFunctionUtils.noop,\
             picker_type=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,\
             page=1,\
             sim_info=None,\
-            categories=()\
+            categories=(),\
+            min_selectable=1,\
+            max_selectable=1\
         )
 
-        Build the dialog and invoke the callbacks upon the player making a choice.
+        Build the dialog and invoke the callbacks upon the player submitting their selection.
 
+        :param on_submit: When the dialog is submitted, this callback will be invoked with the chosen options.
+        :type on_submit: Callable[[Tuple[DialogOptionValueType]], Any], optional
         :param picker_type: The layout of the dialog. Default is UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT.
         :type picker_type: UiObjectPicker.UiObjectPickerObjectPickerType, optional
         :param page: The page to display. Ignored if there is only one page of choices. Default is 1.
         :type page: int, optional
-        :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim. Default is None.
+        :param sim_info: The SimInfo of the Sim that will appear in the dialog image. If None, it will be the active Sim. Default is None.
         :type sim_info: SimInfo, optional
         :param categories: A collection of categories do display in the dialog. Default is an empty collection.
         :type categories: Iterator[CommonDialogObjectOptionCategory], optional
+        :param min_selectable: The minimum number of options that can be chosen.
+        :type min_selectable: int, optional
+        :param max_selectable: The maximum number of options that can be chosen.
+        :type max_selectable: int, optional
         :return: The built dialog or None if a problem occurs.
         :rtype: Union[UiDialogBase, None]
         """
@@ -253,17 +291,23 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
             picker_type=picker_type,
             page=page,
             sim_info=sim_info,
-            categories=categories
+            categories=categories,
+            on_submit=on_submit,
+            min_selectable=min_selectable,
+            max_selectable=max_selectable
         )
 
 
-@sims4.commands.Command('s4clib_testing.show_choose_object_option_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_choose_object_option_dialog(_connection: int=None):
+@sims4.commands.Command('s4clib_testing.show_choose_objects_option_dialog', command_type=sims4.commands.CommandType.Live)
+def _common_testing_show_choose_objects_option_dialog(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
-    output('Showing test choose object option dialog.')
+    output('Showing test choose objects option dialog.')
 
     def _on_option_chosen(option_identifier: str, choice: str):
         output('Chose option {} with value: {}.'.format(pformat(option_identifier), pformat(choice)))
+
+    def _on_submit(choices: Tuple[str]):
+        output('Chose options {}.'.format(pformat(choices)))
 
     try:
         # LocalizedStrings within other LocalizedStrings
@@ -280,7 +324,7 @@ def _common_testing_show_choose_object_option_dialog(_connection: int=None):
                 text_color=CommonLocalizedStringColor.BLUE
             ),
         )
-        option_dialog = CommonChooseObjectOptionDialog(
+        option_dialog = CommonChooseObjectsOptionDialog(
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             title_tokens=title_tokens,
@@ -330,7 +374,10 @@ def _common_testing_show_choose_object_option_dialog(_connection: int=None):
         )
 
         option_dialog.show(
-            sim_info=CommonSimUtils.get_active_sim_info()
+            on_submit=_on_submit,
+            sim_info=CommonSimUtils.get_active_sim_info(),
+            min_selectable=1,
+            max_selectable=2
         )
     except Exception as ex:
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)

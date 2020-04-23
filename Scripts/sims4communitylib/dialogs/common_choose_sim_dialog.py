@@ -177,7 +177,7 @@ class CommonChooseSimDialog(CommonChooseDialog):
         hide_row_descriptions: bool=False,
         column_count: int=3
     ):
-        _dialog = self._build_dialog(
+        _dialog = self.build_dialog(
             on_chosen=on_chosen,
             sim_info=sim_info,
             should_show_names=should_show_names,
@@ -187,7 +187,8 @@ class CommonChooseSimDialog(CommonChooseDialog):
         self.log.debug('Showing dialog.')
         _dialog.show_dialog()
 
-    def _build_dialog(
+    # noinspection PyMissingOrEmptyDocstring
+    def build_dialog(
         self,
         on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         sim_info: SimInfo=None,

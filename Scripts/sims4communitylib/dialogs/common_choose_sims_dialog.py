@@ -186,7 +186,7 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
         min_selectable: int=1,
         max_selectable: int=1
     ):
-        _dialog = self._build_dialog(
+        _dialog = self.build_dialog(
             on_chosen=on_chosen,
             sim_info=sim_info,
             should_show_names=should_show_names,
@@ -198,7 +198,8 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
         self.log.debug('Showing dialog.')
         _dialog.show_dialog()
 
-    def _build_dialog(
+    # noinspection PyMissingOrEmptyDocstring
+    def build_dialog(
         self,
         on_chosen: Callable[[Union[Tuple[CommonDialogSimOption], None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         sim_info: SimInfo=None,
