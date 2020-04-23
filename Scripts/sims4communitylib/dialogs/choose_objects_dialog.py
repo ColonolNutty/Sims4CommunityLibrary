@@ -5,22 +5,15 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import math
-
 import sims4.commands
 from typing import Tuple, Any, Callable, Union, Iterator
 
 from pprint import pformat
-
-from distributor.shared_messages import IconInfoData
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims.sim_info import SimInfo
+from sims4communitylib.dialogs.choose_object_dialog import CommonChooseObjectDialog
 from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
-from sims4communitylib.dialogs.common_choose_dialog import CommonChooseDialog
 from sims4communitylib.dialogs.common_dialog_navigation_button_tag import CommonDialogNavigationButtonTag
-from sims4communitylib.dialogs.custom_dialogs.picker_dialogs.common_ui_object_category_picker import \
-    CommonUiObjectCategoryPicker
-
 from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_option_category import \
     CommonDialogObjectOptionCategory
 from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtils
@@ -29,15 +22,14 @@ from sims4communitylib.exceptions.common_exceptions_handler import CommonExcepti
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
-from sims4communitylib.utils.common_icon_utils import CommonIconUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog_picker import UiObjectPicker, ObjectPickerRow
 
 
-class CommonChooseObjectDialog(CommonChooseDialog):
-    """CommonChooseObjectDialog(\
+class CommonChooseObjectsDialog(CommonChooseObjectDialog):
+    """CommonChooseObjectsDialog(\
         title_identifier,\
         description_identifier,\
         choices,\
@@ -47,16 +39,16 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         mod_identity=None\
     )
 
-    Create a dialog that prompts the player to choose an object.
+    Create a dialog that prompts the player to choose multiple objects.
 
-    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_choose_object_dialog` in the in-game console.
+    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_choose_objects_dialog` in the in-game console.
 
     .. highlight:: python
     .. code-block:: python
 
-        def _common_testing_show_choose_object_dialog():
+        def _common_testing_show_choose_objects_dialog():
 
-            def _on_chosen(choice: str, outcome: CommonChoiceOutcome):
+            def _on_chosen(choices: Tuple[str], outcome: CommonChoiceOutcome):
                 pass
 
             # LocalizedStrings within other LocalizedStrings
@@ -89,7 +81,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                     tag='Value 3'
                 )
             ]
-            dialog = CommonChooseObjectDialog(
+            dialog = CommonChooseObjectsDialog(
                 CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
                 CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
                 tuple(options),
@@ -97,7 +89,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                 description_tokens=description_tokens,
                 per_page=2
             )
-            dialog.show(on_chosen=_on_chosen)
+            dialog.show(on_chosen=_on_chosen, min_selectable=1, max_selectable=2)
 
     :param title_identifier: The title to display in the dialog.
     :type title_identifier: Union[int, LocalizedString]
@@ -186,16 +178,18 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         try:
             self._always_visible_rows += (choice,)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'An error occurred while running \'{}\''.format(CommonChooseObjectDialog.add_row.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'An error occurred while running \'{}\''.format(CommonChooseObjectsDialog.add_row.__name__), exception=ex)
 
     def show(
         self,
-        on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        on_chosen: Callable[[Tuple[Any], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
         sim_info: SimInfo=None,
         categories: Iterator[CommonDialogObjectOptionCategory]=(),
-        include_pagination: bool=True
+        include_pagination: bool=True,
+        min_selectable: int=1,
+        max_selectable: int=1
     ):
         """show(\
             on_chosen=CommonFunctionUtils.noop,\
@@ -203,13 +197,14 @@ class CommonChooseObjectDialog(CommonChooseDialog):
             page=1,\
             sim_info=None,\
             categories=(),\
-            include_pagination=True\
+            min_selectable=1,\
+            max_selectable=1,\
         )
 
-        Show the dialog and invoke the callbacks upon the player making a choice.
+        Show the dialog and invoke the callbacks upon the player choosing objects.
 
         :param on_chosen: A callback invoked upon the player choosing something from the list. Default is CommonFunctionUtils.noop.
-        :type on_chosen: Callable[[Any, CommonChoiceOutcome], optional
+        :type on_chosen: Callable[[Tuple[Any], CommonChoiceOutcome], optional
         :param picker_type: The layout of the dialog. Default is UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT.
         :type picker_type: UiObjectPicker.UiObjectPickerObjectPickerType, optional
         :param page: The page to display. Ignored if there is only one page of choices. Default is 1.
@@ -220,6 +215,10 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         :type categories: Iterator[CommonDialogObjectOptionCategory], optional
         :param include_pagination: If True, pagination will be applied. If False, no pagination will be applied. Default is True.
         :type include_pagination: bool, optional
+        :param min_selectable: The minimum number of items required to be selected. Default is 1.
+        :type min_selectable: int, optional
+        :param max_selectable: The maximum number of items allowed to be selected. Default is 1.
+        :type max_selectable: int, optional
         """
         self._current_page = page
         try:
@@ -229,34 +228,54 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                 page=page,
                 sim_info=sim_info,
                 categories=categories,
-                include_pagination=include_pagination
+                include_pagination=include_pagination,
+                min_selectable=min_selectable,
+                max_selectable=max_selectable
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'An error occurred while running \'{}\''.format(CommonChooseObjectDialog.show.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'An error occurred while running \'{}\''.format(CommonChooseObjectsDialog.show.__name__), exception=ex)
 
     def _show(
         self,
-        on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        on_chosen: Callable[[Tuple[Any], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
         sim_info: SimInfo=None,
         categories: Iterator[CommonDialogObjectOptionCategory]=(),
-        include_pagination: bool=True
+        include_pagination: bool=True,
+        min_selectable: int=1,
+        max_selectable: int=1
     ):
         @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
-        def _on_chosen(choice: Any, outcome: CommonChoiceOutcome):
-            self.log.debug('Choice made.')
-            if choice == CommonDialogNavigationButtonTag.NEXT:
+        def _on_chosen(choices: Tuple[Any], outcome: CommonChoiceOutcome):
+            self.log.debug('Choices made {}.'.format(pformat(choices)))
+            if CommonDialogNavigationButtonTag.NEXT in choices:
                 self.log.debug('Next chosen.')
-                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page + 1, sim_info=sim_info, categories=categories)
+                self.show(
+                    on_chosen=on_chosen,
+                    picker_type=picker_type,
+                    page=page + 1,
+                    sim_info=sim_info,
+                    categories=categories,
+                    min_selectable=min_selectable,
+                    max_selectable=max_selectable
+                )
                 return True
-            elif choice == CommonDialogNavigationButtonTag.PREVIOUS:
+            elif CommonDialogNavigationButtonTag.PREVIOUS in choices:
                 self.log.debug('Previous chosen.')
-                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page - 1, sim_info=sim_info, categories=categories)
+                self.show(
+                    on_chosen=on_chosen,
+                    picker_type=picker_type,
+                    page=page - 1,
+                    sim_info=sim_info,
+                    categories=categories,
+                    min_selectable=min_selectable,
+                    max_selectable=max_selectable
+                )
                 return True
-            self.log.format_with_message('Choose Object Choice made.', choice=choice)
-            result = on_chosen(choice, outcome)
-            self.log.format_with_message('Finished handling choose object _show.', result=result)
+            self.log.format_with_message('Choose Objects Choices made.', choices=pformat(choices))
+            result = on_chosen(choices, outcome)
+            self.log.format_with_message('Finished handling choose objects _show._on_chosen.', result=result)
             return result
 
         _dialog = self._build_dialog(
@@ -265,26 +284,31 @@ class CommonChooseObjectDialog(CommonChooseDialog):
             page=page,
             sim_info=sim_info,
             categories=categories,
-            include_pagination=include_pagination
+            min_selectable=min_selectable,
+            max_selectable=max_selectable
         )
         self.log.debug('Showing dialog.')
         _dialog.show_dialog()
 
     def _build_dialog(
         self,
-        on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        on_chosen: Callable[[Tuple[Any], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
         sim_info: SimInfo=None,
         categories: Iterator[CommonDialogObjectOptionCategory]=(),
-        include_pagination: bool=True
+        include_pagination: bool=True,
+        min_selectable: int=1,
+        max_selectable: int=1
     ) -> Union[UiObjectPicker, None]:
         self.log.format_with_message('Attempting to build dialog.', page=page, categories=categories)
 
         _dialog = self._create_dialog(
             picker_type=picker_type,
             categories=categories,
-            sim_info=sim_info
+            sim_info=sim_info,
+            min_selectable=min_selectable,
+            max_selectable=max_selectable
         )
         if _dialog is None:
             self.log.error('_dialog was None for some reason.')
@@ -298,15 +322,14 @@ class CommonChooseObjectDialog(CommonChooseDialog):
 
         @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
         def _on_chosen(dialog: UiObjectPicker):
-            self.log.debug('Choice made.')
             if not dialog.accepted:
                 self.log.debug('Dialog cancelled.')
-                return on_chosen(None, CommonChoiceOutcome.CANCEL)
-            self.log.debug('Choice not made.')
-            choice = CommonDialogUtils.get_chosen_item(dialog)
-            self.log.format_with_message('Choose Object Choice made.', choice=pformat(choice))
-            result = on_chosen(choice, CommonChoiceOutcome.CHOICE_MADE)
-            self.log.format_with_message('Finished handling choose object _on_chosen.', result=result)
+                return on_chosen(tuple(), CommonChoiceOutcome.CANCEL)
+            self.log.debug('Choices not made.')
+            choices = CommonDialogUtils.get_chosen_items(dialog)
+            self.log.format_with_message('Choose Object Choice made.', choice=pformat(choices))
+            result = on_chosen(choices, CommonChoiceOutcome.CHOICE_MADE)
+            self.log.format_with_message('Finished handling choose objects _build_dialog._on_chosen.', result=result)
             return result
 
         if include_pagination:
@@ -327,123 +350,14 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         _dialog.add_listener(_on_chosen)
         return _dialog
 
-    def _setup_dialog_rows(
-        self,
-        _dialog: UiObjectPicker,
-        page: int=1,
-        categories: Iterator[CommonDialogObjectOptionCategory]=()
-    ):
-        if page < 0:
-            raise AssertionError('page cannot be less than zero.')
 
-        number_of_rows = len(self.rows)
-        self.log.format(number_of_rows=number_of_rows, per_page=self._per_page)
-        if number_of_rows > self._per_page:
-            number_of_pages = math.ceil(number_of_rows / self._per_page)
-
-            if page > number_of_pages:
-                raise AssertionError('page was out of range. Number of Pages: {}, Requested Page: {}'.format(str(number_of_pages), str(page)))
-            # Add the rows that are always visible.
-            for always_visible_rows in self.always_visible_rows:
-                _dialog.add_row(always_visible_rows)
-
-            # Add the rows that should show on the current page.
-            start_index = (page - 1) * self._per_page
-            end_index = page * self._per_page
-            self.log.format(start_index=start_index, end_index=end_index)
-            current_choices = self.rows[start_index:end_index]
-            self.log.format(current_rows=current_choices)
-            for row in current_choices:
-                _dialog.add_row(row)
-
-            tag_list = [(abs(hash(category.object_category)) % (10 ** 8)) for category in categories]
-            self.log.format_with_message('Found tags.', tag_list=tag_list)
-
-            if page > 1:
-                self.log.format_with_message('Adding Previous row.', page=page, number_of_pages=number_of_pages)
-                previous_choice = ObjectPickerRow(
-                    option_id=len(self.rows) + 2,
-                    name=CommonLocalizationUtils.create_localized_string(CommonStringId.PREVIOUS),
-                    row_description=None,
-                    row_tooltip=CommonLocalizationUtils.create_localized_tooltip(CommonStringId.PREVIOUS),
-                    icon=CommonIconUtils.load_arrow_left_icon(),
-                    tag_list=tag_list,
-                    tag=CommonDialogNavigationButtonTag.PREVIOUS
-                )
-                _dialog.add_row(previous_choice)
-            else:
-                self.log.format_with_message('Not adding Previous row.', page=page)
-            if page < number_of_pages:
-                self.log.format_with_message('Adding Next row.', page=page, number_of_pages=number_of_pages)
-                next_choice = ObjectPickerRow(
-                    option_id=len(self.rows) + 1,
-                    name=CommonLocalizationUtils.create_localized_string(CommonStringId.NEXT),
-                    row_description=None,
-                    row_tooltip=CommonLocalizationUtils.create_localized_tooltip(CommonStringId.NEXT),
-                    icon=CommonIconUtils.load_arrow_right_icon(),
-                    tag_list=tag_list,
-                    tag=CommonDialogNavigationButtonTag.NEXT
-                )
-                _dialog.add_row(next_choice)
-            else:
-                self.log.format_with_message('Not adding Next.', page=page, number_of_pages=number_of_pages)
-        else:
-            self.log.debug('Adding always visible rows.')
-            for always_visible_rows in self.always_visible_rows:
-                _dialog.add_row(always_visible_rows)
-            self.log.debug('Adding rows.')
-            for row in self.rows:
-                _dialog.add_row(row)
-
-    def _create_dialog(
-        self,
-        picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
-        sim_info: SimInfo=None,
-        categories: Iterator[CommonDialogObjectOptionCategory]=(),
-        min_selectable: int=1,
-        max_selectable: int=1
-    ) -> Union[UiObjectPicker, None]:
-        try:
-            from collections import namedtuple
-            object_category_type = namedtuple('object_category_type', ('object_category', 'icon', 'category_name'))
-            object_categories = list()
-            for category in tuple(categories):
-                object_categories.append(object_category_type(category.object_category, lambda *_, **__: IconInfoData(icon_resource=CommonIconUtils._load_icon(category.icon)), CommonLocalizationUtils.create_localized_string(category.category_name)))
-
-            if len(object_categories) > 0:
-                self.log.debug('Building dialog with categories.')
-                return CommonUiObjectCategoryPicker.TunableFactory().default(
-                    sim_info or CommonSimUtils.get_active_sim_info(),
-                    text=lambda *_, **__: self.description,
-                    title=lambda *_, **__: self.title,
-                    picker_type=picker_type,
-                    use_dropdown_filter=True,
-                    object_categories=tuple(object_categories),
-                    min_selectable=min_selectable,
-                    max_selectable=max_selectable
-                )
-            else:
-                self.log.debug('Building dialog without categories.')
-                return UiObjectPicker.TunableFactory().default(
-                    sim_info or CommonSimUtils.get_active_sim_info(),
-                    text=lambda *_, **__: self.description,
-                    title=lambda *_, **__: self.title,
-                    picker_type=picker_type,
-                    min_selectable=min_selectable,
-                    max_selectable=max_selectable
-                )
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, '_create_dialog', exception=ex)
-        return None
-
-
-@sims4.commands.Command('s4clib_testing.show_choose_object_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_choose_object_dialog(_connection: int=None):
+@sims4.commands.Command('s4clib_testing.show_choose_objects_dialog', command_type=sims4.commands.CommandType.Live)
+def _common_testing_show_choose_objects_dialog(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
-    output('Showing test choose object dialog.')
+    output('Showing test choose objects dialog.')
 
-    def _on_chosen(choice: str, outcome: CommonChoiceOutcome):
-        output('Chose {} with result: {}.'.format(pformat(choice), pformat(outcome)))
+    def _on_chosen(choices: Tuple[str], outcome: CommonChoiceOutcome):
+        output('Chose {} with result: {}.'.format(pformat(choices), pformat(outcome)))
 
     try:
         # LocalizedStrings within other LocalizedStrings
@@ -476,7 +390,7 @@ def _common_testing_show_choose_object_dialog(_connection: int=None):
                 tag='Value 3'
             )
         ]
-        dialog = CommonChooseObjectDialog(
+        dialog = CommonChooseObjectsDialog(
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             tuple(options),
@@ -484,7 +398,11 @@ def _common_testing_show_choose_object_dialog(_connection: int=None):
             description_tokens=description_tokens,
             per_page=2
         )
-        dialog.show(on_chosen=_on_chosen)
+        dialog.show(
+            on_chosen=_on_chosen,
+            min_selectable=1,
+            max_selectable=2
+        )
     except Exception as ex:
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
         output('Failed to show dialog, please locate your exception log file.')

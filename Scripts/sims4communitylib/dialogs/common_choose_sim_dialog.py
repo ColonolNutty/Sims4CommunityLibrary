@@ -177,6 +177,24 @@ class CommonChooseSimDialog(CommonChooseDialog):
         hide_row_descriptions: bool=False,
         column_count: int=3
     ):
+        _dialog = self._build_dialog(
+            on_chosen=on_chosen,
+            sim_info=sim_info,
+            should_show_names=should_show_names,
+            hide_row_descriptions=hide_row_descriptions,
+            column_count=column_count
+        )
+        self.log.debug('Showing dialog.')
+        _dialog.show_dialog()
+
+    def _build_dialog(
+        self,
+        on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        sim_info: SimInfo=None,
+        should_show_names: bool=True,
+        hide_row_descriptions: bool=False,
+        column_count: int=3
+    ) -> Union[UiSimPicker, None]:
         self.log.format_with_message('Attempting to display choices.')
         _dialog = self._create_dialog(
             sim_info=sim_info,
@@ -210,7 +228,7 @@ class CommonChooseSimDialog(CommonChooseDialog):
             _dialog.add_row(row)
 
         _dialog.add_listener(_on_chosen)
-        _dialog.show_dialog()
+        return _dialog
 
     def _create_dialog(
         self,

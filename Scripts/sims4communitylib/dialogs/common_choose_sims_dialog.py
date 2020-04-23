@@ -186,6 +186,28 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
         min_selectable: int=1,
         max_selectable: int=1
     ):
+        _dialog = self._build_dialog(
+            on_chosen=on_chosen,
+            sim_info=sim_info,
+            should_show_names=should_show_names,
+            hide_row_descriptions=hide_row_descriptions,
+            column_count=column_count,
+            min_selectable=min_selectable,
+            max_selectable=max_selectable
+        )
+        self.log.debug('Showing dialog.')
+        _dialog.show_dialog()
+
+    def _build_dialog(
+        self,
+        on_chosen: Callable[[Union[Tuple[CommonDialogSimOption], None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        sim_info: SimInfo=None,
+        should_show_names: bool=True,
+        hide_row_descriptions: bool=False,
+        column_count: int=3,
+        min_selectable: int=1,
+        max_selectable: int=1
+    ):
         if min_selectable < 1:
             raise AttributeError('\'min_selectable\' must be at least 1.')
         if max_selectable < min_selectable:
@@ -225,7 +247,7 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
             _dialog.add_row(row)
 
         _dialog.add_listener(_on_chosen)
-        _dialog.show_dialog()
+        return _dialog
 
 
 @sims4.commands.Command('s4clib_testing.show_choose_sims_dialog', command_type=sims4.commands.CommandType.Live)
