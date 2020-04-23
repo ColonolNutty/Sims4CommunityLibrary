@@ -5,19 +5,17 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any, Callable
-
-from protocolbuffers.Localization_pb2 import LocalizedString
+from typing import Any, Callable, Union
 from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
 from sims4communitylib.dialogs.common_choose_dialog import CommonChooseDialog
+from sims4communitylib.dialogs.option_dialogs.common_option_dialog import CommonOptionDialog
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option import CommonDialogOption
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.logging.has_log import HasLog
-from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
+from ui.ui_dialog import UiDialogBase
 
 
-class CommonChooseOptionDialog(HasLog):
+class CommonChooseOptionDialog(CommonOptionDialog):
     """CommonChooseOptionDialog(\
         internal_dialog,\
         on_close=CommonFunctionUtils.noop\
@@ -37,15 +35,11 @@ class CommonChooseOptionDialog(HasLog):
         internal_dialog: CommonChooseDialog,
         on_close: Callable[..., Any]=CommonFunctionUtils.noop
     ):
-        super().__init__()
-        self._on_close = on_close
+        super().__init__(
+            internal_dialog,
+            on_close=on_close
+        )
         self._options = []
-        self.__internal_dialog = internal_dialog
-
-    # noinspection PyMissingOrEmptyDocstring
-    @property
-    def mod_identity(self) -> CommonModIdentity:
-        return self._internal_dialog.mod_identity
 
     @property
     def option_count(self) -> int:
@@ -57,26 +51,9 @@ class CommonChooseOptionDialog(HasLog):
         return len(self._options)
 
     @property
-    def title(self) -> LocalizedString:
-        """The title of the dialog.
-
-        :return: The title of the dialog.
-        :rtype: LocalizedString
-        """
-        return self._internal_dialog.title
-
-    @property
-    def description(self) -> LocalizedString:
-        """The description of the dialog.
-
-        :return: The description of the dialog.
-        :rtype: LocalizedString
-        """
-        return self._internal_dialog.description
-
-    @property
     def _internal_dialog(self) -> CommonChooseDialog:
-        return self.__internal_dialog
+        result: CommonChooseDialog = super()._internal_dialog
+        return result
 
     def has_options(self) -> bool:
         """has_options()
@@ -120,21 +97,31 @@ class CommonChooseOptionDialog(HasLog):
 
         """
         try:
-            def _on_chosen(chosen_option: CommonDialogOption, outcome: CommonChoiceOutcome) -> bool:
-                if chosen_option is None or CommonChoiceOutcome.is_error_or_cancel(outcome):
-                    self.close()
-                    return False
-                return chosen_option.choose()
-            self._internal_dialog.show(*_, on_chosen=_on_chosen, **__)
+            return self._internal_dialog.show(*_, on_chosen=self._on_chosen(), **__)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'choose_option.show', exception=ex)
 
-    def close(self) -> bool:
-        """close()
+    def build_dialog(self, *_: Any, **__: Any) -> Union[UiDialogBase, None]:
+        """build_dialog(*_, **__)
 
-        Close the dialog.
+        Build the dialog.
 
-        :return: True, if the dialog closed successfully. False, if not.
-        :rtype: bool
+        .. note:: Override this function to provide your own arguments.
+
+        :return: The built dialog or None if a problem occurs.
+        :rtype: Union[UiDialogBase, None]
         """
-        return self._on_close()
+        try:
+            return self._internal_dialog.build_dialog(*_, on_chosen=self._on_chosen(), **__)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_identity, 'choose_option.build_dialog', exception=ex)
+        return None
+
+    def _on_chosen(self) -> Callable[[CommonDialogOption, CommonChoiceOutcome], bool]:
+        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
+        def _on_chosen(chosen_option: CommonDialogOption, outcome: CommonChoiceOutcome) -> bool:
+            if chosen_option is None or CommonChoiceOutcome.is_error_or_cancel(outcome):
+                self.close()
+                return False
+            return chosen_option.choose()
+        return _on_chosen

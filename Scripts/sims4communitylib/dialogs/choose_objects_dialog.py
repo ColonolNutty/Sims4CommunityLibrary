@@ -278,7 +278,7 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
             self.log.format_with_message('Finished handling choose objects _show._on_chosen.', result=result)
             return result
 
-        _dialog = self._build_dialog(
+        _dialog = self.build_dialog(
             on_chosen=_on_chosen,
             picker_type=picker_type,
             page=page,
@@ -290,7 +290,8 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
         self.log.debug('Showing dialog.')
         _dialog.show_dialog()
 
-    def _build_dialog(
+    # noinspection PyMissingOrEmptyDocstring
+    def build_dialog(
         self,
         on_chosen: Callable[[Tuple[Any], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,

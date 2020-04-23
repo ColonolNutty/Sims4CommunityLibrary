@@ -86,7 +86,16 @@ class CommonDialog(HasLog):
         """
         raise NotImplementedError('\'{}\' not implemented.'.format(self.__class__.show.__name__))
 
-    def _build_dialog(self, *_: Any, **__: Any) -> Union[UiDialogBase, None]:
+    def build_dialog(self, *_: Any, **__: Any) -> Union[UiDialogBase, None]:
+        """build_dialog(*_, **__)
+
+        Build the dialog.
+
+        .. note:: Override this method with any arguments you want to.
+
+        :return: The built dialog or None if a problem occurs.
+        :rtype: Union[UiDialogBase, None]
+        """
         return self._create_dialog(*_, **__)
 
     def _create_dialog(self, *_: Any, **__: Any) -> Union[UiDialogBase, None]:

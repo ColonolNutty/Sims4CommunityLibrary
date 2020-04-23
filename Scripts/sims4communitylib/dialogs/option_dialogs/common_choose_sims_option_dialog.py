@@ -25,6 +25,7 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from ui.ui_dialog import UiDialogBase
 
 
 class CommonChooseSimsOptionDialog(CommonChooseOptionsDialog):
@@ -160,22 +161,71 @@ class CommonChooseSimsOptionDialog(CommonChooseOptionsDialog):
 
         Show the dialog and invoke the callbacks upon the player submitting their selection.
 
-        :param on_submit: A callback invoked upon the player choosing Sims.
+        :param on_submit: A callback invoked upon the player choosing Sims. Default is CommonFunctionUtils.noop.
         :type on_submit: Callable[[Tuple[SimInfo]], Any], optional
-        :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim.
+        :param sim_info: The SimInfo of the Sim that will appear in the dialog image. If None, it will be the active Sim. Default is None.
         :type sim_info: SimInfo, optional
-        :param should_show_names: If True, then the names of the Sims will display in the dialog.
+        :param should_show_names: If True, then the names of the Sims will display in the dialog. Default is True.
         :type should_show_names: bool, optional
-        :param hide_row_descriptions: A flag to hide the row descriptions.
+        :param hide_row_descriptions: A flag to hide the row descriptions. Default is False.
         :type hide_row_descriptions: bool, optional
-        :param column_count: The number of columns to display Sims in.
+        :param column_count: The number of columns to display Sims in. Default is 3.
         :type column_count: int, optional
-        :param min_selectable: The minimum number of Sims that must be chosen.
+        :param min_selectable: The minimum number of Sims that must be chosen. Default is 1.
         :type min_selectable: int, optional
-        :param max_selectable: The maximum number of Sims that can be chosen.
+        :param max_selectable: The maximum number of Sims that can be chosen. Default is 1.
         :type max_selectable: int, optional
         """
         return super().show(
+            on_submit=on_submit,
+            sim_info=sim_info,
+            should_show_names=should_show_names,
+            hide_row_descriptions=hide_row_descriptions,
+            column_count=column_count,
+            min_selectable=min_selectable,
+            max_selectable=max_selectable
+        )
+
+    def build_dialog(
+        self,
+        on_submit: Callable[[Tuple[SimInfo]], Any]=CommonFunctionUtils.noop,
+        sim_info: SimInfo=None,
+        should_show_names: bool=True,
+        hide_row_descriptions: bool=False,
+        column_count: int=3,
+        min_selectable: int=1,
+        max_selectable: int=1
+    ) -> Union[UiDialogBase, None]:
+        """build_dialog(\
+            on_submit=CommonFunctionUtils.noop,\
+            sim_info=None,\
+            should_show_names=True,\
+            hide_row_descriptions=False,\
+            column_count=3,\
+            min_selectable=1,\
+            max_selectable=1,\
+        )
+
+        Show the dialog and invoke the callbacks upon the player submitting their selection.
+
+        :param on_submit: A callback invoked upon the player choosing Sims. Default is CommonFunctionUtils.noop.
+        :type on_submit: Callable[[Tuple[SimInfo]], Any], optional
+        :param sim_info: The SimInfo of the Sim that will appear in the dialog image. If None, it will be the active Sim. Default is None.
+        :type sim_info: SimInfo, optional
+        :param should_show_names: If True, then the names of the Sims will display in the dialog. Default is True.
+        :type should_show_names: bool, optional
+        :param hide_row_descriptions: A flag to hide the row descriptions. Default is False.
+        :type hide_row_descriptions: bool, optional
+        :param column_count: The number of columns to display Sims in. Default is 3.
+        :type column_count: int, optional
+        :param min_selectable: The minimum number of Sims that must be chosen. Default is 1.
+        :type min_selectable: int, optional
+        :param max_selectable: The maximum number of Sims that can be chosen. Default is 1.
+        :type max_selectable: int, optional
+        :return: The built dialog or None if a problem occurs.
+        :rtype: Union[UiDialogBase, None]
+        """
+        return super().build_dialog(
             on_submit=on_submit,
             sim_info=sim_info,
             should_show_names=should_show_names,
