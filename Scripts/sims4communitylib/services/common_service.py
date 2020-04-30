@@ -10,18 +10,18 @@ from typing import TypeVar, Any
 ServiceType = TypeVar('ServiceType', bound=object)
 
 
-class _SingletonService(type):
+class _Singleton(type):
     def __init__(cls, *args, **kwargs) -> None:
-        super(_SingletonService, cls).__init__(*args, **kwargs)
+        super(_Singleton, cls).__init__(*args, **kwargs)
         cls.__instance = None
 
     def __call__(cls, *args, **kwargs) -> 'CommonService':
         if cls.__instance is None:
-            cls.__instance = super(_SingletonService, cls).__call__(*args, **kwargs)
+            cls.__instance = super(_Singleton, cls).__call__(*args, **kwargs)
         return cls.__instance
 
 
-class CommonService(metaclass=_SingletonService):
+class CommonService(metaclass=_Singleton):
     """An inheritable class that turns a class into a singleton, create an instance by invoking :func:`~get`.
 
 
