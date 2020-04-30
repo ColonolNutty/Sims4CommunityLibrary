@@ -12,7 +12,8 @@ from sims4communitylib.testing.common_test_service import CommonTestService
 
 
 class _TestService(CommonService):
-    pass
+    def __init__(self):
+        self.a_collection_of_things = []
 
 
 class _TestSubService(_TestService):
@@ -36,3 +37,17 @@ class CommonServiceTests:
     @CommonTestService.test()
     def _sub_service_should_be_separate_instance_from_parent() -> None:
         CommonAssertionUtils.is_false(_TestSubService.get() is _TestService.get())
+
+    @staticmethod
+    @CommonTestService.test()
+    def _services_should_not_be_reinitialized_when_retrieved_via_get() -> None:
+        thing_added = 'A thing'
+        _TestService.get().a_collection_of_things.append(thing_added)
+        CommonAssertionUtils.is_true(thing_added in _TestService.get().a_collection_of_things)
+
+    @staticmethod
+    @CommonTestService.test()
+    def _services_should_not_be_reinitialized_when_retrieved_via_new() -> None:
+        thing_added = 'A thing'
+        _TestService().a_collection_of_things.append(thing_added)
+        CommonAssertionUtils.is_true(thing_added in _TestService().a_collection_of_things)
