@@ -5,12 +5,23 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import TypeVar, Type
+from typing import TypeVar, Any
 
 ServiceType = TypeVar('ServiceType', bound=object)
 
 
-class CommonService:
+class _SingletonService(type):
+    def __init__(cls, *args, **kwargs) -> None:
+        super(_SingletonService, cls).__init__(*args, **kwargs)
+        cls.__instance = None
+
+    def __call__(cls, *args, **kwargs) -> 'CommonService':
+        if cls.__instance is None:
+            cls.__instance = super(_SingletonService, cls).__call__(*args, **kwargs)
+        return cls.__instance
+
+
+class CommonService(metaclass=_SingletonService):
     """An inheritable class that turns a class into a singleton, create an instance by invoking :func:`~get`.
 
 
@@ -30,7 +41,7 @@ class CommonService:
 
     """
     @classmethod
-    def get(cls: Type[ServiceType]) -> ServiceType:
+    def get(cls: Any, *_, **__) -> 'CommonService':
         """get()
 
         Retrieve an instance of the service
@@ -38,15 +49,4 @@ class CommonService:
         :return: An instance of the service
         :rtype: The type of the inheriting class
         """
-        cls_name = cls.__name__
-        prop_name = '_SERVICE_{}'.format(cls_name)
-        if getattr(cls, prop_name, None) is None:
-            setattr(cls, prop_name, cls())
-        return getattr(cls, prop_name)
-
-    def __new__(cls, *args, **kwargs) -> 'CommonService':
-        cls_name = cls.__name__
-        prop_name = '_SERVICE_{}'.format(cls_name)
-        if getattr(cls, prop_name, None) is None:
-            setattr(cls, prop_name, super().__new__(cls))
-        return getattr(cls, prop_name)
+        return cls(*_, **__)
