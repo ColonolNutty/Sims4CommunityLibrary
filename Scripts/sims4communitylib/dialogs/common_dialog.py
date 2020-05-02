@@ -35,10 +35,6 @@ class CommonDialog(HasLog):
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: Tokens to format into the description. Default is an empty collection.
     :type description_tokens: Iterator[Any], optional
-    :param disabled_tooltip: If provided, this text will display when the dialog is disabled. Default is None.
-    :type disabled_tooltip: Union[int, LocalizedString], optional
-    :param disabled_tooltip_tokens: Tokens to format into the disabled tooltip. Default is an empty collection.
-    :type disabled_tooltip_tokens: Iterator[Any], optional
     :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information. Default is None.
     :type mod_identity: CommonModIdentity, optional
     """
@@ -49,32 +45,17 @@ class CommonDialog(HasLog):
         description_identifier: Union[int, LocalizedString],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
-        disabled_tooltip: Union[int, LocalizedString]=None,
-        disabled_tooltip_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):
         super().__init__()
         self.title = CommonLocalizationUtils.create_localized_string(title_identifier, tokens=tuple(title_tokens))
         self.description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=tuple(description_tokens))
         self._mod_identity = mod_identity
-        if disabled_tooltip is None:
-            self._disabled_tooltip = None
-        else:
-            self._disabled_tooltip = CommonLocalizationUtils.create_localized_string(disabled_tooltip, tokens=tuple(disabled_tooltip_tokens))
 
     # noinspection PyMissingOrEmptyDocstring
     @property
     def mod_identity(self) -> CommonModIdentity:
         return self._mod_identity or ModInfo.get_identity()
-
-    @property
-    def disabled_tooltip(self) -> Union[LocalizedString, None]:
-        """A tooltip that will display when the dialog is disabled.
-
-        :return: An instance of CommonModIdentity
-        :rtype: CommonModIdentity
-        """
-        return self._disabled_tooltip
 
     def show(self, *_: Any, **__: Any):
         """show(*_, **__)

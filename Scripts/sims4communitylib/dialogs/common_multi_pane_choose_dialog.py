@@ -15,6 +15,7 @@ from sims4communitylib.dialogs.choose_object_dialog import CommonChooseObjectDia
 from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
 from sims4communitylib.dialogs.common_choose_dialog import CommonChooseDialog
 from sims4communitylib.dialogs.common_dialog import CommonDialog
+from sims4communitylib.dialogs.custom_dialogs.picker_dialogs.common_ui_multi_picker import CommonUiMultiPicker
 from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtils
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
@@ -26,31 +27,6 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog import UiDialogBase
 from ui.ui_dialog_picker import ObjectPickerRow
-from protocolbuffers.Dialog_pb2 import UiDialogMessage, UiDialogMultiPicker
-from ui.ui_dialog_multi_picker import UiMultiPicker
-
-
-class CommonUiMultiPicker(UiMultiPicker):
-    """A multi picker dialog. """
-    def __init__(self, *args, **kwargs) -> None:
-        super().__init__(*args, **kwargs)
-        self.disabled_tooltips: Dict[Any, LocalizedString] = dict()
-
-    def build_msg(self, **kwargs) -> Any:
-        """ Build the message for display. """
-        message = super().build_msg(**kwargs)
-        # noinspection PyUnresolvedReferences
-        message.dialog_type = UiDialogMessage.MULTI_PICKER
-        multi_picker_msg = UiDialogMultiPicker()
-        for dialog in self._picker_dialogs.values():
-            new_message = dialog.build_msg()
-            # noinspection PyUnresolvedReferences
-            multi_picker_item = multi_picker_msg.multi_picker_items.add()
-            multi_picker_item.picker_data = new_message.picker_data
-            multi_picker_item.picker_id = new_message.dialog_id
-            multi_picker_item.disabled_tooltip = self.disabled_tooltips.get(new_message.dialog_id, None) or CommonLocalizationUtils.create_localized_string('')
-        message.multi_picker_data = multi_picker_msg
-        return message
 
 
 class CommonMultiPaneChooseDialog(CommonDialog):
@@ -66,7 +42,7 @@ class CommonMultiPaneChooseDialog(CommonDialog):
 
     .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_multi_pane_choose_dialog` in the in-game console.
 
-    .. warning:: This dialog oes not currently work with `CommonChooseSimDialog` or `CommonChooseSimsDialog`.
+    .. warning:: This dialog does not currently work with `CommonChooseSimDialog` or `CommonChooseSimsDialog`.
 
     .. highlight:: python
     .. code-block:: python
@@ -211,11 +187,11 @@ class CommonMultiPaneChooseDialog(CommonDialog):
 
         Add a sub dialog to the dialog.
 
-        :param sub_dialog: An instance of a dialog.
+        :param sub_dialog: An instance of a choose dialog.
         :type sub_dialog: CommonChooseDialog
         :param dialog_arguments: Arguments to pass to the sub dialog when building it.
         :type dialog_arguments: Any
-        :param dialog_keyword_arguments: Keyword arguments to pass to the sub dialog when building.
+        :param dialog_keyword_arguments: Keyword arguments to pass to the sub dialog when building it.
         :type dialog_keyword_arguments: Any
         """
         self._sub_dialogs += ((sub_dialog, dialog_arguments, dialog_keyword_arguments), )
@@ -251,7 +227,7 @@ class CommonMultiPaneChooseDialog(CommonDialog):
         on_submit: Callable[[Dict[int, Tuple[Any]], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         sim_info: SimInfo=None
     ):
-        self.log.debug('Attempting to display multi picker dialog.')
+        self.log.debug('Attempting to display multi choose dialog.')
         dialog = self.build_dialog(
             on_submit=on_submit,
             sim_info=sim_info
@@ -264,23 +240,23 @@ class CommonMultiPaneChooseDialog(CommonDialog):
         on_submit: Callable[[Dict[int, Tuple[Any]], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         sim_info: SimInfo=None
     ):
-        self.log.format(ui_dialog_message_dir=dir(UiDialogMessage))
         dialog = self._create_dialog(sim_info=sim_info)
         if dialog is None:
             self.log.error('dialog was None for some reason.')
             return
 
         if on_submit is None:
-            raise AssertionError('on_chosen was None.')
+            raise AssertionError('on_submit was None.')
 
         if len(self._sub_dialogs) == 0:
-            raise AssertionError('No sub dialogs have been added. Add sub dialogs to the dialog before attempting to display it.')
+            raise AssertionError('No dialogs have been added to the container. Add dialogs before attempting to display the multi pane dialog.')
 
         @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
         def _on_submit(_dialog: CommonUiMultiPicker):
             if not _dialog.accepted:
                 self.log.debug('Dialog cancelled.')
                 return on_submit(dict(), CommonChoiceOutcome.CANCEL)
+
             made_choices: bool = CommonDialogUtils.get_chosen_items(_dialog)
             if not made_choices:
                 self.log.debug('No choices made. Cancelling dialog.')
@@ -295,7 +271,8 @@ class CommonMultiPaneChooseDialog(CommonDialog):
                     sub_dialog_choices.append(choice)
                 dialog_choices[index] = tuple(sub_dialog_choices)
                 index += 1
-            self.log.format_with_message('Choices were made.', choice=made_choices)
+
+            self.log.format_with_message('Choices were made, submitting.', choice=made_choices)
             result = on_submit(dialog_choices, CommonChoiceOutcome.CHOICE_MADE)
             self.log.format_with_message('Finished handling choice.', result=result)
             return result
@@ -320,7 +297,7 @@ class CommonMultiPaneChooseDialog(CommonDialog):
                 )
             if _sub_dialog is None:
                 continue
-            dialog.disabled_tooltips[_sub_dialog.dialog_id] = sub_dialog.disabled_tooltip
+            dialog.required_tooltips[_sub_dialog.dialog_id] = sub_dialog.required_tooltip
             dialog._picker_dialogs[_sub_dialog.dialog_id] = _sub_dialog
 
         self.log.debug('Showing dialog.')
@@ -337,7 +314,7 @@ class CommonMultiPaneChooseDialog(CommonDialog):
                 pickers=()
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, '_create_dialog', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'multi_pane_choose._create_dialog', exception=ex)
         return None
 
 

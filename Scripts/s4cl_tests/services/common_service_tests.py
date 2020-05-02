@@ -12,7 +12,7 @@ from sims4communitylib.testing.common_test_service import CommonTestService
 
 
 class _TestService(CommonService):
-    def __init__(self):
+    def __init__(self: '_TestService'):
         self.a_collection_of_things = []
 
 
