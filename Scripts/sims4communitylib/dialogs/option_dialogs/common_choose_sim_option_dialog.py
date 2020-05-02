@@ -35,7 +35,9 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
         title_tokens=(),\
         description_tokens=(),\
         on_close=CommonFunctionUtils.noop,\
-        mod_identity=None\
+        mod_identity=None,\
+        required_tooltip=None,\
+        required_tooltip_tokens=()\
     )
 
     A dialog that displays a list of Sims for selection.
@@ -110,6 +112,10 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
     :type on_close: Callable[..., Any], optional
     :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
     :type mod_identity: CommonModIdentity, optional
+    :param required_tooltip: If provided, this text will display when the dialog requires at least one choice and a choice has not been made. Default is None.
+    :type required_tooltip: Union[int, LocalizedString], optional
+    :param required_tooltip_tokens: Tokens to format into the required tooltip. Default is an empty collection.
+    :type required_tooltip_tokens: Iterator[Any], optional
     """
     def __init__(
         self,
@@ -118,7 +124,9 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
         on_close: Callable[..., Any]=CommonFunctionUtils.noop,
-        mod_identity: CommonModIdentity=None
+        mod_identity: CommonModIdentity=None,
+        required_tooltip: Union[int, LocalizedString]=None,
+        required_tooltip_tokens: Iterator[Any]=()
     ):
         super().__init__(
             CommonChooseSimDialog(
@@ -127,7 +135,9 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
                 tuple(),
                 title_tokens=title_tokens,
                 description_tokens=description_tokens,
-                mod_identity=mod_identity
+                mod_identity=mod_identity,
+                required_tooltip=required_tooltip,
+                required_tooltip_tokens=required_tooltip_tokens
             ),
             on_close=on_close
         )

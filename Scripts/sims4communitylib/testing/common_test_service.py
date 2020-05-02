@@ -12,6 +12,7 @@ from sims4communitylib.exceptions.common_exceptions_handler import CommonExcepti
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
+# This try catch is here for when tests are being run via PyCharm rather than from in-game.
 try:
     from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
@@ -21,7 +22,15 @@ try:
     def _community_test_log(val: str):
         community_test_log_log.debug(val)
 except ModuleNotFoundError:
-    CommonLogRegistry = None
+    # noinspection PyMissingOrEmptyDocstring
+    class CommonLogRegistry:
+
+        @classmethod
+        def get(cls, *_, **__) -> 'CommonLogRegistry':
+            pass
+
+        def register_log(self) -> None:
+            pass
 
     def _community_test_log(_: str):
         pass

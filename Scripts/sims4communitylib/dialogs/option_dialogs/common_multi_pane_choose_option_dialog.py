@@ -29,6 +29,7 @@ from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_obje
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from sims4communitylib.utils.common_icon_utils import CommonIconUtils
 from ui.ui_dialog import UiDialogBase
 
 
@@ -39,27 +40,28 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
         description_identifier,\
         title_tokens=(),\
         description_tokens=(),\
-        on_close=CommonFunctionUtils.noop,\
-        per_page=25\
+        on_close=CommonFunctionUtils.noop\
     )
 
-    A dialog that displays multiple sub dialogs.
+    A container for multiple choose option dialogs.
 
     .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_multi_pane_choose_option_dialog` in the in-game console.
+
+    .. warning:: This dialog does not currently work with `CommonChooseSimOptionDialog` or `CommonChooseSimsOptionDialog`.
 
     :Example usage:
 
     .. highlight:: python
     .. code-block:: python
 
-        def _on_option_chosen(option_identifier: str, choice: str):
-            output('Chose option in dialog one {} with value: {}.'.format(pformat(option_identifier), pformat(choice)))
+        def _on_option_chosen_in_dialog_one(option_identifier: str, choice: str):
+            pass
 
-        def _on_option_two_chosen(option_identifier: str, choice: str):
-            output('Chose option in dialog two {} with value: {}.'.format(pformat(option_identifier), pformat(choice)))
+        def _on_option_chosen_in_dialog_two(option_identifier: str, choice: str):
+            pass
 
         def _on_submit(chosen_options: Dict[int, Any]):
-            output('Chosen options from all dialogs {}.'.format(pformat(chosen_options)))
+            pass
 
         # LocalizedStrings within other LocalizedStrings
         title_tokens = (
@@ -76,7 +78,7 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
             ),
         )
 
-        sub_option_dialog = CommonChooseObjectOptionDialog(
+        sub_dialog_one = CommonChooseObjectOptionDialog(
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             title_tokens=title_tokens,
@@ -84,9 +86,7 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
             per_page=2
         )
 
-        from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-
-        sub_option_dialog.add_option(
+        sub_dialog_one.add_option(
             CommonDialogObjectOption(
                 'Option 1',
                 'Value 1',
@@ -95,11 +95,11 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
                     CommonStringId.TESTING_TEST_BUTTON_ONE,
                     icon=CommonIconUtils.load_checked_square_icon()
                 ),
-                on_chosen=_on_option_chosen
+                on_chosen=_on_option_chosen_in_dialog_one
             )
         )
 
-        sub_option_dialog.add_option(
+        sub_dialog_one.add_option(
             CommonDialogObjectOption(
                 'Option 2',
                 'Value 2',
@@ -108,11 +108,11 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
                     CommonStringId.TESTING_TEST_BUTTON_TWO,
                     icon=CommonIconUtils.load_arrow_navigate_into_icon()
                 ),
-                on_chosen=_on_option_chosen
+                on_chosen=_on_option_chosen_in_dialog_one
             )
         )
 
-        sub_option_dialog.add_option(
+        sub_dialog_one.add_option(
             CommonDialogObjectOption(
                 'Option 3',
                 'Value 3',
@@ -121,11 +121,11 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
                     CommonStringId.TESTING_TEST_BUTTON_TWO,
                     icon=CommonIconUtils.load_arrow_navigate_into_icon()
                 ),
-                on_chosen=_on_option_chosen
+                on_chosen=_on_option_chosen_in_dialog_one
             )
         )
 
-        sub_option_dialog_two = CommonChooseObjectOptionDialog(
+        sub_dialog_two = CommonChooseObjectOptionDialog(
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             title_tokens=title_tokens,
@@ -133,7 +133,7 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
             per_page=2
         )
 
-        sub_option_dialog_two.add_option(
+        sub_dialog_two.add_option(
             CommonDialogObjectOption(
                 'Option 4',
                 'Value 4',
@@ -142,11 +142,11 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
                     CommonStringId.TESTING_TEST_BUTTON_ONE,
                     icon=CommonIconUtils.load_checked_square_icon()
                 ),
-                on_chosen=_on_option_two_chosen
+                on_chosen=_on_option_chosen_in_dialog_two
             )
         )
 
-        sub_option_dialog_two.add_option(
+        sub_dialog_two.add_option(
             CommonDialogObjectOption(
                 'Option 5',
                 'Value 5',
@@ -155,11 +155,11 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
                     CommonStringId.TESTING_TEST_BUTTON_TWO,
                     icon=CommonIconUtils.load_arrow_navigate_into_icon()
                 ),
-                on_chosen=_on_option_two_chosen
+                on_chosen=_on_option_chosen_in_dialog_two
             )
         )
 
-        sub_option_dialog_two.add_option(
+        sub_dialog_two.add_option(
             CommonDialogObjectOption(
                 'Option 6',
                 'Value 6',
@@ -168,7 +168,7 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
                     CommonStringId.TESTING_TEST_BUTTON_TWO,
                     icon=CommonIconUtils.load_arrow_navigate_into_icon()
                 ),
-                on_chosen=_on_option_two_chosen
+                on_chosen=_on_option_chosen_in_dialog_two
             )
         )
 
@@ -180,8 +180,8 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
             description_tokens=description_tokens
         )
 
-        option_dialog.add_sub_option_dialog(sub_option_dialog)
-        option_dialog.add_sub_option_dialog(sub_option_dialog_two)
+        option_dialog.add_sub_dialog(sub_dialog_one)
+        option_dialog.add_sub_dialog(sub_dialog_two)
 
         option_dialog.show(
             on_submit=_on_submit,
@@ -232,19 +232,19 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
         result: CommonMultiPaneChooseDialog = super()._internal_dialog
         return result
 
-    def add_sub_option_dialog(self, sub_option_dialog: CommonChooseOptionDialog, *dialog_arguments: Any, **dialog_keyword_arguments: Any):
+    def add_sub_dialog(self, sub_dialog: CommonChooseOptionDialog, *dialog_arguments: Any, **dialog_keyword_arguments: Any):
         """add_sub_dialog(sub_dialog, *dialog_arguments, **dialog_keyword_arguments)
 
-        Add a sub dialog to the dialog.
+        Add a sub dialog.
 
-        :param sub_option_dialog: An instance of an option dialog.
-        :type sub_option_dialog: CommonChooseOptionDialog
-        :param dialog_arguments: Arguments to pass to the sub option dialog when building it.
-        :type dialog_arguments: Any
-        :param dialog_keyword_arguments: Keyword arguments to pass to the sub option dialog when building.
-        :type dialog_keyword_arguments: Any
+        :param sub_dialog: An instance of a choose option dialog.
+        :type sub_dialog: CommonChooseOptionDialog
+        :param dialog_arguments: Arguments to pass to the sub dialog when building it.
+        :type dialog_arguments: Any, optional
+        :param dialog_keyword_arguments: Keyword arguments to pass to the sub dialog when building it.
+        :type dialog_keyword_arguments: Any, optional
         """
-        self._internal_dialog.add_sub_dialog(sub_option_dialog._internal_dialog, *dialog_arguments, **dialog_keyword_arguments)
+        self._internal_dialog.add_sub_dialog(sub_dialog._internal_dialog, *dialog_arguments, **dialog_keyword_arguments)
 
     def show(
         self,
@@ -259,13 +259,13 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
         Show the dialog and invoke the callbacks upon the player submitting their selections.
 
         :param on_submit: A callback invoked upon the player submitting the dialog and the choices within it.\
-            Default is CommonFunctionUtils.noop. Each choice is mapped as follows The key is the dialog index starting at 0. The value is the choice made within that sub dialog. Default is CommonFunctionUtils.noop.
+            Each choice is mapped as follows: The key is the index of the dialog a value belongs to, starting at 0. The value is the choice made within that dialog. Default is CommonFunctionUtils.noop.
         :type on_submit: Callable[[Dict[int, Tuple[Any]]], Any], optional
         :param sim_info: The SimInfo of the Sim that will appear in the dialog image. The default Sim is the active Sim. Default is None.
         :type sim_info: SimInfo, optional
         """
         try:
-            return self._internal_dialog.show(on_submit=self._on_submit(on_submit), sim_info=sim_info)
+            return self._internal_dialog.show(on_submit=self._on_submit(on_submit=on_submit), sim_info=sim_info)
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_identity, 'multi_pane_choose_option.show', exception=ex)
 
@@ -288,13 +288,10 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
         :type sim_info: SimInfo, optional
         """
         try:
-            return self._internal_dialog.build_dialog(on_submit=self._on_submit(on_submit), sim_info=sim_info)
+            return self._internal_dialog.build_dialog(on_submit=self._on_submit(on_submit=on_submit), sim_info=sim_info)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'multi_pane_choose_option.show', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'multi_pane_choose_option.build_dialog', exception=ex)
         return None
-
-    def _on_chosen(self) -> Callable[[Dict[int, Tuple[CommonDialogOption]], CommonChoiceOutcome], bool]:
-        return self._on_submit()
 
     def _on_submit(
         self,
@@ -306,7 +303,8 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
                 self.log.debug('No options chosen.')
                 self.close()
                 return False
-            self.log.debug('Chosen options: {} with outcome: {}'.format(pformat(chosen_options), pformat(outcome)))
+
+            self.log.debug('Chose options: {} with outcome: {}'.format(pformat(chosen_options), pformat(outcome)))
             chosen_values: Dict[int, DialogOptionValueType] = dict()
             for chosen_option_index in chosen_options:
                 self.log.debug('Chosen option index: {}'.format(chosen_option_index))
@@ -314,10 +312,11 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
                 chosen_option_values: List[Any] = list()
                 for chosen_option_option in chosen_option_options:
                     chosen_option_values.append(chosen_option_option.value)
-                    self.log.debug('Choosing option with value {}'.format(chosen_option_option.value))
+                    self.log.debug('Chose value for option: {}'.format(chosen_option_option.value))
                     chosen_option_option.choose()
                 chosen_values[chosen_option_index] = tuple(chosen_option_values)
-            self.log.debug('Submitting options: {}'.format(pformat(chosen_values)))
+
+            self.log.debug('Submitting choices: {}'.format(pformat(chosen_values)))
             return on_submit(chosen_values)
         return _on_submit
 
@@ -327,10 +326,10 @@ def _common_testing_show_multi_pane_choose_option_dialog(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
     output('Showing test multi pane choose option dialog.')
 
-    def _on_option_chosen(option_identifier: str, choice: str):
+    def _on_option_chosen_in_dialog_one(option_identifier: str, choice: str):
         output('Chose option in dialog one {} with value: {}.'.format(pformat(option_identifier), pformat(choice)))
 
-    def _on_option_two_chosen(option_identifier: str, choice: str):
+    def _on_option_chosen_in_dialog_two(option_identifier: str, choice: str):
         output('Chose option in dialog two {} with value: {}.'.format(pformat(option_identifier), pformat(choice)))
 
     def _on_submit(chosen_options: Dict[int, Any]):
@@ -352,7 +351,7 @@ def _common_testing_show_multi_pane_choose_option_dialog(_connection: int=None):
             ),
         )
 
-        sub_option_dialog = CommonChooseObjectOptionDialog(
+        sub_dialog_one = CommonChooseObjectOptionDialog(
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             title_tokens=title_tokens,
@@ -360,9 +359,7 @@ def _common_testing_show_multi_pane_choose_option_dialog(_connection: int=None):
             per_page=2
         )
 
-        from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-
-        sub_option_dialog.add_option(
+        sub_dialog_one.add_option(
             CommonDialogObjectOption(
                 'Option 1',
                 'Value 1',
@@ -371,11 +368,11 @@ def _common_testing_show_multi_pane_choose_option_dialog(_connection: int=None):
                     CommonStringId.TESTING_TEST_BUTTON_ONE,
                     icon=CommonIconUtils.load_checked_square_icon()
                 ),
-                on_chosen=_on_option_chosen
+                on_chosen=_on_option_chosen_in_dialog_one
             )
         )
 
-        sub_option_dialog.add_option(
+        sub_dialog_one.add_option(
             CommonDialogObjectOption(
                 'Option 2',
                 'Value 2',
@@ -384,11 +381,11 @@ def _common_testing_show_multi_pane_choose_option_dialog(_connection: int=None):
                     CommonStringId.TESTING_TEST_BUTTON_TWO,
                     icon=CommonIconUtils.load_arrow_navigate_into_icon()
                 ),
-                on_chosen=_on_option_chosen
+                on_chosen=_on_option_chosen_in_dialog_one
             )
         )
 
-        sub_option_dialog.add_option(
+        sub_dialog_one.add_option(
             CommonDialogObjectOption(
                 'Option 3',
                 'Value 3',
@@ -397,11 +394,11 @@ def _common_testing_show_multi_pane_choose_option_dialog(_connection: int=None):
                     CommonStringId.TESTING_TEST_BUTTON_TWO,
                     icon=CommonIconUtils.load_arrow_navigate_into_icon()
                 ),
-                on_chosen=_on_option_chosen
+                on_chosen=_on_option_chosen_in_dialog_one
             )
         )
 
-        sub_option_dialog_two = CommonChooseObjectOptionDialog(
+        sub_dialog_two = CommonChooseObjectOptionDialog(
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             title_tokens=title_tokens,
@@ -409,7 +406,7 @@ def _common_testing_show_multi_pane_choose_option_dialog(_connection: int=None):
             per_page=2
         )
 
-        sub_option_dialog_two.add_option(
+        sub_dialog_two.add_option(
             CommonDialogObjectOption(
                 'Option 4',
                 'Value 4',
@@ -418,11 +415,11 @@ def _common_testing_show_multi_pane_choose_option_dialog(_connection: int=None):
                     CommonStringId.TESTING_TEST_BUTTON_ONE,
                     icon=CommonIconUtils.load_checked_square_icon()
                 ),
-                on_chosen=_on_option_two_chosen
+                on_chosen=_on_option_chosen_in_dialog_two
             )
         )
 
-        sub_option_dialog_two.add_option(
+        sub_dialog_two.add_option(
             CommonDialogObjectOption(
                 'Option 5',
                 'Value 5',
@@ -431,11 +428,11 @@ def _common_testing_show_multi_pane_choose_option_dialog(_connection: int=None):
                     CommonStringId.TESTING_TEST_BUTTON_TWO,
                     icon=CommonIconUtils.load_arrow_navigate_into_icon()
                 ),
-                on_chosen=_on_option_two_chosen
+                on_chosen=_on_option_chosen_in_dialog_two
             )
         )
 
-        sub_option_dialog_two.add_option(
+        sub_dialog_two.add_option(
             CommonDialogObjectOption(
                 'Option 6',
                 'Value 6',
@@ -444,7 +441,7 @@ def _common_testing_show_multi_pane_choose_option_dialog(_connection: int=None):
                     CommonStringId.TESTING_TEST_BUTTON_TWO,
                     icon=CommonIconUtils.load_arrow_navigate_into_icon()
                 ),
-                on_chosen=_on_option_two_chosen
+                on_chosen=_on_option_chosen_in_dialog_two
             )
         )
 
@@ -456,8 +453,8 @@ def _common_testing_show_multi_pane_choose_option_dialog(_connection: int=None):
             description_tokens=description_tokens
         )
 
-        option_dialog.add_sub_option_dialog(sub_option_dialog)
-        option_dialog.add_sub_option_dialog(sub_option_dialog_two)
+        option_dialog.add_sub_dialog(sub_dialog_one)
+        option_dialog.add_sub_dialog(sub_dialog_two)
 
         option_dialog.show(
             on_submit=_on_submit,
