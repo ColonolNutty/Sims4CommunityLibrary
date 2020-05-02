@@ -35,7 +35,9 @@ class CommonChooseSimDialog(CommonChooseDialog):
         choices,\
         title_tokens=(),\
         description_tokens=(),\
-        mod_identity=None\
+        mod_identity=None,\
+        required_tooltip=None,\
+        required_tooltip_tokens=()\
     )
 
     Create a dialog to display a list of Sims to choose.
@@ -94,6 +96,10 @@ class CommonChooseSimDialog(CommonChooseDialog):
     :type description_tokens: Iterator[Any], optional
     :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
     :type mod_identity: CommonModIdentity, optional
+    :param required_tooltip: If provided, this text will display when the dialog requires at least one choice and a choice has not been made. Default is None.
+    :type required_tooltip: Union[int, LocalizedString], optional
+    :param required_tooltip_tokens: Tokens to format into the required tooltip. Default is an empty collection.
+    :type required_tooltip_tokens: Iterator[Any], optional
     """
     def __init__(
         self,
@@ -102,7 +108,9 @@ class CommonChooseSimDialog(CommonChooseDialog):
         choices: Iterator[SimPickerRow],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
-        mod_identity: CommonModIdentity=None
+        mod_identity: CommonModIdentity=None,
+        required_tooltip: Union[int, LocalizedString]=None,
+        required_tooltip_tokens: Iterator[Any]=()
     ):
         super().__init__(
             title_identifier,
@@ -110,7 +118,9 @@ class CommonChooseSimDialog(CommonChooseDialog):
             choices,
             title_tokens=title_tokens,
             description_tokens=description_tokens,
-            mod_identity=mod_identity
+            mod_identity=mod_identity,
+            required_tooltip=required_tooltip,
+            required_tooltip_tokens=required_tooltip_tokens
         )
 
     # noinspection PyMissingOrEmptyDocstring

@@ -25,6 +25,14 @@ Basic Dialogs
    :undoc-members:
    :show-inheritance:
 
+`Multi-pane Choose Dialog`
+-------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.dialogs.common_multi_pane_choose_dialog.CommonMultiPaneChooseDialog
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Input Float Dialog`
 -------------------------------------------------------------
 
