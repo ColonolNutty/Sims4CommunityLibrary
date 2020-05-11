@@ -37,7 +37,10 @@ class CommonCASUtils:
         :return: True if the CAS part is loaded within the game, False if not.
         :rtype: bool
         """
-        return CommonCASUtils.get_body_type_of_cas_part(cas_part_id) > 0
+        body_type = CommonCASUtils.get_body_type_of_cas_part(cas_part_id)
+        if body_type is None:
+            return False
+        return body_type > 0
 
     @staticmethod
     def get_body_type_of_cas_part(cas_part_id: int) -> Union[BodyType, None]:
