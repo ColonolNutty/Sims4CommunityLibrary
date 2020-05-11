@@ -6,10 +6,10 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Any, Callable
+from sims4communitylib.dialogs.option_dialogs.common_option_dialog import CommonOptionDialog
 from sims4communitylib.utils.common_icon_utils import CommonIconUtils
 from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_object_option import CommonDialogObjectOption
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_context import CommonDialogOptionContext
-from sims4communitylib.dialogs.option_dialogs.common_choose_object_option_dialog import CommonChooseObjectOptionDialog
 
 
 class CommonDialogOpenDialogOption(CommonDialogObjectOption):
@@ -18,7 +18,7 @@ class CommonDialogOpenDialogOption(CommonDialogObjectOption):
     An option that branches into other options.
 
     :param create_dialog_callback: A callback invoked when the dialog option is chosen. It should open a dialog.
-    :type create_dialog_callback: Callable[..., CommonChooseObjectOptionDialog]
+    :type create_dialog_callback: Callable[..., CommonOptionDialog]
     :param context: A context to customize the dialog option.
     :type context: CommonDialogOptionContext
     :param always_visible: If set to True, the option will always appear in the dialog no matter which page.\
@@ -27,7 +27,7 @@ class CommonDialogOpenDialogOption(CommonDialogObjectOption):
     """
     def __init__(
         self,
-        create_dialog_callback: Callable[..., CommonChooseObjectOptionDialog],
+        create_dialog_callback: Callable[..., CommonOptionDialog],
         context: CommonDialogOptionContext,
         always_visible: bool=False
     ):
