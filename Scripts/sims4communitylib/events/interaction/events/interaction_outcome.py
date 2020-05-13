@@ -33,7 +33,7 @@ class S4CLInteractionOutcomeEvent(CommonEvent):
             # - The argument passed to "handle_events" is the name of your Mod.
             @staticmethod
             @CommonEventRegistry.handle_events(ModInfo.get_identity().name)
-            def handle_event(event_data: S4CLInteractionOutcomeEvent):
+            def handle_event(event_data: S4CLInteractionOutcomeEvent) -> bool:
                 pass
 
     :param interaction: The interaction that was performed.

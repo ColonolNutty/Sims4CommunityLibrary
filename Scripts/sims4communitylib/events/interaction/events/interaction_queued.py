@@ -15,7 +15,7 @@ class S4CLInteractionQueuedEvent(CommonEvent):
 
     An event that occurs upon a Sim adding an interaction to their interaction queue.
 
-    .. note:: This event fires BEFORE the interaction is actually queued. Like a Pre-Queue. If False or None is returned from any of the listeners of this event, the interaction will be prevented from queuing.
+    .. note:: This event fires BEFORE the interaction is actually queued. Like a Pre-Queue. If False or None is returned from any of the listeners of this event, the interaction will be prevented from queuing and any subsequent listeners will not receive the event.
 
     :Example usage:
 
@@ -33,8 +33,8 @@ class S4CLInteractionQueuedEvent(CommonEvent):
             # - The first and only required argument has the Type Hint for the event you are listening for.
             # - The argument passed to "handle_events" is the name of your Mod.
             @staticmethod
-            @CommonEventRegistry.handle_events(ModInfo.get_identity().name)
-            def handle_event(event_data: S4CLInteractionQueuedEvent):
+            @CommonEventRegistry.handle_events(ModInfo.get_identity())
+            def handle_event(event_data: S4CLInteractionQueuedEvent) -> bool:
                 # Return True here to allow the interaction to queue. Return False or None here to prevent the interaction from being queued.
                 return True
 
