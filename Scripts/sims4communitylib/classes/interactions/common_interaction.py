@@ -156,9 +156,9 @@ class CommonInteraction(Interaction, HasClassLog):
         """
         try:
             self.on_cancelled(self.sim, self.target, finishing_type, cancel_reason_msg, **kwargs)
-            return super().cancel(finishing_type, cancel_reason_msg, **kwargs)
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' cancel.'.format(self.__class__.__name__), exception=ex)
+        return super().cancel(finishing_type, cancel_reason_msg, **kwargs)
 
     def on_reset(self: 'CommonInteraction'):
         """on_reset()
@@ -168,16 +168,16 @@ class CommonInteraction(Interaction, HasClassLog):
         """
         try:
             self._on_reset(self.sim, self.target)
-            return super().on_reset()
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' on_reset.'.format(self.__class__.__name__), exception=ex)
+        return super().on_reset()
 
     def _post_perform(self: 'CommonInteraction'):
         try:
             self.on_performed(self.sim, self.target)
-            return super()._post_perform()
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' _post_perform.'.format(self.__class__.__name__), exception=ex)
+        return super()._post_perform()
 
     def send_current_progress(self, *args: Any, **kwargs: Any):
         """send_current_progress(*args, **kwargs)

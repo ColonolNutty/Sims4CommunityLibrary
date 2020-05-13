@@ -5,13 +5,14 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-
+from pprint import pformat
 from typing import Iterator, Union, Any, Callable
 
 from event_testing.results import EnqueueResult, TestResult
 from interactions.aop import AffordanceObjectPair
 from interactions.base.interaction import Interaction
 from interactions.context import InteractionSource, InteractionContext, QueueInsertStrategy
+from interactions.interaction_finisher import FinishingType
 from interactions.priority import Priority
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.interactions_enum import CommonInteractionId
@@ -189,6 +190,78 @@ class CommonSimInteractionUtils:
             if interaction_id in interaction_ids:
                 return True
         return False
+
+    @staticmethod
+    def cancel_all_queued_or_running_interactions(sim_info: SimInfo, cancel_reason: str, finishing_type: FinishingType=FinishingType.USER_CANCEL, include_interaction_callback: Callable[[Interaction], bool]=None, **kwargs) -> bool:
+        """cancel_all_queued_or_running_interactions(sim_info, cancel_reason, finishing_type=FinishingType.USER_CANCEL, include_interaction_callback=None, **kwargs)
+
+        Cancel all interactions that a Sim currently has queued or is currently running.
+
+        :param sim_info: An instance of a Sim
+        :type sim_info: SimInfo
+        :param cancel_reason: The reason for the cancellation.
+        :type cancel_reason: str
+        :param finishing_type: The type of finish to finish the interaction with. Default is FinishingType.USER_CANCEL.
+        :type finishing_type: FinishingType, optional
+        :param include_interaction_callback: If the result of this callback is True, the Interaction will be cancelled. If set to None, All interactions will be cancelled. Default is None.
+        :type include_interaction_callback: Callable[[Interaction], bool], optional
+        :return: True, if all queued and running interactions were successfully cancelled. False, if not.
+        :rtype: bool
+        """
+        return CommonSimInteractionUtils.cancel_all_queued_interactions(sim_info, cancel_reason, finishing_type=finishing_type, include_interaction_callback=include_interaction_callback, **kwargs)\
+               and CommonSimInteractionUtils.cancel_all_running_interactions(sim_info, cancel_reason, finishing_type=finishing_type, include_interaction_callback=include_interaction_callback, **kwargs)
+
+    @staticmethod
+    def cancel_all_running_interactions(sim_info: SimInfo, cancel_reason: str, finishing_type: FinishingType=FinishingType.USER_CANCEL, include_interaction_callback: Callable[[Interaction], bool]=None, **kwargs) -> bool:
+        """cancel_all_running_interactions(sim_info, cancel_reason, finishing_type=FinishingType.USER_CANCEL, include_interaction_callback=None, **kwargs)
+
+        Cancel all interactions that a Sim is currently running.
+
+        :param sim_info: An instance of a Sim
+        :type sim_info: SimInfo
+        :param cancel_reason: The reason for the cancellation.
+        :type cancel_reason: str
+        :param finishing_type: The type of finish to finish the interaction with. Default is FinishingType.USER_CANCEL.
+        :type finishing_type: FinishingType, optional
+        :param include_interaction_callback: If the result of this callback is True, the Interaction will be cancelled. If set to None, All interactions will be cancelled. Default is None.
+        :type include_interaction_callback: Callable[[Interaction], bool], optional
+        :return: True, if all running interactions were successfully cancelled. False, if not.
+        :rtype: bool
+        """
+        result = True
+        for interaction in CommonSimInteractionUtils.get_running_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback):
+            try:
+                interaction.cancel(finishing_type, cancel_reason_msg=cancel_reason, **kwargs)
+            except Exception as ex:
+                CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to cancel running interaction \'{}\' due to an exception.'.format(pformat(interaction)), exception=ex)
+                result = False
+        return result
+
+    @staticmethod
+    def cancel_all_queued_interactions(sim_info: SimInfo, cancel_reason: str, finishing_type: FinishingType=FinishingType.USER_CANCEL, include_interaction_callback: Callable[[Interaction], bool]=None, **kwargs) -> bool:
+        """cancel_all_queued_interactions(sim_info, cancel_reason, finishing_type=FinishingType.USER_CANCEL, include_interaction_callback=None, **kwargs)
+
+        Cancel all interactions that a Sim currently has queued.
+
+        :param sim_info: An instance of a Sim
+        :type sim_info: SimInfo
+        :param cancel_reason: The reason for the cancellation.
+        :type cancel_reason: str
+        :param finishing_type: The type of finish to finish the interaction with. Default is FinishingType.USER_CANCEL.
+        :type finishing_type: FinishingType, optional
+        :param include_interaction_callback: If the result of this callback is True, the Interaction will be cancelled. If set to None, All interactions will be cancelled. Default is None.
+        :type include_interaction_callback: Callable[[Interaction], bool], optional
+        :return: True, if all queued interactions were successfully cancelled. False, if not.
+        :rtype: bool
+        """
+        result = True
+        for interaction in CommonSimInteractionUtils.get_queued_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback):
+            try:
+                interaction.cancel(finishing_type, cancel_reason_msg=cancel_reason, **kwargs)
+            except Exception as ex:
+                CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to cancel queued interaction \'{}\' due to an exception.'.format(pformat(interaction)), exception=ex)
+                result = False
+        return result
 
     @staticmethod
     def get_running_interactions_gen(sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:

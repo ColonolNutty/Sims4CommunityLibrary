@@ -15,7 +15,7 @@ from sims4communitylib.services.common_service import CommonService
 
 
 class CommonEventRegistry(CommonService):
-    """Register event handlers and dispatch events.
+    """Register event listeners and dispatch events to any that are registered.
 
     """
 
@@ -32,7 +32,7 @@ class CommonEventRegistry(CommonService):
 
         :param mod_identifier: The name or identity of the mod the class is being registered for.
         :type mod_identifier: Union[str, CommonModIdentity]
-        :return: A function wrapped to handle events.
+        :return: A callable function wrapped to handle events.
         :rtype: Callable[[Callable[[CommonEvent], bool]], Callable[[CommonEvent], bool]]
         """
         def _wrapper(event_function: Callable[[CommonEvent], bool]) -> Callable[..., Any]:
@@ -49,9 +49,11 @@ class CommonEventRegistry(CommonService):
 
         Dispatch an event to any event handlers listening for it.
 
-        :param event: An instance of the event to dispatch to listeners.
+        .. note:: If any listeners return False or None when they handle it, the total result of dispatch will be False as well.
+
+        :param event: An instance of an Event to dispatch to listeners.
         :type event: CommonEvent
-        :return: True, if the event was dispatched successfully. False, if not.
+        :return: True, if the Event was dispatched to all listeners successfully. False, if any listeners failed to handle the event.
         :rtype: bool
         """
         event_handlers = list(self._event_handlers)
