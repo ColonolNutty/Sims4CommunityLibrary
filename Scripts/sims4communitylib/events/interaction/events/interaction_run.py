@@ -13,7 +13,9 @@ from sims4communitylib.events.event_handling.common_event import CommonEvent
 class S4CLInteractionRunEvent(CommonEvent):
     """S4CLInteractionRunEvent(interaction, interaction_queue)
 
-    An event that occurs upon a Sim running an interaction.
+    An event that occurs after a Sim has run an interaction.
+
+    .. note:: This event fires AFTER the interaction is actually run. Like a Post-Run. If False or None is returned from any of the listeners of this event, the interaction will be prevented from running; All subsequent listeners will still receive the event, but their return will be ignored.
 
     :Example usage:
 
@@ -29,13 +31,14 @@ class S4CLInteractionRunEvent(CommonEvent):
             # - The function is static (staticmethod).
             # - The first and only required argument has the name "event_data".
             # - The first and only required argument has the Type Hint for the event you are listening for.
-            # - The argument passed to "handle_events" is the name of your Mod.
+            # - The argument passed to "handle_events" is the name or identity of your Mod.
             @staticmethod
-            @CommonEventRegistry.handle_events(ModInfo.get_identity().name)
-            def handle_event(event_data: S4CLInteractionRunEvent):
-                pass
+            @CommonEventRegistry.handle_events(ModInfo.get_identity())
+            def handle_event(event_data: S4CLInteractionRunEvent) -> bool:
+                # Return True here to signify the event listener ran successfully. Return False or None here to signify the event listener failed to run.
+                return True
 
-    :param interaction: The interaction that is being run.
+    :param interaction: The interaction that was run.
     :type interaction: Interaction
     :param interaction_queue: The interaction queue of the Sim.
     :type interaction_queue: InteractionQueue
@@ -47,18 +50,18 @@ class S4CLInteractionRunEvent(CommonEvent):
 
     @property
     def interaction(self) -> Interaction:
-        """The interaction that is being run.
+        """The interaction that was run.
 
-        :return: The interaction that is being run.
+        :return: The interaction that was run.
         :rtype: Interaction
         """
         return self._interaction
 
     @property
     def interaction_queue(self) -> InteractionQueue:
-        """The interaction queue of the Sim that is running the interaction.
+        """The interaction queue of the Sim that ran the interaction.
 
-        :return: The interaction queue of the Sim that is running the interaction.
+        :return: The interaction queue of the Sim ran the interaction.
         :rtype: InteractionQueue
         """
         return self._interaction_queue

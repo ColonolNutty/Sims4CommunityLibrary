@@ -30,11 +30,12 @@ class S4CLInteractionOutcomeEvent(CommonEvent):
             # - The function is static (staticmethod).
             # - The first and only required argument has the name "event_data".
             # - The first and only required argument has the Type Hint for the event you are listening for.
-            # - The argument passed to "handle_events" is the name of your Mod.
+            # - The argument passed to "handle_events" is the name or identity of your Mod.
             @staticmethod
-            @CommonEventRegistry.handle_events(ModInfo.get_identity().name)
+            @CommonEventRegistry.handle_events(ModInfo.get_identity())
             def handle_event(event_data: S4CLInteractionOutcomeEvent) -> bool:
-                pass
+                # Return True from here to signify the event listener ran successfully. Return False or None here to signify the event listener failed to run.
+                return True
 
     :param interaction: The interaction that was performed.
     :type interaction: Interaction

@@ -10,12 +10,12 @@ from interactions.interaction_queue import InteractionQueue
 from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
-class S4CLInteractionQueuedEvent(CommonEvent):
-    """S4CLInteractionQueuedEvent(interaction, interaction_queue)
+class S4CLInteractionPostQueuedEvent(CommonEvent):
+    """S4CLInteractionPostQueuedEvent(interaction, interaction_queue)
 
-    An event that occurs upon a Sim adding an interaction to their interaction queue.
+    An event that occurs after a Sim adds an interaction to their interaction queue.
 
-    .. note:: This event fires BEFORE the interaction is actually queued. Like a Pre-Queue. If False or None is returned from any of the listeners of this event, the interaction will be prevented from queuing; All subsequent listeners will still receive the event, but their return will be ignored.
+    .. note:: This event fires AFTER the interaction is actually queued. Like a Post-Queue.
 
     :Example usage:
 
@@ -34,11 +34,11 @@ class S4CLInteractionQueuedEvent(CommonEvent):
             # - The argument passed to "handle_events" is the name or identity of your Mod.
             @staticmethod
             @CommonEventRegistry.handle_events(ModInfo.get_identity())
-            def handle_event(event_data: S4CLInteractionQueuedEvent) -> bool:
-                # Return True here to allow the interaction to queue and to signify the event listener ran successfully. Return False or None here to prevent the interaction from being queued or to signify the event listener failed to run.
+            def handle_event(event_data: S4CLInteractionPostQueuedEvent) -> bool:
+                # Return True here to signify the event listener ran successfully. Return False or None here to signify the event listener failed to run.
                 return True
 
-    :param interaction: The interaction that is being queued.
+    :param interaction: The interaction that was queued.
     :type interaction: Interaction
     :param interaction_queue: The interaction queue of the Sim.
     :type interaction_queue: InteractionQueue
@@ -50,7 +50,7 @@ class S4CLInteractionQueuedEvent(CommonEvent):
 
     @property
     def interaction(self) -> Interaction:
-        """The interaction that is being queued.
+        """The interaction that was queued.
 
         :return: The interaction that was queued.
         :rtype: Interaction
@@ -59,9 +59,9 @@ class S4CLInteractionQueuedEvent(CommonEvent):
 
     @property
     def interaction_queue(self) -> InteractionQueue:
-        """The interaction queue of the Sim that is queuing the interaction.
+        """The interaction queue of the Sim that queued the interaction.
 
-        :return: The interaction queue of the Sim that is queuing the interaction.
+        :return: The interaction queue of the Sim that queued the interaction.
         :rtype: InteractionQueue
         """
         return self._interaction_queue
