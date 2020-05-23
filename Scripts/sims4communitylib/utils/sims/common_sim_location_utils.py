@@ -42,7 +42,11 @@ class CommonSimLocationUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return None
-        return sim.position
+        # noinspection PyBroadException
+        try:
+            return sim.position
+        except:
+            return None
 
     @staticmethod
     def get_location(sim_info: SimInfo) -> Union[Location, None]:
@@ -58,7 +62,11 @@ class CommonSimLocationUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return None
-        return sim.location
+        # noinspection PyBroadException
+        try:
+            return sim.location
+        except:
+            return None
 
     @staticmethod
     def can_swim_at_location(sim_info: SimInfo, location: Location) -> bool:
