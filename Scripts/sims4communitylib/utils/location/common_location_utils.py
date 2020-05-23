@@ -176,10 +176,9 @@ class CommonLocationUtils:
         :return: True, if the current lot has any of the specified traits. False, if not.
         :rtype: bool
         """
-        current_lot_traits = CommonLocationUtils.get_lot_traits_of_current_lot()
-        for current_lot_trait in current_lot_traits:
-            lot_trait_id = getattr(current_lot_trait, 'guid64', None)
-            if lot_trait_id in lot_trait_ids:
+        current_lot_trait_ids = [getattr(current_lot_trait, 'guid64', None) for current_lot_trait in CommonLocationUtils.get_lot_traits_of_current_lot()]
+        for lot_trait_id in lot_trait_ids:
+            if lot_trait_id in current_lot_trait_ids:
                 return True
         return False
 
@@ -194,11 +193,13 @@ class CommonLocationUtils:
         :return: True, if the current lot has all of the specified traits. False, if not.
         :rtype: bool
         """
-        current_lot_traits = CommonLocationUtils.get_lot_traits_of_current_lot()
-        for current_lot_trait in current_lot_traits:
-            lot_trait_id = getattr(current_lot_trait, 'guid64', None)
-            if lot_trait_id not in lot_trait_ids:
-                return False
+        current_lot_trait_ids = [getattr(current_lot_trait, 'guid64', None) for current_lot_trait in CommonLocationUtils.get_lot_traits_of_current_lot()]
+        if len(current_lot_trait_ids) == 0:
+            return False
+        for lot_trait_id in lot_trait_ids:
+            if lot_trait_id in current_lot_trait_ids:
+                continue
+            return False
         return True
 
     @staticmethod
