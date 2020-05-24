@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from typing import Union, Tuple
 
 from protocolbuffers.Math_pb2 import Vector3
+from routing import Location
 from sims.household import Household
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Gender, Age, Species
@@ -71,20 +72,22 @@ class CommonSimSpawnUtils:
         return sim_info_list[0]
 
     @staticmethod
-    def spawn_sim(sim_info: SimInfo, location: Vector3) -> bool:
-        """spawn_sim(sim_info, location)
+    def spawn_sim(sim_info: SimInfo, location: Location=None, position: Vector3=None) -> bool:
+        """spawn_sim(sim_info, location=None, position=None)
 
         Spawn a Sim.
 
         :param sim_info: The Sim to Spawn.
         :type sim_info: SimInfo
-        :param location: The location to spawn the Sim at.
-        :type location: Vector3
+        :param location: The location to spawn the Sim at. Default is None.
+        :type location: Location, optional
+        :param position: The position to spawn the Sim at. Default is None.
+        :type position: Vector3, optional
         :return: True, if the Sim was spawned successfully. False, if not.
         :rtype: bool
         """
         try:
-            SimSpawner.spawn_sim(sim_info, sim_location=location)
+            SimSpawner.spawn_sim(sim_info, sim_location=location, sim_position=position)
         except Exception as ex:
             CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to spawn Sim with SimInfo \'{}\' at location \'{}\'.'.format(sim_info, location), exception=ex)
             return False
