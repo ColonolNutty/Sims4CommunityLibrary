@@ -10,6 +10,12 @@ import services
 from typing import Tuple
 
 import build_buy
+
+try:
+    import _buildbuy
+except ImportError:
+    # noinspection SpellCheckingInspection
+    _buildbuy = build_buy
 from sims4.resources import Types
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from venues.venue_tuning import Venue, VenueTypes
@@ -111,7 +117,8 @@ class CommonLocationUtils:
         :rtype: bool
         """
         try:
-            return build_buy.is_location_outside(lot_id, location.transform.translation, location.level)
+            # noinspection PyTypeChecker
+            return _buildbuy.is_location_outside(lot_id, location.transform.translation, location.level)
         except RuntimeError:
             return False
 

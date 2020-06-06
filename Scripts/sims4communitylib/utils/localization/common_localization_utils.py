@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, Tuple, Any
+from typing import Union, Tuple, Any, Iterable
 
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4.localization import LocalizationHelperTuning, _create_localized_string, create_tokens, \
@@ -16,6 +16,8 @@ from sims4communitylib.utils.localization.common_localized_string_colors import 
 
 class CommonLocalizationUtils:
     """Utilities for handling localization strings.
+
+    .. note:: Localized Strings are the python equivalent of values within a StringTable.
 
     """
     class LocalizedTooltip(TunableLocalizedStringFactory._Wrapper):
@@ -36,7 +38,7 @@ class CommonLocalizationUtils:
             return CommonLocalizationUtils.create_localized_string(self._string_id, tokens=self._tokens)
 
     @staticmethod
-    def create_localized_tooltip(tooltip_text: Union[int, str, LocalizedString], tooltip_tokens: Tuple[Any]=()) -> 'LocalizedTooltip':
+    def create_localized_tooltip(tooltip_text: Union[int, str, LocalizedString], tooltip_tokens: Iterable[Any]=()) -> 'LocalizedTooltip':
         """create_localized_tooltip(tooltip_text, tooltip_tokens=())
 
         Create a LocalizedTooltip use this when you wish to display a tooltip on various things.
@@ -53,7 +55,7 @@ class CommonLocalizationUtils:
         return CommonLocalizationUtils.LocalizedTooltip(tooltip_text, *tooltip_tokens)
 
     @staticmethod
-    def create_localized_string(identifier: Union[int, str, LocalizedString], tokens: Tuple[Any]=(), localize_tokens: bool=True, text_color: CommonLocalizedStringColor=CommonLocalizedStringColor.DEFAULT) -> LocalizedString:
+    def create_localized_string(identifier: Union[int, str, LocalizedString], tokens: Iterable[Any]=(), localize_tokens: bool=True, text_color: CommonLocalizedStringColor=CommonLocalizedStringColor.DEFAULT) -> LocalizedString:
         """create_localized_string(identifier, tokens=(), localize_tokens=True, text_color=CommonLocalizedStringColor.DEFAULT)
 
         Create a LocalizedString formatted with the specified tokens.
@@ -72,7 +74,7 @@ class CommonLocalizationUtils:
         if identifier is None:
             return CommonLocalizationUtils.create_localized_string(CommonStringId.STRING_NOT_FOUND_WITH_IDENTIFIER, tokens=('None',), text_color=text_color)
         if localize_tokens:
-            tokens = CommonLocalizationUtils._normalize_tokens(*tokens)
+            tokens = tuple(CommonLocalizationUtils._normalize_tokens(*tokens))
         if isinstance(identifier, LocalizedString) and hasattr(identifier, 'tokens'):
             create_tokens(identifier.tokens, tokens)
             return CommonLocalizationUtils.colorize(identifier, text_color=text_color)
@@ -134,7 +136,7 @@ class CommonLocalizationUtils:
         return CommonLocalizationUtils.create_localized_string(text_color.value, tokens=(localized_string,))
 
     @staticmethod
-    def _normalize_tokens(*tokens: Any) -> Tuple[LocalizedString]:
+    def _normalize_tokens(*tokens: Any) -> Iterable[LocalizedString]:
         new_tokens = []
         for token in tokens:
             new_tokens.append(CommonLocalizationUtils.create_localized_string(token))

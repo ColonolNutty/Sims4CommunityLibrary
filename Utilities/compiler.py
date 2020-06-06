@@ -1,6 +1,7 @@
 import shutil
 import io
 import fnmatch
+import datetime
 from zipfile import PyZipFile
 from Utilities.unpyc3 import decompile
 from settings import *
@@ -71,6 +72,9 @@ def compile_module(mod_creator_name=None, root=None, mod_scripts_folder=None, mo
     if not mod_name:
         mod_name = os.path.join('..', '..', os.path.basename(os.path.normpath(os.path.dirname(os.path.realpath('__file__')))))
         print('No mod name found, setting the path name to \'{}\'.'.format(mod_name))
+
+    now = datetime.datetime.now()
+    print('Started compiling files: ' + now.strftime('%Y-%m-%d %H:%M:%S'))
     print('The current working directory {}.'.format(os.getcwd()))
 
     if mod_creator_name:
@@ -109,7 +113,9 @@ def compile_module(mod_creator_name=None, root=None, mod_scripts_folder=None, mo
             except Exception as ex:
                 print('Failed to write {}. {}'.format(folder, ex.args[1]))
                 continue
-        print('Done compiling files.')
+
+        now = datetime.datetime.now()
+        print('Done compiling files.' + now.strftime('%Y-%m-%d %H:%M:%S'))
         zf.close()
         print('Changing working directory to previous working directory.')
         os.chdir(previous_working_directory)
