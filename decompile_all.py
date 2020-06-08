@@ -13,7 +13,10 @@ def unpyc3(include_ea_decompileile=False, include_decompile_directory=False):
         decompile_dir(decompile_src)
     if include_ea_decompileile:
         gameplay_folder_data = os.path.join(game_folder, 'Data', 'Simulation', 'Gameplay')
-        gameplay_folder_game = os.path.join(game_folder, 'Game', 'Bin', 'Python')
+        if os.name == 'posix':
+            gameplay_folder_game = os.path.join(game_folder, 'Python')
+        else:
+            gameplay_folder_game = os.path.join(game_folder, 'Game', 'Bin', 'Python')
 
         extract_folder(ea_folder, gameplay_folder_data)
         extract_folder(ea_folder, gameplay_folder_game)
