@@ -195,7 +195,7 @@ Follow the installation instructions below for details.
 - Your folder structure should look like this: `<Your Project>/S4CL/sims4communitylib` at this point.
 - Ensure you list in the description of your mod a link to the github releases (You may even link a specific release to ensure compatibility.)
 - Ensure you properly attribute S4CL and its author according to the license located at the bottom of this readme.
-- YOU DO NOT HAVE MY PERMISSION TO BUNDLE S4CL INTO YOUR OWN MOD. So don't do it. Redirect the users of your mod to the [github repository](https://github.com/ColonolNutty/Sims4CommunityLibrary) or [releases](https://github.com/ColonolNutty/Sims4CommunityLibrary/releases) pages instead.
+- In order to prevent users from accidentally installing multiple copies of S4CL into their Mods folder, it is preferred to redirect the users of your mod to download S4CL from either the [github repository](https://github.com/ColonolNutty/Sims4CommunityLibrary) or [releases](https://github.com/ColonolNutty/Sims4CommunityLibrary/releases) pages instead of bundling it with your mod.
 
 ### Copyright:
 
