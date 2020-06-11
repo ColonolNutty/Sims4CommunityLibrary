@@ -9,7 +9,7 @@ import os
 from Utilities.compiler import compile_module
 
 if os.name == 'posix':
-    release_dir = '../Release/Sims4CommunityLib'
+    release_dir = os.path.join( '../', 'Release', 'Sims4CommunityLib')
 else:
     release_dir = '..\\Release\\Sims4CommunityLib'
 compile_module(root=release_dir, mod_scripts_folder='.', include_folders=('sims4communitylib',), mod_name='sims4communitylib')
