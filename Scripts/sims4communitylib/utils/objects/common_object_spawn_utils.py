@@ -60,8 +60,8 @@ class CommonObjectSpawnUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
-    def destroy_object(game_object: GameObject, source: str=None, cause: str=None) -> bool:
-        """destroy_object(game_object, source=None, cause=None)
+    def destroy_object(game_object: GameObject, source: str=None, cause: str=None, **kwargs) -> bool:
+        """destroy_object(game_object, source=None, cause=None, **kwargs)
 
         Destroy an Object.
 
@@ -76,7 +76,30 @@ class CommonObjectSpawnUtils:
         """
         if game_object is None:
             return False
-        game_object.destroy(source=source, cause=cause)
+        game_object.destroy(source=source, cause=cause, **kwargs)
+        return True
+
+    @staticmethod
+    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
+    def schedule_object_for_destroy(game_object: GameObject, source: str=None, cause: str=None, on_destroyed: Callable[[], None]=None, **kwargs) -> bool:
+        """schedule_object_for_destroy(game_object, source=None, cause=None, on_destroyed=None, **kwargs)
+
+        Schedule an Object to be destroyed.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :param source: The source of the destruction. Default is None.
+        :type source: str, optional
+        :param cause: The cause of the destruction. Default is None.
+        :type cause: str, optional
+        :param on_destroyed: A callback that occurs after the Object is destroyed. Default is None.
+        :type on_destroyed: Callable[[], None], optional
+        :return: True, if the Object was successfully scheduled for destruction. False, if not.
+        :rtype: bool
+        """
+        if game_object is None:
+            return False
+        game_object.schedule_destroy_asap(post_delete_func=on_destroyed, source=source, cause=cause, **kwargs)
         return True
 
 
