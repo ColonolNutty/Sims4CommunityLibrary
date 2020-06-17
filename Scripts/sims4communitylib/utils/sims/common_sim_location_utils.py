@@ -12,7 +12,6 @@ import objects.terrain
 from typing import Union
 
 import routing
-import services
 from autonomy.autonomy_component import AutonomyComponent
 from protocolbuffers.Math_pb2 import Vector3
 from routing import Location
@@ -81,6 +80,8 @@ class CommonSimLocationUtils:
         :return: True, if the Sim can swim at the specified location. False, if not.
         :rtype: bool
         """
+        if location is None:
+            return False
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return False
@@ -111,8 +112,11 @@ class CommonSimLocationUtils:
         :return: True, if the Sim is on the active lot. False, if not.
         :rtype: bool
         """
+        active_lot = CommonLocationUtils.get_current_lot()
         sim_position = CommonSimLocationUtils.get_position(sim_info)
-        return sim_position is not None and services.active_lot().is_position_on_lot(sim_position)
+        if sim_position is None:
+            return False
+        return sim_position is not None and active_lot.is_position_on_lot(sim_position)
 
     @staticmethod
     def is_renting_current_lot(sim_info: SimInfo) -> bool:
@@ -138,8 +142,7 @@ class CommonSimLocationUtils:
         :return: True, if the Sim is at their home lot. False, if not.
         :rtype: bool
         """
-        active_lot = CommonLocationUtils.get_current_lot()
-        return CommonLocationUtils.get_current_lot_id() == CommonHouseholdUtils.get_household_lot_id(sim_info) and active_lot.is_position_on_lot(CommonSimLocationUtils.get_position(sim_info))
+        return CommonLocationUtils.get_current_lot_id() == CommonHouseholdUtils.get_household_lot_id(sim_info) and CommonSimLocationUtils.is_on_current_lot(sim_info)
 
     @staticmethod
     def send_to_position(sim_info: SimInfo, location_position: Vector3, level: int) -> Union[EnqueueResult, None]:
@@ -160,6 +163,8 @@ class CommonSimLocationUtils:
         if location_position is None:
             return None
         sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return None
         # noinspection PyUnresolvedReferences
         pos = sims4.math.Vector3(location_position.x, location_position.y, location_position.z)
         routing_surface = routing.SurfaceIdentifier(CommonLocationUtils.get_current_lot_id(), level, routing.SurfaceType.SURFACETYPE_WORLD)
@@ -187,6 +192,8 @@ class CommonSimLocationUtils:
         if CommonSimTypeUtils.is_player_sim(sim_info) and (CommonLocationUtils.current_venue_allows_role_state_routing() or not CommonLocationUtils.current_venue_requires_player_greeting()):
             return True
         sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return False
         autonomy_component: AutonomyComponent = CommonComponentUtils.get_component(sim, CommonComponentType.AUTONOMY)
         if autonomy_component is None or not hasattr(autonomy_component, 'active_roles'):
             return False
