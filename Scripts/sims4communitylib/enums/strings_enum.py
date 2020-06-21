@@ -29,15 +29,15 @@ class CommonStringId(CommonEnumIntBase):
     # Navigation
     NEXT = 982796106
     PREVIOUS = 4210670582
-    # 0.String
+    # Tokens: {0.String}
     GO_TO_STRING = 3934117375
 
     # Text
-    # 0.String
+    # Tokens: {0.String}
     TEXT_WITH_GREEN_COLOR = 3458194999
-    # 0.String
+    # Tokens: {0.String}
     TEXT_WITH_RED_COLOR = 835489330
-    # 0.String
+    # Tokens: {0.String}
     TEXT_WITH_BLUE_COLOR = 1505840180
 
     # Ages
@@ -77,7 +77,7 @@ class CommonStringId(CommonEnumIntBase):
     PHYSICAL_FRAME = 2574825855
 
     # Text
-    # 0.String
+    # Tokens: {0.String}
     STRING_NOT_FOUND_WITH_IDENTIFIER = 3037244137
 
     # Test
@@ -85,11 +85,11 @@ class CommonStringId(CommonEnumIntBase):
     TESTING_TEST_BUTTON_TWO = 367590349
     TESTING_SOME_TEXT_FOR_TESTING = 1352970207
     TESTING_TEST_TEXT_NO_TOKENS = 3987872118
-    # 0.SimInfo
+    # Tokens: {0.SimFirstName} {0.SimLastName}
     TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME = 4280406738
-    # 0.String
+    # Tokens: {0.String}
     TESTING_TEST_TEXT_WITH_STRING_TOKEN = 2977195159
-    # 0.Number
+    # Tokens: {0.Number}
     TESTING_TEST_TEXT_WITH_NUMBER_TOKEN = 4138001347
 
     # S4CL
@@ -97,3 +97,5 @@ class CommonStringId(CommonEnumIntBase):
     S4CL_LOG_ALL_INTERACTIONS = 3133049591
     # Tokens: {0.String}
     S4CL_DONE_LOGGING_ALL_INTERACTIONS = 207690817
+    # Tokens: {0.SimFirstName}
+    S4CL_SIM_IS_NOT_PREGNANT = 1234364497
