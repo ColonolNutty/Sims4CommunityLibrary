@@ -22,7 +22,8 @@ class _S4CLDebugInteractionHandler(CommonScriptObjectInteractionHandler):
             CommonInteractionId.S4CL_DEBUG_SHOW_RUNNING_AND_QUEUED_INTERACTIONS,
             CommonInteractionId.S4CL_DEBUG_SHOW_ACTIVE_BUFFS,
             CommonInteractionId.S4CL_DEBUG_SHOW_TRAITS,
-            CommonInteractionId.S4CL_DEBUG_SHOW_RUNNING_SITUATIONS
+            CommonInteractionId.S4CL_DEBUG_SHOW_RUNNING_SITUATIONS,
+            CommonInteractionId.S4CL_DEBUG_INDUCE_LABOR
         )
         return result
 

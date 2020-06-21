@@ -8,12 +8,17 @@ Copyright (c) COLONOLNUTTY
 from typing import Union
 from sims.pregnancy.pregnancy_tracker import PregnancyTracker
 from sims.sim_info import SimInfo
+from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 from sims4communitylib.enums.statistics_enum import CommonStatisticId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
 from sims4communitylib.utils.sims.common_sim_statistic_utils import CommonSimStatisticUtils
+
+log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_pregnancy')
 
 
 class CommonSimPregnancyUtils:
@@ -183,6 +188,42 @@ class CommonSimPregnancyUtils:
         if pregnancy_tracker is None:
             return 0.0
         return pregnancy_tracker.PREGNANCY_RATE
+
+    @staticmethod
+    def get_in_labor_buff(sim_info: SimInfo) -> int:
+        """get_in_labor_buff(sim_info)
+
+        Retrieve an In Labor buff appropriate for causing the Sim to go into labor (Give Birth).
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The decimal identifier of a Buff that will cause the specified Sim to go into labor. If no appropriate Buff is found, -1 will be returned.
+        :rtype: int
+        """
+        from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
+        sim_name = CommonSimNameUtils.get_full_name(sim_info)
+        log.debug('Locating appropriate Buff for inducing labor in \'{}\'.'.format(sim_name))
+        is_female = CommonGenderUtils.is_female(sim_info)
+        if CommonSpeciesUtils.is_human(sim_info):
+            log.debug('\'{}\' is Human.'.format(sim_name))
+            if is_female:
+                log.debug('\'{}\' is Female.'.format(sim_name))
+                return CommonBuffId.PREGNANCY_IN_LABOR
+            else:
+                log.debug('\'{}\' is Male.'.format(sim_name))
+                return CommonBuffId.PREGNANCY_IN_LABOR_MALE
+        elif CommonSpeciesUtils.is_dog(sim_info):
+            log.debug('\'{}\' is a Dog.'.format(sim_name))
+            if is_female:
+                log.debug('\'{}\' is Female.'.format(sim_name))
+                return CommonBuffId.PREGNANCY_IN_LABOR_PET_DOG
+        elif CommonSpeciesUtils.is_cat(sim_info):
+            log.debug('\'{}\' is a Cat.'.format(sim_name))
+            if is_female:
+                log.debug('\'{}\' is Female.'.format(sim_name))
+                return CommonBuffId.PREGNANCY_IN_LABOR_PET_CAT
+        log.debug('No appropriate Buff located to induce labor in \'{}\'.'.format(sim_name))
+        return -1
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
