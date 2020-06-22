@@ -24,9 +24,11 @@ from sims4communitylib.events.interaction.events.interaction_queued import S4CLI
 from sims4communitylib.events.interaction.events.interaction_run import S4CLInteractionRunEvent
 from sims4communitylib.events.interaction.events.mixer_interaction_cancelled import S4CLMixerInteractionCancelledEvent
 from sims4communitylib.events.interaction.events.super_interaction_cancelled import S4CLSuperInteractionCancelledEvent
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
+from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
 
 
 class CommonInteractionEventDispatcherService(CommonService):
@@ -41,52 +43,79 @@ class CommonInteractionEventDispatcherService(CommonService):
     def _on_interaction_pre_run(self, interaction_queue: InteractionQueue, timeline, interaction: Interaction, *_, **__) -> Union[bool, None]:
         if interaction is None or interaction.sim is None:
             return None
-        if not CommonEventRegistry.get().dispatch(S4CLInteractionPreRunEvent(interaction, interaction_queue)):
-            return False
+        try:
+            if not CommonEventRegistry.get().dispatch(S4CLInteractionPreRunEvent(interaction, interaction_queue)):
+                return False
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_pre_run for interaction {} with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
         return None
 
     # noinspection PyUnusedLocal
     def _on_interaction_run(self, interaction_queue: InteractionQueue, timeline, interaction: Interaction, *_, **__) -> Union[bool, None]:
         if interaction is None or interaction.sim is None:
             return None
-        return CommonEventRegistry.get().dispatch(S4CLInteractionRunEvent(interaction, interaction_queue))
+        try:
+            return CommonEventRegistry.get().dispatch(S4CLInteractionRunEvent(interaction, interaction_queue))
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_run for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
+        return False
 
     def _on_interaction_queued(self, interaction_queue: InteractionQueue, interaction: Interaction, *_, **__) -> Union[TestResult, None]:
         if interaction is None or interaction.sim is None:
             return None
-        if not CommonEventRegistry.get().dispatch(S4CLInteractionQueuedEvent(interaction, interaction_queue)):
-            return TestResult(False, 'Interaction \'{}\' Failed to Queue'.format(pformat(interaction)))
+        try:
+            if not CommonEventRegistry.get().dispatch(S4CLInteractionQueuedEvent(interaction, interaction_queue)):
+                return TestResult(False, 'Interaction \'{}\' Failed to Queue'.format(pformat(interaction)))
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_queued for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
         return None
 
     def _on_interaction_post_queued(self, interaction_queue: InteractionQueue, interaction: Interaction, *_, **__) -> bool:
         if interaction is None or interaction.sim is None:
             return False
-        return CommonEventRegistry.get().dispatch(S4CLInteractionPostQueuedEvent(interaction, interaction_queue))
+        try:
+            return CommonEventRegistry.get().dispatch(S4CLInteractionPostQueuedEvent(interaction, interaction_queue))
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_post_queued for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
+        return False
 
     def _on_interaction_outcome(self, interaction: Interaction, outcome: InteractionOutcome, result: OutcomeResult) -> Union[bool, Any]:
         if interaction.sim is None:
             return False
-        return CommonEventRegistry.get().dispatch(S4CLInteractionOutcomeEvent(interaction, outcome, result))
+        try:
+            return CommonEventRegistry.get().dispatch(S4CLInteractionOutcomeEvent(interaction, outcome, result))
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_outcome for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
+        return False
 
     def _on_interaction_cancelled(self, interaction: Interaction, finishing_type: FinishingType, cancel_reason_msg: str, ignore_must_run: bool=False, **kwargs) -> Union[bool, None]:
         if finishing_type is None:
             return None
-        if not CommonEventRegistry.get().dispatch(S4CLInteractionCancelledEvent(interaction, finishing_type, cancel_reason_msg, ignore_must_run=ignore_must_run, **kwargs)):
-            return False
+        try:
+            if not CommonEventRegistry.get().dispatch(S4CLInteractionCancelledEvent(interaction, finishing_type, cancel_reason_msg, ignore_must_run=ignore_must_run, **kwargs)):
+                return False
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_cancelled for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
         return None
 
     def _on_mixer_interaction_cancelled(self, interaction: MixerInteraction, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> Union[bool, None]:
         if finishing_type is None:
             return None
-        if not CommonEventRegistry.get().dispatch(S4CLMixerInteractionCancelledEvent(interaction, finishing_type, cancel_reason_msg, **kwargs)):
-            return False
+        try:
+            if not CommonEventRegistry.get().dispatch(S4CLMixerInteractionCancelledEvent(interaction, finishing_type, cancel_reason_msg, **kwargs)):
+                return False
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_mixer_interaction_cancelled for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
         return None
 
     def _on_super_interaction_cancelled(self, interaction: SuperInteraction, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> Union[bool, None]:
         if interaction is None or finishing_type is None:
             return None
-        if not CommonEventRegistry.get().dispatch(S4CLSuperInteractionCancelledEvent(interaction, finishing_type, cancel_reason_msg, **kwargs)):
-            return False
+        try:
+            if not CommonEventRegistry.get().dispatch(S4CLSuperInteractionCancelledEvent(interaction, finishing_type, cancel_reason_msg, **kwargs)):
+                return False
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_super_interaction_cancelled for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
         return None
 
 
