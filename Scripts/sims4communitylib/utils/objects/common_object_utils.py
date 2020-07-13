@@ -25,12 +25,12 @@ class CommonObjectUtils:
 
         :param object_instance: An instance of an Object.
         :type object_instance: BaseObject
-        :return: The decimal identifier of the BaseObject.
+        :return: The decimal identifier of the BaseObject or -1 if the id could not be gained.
         :rtype: int
         """
         if object_instance is None:
             return -1
-        return object_instance.id or getattr(object_instance, 'id', None)
+        return object_instance.id or getattr(object_instance, 'id', -1)
 
     @staticmethod
     def get_game_object(game_object_id: int) -> GameObject:

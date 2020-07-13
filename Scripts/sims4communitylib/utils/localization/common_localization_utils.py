@@ -78,6 +78,8 @@ class CommonLocalizationUtils:
         if isinstance(identifier, LocalizedString) and hasattr(identifier, 'tokens'):
             create_tokens(identifier.tokens, tokens)
             return CommonLocalizationUtils.colorize(identifier, text_color=text_color)
+        if isinstance(identifier, TunableLocalizedStringFactory._Wrapper):
+            return CommonLocalizationUtils.colorize(CommonLocalizationUtils.create_from_int(identifier._string_id, *tokens), text_color=text_color)
         if isinstance(identifier, int):
             return CommonLocalizationUtils.colorize(CommonLocalizationUtils.create_from_int(identifier, *tokens), text_color=text_color)
         if hasattr(identifier, 'sim_info'):

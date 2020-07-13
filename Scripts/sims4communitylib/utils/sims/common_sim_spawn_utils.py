@@ -6,13 +6,12 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Union, Tuple, Callable
-
-from protocolbuffers.Math_pb2 import Vector3
-from routing import Location
 from sims.household import Household
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Gender, Age, Species
 from sims.sim_spawner import SimCreator, SimSpawner
+from sims4communitylib.classes.math.common_location import CommonLocation
+from sims4communitylib.classes.math.common_vector3 import CommonVector3
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 
@@ -72,7 +71,7 @@ class CommonSimSpawnUtils:
         return sim_info_list[0]
 
     @staticmethod
-    def spawn_sim(sim_info: SimInfo, location: Location=None, position: Vector3=None, **kwargs) -> bool:
+    def spawn_sim(sim_info: SimInfo, location: CommonLocation=None, position: CommonVector3=None, **kwargs) -> bool:
         """spawn_sim(sim_info, location=None, position=None, **kwargs)
 
         Spawn a Sim.
@@ -82,9 +81,9 @@ class CommonSimSpawnUtils:
         :param sim_info: The Sim to Spawn.
         :type sim_info: SimInfo
         :param location: The location to spawn the Sim at. Default is None.
-        :type location: Location, optional
+        :type location: CommonLocation, optional
         :param position: The position to spawn the Sim at. Default is None.
-        :type position: Vector3, optional
+        :type position: CommonVector3, optional
         :return: True, if the Sim was spawned successfully. False, if not.
         :rtype: bool
         """

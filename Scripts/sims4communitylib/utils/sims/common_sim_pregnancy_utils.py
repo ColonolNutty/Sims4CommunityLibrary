@@ -6,6 +6,8 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Union
+
+from sims.pregnancy.pregnancy_enums import PregnancyOrigin
 from sims.pregnancy.pregnancy_tracker import PregnancyTracker
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.buffs_enum import CommonBuffId
@@ -44,8 +46,8 @@ class CommonSimPregnancyUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
-    def start_pregnancy(sim_info: SimInfo, partner_sim_info: SimInfo) -> bool:
-        """start_pregnancy(sim_info, partner_sim_info)
+    def start_pregnancy(sim_info: SimInfo, partner_sim_info: SimInfo, pregnancy_origin: PregnancyOrigin=PregnancyOrigin.DEFAULT) -> bool:
+        """start_pregnancy(sim_info, partner_sim_info, pregnancy_origin=PregnancyOrigin.DEFAULT)
 
         Start a pregnancy between a Sim and a Partner Sim.
 
@@ -53,7 +55,9 @@ class CommonSimPregnancyUtils:
         :type sim_info: SimInfo
         :param partner_sim_info: The Sim that is getting the other Sim pregnant.
         :type partner_sim_info: SimInfo
-        :return: True, if successful. False, if not.
+        :param pregnancy_origin: The origin of the pregnancy. Default is PregnancyOrigin.DEFAULT.
+        :type pregnancy_origin: PregnancyOrigin, optional
+        :return: True, if the Sim is successfully impregnated by the Partner Sim. False, if not.
         :rtype: bool
         """
         if not CommonHouseholdUtils.has_free_household_slots(sim_info):
@@ -61,7 +65,7 @@ class CommonSimPregnancyUtils:
         pregnancy_tracker = CommonSimPregnancyUtils._get_pregnancy_tracker(sim_info)
         if pregnancy_tracker is None:
             return False
-        pregnancy_tracker.start_pregnancy(sim_info, partner_sim_info)
+        pregnancy_tracker.start_pregnancy(sim_info, partner_sim_info, pregnancy_origin=pregnancy_origin)
         pregnancy_tracker.clear_pregnancy_visuals()
         CommonSimStatisticUtils.set_statistic_value(sim_info, CommonStatisticId.PREGNANCY, 1.0)
         return True

@@ -70,6 +70,11 @@ Object Utilities
    :undoc-members:
    :show-inheritance:
 
+.. autoclass:: sims4communitylib.utils.objects.common_object_type_utils.CommonObjectTypeUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 *************************
 `Interactions`
 *************************
