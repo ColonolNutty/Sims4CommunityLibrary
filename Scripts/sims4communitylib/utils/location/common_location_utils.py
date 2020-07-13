@@ -10,6 +10,9 @@ import services
 from typing import Tuple
 
 import build_buy
+from sims4communitylib.classes.math.common_location import CommonLocation
+from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
+from sims4communitylib.classes.math.common_vector3 import CommonVector3
 
 try:
     import _buildbuy
@@ -22,8 +25,6 @@ from venues.venue_tuning import Venue, VenueTypes
 from world.lot import Lot
 from zone import Zone
 from zone_modifier.zone_modifier import ZoneModifier
-from protocolbuffers.Math_pb2 import Vector3
-from sims4.math import Location
 
 
 class CommonLocationUtils:
@@ -91,45 +92,45 @@ class CommonLocationUtils:
         return CommonLocationUtils.get_current_zone().lot
 
     @staticmethod
-    def is_location_outside_current_lot(location: Location) -> bool:
+    def is_location_outside_current_lot(location: CommonLocation) -> bool:
         """is_location_outside_current_lot(location)
 
         Determine if a location is outside of the current lot or not.
 
         :param location: The Location to check.
-        :type location: Location
+        :type location: CommonLocation
         :return: True, if the location is outside of the current lot. False, if not.
         :rtype: bool
         """
         return CommonLocationUtils.is_location_outside_lot(location, CommonLocationUtils.get_current_lot_id())
 
     @staticmethod
-    def is_location_outside_lot(location: Location, lot_id: int) -> bool:
+    def is_location_outside_lot(location: CommonLocation, lot_id: int) -> bool:
         """is_location_outside_lot(location, lot_id)
 
         Determine if a location is outside of the Lot with the specified identifier.
 
         :param location: The Location to check.
-        :type location: Location
+        :type location: CommonLocation
         :param lot_id: The identifier of the Lot to check for the Location to be outside of.
         :type lot_id: int
         :return: True, if location is outside of the Lot with the specified lot_id. False, if not.
         :rtype: bool
         """
         try:
-            # noinspection PyTypeChecker
-            return _buildbuy.is_location_outside(lot_id, location.transform.translation, location.level)
+            # noinspection PyTypeChecker,PyArgumentList
+            return _buildbuy.is_location_outside(lot_id, location.transform.translation, location.routing_surface.secondary_id)
         except RuntimeError:
             return False
 
     @staticmethod
-    def is_position_on_current_lot(position: Vector3) -> bool:
+    def is_position_on_current_lot(position: CommonVector3) -> bool:
         """is_position_on_current_lot(position)
 
         Determine if a sim is on the current lot.
 
         :param position: The position to check.
-        :type position: Vector3
+        :type position: CommonVector3
         :return: True, if the specified position is within the bounds of the current lot. False, if not.
         :rtype: bool
         """
@@ -274,3 +275,50 @@ class CommonLocationUtils:
             return False
         # noinspection PyUnresolvedReferences
         return venue_instance.allow_rolestate_routing_on_navmesh
+
+    @staticmethod
+    def can_location_be_routed_to(location: CommonLocation) -> bool:
+        """can_location_be_routed_to(location)
+
+        Determine if a location can be routed to by a Sim.
+
+        :param location: The location to check.
+        :type location: CommonLocation
+        :return: True, if the location can be routed to by a Sim. False, it not.
+        :rtype: bool
+        """
+        return CommonLocationUtils.can_position_be_routed_to(location.transform.translation, location.routing_surface)
+
+    @staticmethod
+    def can_position_be_routed_to(position: CommonVector3, surface_identifier: CommonSurfaceIdentifier) -> bool:
+        """can_position_be_routed_to(position, surface_identifier)
+
+        Determine if a position and surface can be routed to by a Sim.
+
+        :param position: The position to check.
+        :type position: CommonVector3
+        :param surface_identifier: The surface to check.
+        :type surface_identifier: CommonSurfaceIdentifier
+        :return: True, if the position can be routed to by a Sim. False, it not.
+        :rtype: bool
+        """
+        from routing import test_point_placement_in_navmesh
+        return test_point_placement_in_navmesh(surface_identifier, position)
+
+    @staticmethod
+    def get_surface_height_at(x: float, z: float, routing_surface: CommonSurfaceIdentifier) -> float:
+        """get_surface_height_at(x, z, routing_surface)
+
+        Calculate the height of a surface.
+
+        :param x: The x position of the surface.
+        :type x: float
+        :param z: The z position of the surface.
+        :type z: float
+        :param routing_surface: The surface.
+        :type routing_surface: CommonSurfaceIdentifier
+        :return: The height of the surface.
+        :rtype: float
+        """
+        # noinspection PyUnresolvedReferences
+        return services.terrain_service.terrain_object().get_routing_surface_height_at(x, z, routing_surface)

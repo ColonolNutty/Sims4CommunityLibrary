@@ -7,15 +7,13 @@ Copyright (c) COLONOLNUTTY
 """
 from event_testing.results import EnqueueResult
 from server.pick_info import PickType
-import sims4.math
 import objects.terrain
 from typing import Union
-
-import routing
 from autonomy.autonomy_component import AutonomyComponent
-from protocolbuffers.Math_pb2 import Vector3
-from routing import Location
 from sims.sim_info import SimInfo
+from sims4communitylib.classes.math.common_location import CommonLocation
+from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
+from sims4communitylib.classes.math.common_vector3 import CommonVector3
 from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
 from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
 from sims4communitylib.utils.sims.common_sim_type_utils import CommonSimTypeUtils
@@ -28,7 +26,7 @@ class CommonSimLocationUtils:
     """
 
     @staticmethod
-    def get_position(sim_info: SimInfo) -> Union[Vector3, None]:
+    def get_position(sim_info: SimInfo) -> Union[CommonVector3, None]:
         """get_position(sim_info)
 
         Retrieve the current position of a Sim.
@@ -36,19 +34,19 @@ class CommonSimLocationUtils:
         :param sim_info: The Sim to get the position of.
         :type sim_info: SimInfo
         :return: The current position of the Sim or None if the Sim does not have a position.
-        :rtype: Union[Vector3, None]
+        :rtype: Union[CommonVector3, None]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return None
         # noinspection PyBroadException
         try:
-            return sim.position
+            return CommonVector3.from_vector3(sim.position)
         except:
             return None
 
     @staticmethod
-    def get_location(sim_info: SimInfo) -> Union[Location, None]:
+    def get_location(sim_info: SimInfo) -> Union[CommonLocation, None]:
         """get_location(sim_info)
 
         Retrieve the current location of a Sim.
@@ -56,19 +54,19 @@ class CommonSimLocationUtils:
         :param sim_info: The Sim to get the location of.
         :type sim_info: SimInfo
         :return: The current location of the Sim or None if the Sim does not have a location.
-        :rtype: Union[Vector3, None]
+        :rtype: Union[CommonLocation, None]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return None
         # noinspection PyBroadException
         try:
-            return sim.location
+            return CommonLocation.from_location(sim.location)
         except:
             return None
 
     @staticmethod
-    def can_swim_at_location(sim_info: SimInfo, location: Location) -> bool:
+    def can_swim_at_location(sim_info: SimInfo, location: CommonLocation) -> bool:
         """can_swim_at_location(sim_info, location)
 
         Determine if a Sim can swim at the specified location.
@@ -76,7 +74,7 @@ class CommonSimLocationUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param location: The Location to check.
-        :type location: Location
+        :type location: CommonLocation
         :return: True, if the Sim can swim at the specified location. False, if not.
         :rtype: bool
         """
@@ -85,7 +83,7 @@ class CommonSimLocationUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return False
-        return sim.should_be_swimming_at_position(location.transform.translation, location.level)
+        return sim.should_be_swimming_at_position(location.transform.translation, location.routing_surface.secondary_id)
 
     @staticmethod
     def can_swim_at_current_location(sim_info: SimInfo) -> bool:
@@ -145,30 +143,28 @@ class CommonSimLocationUtils:
         return CommonLocationUtils.get_current_lot_id() == CommonHouseholdUtils.get_household_lot_id(sim_info) and CommonSimLocationUtils.is_on_current_lot(sim_info)
 
     @staticmethod
-    def send_to_position(sim_info: SimInfo, location_position: Vector3, level: int) -> Union[EnqueueResult, None]:
-        """send_to_position(sim_info, location_position, level)
+    def send_to_position(sim_info: SimInfo, position: CommonVector3, level: int) -> Union[EnqueueResult, None]:
+        """send_to_position(sim_info, position, level)
 
         Send a Sim to the specified location.
 
         :param sim_info: The Sim to send.
         :type sim_info: SimInfo
-        :param location_position: The position to send the sim to.
-        :type location_position: Vector3
-        :param level: The level at which the position is.
+        :param position: The position to send the sim to.
+        :type position: CommonVector3
+        :param level: The level at which the position is located.
         :type level: int
         :return: The result of sending the Sim to the specified location or None if they could not go there.
         :rtype: EnqueueResult
         """
         from server_commands.sim_commands import _build_terrain_interaction_target_and_context, CommandTuning
-        if location_position is None:
+        if position is None:
             return None
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return None
-        # noinspection PyUnresolvedReferences
-        pos = sims4.math.Vector3(location_position.x, location_position.y, location_position.z)
-        routing_surface = routing.SurfaceIdentifier(CommonLocationUtils.get_current_lot_id(), level, routing.SurfaceType.SURFACETYPE_WORLD)
-        (target, context) = _build_terrain_interaction_target_and_context(sim, pos, routing_surface, PickType.PICK_TERRAIN, objects.terrain.TerrainPoint)
+        routing_surface = CommonSurfaceIdentifier.empty(secondary_id=level)
+        (target, context) = _build_terrain_interaction_target_and_context(sim, position, routing_surface, PickType.PICK_TERRAIN, objects.terrain.TerrainPoint)
         return sim.push_super_affordance(CommandTuning.TERRAIN_GOHERE_AFFORDANCE, target, context)
 
     @staticmethod

@@ -125,3 +125,12 @@ Misc Utilities
    :members:
    :undoc-members:
    :show-inheritance:
+
+*******************
+`Math`
+*******************
+
+.. autoclass:: sims4communitylib.utils.common_math_utils.CommonMathUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:

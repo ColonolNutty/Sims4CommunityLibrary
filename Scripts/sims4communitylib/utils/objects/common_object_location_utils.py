@@ -8,10 +8,14 @@ Copyright (c) COLONOLNUTTY
 from objects.game_object import GameObject
 from typing import Union
 from objects.components.live_drag_component import LiveDragComponent
-from objects.script_object import ScriptObject
-from protocolbuffers.Math_pb2 import Vector3
+from sims4communitylib.classes.math.common_location import CommonLocation
+from sims4communitylib.classes.math.common_quaternion import CommonQuaternion
+from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
+from sims4communitylib.classes.math.common_vector3 import CommonVector3
 from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
+from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
+from sims4communitylib.utils.objects.common_object_type_utils import CommonObjectTypeUtils
 
 
 class CommonObjectLocationUtils:
@@ -76,7 +80,7 @@ class CommonObjectLocationUtils:
         return live_drag_component.can_live_drag
 
     @staticmethod
-    def set_location(game_object: GameObject, location: Vector3) -> bool:
+    def set_location(game_object: GameObject, location: CommonLocation) -> bool:
         """set_location(game_object, location)
 
         Set the location of an Object.
@@ -84,7 +88,7 @@ class CommonObjectLocationUtils:
         :param game_object: An instance of an Object.
         :type game_object: GameObject
         :param location: The location to put the Object.
-        :type location: Vector3
+        :type location: CommonLocation
         :return: True, if successful. False, if not.
         :rtype: bool
         """
@@ -94,7 +98,7 @@ class CommonObjectLocationUtils:
         return True
 
     @staticmethod
-    def get_location(game_object: GameObject) -> Union[Vector3, None]:
+    def get_location(game_object: GameObject) -> Union[CommonLocation, None]:
         """get_location(game_object)
 
         Retrieve the location of an Object.
@@ -102,23 +106,150 @@ class CommonObjectLocationUtils:
         :param game_object: An instance of an Object.
         :type game_object: GameObject
         :return: The location of the Object or None if the Object does not have a location.
-        :rtype: Vector3
+        :rtype: Union[CommonLocation, None]
         """
         if game_object is None:
             return None
-        return game_object.location
+        return CommonLocation.from_location(game_object.location)
 
     @staticmethod
-    def get_position(script_object: ScriptObject) -> Union[Vector3, None]:
+    def get_position(game_object: GameObject) -> Union[CommonVector3, None]:
         """get_position(game_object)
 
         Retrieve the position of an Object.
 
-        :param script_object: An instance of an Object.
-        :type script_object: ScriptObject
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
         :return: The position of the Object or None if the Object does not have a position.
-        :rtype: Vector3
+        :rtype: CommonVector3
         """
-        if script_object is None:
+        if game_object is None:
             return None
-        return script_object.position
+        # noinspection PyBroadException
+        try:
+            return CommonVector3.from_vector3(game_object.position)
+        except:
+            return None
+
+    @staticmethod
+    def get_bone_position(game_object: GameObject, bone_name: str) -> Union[CommonVector3, None]:
+        """get_bone_position(game_object, bone_name)
+
+        Retrieve the position of a joint bone on an Object.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :param bone_name: The name of the bone to retrieve the position of.
+        :type bone_name: str
+        :return: The position of the Object or None if the Object does not have the specified bone.
+        :rtype: Union[CommonVector3, None]
+        """
+        # noinspection PyBroadException
+        try:
+            return CommonVector3.from_vector3(game_object.get_joint_transform_for_joint(bone_name).translation)
+        except:
+            return None
+
+    @staticmethod
+    def get_root_position(game_object: GameObject) -> CommonVector3:
+        """get_root_position(game_object)
+
+        Calculate the position of an Object based off of the position of it's Root bone.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: The position of the Object based off of the position of it's Root bone.
+        :rtype: CommonVector3
+        """
+        object_position = CommonObjectLocationUtils.get_bone_position(game_object, bone_name='b__ROOT__') or CommonObjectLocationUtils.get_position(game_object)
+        if object_position is not None and CommonObjectTypeUtils.is_window(game_object):
+            # For whatever reason, windows have a Y coordinate of -0.0. We fix it here.
+            object_position = CommonVector3(object_position.x, CommonLocationUtils.get_surface_height_at(object_position.x, object_position.z, CommonObjectLocationUtils.get_routing_surface(game_object)), object_position.z)
+        return object_position
+
+    @staticmethod
+    def get_forward_vector(game_object: GameObject) -> CommonVector3:
+        """get_forward_vector(game_object)
+
+        Retrieve the forward vector of an Object.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: The forward vector of the Object.
+        :rtype: CommonVector3
+        """
+        return CommonVector3.from_vector3(game_object.forward)
+
+    @staticmethod
+    def get_orientation(game_object: GameObject) -> CommonQuaternion:
+        """get_orientation(game_object)
+
+        Retrieve the orientation of an Object.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: The orientation of the Object.
+        :rtype: CommonQuaternion
+        """
+        return CommonQuaternion.from_quaternion(game_object.orientation)
+
+    @staticmethod
+    def get_orientation_degrees(game_object: GameObject) -> float:
+        """get_orientation_in_degrees(game_object)
+
+        Retrieve the orientation of an Object in degrees.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: The orientation of the Object represented in degrees.
+        :rtype: float
+        """
+        return CommonQuaternion.to_degrees(CommonObjectLocationUtils.get_orientation(game_object))
+
+    @staticmethod
+    def get_routing_surface(game_object: GameObject) -> Union[CommonSurfaceIdentifier, None]:
+        """get_routing_surface(game_object)
+
+        Retrieve the routing surface of an Object.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: The routing surface of the object or None if a problem occurs.
+        :rtype: Union[CommonSurfaceIdentifier, None]
+        """
+        if game_object is None:
+            return None
+        return CommonSurfaceIdentifier.from_surface_identifier(game_object.routing_surface)
+
+    @staticmethod
+    def get_surface_level(game_object: GameObject) -> int:
+        """get_surface_level(game_object)
+
+        Retrieve the surface level of an Object.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: The surface level of the object.
+        :rtype: int
+        """
+        if game_object is None:
+            return 0
+        routing_surface = CommonObjectLocationUtils.get_routing_surface(game_object)
+        if not routing_surface:
+            return 0
+        return routing_surface.secondary_id
+
+    @staticmethod
+    def can_be_routed_to(game_object: GameObject) -> bool:
+        """can_be_routed_to(game_object)
+
+        Determine if an Object can be routed to by Sims.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object can be routed to by Sims. False, it not.
+        :rtype: bool
+        """
+        position = CommonObjectLocationUtils.get_position(game_object) + CommonObjectLocationUtils.get_forward_vector(game_object)
+        routing_surface = CommonObjectLocationUtils.get_routing_surface(game_object)
+        return CommonLocationUtils.can_position_be_routed_to(position, routing_surface)

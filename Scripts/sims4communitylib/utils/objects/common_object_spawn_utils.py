@@ -10,7 +10,7 @@ from objects.game_object import GameObject
 from objects.object_enums import ItemLocation
 from sims4.commands import Command, CommandType, CheatOutput
 from typing import Any, Callable, Union
-from protocolbuffers.Math_pb2 import Vector3
+from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 
@@ -22,7 +22,7 @@ class CommonObjectSpawnUtils:
     @staticmethod
     def spawn_object_on_lot(
         object_definition_id: int,
-        location: Vector3,
+        location: CommonLocation,
         on_object_initialize_callback: Callable[[GameObject], Any]=None,
         post_object_spawned_callback: Callable[[GameObject], Any]=None
     ) -> Union[GameObject, None]:
@@ -38,7 +38,7 @@ class CommonObjectSpawnUtils:
         :param object_definition_id: The decimal identifier of an Object.
         :type object_definition_id: int
         :param location: The location to spawn the Object at.
-        :type location: Vector3
+        :type location: CommonLocation
         :param on_object_initialize_callback: Called when initializing the Object.
         :type on_object_initialize_callback: Callable[[GameObject], Any], optional
         :param post_object_spawned_callback: Called after the Object was added to the lot.
