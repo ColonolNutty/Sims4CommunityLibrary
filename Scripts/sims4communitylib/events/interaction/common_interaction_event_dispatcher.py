@@ -57,7 +57,7 @@ class CommonInteractionEventDispatcherService(CommonService):
         try:
             return CommonEventRegistry.get().dispatch(S4CLInteractionRunEvent(interaction, interaction_queue))
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_run for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_run for interaction {} with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
         return False
 
     def _on_interaction_queued(self, interaction_queue: InteractionQueue, interaction: Interaction, *_, **__) -> Union[TestResult, None]:
@@ -67,7 +67,7 @@ class CommonInteractionEventDispatcherService(CommonService):
             if not CommonEventRegistry.get().dispatch(S4CLInteractionQueuedEvent(interaction, interaction_queue)):
                 return TestResult(False, 'Interaction \'{}\' Failed to Queue'.format(pformat(interaction)))
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_queued for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_queued for interaction {} with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
         return None
 
     def _on_interaction_post_queued(self, interaction_queue: InteractionQueue, interaction: Interaction, *_, **__) -> bool:
@@ -76,7 +76,7 @@ class CommonInteractionEventDispatcherService(CommonService):
         try:
             return CommonEventRegistry.get().dispatch(S4CLInteractionPostQueuedEvent(interaction, interaction_queue))
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_post_queued for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_post_queued for interaction {} with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
         return False
 
     def _on_interaction_outcome(self, interaction: Interaction, outcome: InteractionOutcome, result: OutcomeResult) -> Union[bool, Any]:
@@ -85,7 +85,7 @@ class CommonInteractionEventDispatcherService(CommonService):
         try:
             return CommonEventRegistry.get().dispatch(S4CLInteractionOutcomeEvent(interaction, outcome, result))
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_outcome for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_outcome for interaction {} with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
         return False
 
     def _on_interaction_cancelled(self, interaction: Interaction, finishing_type: FinishingType, cancel_reason_msg: str, ignore_must_run: bool=False, **kwargs) -> Union[bool, None]:
@@ -95,7 +95,7 @@ class CommonInteractionEventDispatcherService(CommonService):
             if not CommonEventRegistry.get().dispatch(S4CLInteractionCancelledEvent(interaction, finishing_type, cancel_reason_msg, ignore_must_run=ignore_must_run, **kwargs)):
                 return False
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_cancelled for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_interaction_cancelled for interaction {} with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
         return None
 
     def _on_mixer_interaction_cancelled(self, interaction: MixerInteraction, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> Union[bool, None]:
@@ -105,7 +105,7 @@ class CommonInteractionEventDispatcherService(CommonService):
             if not CommonEventRegistry.get().dispatch(S4CLMixerInteractionCancelledEvent(interaction, finishing_type, cancel_reason_msg, **kwargs)):
                 return False
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_mixer_interaction_cancelled for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_mixer_interaction_cancelled for interaction {} with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
         return None
 
     def _on_super_interaction_cancelled(self, interaction: SuperInteraction, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> Union[bool, None]:
@@ -115,7 +115,7 @@ class CommonInteractionEventDispatcherService(CommonService):
             if not CommonEventRegistry.get().dispatch(S4CLSuperInteractionCancelledEvent(interaction, finishing_type, cancel_reason_msg, **kwargs)):
                 return False
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_super_interaction_cancelled for interaction {}with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running _on_super_interaction_cancelled for interaction {} with short name {} and display name {}'.format(pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
         return None
 
 
