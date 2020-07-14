@@ -190,11 +190,21 @@ Sim Utilities
 `Misc`
 ------------------------------------------------------
 
+
 *********************
 `Sim`
 *********************
 
 .. autoclass:: sims4communitylib.utils.sims.common_sim_utils.CommonSimUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
+`Autonomy`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_autonomy_utils.CommonSimAutonomyUtils
    :members:
    :undoc-members:
    :show-inheritance:

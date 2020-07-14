@@ -7,7 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 import services
 
-from typing import Tuple
+from typing import Tuple, Union
 
 import build_buy
 from sims4communitylib.classes.math.common_location import CommonLocation
@@ -48,6 +48,150 @@ class CommonLocationUtils:
         return zone.id
 
     @staticmethod
+    def get_zone(zone_id: int, allow_unloaded_zones: bool=False) -> Zone:
+        """get_zone(zone_id, allow_unloaded_zones=False)
+
+        Retrieve the Zone matching an identifier.
+
+        :param zone_id: The decimal identifier of a Zone.
+        :type zone_id: int
+        :param allow_unloaded_zones: If set to True, Zones that are currently not loaded (or have not been loaded) will be considered. If set to False, Zones that have yet to be loaded will not be considered. Default is False.
+        :type allow_unloaded_zones: bool, optional
+        :return: The Zone with the specified zone id or None if it was not found.
+        :rtype: Zone
+        """
+        return services.get_zone(zone_id, allow_uninstantiated_zones=allow_unloaded_zones)
+
+    @staticmethod
+    def get_zone_lot(zone: Zone) -> Union[Lot, None]:
+        """get_zone_lot(zone)
+
+        Retrieve the lot of a Zone.
+
+        :param zone: An instance of a Zone.
+        :type zone: Zone
+        :return: The Lot belonging to the specified Zone or None if a problem occurs.
+        :rtype: Union[Lot, None]
+        """
+        if zone is None:
+            return None
+        return zone.lot
+
+    @staticmethod
+    def get_current_zone_plex_id() -> int:
+        """get_current_zone_plex_id()
+
+        Retrieve the plex id of the current zone.
+
+        :return: The Plex Id of the current zone or -1 if it was not found.
+        :rtype: int
+        """
+        return CommonLocationUtils.get_plex_id(CommonLocationUtils.get_current_zone_id())
+
+    @staticmethod
+    def get_plex_id_for_zone(zone: Zone) -> int:
+        """get_plex_id_for_zone(zone)
+
+        Retrieve the plex id for a Zone.
+
+        :return: The Plex Id of the specified zone or -1 if it was not found.
+        :rtype: int
+        """
+        zone_id = CommonLocationUtils.get_zone_id(zone)
+        return CommonLocationUtils.get_plex_id(zone_id)
+
+    @staticmethod
+    def get_plex_id(zone_id: int) -> int:
+        """get_plex_id(zone_id)
+
+        Retrieve the plex id of a Zone.
+
+        :return: The Plex Id of the specified zone or -1 if it was not found.
+        :rtype: int
+        """
+        plex_service = services.get_plex_service()
+        if zone_id not in plex_service._zone_to_master_map:
+            return -1
+        (_, plex_id) = plex_service._zone_to_master_map[zone_id]
+        return plex_id
+
+    @staticmethod
+    def get_all_block_ids(zone_id: int) -> Tuple[int]:
+        """get_all_block_ids(zone_id)
+
+        Retrieve a collection of all Block Identifiers for a Zone.
+
+        :param zone_id: The decimal identifier of the Zone to retrieve the block ids of.
+        :type zone_id: int
+        :return: A collection of block identifiers.
+        :rtype: Tuple[int]
+        """
+        plex_id = CommonLocationUtils.get_plex_id(zone_id)
+        if plex_id == -1:
+            return tuple()
+        # noinspection PyArgumentList
+        return tuple(_buildbuy.get_all_block_polygons(zone_id, plex_id).keys())
+
+    @staticmethod
+    def get_block_id_in_current_zone(position: CommonVector3, surface_level: int) -> int:
+        """get_block_id_in_current_zone(position, level)
+
+        Retrieve the decimal identifier of the block containing the position.
+
+        :param position: An instance of a vector.
+        :type position: CommonVector3
+        :param surface_level: The surface level of the position.
+        :type surface_level: int
+        :return: A decimal identifier of the block containing the position.
+        :rtype: int
+        """
+        return CommonLocationUtils.get_block_id(CommonLocationUtils.get_current_zone_id(), position, surface_level)
+
+    @staticmethod
+    def get_all_block_ids_in_current_zone() -> Tuple[int]:
+        """get_all_block_ids_in_current_zone()
+
+        Retrieve a collection of all Block Identifiers for the current zone.
+
+        :return: A collection of block decimal identifiers.
+        :rtype: Tuple[int]
+        """
+        zone_id = CommonLocationUtils.get_current_zone_id()
+        return CommonLocationUtils.get_all_block_ids(zone_id)
+
+    @staticmethod
+    def get_block_id(zone_id: int, position: CommonVector3, surface_level: int) -> int:
+        """get_block_id(zone_id, position, surface_level)
+
+        Retrieve the decimal identifier of the block containing the position.
+
+        :param zone_id: The decimal identifier of a Zone.
+        :type zone_id: int
+        :param position: An instance of a vector.
+        :type position: CommonVector3
+        :param surface_level: The surface level of the position.
+        :type surface_level: int
+        :return: A decimal identifier of the block containing the position.
+        :rtype: int
+        """
+        return build_buy.get_block_id(zone_id, position, surface_level)
+
+    @staticmethod
+    def get_lot_id(lot: Lot) -> int:
+        """get_lot_id(lot)
+
+        Retrieve the decimal identifier of a Lot.
+
+        :param lot: An instance of a Lot.
+        :type lot: Lot
+        :return: The decimal identifier of the specified lot or -1 if a problem occurs.
+        :rtype: int
+        """
+        if lot is None:
+            return -1
+        return lot.lot_id
+
+    @staticmethod
     def get_current_zone() -> Zone:
         """get_current_zone()
 
@@ -70,17 +214,6 @@ class CommonLocationUtils:
         return services.current_zone_id()
 
     @staticmethod
-    def get_current_lot_id() -> int:
-        """get_current_lot_id()
-
-        Retrieve the identifier for the Current Lot.
-
-        :return: The identifier of the current lot.
-        :rtype: int
-        """
-        return services.current_zone_id()
-
-    @staticmethod
     def get_current_lot() -> Lot:
         """get_current_lot()
 
@@ -89,7 +222,18 @@ class CommonLocationUtils:
         :return: The current Lot.
         :rtype: Lot
         """
-        return CommonLocationUtils.get_current_zone().lot
+        return services.active_lot()
+
+    @staticmethod
+    def get_current_lot_id() -> int:
+        """get_current_lot_id()
+
+        Retrieve the decimal identifier of the current Lot.
+
+        :return: The decimal identifier of the current Lot or -1 if a problem occurs.
+        :rtype: int
+        """
+        return services.active_lot_id() or -1
 
     @staticmethod
     def is_location_outside_current_lot(location: CommonLocation) -> bool:
@@ -102,24 +246,24 @@ class CommonLocationUtils:
         :return: True, if the location is outside of the current lot. False, if not.
         :rtype: bool
         """
-        return CommonLocationUtils.is_location_outside_lot(location, CommonLocationUtils.get_current_lot_id())
+        return CommonLocationUtils.is_location_outside_lot(location, CommonLocationUtils.get_current_zone_id())
 
     @staticmethod
-    def is_location_outside_lot(location: CommonLocation, lot_id: int) -> bool:
+    def is_location_outside_lot(location: CommonLocation, zone_id: int) -> bool:
         """is_location_outside_lot(location, lot_id)
 
         Determine if a location is outside of the Lot with the specified identifier.
 
         :param location: The Location to check.
         :type location: CommonLocation
-        :param lot_id: The identifier of the Lot to check for the Location to be outside of.
-        :type lot_id: int
+        :param zone_id: The identifier of a Zone to check for the Location to be outside of.
+        :type zone_id: int
         :return: True, if location is outside of the Lot with the specified lot_id. False, if not.
         :rtype: bool
         """
         try:
             # noinspection PyTypeChecker,PyArgumentList
-            return _buildbuy.is_location_outside(lot_id, location.transform.translation, location.routing_surface.secondary_id)
+            return _buildbuy.is_location_outside(zone_id, location.transform.translation, location.routing_surface.secondary_id)
         except RuntimeError:
             return False
 
@@ -137,17 +281,17 @@ class CommonLocationUtils:
         return position is not None and services.active_lot().is_position_on_lot(position)
 
     @staticmethod
-    def get_lot_traits(lot_id: int) -> Tuple[ZoneModifier]:
+    def get_lot_traits(zone_id: int) -> Tuple[ZoneModifier]:
         """get_lot_traits(lot_id)
 
         Retrieve the Lot Traits of a Lot with the specified identifier.
 
-        :param lot_id: The lot to retrieve the traits of.
-        :type lot_id: int
+        :param zone_id: The lot to retrieve the traits of.
+        :type zone_id: int
         :return: A collection of Lot Traits for the specified lot.
         :rtype: Tuple[ZoneModifier]
         """
-        return tuple(services.get_zone_modifier_service().get_zone_modifiers(lot_id))
+        return tuple(services.get_zone_modifier_service().get_zone_modifiers(zone_id))
 
     @staticmethod
     def get_lot_traits_of_current_lot() -> Tuple[ZoneModifier]:
@@ -158,7 +302,7 @@ class CommonLocationUtils:
         :return: A collection of Lot Traits for the current lot.
         :rtype: Tuple[ZoneModifier]
         """
-        return CommonLocationUtils.get_lot_traits(CommonLocationUtils.get_current_lot_id())
+        return CommonLocationUtils.get_lot_traits(CommonLocationUtils.get_current_zone_id())
 
     @staticmethod
     def current_lot_has_trait(lot_trait_id: int) -> bool:
@@ -219,7 +363,7 @@ class CommonLocationUtils:
         :return: The VenueType of the current lot.
         :rtype: VenueTypes
         """
-        return build_buy.get_current_venue(CommonLocationUtils.get_current_lot_id())
+        return build_buy.get_current_venue(CommonLocationUtils.get_current_zone_id())
 
     @staticmethod
     def get_venue_of_current_lot() -> Venue:
@@ -275,6 +419,21 @@ class CommonLocationUtils:
             return False
         # noinspection PyUnresolvedReferences
         return venue_instance.allow_rolestate_routing_on_navmesh
+
+    @staticmethod
+    def is_position_on_lot(position: CommonVector3, lot: Lot) -> bool:
+        """is_position_on_lot(position, lot)
+
+        Determine if a Position is located on a Lot.
+
+        :param position: An instance of a CommonVector
+        :type position: CommonVector3
+        :param lot: An instance of a Lot.
+        :type lot: Lot
+        :return: True, if the Sim is on the specified Lot. False, if not.
+        :rtype: bool
+        """
+        return position is not None and lot.is_position_on_lot(position)
 
     @staticmethod
     def can_location_be_routed_to(location: CommonLocation) -> bool:

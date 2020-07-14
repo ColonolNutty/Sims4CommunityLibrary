@@ -16,6 +16,15 @@ Misc Utilities
    :show-inheritance:
 
 *******************
+`Terrain`
+*******************
+
+.. autoclass:: sims4communitylib.utils.location.common_terrain_utils.CommonTerrainUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*******************
 `Travel`
 *******************
 

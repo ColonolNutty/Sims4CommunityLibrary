@@ -150,3 +150,52 @@ class CommonResourceUtils:
                 instances.append(instance_class)
                 break
         return tuple(instances)
+
+    @staticmethod
+    def convert_str_to_fnv32(text: str, seed: int=2166136261, high_bit: bool=True) -> int:
+        """convert_str_to_fnv32(text, seed=2166136261, high_bit=True)
+
+        Convert a text string into an FNV32 decimal identifier.
+
+        :param text: The text to convert.
+        :type text: str
+        :param seed: A seed to use when converting. Default value is 2166136261.
+        :type seed: int
+        :param high_bit: If True, the high FNV bit will be returned. If False, a low FNV bit will be returned.
+        :type high_bit: bool
+        :return: The text converted to a FNV32 decimal identifier.
+        :rtype: int
+        """
+        fnv_hash = CommonResourceUtils._str_to_fnv(text, seed, 16777619, 4294967296)
+        if high_bit:
+            fnv_hash |= 2147483648
+        return fnv_hash
+
+    @staticmethod
+    def convert_str_to_fnv64(text: str, seed: int=14695981039346656037, high_bit: bool=True) -> int:
+        """convert_str_to_fnv64(text, seed=14695981039346656037, high_bit=True)
+
+        Convert a text string into an FNV64 decimal identifier.
+
+        :param text: The text to convert.
+        :type text: str
+        :param seed: A seed to use when converting. Default value is 14695981039346656037.
+        :type seed: int
+        :param high_bit: If True, a high bit version of the FNV bit will be returned. If False, a low bit version of the FNV bit will be returned.
+        :type high_bit: bool
+        :return: The text converted to an FNV64 decimal identifier.
+        :rtype: int
+        """
+        fnv_hash = CommonResourceUtils._str_to_fnv(text, seed, 1099511628211, 18446744073709551616)
+        if high_bit:
+            fnv_hash |= 9223372036854775808
+        return fnv_hash
+
+    @staticmethod
+    def _str_to_fnv(text: str, seed: int, prime: int, size: int) -> int:
+        string_bytes = text.lower().encode(encoding='utf-8')
+        hash_value = seed
+        for byte in string_bytes:
+            hash_value = hash_value * prime % size
+            hash_value = hash_value ^ byte
+        return hash_value
