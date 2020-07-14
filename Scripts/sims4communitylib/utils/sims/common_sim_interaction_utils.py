@@ -93,6 +93,34 @@ class CommonSimInteractionUtils:
         return None
 
     @staticmethod
+    def lock_interaction_queue(sim_info: SimInfo):
+        """lock_interaction_queue(sim_info)
+
+        Lock the interaction queue of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None or sim.queue is None:
+            return
+        sim.queue.lock()
+
+    @staticmethod
+    def unlock_interaction_queue(sim_info: SimInfo):
+        """unlock_interaction_queue(sim_info)
+
+        Unlock the interaction queue of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None or sim.queue is None:
+            return
+        sim.queue.unlock()
+
+    @staticmethod
     def has_interaction_running_or_queued(sim_info: SimInfo, interaction_id: int) -> bool:
         """has_interaction_running_or_queued(sim_info, interaction_id)
 

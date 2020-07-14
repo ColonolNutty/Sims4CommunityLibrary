@@ -9,6 +9,8 @@ from typing import Any
 from sims.sim import Sim
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
+from sims4.math import Location
+
 try:
     from objects.pools.ocean import Ocean
 except ModuleNotFoundError:
@@ -150,7 +152,7 @@ class CommonTypeUtils:
     def is_door(obj: Any) -> bool:
         """is_door(obj)
 
-        Determine if an object is of type Door
+        Determine if an Object is of type Door
 
         :param obj: The object to check.
         :type obj: Any
@@ -158,3 +160,17 @@ class CommonTypeUtils:
         :rtype: bool
         """
         return isinstance(obj, Door)
+
+    @staticmethod
+    def is_location(obj: Any) -> bool:
+        """is_location(obj)
+
+        Determine if an object is of type Location.
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
+        """
+        from sims4communitylib.classes.math.common_location import CommonLocation
+        return isinstance(obj, Location) or isinstance(obj, CommonLocation)
