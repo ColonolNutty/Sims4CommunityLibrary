@@ -18,6 +18,7 @@ from sims4communitylib.utils.location.common_location_utils import CommonLocatio
 from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
 from sims4communitylib.utils.sims.common_sim_type_utils import CommonSimTypeUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from world.lot import Lot
 
 
 class CommonSimLocationUtils:
@@ -103,18 +104,33 @@ class CommonSimLocationUtils:
     def is_on_current_lot(sim_info: SimInfo) -> bool:
         """is_on_current_lot(sim_info)
 
-        Determine if a sim is on the current lot.
+        Determine if a Sim is on the active Lot.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim is on the active lot. False, if not.
+        :return: True, if the Sim is on the active Lot. False, if not.
         :rtype: bool
         """
         active_lot = CommonLocationUtils.get_current_lot()
+        return CommonSimLocationUtils.is_on_lot(sim_info, active_lot)
+
+    @staticmethod
+    def is_on_lot(sim_info: SimInfo, lot: Lot) -> bool:
+        """is_on_lot(sim_info, lot)
+
+        Determine if a Sim is on a Lot.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param lot: An instance of a Lot.
+        :type lot: Lot
+        :return: True, if the Sim is on the specified Lot. False, if not.
+        :rtype: bool
+        """
         sim_position = CommonSimLocationUtils.get_position(sim_info)
         if sim_position is None:
             return False
-        return sim_position is not None and active_lot.is_position_on_lot(sim_position)
+        return CommonLocationUtils.is_position_on_lot(sim_position, lot)
 
     @staticmethod
     def is_renting_current_lot(sim_info: SimInfo) -> bool:
@@ -127,7 +143,7 @@ class CommonSimLocationUtils:
         :return: True, if the Sim is renting the active lot. False, if not.
         :rtype: bool
         """
-        return sim_info.is_renting_zone(CommonLocationUtils.get_current_lot_id())
+        return sim_info.is_renting_zone(CommonLocationUtils.get_current_zone_id())
 
     @staticmethod
     def is_at_home(sim_info: SimInfo) -> bool:
@@ -140,7 +156,7 @@ class CommonSimLocationUtils:
         :return: True, if the Sim is at their home lot. False, if not.
         :rtype: bool
         """
-        return CommonLocationUtils.get_current_lot_id() == CommonHouseholdUtils.get_household_lot_id(sim_info) and CommonSimLocationUtils.is_on_current_lot(sim_info)
+        return CommonLocationUtils.get_current_zone_id() == CommonHouseholdUtils.get_household_zone_id(sim_info) and CommonSimLocationUtils.is_on_current_lot(sim_info)
 
     @staticmethod
     def send_to_position(sim_info: SimInfo, position: CommonVector3, level: int) -> Union[EnqueueResult, None]:

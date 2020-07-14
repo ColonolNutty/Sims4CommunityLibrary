@@ -12,6 +12,7 @@ import services
 from sims.household import Household
 from sims.sim_info import SimInfo
 from sims.sim_spawner import SimSpawner
+from world.lot import Lot
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
@@ -50,18 +51,32 @@ class CommonHouseholdUtils:
         return CommonHouseholdUtils.get_household_home_zone_id(household)
 
     @staticmethod
+    def get_household_zone_id(sim_info: SimInfo) -> int:
+        """get_household_zone_id(sim_info)
+
+        Retrieve an zone identifier for the home Lot of the specified Sim.
+
+        :param sim_info: The Sim to retrieve the household Lot id of.
+        :type sim_info: SimInfo
+        :return: The zone identifier of the Household the Sim belongs to.
+        :rtype: int
+        """
+        household = CommonHouseholdUtils.get_household(sim_info)
+        return CommonHouseholdUtils.get_household_home_zone_id(household)
+
+    @staticmethod
     def get_household_lot_id(sim_info: SimInfo) -> int:
         """get_household_lot_id(sim_info)
 
-        Retrieve an identifier for the home lot of the specified Sim.
+        Retrieve an identifier for the home Lot of a Sim.
 
-        :param sim_info: The Sim to retrieve the household lot id of.
+        :param sim_info: The Sim to retrieve the household Lot id of.
         :type sim_info: SimInfo
         :return: The identifier of the Household Lot for the Sim.
         :rtype: int
         """
         household = CommonHouseholdUtils.get_household(sim_info)
-        return CommonHouseholdUtils.get_household_home_zone_id(household)
+        return CommonHouseholdUtils.get_household_home_lot_id(household)
 
     @staticmethod
     def get_household_home_zone_id(household: Household) -> int:
@@ -71,12 +86,37 @@ class CommonHouseholdUtils:
 
         :param household: An instance of a Household.
         :type household: Household
-        :return: The home zone identifier of the specified Household.
+        :return: The home zone identifier of the specified Household or -1 if a problem occurs..
         :rtype: int
         """
         if household is None:
-            return 0
+            return -1
         return household.home_zone_id
+
+    @staticmethod
+    def get_household_home_lot_id(household: Household) -> int:
+        """get_household_home_lot_id(household)
+
+        Retrieve the decimal identifier of the home Lot for a Household.
+
+        :param household: An instance of a Household.
+        :type household: Household
+        :return: The home zone identifier of the specified Household or -1 if a problem occurs.
+        :rtype: int
+        """
+        from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
+        if household is None:
+            return -1
+        home_zone_id = CommonHouseholdUtils.get_household_home_zone_id(household)
+        if home_zone_id == -1:
+            return -1
+        home_zone = CommonLocationUtils.get_zone(home_zone_id, allow_unloaded_zones=True)
+        if home_zone is None:
+            return -1
+        lot = CommonLocationUtils.get_zone_lot(home_zone)
+        if lot is None:
+            return home_zone_id
+        return CommonLocationUtils.get_lot_id(lot)
 
     @staticmethod
     def get_sim_info_of_all_sims_in_active_household_generator() -> Iterator[SimInfo]:
@@ -133,6 +173,23 @@ class CommonHouseholdUtils:
             if household is None:
                 continue
             yield household
+
+    @staticmethod
+    def locate_household_by_id(household_id: int) -> Union[Household, None]:
+        """locate_household_by_id(household_id)
+
+        Locate a household with the specified id.
+
+        :param household_id: The decimal identifier of a Household.
+        :type household_id: int
+        :return: The Household with an identifier matching the specified identifier or None if no Household was found.
+        :rtype: Union[Household, None]
+        """
+        # noinspection PyBroadException
+        try:
+            return services.household_manager().get(household_id)
+        except:
+            return None
 
     @staticmethod
     def locate_household_by_name(name: str, allow_partial_match: bool=False, create_on_missing: bool=False, starting_funds: int=0, as_hidden_household: bool=False) -> Union[Household, None]:
@@ -307,7 +364,7 @@ class CommonHouseholdUtils:
             log.info('Invalid careers removed.')
         sim = sim_info.get_sim_instance()
         if sim is not None:
-            log.info('Updating sims intended position on the active lot.')
+            log.info('Updating sims intended position on the active Lot.')
             sim.update_intended_position_on_active_lot(update_ui=True)
             situation_manager = services.get_zone_situation_manager()
             log.info('Removing Sim from currently active situations.')
@@ -419,6 +476,65 @@ class CommonHouseholdUtils:
         if target_household is None:
             return False
         return household is target_household
+
+    @staticmethod
+    def get_household_owning_current_lot() -> Union[Household, None]:
+        """get_household_owning_current_lot()
+
+        Retrieve the Household that owns the current Lot.
+
+        :return: A decimal identifier of the Household that owns the current Lot or None if no Household owns the current Lot.
+        :rtype: Union[Household, None]
+        """
+        household_id = CommonHouseholdUtils.get_household_id_owning_current_lot()
+        if household_id is None or household_id == -1:
+            return None
+        return CommonHouseholdUtils.locate_household_by_id(household_id)
+
+    @staticmethod
+    def get_household_id_owning_current_lot() -> int:
+        """get_household_id_owning_current_lot()
+
+        Retrieve the decimal identifier of the Household that owns the current Lot.
+
+        :return: A decimal identifier of the Household that owns the current Lot or -1 if a problem occurs.
+        :rtype: int
+        """
+        household_id = services.owning_household_id_of_active_lot()
+        if household_id is None:
+            return -1
+        return household_id
+
+    @staticmethod
+    def get_household_owning_lot(lot: Lot) -> Union[Household, None]:
+        """get_household_owning_lot(lot)
+
+        Retrieve the Household that owns a Lot.
+
+        :param lot: An instance of a Lot.
+        :type lot: Lot
+        :return: A decimal identifier of the Household that owns the specified Lot or None if no Household owns the specified Lot.
+        :rtype: Union[Household, None]
+        """
+        household_id = CommonHouseholdUtils.get_household_id_owning_lot(lot)
+        if household_id is None or household_id == -1:
+            return None
+        return CommonHouseholdUtils.locate_household_by_id(household_id)
+
+    @staticmethod
+    def get_household_id_owning_lot(lot: Lot) -> int:
+        """get_household_id_owning_lot(lot)
+
+        Retrieve the decimal identifier of the Household that owns a Lot.
+
+        :param lot: An instance of a Lot.
+        :type lot: Lot
+        :return: A decimal identifier of the Household that owns the specified Lot or -1 if a problem occurs.
+        :rtype: int
+        """
+        if lot is None:
+            return -1
+        return lot.owner_household_id
 
     @staticmethod
     def delete_household(household: Household) -> bool:

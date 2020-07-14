@@ -6,9 +6,10 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from objects.base_object import BaseObject
-from typing import Callable, Iterator
+from typing import Callable, Iterator, Union
 import services
 from objects.game_object import GameObject
+from objects.script_object import ScriptObject
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
@@ -44,6 +45,36 @@ class CommonObjectUtils:
         :rtype: GameObject
         """
         return services.object_manager().get(game_object_id)
+
+    @staticmethod
+    def has_root_parent(object_instance: ScriptObject) -> bool:
+        """has_root_parent(object_instance)
+
+        Determine if an Object has a root parent.
+
+        :param object_instance: An instance of an Object.
+        :type object_instance: ScriptObject
+        :return: True, if the Object has a root parent. False, if not.
+        :rtype: bool
+        """
+        if object_instance is None:
+            return False
+        return object_instance.parent is not None
+
+    @staticmethod
+    def get_root_parent(object_instance: ScriptObject) -> Union[ScriptObject, None]:
+        """get_root_parent(object_instance)
+
+        Retrieve the root parent of an Object.
+
+        :param object_instance: An instance of an Object.
+        :type object_instance: ScriptObject
+        :return: The root parent of the Object or None if a problem occurs.
+        :rtype: Union[ScriptObject, None]
+        """
+        if object_instance is None or object_instance.parent is None:
+            return object_instance
+        return CommonObjectUtils.get_root_parent(object_instance.parent) or object_instance
 
     @staticmethod
     def get_instance_for_all_game_objects_generator(
