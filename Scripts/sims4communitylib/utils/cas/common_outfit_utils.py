@@ -16,6 +16,7 @@ from sims.sim_info import SimInfo
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 
 
@@ -358,6 +359,20 @@ class CommonOutfitUtils:
         :rtype: bool
         """
         return CommonBuffUtils.has_buff(sim_info, CommonBuffId.IS_WEARING_TOWEL)
+
+    @staticmethod
+    def get_outfit_category_by_name(name: str) -> OutfitCategory:
+        """get_outfit_category_by_name(name)
+
+        Retrieve an OutfitCategory by its a name.
+
+        :param name: The name of an outfit category.
+        :type name: str
+        :return: The OutfitCategory with the specified name or OutfitCategory.CURRENT_OUTFIT if no outfit category was found using the specified name.
+        :rtype: OutfitCategory
+        """
+        upper_case_name = str(name).upper().strip()
+        return CommonResourceUtils.get_enum_by_name(upper_case_name, OutfitCategory, default_value=OutfitCategory.CURRENT_OUTFIT)
 
     @staticmethod
     def get_current_outfit_category(sim_info: SimInfo) -> OutfitCategory:

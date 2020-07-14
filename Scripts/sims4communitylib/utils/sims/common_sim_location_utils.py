@@ -12,6 +12,7 @@ from typing import Union
 from autonomy.autonomy_component import AutonomyComponent
 from sims.sim_info import SimInfo
 from sims4communitylib.classes.math.common_location import CommonLocation
+from sims4communitylib.classes.math.common_quaternion import CommonQuaternion
 from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
 from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
@@ -25,7 +26,6 @@ class CommonSimLocationUtils:
     """Utilities for manipulating the locations of Sims.
 
     """
-
     @staticmethod
     def get_position(sim_info: SimInfo) -> Union[CommonVector3, None]:
         """get_position(sim_info)
@@ -65,6 +65,37 @@ class CommonSimLocationUtils:
             return CommonLocation.from_location(sim.location)
         except:
             return None
+
+    @staticmethod
+    def get_orientation(sim_info: SimInfo) -> CommonQuaternion:
+        """get_orientation(sim_info)
+
+        Retrieve the orientation of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The orientation of the Sim.
+        :rtype: CommonQuaternion
+        """
+        if sim_info is None:
+            return CommonQuaternion.empty()
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return CommonQuaternion.empty()
+        return CommonQuaternion.from_quaternion(sim.orientation)
+
+    @staticmethod
+    def get_orientation_degrees(sim_info: SimInfo) -> float:
+        """get_orientation_degrees(sim_info)
+
+        Retrieve the orientation of a Sim represented in degrees.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The orientation of the Sim represented in degrees.
+        :rtype: float
+        """
+        return CommonQuaternion.to_degrees(CommonSimLocationUtils.get_orientation(sim_info))
 
     @staticmethod
     def can_swim_at_location(sim_info: SimInfo, location: CommonLocation) -> bool:
@@ -149,14 +180,17 @@ class CommonSimLocationUtils:
     def is_at_home(sim_info: SimInfo) -> bool:
         """is_at_home(sim_info)
 
-        Determine if a Sim is currently at home.
+        Determine if a Sim is on their home Lot.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim is at their home lot. False, if not.
+        :return: True, if the Sim is on their home Lot. False, if not.
         :rtype: bool
         """
-        return CommonLocationUtils.get_current_zone_id() == CommonHouseholdUtils.get_household_zone_id(sim_info) and CommonSimLocationUtils.is_on_current_lot(sim_info)
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None or not CommonHouseholdUtils.has_household(sim_info):
+            return False
+        return sim.on_home_lot or (CommonLocationUtils.get_current_zone_id() == CommonHouseholdUtils.get_household_zone_id(sim_info) and CommonSimLocationUtils.is_on_current_lot(sim_info))
 
     @staticmethod
     def send_to_position(sim_info: SimInfo, position: CommonVector3, level: int) -> Union[EnqueueResult, None]:

@@ -152,6 +152,25 @@ class CommonResourceUtils:
         return tuple(instances)
 
     @staticmethod
+    def get_enum_by_name(name: str, enum_type: Any, default_value: Any=None) -> Any:
+        """get_enum_by_name(name, enum_type, default_value=None)
+
+        Retrieve an enum value by its a name.
+
+        :param name: The name of an outfit category.
+        :type name: str
+        :param enum_type: The type of enum to retrieve.
+        :type enum_type: Any
+        :param default_value: The default value to return if an enum value was not found using the specified name. Default is None.
+        :type default_value: Any, optional
+        :return: The enum value with a name matching the specified name.
+        :rtype: Any
+        """
+        if not hasattr(enum_type, name) and name not in enum_type:
+            return default_value
+        return getattr(enum_type, name)
+
+    @staticmethod
     def convert_str_to_fnv32(text: str, seed: int=2166136261, high_bit: bool=True) -> int:
         """convert_str_to_fnv32(text, seed=2166136261, high_bit=True)
 
