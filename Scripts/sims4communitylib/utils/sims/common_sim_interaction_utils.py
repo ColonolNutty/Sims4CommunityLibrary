@@ -84,7 +84,7 @@ class CommonSimInteractionUtils:
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim is standing. False, if not.
+        :return: True, if the Sim is swimming. False, if not.
         :rtype: bool
         """
         interactions = (
