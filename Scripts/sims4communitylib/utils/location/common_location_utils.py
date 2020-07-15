@@ -481,3 +481,51 @@ class CommonLocationUtils:
         """
         # noinspection PyUnresolvedReferences
         return services.terrain_service.terrain_object().get_routing_surface_height_at(x, z, routing_surface)
+
+    @staticmethod
+    def get_current_zone_world_id() -> int:
+        """get_current_zone_world_id()
+
+        Retrieve the world id of the current Zone.
+
+        :return: The world id of the current Zone.
+        :rtype: int
+        """
+        return CommonLocationUtils.get_zone_world_id(CommonLocationUtils.get_current_zone_id())
+
+    @staticmethod
+    def get_current_zone_world_description_id() -> int:
+        """get_current_zone_world_description_id()
+
+        Retrieve the world description id of the current Zone.
+
+        :return: The world description id of the current Zone.
+        :rtype: int
+        """
+        return CommonLocationUtils.get_zone_world_description_id(CommonLocationUtils.get_current_zone_id())
+
+    @staticmethod
+    def get_zone_world_id(zone_id: int) -> int:
+        """get_zone_world_id(zone_id)
+
+        Retrieve the world id of the a Zone.
+
+        :param zone_id: The decimal identifier of a Zone.
+        :type zone_id: int
+        :return: The world id of the specified Zone.
+        :rtype: int
+        """
+        return services.get_persistence_service().get_world_id_from_zone(zone_id)
+
+    @staticmethod
+    def get_zone_world_description_id(zone_id: int) -> int:
+        """get_zone_world_description_id(zone_id)
+
+        Retrieve the world description id of the a Zone.
+
+        :param zone_id: The decimal identifier of a Zone.
+        :type zone_id: int
+        :return: The world description id of the the specified Zone.
+        :rtype: int
+        """
+        return services.get_world_description_id(CommonLocationUtils.get_zone_world_id(zone_id))
