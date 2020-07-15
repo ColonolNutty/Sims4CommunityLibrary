@@ -16,7 +16,6 @@ from sims.sim import Sim
 from sims4.utils import flexmethod
 from sims4communitylib.classes.interactions.common_interaction import CommonInteraction
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 
@@ -114,7 +113,7 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
         return True
 
 
-class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
+class CommonConstrainedSuperInteraction(SuperInteraction):
     """An inheritable class that provides a way to create custom Super Interactions that provide custom constraints.
 
     .. note:: For more information see :class:`.CommonSuperInteraction`.
