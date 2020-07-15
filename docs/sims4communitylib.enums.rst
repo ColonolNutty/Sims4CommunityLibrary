@@ -126,6 +126,14 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Slot Types`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_slot_type.CommonSlotType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Statistics`
 -----------------------------------------------
 

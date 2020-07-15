@@ -48,6 +48,14 @@ Custom Interactions
    :undoc-members:
    :show-inheritance:
 
+`Social Super Interaction`
+------------------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.classes.interactions.common_social_super_interaction.CommonSocialSuperInteraction
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Terrain Interaction`
 --------------------------------------------------------------------------
 
