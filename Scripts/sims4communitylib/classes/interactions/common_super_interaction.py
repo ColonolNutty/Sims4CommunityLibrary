@@ -11,10 +11,13 @@ from typing import Any
 from interactions import ParticipantType
 from interactions.base.interaction import Interaction
 from interactions.constraints import Constraint
+from scheduling import Timeline
 from sims.sim import Sim
 from sims4.utils import flexmethod
 from sims4communitylib.classes.interactions.common_interaction import CommonInteraction
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.logging.has_class_log import HasClassLog
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 
 # ReadTheDocs
@@ -70,7 +73,8 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
                 # Interaction will display and be enabled.
                 return TestResult.TRUE
 
-            def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
+            # Instead of on_started, SuperInteractions use on_run.
+            def on_run(self, interaction_sim: Sim, interaction_target: Any: timeline: Timeline) -> bool:
                 result = True
                 if not result:
                     return False
@@ -84,17 +88,16 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
     def _tuning_loaded_callback(cls):
         return super()._tuning_loaded_callback()
 
-    def _run_interaction_gen(self, timeline: Any):
+    def _run_interaction_gen(self, timeline: Timeline):
         super()._run_interaction_gen(timeline)
         try:
             return self.on_run(self.sim, self.target, timeline)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running interaction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
         return False
 
     # noinspection PyUnusedLocal
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=True)
-    def on_run(self, interaction_sim: Sim, interaction_target: Any, timeline) -> bool:
+    def on_run(self, interaction_sim: Sim, interaction_target: Any, timeline: Timeline) -> bool:
         """on_run(interaction_sim, interaction_target, timeline)
 
         A hook that occurs upon the interaction being run.
@@ -104,14 +107,14 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
         :param interaction_target: The target of the interaction.
         :type interaction_target: Any
         :param timeline: The timeline the interaction is running on.
-        :type timeline: Any
+        :type timeline: Timeline
         :return: True, if the interaction hook was executed successfully. False, if the interaction hook was not executed successfully.
         :rtype: bool
         """
         return True
 
 
-class CommonConstrainedSuperInteraction(SuperInteraction):
+class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
     """An inheritable class that provides a way to create custom Super Interactions that provide custom constraints.
 
     .. note:: For more information see :class:`.CommonSuperInteraction`.
@@ -120,6 +123,11 @@ class CommonConstrainedSuperInteraction(SuperInteraction):
 
     """
 
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
+        return ModInfo.get_identity()
+
     # noinspection PyMethodParameters
     @flexmethod
     def _constraint_gen(cls, inst: Interaction, sim: Sim, target: Any, participant_type: ParticipantType=ParticipantType.Actor, **kwargs) -> Constraint:
@@ -127,7 +135,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction):
         try:
             yield cls.on_constraint_gen(interaction_instance, sim or interaction_instance.sim, target or interaction_instance.target)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running interaction \'{}\' _on_constraint_gen.'.format(cls.__name__), exception=ex)
+            CommonExceptionHandler.log_exception(cls.get_mod_identity(), 'Error occurred while running interaction \'{}\' _on_constraint_gen.'.format(cls.__name__), exception=ex)
         return super(CommonConstrainedSuperInteraction, interaction_instance)._constraint_gen(sim, interaction_instance.get_constraint_target(target), participant_type=participant_type)
 
     @classmethod

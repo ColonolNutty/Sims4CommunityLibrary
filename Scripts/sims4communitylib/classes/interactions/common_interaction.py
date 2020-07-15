@@ -90,27 +90,30 @@ class CommonInteraction(Interaction, HasClassLog):
         HasClassLog.__init__(self)
 
     @classmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=TestResult.NONE)
     def _test(cls, target: Any, context: InteractionContext, **kwargs) -> TestResult:
         try:
-            test_result = cls.on_test(context.sim, target, context, **kwargs)
-        except Exception as ex:
-            mod_identity = cls.get_mod_identity()
-            CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
-            return TestResult.NONE
-        if test_result is None:
+            try:
+                test_result = cls.on_test(context.sim, target, context, **kwargs)
+            except Exception as ex:
+                mod_identity = cls.get_mod_identity()
+                CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
+                return TestResult.NONE
+            if test_result is None:
+                return super()._test(target, context, **kwargs)
+            if not isinstance(test_result, TestResult):
+                raise RuntimeError('Interaction on_test did not result in a TestResult, instead got {}. {}'.format(pformat(test_result), cls.__name__))
+            if test_result.result is False:
+                if test_result.tooltip is not None:
+                    tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.tooltip)
+                elif test_result.reason is not None:
+                    tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.reason)
+                else:
+                    tooltip = None
+                return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
             return super()._test(target, context, **kwargs)
-        if not isinstance(test_result, TestResult):
-            raise RuntimeError('Interaction on_test did not result in a TestResult, instead got {}. {}'.format(pformat(test_result), cls.__name__))
-        if test_result.result is False:
-            if test_result.tooltip is not None:
-                tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.tooltip)
-            elif test_result.reason is not None:
-                tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.reason)
-            else:
-                tooltip = None
-            return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
-        return super()._test(target, context, **kwargs)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(cls.get_mod_identity(), 'An error occurred while testing interaction {}'.format(cls.__name__), exception=ex)
+        return TestResult(False)
 
     def _trigger_interaction_start_event(self: 'CommonInteraction'):
         try:
@@ -213,9 +216,9 @@ class CommonInteraction(Interaction, HasClassLog):
 
     # The following functions are hooks into various parts of an interaction override them in your own interaction to provide custom functionality.
 
-    @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=TestResult.NONE)
+    @classmethod
     def create_test_result(
+        cls,
         result: bool,
         reason: str=None,
         text_tokens: Union[Tuple[Any], List[Any], Set[Any]]=(),
@@ -251,14 +254,17 @@ class CommonInteraction(Interaction, HasClassLog):
         :return: The desired outcome for a call of :func:`~on_test`, default is `TestResult.NONE`
         :rtype: TestResult
         """
-        return TestResult(
-            result,
-            reason,
-            *text_tokens,
-            tooltip=tooltip,
-            icon=icon,
-            influence_by_active_mood=influence_by_active_mood
-        )
+        try:
+            return TestResult(
+                result,
+                reason,
+                *text_tokens,
+                tooltip=tooltip,
+                icon=icon,
+                influence_by_active_mood=influence_by_active_mood
+            )
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(cls.get_mod_identity(), 'An error occurred while creating a test result for {}'.format(cls.__name__), exception=ex)
 
     @classmethod
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:

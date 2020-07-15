@@ -15,6 +15,7 @@ from interactions.interaction_finisher import FinishingType
 from interactions.interaction_queue import InteractionQueue
 from interactions.utils.outcome import InteractionOutcome
 from interactions.utils.outcome_enums import OutcomeResult
+from scheduling import Timeline
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
 from sims4communitylib.events.interaction.events.interaction_cancelled import S4CLInteractionCancelledEvent
 from sims4communitylib.events.interaction.events.interaction_outcome import S4CLInteractionOutcomeEvent
@@ -40,7 +41,7 @@ class CommonInteractionEventDispatcherService(CommonService):
     """
 
     # noinspection PyUnusedLocal
-    def _on_interaction_pre_run(self, interaction_queue: InteractionQueue, timeline, interaction: Interaction, *_, **__) -> Union[bool, None]:
+    def _on_interaction_pre_run(self, interaction_queue: InteractionQueue, timeline: Timeline, interaction: Interaction, *_, **__) -> Union[bool, None]:
         if interaction is None or interaction.sim is None:
             return None
         try:
@@ -51,7 +52,7 @@ class CommonInteractionEventDispatcherService(CommonService):
         return None
 
     # noinspection PyUnusedLocal
-    def _on_interaction_run(self, interaction_queue: InteractionQueue, timeline, interaction: Interaction, *_, **__) -> Union[bool, None]:
+    def _on_interaction_run(self, interaction_queue: InteractionQueue, timeline: Timeline, interaction: Interaction, *_, **__) -> Union[bool, None]:
         if interaction is None or interaction.sim is None:
             return None
         try:
