@@ -40,20 +40,62 @@ class CommonSimInteractionUtils:
         :rtype: bool
         """
         interactions = (
+            CommonInteractionId.SIT_PASSIVE,
             CommonInteractionId.SEATING_SIT,
             CommonInteractionId.SEATING_SIT_CTYAE,
             CommonInteractionId.SEATING_SIT_RESTAURANT_RALLY_ONLY,
             CommonInteractionId.SEATING_SIT_SINGLE,
             CommonInteractionId.SEATING_SIT_TODDLER_BED,
-            CommonInteractionId.SIT_PASSIVE,
             CommonInteractionId.SEATING_SIT_POST_GRAND_MEAL_WAIT_ENJOY_COMPANY,
             CommonInteractionId.SEATING_SIT_DIRECTOR_CHAIR,
-            CommonInteractionId.SEATING_SIT_HAIR_MAKE_UP_CHAIR
+            CommonInteractionId.SEATING_SIT_HAIR_MAKE_UP_CHAIR,
         )
         return CommonSimInteractionUtils.has_interactions_running_or_queued(sim_info, interactions)
 
     @staticmethod
-    def get_swim_interaction(sim_info: SimInfo) -> Union[int, None]:
+    def is_standing(sim_info: SimInfo) -> bool:
+        """is_standing(sim_info)
+
+        Determine if a Sim is standing.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is standing. False, if not.
+        :rtype: bool
+        """
+        interactions = (
+            CommonInteractionId.STAND_PASSIVE,
+            CommonInteractionId.SIM_STAND,
+            CommonInteractionId.SIM_STAND_EXCLUSIVE,
+            CommonInteractionId.DOG_STAND,
+            CommonInteractionId.DOG_STAND_PASSIVE,
+            CommonInteractionId.CAT_STAND,
+            CommonInteractionId.CAT_STAND_PASSIVE
+        )
+        return CommonSimInteractionUtils.has_interactions_running_or_queued(sim_info, interactions)
+
+    @staticmethod
+    def is_swimming(sim_info: SimInfo) -> bool:
+        """is_swimming(sim_info)
+
+        Determine if a Sim is swimming.
+
+        .. note: Cats cannot swim.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is standing. False, if not.
+        :rtype: bool
+        """
+        interactions = (
+            CommonInteractionId.SIM_SWIM,
+            CommonInteractionId.DOG_SWIM,
+            CommonInteractionId.DOG_SWIM_PASSIVE
+        )
+        return CommonSimInteractionUtils.has_interactions_running_or_queued(sim_info, interactions)
+
+    @staticmethod
+    def get_swim_interaction(sim_info: SimInfo) -> int:
         """get_swim_interaction(sim_info)
 
         Retrieve a Swim interaction appropriate for a Sim.
@@ -62,26 +104,26 @@ class CommonSimInteractionUtils:
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :return: The decimal identifier of an interaction appropriate for the Sim or None if no interaction was found to be appropriate.
-        :rtype: Union[int, None]
+        :return: The decimal identifier of an interaction appropriate for the Sim or -1 if no interaction was found to be appropriate.
+        :rtype: int
         """
         if CommonSpeciesUtils.is_human(sim_info):
             return CommonInteractionId.SIM_SWIM
         elif CommonSpeciesUtils.is_dog(sim_info):
             return CommonInteractionId.DOG_SWIM
-        # Cats don't have a swim interaction.
-        return None
+        # Cats don't have a swim interaction. Because they cannot swim.
+        return -1
 
     @staticmethod
-    def get_stand_interaction(sim_info: SimInfo) -> Union[int, None]:
+    def get_stand_interaction(sim_info: SimInfo) -> int:
         """get_stand_interaction(sim_info)
 
         Retrieve a Stand interaction appropriate for a Sim.
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :return: The decimal identifier of a Stand interaction appropriate for the Sim or None if no Stand interaction was found to be appropriate.
-        :rtype: Union[int, None]
+        :return: The decimal identifier of a Stand interaction appropriate for the Sim or -1 if no Stand interaction was found to be appropriate.
+        :rtype: int
         """
         from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
         if CommonSpeciesUtils.is_human(sim_info):
@@ -90,7 +132,7 @@ class CommonSimInteractionUtils:
             return CommonInteractionId.DOG_STAND
         elif CommonSpeciesUtils.is_cat(sim_info):
             return CommonInteractionId.CAT_STAND
-        return None
+        return -1
 
     @staticmethod
     def lock_interaction_queue(sim_info: SimInfo):
