@@ -111,11 +111,11 @@ class CommonHouseholdUtils:
         if home_zone_id == -1:
             return -1
         home_zone = CommonLocationUtils.get_zone(home_zone_id, allow_unloaded_zones=True)
-        if home_zone is None:
-            return -1
+        if home_zone is None or not home_zone.is_instantiated:
+            return home_zone_id or -1
         lot = CommonLocationUtils.get_zone_lot(home_zone)
         if lot is None:
-            return home_zone_id
+            return home_zone_id or -1
         return CommonLocationUtils.get_lot_id(lot)
 
     @staticmethod
