@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-from typing import Any
+from typing import Any, Union
 
 from interactions import ParticipantType
 from interactions.base.interaction import Interaction
@@ -41,7 +41,44 @@ else:
         pass
 
 
-class CommonSuperInteraction(CommonInteraction, SuperInteraction):
+class CommonBaseSuperInteraction(CommonInteraction, SuperInteraction):
+    """An inheritable class that provides a way to create custom Super Interactions.
+
+    .. note:: Use this Base class when you don't wish _run_interaction_gen to be overridden.
+
+    .. note::
+
+        The main use for this class is to create interactions that wrap sub interactions.
+        One example Super interaction is the `sim-chat` interaction, where other interactions (Such as the `Get To Know` interaction), run as sub interactions of `sim-chat`
+
+    .. warning:: Due to an issue with how Read The Docs functions, the base classes of this class will have different namespaces than they do in the source code!
+
+    :Example:
+
+    .. highlight:: python
+    .. code-block:: python
+
+        # The following is an example interaction that varies when it will display, when it will be hidden, and when it will be disabled with a tooltip.
+        class _ExampleInteraction(CommonBaseSuperInteraction):
+            @classmethod
+            def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
+                result = 1 + 1
+                if result == 2:
+                    # Interaction will be displayed, but disabled, it will also have a tooltip that displays on hover with the text "Test Tooltip"
+                    return cls.create_test_result(False, reason="Test Tooltip")
+                    # Alternative way to specify a tooltip with the text "Test Tooltip"
+                    # return cls.create_test_result(False, reason="No Reason", tooltip=CommonLocalizationUtils.create_localized_tooltip("Test Tooltip"))
+                if result == 3:
+                    # Interaction will be hidden completely.
+                    return TestResult.NONE
+                # Interaction will display and be enabled.
+                return TestResult.TRUE
+
+    """
+    pass
+
+
+class CommonSuperInteraction(CommonBaseSuperInteraction):
     """An inheritable class that provides a way to create custom Super Interactions.
 
     .. note::
@@ -81,7 +118,6 @@ class CommonSuperInteraction(CommonInteraction, SuperInteraction):
                 return True
 
     """
-
     # noinspection PyMissingTypeHints
     @classmethod
     def _tuning_loaded_callback(cls):
@@ -130,18 +166,23 @@ class CommonConstrainedSuperInteraction(SuperInteraction):
     # noinspection PyMethodParameters
     @flexmethod
     def _constraint_gen(cls, inst: Interaction, sim: Sim, target: Any, participant_type: ParticipantType=ParticipantType.Actor, **kwargs) -> Constraint:
-        interaction_instance = inst if inst is not None else cls
+        inst_or_cls = inst if inst is not None else cls
         try:
-            yield cls.on_constraint_gen(interaction_instance, sim or interaction_instance.sim, target or interaction_instance.target)
+            result = cls.on_constraint_gen(inst if inst is not None else cls, sim or inst_or_cls.sim, target or inst_or_cls.target)
+            if result is not None:
+                yield result
+            else:
+                return super(CommonConstrainedSuperInteraction, inst_or_cls)._constraint_gen(sim, target, participant_type=participant_type, **kwargs)
         except Exception as ex:
             CommonExceptionHandler.log_exception(cls.get_mod_identity(), 'Error occurred while running interaction \'{}\' _on_constraint_gen.'.format(cls.__name__), exception=ex)
-        return super(CommonConstrainedSuperInteraction, interaction_instance)._constraint_gen(sim, interaction_instance.get_constraint_target(target), participant_type=participant_type)
 
     @classmethod
-    def on_constraint_gen(cls, inst: Interaction, sim: Sim, target: Any) -> Constraint:
+    def on_constraint_gen(cls, inst: Interaction, sim: Sim, target: Any) -> Union[Constraint, None]:
         """on_constraint_gen(inst, sim, target)
 
         A hook that occurs when generating the constraints of an interaction to enable modification or replacement of the constraints.
+
+        .. note:: Return None from this function to use the original constraints.
 
         :param inst: An instance of the interaction.
         :type inst: Interaction
@@ -150,6 +191,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction):
         :param target: The target Object of the interaction.
         :type target: Any
         :return: The constraints of the interaction.
-        :rtype: Constraint
+        :rtype: Union[Constraint, None]
         """
         raise NotImplementedError()
+

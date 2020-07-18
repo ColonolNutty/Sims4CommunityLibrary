@@ -21,14 +21,14 @@ class CommonSpecies(Int):
     """Custom Species enum containing all species (including extended species).
 
     """
-    INVALID = 0
-    HUMAN = 1
-    SMALL_DOG = 2
-    LARGE_DOG = 3
-    CAT = 4
+    INVALID: 'CommonSpecies' = 0
+    HUMAN: 'CommonSpecies' = 1
+    SMALL_DOG: 'CommonSpecies' = 2
+    LARGE_DOG: 'CommonSpecies' = 3
+    CAT: 'CommonSpecies' = 4
 
     @staticmethod
-    def get_species(sim_info: SimInfo) -> int:
+    def get_species(sim_info: SimInfo) -> 'CommonSpecies':
         """Retrieve the CommonSpecies of a sim. Use this instead of CommonSpeciesUtils.get_species to determine a more specific species.
 
         """

@@ -40,6 +40,14 @@ Custom Interactions
    :undoc-members:
    :show-inheritance:
 
+`Base Super Interaction`
+------------------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.classes.interactions.common_super_interaction.CommonBaseSuperInteraction
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Super Interaction`
 ------------------------------------------------------------------------
 
@@ -61,12 +69,26 @@ Custom Interactions
 
 An inheritable class that provides a way to create custom Terrain Interactions.
 
-The main use for this class is to create interactions that occur when clicking on the ground.
+The main use for this class is to create interactions that occur when clicking on the ground, however it may be used for interactions on objects as well.
 
 .. autoclass:: sims4communitylib.classes.interactions.common_terrain_interaction.CommonTerrainInteraction
    :members:
    :undoc-members:
    :show-inheritance:
+
+`Interaction Overrides`
+--------------------------------------------------------------------------
+
+**********************
+`Name Override`
+**********************
+
+.. autoclass:: sims4communitylib.classes.interactions.common_interaction_override_name.CommonInteractionOverrideName
+   :members:
+   :private-members:
+   :show-inheritance:
+   :exclude-members: get_name
+
 
 `Interaction Registration`
 --------------------------------------------------------------------------
