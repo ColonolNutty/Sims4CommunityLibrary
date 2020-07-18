@@ -47,8 +47,7 @@ class CommonHouseholdUtils:
         :return: The identifier of the Household of the Active Sim.
         :rtype: int
         """
-        household = CommonHouseholdUtils.get_active_household()
-        return CommonHouseholdUtils.get_household_home_zone_id(household)
+        return CommonHouseholdUtils.get_id(CommonHouseholdUtils.get_active_household())
 
     @staticmethod
     def get_household_zone_id(sim_info: SimInfo) -> int:
@@ -438,7 +437,19 @@ class CommonHouseholdUtils:
         :return: The identifier of the Household of the specified Sim or `0` if no household is found.
         :rtype: int
         """
-        household = CommonHouseholdUtils.get_household(sim_info)
+        return CommonHouseholdUtils.get_id(CommonHouseholdUtils.get_household(sim_info))
+
+    @staticmethod
+    def get_id(household: Household) -> int:
+        """get_id(household)
+
+        Retrieve the decimal identifier of a Household.
+
+        :param household: An instance of a Household.
+        :type: Household
+        :return: The identifier of the Household or `0` if an error occurs.
+        :rtype: int
+        """
         if household is None:
             return 0
         return household.id

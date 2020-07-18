@@ -28,6 +28,19 @@ class CommonTravelUtils:
         sim_info.send_travel_switch_to_zone_op(zone_id=lot_id)
 
     @staticmethod
+    def travel_to_zone(sim_info: SimInfo, zone_id: int):
+        """travel_to_zone(sim_info, zone_id)
+
+        Travel with the specified Sim to a Zone.
+
+        :param sim_info: The Sim to travel with.
+        :type sim_info: SimInfo
+        :param zone_id: The identifier of the zone to travel to.
+        :type zone_id: int
+        """
+        sim_info.send_travel_switch_to_zone_op(zone_id=zone_id)
+
+    @staticmethod
     def travel_to_home_lot_of(sim_info: SimInfo):
         """travel_to_home_lot_of(sim_info)
 
@@ -36,7 +49,7 @@ class CommonTravelUtils:
         :param sim_info: The owner of the home lot to travel to.
         :type sim_info: SimInfo
         """
-        lot_id = CommonHouseholdUtils.get_household_lot_id(sim_info)
+        lot_id = CommonHouseholdUtils.get_household_zone_id(sim_info)
         CommonTravelUtils.travel_to_lot(sim_info, lot_id)
 
     @staticmethod
@@ -48,5 +61,5 @@ class CommonTravelUtils:
         :param sim_info: The Sim to travel with.
         :type sim_info: SimInfo
         """
-        lot_id = CommonHouseholdUtils.get_active_household().home_zone_id
+        lot_id = CommonHouseholdUtils.get_household_home_zone_id(CommonHouseholdUtils.get_active_household())
         CommonTravelUtils.travel_to_lot(sim_info, lot_id)

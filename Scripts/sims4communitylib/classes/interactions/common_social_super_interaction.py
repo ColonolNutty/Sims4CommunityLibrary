@@ -150,41 +150,45 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
     @flexmethod
     def _test(cls, inst, target: Any, context: InteractionContext, *args, **kwargs) -> TestResult:
         try:
-            if context.sim is target:
-                return TestResult(False, 'Cannot run a social as a self interaction.')
-            if target is None:
-                return TestResult(False, 'Cannot run a social with no target.')
-            if target.is_sim and target.socials_locked:
-                return TestResult(False, 'Cannot socialize with a Sim who has socials_locked set to true. This Sim is leaving the lot.')
-            if context.source == context.SOURCE_AUTONOMY:
-                sim = inst.sim if inst is not None else context.sim
-                social_group = cls._get_social_group_for_sim(sim)
-                if social_group is not None and target in social_group:
-                    attached_si = social_group.get_si_registered_for_sim(sim, affordance=cls)
-                    if inst is not None:
-                        if attached_si is not inst:
-                            return TestResult(False, 'Cannot run social since sim already has an interaction that is registered to group.')
-                    else:
-                        return TestResult(False, 'Sim {} is already running matching affordance:{} ', sim, cls)
-            test_result = cls.on_test(context.sim, target, context, *args, **kwargs)
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(cls.get_mod_identity(), 'Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
-            return TestResult.NONE
+            inst_or_cls = inst if inst is not None else cls
+            try:
+                if context.sim is target:
+                    return TestResult(False, 'Cannot run a social as a self interaction.')
+                if target is None:
+                    return TestResult(False, 'Cannot run a social with no target.')
+                if target.is_sim and target.socials_locked:
+                    return TestResult(False, 'Cannot socialize with a Sim who has socials_locked set to true. This Sim is leaving the lot.')
+                if context.source == context.SOURCE_AUTONOMY:
+                    sim = inst.sim if inst is not None else context.sim
+                    social_group = cls._get_social_group_for_sim(sim)
+                    if social_group is not None and target in social_group:
+                        attached_si = social_group.get_si_registered_for_sim(sim, affordance=cls)
+                        if inst is not None:
+                            if attached_si is not inst:
+                                return TestResult(False, 'Cannot run social since sim already has an interaction that is registered to group.')
+                        else:
+                            return TestResult(False, 'Sim {} is already running matching affordance:{} ', sim, cls)
+                test_result = cls.on_test(context.sim, target, context, *args, **kwargs)
+            except Exception as ex:
+                CommonExceptionHandler.log_exception(cls.get_mod_identity(), 'Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
+                return TestResult.NONE
 
-        if test_result is None:
-            return super()._test(target, context, *args, **kwargs)
-        if not isinstance(test_result, TestResult):
-            raise RuntimeError('Interaction on_test did not result in a TestResult, instead got {}. {}'.format(pformat(test_result), cls.__name__))
-        if test_result.result is False:
-            if test_result.tooltip is not None:
-                tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.tooltip)
-            elif test_result.reason is not None:
-                tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.reason)
-            else:
-                tooltip = None
-            return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
-        inst_or_cls = inst if inst is not None else cls
-        return super(SocialSuperInteraction, inst_or_cls)._test(target, context, *args, **kwargs)
+            if test_result is None:
+                return super(CommonSocialSuperInteraction, inst_or_cls)._test(target, context, *args, **kwargs)
+            if not isinstance(test_result, TestResult):
+                raise RuntimeError('SocialSuperInteraction on_test did not result in a TestResult, instead got {}. {}'.format(pformat(test_result), cls.__name__))
+            if test_result.result is False:
+                if test_result.tooltip is not None:
+                    tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.tooltip)
+                elif test_result.reason is not None:
+                    tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.reason)
+                else:
+                    tooltip = None
+                return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
+            return super(CommonSocialSuperInteraction, inst_or_cls)._test(target, context, *args, **kwargs)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(cls.get_mod_identity(), 'Error occurred while running _test of interaction \'{}\''.format(cls.__name__), exception=ex)
+        return TestResult(False)
 
     @classmethod
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, *args, **kwargs) -> TestResult:
