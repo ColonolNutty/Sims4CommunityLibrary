@@ -12,7 +12,10 @@ try:
 except:
     # noinspection PyMissingOrEmptyDocstring
     class Int:
-        pass
+        # noinspection PyPropertyDefinition
+        @property
+        def name(self) -> str:
+            pass
 
 from sims.sim_info import SimInfo
 
