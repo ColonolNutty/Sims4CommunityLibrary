@@ -199,6 +199,8 @@ class CommonSimStatisticUtils:
         """
         if sim_info is None:
             return False
+        if CommonSimStatisticUtils.is_statistic_locked(sim_info, statistic_id):
+            return False
         response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic_id, add_dynamic=add_dynamic)
         if response.statistics_tracker is None or response.statistic_instance is None:
             return False
@@ -253,6 +255,8 @@ class CommonSimStatisticUtils:
         :rtype: bool
         """
         if sim_info is None:
+            return False
+        if CommonSimStatisticUtils.is_statistic_locked(sim_info, statistic_id):
             return False
         response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic_id, add_dynamic=add_dynamic)
         if response.statistics_tracker is None or response.statistic_instance is None:

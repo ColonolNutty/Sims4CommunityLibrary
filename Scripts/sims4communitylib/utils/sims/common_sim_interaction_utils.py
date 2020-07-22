@@ -163,7 +163,7 @@ class CommonSimInteractionUtils:
         sim.queue.unlock()
 
     @staticmethod
-    def has_interaction_running_or_queued(sim_info: SimInfo, interaction_id: int) -> bool:
+    def has_interaction_running_or_queued(sim_info: SimInfo, interaction_id: Union[int, CommonInteractionId]) -> bool:
         """has_interaction_running_or_queued(sim_info, interaction_id)
 
         Determine if a Sim has the specified interaction running or in their interaction queue.
@@ -171,14 +171,14 @@ class CommonSimInteractionUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param interaction_id: The identifier of the interaction to check for.
-        :type interaction_id: int
+        :type interaction_id: Union[int, CommonInteractionId]
         :return: True, if the Sim has the specified interaction running or queued. False, if not.
         :rtype: bool
         """
         return CommonSimInteractionUtils.has_interactions_running_or_queued(sim_info, (interaction_id, ))
 
     @staticmethod
-    def has_interaction_running(sim_info: SimInfo, interaction_id: int) -> bool:
+    def has_interaction_running(sim_info: SimInfo, interaction_id: Union[int, CommonInteractionId]) -> bool:
         """has_interaction_running(sim_info, interaction_id)
 
         Determine if a Sim is running the specified interaction.
@@ -186,14 +186,14 @@ class CommonSimInteractionUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param interaction_id: The identifier of the interaction to check for.
-        :type interaction_id: int
+        :type interaction_id: Union[int, CommonInteractionId]
         :return: True, if the Sim has the specified interaction running. False, if not.
         :rtype: bool
         """
         return CommonSimInteractionUtils.has_interactions_running(sim_info, (interaction_id, ))
 
     @staticmethod
-    def has_interaction_queued(sim_info: SimInfo, interaction_id: int) -> bool:
+    def has_interaction_queued(sim_info: SimInfo, interaction_id: Union[int, CommonInteractionId]) -> bool:
         """has_interaction_queued(sim_info, interaction_id)
 
         Determine if a Sim is running the specified interaction.
@@ -201,7 +201,7 @@ class CommonSimInteractionUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param interaction_id: The identifier of the interaction to check for.
-        :type interaction_id: int
+        :type interaction_id: Union[int, CommonInteractionId]
         :return: True, if the Sim has the specified interaction queued. False, if not.
         :rtype: bool
         """
@@ -216,7 +216,7 @@ class CommonSimInteractionUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param interaction_ids: An iterable of identifiers of the interactions to check for.
-        :type interaction_ids: int
+        :type interaction_ids: Union[int, CommonInteractionId]
         :return: True, if the Sim has any of the specified interactions running or queued. False, if not.
         :rtype: bool
         """
@@ -232,7 +232,7 @@ class CommonSimInteractionUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param interaction_ids: An iterable of identifiers of the interactions to check for.
-        :type interaction_ids: int
+        :type interaction_ids: Union[int, CommonInteractionId]
         :return: True, if the Sim has any of the specified interactions running. False, if not.
         :rtype: bool
         """
@@ -251,7 +251,7 @@ class CommonSimInteractionUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param interaction_ids: An iterable of identifiers of the interactions to check for.
-        :type interaction_ids: int
+        :type interaction_ids: Union[int, CommonInteractionId]
         :return: True, if the Sim has any of the specified interactions queued. False, if not.
         :rtype: bool
         """
@@ -383,8 +383,8 @@ class CommonSimInteractionUtils:
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=EnqueueResult.NONE)
     def queue_interaction(
         sim_info: SimInfo,
-        interaction_id: int,
-        social_super_interaction_id: int=None,
+        interaction_id: Union[int, CommonInteractionId],
+        social_super_interaction_id: Union[int, CommonInteractionId]=None,
         target: Any=None,
         interaction_context: InteractionContext=None,
         skip_if_running: bool=False,
@@ -405,9 +405,9 @@ class CommonSimInteractionUtils:
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param interaction_id: The decimal identifier of an interaction.
-        :type interaction_id: int
+        :type interaction_id: Union[int, CommonInteractionId]
         :param social_super_interaction_id: The decimal identifier of a social super interaction to queue the interaction under. Default is None
-        :type social_super_interaction_id: int, optional
+        :type social_super_interaction_id: Union[int, CommonInteractionId], optional
         :param target: The target of the interaction. Default is None.
         :type target: Any, optional
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
@@ -460,7 +460,7 @@ class CommonSimInteractionUtils:
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=EnqueueResult.NONE)
     def queue_super_interaction(
         sim_info: SimInfo,
-        super_interaction_id: int,
+        super_interaction_id: Union[int, CommonInteractionId],
         target: Any=None,
         interaction_context: InteractionContext=None,
         **kwargs
@@ -478,7 +478,7 @@ class CommonSimInteractionUtils:
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param super_interaction_id: The decimal identifier of a super interaction.
-        :type super_interaction_id: int
+        :type super_interaction_id: Union[int, CommonInteractionId]
         :param target: The target of the interaction. Default is None.
         :type target: Any, optional
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
@@ -510,8 +510,8 @@ class CommonSimInteractionUtils:
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=EnqueueResult.NONE)
     def queue_social_mixer_interaction(
         sim_info: SimInfo,
-        social_mixer_interaction_id: int,
-        social_super_interaction_id: int,
+        social_mixer_interaction_id: Union[int, CommonInteractionId],
+        social_super_interaction_id: Union[int, CommonInteractionId],
         target: SimInfo=None,
         interaction_context: InteractionContext=None,
         **kwargs
@@ -530,9 +530,9 @@ class CommonSimInteractionUtils:
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param social_mixer_interaction_id: The decimal identifier of a social mixer interaction.
-        :type social_mixer_interaction_id: int
+        :type social_mixer_interaction_id: Union[int, CommonInteractionId]
         :param social_super_interaction_id: The decimal identifier of a social super interaction to queue the social mixer interaction under.
-        :type social_super_interaction_id: int
+        :type social_super_interaction_id: Union[int, CommonInteractionId]
         :param target: The target of the interaction. Default is None.
         :type target: Any, optional
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
@@ -601,7 +601,7 @@ class CommonSimInteractionUtils:
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=EnqueueResult.NONE)
     def queue_mixer_interaction(
         sim_info: SimInfo,
-        mixer_interaction_id: int,
+        mixer_interaction_id: Union[int, CommonInteractionId],
         target: Any=None,
         interaction_context: InteractionContext=None,
         **kwargs
@@ -619,7 +619,7 @@ class CommonSimInteractionUtils:
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param mixer_interaction_id: The decimal identifier of a mixer interaction.
-        :type mixer_interaction_id: int
+        :type mixer_interaction_id: Union[int, CommonInteractionId]
         :param target: The target of the interaction. Default is None.
         :type target: Any, optional
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
@@ -676,8 +676,8 @@ class CommonSimInteractionUtils:
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=TestResult.NONE)
     def test_interaction(
         sim_info: SimInfo,
-        interaction_id: int,
-        social_super_interaction_id: int=None,
+        interaction_id: Union[int, CommonInteractionId],
+        social_super_interaction_id: Union[int, CommonInteractionId]=None,
         target: Any=None,
         interaction_context: InteractionContext=None,
         **kwargs
@@ -697,9 +697,9 @@ class CommonSimInteractionUtils:
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param interaction_id: The decimal identifier of an interaction.
-        :type interaction_id: int
+        :type interaction_id: Union[int, CommonInteractionId]
         :param social_super_interaction_id: The decimal identifier of a social super interaction to queue the interaction under. Default is None
-        :type social_super_interaction_id: int, optional
+        :type social_super_interaction_id: Union[int, CommonInteractionId], optional
         :param target: The target of the interaction. Default is None.
         :type target: Any, optional
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
@@ -749,7 +749,7 @@ class CommonSimInteractionUtils:
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=TestResult.NONE)
     def test_super_interaction(
         sim_info: SimInfo,
-        super_interaction_id: int,
+        super_interaction_id: Union[int, CommonInteractionId],
         target: Any=None,
         interaction_context: InteractionContext=None,
         **kwargs
@@ -767,7 +767,7 @@ class CommonSimInteractionUtils:
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param super_interaction_id: The decimal identifier of a super interaction.
-        :type super_interaction_id: int
+        :type super_interaction_id: Union[int, CommonInteractionId]
         :param target: The target of the interaction. Default is None.
         :type target: Any, optional
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
@@ -799,8 +799,8 @@ class CommonSimInteractionUtils:
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=TestResult.NONE)
     def test_social_mixer_interaction(
         sim_info: SimInfo,
-        social_mixer_interaction_id: int,
-        social_super_interaction_id: int,
+        social_mixer_interaction_id: Union[int, CommonInteractionId],
+        social_super_interaction_id: Union[int, CommonInteractionId],
         target: SimInfo=None,
         interaction_context: InteractionContext=None,
         **kwargs
@@ -819,9 +819,9 @@ class CommonSimInteractionUtils:
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param social_mixer_interaction_id: The decimal identifier of a social mixer interaction.
-        :type social_mixer_interaction_id: int
+        :type social_mixer_interaction_id: Union[int, CommonInteractionId]
         :param social_super_interaction_id: The decimal identifier of a social super interaction to queue the social mixer interaction under.
-        :type social_super_interaction_id: int
+        :type social_super_interaction_id: Union[int, CommonInteractionId]
         :param target: The target of the interaction. Default is None.
         :type target: Any, optional
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
@@ -890,7 +890,7 @@ class CommonSimInteractionUtils:
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=TestResult.NONE)
     def test_mixer_interaction(
         sim_info: SimInfo,
-        mixer_interaction_id: int,
+        mixer_interaction_id: Union[int, CommonInteractionId],
         target: Any=None,
         interaction_context: InteractionContext=None,
         **kwargs
@@ -908,7 +908,7 @@ class CommonSimInteractionUtils:
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param mixer_interaction_id: The decimal identifier of a mixer interaction.
-        :type mixer_interaction_id: int
+        :type mixer_interaction_id: Union[int, CommonInteractionId]
         :param target: The target of the interaction. Default is None.
         :type target: Any, optional
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
