@@ -38,6 +38,8 @@ class CommonSimMotiveUtils:
         :rtype: bool
         """
         mapped_motive_id: int = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
+        if mapped_motive_id == -1:
+            return False
         return CommonSimStatisticUtils.has_statistic(sim_info, mapped_motive_id)
 
     @staticmethod
@@ -55,10 +57,9 @@ class CommonSimMotiveUtils:
         :return: True, if the specified Motive was changed successfully. False, if not.
         :rtype: bool
         """
-        mapped_motive_id: CommonMotiveId = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
-        if not CommonSimMotiveUtils.has_motive(sim_info, mapped_motive_id):
+        if not CommonSimMotiveUtils.has_motive(sim_info, motive_id):
             return False
-        mapped_motive_id: int = mapped_motive_id
+        mapped_motive_id: int = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
         CommonSimStatisticUtils.set_statistic_value(sim_info, mapped_motive_id, amount, add=True)
         return True
 
@@ -77,10 +78,9 @@ class CommonSimMotiveUtils:
         :return: True, if the specified Motive was changed successfully. False, if not.
         :rtype: bool
         """
-        mapped_motive_id: CommonMotiveId = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
-        if not CommonSimMotiveUtils.has_motive(sim_info, mapped_motive_id):
+        if not CommonSimMotiveUtils.has_motive(sim_info, motive_id):
             return False
-        mapped_motive_id: int = mapped_motive_id
+        mapped_motive_id: int = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
         CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount, add=True)
         return True
 
@@ -99,10 +99,9 @@ class CommonSimMotiveUtils:
         :return: True, if the specified Motive was changed successfully. False, if not.
         :rtype: bool
         """
-        mapped_motive_id: CommonMotiveId = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
-        if not CommonSimMotiveUtils.has_motive(sim_info, mapped_motive_id):
+        if not CommonSimMotiveUtils.has_motive(sim_info, motive_id):
             return False
-        mapped_motive_id: int = mapped_motive_id
+        mapped_motive_id: int = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
         CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount * -1.0, add=True)
         return True
 
@@ -171,10 +170,27 @@ class CommonSimMotiveUtils:
         return motive_level
 
     @staticmethod
+    def has_bowels(sim_info: SimInfo) -> bool:
+        """has_bowels(sim_info)
+
+        Determine if a Sim has bowels.
+
+        .. note:: Human Sims do not have Bowels.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the Sim has bowels. False, if not.
+        :rtype: bool
+        """
+        return CommonSimMotiveUtils.has_motive(sim_info, CommonMotiveId.BOWEL)
+
+    @staticmethod
     def get_bowels_level(sim_info: SimInfo) -> float:
         """get_bowels_level(sim_info)
 
-        Retrieve the bowels level of a Sim.
+        Retrieve the bowel level of a Sim.
+
+        .. note:: Human Sims do not have Bowels. (As hard as that is to believe)
 
         :param sim_info: The Sim to get the level of.
         :type sim_info: SimInfo
@@ -183,11 +199,7 @@ class CommonSimMotiveUtils:
         """
         if CommonSpeciesUtils.is_human(sim_info):
             return -1.0
-        elif CommonSpeciesUtils.is_dog(sim_info):
-            return CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.PET_DOG_BOWEL)
-        elif CommonSpeciesUtils.is_cat(sim_info):
-            return CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.PET_CAT_BOWEL)
-        return -1.0
+        return CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.BOWEL)
 
     @staticmethod
     def get_social_level(sim_info: SimInfo) -> float:
@@ -269,6 +281,8 @@ class CommonSimMotiveUtils:
     @staticmethod
     def _get_motive_level(sim_info: SimInfo, motive_id: CommonMotiveId) -> float:
         motive_id: int = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
+        if motive_id == -1:
+            return 0.0
         return CommonSimStatisticUtils.get_statistic_value(sim_info, motive_id)
 
     @staticmethod
@@ -306,6 +320,11 @@ class CommonSimMotiveUtils:
                     Species.HUMAN: CommonMotiveId.BLADDER,
                     Species.CAT: CommonMotiveId.PET_CAT_BLADDER,
                     Species.DOG: CommonMotiveId.PET_DOG_BLADDER
+                },
+                CommonMotiveId.BOWEL: {
+                    Species.HUMAN: CommonMotiveId.BOWEL,
+                    Species.CAT: CommonMotiveId.PET_CAT_BOWEL,
+                    Species.DOG: CommonMotiveId.PET_DOG_BOWEL
                 },
                 CommonMotiveId.SOCIAL: {
                     Species.HUMAN: CommonMotiveId.SOCIAL,

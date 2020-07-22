@@ -7,6 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Union
 from sims.sim_info import SimInfo
+from sims4communitylib.enums.skills_enum import CommonSkillId
 from sims4communitylib.modinfo import ModInfo
 from statistics.skill import Skill
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
@@ -19,7 +20,7 @@ class CommonSimSkillUtils:
     """
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
-    def has_skill(sim_info: SimInfo, skill_id: int) -> bool:
+    def has_skill(sim_info: SimInfo, skill_id: Union[int, CommonSkillId]) -> bool:
         """has_skill(sim_info, skill_id)
 
         Determine if a Sim has a Skill.
@@ -27,7 +28,7 @@ class CommonSimSkillUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param skill_id: The identifier of the Skill to check.
-        :type skill_id: int
+        :type skill_id: Union[int, CommonSkillId]
         :return: True, if the Sim has the skill. False, if the Sim does not.
         :rtype: bool
         """
@@ -35,7 +36,7 @@ class CommonSimSkillUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
-    def is_at_max_skill_level(sim_info: SimInfo, skill_id: int) -> bool:
+    def is_at_max_skill_level(sim_info: SimInfo, skill_id: Union[int, CommonSkillId]) -> bool:
         """is_at_max_skill_level(sim_info, skill_id)
 
         Determine if a Sim has reached the Maximum Level of a Skill.
@@ -45,7 +46,7 @@ class CommonSimSkillUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param skill_id: The identifier of the Skill to check.
-        :type skill_id: int
+        :type skill_id: Union[int, CommonSkillId]
         :return: True, if the Sim has the skill at the maximum level. False, if the Sim does not.
         :rtype: bool
         """
@@ -57,7 +58,7 @@ class CommonSimSkillUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
-    def remove_skill(sim_info: SimInfo, skill_id: int) -> bool:
+    def remove_skill(sim_info: SimInfo, skill_id: Union[int, CommonSkillId]) -> bool:
         """remove_skill(sim_info, skill_id)
 
         Remove a Skill from the specified Sim.
@@ -65,7 +66,7 @@ class CommonSimSkillUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param skill_id: The identifier of the Skill to remove.
-        :type skill_id: int
+        :type skill_id: Union[int, CommonSkillId]
         :return: True, if the skill was removed successfully. False, if not.
         :rtype: bool
         """
@@ -73,7 +74,7 @@ class CommonSimSkillUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
-    def set_progress_toward_max_skill_level(sim_info: SimInfo, skill_id: int, value: float, add: bool=True) -> bool:
+    def set_progress_toward_max_skill_level(sim_info: SimInfo, skill_id: Union[int, CommonSkillId], value: float, add: bool=True) -> bool:
         """set_progress_toward_max_skill_level(sim_info, skill_id, value, add=True)
 
         Set the amount of progress a Sim has made toward the max level of a Skill.
@@ -81,9 +82,9 @@ class CommonSimSkillUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param skill_id: The identifier of the Skill to set.
-        :type skill_id: int
+        :type skill_id: Union[int, CommonSkillId]
         :param value: The amount to add.
-        :type value: int
+        :type value: Union[int, CommonSkillId]
         :param add: If True, the skill will be added to the Sim before it is modified.
         :type add: bool, optional
         :return: True, if successful. False, if not.
@@ -93,7 +94,7 @@ class CommonSimSkillUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
-    def set_current_skill_level(sim_info: SimInfo, skill_id: int, level: float, add: bool=True) -> bool:
+    def set_current_skill_level(sim_info: SimInfo, skill_id: Union[int, CommonSkillId], level: float, add: bool=True) -> bool:
         """set_current_skill_level(sim_info, skill_id, level, add=True)
 
         Set the Skill Level of the Skill for the specified Sim.
@@ -101,9 +102,9 @@ class CommonSimSkillUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param skill_id: The identifier of the Skill to set.
-        :type skill_id: int
+        :type skill_id: Union[int, CommonSkillId]
         :param level: The level to set the skill to.
-        :type level: int
+        :type level: Union[int, CommonSkillId]
         :param add: If True, the skill will be added to the Sim before it is modified.
         :type add: bool, optional
         :return: True, if successful. False, if not.
@@ -113,7 +114,7 @@ class CommonSimSkillUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
-    def translate_skill_progress(sim_info: SimInfo, skill_id_from: int, skill_id_to: int, add: bool=True) -> bool:
+    def translate_skill_progress(sim_info: SimInfo, skill_id_from: Union[int, CommonSkillId], skill_id_to: Union[int, CommonSkillId], add: bool=True) -> bool:
         """translate_skill_progress(sim_info, skill_id_from, skill_id_to, add=True)
 
         Translate the total progress of one Skill to the total progress of another Skill for the specified Sim.
@@ -121,9 +122,9 @@ class CommonSimSkillUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param skill_id_from: The identifier of the Skill being changed.
-        :type skill_id_from: int
+        :type skill_id_from: Union[int, CommonSkillId]
         :param skill_id_to: The identifier of the Skill being translated to.
-        :type skill_id_to: int
+        :type skill_id_to: Union[int, CommonSkillId]
         :param add: If True, the skill will be added to the Sim before it is modified.
         :type add: bool, optional
         :return: True, if successful. False, if not.
@@ -141,7 +142,7 @@ class CommonSimSkillUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
-    def change_progress_toward_max_skill_level(sim_info: SimInfo, skill_id: int, value: float, add: bool=True) -> bool:
+    def change_progress_toward_max_skill_level(sim_info: SimInfo, skill_id: Union[int, CommonSkillId], value: float, add: bool=True) -> bool:
         """change_progress_toward_max_skill_level(sim_info, skill_id, value, add=True)
 
         Modify the amount of progress a Sim has made toward the max level of a Skill.
@@ -149,9 +150,9 @@ class CommonSimSkillUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param skill_id: The identifier of the Skill to modify.
-        :type skill_id: int
+        :type skill_id: Union[int, CommonSkillId]
         :param value: The level to add or subtract to/from the skill.
-        :type value: int
+        :type value: Union[int, CommonSkillId]
         :param add: If True, the skill will be added to the Sim before it is modified.
         :type add: bool, optional
         :return: True, if successful. False, if not.
@@ -161,7 +162,7 @@ class CommonSimSkillUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
-    def change_progress_toward_next_skill_level(sim_info: SimInfo, skill_id: int, value: float, add: bool=True) -> bool:
+    def change_progress_toward_next_skill_level(sim_info: SimInfo, skill_id: Union[int, CommonSkillId], value: float, add: bool=True) -> bool:
         """change_progress_toward_next_skill_level(sim_info, skill_id, value, add=True)
 
         Modify the amount of progress a Sim has made toward the next level of a Skill.
@@ -169,9 +170,9 @@ class CommonSimSkillUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param skill_id: The identifier of the Skill to modify.
-        :type skill_id: int
+        :type skill_id: Union[int, CommonSkillId]
         :param value: The level to add or subtract to/from the skill.
-        :type value: int
+        :type value: Union[int, CommonSkillId]
         :param add: If True, the skill will be added to the Sim before it is modified.
         :type add: bool, optional
         :return: True, if successful. False, if not.
@@ -192,7 +193,7 @@ class CommonSimSkillUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=-1.0)
-    def get_progress_toward_max_skill_level(sim_info: SimInfo, skill_id: int, add: bool=True) -> float:
+    def get_progress_toward_max_skill_level(sim_info: SimInfo, skill_id: Union[int, CommonSkillId], add: bool=True) -> float:
         """get_progress_toward_max_skill_level(sim_info, skill_id, add=True)
 
         Retrieve the amount of progress a Sim has made toward the max level of a Skill.
@@ -200,7 +201,7 @@ class CommonSimSkillUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param skill_id: The identifier of the Skill to modify.
-        :type skill_id: int
+        :type skill_id: Union[int, CommonSkillId]
         :param add: If True, the skill will be added to the Sim before it is modified.
         :type add: bool, optional
         :return: True, if successful. False, if not.
@@ -210,7 +211,7 @@ class CommonSimSkillUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=-1.0)
-    def get_current_skill_level(sim_info: SimInfo, skill_id: int) -> float:
+    def get_current_skill_level(sim_info: SimInfo, skill_id: Union[int, CommonSkillId]) -> float:
         """get_current_skill_level(sim_info, skill_id)
 
         Retrieve the Skill Level of a sim.
@@ -218,7 +219,7 @@ class CommonSimSkillUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param skill_id: The identifier of the Skill to use.
-        :type skill_id: int
+        :type skill_id: Union[int, CommonSkillId]
         :return: The current skill level of the specified Skill or `-1.0` if a problem occurs.
         :rtype: float
         """
@@ -226,7 +227,7 @@ class CommonSimSkillUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=-1.0)
-    def get_progress_toward_next_skill_level(sim_info: SimInfo, skill_id: int, add: bool=False) -> float:
+    def get_progress_toward_next_skill_level(sim_info: SimInfo, skill_id: Union[int, CommonSkillId], add: bool=False) -> float:
         """get_progress_toward_next_skill_level(sim_info, skill_id, add=False)
 
         Retrieve the amount of progress a Sim has made toward the next level of a Skill.
@@ -234,7 +235,7 @@ class CommonSimSkillUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param skill_id: The identifier of the Skill to use.
-        :type skill_id: int
+        :type skill_id: Union[int, CommonSkillId]
         :param add: If True, the skill will be added to the Sim before it is checked.
         :type add: bool, optional
         :return: The progress to the next level of the specified Skill or `-1.0` if a problem occurs.
@@ -253,7 +254,7 @@ class CommonSimSkillUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
-    def get_skill(sim_info: SimInfo, skill_id: int, add: bool=True) -> Union[Skill, None]:
+    def get_skill(sim_info: SimInfo, skill_id: Union[int, CommonSkillId], add: bool=True) -> Union[Skill, None]:
         """get_skill(sim_info, skill_id, add=True)
 
         Retrieve a Skill for the specified Sim.
@@ -261,7 +262,7 @@ class CommonSimSkillUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param skill_id: The identifier of the Skill to use.
-        :type skill_id: int
+        :type skill_id: Union[int, CommonSkillId]
         :param add: If True, the skill will be added to the Sim before it is checked.
         :type add: bool, optional
         :return: An instance of a Skill of the Sim or None if the Skill does not exist.

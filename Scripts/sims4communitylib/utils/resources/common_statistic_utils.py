@@ -6,6 +6,8 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Union
+
+from sims4communitylib.enums.statistics_enum import CommonStatisticId
 from sims4communitylib.modinfo import ModInfo
 from statistics.statistic import Statistic
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
@@ -19,13 +21,13 @@ class CommonStatisticUtils:
     """
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=-1.0)
-    def get_statistic_initial_value(statistic_id: int) -> float:
+    def get_statistic_initial_value(statistic_id: Union[int, CommonStatisticId]) -> float:
         """get_statistic_initial_value(statistic_id)
 
         Retrieve the Initial Value of a Statistic.
 
         :param statistic_id: The identifier of the Statistic to use.
-        :type statistic_id: int
+        :type statistic_id: Union[int, CommonStatisticId]
         :return: The initial value of the statistic.
         :rtype: float
         """
@@ -38,13 +40,13 @@ class CommonStatisticUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=-1.0)
-    def get_statistic_min_value(statistic_id: int) -> float:
+    def get_statistic_min_value(statistic_id: Union[int, CommonStatisticId]) -> float:
         """get_statistic_min_value(statistic_id)
 
         Retrieve the Minimum Value of a Statistic.
 
         :param statistic_id: The identifier of the Statistic to use.
-        :type statistic_id: int
+        :type statistic_id: Union[int, CommonStatisticId]
         :return: The minimum value of the statistic.
         :rtype: float
         """
@@ -55,13 +57,13 @@ class CommonStatisticUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=-1.0)
-    def get_statistic_max_value(statistic_id: int) -> float:
+    def get_statistic_max_value(statistic_id: Union[int, CommonStatisticId]) -> float:
         """get_statistic_max_value(statistic_id)
 
         Retrieve the Maximum Value of a Statistic.
 
         :param statistic_id: The identifier of the Statistic to use.
-        :type statistic_id: int
+        :type statistic_id: Union[int, CommonStatisticId]
         :return: The maximum value of the statistic.
         :rtype: float
         """
@@ -72,7 +74,7 @@ class CommonStatisticUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
-    def _load_statistic_instance(statistic_id: int) -> Union[Statistic, None]:
+    def _load_statistic_instance(statistic_id: Union[int, CommonStatisticId]) -> Union[Statistic, None]:
         statistic_instance = CommonResourceUtils.load_instance(Types.STATISTIC, statistic_id)
         if statistic_instance is None:
             return None
