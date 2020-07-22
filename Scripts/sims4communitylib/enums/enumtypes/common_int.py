@@ -5,6 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from collections import OrderedDict
 from typing import Iterator
 
 # noinspection PyBroadException
@@ -27,6 +28,16 @@ except:
         # noinspection PyPropertyDefinition
         @property
         def values(self) -> Iterator[int]:
+            pass
+
+        # noinspection PyPropertyDefinition
+        @property
+        def name_to_value(self) -> OrderedDict:
+            pass
+
+        # noinspection PyPropertyDefinition
+        @property
+        def value_to_name(self) -> OrderedDict:
             pass
 
 
