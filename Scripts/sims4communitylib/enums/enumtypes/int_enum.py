@@ -83,6 +83,8 @@ class CommonEnumIntMetaclass(CommonEnumMetaclass):
 class CommonEnumIntBase(int, metaclass=CommonEnumIntMetaclass):
     """An inheritable class to turn properties into integer enums.
 
+    .. warning:: This class is obsolete, please inherit from :class:`.CommonInt` instead.
+
     """
     def __call__(self, val) -> CommonEnumInt:
         pass

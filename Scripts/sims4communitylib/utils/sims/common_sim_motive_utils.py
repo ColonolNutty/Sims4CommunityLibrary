@@ -20,10 +20,10 @@ class CommonSimMotiveUtils:
     .. note:: Motives are just another name for Sim Needs (Bladder, Hunger, Energy, etc.)
 
     """
-    _MOTIVE_MAPPINGS: Dict[int, Dict[Species, int]] = None
+    _MOTIVE_MAPPINGS: Dict[CommonMotiveId, Dict[Species, CommonMotiveId]] = None
 
     @staticmethod
-    def has_motive(sim_info: SimInfo, motive_id: int) -> bool:
+    def has_motive(sim_info: SimInfo, motive_id: CommonMotiveId) -> bool:
         """has_motive(sim_info, motive_id)
 
         Determine if a Sim has the specified Motive.
@@ -37,11 +37,11 @@ class CommonSimMotiveUtils:
         :return: True, if the Sim has the specified Motive. False, if not.
         :rtype: bool
         """
-        mapped_motive_id = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
+        mapped_motive_id: int = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
         return CommonSimStatisticUtils.has_statistic(sim_info, mapped_motive_id)
 
     @staticmethod
-    def set_motive_level(sim_info: SimInfo, motive_id: int, amount: float) -> bool:
+    def set_motive_level(sim_info: SimInfo, motive_id: CommonMotiveId, amount: float) -> bool:
         """set_motive_level(sim_info, motive_id, amount)
 
         Set the current level of a Motive of a Sim.
@@ -49,20 +49,21 @@ class CommonSimMotiveUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param motive_id: The identifier of the Motive to change.
-        :type motive_id: int
+        :type motive_id: CommonMotiveId
         :param amount: The amount to set the motive level to.
         :type amount: float
         :return: True, if the specified Motive was changed successfully. False, if not.
         :rtype: bool
         """
-        mapped_motive_id = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
+        mapped_motive_id: CommonMotiveId = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
         if not CommonSimMotiveUtils.has_motive(sim_info, mapped_motive_id):
             return False
+        mapped_motive_id: int = mapped_motive_id
         CommonSimStatisticUtils.set_statistic_value(sim_info, mapped_motive_id, amount, add=True)
         return True
 
     @staticmethod
-    def increase_motive_level(sim_info: SimInfo, motive_id: int, amount: float) -> bool:
+    def increase_motive_level(sim_info: SimInfo, motive_id: CommonMotiveId, amount: float) -> bool:
         """increase_motive_level(sim_info, motive_id, amount)
 
         Increase the current level of a Motive of a Sim.
@@ -70,20 +71,21 @@ class CommonSimMotiveUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param motive_id: The identifier of the Motive to change.
-        :type motive_id: int
+        :type motive_id: CommonMotiveId
         :param amount: The amount to increase the motive by.
         :type amount: float
         :return: True, if the specified Motive was changed successfully. False, if not.
         :rtype: bool
         """
-        mapped_motive_id = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
+        mapped_motive_id: CommonMotiveId = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
         if not CommonSimMotiveUtils.has_motive(sim_info, mapped_motive_id):
             return False
+        mapped_motive_id: int = mapped_motive_id
         CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount, add=True)
         return True
 
     @staticmethod
-    def decrease_motive_level(sim_info: SimInfo, motive_id: int, amount: float) -> bool:
+    def decrease_motive_level(sim_info: SimInfo, motive_id: CommonMotiveId, amount: float) -> bool:
         """decrease_motive_level(sim_info, motive_id, amount)
 
         Decrease the current level of a Motive of a Sim.
@@ -91,15 +93,16 @@ class CommonSimMotiveUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param motive_id: The identifier of the Motive to change.
-        :type motive_id: int
+        :type motive_id: CommonMotiveId
         :param amount: The amount to decrease the motive by.
         :type amount: float
         :return: True, if the specified Motive was changed successfully. False, if not.
         :rtype: bool
         """
-        mapped_motive_id = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
+        mapped_motive_id: CommonMotiveId = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
         if not CommonSimMotiveUtils.has_motive(sim_info, mapped_motive_id):
             return False
+        mapped_motive_id: int = mapped_motive_id
         CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount * -1.0, add=True)
         return True
 
@@ -264,12 +267,12 @@ class CommonSimMotiveUtils:
         return CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.PLANT_SIM_WATER)
 
     @staticmethod
-    def _get_motive_level(sim_info: SimInfo, motive_id: int) -> float:
-        motive_id = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
+    def _get_motive_level(sim_info: SimInfo, motive_id: CommonMotiveId) -> float:
+        motive_id: int = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
         return CommonSimStatisticUtils.get_statistic_value(sim_info, motive_id)
 
     @staticmethod
-    def _map_motive_id(sim_info: SimInfo, motive_id: int) -> int:
+    def _map_motive_id(sim_info: SimInfo, motive_id: CommonMotiveId) -> CommonMotiveId:
         motive_mappings = CommonSimMotiveUtils._get_motive_mappings()
         if motive_id not in motive_mappings:
             return motive_id
@@ -281,7 +284,7 @@ class CommonSimMotiveUtils:
         return motive_species_mapping[species]
 
     @staticmethod
-    def _get_motive_mappings() -> Dict[int, Dict[Species, int]]:
+    def _get_motive_mappings() -> Dict[CommonMotiveId, Dict[Species, CommonMotiveId]]:
         if CommonSimMotiveUtils._MOTIVE_MAPPINGS is None:
             CommonSimMotiveUtils._MOTIVE_MAPPINGS = {
                 CommonMotiveId.HUNGER: {

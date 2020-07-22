@@ -192,9 +192,9 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
     :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
     :type mod_identity: CommonModIdentity
     :param title_identifier: A decimal identifier of the title text.
-    :type title_identifier: Union[int, LocalizedString]
+    :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: A decimal identifier of the description text.
-    :type description_identifier: Union[int, LocalizedString]
+    :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param title_tokens: An iterable of Tokens to format into the title. Default is an empty collection.
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: An iterable of Tokens to format into the description. Default is an empty collection.
@@ -205,8 +205,8 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
     def __init__(
         self,
         mod_identity: CommonModIdentity,
-        title_identifier: Union[int, LocalizedString],
-        description_identifier: Union[int, LocalizedString],
+        title_identifier: Union[int, str, LocalizedString, CommonStringId],
+        description_identifier: Union[int, str, LocalizedString, CommonStringId],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
         on_close: Callable[..., Any]=CommonFunctionUtils.noop

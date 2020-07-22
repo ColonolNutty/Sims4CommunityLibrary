@@ -68,9 +68,9 @@ class CommonBasicNotification:
             dialog.show()
 
     :param title_identifier: The title to display in the dialog.
-    :type title_identifier: Union[int, LocalizedString]
+    :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: The description to display in the dialog.
-    :type description_identifier: Union[int, LocalizedString]
+    :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param title_tokens: Tokens to format into the title.
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: Tokens to format into the description.
@@ -84,8 +84,8 @@ class CommonBasicNotification:
     """
     def __init__(
         self,
-        title_identifier: Union[int, LocalizedString],
-        description_identifier: Union[int, LocalizedString],
+        title_identifier: Union[int, str, LocalizedString, CommonStringId],
+        description_identifier: Union[int, str, LocalizedString, CommonStringId],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
         urgency: UiDialogNotification.UiDialogNotificationUrgency=UiDialogNotification.UiDialogNotificationUrgency.DEFAULT,

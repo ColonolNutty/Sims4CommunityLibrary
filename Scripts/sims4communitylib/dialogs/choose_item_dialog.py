@@ -11,7 +11,7 @@ from typing import Tuple, Any, Callable, Union
 from pprint import pformat
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtils
-from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
@@ -25,13 +25,13 @@ from ui.ui_dialog_picker import UiObjectPicker, ObjectPickerRow
 log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'choose_item_dialog')
 
 
-class CommonChooseItemResult(CommonEnumIntBase):
+class CommonChooseItemResult(CommonInt):
     """Different outcomes upon the player choosing or not choosing items in the dialog.
 
     """
-    DIALOG_CANCELLED = 0
-    ITEM_CHOSEN = 1
-    ITEM_CHOSEN_WITH_ERROR = 2
+    DIALOG_CANCELLED: 'CommonChooseItemResult' = 0
+    ITEM_CHOSEN: 'CommonChooseItemResult' = 1
+    ITEM_CHOSEN_WITH_ERROR: 'CommonChooseItemResult' = 2
 
     @staticmethod
     def is_error(result: 'CommonChooseItemResult') -> bool:
@@ -93,9 +93,9 @@ class CommonChooseItemDialog:
             dialog.show(on_item_chosen=_item_chosen)
 
     :param title_identifier: A decimal identifier of the title text.
-    :type title_identifier: Union[int, LocalizedString]
+    :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: A decimal identifier of the description text.
-    :type description_identifier: Union[int, LocalizedString]
+    :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param list_items: The items to display in the dialog.
     :type list_items: Tuple[ObjectPickerRow]
     :param title_tokens: Tokens to format into the title.
@@ -105,8 +105,8 @@ class CommonChooseItemDialog:
     """
     def __init__(
         self,
-        title_identifier: Union[int, LocalizedString],
-        description_identifier: Union[int, LocalizedString],
+        title_identifier: Union[int, str, LocalizedString, CommonStringId],
+        description_identifier: Union[int, str, LocalizedString, CommonStringId],
         list_items: Tuple[ObjectPickerRow],
         title_tokens: Tuple[Any]=(),
         description_tokens: Tuple[Any]=()
@@ -150,9 +150,9 @@ class CommonChooseItemDialog:
 
         def _on_item_chosen(dialog: UiObjectPicker):
             if not dialog.accepted:
-                return on_item_chosen(None, CommonChooseItemResult(CommonChooseItemResult.DIALOG_CANCELLED))
+                return on_item_chosen(None, CommonChooseItemResult.DIALOG_CANCELLED)
             chosen_item = CommonDialogUtils.get_chosen_item(dialog)
-            return on_item_chosen(chosen_item, CommonChooseItemResult(CommonChooseItemResult.ITEM_CHOSEN))
+            return on_item_chosen(chosen_item, CommonChooseItemResult.ITEM_CHOSEN)
 
         for list_item in self.list_items:
             _dialog.add_row(list_item)

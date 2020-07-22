@@ -960,7 +960,7 @@ class CommonTraitUtils:
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING)
 
     @staticmethod
-    def has_trait(sim_info: SimInfo, *trait_ids: int) -> bool:
+    def has_trait(sim_info: SimInfo, *trait_ids: Union[int, CommonTraitId]) -> bool:
         """has_trait(sim_info, *trait_ids)
 
         Determine if a sim has any of the specified traits.
@@ -968,7 +968,7 @@ class CommonTraitUtils:
         :param sim_info: The sim to check.
         :type sim_info: SimInfo
         :param trait_ids: An iterable of identifiers of Traits.
-        :type trait_ids: int
+        :type trait_ids: Union[int, CommonTraitId]
         :return: True, if the sim has any of the specified traits. False, if not.
         :rtype: bool
         """
@@ -1077,7 +1077,7 @@ class CommonTraitUtils:
         return list(sim_info.trait_tracker.equipped_traits)
 
     @staticmethod
-    def add_trait(sim_info: SimInfo, *trait_ids: int) -> bool:
+    def add_trait(sim_info: SimInfo, *trait_ids: Union[int, CommonTraitId]) -> bool:
         """add_trait(sim_info, *trait_ids)
 
         Add the specified traits to a Sim.
@@ -1085,7 +1085,7 @@ class CommonTraitUtils:
         :param sim_info: The Sim to add the specified traits to.
         :type sim_info: SimInfo
         :param trait_ids: An iterable of Trait identifiers of traits being added.
-        :type trait_ids: int
+        :type trait_ids: Union[int, CommonTraitId]
         :return: True, if all specified traits were successfully added to the Sim. False, if not.
         :rtype: bool
         """
@@ -1099,7 +1099,7 @@ class CommonTraitUtils:
         return success
 
     @staticmethod
-    def remove_trait(sim_info: SimInfo, *trait_ids: int) -> bool:
+    def remove_trait(sim_info: SimInfo, *trait_ids: Union[int, CommonTraitId]) -> bool:
         """remove_trait(sim_info, *trait_ids)
 
         Remove the specified traits from a Sim.
@@ -1107,7 +1107,7 @@ class CommonTraitUtils:
         :param sim_info: The Sim to remove the specified traits from.
         :type sim_info: SimInfo
         :param trait_ids: The decimal identifier of the trait being removed.
-        :type trait_ids: int
+        :type trait_ids: Union[int, CommonTraitId]
         :return: True, if all specified traits were successfully removed from the Sim. False, if not.
         :rtype: bool
         """
@@ -1121,7 +1121,7 @@ class CommonTraitUtils:
         return success
 
     @staticmethod
-    def swap_traits(sim_info: SimInfo, trait_id_one: int, trait_id_two: int) -> bool:
+    def swap_traits(sim_info: SimInfo, trait_id_one: Union[int, CommonTraitId], trait_id_two: Union[int, CommonTraitId]) -> bool:
         """swap_traits(sim_info, trait_id_one, trait_id_two)
 
         Remove one trait and add another to a Sim.
@@ -1132,9 +1132,9 @@ class CommonTraitUtils:
         :param sim_info: The Sim to remove the specified traits from.
         :type sim_info: SimInfo
         :param trait_id_one: The first trait to remove/add
-        :type trait_id_one: int
+        :type trait_id_one: Union[int, CommonTraitId]
         :param trait_id_two: The second trait to remove/add
-        :type trait_id_two: int
+        :type trait_id_two: Union[int, CommonTraitId]
         :return: True, if the Traits were swapped successfully. False, if neither Trait exists on a Sim or the traits were not swapped successfully.
         :rtype: bool
         """
@@ -1153,13 +1153,13 @@ class CommonTraitUtils:
         return False
 
     @staticmethod
-    def add_trait_to_all_sims(trait_id: int, include_sim_callback: Callable[[SimInfo], bool]=None):
+    def add_trait_to_all_sims(trait_id: Union[int, CommonTraitId], include_sim_callback: Callable[[SimInfo], bool]=None):
         """add_trait_to_all_sims(trait_id, include_sim_callback=None)
 
         Add a trait to all Sims that match the specified include filter.
 
         :param trait_id: The identifier of the Trait to add to all Sims.
-        :type trait_id: int
+        :type trait_id: Union[int, CommonTraitId]
         :param include_sim_callback: Only Sims that match this filter will have the Trait added.
         :type include_sim_callback: Callback[[SimInfo], bool], optional
         """
@@ -1169,13 +1169,13 @@ class CommonTraitUtils:
             CommonTraitUtils.add_trait(sim_info, trait_id)
 
     @staticmethod
-    def remove_trait_from_all_sims(trait_id: int, include_sim_callback: Callable[[SimInfo], bool]=None):
+    def remove_trait_from_all_sims(trait_id: Union[int, CommonTraitId], include_sim_callback: Callable[[SimInfo], bool]=None):
         """remove_trait_from_all_sims(trait_id, include_sim_callback=None)
 
         Remove a trait from all Sims that match the specified include filter.
 
         :param trait_id: The identifier of the Trait to remove from all Sims.
-        :type trait_id: int
+        :type trait_id: Union[int, CommonTraitId]
         :param include_sim_callback: Only Sims that match this filter will have the Trait removed.
         :type include_sim_callback: Callback[[SimInfo], bool], optional
         """
@@ -1201,7 +1201,7 @@ class CommonTraitUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
-    def _load_trait_instance(trait_id: int) -> Union[Trait, None]:
+    def _load_trait_instance(trait_id: Union[int, CommonTraitId]) -> Union[Trait, None]:
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.load_instance(Types.TRAIT, trait_id)

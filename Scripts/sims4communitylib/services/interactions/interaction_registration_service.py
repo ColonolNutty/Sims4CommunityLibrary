@@ -11,20 +11,20 @@ from interactions.base.interaction import Interaction
 from objects.script_object import ScriptObject
 from services.terrain_service import TerrainService
 from sims4.resources import Types
-from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 
 
-class CommonInteractionType(CommonEnumIntBase):
+class CommonInteractionType(CommonInt):
     """The type of object/area to add interactions to.
 
     """
-    ON_TERRAIN_LOAD = 0
-    ON_OCEAN_LOAD = 1
-    ON_SCRIPT_OBJECT_LOAD = 2
+    ON_TERRAIN_LOAD: 'CommonInteractionType' = 0
+    ON_OCEAN_LOAD: 'CommonInteractionType' = 1
+    ON_SCRIPT_OBJECT_LOAD: 'CommonInteractionType' = 2
 
 
 class CommonInteractionHandler:
@@ -233,6 +233,7 @@ class ExampleInteractionHandler(CommonScriptObjectInteractionHandler):
         # Interaction Ids
         # These are the decimal identifiers of the interactions from a package file.
         from sims4communitylib.enums.interactions_enum import CommonInteractionId
+        # noinspection PyTypeChecker
         return tuple([int(CommonInteractionId.SIM_CHAT), 2])
 
     def should_add(self, script_object: ScriptObject, *args, **kwargs) -> bool:

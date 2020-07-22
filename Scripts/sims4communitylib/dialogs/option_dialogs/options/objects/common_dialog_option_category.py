@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from typing import Union
 
 from protocolbuffers.Localization_pb2 import LocalizedString
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 
 
@@ -21,9 +22,9 @@ class CommonDialogObjectOptionCategory:
     :param icon: The decimal identifier of the icon for the category.
     :type icon: int
     :param category_name: The name of the category. Default is the object_category value.
-    :type category_name: Union[int, str, LocalizedString]
+    :type category_name: Union[int, str, LocalizedString, CommonStringId]
     """
-    def __init__(self, object_category: str, icon: int, category_name: Union[int, str, LocalizedString]=None):
+    def __init__(self, object_category: str, icon: int, category_name: Union[int, str, LocalizedString, CommonStringId]=None):
         self.object_category = object_category
         self.icon = icon
         if category_name is None:

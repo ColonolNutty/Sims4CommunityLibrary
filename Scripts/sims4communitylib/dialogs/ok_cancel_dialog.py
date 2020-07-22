@@ -63,19 +63,19 @@ class CommonOkCancelDialog(CommonDialog):
             dialog.show(on_ok_selected=_ok_chosen, on_cancel_selected=_cancel_chosen)
 
     :param title_identifier: A decimal identifier of the title text.
-    :type title_identifier: Union[int, LocalizedString]
+    :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: A decimal identifier of the description text.
-    :type description_identifier: Union[int, LocalizedString]
+    :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param title_tokens: Tokens to format into the title.
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: Tokens to format into the description.
     :type description_tokens: Iterator[Any], optional
     :param ok_text_identifier: A decimal identifier for the Ok text.
-    :type ok_text_identifier: Union[int, LocalizedString], optional
+    :type ok_text_identifier: Union[int, str, LocalizedString, CommonStringId], optional
     :param ok_text_tokens: Tokens to format into the Ok text.
     :type ok_text_tokens: Iterator[Any], optional
     :param cancel_text_identifier: A decimal identifier for the Cancel text.
-    :type cancel_text_identifier: Union[int, LocalizedString], optional
+    :type cancel_text_identifier: Union[int, str, LocalizedString, CommonStringId], optional
     :param cancel_text_tokens: Tokens to format into the Cancel text.
     :type cancel_text_tokens: Iterator[Any], optional
     :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
@@ -83,13 +83,13 @@ class CommonOkCancelDialog(CommonDialog):
     """
     def __init__(
         self,
-        title_identifier: Union[int, LocalizedString],
-        description_identifier: Union[int, LocalizedString],
+        title_identifier: Union[int, str, LocalizedString, CommonStringId],
+        description_identifier: Union[int, str, LocalizedString, CommonStringId],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
-        ok_text_identifier: Union[int, LocalizedString]=CommonStringId.OK,
+        ok_text_identifier: Union[int, str, LocalizedString, CommonStringId]=CommonStringId.OK,
         ok_text_tokens: Iterator[Any]=(),
-        cancel_text_identifier: Union[int, LocalizedString]=CommonStringId.CANCEL,
+        cancel_text_identifier: Union[int, str, LocalizedString, CommonStringId]=CommonStringId.CANCEL,
         cancel_text_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):

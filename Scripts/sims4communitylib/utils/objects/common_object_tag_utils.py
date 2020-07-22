@@ -6,7 +6,9 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from objects.game_object import GameObject
-from typing import Tuple, Set
+from typing import Tuple, Set, Union, Iterator
+
+from sims4communitylib.enums.tags_enum import CommonGameTag
 
 
 class CommonObjectTagUtils:
@@ -15,7 +17,7 @@ class CommonObjectTagUtils:
     """
 
     @staticmethod
-    def has_game_tags(game_object: GameObject, tags: Tuple[int]) -> bool:
+    def has_game_tags(game_object: GameObject, tags: Iterator[Union[int, CommonGameTag]]) -> bool:
         """has_game_tags(game_object, tags)
 
         Determine if an Object has any of the specified tags.
@@ -23,13 +25,13 @@ class CommonObjectTagUtils:
         :param game_object: An instance of an Object.
         :type game_object: GameObject
         :param tags: A collection of tags to locate.
-        :type tags: Tuple[int]
+        :type tags: Iterator[Union[int, CommonGameTag]]
         :return: True, if the Object has any of the specified tags. False, if not.
         :rtype: bool
         """
         if game_object is None:
             return False
-        return game_object.has_any_tag(tags)
+        return game_object.has_any_tag(tuple(tags))
 
     @staticmethod
     def get_game_tags(game_object: GameObject) -> Set[int]:

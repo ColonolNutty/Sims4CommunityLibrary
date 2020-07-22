@@ -67,15 +67,15 @@ class CommonTargetedQuestionDialog(CommonDialog):
 
 
     :param question_text: A decimal identifier of the question text.
-    :type question_text: Union[int, LocalizedString]
+    :type question_text: Union[int, str, LocalizedString, CommonStringId]
     :param question_tokens: Tokens to format into the question text.
     :type question_tokens: Iterator[Any], optional
     :param ok_text_identifier: A decimal identifier for the Ok text.
-    :type ok_text_identifier: Union[int, LocalizedString], optional
+    :type ok_text_identifier: Union[int, str, LocalizedString, CommonStringId], optional
     :param ok_text_tokens: Tokens to format into the Ok text.
     :type ok_text_tokens: Iterator[Any], optional
     :param cancel_text_identifier: A decimal identifier for the Cancel text.
-    :type cancel_text_identifier: Union[int, LocalizedString], optional
+    :type cancel_text_identifier: Union[int, str, LocalizedString, CommonStringId], optional
     :param cancel_text_tokens: Tokens to format into the Cancel text.
     :type cancel_text_tokens: Iterator[Any], optional
     :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
@@ -83,11 +83,11 @@ class CommonTargetedQuestionDialog(CommonDialog):
     """
     def __init__(
         self,
-        question_text: Union[int, LocalizedString],
+        question_text: Union[int, str, LocalizedString, CommonStringId],
         question_tokens: Iterator[Any]=(),
-        ok_text_identifier: Union[int, LocalizedString]=CommonStringId.OK,
+        ok_text_identifier: Union[int, str, LocalizedString, CommonStringId]=CommonStringId.OK,
         ok_text_tokens: Iterator[Any]=(),
-        cancel_text_identifier: Union[int, LocalizedString]=CommonStringId.CANCEL,
+        cancel_text_identifier: Union[int, str, LocalizedString, CommonStringId]=CommonStringId.CANCEL,
         cancel_text_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
     ):

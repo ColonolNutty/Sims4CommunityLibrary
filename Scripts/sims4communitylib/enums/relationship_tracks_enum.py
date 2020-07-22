@@ -5,18 +5,18 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 
-class CommonRelationshipTrackId(CommonEnumIntBase):
+class CommonRelationshipTrackId(CommonInt):
     """Identifiers for vanilla sim relationship tracks.
 
     """
-    AUTHORITY = 161998
-    FEUD = 193901
-    FRIENDSHIP = 16650
-    MISCHIEF = 26920
-    RIVALRY = 161999
-    ROMANCE = 16651
-    SIM_TO_PET_FRIENDSHIP = 159228
-    SMART_HUB_FRIENDSHIP = 203686
+    AUTHORITY: 'CommonRelationshipTrackId' = 161998
+    FEUD: 'CommonRelationshipTrackId' = 193901
+    FRIENDSHIP: 'CommonRelationshipTrackId' = 16650
+    MISCHIEF: 'CommonRelationshipTrackId' = 26920
+    RIVALRY: 'CommonRelationshipTrackId' = 161999
+    ROMANCE: 'CommonRelationshipTrackId' = 16651
+    SIM_TO_PET_FRIENDSHIP: 'CommonRelationshipTrackId' = 159228
+    SMART_HUB_FRIENDSHIP: 'CommonRelationshipTrackId' = 203686

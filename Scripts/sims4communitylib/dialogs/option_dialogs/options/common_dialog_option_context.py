@@ -7,6 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Union, Any, TypeVar, Iterator, Tuple, List
 from protocolbuffers.Localization_pb2 import LocalizedString
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 
 DialogOptionValueType = TypeVar('DialogOptionValueType')
@@ -28,15 +29,15 @@ class CommonDialogOptionContext:
     A context used by :class:`.CommonDialogOption` that provides customization of options.
 
     :param title_identifier: The title of the option.
-    :type title_identifier: Union[int, str, LocalizedString]
+    :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: The description of the option.
-    :type description_identifier: Union[int, str, LocalizedString]
+    :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param title_tokens: An iterable of Tokens that will be formatted into the title.
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: An iterable of Tokens that will be formatted into the description.
     :type description_tokens: Iterator[Any], optional
     :param tooltip_text_identifier: Text that will be displayed upon hovering the option.
-    :type tooltip_text_identifier: Union[int, str, LocalizedString], optional
+    :type tooltip_text_identifier: Union[int, str, LocalizedString, CommonStringId], optional
     :param tooltip_tokens: An iterable of Tokens that will be formatted into the tooltip text.
     :type tooltip_tokens: Tuple[Any], optional
     :param icon: The icon to display for the option.
@@ -48,11 +49,11 @@ class CommonDialogOptionContext:
     """
     def __init__(
         self,
-        title_identifier: Union[int, str, LocalizedString],
-        description_identifier: Union[int, str, LocalizedString],
+        title_identifier: Union[int, str, LocalizedString, CommonStringId],
+        description_identifier: Union[int, str, LocalizedString, CommonStringId],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
-        tooltip_text_identifier: Union[int, str, LocalizedString]=None,
+        tooltip_text_identifier: Union[int, str, LocalizedString, CommonStringId]=None,
         tooltip_tokens: Iterator[Any]=(),
         icon: Any=None,
         is_enabled: bool=True,
