@@ -95,7 +95,7 @@ class CommonSimInteractionUtils:
         return CommonSimInteractionUtils.has_interactions_running_or_queued(sim_info, interactions)
 
     @staticmethod
-    def get_swim_interaction(sim_info: SimInfo) -> int:
+    def get_swim_interaction(sim_info: SimInfo) -> Union[int, CommonInteractionId]:
         """get_swim_interaction(sim_info)
 
         Retrieve a Swim interaction appropriate for a Sim.
@@ -105,7 +105,7 @@ class CommonSimInteractionUtils:
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :return: The decimal identifier of an interaction appropriate for the Sim or -1 if no interaction was found to be appropriate.
-        :rtype: int
+        :rtype: Union[int, CommonInteractionId]
         """
         if CommonSpeciesUtils.is_human(sim_info):
             return CommonInteractionId.SIM_SWIM
@@ -115,7 +115,7 @@ class CommonSimInteractionUtils:
         return -1
 
     @staticmethod
-    def get_stand_interaction(sim_info: SimInfo) -> int:
+    def get_stand_interaction(sim_info: SimInfo) -> Union[int, CommonInteractionId]:
         """get_stand_interaction(sim_info)
 
         Retrieve a Stand interaction appropriate for a Sim.
@@ -123,7 +123,7 @@ class CommonSimInteractionUtils:
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :return: The decimal identifier of a Stand interaction appropriate for the Sim or -1 if no Stand interaction was found to be appropriate.
-        :rtype: int
+        :rtype: Union[int, CommonInteractionId]
         """
         from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
         if CommonSpeciesUtils.is_human(sim_info):
@@ -208,7 +208,7 @@ class CommonSimInteractionUtils:
         return CommonSimInteractionUtils.has_interactions_queued(sim_info, (interaction_id, ))
 
     @staticmethod
-    def has_interactions_running_or_queued(sim_info: SimInfo, interaction_ids: Iterator[int]) -> bool:
+    def has_interactions_running_or_queued(sim_info: SimInfo, interaction_ids: Iterator[Union[int, CommonInteractionId]]) -> bool:
         """has_interactions_running_or_queued(sim_info, interaction_ids)
 
         Determine if a Sim has any of the specified interactions running or in their interaction queue.

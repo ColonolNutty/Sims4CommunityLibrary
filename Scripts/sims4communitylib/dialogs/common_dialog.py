@@ -7,6 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Any, Union, Iterator
 from protocolbuffers.Localization_pb2 import LocalizedString
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
@@ -28,9 +29,9 @@ class CommonDialog(HasLog):
     .. note:: It is recommended to utilize one of the ready made dialogs, instead of creating a custom :class:`CommonDialog`
 
     :param title_identifier: The title to display in the dialog.
-    :type title_identifier: Union[int, LocalizedString]
+    :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: The description to display in the dialog.
-    :type description_identifier: Union[int, LocalizedString]
+    :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param title_tokens: Tokens to format into the title. Default is an empty collection.
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: Tokens to format into the description. Default is an empty collection.
@@ -41,8 +42,8 @@ class CommonDialog(HasLog):
 
     def __init__(
         self,
-        title_identifier: Union[int, LocalizedString],
-        description_identifier: Union[int, LocalizedString],
+        title_identifier: Union[int, str, LocalizedString, CommonStringId],
+        description_identifier: Union[int, str, LocalizedString, CommonStringId],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None

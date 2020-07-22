@@ -11,6 +11,7 @@ from buffs.buff import Buff
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.buffs_enum import CommonBuffId
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
@@ -91,7 +92,7 @@ class CommonBuffUtils:
         return CommonBuffUtils.has_buff(sim_info, *buff_ids)
 
     @staticmethod
-    def has_buff(sim_info: SimInfo, *buff_ids: int) -> bool:
+    def has_buff(sim_info: SimInfo, *buff_ids: Union[int, CommonBuffId]) -> bool:
         """has_buff(sim_info, *buff_ids)
 
         Determine if any of the specified buffs are currently active on a sim.
@@ -143,7 +144,7 @@ class CommonBuffUtils:
         return buffs
 
     @staticmethod
-    def add_buff(sim_info: SimInfo, *buff_ids: int, buff_reason: Union[int, str, LocalizedString]=None) -> bool:
+    def add_buff(sim_info: SimInfo, *buff_ids: Union[int, CommonBuffId], buff_reason: Union[int, str, LocalizedString, CommonStringId]=None) -> bool:
         """add_buff(sim_info, *buff_ids, buff_reason=None)
 
         Add the specified buffs to a sim.
@@ -153,7 +154,7 @@ class CommonBuffUtils:
         :param buff_ids: The decimal identifiers of buffs to add.
         :type buff_ids: int
         :param buff_reason: The text that will display when the player hovers over the buffs. What caused the buffs to be added.
-        :type buff_reason: Union[int, str, LocalizedString], optional
+        :type buff_reason: Union[int, str, LocalizedString, CommonStringId], optional
         :return: True, if all of the specified buffs were successfully added. False, if not.
         :rtype: bool
         """
@@ -173,7 +174,7 @@ class CommonBuffUtils:
         return success
 
     @staticmethod
-    def remove_buff(sim_info: SimInfo, *buff_ids: int) -> bool:
+    def remove_buff(sim_info: SimInfo, *buff_ids: Union[int, CommonBuffId]) -> bool:
         """remove_buff(sim_info, *buff_ids)
 
         Remove the specified buffs from a sim.

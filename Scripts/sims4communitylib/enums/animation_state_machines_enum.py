@@ -5,10 +5,10 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 
-class CommonAnimationStateMachineId(CommonEnumIntBase):
+class CommonAnimationStateMachineId(CommonInt):
     """Identifiers for vanilla animation state machines (ASM).
 
     """

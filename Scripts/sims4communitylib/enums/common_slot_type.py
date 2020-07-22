@@ -8,7 +8,9 @@ Copyright (c) COLONOLNUTTY
 
 
 class CommonSlotType:
-    """ Slot types for various objects. """
+    """Slot types for various objects.
+
+    """
     ACTIVITY_TABLE_PAINTING: 'CommonSlotType' = 'ActivityTablePainting'
     ANIMATION_SLOT_SIM_INTERACTION: 'CommonSlotType' = 'animationSlot_SimInteraction'
     ANIMATION_SLOT_SIT_INDIVIDUAL: 'CommonSlotType' = 'animationSlot_SitIndividual'

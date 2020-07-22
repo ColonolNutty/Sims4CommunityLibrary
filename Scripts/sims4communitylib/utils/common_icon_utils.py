@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any
+from typing import Any, Union
 from sims4.resources import Types
 from sims4communitylib.enums.icons_enum import CommonIconId
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
@@ -24,7 +24,7 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_ARROW_RIGHT_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_ARROW_RIGHT_ICON)
 
     @staticmethod
     def load_arrow_left_icon() -> Any:
@@ -35,7 +35,7 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_ARROW_LEFT_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_ARROW_LEFT_ICON)
 
     @staticmethod
     def load_arrow_navigate_into_icon() -> Any:
@@ -46,7 +46,7 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_ARROW_NAVIGATE_INTO_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_ARROW_NAVIGATE_INTO_ICON)
 
     @staticmethod
     def load_question_mark_icon() -> Any:
@@ -57,7 +57,7 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_QUESTION_MARK_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_QUESTION_MARK_ICON)
 
     @staticmethod
     def load_checked_square_icon() -> Any:
@@ -68,7 +68,7 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_CHECKED_SQUARE_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_CHECKED_SQUARE_ICON)
 
     @staticmethod
     def load_checked_circle_icon() -> Any:
@@ -79,7 +79,7 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_CHECKED_CIRCLE_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_CHECKED_CIRCLE_ICON)
 
     @staticmethod
     def load_unchecked_square_icon() -> Any:
@@ -90,7 +90,7 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_UNCHECKED_SQUARE_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_UNCHECKED_SQUARE_ICON)
 
     @staticmethod
     def load_x_icon() -> Any:
@@ -101,7 +101,7 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_X_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_X_ICON)
 
     @staticmethod
     def load_six_sided_dice_icon() -> Any:
@@ -112,7 +112,7 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_SIX_SIDED_DICE_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_SIX_SIDED_DICE_ICON)
 
     @staticmethod
     def load_blank_square_icon() -> Any:
@@ -123,7 +123,7 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_BLANK_SQUARE_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_BLANK_SQUARE_ICON)
 
     @staticmethod
     def load_text_prev_icon() -> Any:
@@ -134,7 +134,7 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_TEXT_PREV_SQUARE_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_TEXT_PREV_SQUARE_ICON)
 
     @staticmethod
     def load_text_next_icon() -> Any:
@@ -145,7 +145,7 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_TEXT_NEXT_SQUARE_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_TEXT_NEXT_SQUARE_ICON)
 
     @staticmethod
     def load_unfilled_circle_icon() -> Any:
@@ -156,7 +156,7 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_UNFILLED_CIRCLE_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_UNFILLED_CIRCLE_ICON)
 
     @staticmethod
     def load_filled_circle_icon() -> Any:
@@ -167,8 +167,8 @@ class CommonIconUtils:
         :return: An identifier for the icon.
         :rtype: Any
         """
-        return CommonResourceUtils.get_resource_key(Types.PNG, CommonIconId.S4CLIB_FILLED_CIRCLE_ICON)
+        return CommonIconUtils._load_icon(CommonIconId.S4CLIB_FILLED_CIRCLE_ICON)
     
     @staticmethod
-    def _load_icon(icon_id: int) -> Any:
+    def _load_icon(icon_id: Union[int, CommonIconId]) -> Any:
         return CommonResourceUtils.get_resource_key(Types.PNG, icon_id)

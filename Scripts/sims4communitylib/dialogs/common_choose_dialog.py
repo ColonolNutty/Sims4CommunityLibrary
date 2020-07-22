@@ -9,6 +9,7 @@ from abc import ABC
 from typing import Tuple, Any, Union, Iterator
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.dialogs.common_dialog import CommonDialog
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
@@ -30,9 +31,9 @@ class CommonChooseDialog(CommonDialog, ABC):
     A dialog that prompts the player to choose something.
 
     :param title_identifier: The title to display in the dialog.
-    :type title_identifier: Union[int, LocalizedString]
+    :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: The description to display in the dialog.
-    :type description_identifier: Union[int, LocalizedString]
+    :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param rows: The rows to display in the dialog.
     :type rows: Iterator[BasePickerRow]
     :param title_tokens: Tokens to format into the title. Default is an empty collection.
@@ -42,19 +43,19 @@ class CommonChooseDialog(CommonDialog, ABC):
     :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information. Default is None.
     :type mod_identity: CommonModIdentity, optional
     :param required_tooltip: If provided, this text will display when the dialog requires at least one choice and a choice has not been made. Default is None.
-    :type required_tooltip: Union[int, LocalizedString], optional
+    :type required_tooltip: Union[int, str, LocalizedString, CommonStringId], optional
     :param required_tooltip_tokens: Tokens to format into the required tooltip. Default is an empty collection.
     :type required_tooltip_tokens: Iterator[Any], optional
     """
     def __init__(
         self,
-        title_identifier: Union[int, LocalizedString],
-        description_identifier: Union[int, LocalizedString],
+        title_identifier: Union[int, str, LocalizedString, CommonStringId],
+        description_identifier: Union[int, str, LocalizedString, CommonStringId],
         rows: Iterator[BasePickerRow],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None,
-        required_tooltip: Union[int, LocalizedString]=None,
+        required_tooltip: Union[int, str, LocalizedString, CommonStringId]=None,
         required_tooltip_tokens: Iterator[Any]=()
     ):
         super().__init__(

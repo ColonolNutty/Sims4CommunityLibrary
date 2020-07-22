@@ -5,62 +5,62 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 
-class CommonLotTraitId(CommonEnumIntBase):
+class CommonLotTraitId(CommonInt):
     """Identifiers for vanilla lot traits.
 
     """
-    CELEBRITY_HANG_OUT_HIGH_FAME = 191710
-    CELEBRITY_HANG_OUT_LOW_FAME = 191708
-    CELEBRITY_HOME_LOT_TRAIT = 199661
-    CHILDS_PLAY = 144151
-    CON_CURSED = 137285
-    CON_HAUNTED = 137286
-    CON_LIVELY_NEIGHBORS = 137276
-    CON_NEEDS_TLC = 137283
-    CON_PRICEY = 137272
-    CONVIVIAL = 144156
-    CREEPY_CRAWLIES = 179482
-    FILTHY = 144148
-    FRESH_AIR = 144158
-    GNOMES = 147778
-    GREAT_ACOUSTICS = 144154
-    GREAT_SOIL = 144150
-    GREMLINS = 147847
-    GRODY = 144146
-    HAUNTED = 149429
-    HIGH_SPEED_INTERNET = 144153
-    HOMEY = 144152
-    MEAN_VIBE = 144144
-    NATURAL_LIGHT = 144157
-    NO_TRESPASSING = 144159
-    ON_DARK_LEY_LINE = 154647
-    PEACE_AND_QUIET = 179555
-    PENNY_PIXIES = 144147
-    PET_WORLD_BREEDING_GROUND = 170199
-    PET_WORLD_CAT_FRIENDLY = 170196
-    PET_WORLD_CAT_HANGOUT = 170190
-    PET_WORLD_DOG_FRIENDLY = 170197
-    PET_WORLD_DOG_HANGOUT = 170191
-    PET_WORLD_TRAINING_GROUND = 170198
-    PRO_CHEAP = 137273
-    PRO_CHEFS_KITCHEN = 137281
-    PRO_GREAT_ATMOSPHERE = 137287
-    PRO_GREAT_VIEW = 137278
-    PRO_HISTORICAL = 137280
-    PRO_HOME_STUDIO = 137284
-    PRO_LOW_DEPOSIT = 137282
-    PRO_NEAR_GOOD_SCHOOLS = 137223
-    PRO_ON_LEY_LINE = 137275
-    PRO_QUIET = 137277
-    PRO_ROMANTIC_FIREPLACE = 137279
-    PRO_SERVICED_APARTMENT = 137274
-    QUAKE_ZONE = 144143
-    REGISTERED_VAMPIRE_LAIR = 155246
-    ROMANTIC_ATMOSPHERE = 144149
-    SCIENCE_LAIR = 144155
-    SUNNY_ASPECT = 144145
-    TEEN_HANG_OUT = 162560
-    VAMPIRE_NEXUS = 154888
+    CELEBRITY_HANG_OUT_HIGH_FAME: 'CommonLotTraitId' = 191710
+    CELEBRITY_HANG_OUT_LOW_FAME: 'CommonLotTraitId' = 191708
+    CELEBRITY_HOME_LOT_TRAIT: 'CommonLotTraitId' = 199661
+    CHILDS_PLAY: 'CommonLotTraitId' = 144151
+    CON_CURSED: 'CommonLotTraitId' = 137285
+    CON_HAUNTED: 'CommonLotTraitId' = 137286
+    CON_LIVELY_NEIGHBORS: 'CommonLotTraitId' = 137276
+    CON_NEEDS_TLC: 'CommonLotTraitId' = 137283
+    CON_PRICEY: 'CommonLotTraitId' = 137272
+    CONVIVIAL: 'CommonLotTraitId' = 144156
+    CREEPY_CRAWLIES: 'CommonLotTraitId' = 179482
+    FILTHY: 'CommonLotTraitId' = 144148
+    FRESH_AIR: 'CommonLotTraitId' = 144158
+    GNOMES: 'CommonLotTraitId' = 147778
+    GREAT_ACOUSTICS: 'CommonLotTraitId' = 144154
+    GREAT_SOIL: 'CommonLotTraitId' = 144150
+    GREMLINS: 'CommonLotTraitId' = 147847
+    GRODY: 'CommonLotTraitId' = 144146
+    HAUNTED: 'CommonLotTraitId' = 149429
+    HIGH_SPEED_INTERNET: 'CommonLotTraitId' = 144153
+    HOMEY: 'CommonLotTraitId' = 144152
+    MEAN_VIBE: 'CommonLotTraitId' = 144144
+    NATURAL_LIGHT: 'CommonLotTraitId' = 144157
+    NO_TRESPASSING: 'CommonLotTraitId' = 144159
+    ON_DARK_LEY_LINE: 'CommonLotTraitId' = 154647
+    PEACE_AND_QUIET: 'CommonLotTraitId' = 179555
+    PENNY_PIXIES: 'CommonLotTraitId' = 144147
+    PET_WORLD_BREEDING_GROUND: 'CommonLotTraitId' = 170199
+    PET_WORLD_CAT_FRIENDLY: 'CommonLotTraitId' = 170196
+    PET_WORLD_CAT_HANGOUT: 'CommonLotTraitId' = 170190
+    PET_WORLD_DOG_FRIENDLY: 'CommonLotTraitId' = 170197
+    PET_WORLD_DOG_HANGOUT: 'CommonLotTraitId' = 170191
+    PET_WORLD_TRAINING_GROUND: 'CommonLotTraitId' = 170198
+    PRO_CHEAP: 'CommonLotTraitId' = 137273
+    PRO_CHEFS_KITCHEN: 'CommonLotTraitId' = 137281
+    PRO_GREAT_ATMOSPHERE: 'CommonLotTraitId' = 137287
+    PRO_GREAT_VIEW: 'CommonLotTraitId' = 137278
+    PRO_HISTORICAL: 'CommonLotTraitId' = 137280
+    PRO_HOME_STUDIO: 'CommonLotTraitId' = 137284
+    PRO_LOW_DEPOSIT: 'CommonLotTraitId' = 137282
+    PRO_NEAR_GOOD_SCHOOLS: 'CommonLotTraitId' = 137223
+    PRO_ON_LEY_LINE: 'CommonLotTraitId' = 137275
+    PRO_QUIET: 'CommonLotTraitId' = 137277
+    PRO_ROMANTIC_FIREPLACE: 'CommonLotTraitId' = 137279
+    PRO_SERVICED_APARTMENT: 'CommonLotTraitId' = 137274
+    QUAKE_ZONE: 'CommonLotTraitId' = 144143
+    REGISTERED_VAMPIRE_LAIR: 'CommonLotTraitId' = 155246
+    ROMANTIC_ATMOSPHERE: 'CommonLotTraitId' = 144149
+    SCIENCE_LAIR: 'CommonLotTraitId' = 144155
+    SUNNY_ASPECT: 'CommonLotTraitId' = 144145
+    TEEN_HANG_OUT: 'CommonLotTraitId' = 162560
+    VAMPIRE_NEXUS: 'CommonLotTraitId' = 154888

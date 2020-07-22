@@ -194,7 +194,7 @@ class CommonSimPregnancyUtils:
         return pregnancy_tracker.PREGNANCY_RATE
 
     @staticmethod
-    def get_in_labor_buff(sim_info: SimInfo) -> int:
+    def get_in_labor_buff(sim_info: SimInfo) -> Union[int, CommonBuffId]:
         """get_in_labor_buff(sim_info)
 
         Retrieve an In Labor buff appropriate for causing the Sim to go into labor (Give Birth).
@@ -202,7 +202,7 @@ class CommonSimPregnancyUtils:
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :return: The decimal identifier of a Buff that will cause the specified Sim to go into labor. If no appropriate Buff is found, -1 will be returned.
-        :rtype: int
+        :rtype: Union[int, CommonBuffId]
         """
         from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
         sim_name = CommonSimNameUtils.get_full_name(sim_info)

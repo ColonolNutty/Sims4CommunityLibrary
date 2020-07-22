@@ -5,11 +5,11 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4communitylib.enums.enumtypes.int_enum import CommonEnumIntBase
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 
-class CommonFurnitureObjectId(CommonEnumIntBase):
+class CommonFurnitureObjectId(CommonInt):
     """Identifiers for vanilla furniture.
 
     """
-    BASSINET_EMPTY_01 = 36210
+    BASSINET_EMPTY_01: 'CommonFurnitureObjectId' = 36210

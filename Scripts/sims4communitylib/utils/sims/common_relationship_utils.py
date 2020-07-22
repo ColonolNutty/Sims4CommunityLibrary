@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Iterator
+from typing import Iterator, Union
 from sims.sim_info import SimInfo
 from sims4.resources import Types
 from sims4communitylib.enums.relationship_bits_enum import CommonRelationshipBitId
@@ -153,7 +153,7 @@ class CommonRelationshipUtils:
     def has_relationship_bit_with_sim(
         sim_info: SimInfo,
         target_sim_info: SimInfo,
-        relationship_bit_id: int,
+        relationship_bit_id: Union[int, CommonRelationshipBitId],
     ) -> bool:
         """has_relationship_bit_with_sim(sim_info, target_sim_info, relationship_bit_id)
 
@@ -164,7 +164,7 @@ class CommonRelationshipUtils:
         :param target_sim_info: The Target Sim of the relationship bit (The target is especially important for Unidirectional/One Way Relationship Bits).
         :type target_sim_info: SimInfo
         :param relationship_bit_id: The identifier of the Relationship Bit to check for.
-        :type relationship_bit_id: int
+        :type relationship_bit_id: Union[int, CommonRelationshipBitId]
         :return: True, if the Sim has the specified Relationship Bit with the Target Sim. False, if not.
         :rtype: bool
         """
@@ -174,7 +174,7 @@ class CommonRelationshipUtils:
     def has_relationship_bits_with_sim(
         sim_info: SimInfo,
         target_sim_info: SimInfo,
-        relationship_bit_ids: Iterator[int],
+        relationship_bit_ids: Iterator[Union[int, CommonRelationshipBitId]],
     ) -> bool:
         """has_relationship_bits_with_sim(sim_info, target_sim_info, relationship_bit_ids)
 
@@ -185,7 +185,7 @@ class CommonRelationshipUtils:
         :param target_sim_info: The Target Sim of the relationship bit (The target is especially important for Unidirectional/One Way Relationship Bits).
         :type target_sim_info: SimInfo
         :param relationship_bit_ids: A collection of identifier of Relationship Bits to check for.
-        :type relationship_bit_ids: int
+        :type relationship_bit_ids: Iterator[Union[int, CommonRelationshipBitId]]
         :return: True, if the Sim has any of the specified Relationship Bits with the Target Sim. False, if not.
         :rtype: bool
         """
@@ -201,7 +201,7 @@ class CommonRelationshipUtils:
     def get_relationship_level_of_sims(
         sim_info: SimInfo,
         target_sim_info: SimInfo,
-        relationship_track_id: int
+        relationship_track_id: Union[int, CommonRelationshipTrackId]
     ) -> float:
         """get_relationship_level_of_sims(sim_info, target_sim_info, relationship_track_id)
 
@@ -212,7 +212,7 @@ class CommonRelationshipUtils:
         :param target_sim_info: The Target Sim of the relationship track.
         :type target_sim_info: SimInfo
         :param relationship_track_id: An identifier for a Relationship Track to retrieve.
-        :type relationship_track_id: int
+        :type relationship_track_id: Union[int, CommonRelationshipTrackId]
         :return: The current level between two Sims for the specified Relationship Track.
         :rtype: float
         """
@@ -351,7 +351,7 @@ class CommonRelationshipUtils:
         return CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, (relationship_bit_id, ), instanced_only=instanced_only)
 
     @staticmethod
-    def get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info: SimInfo, relationship_bit_ids: Iterator[int], instanced_only: bool=True) -> Iterator[SimInfo]:
+    def get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info: SimInfo, relationship_bit_ids: Iterator[Union[int, CommonRelationshipBitId]], instanced_only: bool=True) -> Iterator[SimInfo]:
         """get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, relationship_bit_ids, instanced_only=True)
 
         Retrieve an Iterator of SimInfo for all Sims that have the specified relationship bits with the specified Sim.
@@ -368,7 +368,7 @@ class CommonRelationshipUtils:
         :param sim_info: The Sim to locate relationship bits on.
         :type sim_info: SimInfo
         :param relationship_bit_ids: A collection of identifiers for relationship bits to locate connections with.
-        :type relationship_bit_ids: Iterator[int]
+        :type relationship_bit_ids: Iterator[Union[int, CommonRelationshipBitId]]
         :param instanced_only: If True, only Sims that are currently loaded will be returned.
         :type instanced_only: bool, optional
         :return: An iterable of Sims that have any of the specified relationship bits with the specified Sim.

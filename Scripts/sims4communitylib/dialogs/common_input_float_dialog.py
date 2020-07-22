@@ -100,9 +100,9 @@ class CommonInputFloatDialog(CommonDialog):
             dialog.show(on_submit=_on_chosen)
 
     :param title_identifier: A decimal identifier of the title text.
-    :type title_identifier: Union[int, LocalizedString]
+    :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: A decimal identifier of the description text.
-    :type description_identifier: Union[int, LocalizedString]
+    :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param initial_value: The initial value that will appear in the input box.
     :type initial_value: float
     :param min_value: The minimum value allowed to be entered by the player. Default is 0.0
@@ -118,8 +118,8 @@ class CommonInputFloatDialog(CommonDialog):
     """
     def __init__(
         self,
-        title_identifier: Union[int, LocalizedString],
-        description_identifier: Union[int, LocalizedString],
+        title_identifier: Union[int, str, LocalizedString, CommonStringId],
+        description_identifier: Union[int, str, LocalizedString, CommonStringId],
         initial_value: float,
         min_value: float=0.0,
         max_value: float=2147483647.0,

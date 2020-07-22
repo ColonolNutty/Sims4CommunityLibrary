@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Iterator, Tuple
+from typing import Iterator, Tuple, Union
 from sims.occult.occult_enums import OccultType
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.traits_enum import CommonTraitId
@@ -302,11 +302,11 @@ class CommonOccultUtils:
         return CommonOccultUtils.get_sim_info_for_all_occults_gen(sim_info, exclude_occult_types)
 
     @staticmethod
-    def _has_occult_trait(sim_info: SimInfo, trait_id: int) -> bool:
+    def _has_occult_trait(sim_info: SimInfo, trait_id: Union[int, CommonTraitId]) -> bool:
         return CommonOccultUtils._has_occult_traits(sim_info, (trait_id,))
 
     @staticmethod
-    def _has_occult_traits(sim_info: SimInfo, trait_ids: Iterator[int]) -> bool:
+    def _has_occult_traits(sim_info: SimInfo, trait_ids: Iterator[Union[int, CommonTraitId]]) -> bool:
         if sim_info is None:
             return False
         equipped_traits = CommonTraitUtils.get_equipped_traits(sim_info)

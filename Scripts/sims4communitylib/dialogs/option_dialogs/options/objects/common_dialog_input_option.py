@@ -9,6 +9,7 @@ from typing import Any, Callable, Union, Iterator
 
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.common_icon_utils import CommonIconUtils
 from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_object_option import CommonDialogObjectOption
@@ -49,7 +50,7 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
     :type always_visible: bool, optional
     :param dialog_description_identifier: The description that will display in the input dialog separately from the option.\
     If not provided the description from the provided context will be used instead.
-    :type dialog_description_identifier: Union[int, str, LocalizedString], optional
+    :type dialog_description_identifier: Union[int, str, LocalizedString, CommonStringId], optional
     :param dialog_description_tokens: An iterable of Tokens that will be formatted into the dialog description.
     :type dialog_description_tokens: Iterator[Any], optional
     """
@@ -62,7 +63,7 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
         max_value: float=2147483647.0,
         on_chosen: Callable[[str, float, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
         always_visible: bool=False,
-        dialog_description_identifier: Union[int, str, LocalizedString]=None,
+        dialog_description_identifier: Union[int, str, LocalizedString, CommonStringId]=None,
         dialog_description_tokens: Iterator[Any]=()
     ):
         if dialog_description_identifier is not None:

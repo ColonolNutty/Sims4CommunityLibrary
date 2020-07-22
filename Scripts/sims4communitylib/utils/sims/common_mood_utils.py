@@ -236,7 +236,7 @@ class CommonMoodUtils:
         return CommonMoodUtils.has_mood(sim_info, CommonMoodId.SLEEPING)
 
     @staticmethod
-    def has_mood(sim_info: SimInfo, mood_id: int) -> bool:
+    def has_mood(sim_info: SimInfo, mood_id: CommonMoodId) -> bool:
         """has_mood(sim_info, mood_id)
 
         Determine if a Sim has the specified mood.
@@ -244,7 +244,7 @@ class CommonMoodUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param mood_id: The identifier of the Mood to check for.
-        :type mood_id: int
+        :type mood_id: CommonMoodId
         :return: True, if the Sim has the specified Mood. False, if the Sim does not.
         :rtype: bool
         """

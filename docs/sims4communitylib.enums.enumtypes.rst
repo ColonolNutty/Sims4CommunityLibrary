@@ -17,6 +17,14 @@ Custom Enum Types
    :undoc-members:
    :show-inheritance:
 
+`Int`
+--------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.enumtypes.common_int.CommonInt
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Int Enum`
 --------------------------------------------------
 

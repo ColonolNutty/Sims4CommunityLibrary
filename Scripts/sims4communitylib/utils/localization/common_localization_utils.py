@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, Tuple, Any, Iterable
+from typing import Union, Any, Iterator
 
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4.localization import LocalizationHelperTuning, _create_localized_string, create_tokens, \
@@ -26,11 +26,11 @@ class CommonLocalizationUtils:
         A LocalizedTooltip used when displaying tooltips.
 
         :param string_id: The text that will display in the tooltip.
-        :type string_id: Union[int, str, LocalizedString]
+        :type string_id: Union[int, str, LocalizedString, CommonStringId]
         :param tokens: A collection of objects to format into the `string_id`
         :type tokens: Any
         """
-        def __init__(self, string_id: Union[int, str, LocalizedString], *tokens: Any):
+        def __init__(self, string_id: Union[int, str, LocalizedString, CommonStringId], *tokens: Any):
             super().__init__(string_id)
             self._tokens = tokens
 
@@ -38,32 +38,32 @@ class CommonLocalizationUtils:
             return CommonLocalizationUtils.create_localized_string(self._string_id, tokens=self._tokens)
 
     @staticmethod
-    def create_localized_tooltip(tooltip_text: Union[int, str, LocalizedString], tooltip_tokens: Iterable[Any]=()) -> 'LocalizedTooltip':
+    def create_localized_tooltip(tooltip_text: Union[int, str, LocalizedString, CommonStringId], tooltip_tokens: Iterator[Any]=()) -> 'LocalizedTooltip':
         """create_localized_tooltip(tooltip_text, tooltip_tokens=())
 
         Create a LocalizedTooltip use this when you wish to display a tooltip on various things.
 
         :param tooltip_text: The text that will be displayed.
-        :type tooltip_text: Union[int, str, LocalizedString]
+        :type tooltip_text: Union[int, str, LocalizedString, CommonStringId]
         :param tooltip_tokens: A collection of objects to format into the localized string. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few)
-        :type tooltip_tokens: Tuple[Any], optional
+        :type tooltip_tokens: Iterable[Any], optional
         :return: A tooltip ready for display.
         :rtype: LocalizedTooltip
         """
         if isinstance(tooltip_text, CommonLocalizationUtils.LocalizedTooltip):
             return tooltip_text
-        return CommonLocalizationUtils.LocalizedTooltip(tooltip_text, *tooltip_tokens)
+        return CommonLocalizationUtils.LocalizedTooltip(tooltip_text, *tuple(tooltip_tokens))
 
     @staticmethod
-    def create_localized_string(identifier: Union[int, str, LocalizedString], tokens: Iterable[Any]=(), localize_tokens: bool=True, text_color: CommonLocalizedStringColor=CommonLocalizedStringColor.DEFAULT) -> LocalizedString:
+    def create_localized_string(identifier: Union[int, str, LocalizedString, CommonStringId], tokens: Iterator[Any]=(), localize_tokens: bool=True, text_color: CommonLocalizedStringColor=CommonLocalizedStringColor.DEFAULT) -> LocalizedString:
         """create_localized_string(identifier, tokens=(), localize_tokens=True, text_color=CommonLocalizedStringColor.DEFAULT)
 
         Create a LocalizedString formatted with the specified tokens.
 
         :param identifier: An identifier to locate a LocalizedString with, text that will be turned into a LocalizedString, or a LocalizedString itself.
-        :type identifier: Union[int, str, LocalizedString]
+        :type identifier: Union[int, str, LocalizedString, CommonStringId]
         :param tokens: A collection of objects to format into the localized string. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few)
-        :type tokens: Tuple[Any]
+        :type tokens: Iterable[Any]
         :param localize_tokens: If True, the specified tokens will be localized. If False, the specified tokens will be formatted into the LocalizedString as they are. Default is True
         :type localize_tokens: bool
         :param text_color: The color the text will be when displayed.
@@ -79,9 +79,9 @@ class CommonLocalizationUtils:
             create_tokens(identifier.tokens, tokens)
             return CommonLocalizationUtils.colorize(identifier, text_color=text_color)
         if isinstance(identifier, TunableLocalizedStringFactory._Wrapper):
-            return CommonLocalizationUtils.colorize(CommonLocalizationUtils.create_from_int(identifier._string_id, *tokens), text_color=text_color)
+            return CommonLocalizationUtils.colorize(CommonLocalizationUtils.create_from_int(identifier._string_id, *tuple(tokens)), text_color=text_color)
         if isinstance(identifier, int):
-            return CommonLocalizationUtils.colorize(CommonLocalizationUtils.create_from_int(identifier, *tokens), text_color=text_color)
+            return CommonLocalizationUtils.colorize(CommonLocalizationUtils.create_from_int(identifier, *tuple(tokens)), text_color=text_color)
         if hasattr(identifier, 'sim_info'):
             return identifier.sim_info
         if hasattr(identifier, 'get_sim_info'):
@@ -133,12 +133,12 @@ class CommonLocalizationUtils:
         """
         if text_color == CommonLocalizedStringColor.DEFAULT:
             return localized_string
-        from sims4communitylib.enums.enumtypes.int_enum import CommonEnumInt
-        text_color: CommonEnumInt = text_color
+        if not hasattr(text_color, 'value'):
+            return localized_string
         return CommonLocalizationUtils.create_localized_string(text_color.value, tokens=(localized_string,))
 
     @staticmethod
-    def _normalize_tokens(*tokens: Any) -> Iterable[LocalizedString]:
+    def _normalize_tokens(*tokens: Any) -> Iterator[LocalizedString]:
         new_tokens = []
         for token in tokens:
             new_tokens.append(CommonLocalizationUtils.create_localized_string(token))

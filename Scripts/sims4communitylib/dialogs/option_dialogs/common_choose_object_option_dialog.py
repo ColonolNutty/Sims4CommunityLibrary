@@ -127,9 +127,9 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
 
 
     :param title_identifier: A decimal identifier of the title text.
-    :type title_identifier: Union[int, LocalizedString]
+    :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: A decimal identifier of the description text.
-    :type description_identifier: Union[int, LocalizedString]
+    :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param title_tokens: An iterable of Tokens to format into the title. Default is an empty collection.
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: An iterable of Tokens to format into the description. Default is an empty collection.
@@ -141,20 +141,20 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
     :param per_page: The number of rows to display per page. If the number of rows (including rows added after creation) exceeds this value, pagination will be added. Default is 25.
     :type per_page: int, optional
     :param required_tooltip: If provided, this text will display when the dialog requires at least one choice and a choice has not been made. Default is None.
-    :type required_tooltip: Union[int, LocalizedString], optional
+    :type required_tooltip: Union[int, str, LocalizedString, CommonStringId], optional
     :param required_tooltip_tokens: Tokens to format into the required tooltip. Default is an empty collection.
     :type required_tooltip_tokens: Iterator[Any], optional
     """
     def __init__(
         self,
-        title_identifier: Union[int, LocalizedString],
-        description_identifier: Union[int, LocalizedString],
+        title_identifier: Union[int, str, LocalizedString, CommonStringId],
+        description_identifier: Union[int, str, LocalizedString, CommonStringId],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
         on_close: Callable[..., Any]=CommonFunctionUtils.noop,
         mod_identity: CommonModIdentity=None,
         per_page: int=25,
-        required_tooltip: Union[int, LocalizedString]=None,
+        required_tooltip: Union[int, str, LocalizedString, CommonStringId]=None,
         required_tooltip_tokens: Iterator[Any]=()
     ):
         super().__init__(
