@@ -67,7 +67,7 @@ class CommonLocation:
         return self._slot_hash
 
     def __new__(cls, transform: CommonTransform, routing_surface: CommonSurfaceIdentifier, parent_ref: Any=None, joint_name_or_hash: Any=None, slot_hash: int=0) -> 'CommonLocation':
-        # noinspection PyTypeChecker
+        # noinspection PyTypeChecker, PyArgumentList
         return Location(transform, routing_surface, parent_ref, joint_name_or_hash, slot_hash)
 
     @staticmethod

@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from objects.base_object import BaseObject
 from typing import Callable, Iterator, Union
 import services
+from objects.definition import Definition
 from objects.game_object import GameObject
 from objects.script_object import ScriptObject
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
@@ -32,6 +33,53 @@ class CommonObjectUtils:
         if object_instance is None:
             return -1
         return object_instance.id or getattr(object_instance, 'id', -1)
+
+    @staticmethod
+    def get_object_guid(game_object: GameObject) -> int:
+        """get_object_guid(game_object)
+
+        Retrieve the GUID of an Object.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: The GUID of the specified Object or -1 if it does not have one.
+        :rtype: int
+        """
+        if game_object is None or not hasattr(game_object, 'guid64'):
+            return -1
+        return getattr(game_object, 'guid64', -1)
+
+    @staticmethod
+    def get_object_definition(object_id: int, pack_safe: bool=False, get_fallback_definition_id: bool=True) -> Definition:
+        """get_definition(object_id)
+
+        Retrieve the definition for an Object.
+
+        :param object_id: The decimal identifier of an Object.
+        :type object_id: int
+        :param pack_safe: If true, objects will be searched for keeping package safety in mind. Default is False.
+        :type pack_safe: bool, optional
+        :param get_fallback_definition_id: Whether or not to locate a fallback definition id. Default is True.
+        :type get_fallback_definition_id: bool, optional
+        :return: The definition of the object with the id.
+        :rtype: Definition
+        """
+        return services.definition_manager().get(object_id, pack_safe=pack_safe, get_fallback_definition_id=get_fallback_definition_id)
+
+    @staticmethod
+    def get_catalog_name(game_object: GameObject) -> int:
+        """get_catalog_name(game_object)
+
+        Retrieve the catalog name identifier of an Object.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: The decimal identifier of the catalog name of an Object or -1 if no catalog name is found.
+        :rtype: int
+        """
+        if game_object is None:
+            return -1
+        return game_object.catalog_name
 
     @staticmethod
     def get_game_object(game_object_id: int) -> GameObject:
@@ -87,7 +135,7 @@ class CommonObjectUtils:
         :param include_object_callback: If the result of this callback is True, the Object will be included in the\
          results. If set to None, All Objects will be included.
         :type include_object_callback: Callable[[GameObject], bool], optional
-        :return: An iterable of all Sims matching the `include_object_callback` filter.
+        :return: An iterable of all Objects matching the `include_object_callback` filter.
         :rtype: Iterator[GameObject]
         """
         for game_object in services.object_manager().get_all():
@@ -107,7 +155,7 @@ class CommonObjectUtils:
 
         :param include_object_callback: If the result of this callback is True, the Object will be included in the results. If set to None, All Objects will be included.
         :type include_object_callback: Callable[[GameObject], bool], optional
-        :return: An iterable of all Sims matching the `include_object_callback` filter.
+        :return: An iterable of all Objects matching the `include_object_callback` filter.
         :rtype: Iterator[GameObject]
         """
         def _is_visible(_game_object: GameObject) -> bool:

@@ -46,26 +46,30 @@ class CommonCASUtils:
         return body_type > 0
 
     @staticmethod
-    def get_body_type_of_cas_part(cas_part_id: int) -> Union[BodyType, None]:
+    def get_body_type_of_cas_part(cas_part_id: int) -> Union[BodyType, int]:
         """get_body_type_of_cas_part(cas_part_id)
 
         Retrieve the BodyType of a CAS part.
 
-        .. note:: For some reason not every CAS part has a BodyType.
+        .. note:: Some Body Types don't appear in the BodyType enum.
 
         :param cas_part_id: The decimal identifier of a CAS part.
         :type cas_part_id: int
-        :return: The default BodyType of the CAS part or None if the BodyType of a CAS part is not an actual BodyType.
-        :rtype: Union[BodyType, None]
+        :return: The default BodyType of the CAS part or an int if the Body Type is not within the BodyType enum.
+        :rtype: Union[BodyType, int]
         """
         body_type = get_caspart_bodytype(cas_part_id)
         if body_type not in BodyType:
-            return None
-        return BodyType(body_type)
+            return body_type
+        # noinspection PyBroadException
+        try:
+            return BodyType(body_type)
+        except:
+            return body_type
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity())
-    def attach_cas_part_to_sim(sim_info: SimInfo, cas_part_id: int, body_type: BodyType=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+    def attach_cas_part_to_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """attach_cas_part_to_sim(sim_info, cas_part_id, body_type=BodyType.NONE, outfit_category_and_index=None)
 
         Add a CAS part at the specified BodyType to the Sims outfit.
@@ -75,7 +79,7 @@ class CommonCASUtils:
         :param cas_part_id: The decimal identifier of a CAS part to attach to the Sim.
         :type cas_part_id: int
         :param body_type: The BodyType the CAS part will be attached to. If no value is provided or it is None, the BodyType of the CAS part itself will be used.
-        :type body_type: BodyType, optional
+        :type body_type: Union[BodyType, int], optional
         :param outfit_category_and_index: The outfit category and index of the Sims outfit to modify. If no value is provided, the Sims current outfit will be used.
         :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
         :return: True if the CAS part was successfully attached to the Sim. False if the CAS part was not successfully attached to the Sim.
@@ -129,7 +133,7 @@ class CommonCASUtils:
 
     @staticmethod
     @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity())
-    def detach_cas_part_from_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, None]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+    def detach_cas_part_from_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """detach_cas_part_from_sim(sim_info, cas_part_id, body_type=BodyType.NONE, outfit_category_and_index=None)
 
         Remove a CAS part at the specified BodyType from the Sims outfit.
@@ -139,7 +143,7 @@ class CommonCASUtils:
         :param cas_part_id: The decimal identifier of a CAS part to detach from the Sim.
         :type cas_part_id: int
         :param body_type: The BodyType the CAS part will be detached from. If no value is provided, the BodyType of the CAS part itself will be used. If set to None, the CAS part will be removed from all BodyTypes.
-        :type body_type: Union[BodyType, None], optional
+        :type body_type: Union[BodyType, int, None], optional
         :param outfit_category_and_index: The outfit category and index of the Sims outfit to modify. If no value is provided, the Sims current outfit will be used.
         :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
         :return: True if the CAS part was successfully detached from the Sim. False if the CAS part was not successfully detached from the Sim.
@@ -194,7 +198,7 @@ class CommonCASUtils:
         return True
 
     @staticmethod
-    def has_cas_part_attached(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, None]=BodyType.NONE, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    def has_cas_part_attached(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None]=BodyType.NONE, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
         """has_cas_part_attached(sim_info, cas_part_id, body_type=BodyType.NONE, outfit_category_and_index=None)
 
         Determine if a Sim has the specified CAS part attached to their outfit.
@@ -204,7 +208,7 @@ class CommonCASUtils:
         :param cas_part_id: A decimal identifier of the CAS part to locate.
         :type cas_part_id: int
         :param body_type: The BodyType the CAS part will be located at. If no value is provided, it defaults to the BodyType of the CAS part itself. If set to None, the CAS part will be located within any BodyType.
-        :type body_type: Union[BodyType, None], optional
+        :type body_type: Union[BodyType, int, None], optional
         :param outfit_category_and_index: The outfit category and index of the Sims outfit to check. Default is the Sims current outfit.
         :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
         :return: True, if the Sims outfit contain the specified CAS part. False, if the Sims outfit does not contain the specified CAS part.
@@ -233,7 +237,24 @@ class CommonCASUtils:
         return cas_part_id == attached_cas_part_id
 
     @staticmethod
-    def get_body_type_cas_part_is_attached_to(sim_info: SimInfo, cas_part_id: int, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> BodyType:
+    def has_any_cas_part_attached_to_body_type(sim_info: SimInfo, body_type: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+        """has_any_cas_part_attached_to_body_type(sim_info, body_type, outfit_category_and_index=None)
+
+        Determine if a Sim has a CAS Part attached to a BodyType.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param body_type: A BodyType to check.
+        :type body_type: Union[BodyType, int]
+        :param outfit_category_and_index: An outfit category and index of the outfit. Default is None, which is whatever outfit a Sim is currently wearing.
+        :type outfit_category_and_index: Tuple[OutfitCategory, int], optional
+        :return: True, if the Sim has any CAS Part attached to the specified BodyType for the specified outfit. False, it not.
+        :rtype: bool
+        """
+        return CommonCASUtils.get_cas_part_id_at_body_type(sim_info, body_type, outfit_category_and_index=outfit_category_and_index) != -1
+
+    @staticmethod
+    def get_body_type_cas_part_is_attached_to(sim_info: SimInfo, cas_part_id: int, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> Union[BodyType, int]:
         """get_body_type_cas_part_is_attached_to(sim_info, cas_part_id, outfit_category_and_index=None)
 
         Retrieve the BodyType that a CAS part is attached to within a Sims outfit.
@@ -242,10 +263,10 @@ class CommonCASUtils:
         :type sim_info: SimInfo
         :param cas_part_id: A decimal identifier of the CAS part to locate.
         :type cas_part_id: int
-        :param outfit_category_and_index: The outfit category and index of the Sims outfit to check. Default is the Sims current outfit.
+        :param outfit_category_and_index: The outfit category and index of the Sims outfit to check. If None, the current outfit of the Sim will be used.
         :type outfit_category_and_index: Tuple[OutfitCategory, int], optional
-        :return: The BodyType the specified CAS part id is attached to or -1 if the CAS part is not found.
-        :rtype: BodyType
+        :return: The BodyType the specified CAS part id is attached to or BodyType.NONE if the CAS part is not found or the Sim does not have body parts for their outfit.
+        :rtype: Union[BodyType, int]
         """
         log.format_with_message('Retrieving BodyType for CAS part.', sim=sim_info, cas_part_id=cas_part_id, outfit_category_and_index=outfit_category_and_index)
         if outfit_category_and_index is None:
@@ -253,19 +274,24 @@ class CommonCASUtils:
         log.format(cas_part_id=cas_part_id, outfit_category_and_index=outfit_category_and_index)
         outfit_parts = CommonOutfitUtils.get_outfit_parts(sim_info, outfit_category_and_index=outfit_category_and_index)
         if not outfit_parts:
-            log.debug('No body parts found.')
+            log.debug('No body parts found on Sim!')
             return BodyType.NONE
         log.format_with_message('Found body parts from outfit.', body_parts=outfit_parts)
         for body_type in outfit_parts.keys():
             if cas_part_id != outfit_parts[body_type]:
                 continue
-            log.format_with_message('Found the BodyType the specified CAS part is attached to.', body_type=BodyType(body_type))
-            return BodyType(body_type)
+            # noinspection PyBroadException
+            try:
+                body_type = BodyType(body_type)
+            except:
+                body_type = body_type
+            log.format_with_message('Found the BodyType the specified CAS part is attached to.', body_type=body_type)
+            return body_type
         log.debug('No BodyType was found matching the specified CAS part.')
         return BodyType.NONE
 
     @staticmethod
-    def get_cas_part_id_at_body_type(sim_info: SimInfo, body_type: BodyType, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> int:
+    def get_cas_part_id_at_body_type(sim_info: SimInfo, body_type: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> int:
         """get_cas_part_id_at_body_type(sim_info, body_type, outfit_category_and_index=None)
 
         Retrieve the CAS part identifier attached to the specified BodyType within a Sims outfit.
@@ -273,7 +299,7 @@ class CommonCASUtils:
         :param sim_info: The SimInfo of the Sim to check.
         :type sim_info: SimInfo
         :param body_type: The BodyType to check.
-        :type body_type: BodyType
+        :type body_type: Union[BodyType, int]
         :param outfit_category_and_index: The outfit category and index of the Sims outfit to check. Default is the Sims current outfit.
         :type outfit_category_and_index: Tuple[OutfitCategory, int], optional
         :return: The CAS part identifier attached to the specified BodyType or -1 if the BodyType is not found.

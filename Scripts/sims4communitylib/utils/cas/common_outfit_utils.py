@@ -435,6 +435,47 @@ class CommonOutfitUtils:
         return sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
 
     @staticmethod
+    def has_cas_part_attached(sim_info: SimInfo, cas_part_id: int, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+        """has_any_cas_parts_attached(sim_info, cas_part_id, outfit_category_and_index=None)
+
+        Determine if any of the specified CAS Parts are attached to the Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param cas_part_id: A CAS Part identifier.
+        :type cas_part_id: int
+        :param outfit_category_and_index: The OutfitCategory and Index of the outfit to check. Default is the current outfit.
+        :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
+        :return: True, if the Sim has the specified CAS Parts attached to the specified outfit. False, if not.
+        :rtype: bool
+        """
+        return CommonOutfitUtils.has_any_cas_parts_attached(sim_info, (cas_part_id, ), outfit_category_and_index=outfit_category_and_index)
+
+    @staticmethod
+    def has_any_cas_parts_attached(sim_info: SimInfo, cas_part_ids: Tuple[int], outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+        """has_any_cas_parts_attached(sim_info, cas_part_ids, outfit_category_and_index=None)
+
+        Determine if any of the specified CAS Parts are attached to the Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param cas_part_ids: A collection of CAS Part identifiers.
+        :type cas_part_ids: Tuple[int]
+        :param outfit_category_and_index: The OutfitCategory and Index of the outfit to check. Default is the current outfit.
+        :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
+        :return: True, if the Sim has any of the specified CAS Parts attached to the specified outfit. False, if not.
+        :rtype: bool
+        """
+        body_parts = CommonOutfitUtils.get_outfit_parts(sim_info, outfit_category_and_index=outfit_category_and_index)
+        if not body_parts:
+            return False
+        outfit_part_ids = body_parts.values()
+        for cas_part_id in cas_part_ids:
+            if cas_part_id in outfit_part_ids:
+                return True
+        return False
+
+    @staticmethod
     def get_outfit_parts(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[BodyType, int]:
         """get_outfit_parts(sim_info, outfit_category_and_index=None)
 
