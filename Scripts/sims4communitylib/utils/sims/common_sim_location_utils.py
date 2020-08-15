@@ -6,6 +6,8 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from event_testing.results import EnqueueResult
+import routing
+from routing import RoutingContext
 from server.pick_info import PickType
 import objects.terrain
 from typing import Union
@@ -13,7 +15,9 @@ from autonomy.autonomy_component import AutonomyComponent
 from sims.sim_info import SimInfo
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_quaternion import CommonQuaternion
+from sims4communitylib.classes.math.common_routing_location import CommonRoutingLocation
 from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
+from sims4communitylib.classes.math.common_transform import CommonTransform
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
 from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
 from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
@@ -47,6 +51,29 @@ class CommonSimLocationUtils:
             return None
 
     @staticmethod
+    def set_location(sim_info: SimInfo, location: CommonLocation) -> bool:
+        """set_location(sim_info, location)
+
+        Set the location of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param location: The location to put the Sim.
+        :type location: CommonLocation
+        :return: True, if the location of the Sim is successfully set. False, if not.
+        :rtype: bool
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None or location is None:
+            return False
+        # noinspection PyBroadException
+        try:
+            sim.location = location
+        except:
+            return False
+        return True
+
+    @staticmethod
     def get_location(sim_info: SimInfo) -> Union[CommonLocation, None]:
         """get_location(sim_info)
 
@@ -65,6 +92,22 @@ class CommonSimLocationUtils:
             return CommonLocation.from_location(sim.location)
         except:
             return None
+
+    @staticmethod
+    def get_routing_location(sim_info: SimInfo) -> Union[CommonRoutingLocation, None]:
+        """get_routing_location(sim_info)
+
+        Retrieve a routing location for the current location of a Sim.
+
+        :param sim_info: The Sim to get the location of.
+        :type sim_info: SimInfo
+        :return: The routing location for the current location of the Sim or None if the Sim does not have a location.
+        :rtype: Union[CommonRoutingLocation, None]
+        """
+        sim_location = CommonSimLocationUtils.get_location(sim_info)
+        if sim_location is None:
+            return None
+        return CommonRoutingLocation(sim_location.transform.translation, orientation=sim_location.transform.orientation, routing_surface=sim_location.routing_surface)
 
     @staticmethod
     def get_orientation(sim_info: SimInfo) -> CommonQuaternion:
@@ -96,6 +139,71 @@ class CommonSimLocationUtils:
         :rtype: float
         """
         return CommonQuaternion.to_degrees(CommonSimLocationUtils.get_orientation(sim_info))
+
+    @staticmethod
+    def get_routing_surface(sim_info: SimInfo) -> Union[CommonSurfaceIdentifier, None]:
+        """get_routing_surface(sim_info)
+
+        Retrieve the Routing Surface Identifier of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The Routing Surface Identifier of the specified Sim or None if a problem occurs.
+        :rtype: Union[CommonSurfaceIdentifier, None]
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return None
+
+        return CommonSurfaceIdentifier.from_surface_identifier(sim.routing_surface)
+
+    @staticmethod
+    def get_surface_level(sim_info: SimInfo) -> int:
+        """get_surface_level(sim_info)
+
+        Retrieve the Surface Level of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The Surface Level of the specified Sim or 0 if a problem occurs.
+        :rtype: int
+        """
+        routing_surface = CommonSimLocationUtils.get_routing_surface(sim_info)
+        if routing_surface is None:
+            return 0
+        return routing_surface.secondary_id
+
+    @staticmethod
+    def get_forward_vector(sim_info: SimInfo) -> CommonVector3:
+        """get_forward_vector(sim_info)
+
+        Retrieve the forward vector of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The forward vector of the Sim.
+        :rtype: CommonVector3
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return CommonVector3.empty()
+        return CommonVector3.from_vector3(sim.forward)
+
+    @staticmethod
+    def get_routing_context(sim_info: SimInfo) -> Union[RoutingContext, None]:
+        """get_routing_context(sim_info)
+
+        Retrieve the routing context of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The routing context of the specified Sim or None if an error occurs.
+        :rtype: Union[RoutingContext, None]
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return None
+        return sim.routing_context
 
     @staticmethod
     def can_swim_at_location(sim_info: SimInfo, location: CommonLocation) -> bool:
@@ -130,6 +238,53 @@ class CommonSimLocationUtils:
         """
         location = CommonSimLocationUtils.get_location(sim_info)
         return CommonSimLocationUtils.can_swim_at_location(sim_info, location)
+
+    @staticmethod
+    def can_route_to_location(sim_info: SimInfo, location: CommonLocation) -> bool:
+        """can_route_to_location(sim_info, location)
+
+        Determine if a Sim can route to a Location.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param location: The location to route to.
+        :type location: CommonLocation
+        :return: True, if the Sim can route to the specified Location. False, if not.
+        :rtype: bool
+        """
+        sim_routing_location = CommonSimLocationUtils.get_routing_location(sim_info)
+        if sim_routing_location is None:
+            return False
+        sim_routing_context = CommonSimLocationUtils.get_routing_context(sim_info)
+        if sim_routing_context is None:
+            return False
+        return routing.test_connectivity_pt_pt(sim_routing_location, CommonRoutingLocation.from_location(location), sim_routing_context)
+
+    @staticmethod
+    def can_route_to_position(sim_info: SimInfo, position: CommonVector3, routing_surface: CommonSurfaceIdentifier, orientation: CommonQuaternion=CommonQuaternion.empty()) -> bool:
+        """can_route_to_position(sim_info, position, routing_surface)
+
+        Determine if a Sim can route to a Location.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param position: The position to route to.
+        :type position: CommonVector3
+        :param routing_surface: The routing surface of the target.
+        :type routing_surface: CommonSurfaceIdentifier
+        :param orientation: The orientation of the position. Default is CommonQuaternion.empty().
+        :type orientation: CommonQuaternion, optional
+        :return: True, if the Sim can route to the specified Position. False, if not.
+        :rtype: bool
+        """
+        location = CommonLocation(
+            CommonTransform(
+                position,
+                orientation or CommonQuaternion.empty()
+            ),
+            routing_surface
+        )
+        return CommonSimLocationUtils.can_route_to_location(sim_info, location)
 
     @staticmethod
     def is_on_current_lot(sim_info: SimInfo) -> bool:

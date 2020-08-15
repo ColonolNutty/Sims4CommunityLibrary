@@ -7,7 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 import services
 
-from typing import Tuple, Union
+from typing import Tuple, Union, Any, Dict, List
 
 import build_buy
 from sims4communitylib.classes.math.common_location import CommonLocation
@@ -31,8 +31,31 @@ class CommonLocationUtils:
     """Utilities for manipulating locations and lots.
 
     To manipulate the location of Sims, see :class:`.CommonSimLocationUtils`.
+    To manipulate the location of Objects, see :class:`.CommonObjectLocationUtils`.
 
     """
+
+    @staticmethod
+    def get_lot_corners(lot: Lot) -> Tuple[Any]:
+        """get_lot_corners(lot)
+
+        Retrieve the lot corners of the specified Lot.
+
+        :return: A collection of corners of the specified Lot.
+        :rtype: Tuple[Any]
+        """
+        return tuple(lot.corners)
+
+    @staticmethod
+    def get_lot_corners_of_current_lot() -> Tuple[Any]:
+        """get_lot_corners_of_current_lot()
+
+        Retrieve the lot corners of the current Lot.
+
+        :return: A collection of corners on the current Lot.
+        :rtype: Tuple[Any]
+        """
+        return CommonLocationUtils.get_lot_corners(CommonLocationUtils.get_current_lot())
 
     @staticmethod
     def get_zone_id(zone: Zone) -> int:
@@ -83,10 +106,13 @@ class CommonLocationUtils:
 
         Retrieve the plex id of the current zone.
 
-        :return: The Plex Id of the current zone or -1 if it was not found.
+        .. note:: A plex id is basically a Room location.
+
+        :return: The decimal identifier of the current zone or 0 if the current zone does not have a plex id.
         :rtype: int
         """
-        return CommonLocationUtils.get_plex_id(CommonLocationUtils.get_current_zone_id())
+        from services import get_plex_service
+        return get_plex_service().get_active_zone_plex_id() or 0
 
     @staticmethod
     def get_plex_id_for_zone(zone: Zone) -> int:
@@ -111,7 +137,7 @@ class CommonLocationUtils:
         """
         plex_service = services.get_plex_service()
         if zone_id not in plex_service._zone_to_master_map:
-            return -1
+            return 0
         (_, plex_id) = plex_service._zone_to_master_map[zone_id]
         return plex_id
 
@@ -153,11 +179,43 @@ class CommonLocationUtils:
 
         Retrieve a collection of all Block Identifiers for the current zone.
 
+        .. note:: A Block Id is essentially an identifier for a Room.
+
         :return: A collection of block decimal identifiers.
         :rtype: Tuple[int]
         """
-        zone_id = CommonLocationUtils.get_current_zone_id()
-        return CommonLocationUtils.get_all_block_ids(zone_id)
+        return tuple(CommonLocationUtils.get_all_block_polygons_of_current_zone().keys())
+
+    @staticmethod
+    def get_all_block_polygons_of_current_zone() -> Dict[int, Tuple[Tuple[List[CommonVector3]]]]:
+        """get_all_block_polygons_of_current_zone()
+
+        Retrieve all block polygons for the current Zone.
+
+        :return: A dictionary of polygons for the current Zone with the Block Ids as the key.
+        :rtype: Dict[int, Tuple[Tuple[Polygon]]]
+        """
+        # noinspection PyArgumentList
+        return _buildbuy.get_all_block_polygons(CommonLocationUtils.get_current_zone_id(), CommonLocationUtils.get_current_zone_plex_id())
+
+    @staticmethod
+    def get_all_block_polygons(zone_id: int) -> Dict[int, Tuple[Tuple[List[CommonVector3]]]]:
+        """get_all_block_polygons(zone_id)
+
+        Retrieve all block polygons for a Zone.
+
+        .. note:: A Block is essentially just a Room.
+
+        :param zone_id: A decimal identifier of a Zone.
+        :type zone_id: int
+        :return: A collection of polygons for the specified Zone.
+        :rtype: Dict[int, Tuple[Tuple[List[CommonVector3]]]]
+        """
+        plex_id = CommonLocationUtils.get_plex_id(zone_id)
+        if plex_id == -1:
+            return dict()
+        # noinspection PyArgumentList
+        return _buildbuy.get_all_block_polygons(zone_id, plex_id)
 
     @staticmethod
     def get_block_id(zone_id: int, position: CommonVector3, surface_level: int) -> int:

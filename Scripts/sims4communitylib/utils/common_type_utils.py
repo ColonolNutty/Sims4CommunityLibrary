@@ -6,6 +6,8 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Any
+
+from objects.pools.pool_seat import PoolSeat
 from sims.sim import Sim
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
@@ -174,3 +176,16 @@ class CommonTypeUtils:
         """
         from sims4communitylib.classes.math.common_location import CommonLocation
         return isinstance(obj, Location) or isinstance(obj, CommonLocation)
+
+    @staticmethod
+    def is_pool_seat(obj: Any) -> bool:
+        """is_pool_seat(obj)
+
+        Determine if an Object is a Pool Seat.
+
+        :param obj: An instance of an Object.
+        :type: Any
+        :return: True, if the Object is a Pool Seat. False, if not.
+        :rtype: bool
+        """
+        return isinstance(obj, PoolSeat)

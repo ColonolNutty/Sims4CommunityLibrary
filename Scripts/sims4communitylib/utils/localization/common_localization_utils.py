@@ -138,6 +138,26 @@ class CommonLocalizationUtils:
         return CommonLocalizationUtils.create_localized_string(text_color.value, tokens=(localized_string,))
 
     @staticmethod
+    def get_localized_string_hash(localized_string: LocalizedString) -> int:
+        """get_localized_string_hash(localized_string)
+
+        Retrieve the hash value of a Localized String.
+
+        :param localized_string: An instance of a Localized String.
+        :type localized_string: LocalizedString
+        :return: The hash value of the Localized String or 0 if a problem occurs.
+        :rtype: int
+        """
+        if localized_string is None:
+            return 0
+        # noinspection PyBroadException
+        try:
+            # noinspection PyUnresolvedReferences
+            return localized_string.hash
+        except:
+            return 0
+
+    @staticmethod
     def _normalize_tokens(*tokens: Any) -> Iterator[LocalizedString]:
         new_tokens = []
         for token in tokens:

@@ -6,7 +6,9 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from autonomy.settings import AutonomyState
+from objects.game_object import GameObject
 from sims.sim_info import SimInfo
+from sims4communitylib.enums.common_object_preference_tag import CommonObjectPreferenceTag
 from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -99,3 +101,43 @@ class CommonSimAutonomyUtils:
         :rtype: bool
         """
         return CommonSimAutonomyUtils.get_autonomy_state(sim_info) == autonomy_state
+
+    @staticmethod
+    def has_scoring_preference_for_object(sim_info: SimInfo, preference_tag: CommonObjectPreferenceTag, game_object: GameObject) -> bool:
+        """has_scoring_preference_for_object(sim_info, preference_tag, game_object)
+
+        Determine if a Sim will have a scoring preference for an Object when searching for Objects to use with a Tag.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param preference_tag: The tag to look for preference with.
+        :type preference_tag: CommonObjectPreferenceTag
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Sim will have a scoring preference to use the specified Object when searching for Objects to use with the specified Tag. False, if not.
+        :rtype: bool
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None or game_object is None:
+            return False
+        return sim.is_object_scoring_preferred(preference_tag, game_object)
+
+    @staticmethod
+    def has_use_preference_for_object(sim_info: SimInfo, preference_tag: CommonObjectPreferenceTag, game_object: GameObject) -> bool:
+        """has_use_preference_for_object(sim_info, preference_tag, game_object)
+
+        Determine if a Sim will have a preference for an Object when searching for Objects to use with a Tag.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param preference_tag: The tag to look for preference with.
+        :type preference_tag: CommonObjectPreferenceTag
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Sim will prefer to use the specified Object when searching for Objects to use with the specified Tag. False, if not.
+        :rtype: bool
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None or game_object is None:
+            return False
+        return sim.is_object_use_preferred(preference_tag, game_object)
