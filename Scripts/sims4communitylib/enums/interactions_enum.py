@@ -33,6 +33,7 @@ class CommonInteractionId(CommonInt):
     STAND_PASSIVE: 'CommonInteractionId' = 14310
     SIM_SWIM: 'CommonInteractionId' = 102325
     SIM_CHAT: 'CommonInteractionId' = 13998
+    SIM_BE_AFFECTIONATE: 'CommonInteractionId' = 13991
     CAT_STAND: 'CommonInteractionId' = 120562
     CAT_STAND_PASSIVE: 'CommonInteractionId' = 120558
     DOG_STAND: 'CommonInteractionId' = 120569

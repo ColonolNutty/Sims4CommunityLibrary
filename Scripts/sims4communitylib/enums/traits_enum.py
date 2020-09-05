@@ -34,6 +34,7 @@ class CommonTraitId(CommonInt):
     AT_DAYCARE: 'CommonTraitId' = 105482
     BABY: 'CommonTraitId' = 34314
     BANE: 'CommonTraitId' = 27217
+    BATUU_ALIEN: 'CommonTraitId' = 20
     BEGUILING: 'CommonTraitId' = 26203
     BOOKWORM: 'CommonTraitId' = 27916
     BREASTS_FORCE_OFF: 'CommonTraitId' = 136862
