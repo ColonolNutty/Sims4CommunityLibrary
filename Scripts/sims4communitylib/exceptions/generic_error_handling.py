@@ -1,0 +1,23 @@
+from pprint import pformat
+
+from broadcasters.broadcaster import Broadcaster
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
+from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Broadcaster, Broadcaster.apply_broadcaster_effect.__name__)
+def _common_broadcaster_apply(original, self: Broadcaster, *_, **__) -> None:
+    try:
+        return original(self, *_, **__)
+    except Exception as ex:
+        if self.interaction is not None:
+            interaction = self.interaction
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running apply_broadcaster_effect for broadcaster {} for interaction {} with short name {} and display name {}'.format(pformat(self), pformat(interaction), CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_display_name(interaction)), exception=ex)
+        elif self.broadcasting_object is not None:
+            broadcasting_object = self.broadcasting_object
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running apply_broadcaster_effect for broadcaster {} from object {}'.format(pformat(self), pformat(broadcasting_object)), exception=ex)
+        else:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while running apply_broadcaster_effect for broadcaster {}'.format(pformat(self)), exception=ex)
+    return None

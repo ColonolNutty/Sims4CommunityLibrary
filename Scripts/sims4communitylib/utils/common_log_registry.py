@@ -23,6 +23,7 @@ class CommonMessageType(CommonEnumStringBase):
     DEBUG = 'DEBUG'
     ERROR = 'ERROR'
     INFO = 'INFO'
+    WARN = 'WARN'
 
 
 class CommonLog:
@@ -119,6 +120,43 @@ class CommonLog:
         """
         if self.enabled:
             self._log_message(message_type, '{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)))
+
+    def warn(self, message: str):
+        """warn(message)
+
+        Log a message with message type WARN.
+
+        :param message: The message to log.
+        :type message: str
+        """
+        if self.enabled:
+            self._log_message(CommonMessageType.WARN, message)
+
+    def format_warn(self, *args: Any, **kwargs: Any):
+        """format_warn(*args, **kwargs)
+
+        Log a non-descriptive message containing pformatted arguments and keyword arguments with message type WARN.
+
+        :param args: Arguments to format into the message.
+        :type args: Any
+        :param kwargs: Keyword Arguments to format into the message.
+        :type kwargs: Any
+        """
+        self.format(*args, message_type=CommonMessageType.WARN, **kwargs)
+
+    def format_warn_with_message(self, message: str, *args, **kwargs):
+        """format_warn_with_message(message, *args, **kwargs)
+
+        Log a message containing pformatted arguments and keyword arguments with message type WARN.
+
+        :param message: The message to log.
+        :type message: str
+        :param args: Arguments to format into the message.
+        :type args: Any
+        :param kwargs: Keyword Arguments to format into the message.
+        :type kwargs: Any
+        """
+        self.format_with_message(message, *args, message_type=CommonMessageType.WARN, **kwargs)
 
     def error(self, message: str, message_type: str=CommonMessageType.ERROR, exception: Exception=None, throw: bool=True):
         """error(message, message_type=CommonMessageType.ERROR, exception=None, throw=True)
@@ -332,12 +370,31 @@ class CommonLogRegistry(CommonService):
         # Dict[str, Dict[str, CommonLog]]
         if mod_name not in self._registered_logs:
             self._registered_logs[mod_name] = dict()
+            self._delete_old_log_files(mod_name)
         # Dict[str, CommonLog]
         if log_name in self._registered_logs[mod_name]:
             return self._registered_logs[mod_name][log_name]
         log = CommonLog(mod_identifier, log_name)
         self._registered_logs[mod_name][log_name] = log
         return log
+
+    def _delete_old_log_files(self, mod_identifier: Union[str, CommonModIdentity]):
+        from sims4communitylib.utils.common_io_utils import CommonIOUtils
+        mod_name = CommonModIdentity._get_mod_name(mod_identifier)
+        if mod_name is None:
+            mod_name = 'Unknown_Mod_Name'
+        files_to_delete = (
+            CommonLogUtils.get_message_file_path(mod_name),
+            CommonLogUtils.get_exceptions_file_path(mod_name),
+            CommonLogUtils.get_old_message_file_path(mod_name),
+            CommonLogUtils.get_old_exceptions_file_path(mod_name)
+        )
+        for file_to_delete in files_to_delete:
+            # noinspection PyBroadException
+            try:
+                CommonIOUtils.delete_file(file_to_delete, ignore_errors=True)
+            except:
+                continue
 
     # noinspection PyUnusedLocal
     def log_exists(self, log_name: str, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:

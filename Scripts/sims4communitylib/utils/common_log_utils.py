@@ -9,7 +9,6 @@ import os
 from typing import Union
 
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
 
 
 class CommonLogUtils:
@@ -46,6 +45,32 @@ class CommonLogUtils:
         return CommonLogUtils._get_file_path(mod_identifier, 'Messages')
 
     @staticmethod
+    def get_old_exceptions_file_path(mod_identifier: Union[str, CommonModIdentity]) -> str:
+        """get_old_exceptions_file_path(mod_identifier)
+
+        Retrieve the file path to the Old Exceptions file used as the overflow when the main Exception file becomes too large.
+
+        :param mod_identifier: The name or identity of the mod requesting the file path.
+        :type mod_identifier: Union[str, CommonModIdentity]
+        :return: An str file path to the Old Exceptions file.
+        :rtype: str
+        """
+        return CommonLogUtils._get_old_file_path_name(mod_identifier, 'Exceptions')
+
+    @staticmethod
+    def get_old_message_file_path(mod_identifier: Union[str, CommonModIdentity]) -> str:
+        """get_old_message_file_path(mod_identifier)
+
+        Retrieve the file path to the Old Messages file used as the overflow when the main Messages file becomes too large.
+
+        :param mod_identifier: The name of the mod requesting the file path.
+        :type mod_identifier: Union[str, CommonModIdentity]
+        :return: An str file path to the Old Messages file.
+        :rtype: str
+        """
+        return CommonLogUtils._get_old_file_path_name(mod_identifier, 'Messages')
+
+    @staticmethod
     def get_sims_documents_location_path() -> str:
         """get_sims_documents_location_path()
 
@@ -66,14 +91,23 @@ class CommonLogUtils:
 
     @staticmethod
     def _get_file_path(mod_identifier: Union[str, CommonModIdentity], file_name: str) -> str:
-        if isinstance(mod_identifier, CommonModIdentity):
-            mod_identifier = mod_identifier.name
+        mod_identifier = CommonModIdentity._get_mod_name(mod_identifier)
         root_path = CommonLogUtils.get_sims_documents_location_path()
         file_path = os.path.join(root_path, '{}_{}.txt'.format(mod_identifier, file_name))
         if os.path.exists(file_path) and CommonLogUtils._file_is_too_big(file_path):
-            current_date_time = CommonRealDateUtils.get_current_date_string()
-            os.rename(file_path, os.path.join(root_path, 'Old_{}_{}_{}.txt'.format(mod_identifier, file_name, str(current_date_time).replace(':', '_'))))
+            old_file_name = 'Old_{}_{}.txt'.format(mod_identifier, file_name)
+            old_file_path = os.path.join(root_path, old_file_name)
+            if os.path.exists(old_file_path):
+                os.remove(old_file_path)
+            os.rename(file_path, old_file_path)
         return file_path
+
+    @staticmethod
+    def _get_old_file_path_name(mod_identifier: Union[str, CommonModIdentity], file_name: str) -> str:
+        mod_identifier = CommonModIdentity._get_mod_name(mod_identifier)
+        root_path = CommonLogUtils.get_sims_documents_location_path()
+        old_file_name = 'Old_{}_{}.txt'.format(mod_identifier, file_name)
+        return os.path.join(root_path, old_file_name)
 
     @staticmethod
     def _file_is_too_big(file_path: str) -> bool:

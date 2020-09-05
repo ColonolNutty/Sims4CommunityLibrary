@@ -15,6 +15,32 @@ class CommonIOUtils:
 
     """
     @staticmethod
+    def delete_file(file_path: str, ignore_errors: bool=False) -> bool:
+        """delete_file(file_path, ignore_errors=False)
+
+        Delete a file.
+
+        :param file_path: The file to delete.
+        :type file_path: str
+        :param ignore_errors: If True, any exceptions thrown will be ignored (Useful in preventing infinite loops)
+        :type ignore_errors: bool, optional
+        :return: True if successful. False if not.
+        :rtype: bool
+        """
+        if file_path is None:
+            return False
+        try:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        except Exception as ex:
+            if ignore_errors:
+                return False
+            from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while writing to file \'{}\''.format(file_path), exception=ex)
+            return False
+        return True
+
+    @staticmethod
     def write_to_file(file_path: str, data: str, buffering: int=1, encoding: str='utf-8', ignore_errors: bool=False) -> bool:
         """write_to_file(file_path, data, buffering=1, encoding='utf-8', ignore_errors=False)
 
