@@ -158,27 +158,51 @@ class CommonOutfitUtils:
     def is_hot_weather_category(outfit_category: OutfitCategory) -> bool:
         """is_hot_weather_category(outfit_category)
 
-        Determine if an OutfitCategory is HOT_WEATHER
+        Determine if an OutfitCategory is HOTWEATHER
 
         :param outfit_category: The OutfitCategory to check.
         :type outfit_category: OutfitCategory
-        :return: True, if the OutfitCategory is OutfitCategory.HOT_WEATHER. False, if it is not.
+        :return: True, if the OutfitCategory is OutfitCategory.HOTWEATHER. False, if it is not.
         :rtype: bool
         """
-        return outfit_category == OutfitCategory.HOT_WEATHER
+        try:
+            return outfit_category == OutfitCategory.HOTWEATHER
+        except:
+            return False
 
     @staticmethod
     def is_cold_weather_category(outfit_category: OutfitCategory) -> bool:
         """is_cold_weather_category(outfit_category)
 
-        Determine if an OutfitCategory is COLD_WEATHER
+        Determine if an OutfitCategory is COLDWEATHER
 
         :param outfit_category: The OutfitCategory to check.
         :type outfit_category: OutfitCategory
-        :return: True, if the OutfitCategory is OutfitCategory.COLD_WEATHER. False, if it is not.
+        :return: True, if the OutfitCategory is OutfitCategory.COLDWEATHER. False, if it is not.
         :rtype: bool
         """
-        return outfit_category == OutfitCategory.COLD_WEATHER
+        # noinspection PyBroadException
+        try:
+            return outfit_category == OutfitCategory.COLDWEATHER
+        except:
+            return False
+
+    @staticmethod
+    def is_batuu_category(outfit_category: OutfitCategory) -> bool:
+        """is_batuu_category(outfit_category)
+
+        Determine if an OutfitCategory is BATUU
+
+        :param outfit_category: The OutfitCategory to check.
+        :type outfit_category: OutfitCategory
+        :return: True, if the OutfitCategory is OutfitCategory.BATUU. False, if it is not.
+        :rtype: bool
+        """
+        # noinspection PyBroadException
+        try:
+            return outfit_category == OutfitCategory.BATUU
+        except:
+            return False
 
     @staticmethod
     def get_all_outfit_categories() -> Tuple[OutfitCategory]:
@@ -346,6 +370,19 @@ class CommonOutfitUtils:
         :rtype: bool
         """
         return CommonOutfitUtils.is_cold_weather_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
+
+    @staticmethod
+    def is_wearing_batuu_outfit(sim_info: SimInfo) -> bool:
+        """is_wearing_batuu_outfit(sim_info)
+
+        Determine if a Sim is wearing a Batuu outfit.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the sim is wearing a batuu outfit. False, if not.
+        :rtype: bool
+        """
+        return CommonOutfitUtils.is_batuu_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @staticmethod
     def is_wearing_towel(sim_info: SimInfo) -> bool:
