@@ -1424,6 +1424,7 @@ class CommonStatisticId(CommonInt):
     SKILL_ADULT_MAJOR_CHARISMA: 'CommonStatisticId' = 16699
     SKILL_ADULT_MAJOR_COMEDY: 'CommonStatisticId' = 16698
     SKILL_ADULT_MAJOR_DJ_MIXING: 'CommonStatisticId' = 121612
+    SKILL_ADULT_MAJOR_FABRICATION: 'CommonStatisticId' = 231908
     SKILL_ADULT_MAJOR_FISHING: 'CommonStatisticId' = 39397
     SKILL_ADULT_MAJOR_FLOWER_ARRANGING: 'CommonStatisticId' = 186703
     SKILL_ADULT_MAJOR_GARDENING: 'CommonStatisticId' = 16700
