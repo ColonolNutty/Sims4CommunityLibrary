@@ -19,6 +19,7 @@ class CommonSkillId(CommonInt):
     ADULT_MAJOR_CHARISMA: 'CommonSkillId' = 16699
     ADULT_MAJOR_COMEDY: 'CommonSkillId' = 16698
     ADULT_MAJOR_DJ_MIXING: 'CommonSkillId' = 121612
+    ADULT_MAJOR_FABRICATION: 'CommonSkillId' = 231908
     ADULT_MAJOR_FISHING: 'CommonSkillId' = 39397
     ADULT_MAJOR_FLOWER_ARRANGING: 'CommonSkillId' = 186703
     ADULT_MAJOR_GARDENING: 'CommonSkillId' = 16700
