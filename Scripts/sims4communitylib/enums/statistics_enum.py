@@ -1449,6 +1449,7 @@ class CommonStatisticId(CommonInt):
     SKILL_ADULT_MAJOR_WELLNESS: 'CommonStatisticId' = 117858
     SKILL_ADULT_MAJOR_WRITING: 'CommonStatisticId' = 16714
     SKILL_ADULT_MINOR_DANCING: 'CommonStatisticId' = 128145
+    SKILL_ADULT_MINOR_JUICE_FIZZING: 'CommonStatisticId' = 234806
     SKILL_ADULT_MINOR_LOCAL_CULTURE: 'CommonStatisticId' = 174687
     SKILL_ADULT_MINOR_MEDIA_PRODUCTION: 'CommonStatisticId' = 192655
     SKILL_BOWLING: 'CommonStatisticId' = 158659

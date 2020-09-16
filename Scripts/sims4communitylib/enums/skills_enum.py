@@ -44,6 +44,7 @@ class CommonSkillId(CommonInt):
     ADULT_MAJOR_WELLNESS: 'CommonSkillId' = 117858
     ADULT_MAJOR_WRITING: 'CommonSkillId' = 16714
     ADULT_MINOR_DANCING: 'CommonSkillId' = 128145
+    ADULT_MINOR_JUICE_FIZZING: 'CommonSkillId' = 234806
     ADULT_MINOR_LOCAL_CULTURE: 'CommonSkillId' = 174687
     ADULT_MINOR_MEDIA_PRODUCTION: 'CommonSkillId' = 192655
     BOWLING: 'CommonSkillId' = 158659
