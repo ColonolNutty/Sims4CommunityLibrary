@@ -67,7 +67,7 @@ class CommonEventRegistry(CommonService):
                     if not handle_result:
                         result = False
                 except Exception as ex:
-                    CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred when attempting to handle event type \'{}\' via event handler \'{}\''.format(type(event), str(event_handler)), exception=ex)
+                    CommonExceptionHandler.log_exception(event_handler.mod_name, 'Error occurred when attempting to handle event type \'{}\' via event handler \'{}\''.format(type(event), str(event_handler)), exception=ex)
                     continue
         except Exception as ex:
             CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to dispatch event \'{}\''.format(event), exception=ex)

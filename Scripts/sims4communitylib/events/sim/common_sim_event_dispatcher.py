@@ -44,9 +44,6 @@ class CommonSimEventDispatcherService(CommonService):
         return CommonEventRegistry.get().dispatch(S4CLSimLoadedEvent(sim_info))
 
     def _on_sim_spawned(self, sim_info: SimInfo, *_, **__):
-        from sims4communitylib.events.zone_spin.common_zone_spin_event_dispatcher import CommonZoneSpinEventDispatcher
-        if CommonZoneSpinEventDispatcher.get().game_loading:
-            return False
         from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
         return CommonEventRegistry.get().dispatch(S4CLSimSpawnedEvent(CommonSimUtils.get_sim_info(sim_info)))
 
