@@ -45,23 +45,23 @@ class CommonSimEventDispatcherService(CommonService):
 
     def _on_sim_spawned(self, sim_info: SimInfo, *_, **__):
         from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-        return CommonEventRegistry.get().dispatch(S4CLSimSpawnedEvent(CommonSimUtils.get_sim_info(sim_info)))
+        return CommonEventRegistry.get().dispatch(S4CLSimSpawnedEvent(CommonSimUtils.get_sim_info(sim_info)), threaded=True)
 
     def _on_sim_change_age(self, sim_info: SimInfo, new_age: Age, current_age: Age):
         from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-        return CommonEventRegistry.get().dispatch(S4CLSimChangedAgeEvent(CommonSimUtils.get_sim_info(sim_info), current_age, new_age))
+        return CommonEventRegistry.get().dispatch(S4CLSimChangedAgeEvent(CommonSimUtils.get_sim_info(sim_info), current_age, new_age), threaded=True)
 
     def _on_sim_add_occult_type(self, occult_tracker: OccultTracker, occult_type: OccultType):
         sim_info = occult_tracker._sim_info
-        return CommonEventRegistry.get().dispatch(S4CLSimAddedOccultTypeEvent(sim_info, occult_type, occult_tracker))
+        return CommonEventRegistry.get().dispatch(S4CLSimAddedOccultTypeEvent(sim_info, occult_type, occult_tracker), threaded=True)
 
     def _on_sim_change_occult_type(self, occult_tracker: OccultTracker, occult_type: OccultType, *_, **__):
         sim_info = occult_tracker._sim_info
-        return CommonEventRegistry.get().dispatch(S4CLSimChangedOccultTypeEvent(sim_info, occult_type, occult_tracker))
+        return CommonEventRegistry.get().dispatch(S4CLSimChangedOccultTypeEvent(sim_info, occult_type, occult_tracker), threaded=True)
 
     def _on_sim_remove_occult_type(self, occult_tracker: OccultTracker, occult_type: OccultType):
         sim_info = occult_tracker._sim_info
-        return CommonEventRegistry.get().dispatch(S4CLSimRemovedOccultTypeEvent(sim_info, occult_type, occult_tracker))
+        return CommonEventRegistry.get().dispatch(S4CLSimRemovedOccultTypeEvent(sim_info, occult_type, occult_tracker), threaded=True)
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, SimInfo, SimInfo.__init__.__name__)
