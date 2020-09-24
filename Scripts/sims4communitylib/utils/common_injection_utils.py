@@ -91,7 +91,7 @@ class CommonInjectionUtils:
                         # noinspection PyBroadException
                         try:
                             from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-                            CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while injecting into function \'{}\' of class'.format(new_function.__name__, target_object.__name__), exception=ex)
+                            CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while injecting into function \'{}\' of class \'{}\''.format(new_function.__name__, target_object.__name__), exception=ex)
                         except Exception:
                             pass
                         return original_function(*args, **kwargs)
