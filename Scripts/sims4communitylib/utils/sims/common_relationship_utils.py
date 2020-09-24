@@ -374,6 +374,8 @@ class CommonRelationshipUtils:
         :return: An iterable of Sims that have any of the specified relationship bits with the specified Sim.
         :rtype: Iterator[SimInfo]
         """
+        if sim_info is None:
+            return tuple()
         sim_id = CommonSimUtils.get_sim_id(sim_info)
         for relationship in sim_info.relationship_tracker:
             if relationship.sim_id_a != sim_id:
