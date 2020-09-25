@@ -67,6 +67,8 @@ class CommonTraitId(CommonInt):
     CHILDHOOD_PHASE_PICKY_EATER_E: 'CommonTraitId' = 164975
     CHILDHOOD_PHASE_REBELLIOUS: 'CommonTraitId' = 164765
     CHILDISH: 'CommonTraitId' = 16830
+    CHILD_OF_THE_ISLANDS: 'CommonTraitId' = 204492
+    CHILD_OF_THE_OCEAN: 'CommonTraitId' = 204493
     CHOPSTICK_SAVVY: 'CommonTraitId' = 146104
     CHRONICLER: 'CommonTraitId' = 27692
     CLUB_PRESIDENT: 'CommonTraitId' = 122922
@@ -452,6 +454,7 @@ class CommonTraitId(CommonInt):
     OUTGOING: 'CommonTraitId' = 29571
     PA_MATRIARCH: 'CommonTraitId' = 29827
     PAPARAZZI: 'CommonTraitId' = 191783
+    PARANOID: 'CommonTraitId' = 203542
     PARENTING_SKILL_UNDERSTAND_BABY: 'CommonTraitId' = 163783
     PERFECT_HOST: 'CommonTraitId' = 27172
     PERFECTIONIST: 'CommonTraitId' = 9617
