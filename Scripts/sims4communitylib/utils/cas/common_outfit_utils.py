@@ -165,6 +165,7 @@ class CommonOutfitUtils:
         :return: True, if the OutfitCategory is OutfitCategory.HOTWEATHER. False, if it is not.
         :rtype: bool
         """
+        # noinspection PyBroadException
         try:
             return outfit_category == OutfitCategory.HOTWEATHER
         except:
