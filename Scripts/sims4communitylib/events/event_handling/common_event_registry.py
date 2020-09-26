@@ -26,12 +26,12 @@ class CommonEventRegistry(CommonService):
     def __init__(self) -> None:
         self._event_handlers: List[CommonEventHandler] = []
         self._event_queue = Queue()
-        self._worker_threads: List[Thread] = []
+        self._running = True
         self._number_of_worker_threads = 5
         for i in range(self._number_of_worker_threads):
             worker = Thread(target=self._work_the_queue, args=(self._event_queue,))
-            self._worker_threads.append(worker)
-        self._running = False
+            worker.daemon = True
+            worker.start()
 
     @staticmethod
     def handle_events(mod_identifier: Union[str, CommonModIdentity]) -> Callable[[Callable[[CommonEvent], bool]], Callable[[CommonEvent], bool]]:
@@ -60,20 +60,13 @@ class CommonEventRegistry(CommonService):
 
         Start dispatching events.
         """
-        if self._running:
-            return
         self._running = True
-        for worker in self._worker_threads:
-            worker.start()
 
     def stop(self) -> None:
         """stop()
 
         Stop dispatching events.
         """
-        if not self._running:
-            return
-        self._event_queue.join()
         self._running = False
 
     def _should_continue_running(self) -> bool:
@@ -81,13 +74,7 @@ class CommonEventRegistry(CommonService):
 
     def _work_the_queue(self, event_queue: Queue):
         while self._should_continue_running():
-            if event_queue.qsize() == 0:
-                continue
-            # noinspection PyBroadException
-            try:
-                event = event_queue.get(timeout=2)
-            except:
-                continue
+            event = event_queue.get()
             self._dispatch(event)
             event_queue.task_done()
 
@@ -131,15 +118,8 @@ class CommonEventRegistry(CommonService):
         return result
 
     @staticmethod
-    @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, Zone, Zone.load_zone.__name__)
-    def _common_start_dispatching_events_on_zone_load(original, self: Zone, *args, **kwargs):
-        result = original(self, *args, **kwargs)
-        CommonEventRegistry().start()
-        return result
-
-    @staticmethod
     @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, Zone, Zone.on_teardown.__name__)
     def _common_stop_dispatching_events_on_zone_teardown(original, self: Zone, client):
-        result = original(self, client)
         CommonEventRegistry().stop()
+        result = original(self, client)
         return result
