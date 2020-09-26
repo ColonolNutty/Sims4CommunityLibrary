@@ -28,9 +28,11 @@ class CommonEventRegistry(CommonService):
         self._event_queue = Queue()
         self._running = True
         self._number_of_worker_threads = 5
+        self._worker_threads = list()
         for i in range(self._number_of_worker_threads):
             worker = Thread(target=self._work_the_queue, args=(self._event_queue,))
             worker.daemon = True
+            self._worker_threads.append(worker)
             worker.start()
 
     @staticmethod
@@ -55,10 +57,19 @@ class CommonEventRegistry(CommonService):
         event_handler = CommonEventHandler(mod_identifier, event_function)
         self._event_handlers.append(event_handler)
 
+    def start(self) -> None:
+        """start()
+
+        Start dispatching events that are in the queue.
+        """
+        self._running = True
+        for worker in self._worker_threads:
+            worker.start()
+
     def stop(self) -> None:
         """stop()
 
-        Stop dispatching events.
+        Stop dispatching events that are in the queue.
         """
         self._running = False
 
@@ -119,6 +130,13 @@ class CommonEventRegistry(CommonService):
         except Exception as ex:
             CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to dispatch event \'{}\''.format(event), exception=ex)
             return False
+        return result
+
+    @staticmethod
+    @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, Zone, Zone.load_zone.__name__)
+    def _common_stop_dispatching_events_on_zone_load(original, self: Zone, *args, **kwargs):
+        CommonEventRegistry().start()
+        result = original(self, *args, **kwargs)
         return result
 
     @staticmethod
