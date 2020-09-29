@@ -400,6 +400,7 @@ class CommonTraitId(CommonInt):
     LONGEVITY: 'CommonTraitId' = 27081
     LOVE_GURU: 'CommonTraitId' = 146648
     LOVES_OUTDOORS: 'CommonTraitId' = 27914
+    MAKER: 'CommonTraitId' = 230745
     MARKETABLE: 'CommonTraitId' = 31924
     MASTERMIND: 'CommonTraitId' = 27184
     MATERIALISTIC: 'CommonTraitId' = 27913
