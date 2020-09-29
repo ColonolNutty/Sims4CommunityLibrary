@@ -160,6 +160,7 @@ class CommonTraitId(CommonInt):
     FOREVER_FRESH: 'CommonTraitId' = 183037
     FOREVER_FULL: 'CommonTraitId' = 183035
     FREE_SERVICES: 'CommonTraitId' = 32110
+    FREEGAN: 'CommonTraitId' = 234414
     FRESH_CHEF: 'CommonTraitId' = 26199
     FRUGAL: 'CommonTraitId' = 32111
     FTUE_CAREER_MINDED_INITIAL: 'CommonTraitId' = 200838
@@ -209,6 +210,7 @@ class CommonTraitId(CommonInt):
     GRADE_SCHOOL_F: 'CommonTraitId' = 98702
     GREAT_KISSER: 'CommonTraitId' = 26686
     GREAT_STORYTELLER: 'CommonTraitId' = 103263
+    GREEN_FIEND: 'CommonTraitId' = 231699
     GREGARIOUS: 'CommonTraitId' = 27087
     GYM_RAT: 'CommonTraitId' = 26427
     HANDEDNESS_LEFT: 'CommonTraitId' = 113589
@@ -588,6 +590,7 @@ class CommonTraitId(CommonInt):
     PREGNANCY_OPTIONS_PET_CAN_REPRODUCE: 'CommonTraitId' = 162563
     PROFESSIONAL_SLACKER: 'CommonTraitId' = 32442
     QUICK_LEARNER: 'CommonTraitId' = 27086
+    RECYCLE_DISCIPLE: 'CommonTraitId' = 232692
     REGAINED_HUMANITY: 'CommonTraitId' = 154825
     REPUTATION_HAS_BEEN_RANK_1_TERRIBLE: 'CommonTraitId' = 194218
     REPUTATION_HAS_BEEN_RANK_2_REALLY_BAD: 'CommonTraitId' = 194219
