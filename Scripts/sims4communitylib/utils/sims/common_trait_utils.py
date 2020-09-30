@@ -772,7 +772,8 @@ class CommonTraitUtils:
         :return: True, if the Sim does. False, if the Sim does not.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_FRAME_MASCULINE)
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        return CommonSimGenderOptionUtils.has_masculine_frame(sim_info)
 
     @staticmethod
     def has_feminine_frame(sim_info: SimInfo) -> bool:
@@ -785,7 +786,8 @@ class CommonTraitUtils:
         :return: True, if the Sim does. False, if the Sim does not.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_FRAME_FEMININE)
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        return CommonSimGenderOptionUtils.has_feminine_frame(sim_info)
 
     @staticmethod
     def prefers_menswear(sim_info: SimInfo) -> bool:
@@ -798,7 +800,8 @@ class CommonTraitUtils:
         :return: True, if the Sim does. False, if the Sim does not.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_CLOTHING_MENS_WEAR)
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        return CommonSimGenderOptionUtils.prefers_menswear(sim_info)
 
     @staticmethod
     def prefers_womenswear(sim_info: SimInfo) -> bool:
@@ -811,7 +814,8 @@ class CommonTraitUtils:
         :return: True, if the Sim does. False, if the Sim does not.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_CLOTHING_WOMENS_WEAR)
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        return CommonSimGenderOptionUtils.prefers_womenswear(sim_info)
 
     @staticmethod
     def can_impregnate(sim_info: SimInfo) -> bool:
@@ -827,8 +831,8 @@ class CommonTraitUtils:
         :return: True, if the Sim can impregnate other Sims. False, if the Sim can not impregnate other Sims.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE)\
-               and not CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE)
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        return CommonSimGenderOptionUtils.can_impregnate(sim_info)
 
     @staticmethod
     def can_not_impregnate(sim_info: SimInfo) -> bool:
@@ -844,8 +848,8 @@ class CommonTraitUtils:
         :return: True, if the Sim can not impregnate other Sims. False, if the Sim can impregnate other Sims.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE)\
-               and not CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE)
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        return CommonSimGenderOptionUtils.can_not_impregnate(sim_info)
 
     @staticmethod
     def can_be_impregnated(sim_info: SimInfo) -> bool:
@@ -861,8 +865,8 @@ class CommonTraitUtils:
         :return: True, if the Sim can be impregnated. False, if the Sim can not be impregnated.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED)\
-               and not CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED)
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        return CommonSimGenderOptionUtils.can_be_impregnated(sim_info)
 
     @staticmethod
     def can_not_be_impregnated(sim_info: SimInfo) -> bool:
@@ -878,26 +882,28 @@ class CommonTraitUtils:
         :return: True, if the Sim can not be impregnated. False, if the Sim can be impregnated.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED)\
-               and not CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED)
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        return CommonSimGenderOptionUtils.can_not_be_impregnated(sim_info)
 
     @staticmethod
     def can_create_pregnancy(sim_info: SimInfo) -> bool:
         """can_create_pregnancy(sim_info)
 
-        Determine if a sim can either impregnate or be impregnated.
+        Determine if a Sim can either impregnate, be impregnated, or can reproduce.
 
-        .. note:: Will return False if the sim can both impregnate and not impregnate\
-            or if the sim can both be impregnated and not be impregnated.
+        .. note:: Will return False if the Sim can both impregnate and not impregnate,\
+            if the Sim can both be impregnated and not be impregnated\
+            or if the Sim can both reproduce and not reproduce.
 
-        .. note:: A Sim can impregnate when they can either impregnate other Sims or can be impregnated by other Sims.
+        .. note:: A Sim can impregnate when they can either impregnate other Sims, can be impregnated by other Sims, or if they are a Pet, can reproduce.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim can create pregnancies. False, if the Sim can not create pregnancies.
         :rtype: bool
         """
-        return CommonTraitUtils.can_impregnate(sim_info) or CommonTraitUtils.can_be_impregnated(sim_info)
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        return CommonSimGenderOptionUtils.can_create_pregnancy(sim_info)
 
     @staticmethod
     def can_reproduce(sim_info: SimInfo) -> bool:
@@ -913,8 +919,8 @@ class CommonTraitUtils:
         :return: True, if the Sim can reproduce. False, if the Sim can not reproduce.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)\
-               and not CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        return CommonSimGenderOptionUtils.can_reproduce(sim_info)
 
     @staticmethod
     def can_not_reproduce(sim_info: SimInfo) -> bool:
@@ -930,8 +936,8 @@ class CommonTraitUtils:
         :return: True, if the Sim can not reproduce. False, if the Sim can reproduce.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)\
-               and not CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        return CommonSimGenderOptionUtils.can_not_reproduce(sim_info)
 
     @staticmethod
     def uses_toilet_standing(sim_info: SimInfo) -> bool:
@@ -944,7 +950,8 @@ class CommonTraitUtils:
         :return: True, if the Sim uses toilets while standing. False, if the Sim does not use toilets while standing.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_STANDING)
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        return CommonSimGenderOptionUtils.uses_toilet_standing(sim_info)
 
     @staticmethod
     def uses_toilet_sitting(sim_info: SimInfo) -> bool:
@@ -957,7 +964,8 @@ class CommonTraitUtils:
         :return: True, if the Sim uses toilets while sitting. False, if the Sim does not use toilets while sitting.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING)
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        return CommonSimGenderOptionUtils.uses_toilet_sitting(sim_info)
 
     @staticmethod
     def has_trait(sim_info: SimInfo, *trait_ids: Union[int, CommonTraitId]) -> bool:
