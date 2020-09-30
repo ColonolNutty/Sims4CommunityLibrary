@@ -6,16 +6,13 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from sims.sim_info import SimInfo
-from sims.sim_info_types import Age
 from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
-class S4CLSimChangedAgeEvent(CommonEvent):
-    """S4CLSimChangedAgeEvent(sim_info, old_age, new_age)
+class S4CLSimChangedGenderOptionsCanBeImpregnatedEvent(CommonEvent):
+    """S4CLSimChangedGenderOptionsCanBeImpregnatedEvent(sim_info)
 
-    An event that occurs when a Sim has changed their current Age.
-
-    .. note:: This can occur when a Child Sim becomes a Teen Sim, a Teen Sim becomes a Child Sim, etc.
+    An event that occurs when a Human Sim has changed whether they can be impregnated by other Sims or not.
 
     :Example usage:
 
@@ -34,21 +31,15 @@ class S4CLSimChangedAgeEvent(CommonEvent):
             # - The argument passed to "handle_events" is the name of your Mod.
             @staticmethod
             @CommonEventRegistry.handle_events(ModInfo.get_identity().name)
-            def handle_event(event_data: S4CLSimChangedAgeEvent):
+            def handle_event(event_data: S4CLSimChangedGenderOptionsCanBeImpregnatedEvent):
                 pass
 
     :param sim_info: The Sim that changed.
     :type sim_info: SimInfo
-    :param old_age: The Age the Sim has changed from.
-    :type old_age: Age
-    :param new_age: The Age the Sim has changed to.
-    :type new_age: Age
     """
 
-    def __init__(self, sim_info: SimInfo, old_age: Age, new_age: Age):
+    def __init__(self, sim_info: SimInfo):
         self._sim_info = sim_info
-        self._old_age = old_age
-        self._new_age = new_age
 
     @property
     def sim_info(self) -> SimInfo:
@@ -58,21 +49,3 @@ class S4CLSimChangedAgeEvent(CommonEvent):
         :rtype: SimInfo
         """
         return self._sim_info
-
-    @property
-    def old_age(self) -> Age:
-        """The Age the Sim has changed from.
-
-        :return: The Age the Sim has changed from.
-        :rtype: Age
-        """
-        return self._old_age
-
-    @property
-    def new_age(self) -> Age:
-        """The Age the Sim has changed to.
-
-        :return: The Age the Sim has changed to.
-        :rtype: Age
-        """
-        return self._new_age

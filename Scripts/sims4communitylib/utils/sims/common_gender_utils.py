@@ -54,10 +54,43 @@ class CommonGenderUtils:
         """
         try:
             sim_info.gender = gender
+            from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
+            CommonSimEventDispatcherService()._on_sim_change_gender(sim_info)
             return True
         except Exception as ex:
             CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set gender of Sim {} to {}.'.format(pformat(sim_info), gender), exception=ex)
             return False
+
+    @staticmethod
+    def swap_gender(sim_info: SimInfo, update_gender_options: bool=True) -> bool:
+        """swap_gender(sim_info, update_gender_options=True)
+
+        Swap the Gender of a Sim to it's opposite. i.e. Change a Sim from Male to Female or from Female to Male.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param update_gender_options: If True, gender option traits such as Toilet Usage, Clothing Preference, Pregnancy, and Body Frame will be updated to reflect the vanilla settings for each gender\
+        For example, if a Human Sim is swapping from Female to Male, their gender options will be updated to Toilet Standing, Cannot Be Impregnated, Can Impregnate, Mens Wear clothing preference, and Masculine Frame.\
+        If False, gender option traits will not be updated.\
+        Default is True.
+        :type update_gender_options: bool, optional
+        :return: True, if the Gender of the Sim was swapped successfully. False, if not.
+        :rtype: bool
+        """
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        if CommonGenderUtils.is_male(sim_info):
+            result = CommonGenderUtils.set_gender(sim_info, Gender.FEMALE)
+            if not update_gender_options:
+                return result
+            CommonSimGenderOptionUtils.update_gender_options_to_vanilla_female(sim_info)
+            return result
+        elif CommonGenderUtils.is_female(sim_info):
+            result = CommonGenderUtils.set_gender(sim_info, Gender.MALE)
+            if not update_gender_options:
+                return result
+            CommonSimGenderOptionUtils.update_gender_options_to_vanilla_male(sim_info)
+            return result
+        return False
 
     @staticmethod
     def are_same_gender(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:
