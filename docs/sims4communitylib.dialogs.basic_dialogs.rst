@@ -41,6 +41,14 @@ Basic Dialogs
    :undoc-members:
    :show-inheritance:
 
+`Input Integer Dialog`
+-------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.dialogs.common_input_integer_dialog.CommonInputIntegerDialog
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Ok Dialog`
 ---------------------------------------------------
 

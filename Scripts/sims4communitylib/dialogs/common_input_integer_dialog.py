@@ -25,28 +25,28 @@ from ui.ui_dialog_generic import UiDialogTextInput
 from sims4communitylib.modinfo import ModInfo
 
 
-class CommonInputFloatDialog(CommonDialog):
-    """CommonInputFloatDialog(\
+class CommonInputIntegerDialog(CommonDialog):
+    """CommonInputIntegerDialog(\
         title_identifier,\
         description_identifier,\
         initial_value,\
-        min_value=0.0,\
-        max_value=2147483647.0,\
+        min_value=0,\
+        max_value=2147483647,\
         title_tokens=(),\
         description_tokens=(),\
         mod_identity=None\
     )
 
-    Create a dialog that prompts the player to enter a float value.
+    Create a dialog that prompts the player to enter an integer value.
 
-    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_input_float_dialog` in the in-game console.
+    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_input_integer_dialog` in the in-game console.
 
     .. highlight:: python
     .. code-block:: python
 
-        def _common_testing_show_input_float_dialog():
+        def _common_testing_show_input_integer_dialog():
 
-            def _on_chosen(choice: float, outcome: CommonChoiceOutcome):
+            def _on_chosen(choice: integer, outcome: CommonChoiceOutcome):
                 pass
 
             # LocalizedStrings within other LocalizedStrings
@@ -67,11 +67,11 @@ class CommonInputFloatDialog(CommonDialog):
     :param description_identifier: A decimal identifier of the description text.
     :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param initial_value: The initial value that will appear in the input box.
-    :type initial_value: float
+    :type initial_value: int
     :param min_value: The minimum value allowed to be entered by the player. Default is 0.0
-    :type min_value: float, optional
+    :type min_value: int, optional
     :param max_value: The maximum value allowed to be entered by the player. Default is Max Int.
-    :type max_value: float, optional
+    :type max_value: int, optional
     :param title_tokens: Tokens to format into the title.
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: Tokens to format into the description.
@@ -83,9 +83,9 @@ class CommonInputFloatDialog(CommonDialog):
         self,
         title_identifier: Union[int, str, LocalizedString, CommonStringId],
         description_identifier: Union[int, str, LocalizedString, CommonStringId],
-        initial_value: float,
-        min_value: float=0.0,
-        max_value: float=2147483647.0,
+        initial_value: int,
+        min_value: int=0,
+        max_value: int=2147483647,
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
         mod_identity: CommonModIdentity=None
@@ -104,11 +104,11 @@ class CommonInputFloatDialog(CommonDialog):
     # noinspection PyMissingOrEmptyDocstring
     @property
     def log_identifier(self) -> str:
-        return 's4cl_input_float_dialog'
+        return 's4cl_input_integer_dialog'
 
     def show(
         self,
-        on_submit: Callable[[Union[float, None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop
+        on_submit: Callable[[Union[int, None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop
     ):
         """show(\
             on_submit=CommonFunctionUtils.noop\
@@ -117,7 +117,7 @@ class CommonInputFloatDialog(CommonDialog):
         Show the dialog and invoke the callbacks upon the player submitting a value.
 
         :param on_submit: A callback invoked upon the player submitting a value. Default is CommonFunctionUtils.noop.
-        :type on_submit: Callable[[Union[float, None], CommonChoiceOutcome], Any], optional
+        :type on_submit: Callable[[Union[int, None], CommonChoiceOutcome], Any], optional
         """
         try:
             return self._show(
@@ -128,9 +128,9 @@ class CommonInputFloatDialog(CommonDialog):
 
     def _show(
         self,
-        on_submit: Callable[[Union[float, None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop
+        on_submit: Callable[[Union[int, None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop
     ):
-        self.log.debug('Attempting to display input float dialog.')
+        self.log.debug('Attempting to display input integer dialog.')
 
         if on_submit is None:
             raise ValueError('\'on_submit\' was None.')
@@ -147,10 +147,10 @@ class CommonInputFloatDialog(CommonDialog):
             if not input_value or not dialog.accepted:
                 self.log.debug('Dialog cancelled.')
                 return on_submit(None, CommonChoiceOutcome.CANCEL)
-            self.log.format_with_message('Value entered, attempting to convert it to a float.', value=input_value)
+            self.log.format_with_message('Value entered, attempting to convert it to an integer.', value=input_value)
 
             try:
-                input_value = float(input_value)
+                input_value = int(input_value)
                 self.log.debug('Conversion successful.')
                 input_value = max(self.min_value, input_value)
                 input_value = min(self.max_value, input_value)
@@ -181,12 +181,12 @@ class CommonInputFloatDialog(CommonDialog):
         return None
 
 
-@sims4.commands.Command('s4clib_testing.show_input_float_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_input_float_dialog(_connection: int=None):
+@sims4.commands.Command('s4clib_testing.show_input_integer_dialog', command_type=sims4.commands.CommandType.Live)
+def _common_testing_show_input_integer_dialog(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
-    output('Showing test input float dialog.')
+    output('Showing test input integer dialog.')
 
-    def _on_chosen(choice: float, outcome: CommonChoiceOutcome):
+    def _on_chosen(choice: int, outcome: CommonChoiceOutcome):
         output('Chose {} with result: {}.'.format(pformat(choice), pformat(outcome)))
 
     try:
@@ -194,10 +194,10 @@ def _common_testing_show_input_float_dialog(_connection: int=None):
         title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
         description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
         from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-        dialog = CommonInputFloatDialog(
+        dialog = CommonInputIntegerDialog(
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            2.0,
+            2,
             title_tokens=title_tokens,
             description_tokens=description_tokens
         )
