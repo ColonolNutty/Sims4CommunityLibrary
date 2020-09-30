@@ -36,6 +36,14 @@ Objects
    :undoc-members:
    :show-inheritance:
 
+`Input Integer Option`
+""""""""""""""""""""""""""""""""""""
+
+.. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_input_integer_option.CommonDialogInputIntegerOption
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Object Option`
 """"""""""""""""""""""""""""""""""""
 

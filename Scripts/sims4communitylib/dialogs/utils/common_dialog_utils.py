@@ -16,6 +16,8 @@ class CommonDialogUtils:
     """Utilities for use with dialogs.
 
     """
+    TEXT_INPUT_NAME = 'text_input'
+
     @staticmethod
     def get_chosen_item(dialog: Union[UiDialogObjectPicker, UiMultiPicker]) -> Any:
         """get_chosen_item(dialog)
@@ -53,4 +55,4 @@ class CommonDialogUtils:
         :return: The value of the entered input.
         :rtype: Union[str, None]
         """
-        return str(dialog.text_input_responses.get('text_input'))
+        return str(dialog.text_input_responses.get(CommonDialogUtils.TEXT_INPUT_NAME))
