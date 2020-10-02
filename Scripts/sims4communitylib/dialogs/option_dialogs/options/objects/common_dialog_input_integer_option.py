@@ -21,6 +21,7 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 
 class CommonDialogInputIntegerOption(CommonDialogObjectOption):
     """CommonDialogInputIntegerOption(\
+        mod_identity,\
         option_identifier,\
         initial_value,\
         context,\
@@ -34,6 +35,8 @@ class CommonDialogInputIntegerOption(CommonDialogObjectOption):
 
     An option to open a dialog to input an integer value.
 
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
+    :type mod_identity: CommonModIdentity
     :param option_identifier: A string that identifies the option from other options.
     :type option_identifier: str
     :param initial_value: The value the option will have initially
