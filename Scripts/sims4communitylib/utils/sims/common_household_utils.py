@@ -168,7 +168,8 @@ class CommonHouseholdUtils:
         :return: An iterable of all Households.
         :rtype: Iterator[Household]
         """
-        for household in list(services.household_manager().get_all()):
+        household_list = tuple(services.household_manager().get_all())
+        for household in household_list:
             if household is None:
                 continue
             yield household

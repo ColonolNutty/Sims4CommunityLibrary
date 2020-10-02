@@ -138,7 +138,8 @@ class CommonObjectUtils:
         :return: An iterable of all Objects matching the `include_object_callback` filter.
         :rtype: Iterator[GameObject]
         """
-        for game_object in services.object_manager().get_all():
+        game_object_list = tuple(services.object_manager().get_all())
+        for game_object in game_object_list:
             if game_object is None:
                 continue
             if include_object_callback is not None and not include_object_callback(game_object):

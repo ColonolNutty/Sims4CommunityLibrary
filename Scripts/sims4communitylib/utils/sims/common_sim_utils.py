@@ -118,7 +118,7 @@ class CommonSimUtils:
         :return: An iterable of all Sims matching the `include_sim_callback` filter.
         :rtype: Iterator[SimInfo]
         """
-        sim_info_list = list(services.sim_info_manager().get_all())
+        sim_info_list = tuple(services.sim_info_manager().get_all())
         for sim_info in sim_info_list:
             if sim_info is None:
                 continue
