@@ -200,7 +200,7 @@ class CommonChooseSimDialog(CommonChooseDialog):
     # noinspection PyMissingOrEmptyDocstring
     def build_dialog(
         self,
-        on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        on_chosen: Callable[[Any, CommonChoiceOutcome], bool]=CommonFunctionUtils.noop,
         sim_info: SimInfo=None,
         should_show_names: bool=True,
         hide_row_descriptions: bool=False,
@@ -223,8 +223,8 @@ class CommonChooseSimDialog(CommonChooseDialog):
         if len(self.rows) == 0:
             raise AssertionError('No rows have been provided. Add rows to the dialog before attempting to display it.')
 
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
-        def _on_chosen(dialog: UiSimPicker):
+        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
+        def _on_chosen(dialog: UiSimPicker) -> bool:
             if not dialog.accepted:
                 self.log.debug('Dialog cancelled.')
                 return on_chosen(None, CommonChoiceOutcome.CANCEL)

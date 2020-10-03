@@ -166,7 +166,7 @@ class CommonBuffUtils:
         localized_buff_reason = CommonLocalizationUtils.create_localized_string(buff_reason)
         success = True
         for buff_identifier in buff_ids:
-            buff_instance = CommonBuffUtils._load_buff_instance(buff_identifier)
+            buff_instance = CommonBuffUtils.load_buff_by_id(buff_identifier)
             if buff_instance is None:
                 continue
             if not sim_info.add_buff_from_op(buff_instance, buff_reason=localized_buff_reason):
@@ -193,7 +193,7 @@ class CommonBuffUtils:
             return False
         success = True
         for buff_identifier in buff_ids:
-            buff_instance = CommonBuffUtils._load_buff_instance(buff_identifier)
+            buff_instance = CommonBuffUtils.load_buff_by_id(buff_identifier)
             if buff_instance is None:
                 continue
             if not sim_info.remove_buff_by_type(buff_instance):
@@ -260,7 +260,21 @@ class CommonBuffUtils:
         return tuple(names)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
+    def load_buff_by_id(buff_id: Union[int, CommonBuffId]) -> Union[Buff, None]:
+        """load_buff_by_id(buff_id)
+
+        Load an instance of a Buff by its decimal identifier.
+
+        :param buff_id: The decimal identifier of a Buff.
+        :type buff_id: Union[int, CommonBuffId]
+        :return: An instance of a Buff matching the decimal identifier or None if not found.
+        :rtype: Union[Buff, None]
+        """
+        from sims4.resources import Types
+        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+        return CommonResourceUtils.load_instance(Types.BUFF, buff_id)
+
+    @staticmethod
     def _load_buff_instance(buff_identifier: int) -> Union[Buff, None]:
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils

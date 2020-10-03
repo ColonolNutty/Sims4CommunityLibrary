@@ -92,7 +92,6 @@ class CommonIntervalDispatcher:
         """
         return self._run_once
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def try_dispatch(self, milliseconds_since_last_update: int) -> bool:
         """Attempt to run the dispatcher.
 

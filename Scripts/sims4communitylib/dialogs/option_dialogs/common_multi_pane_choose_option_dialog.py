@@ -271,7 +271,7 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
 
     def build_dialog(
         self,
-        on_submit: Callable[[Dict[int, Tuple[Any]]], Any]=CommonFunctionUtils.noop,
+        on_submit: Callable[[Dict[int, Tuple[Any]]], bool]=CommonFunctionUtils.noop,
         sim_info: SimInfo=None
     ) -> Union[UiDialogBase, None]:
         """build_dialog(\

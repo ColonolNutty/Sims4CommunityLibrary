@@ -11,7 +11,7 @@ from sims4communitylib.testing.common_test_service import CommonTestService
 from sims4communitylib.utils.sims.common_sim_spawn_utils import CommonSimSpawnUtils
 
 
-@CommonTestService.test_class(ModInfo.get_identity().name)
+@CommonTestService.test_class(ModInfo.get_identity())
 class _CommonSimSpawnUtilsTests:
     @staticmethod
     @CommonTestService.test()

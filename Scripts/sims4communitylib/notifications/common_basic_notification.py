@@ -10,14 +10,14 @@ from typing import Any, Union, Iterator
 from distributor.shared_messages import IconInfoData
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.enums.strings_enum import CommonStringId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog_notification import UiDialogNotification
-log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'common_basic_notification')
+
+log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 'common_basic_notification')
 
 
 class CommonBasicNotification:
@@ -100,7 +100,6 @@ class CommonBasicNotification:
         self.expand_behavior = expand_behavior
         self.ui_responses = ()
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def show(self, icon: IconInfoData=None, secondary_icon: IconInfoData=None):
         """show(icon=None, secondary_icon=None)
 
@@ -120,7 +119,6 @@ class CommonBasicNotification:
             secondary_icon_override=secondary_icon
         )
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def _create_dialog(self) -> Union[UiDialogNotification, None]:
         """_create_dialog()
         Create a dialog for use in :func:``show`.

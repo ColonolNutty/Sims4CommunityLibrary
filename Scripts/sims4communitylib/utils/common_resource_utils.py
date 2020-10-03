@@ -80,7 +80,6 @@ class CommonResourceUtils:
         return CommonResourceUtils.get_instance_manager(instance_type).types.items()
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def get_instance_manager(instance_manager_type: Types) -> Union[InstanceManager, None]:
         """get_instance_manager(instance_manager_type)
 

@@ -21,7 +21,7 @@ class _TestSubService(_TestService):
 
 
 # noinspection PyMissingOrEmptyDocstring
-@CommonTestService.test_class(ModInfo.get_identity().name)
+@CommonTestService.test_class(ModInfo.get_identity())
 class CommonServiceTests:
     @staticmethod
     @CommonTestService.test()

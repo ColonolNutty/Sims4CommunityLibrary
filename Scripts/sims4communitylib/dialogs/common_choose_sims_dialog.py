@@ -242,7 +242,6 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
         if len(self.rows) == 0:
             raise AssertionError('No rows have been provided. Add rows to the dialog before attempting to display it.')
 
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
         def _on_chosen(dialog: UiSimPicker):
             if not dialog.accepted:
                 self.log.debug('Dialog cancelled.')

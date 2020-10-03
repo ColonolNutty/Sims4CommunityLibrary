@@ -133,10 +133,9 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
         on_submit: Callable[[Tuple[DialogOptionValueType]], Any]=CommonFunctionUtils.noop
     ) -> Callable[[Union[Tuple[CommonDialogOption], None], CommonChoiceOutcome], bool]:
         @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
-        def _on_submit(chosen_options: Union[Tuple[CommonDialogOption], None], outcome: CommonChoiceOutcome) -> Any:
+        def _on_submit(chosen_options: Union[Tuple[CommonDialogOption], None], outcome: CommonChoiceOutcome) -> bool:
             if chosen_options is None or len(chosen_options) == 0 or CommonChoiceOutcome.is_error_or_cancel(outcome):
-                self.close()
-                return None
+                return self.close()
             chosen_values: List[DialogOptionValueType] = list()
             for chosen_option in chosen_options:
                 chosen_values.append(chosen_option.value)

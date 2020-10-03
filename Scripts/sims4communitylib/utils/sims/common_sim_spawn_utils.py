@@ -22,7 +22,6 @@ class CommonSimSpawnUtils:
     """
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def create_human_sim_info(
         gender: Gender=None,
         age: Age=None,
@@ -115,7 +114,6 @@ class CommonSimSpawnUtils:
         return CommonSimSpawnUtils.spawn_sim(sim_info, location=active_location, position=active_position, **kwargs)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def despawn_sim(sim_info: SimInfo, source: str=None, cause: str=None, **kwargs) -> bool:
         """despawn_sim(sim_info, source=None, cause=None, **kwargs)
 
@@ -141,7 +139,6 @@ class CommonSimSpawnUtils:
         return True
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def schedule_sim_for_despawn(sim_info: SimInfo, source: str=None, cause: str=None, on_despawn: Callable[[], None]=None, **kwargs) -> bool:
         """schedule_sim_for_despawn(sim_info, source=None, cause=None, on_despawn=None, **kwargs)
 
@@ -171,7 +168,6 @@ class CommonSimSpawnUtils:
         return True
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def delete_sim(sim_info: SimInfo, source: str=None, cause: str=None, **kwargs) -> bool:
         """delete_sim(sim_info, source=None, cause=None, **kwargs)
 

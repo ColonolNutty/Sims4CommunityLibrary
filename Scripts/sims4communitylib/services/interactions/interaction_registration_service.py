@@ -12,7 +12,6 @@ from objects.script_object import ScriptObject
 from services.terrain_service import TerrainService
 from sims4.resources import Types
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
@@ -111,7 +110,6 @@ class CommonInteractionRegistry(CommonService):
             CommonInteractionType.ON_SCRIPT_OBJECT_LOAD: []
         }
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_script_object_add(self, script_object: ScriptObject, *args, **kwargs):
         """on_script_object_add(script_object, *args, **kwargs)
 
@@ -132,7 +130,6 @@ class CommonInteractionRegistry(CommonService):
                 new_super_affordances.append(interaction_instance)
         script_object._super_affordances += tuple(new_super_affordances)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_terrain_load(self, terrain_service: TerrainService, *_, **__):
         """on_terrain_load(terrain_service, *_, **__)
 
@@ -151,7 +148,6 @@ class CommonInteractionRegistry(CommonService):
         new_terrain_definition_class._super_affordances += tuple(new_super_affordances)
         terrain_service.TERRAIN_DEFINITION.set_class(new_terrain_definition_class)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def on_ocean_load(self, terrain_service: TerrainService, *_, **__):
         """on_ocean_load(terrain_service, *_, **__)
 
@@ -199,26 +195,26 @@ class CommonInteractionRegistry(CommonService):
         :rtype: Callable[..., Any]
         """
         def _wrapper(interaction_handler) -> CommonInteractionHandler:
-            CommonInteractionRegistry.get().register_handler(interaction_handler(), interaction_type)
+            CommonInteractionRegistry().register_handler(interaction_handler(), interaction_type)
             return interaction_handler
         return _wrapper
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, ScriptObject, ScriptObject.on_add.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), ScriptObject, ScriptObject.on_add.__name__)
 def _common_script_object_on_add(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonInteractionRegistry.get().on_script_object_add(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, TerrainService, TerrainService.start.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TerrainService, TerrainService.start.__name__)
 def _common_terrain_service_start(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonInteractionRegistry.get().on_terrain_load(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, TerrainService, TerrainService.on_zone_load.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TerrainService, TerrainService.on_zone_load.__name__)
 def _common_terrain_service_on_zone_load(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonInteractionRegistry.get().on_ocean_load(self, *args, **kwargs)

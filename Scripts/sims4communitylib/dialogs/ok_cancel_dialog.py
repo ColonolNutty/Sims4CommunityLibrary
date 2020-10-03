@@ -144,7 +144,6 @@ class CommonOkCancelDialog(CommonDialog):
             self.log.debug('Failed to create dialog.')
             return
 
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
         def _on_option_selected(dialog: UiDialogOkCancel):
             self.log.debug('Option selected.')
             if dialog.accepted:

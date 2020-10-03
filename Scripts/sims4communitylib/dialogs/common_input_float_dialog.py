@@ -128,7 +128,7 @@ class CommonInputFloatDialog(CommonDialog):
 
     def _show(
         self,
-        on_submit: Callable[[Union[float, None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop
+        on_submit: Callable[[Union[float, None], CommonChoiceOutcome], bool]=CommonFunctionUtils.noop
     ):
         self.log.debug('Attempting to display input float dialog.')
 
@@ -141,8 +141,8 @@ class CommonInputFloatDialog(CommonDialog):
             return
 
         # noinspection PyBroadException
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
-        def _on_submit(dialog: UiDialogTextInput):
+        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
+        def _on_submit(dialog: UiDialogTextInput) -> bool:
             input_value = CommonDialogUtils.get_input_value(dialog)
             if not input_value or not dialog.accepted:
                 self.log.debug('Dialog cancelled.')

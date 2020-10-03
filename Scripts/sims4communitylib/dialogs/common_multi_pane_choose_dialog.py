@@ -237,7 +237,7 @@ class CommonMultiPaneChooseDialog(CommonDialog):
     # noinspection PyMissingOrEmptyDocstring
     def build_dialog(
         self,
-        on_submit: Callable[[Dict[int, Tuple[Any]], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        on_submit: Callable[[Dict[int, Tuple[Any]], CommonChoiceOutcome], bool]=CommonFunctionUtils.noop,
         sim_info: SimInfo=None
     ):
         dialog = self._create_dialog(sim_info=sim_info)
@@ -251,8 +251,8 @@ class CommonMultiPaneChooseDialog(CommonDialog):
         if len(self._sub_dialogs) == 0:
             raise AssertionError('No dialogs have been added to the container. Add dialogs before attempting to display the multi pane dialog.')
 
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
-        def _on_submit(_dialog: CommonUiMultiPicker):
+        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
+        def _on_submit(_dialog: CommonUiMultiPicker) -> bool:
             if not _dialog.accepted:
                 self.log.debug('Dialog cancelled.')
                 return on_submit(dict(), CommonChoiceOutcome.CANCEL)

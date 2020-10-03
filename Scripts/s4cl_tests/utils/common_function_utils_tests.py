@@ -14,7 +14,7 @@ from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
 # noinspection PyMissingOrEmptyDocstring
-@CommonTestService.test_class(ModInfo.get_identity().name)
+@CommonTestService.test_class(ModInfo.get_identity())
 class CommonFunctionUtilsTests:
     @staticmethod
     @CommonTestService.test(True, True, True, True)

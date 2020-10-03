@@ -246,15 +246,15 @@ class CommonChooseObjectDialog(CommonChooseDialog):
 
     def _show(
         self,
-        on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        on_chosen: Callable[[Any, CommonChoiceOutcome], bool]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
         sim_info: SimInfo=None,
         categories: Iterator[CommonDialogObjectOptionCategory]=(),
         include_pagination: bool=True
     ):
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
-        def _on_chosen(choice: Any, outcome: CommonChoiceOutcome):
+        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
+        def _on_chosen(choice: Any, outcome: CommonChoiceOutcome) -> bool:
             self.log.debug('Choice made.')
             if choice == CommonDialogNavigationButtonTag.NEXT:
                 self.log.debug('Next chosen.')
@@ -283,7 +283,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
     # noinspection PyMissingOrEmptyDocstring
     def build_dialog(
         self,
-        on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        on_chosen: Callable[[Any, CommonChoiceOutcome], bool]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
         sim_info: SimInfo=None,
@@ -307,8 +307,8 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         if len(self.always_visible_rows) == 0 and len(self.rows) == 0:
             raise AssertionError('No rows have been provided. Add rows to the dialog before attempting to display it.')
 
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
-        def _on_chosen(dialog: UiObjectPicker):
+        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
+        def _on_chosen(dialog: UiObjectPicker) -> bool:
             self.log.debug('Choice made.')
             if not dialog.accepted:
                 self.log.debug('Dialog cancelled.')

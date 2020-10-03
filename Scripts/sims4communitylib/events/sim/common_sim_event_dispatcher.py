@@ -102,14 +102,14 @@ class CommonSimEventDispatcherService(CommonService):
         return CommonEventRegistry.get().dispatch(S4CLSimRemovedOccultTypeEvent(sim_info, occult_type, occult_tracker))
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, SimInfo, SimInfo.__init__.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.__init__.__name__)
 def _common_on_sim_init(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_init(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, SimInfo, SimInfo.load_sim_info.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.load_sim_info.__name__)
 def _common_on_sim_load(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_load(self, *args, **kwargs)
@@ -117,7 +117,7 @@ def _common_on_sim_load(original, self, *args, **kwargs) -> Any:
 
 
 # noinspection PyUnusedLocal
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, SimSpawner, SimSpawner.spawn_sim.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimSpawner, SimSpawner.spawn_sim.__name__)
 def _common_on_sim_spawn(original, cls, *args, **kwargs) -> Any:
     result = original(*args, **kwargs)
     if result:
@@ -125,28 +125,28 @@ def _common_on_sim_spawn(original, cls, *args, **kwargs) -> Any:
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, AgingMixin, AgingMixin.change_age.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), AgingMixin, AgingMixin.change_age.__name__)
 def _common_on_sim_change_age(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_change_age(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, OccultTracker, OccultTracker.add_occult_type.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), OccultTracker, OccultTracker.add_occult_type.__name__)
 def _common_on_sim_add_occult_type(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_add_occult_type(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, OccultTracker, OccultTracker.switch_to_occult_type.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), OccultTracker, OccultTracker.switch_to_occult_type.__name__)
 def _common_on_sim_change_occult_type(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_change_occult_type(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, OccultTracker, OccultTracker.remove_occult_type.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), OccultTracker, OccultTracker.remove_occult_type.__name__)
 def _common_on_sim_remove_occult_type(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_remove_occult_type(self, *args, **kwargs)

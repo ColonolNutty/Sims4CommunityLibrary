@@ -19,7 +19,6 @@ class CommonAgeUtils:
 
     """
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def get_age(sim_info: SimInfo) -> Union[Age, None]:
         """get_age(sim_info)
 

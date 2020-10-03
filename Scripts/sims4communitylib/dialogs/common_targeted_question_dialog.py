@@ -144,8 +144,8 @@ class CommonTargetedQuestionDialog(CommonDialog):
         self,
         sim_info: SimInfo,
         target_sim_info: SimInfo,
-        on_ok_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop,
-        on_cancel_selected: Callable[[UiDialogOkCancel], Any]=CommonFunctionUtils.noop
+        on_ok_selected: Callable[[UiDialogOkCancel], bool]=CommonFunctionUtils.noop,
+        on_cancel_selected: Callable[[UiDialogOkCancel], bool]=CommonFunctionUtils.noop
     ):
         self.log.format_with_message(
             'Attempting to display dialog.',
@@ -157,8 +157,8 @@ class CommonTargetedQuestionDialog(CommonDialog):
             self.log.debug('Failed to create dialog.')
             return
 
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
-        def _on_option_selected(dialog: UiDialogOkCancel):
+        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
+        def _on_option_selected(dialog: UiDialogOkCancel) -> bool:
             self.log.debug('Option selected.')
             if dialog.accepted:
                 self.log.debug('Ok chosen.')
