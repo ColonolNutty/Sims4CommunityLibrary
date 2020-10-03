@@ -11,12 +11,11 @@ from cas.cas import get_caspart_bodytype
 from protocolbuffers import S4Common_pb2, Outfits_pb2
 from sims.outfits.outfit_enums import OutfitCategory, BodyType
 from sims.sim_info import SimInfo
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
-log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 's4cl_common_cas_utils')
+log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 's4cl_common_cas_utils')
 
 
 class CommonCASUtils:
@@ -25,7 +24,6 @@ class CommonCASUtils:
     """
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity())
     def is_cas_part_loaded(cas_part_id: int) -> bool:
         """is_cas_part_loaded(cas_part_id)
 
@@ -68,7 +66,6 @@ class CommonCASUtils:
             return body_type
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity())
     def attach_cas_part_to_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """attach_cas_part_to_sim(sim_info, cas_part_id, body_type=BodyType.NONE, outfit_category_and_index=None)
 
@@ -132,7 +129,6 @@ class CommonCASUtils:
         return True
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity())
     def detach_cas_part_from_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """detach_cas_part_from_sim(sim_info, cas_part_id, body_type=BodyType.NONE, outfit_category_and_index=None)
 

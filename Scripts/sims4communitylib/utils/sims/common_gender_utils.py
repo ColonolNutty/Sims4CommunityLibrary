@@ -19,7 +19,6 @@ class CommonGenderUtils:
 
     """
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def get_gender(sim_info: SimInfo) -> Union[Gender, None]:
         """get_gender(sim_info)
 

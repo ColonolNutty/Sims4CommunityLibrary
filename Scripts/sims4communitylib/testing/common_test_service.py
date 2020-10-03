@@ -16,7 +16,7 @@ from sims4communitylib.services.common_service import CommonService
 try:
     from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
-    community_test_log_log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'community_test_log')
+    community_test_log_log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 'community_test_log')
     community_test_log_log.enable()
 
     def _community_test_log(val: str):
@@ -133,7 +133,7 @@ class CommonTestService(CommonService):
         def _inner_test_class(cls) -> Any:
             name_of_class = cls.__name__
             if CommonLogRegistry is not None:
-                cls.test_log_log = CommonLogRegistry.get().register_log(mod_identifier, name_of_class)
+                cls.test_log_log = CommonLogRegistry().register_log(mod_identifier, name_of_class)
                 cls.test_log_log.enable()
                 cls.test_log = lambda val: cls.test_log_log.debug(val)
             else:

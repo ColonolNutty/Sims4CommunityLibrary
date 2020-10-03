@@ -59,7 +59,6 @@ class CommonObjectSpawnUtils:
         return game_object
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def destroy_object(game_object: GameObject, source: str=None, cause: str=None, **kwargs) -> bool:
         """destroy_object(game_object, source=None, cause=None, **kwargs)
 
@@ -80,7 +79,6 @@ class CommonObjectSpawnUtils:
         return True
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def schedule_object_for_destroy(game_object: GameObject, source: str=None, cause: str=None, on_destroyed: Callable[[], None]=None, **kwargs) -> bool:
         """schedule_object_for_destroy(game_object, source=None, cause=None, on_destroyed=None, **kwargs)
 

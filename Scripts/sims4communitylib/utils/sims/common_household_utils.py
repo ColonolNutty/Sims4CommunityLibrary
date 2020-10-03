@@ -20,7 +20,7 @@ from sims4communitylib.utils.sims.common_sim_state_utils import CommonSimStateUt
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
-log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 's4cl_household_utils')
+log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 's4cl_household_utils')
 
 
 class CommonHouseholdUtils:

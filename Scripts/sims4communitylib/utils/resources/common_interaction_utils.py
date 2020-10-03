@@ -11,8 +11,7 @@ from interactions.base.interaction import Interaction
 from interactions.interaction_instance_manager import InteractionInstanceManager
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4.resources import Types
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.enums.interactions_enum import CommonInteractionId
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
 
@@ -65,7 +64,6 @@ class CommonInteractionUtils:
         return interaction.is_super
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def get_interaction_display_name(interaction: Interaction, tokens: Iterator[Any]=()) -> Union[LocalizedString, None]:
         """get_interaction_display_name(interaction, tokens=())
 
@@ -84,7 +82,6 @@ class CommonInteractionUtils:
         return CommonLocalizationUtils.create_localized_string(interaction.display_name._string_id, tokens=tuple(tokens))
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def get_interaction_short_name(interaction: Interaction) -> Union[str, None]:
         """get_interaction_short_name(interaction)
 
@@ -104,7 +101,6 @@ class CommonInteractionUtils:
             return ''
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def get_interaction_short_names(interactions: Iterator[Interaction]) -> Tuple[str]:
         """get_interaction_short_names(interactions)
 
@@ -130,12 +126,25 @@ class CommonInteractionUtils:
         return tuple(short_names)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), )
-    def _load_interaction_instance_manager() -> Union[InteractionInstanceManager, None]:
-        return services.get_instance_manager(Types.INTERACTION)
+    def load_interaction_by_id(interaction_id: Union[int, CommonInteractionId]) -> Union[Interaction, None]:
+        """load_interaction_by_id(interaction_id)
+
+        Load an instance of an Interaction by its decimal identifier.
+
+        :param interaction_id: The decimal identifier of an Interaction.
+        :type interaction_id: Union[int, CommonInteractionId]
+        :return: An instance of an Interaction matching the decimal identifier or None if not found.
+        :rtype: Union[Interaction, None]
+        """
+        return CommonResourceUtils.load_instance(Types.INTERACTION, interaction_id)
 
     @staticmethod
-    def _load_interaction_instance(interaction_identifier: int) -> Union[Interaction, None]:
-        if interaction_identifier is None:
-            return None
-        return CommonResourceUtils.load_instance(Types.INTERACTION, interaction_identifier)
+    def get_instance_manager() -> InteractionInstanceManager:
+        """get_instance_manager()
+
+        Retrieve the instance manager for interactions.
+
+        :return: The instance manager for interactions.
+        :rtype: InteractionInstanceManager
+        """
+        return services.get_instance_manager(Types.INTERACTION)

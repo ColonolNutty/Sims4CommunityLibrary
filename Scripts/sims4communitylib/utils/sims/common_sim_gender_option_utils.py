@@ -7,8 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.traits_enum import CommonTraitId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 
@@ -256,7 +254,6 @@ class CommonSimGenderOptionUtils:
         return True
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def update_body_frame(sim_info: SimInfo, masculine: bool) -> bool:
         """update_body_frame(sim_info, masculine)
 
@@ -287,7 +284,6 @@ class CommonSimGenderOptionUtils:
         return True
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def update_clothing_preference(sim_info: SimInfo, prefer_menswear: bool) -> bool:
         """update_clothing_preference(sim_info, prefer_menswear)
 
@@ -318,7 +314,6 @@ class CommonSimGenderOptionUtils:
         return True
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def update_can_be_impregnated(sim_info: SimInfo, can_be_impregnated: bool) -> bool:
         """update_can_be_impregnated(sim_info, can_be_impregnated)
 
@@ -349,7 +344,6 @@ class CommonSimGenderOptionUtils:
         return True
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def update_can_impregnate(sim_info: SimInfo, can_impregnate: bool) -> bool:
         """update_can_impregnate(sim_info, can_impregnate)
 
@@ -380,7 +374,6 @@ class CommonSimGenderOptionUtils:
         return True
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def update_can_reproduce(sim_info: SimInfo, can_reproduce: bool) -> bool:
         """update_can_reproduce(sim_info, can_reproduce)
 
@@ -411,7 +404,6 @@ class CommonSimGenderOptionUtils:
         return True
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def update_toilet_usage(sim_info: SimInfo, uses_toilet_standing: bool) -> bool:
         """update_toilet_usage(sim_info, uses_toilet_standing)
 

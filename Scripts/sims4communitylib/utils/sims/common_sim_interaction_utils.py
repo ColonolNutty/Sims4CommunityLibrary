@@ -25,7 +25,7 @@ from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 
 
 class CommonSimInteractionUtils:
-    """Utilities for managing interactions.
+    """Utilities for manipulating the interactions of Sims.
 
     """
     @staticmethod
@@ -380,7 +380,6 @@ class CommonSimInteractionUtils:
             yield interaction
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=EnqueueResult.NONE)
     def queue_interaction(
         sim_info: SimInfo,
         interaction_id: Union[int, CommonInteractionId],
@@ -419,7 +418,7 @@ class CommonSimInteractionUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None or sim.si_state is None or sim.queue is None or sim.posture_state is None or sim.posture is None:
             return EnqueueResult.NONE
-        interaction_instance = CommonInteractionUtils._load_interaction_instance(interaction_id)
+        interaction_instance = CommonInteractionUtils.load_interaction_by_id(interaction_id)
         if interaction_instance is None:
             return EnqueueResult.NONE
         if skip_if_running and CommonSimInteractionUtils.has_interaction_running_or_queued(sim_info, interaction_id):
@@ -457,7 +456,6 @@ class CommonSimInteractionUtils:
         )
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=EnqueueResult.NONE)
     def queue_super_interaction(
         sim_info: SimInfo,
         super_interaction_id: Union[int, CommonInteractionId],
@@ -494,7 +492,7 @@ class CommonSimInteractionUtils:
             target = CommonSimUtils.get_sim_instance(target)
 
         interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
-        super_interaction_instance = CommonInteractionUtils._load_interaction_instance(super_interaction_id)
+        super_interaction_instance = CommonInteractionUtils.load_interaction_by_id(super_interaction_id)
         if super_interaction_instance is None:
             return EnqueueResult.NONE
 
@@ -507,7 +505,6 @@ class CommonSimInteractionUtils:
         )
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=EnqueueResult.NONE)
     def queue_social_mixer_interaction(
         sim_info: SimInfo,
         social_mixer_interaction_id: Union[int, CommonInteractionId],
@@ -541,13 +538,13 @@ class CommonSimInteractionUtils:
         :rtype: EnqueueResult
         """
         if social_super_interaction_id is not None and social_mixer_interaction_id is None:
-            return CommonSimInteractionUtils.queue_super_interaction(social_super_interaction_id, target=target, interaction_context=interaction_context)
+            return CommonSimInteractionUtils.queue_super_interaction(sim_info, social_super_interaction_id, target=target, interaction_context=interaction_context)
         sim = CommonSimUtils.get_sim_instance(sim_info)
         # noinspection PyTypeChecker
-        super_affordance_instance = CommonInteractionUtils._load_interaction_instance(social_super_interaction_id)
+        super_affordance_instance = CommonInteractionUtils.load_interaction_by_id(social_super_interaction_id)
         if super_affordance_instance is None:
             return EnqueueResult.NONE
-        mixer_affordance_instance = CommonInteractionUtils._load_interaction_instance(social_mixer_interaction_id)
+        mixer_affordance_instance = CommonInteractionUtils.load_interaction_by_id(social_mixer_interaction_id)
         if mixer_affordance_instance is None:
             return EnqueueResult.NONE
 
@@ -598,7 +595,6 @@ class CommonSimInteractionUtils:
         return aop.test_and_execute(context)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=EnqueueResult.NONE)
     def queue_mixer_interaction(
         sim_info: SimInfo,
         mixer_interaction_id: Union[int, CommonInteractionId],
@@ -636,7 +632,7 @@ class CommonSimInteractionUtils:
             return EnqueueResult.NONE
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
             target = CommonSimUtils.get_sim_instance(target)
-        mixer_interaction_instance = CommonInteractionUtils._load_interaction_instance(mixer_interaction_id)
+        mixer_interaction_instance = CommonInteractionUtils.load_interaction_by_id(mixer_interaction_id)
         if mixer_interaction_instance is None:
             return EnqueueResult.NONE
         source_interaction = sim.posture.source_interaction
@@ -673,7 +669,6 @@ class CommonSimInteractionUtils:
             return aop.execute(interaction_context, **kwargs)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=TestResult.NONE)
     def test_interaction(
         sim_info: SimInfo,
         interaction_id: Union[int, CommonInteractionId],
@@ -710,7 +705,7 @@ class CommonSimInteractionUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None or sim.si_state is None or sim.queue is None or sim.posture_state is None or sim.posture is None:
             return TestResult.NONE
-        interaction_instance = CommonInteractionUtils._load_interaction_instance(interaction_id)
+        interaction_instance = CommonInteractionUtils.load_interaction_by_id(interaction_id)
         if interaction_instance is None:
             return TestResult.NONE
 
@@ -746,7 +741,6 @@ class CommonSimInteractionUtils:
         )
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=TestResult.NONE)
     def test_super_interaction(
         sim_info: SimInfo,
         super_interaction_id: Union[int, CommonInteractionId],
@@ -783,7 +777,7 @@ class CommonSimInteractionUtils:
             target = CommonSimUtils.get_sim_instance(target)
 
         interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
-        super_interaction_instance = CommonInteractionUtils._load_interaction_instance(super_interaction_id)
+        super_interaction_instance = CommonInteractionUtils.load_interaction_by_id(super_interaction_id)
         if super_interaction_instance is None:
             return TestResult.NONE
 
@@ -796,7 +790,6 @@ class CommonSimInteractionUtils:
         )
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=TestResult.NONE)
     def test_social_mixer_interaction(
         sim_info: SimInfo,
         social_mixer_interaction_id: Union[int, CommonInteractionId],
@@ -830,13 +823,13 @@ class CommonSimInteractionUtils:
         :rtype: TestResult
         """
         if social_super_interaction_id is not None and social_mixer_interaction_id is None:
-            return CommonSimInteractionUtils.test_super_interaction(social_super_interaction_id, target=target, interaction_context=interaction_context)
+            return CommonSimInteractionUtils.test_super_interaction(sim_info, social_super_interaction_id, target=target, interaction_context=interaction_context)
         sim = CommonSimUtils.get_sim_instance(sim_info)
         # noinspection PyTypeChecker
-        super_affordance_instance = CommonInteractionUtils._load_interaction_instance(social_super_interaction_id)
+        super_affordance_instance = CommonInteractionUtils.load_interaction_by_id(social_super_interaction_id)
         if super_affordance_instance is None:
             return TestResult.NONE
-        mixer_affordance_instance = CommonInteractionUtils._load_interaction_instance(social_mixer_interaction_id)
+        mixer_affordance_instance = CommonInteractionUtils.load_interaction_by_id(social_mixer_interaction_id)
         if mixer_affordance_instance is None:
             return TestResult.NONE
 
@@ -887,7 +880,6 @@ class CommonSimInteractionUtils:
         return aop.test(context)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=TestResult.NONE)
     def test_mixer_interaction(
         sim_info: SimInfo,
         mixer_interaction_id: Union[int, CommonInteractionId],
@@ -925,7 +917,7 @@ class CommonSimInteractionUtils:
             return TestResult.NONE
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
             target = CommonSimUtils.get_sim_instance(target)
-        mixer_interaction_instance = CommonInteractionUtils._load_interaction_instance(mixer_interaction_id)
+        mixer_interaction_instance = CommonInteractionUtils.load_interaction_by_id(mixer_interaction_id)
         if mixer_interaction_instance is None:
             return TestResult.NONE
         source_interaction = sim.posture.source_interaction
@@ -962,7 +954,6 @@ class CommonSimInteractionUtils:
             return aop.test(interaction_context, **kwargs)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def create_interaction_context(
         sim_info: SimInfo,
         interaction_source: InteractionSource=InteractionContext.SOURCE_SCRIPT_WITH_USER_INTENT,

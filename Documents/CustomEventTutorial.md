@@ -44,13 +44,13 @@ from sims4communitylib.events.event_handling.common_event_registry import Common
 
 class MyCustomEventListenerThing:
     @staticmethod
-    @CommonEventRegistry.handle_events(ModInfo.get_identity().name)
+    @CommonEventRegistry.handle_events(ModInfo.get_identity())
     def _handle_my_custom_event(event_data: MyOwnCustomEvent):
         if event_data.some_identifier === 123:
             return
         # Do some other code.
 
-@CommonEventRegistry.handle_events(ModInfo.get_identity().name)
+@CommonEventRegistry.handle_events(ModInfo.get_identity())
 def _handle_the_custom_event_globally(event_data: MyOwnCustomEvent):
     if event_data.some_identifier === 123:
         return

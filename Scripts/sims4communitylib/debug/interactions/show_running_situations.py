@@ -12,9 +12,6 @@ from event_testing.results import TestResult
 from interactions.context import InteractionContext
 from sims.sim import Sim
 from sims4communitylib.classes.interactions.common_immediate_super_interaction import CommonImmediateSuperInteraction
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
@@ -32,17 +29,11 @@ class S4CLDebugShowRunningSituationsInteraction(CommonImmediateSuperInteraction)
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
-    def get_mod_identity(cls) -> CommonModIdentity:
-        return ModInfo.get_identity()
-
-    # noinspection PyMissingOrEmptyDocstring
-    @classmethod
     def get_log_identifier(cls) -> str:
         return 's4cl_debug_show_running_situations'
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=TestResult.NONE)
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
         cls.get_log().format_with_message(
             'Running \'{}\' on_test.'.format(cls.__name__),
@@ -58,7 +49,6 @@ class S4CLDebugShowRunningSituationsInteraction(CommonImmediateSuperInteraction)
         return TestResult.TRUE
 
     # noinspection PyMissingOrEmptyDocstring
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name, fallback_return=False)
     def on_started(self, interaction_sim: Sim, interaction_target: Sim) -> bool:
         self.log.format_with_message(
             'Running \'{}\' on_started.'.format(self.__class__.__name__),

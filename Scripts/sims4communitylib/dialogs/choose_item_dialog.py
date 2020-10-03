@@ -13,7 +13,6 @@ from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtils
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 from sims4communitylib.enums.strings_enum import CommonStringId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
@@ -22,7 +21,7 @@ from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog_picker import UiObjectPicker, ObjectPickerRow
 
-log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'choose_item_dialog')
+log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'choose_item_dialog')
 
 
 class CommonChooseItemResult(CommonInt):
@@ -115,7 +114,6 @@ class CommonChooseItemDialog:
         self.description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=description_tokens)
         self.list_items = list_items
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def add_item(self, item: ObjectPickerRow):
         """add_item(item)
 
@@ -126,7 +124,6 @@ class CommonChooseItemDialog:
         """
         self.list_items += (item,)
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity().name)
     def show(
         self,
         on_item_chosen: Callable[[Any, CommonChooseItemResult], Any]=CommonFunctionUtils.noop,
@@ -160,7 +157,6 @@ class CommonChooseItemDialog:
         _dialog.add_listener(_on_item_chosen)
         _dialog.show_dialog()
 
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def _create_dialog(self, picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT) -> Union[UiObjectPicker, None]:
         return UiObjectPicker.TunableFactory().default(CommonSimUtils.get_active_sim_info(),
                                                        text=lambda *_, **__: self.description,

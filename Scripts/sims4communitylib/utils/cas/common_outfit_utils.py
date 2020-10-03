@@ -641,7 +641,6 @@ class CommonOutfitUtils:
         sim_info.set_previous_outfit(None, force=True)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=False)
     def has_outfit(sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]) -> bool:
         """has_outfit(sim_info, outfit_category_and_index)
 

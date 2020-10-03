@@ -14,7 +14,7 @@ from sims4communitylib.exceptions.common_exceptions_handler import CommonExcepti
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
-log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 'common_species_utils')
+log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 'common_species_utils')
 
 
 class CommonSpeciesUtils:
@@ -22,7 +22,6 @@ class CommonSpeciesUtils:
 
     """
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
     def get_species(sim_info: SimInfo) -> Union[Species, None]:
         """get_species(sim_info)
 

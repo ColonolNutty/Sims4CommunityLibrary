@@ -247,7 +247,7 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
 
     def _show(
         self,
-        on_chosen: Callable[[Tuple[Any], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        on_chosen: Callable[[Tuple[Any], CommonChoiceOutcome], bool]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
         sim_info: SimInfo=None,
@@ -256,8 +256,8 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
         min_selectable: int=1,
         max_selectable: int=1
     ):
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
-        def _on_chosen(choices: Tuple[Any], outcome: CommonChoiceOutcome):
+        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
+        def _on_chosen(choices: Tuple[Any], outcome: CommonChoiceOutcome) -> bool:
             self.log.debug('Choices made {}.'.format(pformat(choices)))
             if CommonDialogNavigationButtonTag.NEXT in choices:
                 self.log.debug('Next chosen.')
@@ -303,7 +303,7 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
     # noinspection PyMissingOrEmptyDocstring
     def build_dialog(
         self,
-        on_chosen: Callable[[Tuple[Any], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        on_chosen: Callable[[Tuple[Any], CommonChoiceOutcome], bool]=CommonFunctionUtils.noop,
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
         sim_info: SimInfo=None,
@@ -331,8 +331,8 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
         if len(self.always_visible_rows) == 0 and len(self.rows) == 0:
             raise AssertionError('No rows have been provided. Add rows to the dialog before attempting to display it.')
 
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity.name)
-        def _on_chosen(dialog: UiObjectPicker):
+        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
+        def _on_chosen(dialog: UiObjectPicker) -> bool:
             if not dialog.accepted:
                 self.log.debug('Dialog cancelled.')
                 return on_chosen(tuple(), CommonChoiceOutcome.CANCEL)

@@ -11,7 +11,7 @@ from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 
-log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 's4cl_age_species_utils')
+log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 's4cl_age_species_utils')
 
 
 class CommonAgeSpeciesUtils:

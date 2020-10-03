@@ -8,8 +8,6 @@ Copyright (c) COLONOLNUTTY
 from typing import List, Union, Callable, Iterator, Tuple
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.traits_enum import CommonTraitId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from traits.traits import Trait
 
@@ -1099,7 +1097,7 @@ class CommonTraitUtils:
         """
         success = True
         for trait_id in trait_ids:
-            trait_instance = CommonTraitUtils._load_trait_instance(trait_id)
+            trait_instance = CommonTraitUtils.load_trait_by_id(trait_id)
             if trait_instance is None:
                 continue
             if not sim_info.add_trait(trait_instance):
@@ -1121,7 +1119,7 @@ class CommonTraitUtils:
         """
         success = True
         for trait_id in trait_ids:
-            trait_instance = CommonTraitUtils._load_trait_instance(trait_id)
+            trait_instance = CommonTraitUtils.load_trait_by_id(trait_id)
             if trait_instance is None:
                 continue
             if not sim_info.remove_trait(trait_instance):
@@ -1208,8 +1206,16 @@ class CommonTraitUtils:
         return getattr(trait_identifier, 'guid64', None)
 
     @staticmethod
-    @CommonExceptionHandler.catch_exceptions(ModInfo.get_identity(), fallback_return=None)
-    def _load_trait_instance(trait_id: Union[int, CommonTraitId]) -> Union[Trait, None]:
+    def load_trait_by_id(trait_id: Union[int, CommonTraitId]) -> Union[Trait, None]:
+        """load_trait_by_id(trait_id)
+
+        Load an instance of a Trait by its decimal identifier.
+
+        :param trait_id: The decimal identifier of a Trait.
+        :type trait_id: Union[int, CommonTraitId]
+        :return: An instance of a Trait matching the decimal identifier or None if not found.
+        :rtype: Union[Trait, None]
+        """
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.load_instance(Types.TRAIT, trait_id)

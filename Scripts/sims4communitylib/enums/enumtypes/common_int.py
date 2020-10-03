@@ -5,6 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from sims4.utils import classproperty
 from collections import OrderedDict
 from typing import Iterator
 
@@ -25,19 +26,19 @@ except:
         def value(self) -> int:
             pass
 
-        # noinspection PyPropertyDefinition
-        @property
-        def values(self) -> Iterator[int]:
+        # noinspection PyPropertyDefinition,PyMethodParameters
+        @classproperty
+        def values(cls) -> Iterator[int]:
             pass
 
-        # noinspection PyPropertyDefinition
-        @property
-        def name_to_value(self) -> OrderedDict:
+        # noinspection PyPropertyDefinition,PyMethodParameters
+        @classproperty
+        def name_to_value(cls) -> OrderedDict:
             pass
 
-        # noinspection PyPropertyDefinition
-        @property
-        def value_to_name(self) -> OrderedDict:
+        # noinspection PyPropertyDefinition,PyMethodParameters
+        @classproperty
+        def value_to_name(cls) -> OrderedDict:
             pass
 
 
