@@ -7,11 +7,12 @@ Copyright (c) COLONOLNUTTY
 """
 from interactions.base.interaction import Interaction
 from interactions.interaction_queue import InteractionQueue
+from scheduling import Timeline
 from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
 class S4CLInteractionPreRunEvent(CommonEvent):
-    """S4CLInteractionPreRunEvent(interaction, interaction_queue)
+    """S4CLInteractionPreRunEvent(interaction, interaction_queue, timeline)
 
     An event that occurs upon a Sim running an interaction.
 
@@ -42,11 +43,14 @@ class S4CLInteractionPreRunEvent(CommonEvent):
     :type interaction: Interaction
     :param interaction_queue: The interaction queue of the Sim.
     :type interaction_queue: InteractionQueue
+    :param timeline: The timeline of the interaction.
+    :type timeline: Timeline
     """
 
-    def __init__(self, interaction: Interaction, interaction_queue: InteractionQueue):
+    def __init__(self, interaction: Interaction, interaction_queue: InteractionQueue, timeline: Timeline):
         self._interaction = interaction
         self._interaction_queue = interaction_queue
+        self._timeline = timeline
 
     @property
     def interaction(self) -> Interaction:
@@ -65,3 +69,12 @@ class S4CLInteractionPreRunEvent(CommonEvent):
         :rtype: InteractionQueue
         """
         return self._interaction_queue
+
+    @property
+    def timeline(self) -> Timeline:
+        """The timeline of the interaction.
+
+        :return: The timeline of the interaction.
+        :rtype: Timeline
+        """
+        return self._timeline

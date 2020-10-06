@@ -5,13 +5,14 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from event_testing.results import TestResult
 from interactions.base.interaction import Interaction
 from interactions.interaction_queue import InteractionQueue
 from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
 class S4CLInteractionPostQueuedEvent(CommonEvent):
-    """S4CLInteractionPostQueuedEvent(interaction, interaction_queue)
+    """S4CLInteractionPostQueuedEvent(interaction, interaction_queue, queue_result)
 
     An event that occurs after a Sim adds an interaction to their interaction queue.
 
@@ -42,11 +43,14 @@ class S4CLInteractionPostQueuedEvent(CommonEvent):
     :type interaction: Interaction
     :param interaction_queue: The interaction queue of the Sim.
     :type interaction_queue: InteractionQueue
+    :param queue_result: The result of the interaction being Queued.
+    :type queue_result: TestResult
     """
 
-    def __init__(self, interaction: Interaction, interaction_queue: InteractionQueue):
+    def __init__(self, interaction: Interaction, interaction_queue: InteractionQueue, queue_result: TestResult):
         self._interaction = interaction
         self._interaction_queue = interaction_queue
+        self._queue_result = queue_result
 
     @property
     def interaction(self) -> Interaction:
@@ -65,3 +69,12 @@ class S4CLInteractionPostQueuedEvent(CommonEvent):
         :rtype: InteractionQueue
         """
         return self._interaction_queue
+
+    @property
+    def queue_result(self) -> TestResult:
+        """The result of the interaction being Queued.
+
+        :return: The result of the interaction being Queued.
+        :rtype: TestResult
+        """
+        return self._queue_result
