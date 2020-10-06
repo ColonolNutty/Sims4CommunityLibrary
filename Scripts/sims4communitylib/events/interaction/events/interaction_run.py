@@ -11,7 +11,7 @@ from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
 class S4CLInteractionRunEvent(CommonEvent):
-    """S4CLInteractionRunEvent(interaction, interaction_queue)
+    """S4CLInteractionRunEvent(interaction, interaction_queue, run_result)
 
     An event that occurs after a Sim has run an interaction.
 
@@ -42,11 +42,14 @@ class S4CLInteractionRunEvent(CommonEvent):
     :type interaction: Interaction
     :param interaction_queue: The interaction queue of the Sim.
     :type interaction_queue: InteractionQueue
+    :param run_result: The result of the interaction being run.
+    :type run_result: bool
     """
 
-    def __init__(self, interaction: Interaction, interaction_queue: InteractionQueue):
+    def __init__(self, interaction: Interaction, interaction_queue: InteractionQueue, run_result: bool):
         self._interaction = interaction
         self._interaction_queue = interaction_queue
+        self._run_result = run_result
 
     @property
     def interaction(self) -> Interaction:
@@ -65,3 +68,12 @@ class S4CLInteractionRunEvent(CommonEvent):
         :rtype: InteractionQueue
         """
         return self._interaction_queue
+
+    @property
+    def run_result(self) -> bool:
+        """The result of the interaction being run.
+
+        :return: True, if the interaction was run successfully. False, if not.
+        :rtype: bool
+        """
+        return self._run_result
