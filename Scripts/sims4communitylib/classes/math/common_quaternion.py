@@ -5,8 +5,10 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, Any
+from typing import Union, Any, TYPE_CHECKING
 from protocolbuffers.Math_pb2 import Quaternion as MathPb2Quaternion
+if TYPE_CHECKING:
+    from sims4communitylib.classes.math.common_vector3 import CommonVector3
 
 # noinspection PyBroadException
 try:
@@ -37,6 +39,10 @@ except:
         # noinspection PyPropertyDefinition
         @property
         def w(self) -> float:
+            pass
+
+        # noinspection PyMissingOrEmptyDocstring
+        def transform_vector(self, vector: 'CommonVector3') -> 'CommonVector3':
             pass
 
     # noinspection PyMissingOrEmptyDocstring
@@ -79,6 +85,10 @@ except:
 
         @w.setter
         def w(self, value: float):
+            pass
+
+        # noinspection PyMissingOrEmptyDocstring
+        def transform_vector(self, vector: 'CommonVector3') -> 'CommonVector3':
             pass
 
 
@@ -232,3 +242,7 @@ class CommonQuaternion:
             return 0.0
         from sims4communitylib.utils.common_math_utils import CommonMathUtils
         return CommonMathUtils.radian_to_degrees(CommonQuaternion.to_radian(quaternion))
+
+    # noinspection PyMissingOrEmptyDocstring
+    def transform_vector(self, vector: 'CommonVector3') -> 'CommonVector3':
+        pass

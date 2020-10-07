@@ -6,13 +6,15 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import objects.system
-from objects.game_object import GameObject
 from objects.object_enums import ItemLocation
 from sims4.commands import Command, CommandType, CheatOutput
-from typing import Any, Callable, Union
+from typing import Any, Callable, Union, Tuple, Iterator
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
+from carry.carry_postures import CarryingObject
+from objects.game_object import GameObject
+from objects.object_enums import ResetReason
 
 
 class CommonObjectSpawnUtils:
@@ -99,6 +101,121 @@ class CommonObjectSpawnUtils:
             return False
         game_object.schedule_destroy_asap(post_delete_func=on_destroyed, source=source, cause=cause, **kwargs)
         return True
+
+    @staticmethod
+    def soft_reset(
+        game_object: GameObject,
+        reset_reason: ResetReason=ResetReason.RESET_EXPECTED,
+        hard_reset_on_exception: bool=False,
+        source: Any=None,
+        cause: Any='S4CL Soft Reset'
+    ) -> bool:
+        """soft_reset(game_object, reset_reason=ResetReason.RESET_EXPECTED, hard_reset_on_exception=False, source=None, cause=None)
+
+        Perform a soft reset on an Object.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :param reset_reason: The reason for the reset. Default is ResetReason.RESET_EXPECTED.
+        :type reset_reason: ResetReason, optional
+        :param hard_reset_on_exception: If set to True, a hard reset of the Object will be attempted upon an error occurring. If set to False, nothing will occur if the reset failed. Default is False.
+        :type hard_reset_on_exception: bool, optional
+        :param source: The source of the reset. Default is the GameObject.
+        :type source: Any, optional
+        :param cause: The cause of the reset. Default is 'S4CL Soft Reset'.
+        :type cause: Any, optional
+        :return: True, if the reset was successful. False, if not.
+        :rtype: bool
+        """
+        if game_object is None:
+            return True
+        # noinspection PyBroadException
+        try:
+            if game_object.parent is not None and game_object.parent.is_sim and not game_object.parent.posture_state.is_carrying(game_object):
+                CarryingObject.snap_to_good_location_on_floor(
+                    game_object,
+                    starting_transform=game_object.parent.transform,
+                    starting_routing_surface=game_object.parent.routing_surface
+                )
+            location = game_object.location
+            game_object.on_reset_send_op(reset_reason)
+            game_object.location = location
+            game_object.resend_location()
+            if game_object.routing_component is not None:
+                game_object.routing_component.on_reset_internal_state(reset_reason)
+            if game_object.idle_component is not None:
+                game_object.idle_component._refresh_active_idle()
+            if game_object.linked_object_component is not None:
+                game_object.linked_object_component._relink(update_others=True)
+            return True
+        except:
+            if hard_reset_on_exception:
+                return CommonObjectSpawnUtils.hard_reset(game_object, reset_reason=reset_reason, source=source, cause=cause)
+        return False
+
+    @staticmethod
+    def hard_reset(game_object: GameObject, reset_reason: ResetReason=ResetReason.RESET_EXPECTED, source: Any=None, cause: Any='S4CL Hard Reset') -> bool:
+        """hard_reset(game_object, reset_reason=ResetReason.RESET_EXPECTED, source=None, cause=None)
+
+        Perform a hard reset on an Object.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :param reset_reason: The reason for the reset. Default is ResetReason.RESET_EXPECTED.
+        :type reset_reason: ResetReason, optional
+        :param source: The source of the reset. Default is the GameObject.
+        :type source: Any, optional
+        :param cause: The cause of the reset. Default is 'S4CL Hard Reset'.
+        :type cause: Any, optional
+        :return: True, if the reset was successful. False, if not.
+        :rtype: bool
+        """
+        if game_object is None:
+            return True
+        # noinspection PyBroadException
+        try:
+            game_object.reset(reset_reason, source=source or game_object, cause=cause)
+            return True
+        except:
+            return False
+
+    @staticmethod
+    def fade_in(game_object: GameObject, fade_duration: float=1.0, immediate: bool=False, additional_channels: Iterator[Tuple[int, int, int]]=None):
+        """fade_in(game_object, fade_duration=1.0, immediate=False, additional_channels=None)
+
+        Change the opacity of an Object from invisible to visible.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :param fade_duration: The number of milliseconds the fade effect should take to complete. Default is 1.0.
+        :type fade_duration: float, optional
+        :param immediate: If set to True, fade in will occur immediately. Default is False.
+        :type immediate: bool, optional
+        :param additional_channels: A collection of additional channels. The order of the inner tuple is Manager Id, Object Id, and Mask. Default is None.
+        :type additional_channels: Iterator[Tuple[int, int, int]], optional
+        """
+        if game_object is None:
+            return
+        game_object.fade_in(fade_duration=fade_duration, immediate=immediate, additional_channels=additional_channels)
+
+    @staticmethod
+    def fade_out(game_object: GameObject, fade_duration: float=1.0, immediate: bool=False, additional_channels: Iterator[Tuple[int, int, int]]=None):
+        """fade_out(game_object, fade_duration=1.0, immediate=False, additional_channels=None)
+
+        Change the opacity of an Object from visible to invisible.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :param fade_duration: The number of milliseconds the fade effect should take to complete. Default is 1.0.
+        :type fade_duration: float, optional
+        :param immediate: If set to True, fade out will occur immediately. Default is False.
+        :type immediate: bool, optional
+        :param additional_channels: A collection of additional channels. The order of the inner tuple is Manager Id, Object Id, and Mask. Default is None.
+        :type additional_channels: Iterator[Tuple[int, int, int]], optional
+        """
+        if game_object is None:
+            return
+        game_object.fade_out(fade_duration=fade_duration, immediate=immediate, additional_channels=additional_channels)
 
 
 @Command('s4clib_testing.spawn_object_on_lot', command_type=CommandType.Live)

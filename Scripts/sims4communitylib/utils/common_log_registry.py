@@ -9,21 +9,21 @@ import sims4.commands
 from typing import List, Dict, Any, Union
 from pprint import pformat
 
-from sims4communitylib.enums.enumtypes.string_enum import CommonEnumStringBase
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_log_utils import CommonLogUtils
 
 
-class CommonMessageType(CommonEnumStringBase):
+class CommonMessageType(CommonInt):
     """Message types for use when logging.
 
     """
-    DEBUG = 'DEBUG'
-    ERROR = 'ERROR'
-    INFO = 'INFO'
-    WARN = 'WARN'
+    DEBUG: 'CommonMessageType' = 0
+    ERROR: 'CommonMessageType' = 1
+    INFO: 'CommonMessageType' = 2
+    WARN: 'CommonMessageType' = 3
 
 
 class CommonLog:
@@ -89,7 +89,7 @@ class CommonLog:
         """
         self.format_with_message(message, *args, message_type=CommonMessageType.INFO, **kwargs)
 
-    def format(self, *args, message_type: str=CommonMessageType.DEBUG, **kwargs):
+    def format(self, *args, message_type: CommonMessageType=CommonMessageType.DEBUG, **kwargs):
         """format(*args, message_type=CommonMessageType.DEBUG, **kwargs)
 
         Log a non-descriptive message containing pformatted arguments and keyword arguments with the specified message type.
@@ -104,7 +104,7 @@ class CommonLog:
         if self.enabled:
             self._log_message(message_type, '{}, {}\n'.format(pformat(args), pformat(kwargs)))
 
-    def format_with_message(self, message: str, *args, message_type: str=CommonMessageType.DEBUG, **kwargs):
+    def format_with_message(self, message: str, *args, message_type: CommonMessageType=CommonMessageType.DEBUG, **kwargs):
         """format_with_message(message, *args, message_type=CommonMessageType.DEBUG, **kwargs)
 
         Log a message containing pformatted arguments and keyword arguments with the specified message type.
@@ -158,14 +158,14 @@ class CommonLog:
         """
         self.format_with_message(message, *args, message_type=CommonMessageType.WARN, **kwargs)
 
-    def error(self, message: str, message_type: str=CommonMessageType.ERROR, exception: Exception=None, throw: bool=True):
+    def error(self, message: str, message_type: CommonMessageType=CommonMessageType.ERROR, exception: Exception=None, throw: bool=True):
         """error(message, message_type=CommonMessageType.ERROR, exception=None, throw=True)
 
         Log an error message with the specified message type
 
         :param message: The message to log.
         :type message: str
-        :param message_type: The message type of the error message.
+        :param message_type: The message type of the error message. Default is CommonMessageType.ERROR.
         :type message_type: CommonMessageType, optional
         :param exception: The exception that occurred.
         :param throw: If set to True, the exception will be rethrown.
@@ -271,12 +271,12 @@ class CommonLog:
         """
         return self._mod_name
 
-    def _log_message(self, message_type: str, message: str):
+    def _log_message(self, message_type: CommonMessageType, message: str):
         from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
         from pprint import pformat
         from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
         current_date_time = CommonRealDateUtils.get_current_date_string()
-        new_message = '{} [{}] {}: [{}]: {}\n'.format(current_date_time, self.mod_name, str(message_type), self.name, message)
+        new_message = '{} {}: [{}]: {}\n'.format(current_date_time, message_type.name, self.name, message)
         try:
             from sims4communitylib.utils.common_io_utils import CommonIOUtils
             file_path = CommonLogUtils.get_message_file_path(self.mod_name)

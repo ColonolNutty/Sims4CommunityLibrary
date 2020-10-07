@@ -18,6 +18,30 @@ class CommonObjectUtils:
     """Utilities for retrieving Objects in various ways.
 
     """
+    @staticmethod
+    def create_unique_identifier(game_object: GameObject) -> int:
+        """create_unique_identifier(game_object)
+
+        Create a unique identifier for an Object.
+
+        .. note:: The unique identifier will be the same for all objects of the same type. For Example, with two The Ambassador toilets they will have the same unique identifier.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: An identifier that uniquely identifies a specific Object.
+        :rtype: int
+        """
+        guid64 = CommonObjectUtils.get_object_guid(game_object)
+        catalog_name = CommonObjectUtils.get_catalog_name(game_object)
+        if guid64 > catalog_name:
+            identifier_data = [int(catalog_name), int(guid64)]
+        else:
+            identifier_data = [int(guid64), int(catalog_name)]
+        hash_value = 3430008
+        for item in identifier_data:
+            hash_value = eval(hex(1000003 * hash_value & 4294967295)[:-1]) ^ item
+        hash_value ^= len(identifier_data)
+        return abs(hash_value)
 
     @staticmethod
     def get_object_id(object_instance: BaseObject) -> int:

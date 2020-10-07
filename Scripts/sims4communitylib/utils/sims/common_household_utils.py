@@ -149,6 +149,34 @@ class CommonHouseholdUtils:
             yield sim_info
 
     @staticmethod
+    def get_number_of_sims_in_household(household: Household) -> int:
+        """get_number_of_sims_in_household(household)
+
+        Determine the number of Sims in the specified Household.
+
+        :param household: An instance of a Household.
+        :type household: Household
+        :return: The number of Sims in the specified Household.
+        :rtype: int
+        """
+        if household is None:
+            return 0
+        return len(tuple(CommonHouseholdUtils.get_sim_info_of_all_sims_in_household_generator(household)))
+
+    @staticmethod
+    def get_number_of_sims_in_household_of_sim(sim_info: SimInfo) -> int:
+        """get_number_of_sims_in_household_of_sim(sim_info)
+
+        Determine the number of Sims in the household of the specified Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type: sim_info: SimInfo
+        :return: The number of Sims in the household of the specified Sim.
+        :rtype: int
+        """
+        return CommonHouseholdUtils.get_number_of_sims_in_household(CommonHouseholdUtils.get_household(sim_info))
+
+    @staticmethod
     def is_part_of_active_household(sim_info: SimInfo) -> bool:
         """is_part_of_active_household(sim_info)
 
@@ -158,6 +186,33 @@ class CommonHouseholdUtils:
         :rtype: bool
         """
         return sim_info in CommonHouseholdUtils.get_sim_info_of_all_sims_in_active_household_generator()
+
+    @staticmethod
+    def is_part_of_a_single_sim_household(sim_info: SimInfo) -> bool:
+        """is_part_of_a_single_sim_household(sim_info)
+
+        Determine if a Sim is the only Sim in their Household (Single Sim Household).
+
+        :param sim_info: An instance of a Sim.
+        :type: sim_info: SimInfo
+        :return: True, if specified Sim is the only Sim in their Household (Single Sim Household). False, if not.
+        :rtype: bool
+        """
+        return CommonHouseholdUtils.get_number_of_sims_in_household_of_sim(sim_info) == 1
+
+    @staticmethod
+    def is_alone_on_home_lot(sim_info: SimInfo) -> bool:
+        """is_alone_on_home_lot(sim_info)
+
+        Determine if a Sim is alone on their home lot.
+
+        :param sim_info: An instance of a Sim.
+        :type: sim_info: SimInfo
+        :return: True, if the Sim is on their home lot and alone. False, if not.
+        :rtype: bool
+        """
+        from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
+        return CommonHouseholdUtils.is_part_of_a_single_sim_household(sim_info) and CommonSimLocationUtils.is_at_home(sim_info)
 
     @staticmethod
     def get_all_households_generator() -> Iterator[Household]:

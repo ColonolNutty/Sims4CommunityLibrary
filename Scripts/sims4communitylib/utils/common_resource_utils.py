@@ -8,8 +8,9 @@ Copyright (c) COLONOLNUTTY
 # noinspection PyUnresolvedReferences
 import _resourceman
 import services
+from io import BytesIO
 from typing import ItemsView, Any, Union, Tuple
-from sims4.resources import get_resource_key, Types
+from sims4.resources import ResourceLoader, get_resource_key, Types
 from sims4.tuning.instance_manager import InstanceManager
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
@@ -225,3 +226,45 @@ class CommonResourceUtils:
             hash_value = hash_value * prime % size
             hash_value = hash_value ^ byte
         return hash_value
+
+    @staticmethod
+    def load_resource_bytes(resource_key: _resourceman.Key, silent_fail: bool=True) -> BytesIO:
+        """load_resource_bytes(resource_key, silent_fail=True)
+
+        Retrieve the bytes of a resource.
+
+        :param resource_key: The key of the resource.
+        :type resource_key: _resourceman.Key
+        :param silent_fail: Set to True to ignore errors if they occur. Set to False to throw errors when they occur. Default is True.
+        :type silent_fail: bool, optional
+        :return: An Input Output Byte reader/writer for the resource.
+        :rtype: BytesIO
+        """
+        return ResourceLoader(resource_key).load(silent_fail=silent_fail)
+
+    @staticmethod
+    def load_resource_bytes_by_name(resource_type: Types, resource_name: str, has_fnv64_identifier: bool=True, has_high_bit_identifier: bool=False) -> Union[BytesIO, None]:
+        """load_resource_bytes_by_name(resource_type, resource_name, fnv64=True, high_bit=False)
+
+        Load the bytes of a resource into a Bytes Reader.
+
+        .. note:: This function will only work if the instance key/decimal identifier of the resource equates to the name of the resource.
+
+        :param resource_type: The type of resource being loaded.
+        :type resource_type: Types
+        :param resource_name: The tuning name of the resource.
+        :type resource_name: str
+        :param has_fnv64_identifier: Set to True to indicate the resource uses a 64 bit identifier. Set to False to indicate the resource uses a 32 bit identifier. Default is True.
+        :type has_fnv64_identifier: bool, optional
+        :param has_high_bit_identifier: Set to True to indicate the resource uses a high bit identifier. Set to False to indicate the resource uses a low bit identifier. Default is False.
+        :type has_high_bit_identifier: bool, optional
+        :return: An Input Output Byte reader/writer for the resource or None if a problem occurs.
+        :rtype: Union[BytesIO, None]
+        """
+        conversion_func = CommonResourceUtils.convert_str_to_fnv32
+        if has_fnv64_identifier:
+            conversion_func = CommonResourceUtils.convert_str_to_fnv64
+        resource_key = CommonResourceUtils.get_resource_key(resource_type, conversion_func(resource_name, high_bit=has_high_bit_identifier))
+        if resource_key is None:
+            return None
+        return CommonResourceUtils.load_resource_bytes(resource_key)
