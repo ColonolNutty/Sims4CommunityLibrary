@@ -15,6 +15,17 @@ class CommonRealDateUtils:
 
     """
     @staticmethod
+    def get_current_date_time() -> datetime:
+        """get_current_date_time()
+
+        Retrieve the current date and time.
+
+        :return: The current real date and time.
+        :rtype: datetime
+        """
+        return datetime.now()
+
+    @staticmethod
     def get_current_date_string() -> str:
         """get_current_date_string()
 

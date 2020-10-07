@@ -9,26 +9,26 @@ import sys
 from pprint import pformat
 from typing import Dict, Any
 from typing import Union
-from sims.sim_info import SimInfo
+from objects.game_object import GameObject
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
 
 
-class _CommonSimDataStorageMetaclass(type):
-    _sim_storage_instances: Dict[str, Dict[int, '_CommonSimDataStorageMetaclass']] = {}
+class _CommonGameObjectDataStorageMetaclass(type):
+    _game_object_storage_instances: Dict[str, Dict[int, '_CommonGameObjectDataStorageMetaclass']] = {}
 
-    def __call__(cls, sim_info: SimInfo) -> Union['_CommonSimDataStorageMetaclass', None]:
+    def __call__(cls, game_object: GameObject) -> Union['_CommonGameObjectDataStorageMetaclass', None]:
         mod_identity = cls.get_mod_identity()
-        sim_id = CommonSimUtils.get_sim_id(sim_info)
+        game_object_id = CommonObjectUtils.get_object_id(game_object)
         mod_name = mod_identity.name
         if mod_name is None:
             return None
-        if mod_name not in cls._sim_storage_instances:
-            cls._sim_storage_instances[mod_name] = dict()
-        if sim_id not in cls._sim_storage_instances[mod_name]:
-            cls._sim_storage_instances[mod_name][sim_id] = super(_CommonSimDataStorageMetaclass, cls).__call__(sim_info)
-        return cls._sim_storage_instances[mod_name][sim_id]
+        if mod_name not in cls._game_object_storage_instances:
+            cls._game_object_storage_instances[mod_name] = dict()
+        if game_object_id not in cls._game_object_storage_instances[mod_name]:
+            cls._game_object_storage_instances[mod_name][game_object_id] = super(_CommonGameObjectDataStorageMetaclass, cls).__call__(game_object)
+        return cls._game_object_storage_instances[mod_name][game_object_id]
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
@@ -36,11 +36,11 @@ class _CommonSimDataStorageMetaclass(type):
         raise NotImplementedError()
 
 
-class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclass):
-    def __init__(self, sim_info: SimInfo):
+class _CommonGameObjectDataStorage(HasClassLog, metaclass=_CommonGameObjectDataStorageMetaclass):
+    def __init__(self, game_object: GameObject):
         super().__init__()
-        self._sim_id = CommonSimUtils.get_sim_id(sim_info)
-        self._sim_info = sim_info
+        self._game_object_id = CommonObjectUtils.get_object_id(game_object)
+        self._game_object = game_object
         self._data = dict()
 
     # noinspection PyMissingOrEmptyDocstring
@@ -51,16 +51,16 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_log_identifier(cls) -> str:
-        return '{}_sim_data_storage'.format(cls.get_mod_identity().base_namespace)
+        return '{}_game_object_data_storage'.format(cls.get_mod_identity().base_namespace)
 
     @property
-    def sim_info(self) -> SimInfo:
-        """The SimInfo of a Sim.
+    def game_object(self) -> GameObject:
+        """The GameObject the storage applies to.
 
-        :return: The SimInfo of a Sim.
-        :rtype: SimInfo
+        :return: An instance of an Object.
+        :rtype: GameObject
         """
-        return self._sim_info
+        return self._game_object
 
     def get_data(self, default: Any=None, key: str=None) -> Union[Any, None]:
         """get_data(default=None, key=None)
@@ -118,10 +118,10 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         return self.__repr__()
 
 
-class CommonSimDataStorage(_CommonSimDataStorage):
-    """CommonSimDataStorage(sim_info)
+class CommonGameObjectDataStorage(_CommonGameObjectDataStorage):
+    """CommonGameObjectDataStorage(game_object)
 
-    A wrapper for Sim instances that allows storing of data.
+    A wrapper for Object instances that allows storing of data.
 
     .. warning:: Data stored within is not persisted when closing and reopening the game!
     .. warning:: DO NOT CREATE THIS CLASS DIRECTLY, IT IS ONLY MEANT TO INHERIT FROM!
@@ -131,8 +131,9 @@ class CommonSimDataStorage(_CommonSimDataStorage):
     .. highlight:: python
     .. code-block:: python
 
-        # Inherit from CommonSimDataStorage
-        class ExampleSimDataStorage(CommonSimDataStorage):
+        # Inherit from CommonGameObjectDataStorage
+        class ExampleGameObjectDataStorage(CommonGameObjectDataStorage):
+            # noinspection PyMissingOrEmptyDocstring
             @classmethod
             def get_mod_identity(cls) -> CommonModIdentity:
                 # !!!Override with the CommonModIdentity of your own mod!!!
@@ -149,8 +150,8 @@ class CommonSimDataStorage(_CommonSimDataStorage):
                 # Could also be written self.set_data(value, key='example_property_one') and it would do the same thing.
                 self.set_data(value)
 
-    :param sim_info: The SimInfo of a Sim.
-    :type sim_info: SimInfo
+    :param game_object: An instance of an Object.
+    :type game_object: GameObject
     """
 
     # noinspection PyMissingOrEmptyDocstring
@@ -158,14 +159,14 @@ class CommonSimDataStorage(_CommonSimDataStorage):
     def get_mod_identity(cls) -> CommonModIdentity:
         return super().get_mod_identity()
 
-    def __init__(self, sim_info: SimInfo):
-        super().__init__(sim_info)
-        if self.__class__.__name__ is CommonSimDataStorage.__name__:
+    def __init__(self, game_object: GameObject):
+        super().__init__(game_object)
+        if self.__class__.__name__ is CommonGameObjectDataStorage.__name__:
             raise RuntimeError('{} cannot be created directly. You must inherit from it to create an instance of it.'.format(self.__class__.__name__))
 
 
 # noinspection PyMissingOrEmptyDocstring
-class ExampleSimDataStorage(CommonSimDataStorage):
+class ExampleGameObjectDataStorage(CommonGameObjectDataStorage):
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(cls) -> CommonModIdentity:

@@ -8,8 +8,11 @@ Copyright (c) COLONOLNUTTY
 from pprint import pformat
 
 import sims4.commands
-from typing import Tuple, Union, Dict
+from typing import Tuple, Union, Dict, Callable, Iterator
 
+from buffs.appearance_modifier.appearance_modifier import AppearanceModifier
+from buffs.appearance_modifier.appearance_modifier_type import AppearanceModifierType
+from buffs.appearance_modifier.appearance_tracker import ModifierInfo
 from cas.cas import OutfitData
 from sims.outfits.outfit_enums import OutfitCategory, BodyType
 from sims.sim_info import SimInfo
@@ -454,6 +457,42 @@ class CommonOutfitUtils:
         :rtype: Tuple[OutfitCategory, int]
         """
         return sim_info.get_current_outfit()
+
+    @staticmethod
+    def get_appearance_modifiers_gen(sim_info: SimInfo, appearance_modifier_type: AppearanceModifierType, include_appearance_modifier_callback: Callable[[ModifierInfo], bool]=None) -> Iterator[AppearanceModifier]:
+        """get_appearance_modifiers_gen(sim_info, appearance_modifier_type, include_appearance_modifier_callback=None)
+
+        Retrieve the appearance modifiers of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param appearance_modifier_type: The type of appearance modifiers to retrieve.
+        :type appearance_modifier_type: AppearanceModifierType
+        :param include_appearance_modifier_callback: If an appearance modifier matches this callback, then it will be returned. Default is None.
+        :type include_appearance_modifier_callback: Callable[[ModifierInfo], bool], optional
+        :return: A collection of appearance modifiers.
+        :rtype: Iterator[AppearanceModifier]
+        """
+        if sim_info is None:
+            return tuple()
+        if not hasattr(sim_info, 'appearance_tracker') or sim_info.appearance_tracker is None:
+            return tuple()
+        if appearance_modifier_type is None:
+            return
+        active_appearance_modifier_info_library: Dict[AppearanceModifierType, Tuple[ModifierInfo]] = sim_info.appearance_tracker._active_appearance_modifier_infos
+        if active_appearance_modifier_info_library is None:
+            return tuple()
+        if appearance_modifier_type not in active_appearance_modifier_info_library:
+            return tuple()
+        modifier_info_list = active_appearance_modifier_info_library[appearance_modifier_type]
+        if not modifier_info_list:
+            return tuple()
+        for modifier_info in modifier_info_list:
+            if modifier_info is None:
+                continue
+            if include_appearance_modifier_callback is not None and not include_appearance_modifier_callback(modifier_info):
+                continue
+            yield modifier_info.modifier
 
     @staticmethod
     def get_outfit_data(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> OutfitData:

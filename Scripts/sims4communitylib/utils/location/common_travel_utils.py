@@ -15,6 +15,21 @@ class CommonTravelUtils:
     """
 
     @staticmethod
+    def get_travel_group_id(sim_info: SimInfo) -> int:
+        """get_travel_group_id(sim_info)
+
+        Retrieve a decimal identifier for the Travel Group of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The decimal identifier of the Travel Group of the Sim or -1 if a problem occurs.
+        :rtype: int
+        """
+        if sim_info is None:
+            return -1
+        return sim_info.travel_group_id
+
+    @staticmethod
     def travel_to_lot(sim_info: SimInfo, lot_id: int):
         """travel_to_lot(sim_info, lot_id)
 

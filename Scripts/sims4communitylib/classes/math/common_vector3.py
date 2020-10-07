@@ -166,6 +166,20 @@ class CommonVector3:
         return CommonVector3.from_vector3(vector_flatten(vector))
 
     @staticmethod
+    def normalize(vector: 'CommonVector3') -> float:
+        """normalize(vector)
+
+        Normalize a Vector.
+
+        :param vector: An instance of a vector.
+        :type vector: Union[Vector3, Vector3Immutable, MathPb2Vector3, CommonVector3]
+        :return: An instance of a normalized CommonVector3.
+        :rtype: float
+        """
+        from sims4.math import vector_normalize
+        return vector_normalize(vector)
+
+    @staticmethod
     def distance_between(
         position_one: Union[Vector3, Vector3Immutable, MathPb2Vector3, 'CommonVector3'],
         position_two: Union[Vector3, Vector3Immutable, MathPb2Vector3, 'CommonVector3']
@@ -193,15 +207,15 @@ class CommonVector3:
         # The functionality lies inside Vector3
         pass
 
-    def __add__(self, other: Union[Vector3, Vector3Immutable, MathPb2Vector3, 'CommonVector3']) -> 'CommonVector3':
+    def __add__(self, other: Union[Vector3, Vector3Immutable, MathPb2Vector3, 'CommonVector3', float]) -> 'CommonVector3':
         # The functionality lies inside Vector3
         pass
 
-    def __sub__(self, other: Union[Vector3, Vector3Immutable, MathPb2Vector3, 'CommonVector3']) -> 'CommonVector3':
+    def __sub__(self, other: Union[Vector3, Vector3Immutable, MathPb2Vector3, 'CommonVector3', float]) -> 'CommonVector3':
         # The functionality lies inside Vector3
         pass
 
-    def __mul__(self, other: Union[Vector3, Vector3Immutable, MathPb2Vector3, 'CommonVector3']) -> 'CommonVector3':
+    def __mul__(self, other: Union[Vector3, Vector3Immutable, MathPb2Vector3, 'CommonVector3', float]) -> 'CommonVector3':
         # The functionality lies inside Vector3
         pass
 

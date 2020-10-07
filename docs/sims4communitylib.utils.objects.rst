@@ -84,3 +84,12 @@ Object Utilities
    :undoc-members:
    :show-inheritance:
 
+*************************
+`Reservation`
+*************************
+
+.. autoclass:: sims4communitylib.utils.objects.common_object_reservation_utils.CommonObjectReservationUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+

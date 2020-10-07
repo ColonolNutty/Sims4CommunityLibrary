@@ -5,19 +5,35 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, Tuple, Callable
+import services
+import build_buy
+from interactions.interaction_finisher import FinishingType
+
+try:
+    import _buildbuy
+except ImportError:
+    # noinspection SpellCheckingInspection
+    _buildbuy = build_buy
+from typing import Union, Tuple, Callable, Any, Iterator
 from sims.household import Household
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Gender, Age, Species
 from sims.sim_spawner import SimCreator, SimSpawner
+from animation.posture_manifest import Hand
+from interactions.si_state import SIState
+from objects.object_enums import ResetReason
+from postures import posture_graph
+from postures.posture_specs import get_origin_spec, PostureSpecVariable
+from postures.posture_state import PostureState
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonSimSpawnUtils:
-    """Utilities for creating, spawning, and despawning Sims.
+    """Utilities for creating, spawning, despawning, and resetting Sims.
 
     """
 
@@ -186,3 +202,149 @@ class CommonSimSpawnUtils:
             return False
         sim_info.remove_permanently()
         return True
+
+    @staticmethod
+    def soft_reset(sim_info: SimInfo, reset_reason: ResetReason=ResetReason.RESET_EXPECTED, hard_reset_on_exception: bool=False, source: Any=None, cause: Any='S4CL Soft Reset') -> bool:
+        """soft_reset(sim_info, reset_reason=ResetReason.RESET_EXPECTED, hard_reset_on_exception=False, source=None, cause=None)
+
+        Perform a soft reset on a Sim.
+
+        :param sim_info: An instance of an Sim.
+        :type sim_info: SimInfo
+        :param reset_reason: The reason for the reset. Default is ResetReason.RESET_EXPECTED.
+        :type reset_reason: ResetReason, optional
+        :param hard_reset_on_exception: If set to True, a hard reset of the Object will be attempted upon an error occurring. If set to False, nothing will occur if the reset failed. Default is False.
+        :type hard_reset_on_exception: bool, optional
+        :param source: The source of the reset. Default is the GameObject.
+        :type source: Any, optional
+        :param cause: The cause of the reset. Default is 'S4CL Soft Reset'.
+        :type cause: Any, optional
+        :return: True, if the reset was successful. False, if not.
+        :rtype: bool
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return True
+        # noinspection PyBroadException
+        try:
+            # noinspection PyArgumentList
+            if sim._should_be_swimming() or _buildbuy.is_location_pool(services.current_zone_id(), sim.position, sim.location.level):
+                posture_type = posture_graph.SIM_SWIM_POSTURE_TYPE
+            else:
+                posture_type = posture_graph.SIM_DEFAULT_POSTURE_TYPE
+
+            if sim.queue is not None:
+                for interaction in sim.queue:
+                    interaction.cancel(FinishingType.KILLED, 'S4CL soft_reset sim.queue')
+                sim.queue.on_reset()
+                sim.queue.unlock()
+
+            if sim.si_state is not None:
+                for interaction in sim.si_state:
+                    interaction.cancel(FinishingType.KILLED, 'S4CL soft_reset sim.si_state')
+                # noinspection PyBroadException
+                try:
+                    sim.si_state.on_reset()
+                except:
+                    sim._si_state = SIState(sim)
+                    sim.si_state.on_reset()
+            else:
+                sim._si_state = SIState(sim)
+                sim.si_state.on_reset()
+
+            if sim.ui_manager is not None:
+                sim.ui_manager.remove_all_interactions()
+
+            sim.socials_locked = False
+            sim.last_affordance = None
+            sim.two_person_social_transforms.clear()
+            sim.on_reset_send_op(reset_reason)
+            # noinspection PyPropertyAccess
+            if sim.posture_state is not None:
+                # noinspection PyPropertyAccess
+                sim.posture_state.on_reset(reset_reason)
+
+            sim._stop_animation_interaction()
+            sim.asm_auto_exit.clear()
+            sim._start_animation_interaction()
+            # noinspection PyBroadException
+            try:
+                sim.posture_state = PostureState(sim, None, get_origin_spec(posture_type), {PostureSpecVariable.HAND: (Hand.LEFT,)})
+            except:
+                sim.posture_state = PostureState(sim, None, get_origin_spec(posture_graph.SIM_DEFAULT_POSTURE_TYPE), {PostureSpecVariable.HAND: (Hand.LEFT,)})
+
+            sim._posture_target_refs.clear()
+            sim.run_full_autonomy_next_ping()
+            return True
+        except:
+            if hard_reset_on_exception:
+                return CommonSimSpawnUtils.hard_reset(sim_info, reset_reason, source=source, cause=cause)
+        return False
+
+    @staticmethod
+    def hard_reset(sim_info: SimInfo, reset_reason: ResetReason=ResetReason.RESET_EXPECTED, source: Any=None, cause: Any='S4CL Hard Reset') -> bool:
+        """hard_reset(sim_info, reset_reason=ResetReason.RESET_EXPECTED, source=None, cause=None)
+
+        Perform a hard reset on a SimInfo.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param reset_reason: The reason for the reset. Default is ResetReason.RESET_EXPECTED.
+        :type reset_reason: ResetReason, optional
+        :param source: The source of the reset. Default is the SimInfo.
+        :type source: Any, optional
+        :param cause: The cause of the reset. Default is 'S4CL Hard Reset'.
+        :type cause: Any, optional
+        :return: True, if the reset was successful. False, if not.
+        :rtype: bool
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return True
+
+        # noinspection PyBroadException
+        try:
+            sim.reset(reset_reason, source=source or sim_info, cause=cause)
+            return True
+        except:
+            return False
+
+    @staticmethod
+    def fade_in(sim_info: SimInfo, fade_duration: float=1.0, immediate: bool=False, additional_channels: Iterator[Tuple[int, int, int]]=None):
+        """fade_in(sim_info, fade_duration=1.0)
+
+        Fade a Sim to become visible.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param fade_duration: The number of milliseconds the fade effect should take to complete. Default is 1.0.
+        :type fade_duration: float, optional
+        :param immediate: If set to True, fade in will occur immediately. Default is False.
+        :type immediate: bool, optional
+        :param additional_channels: A collection of additional channels. The order of the inner tuple is Manager Id, Sim Id, and Mask. Default is None.
+        :type additional_channels: Iterator[Tuple[int, int, int]], optional
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return
+        sim.fade_in(fade_duration=fade_duration, immediate=immediate, additional_channels=additional_channels)
+
+    @staticmethod
+    def fade_out(sim_info: SimInfo, fade_duration: float=1.0, immediate: bool=False, additional_channels: Iterator[Tuple[int, int, int]]=None):
+        """fade_out(sim_info, fade_duration=1.0, immediate=False, additional_channels=None)
+
+        Fade a Sim to become invisible.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param fade_duration: The number of milliseconds the fade effect should take to complete. Default is 1.0.
+        :type fade_duration: float, optional
+        :param immediate: If set to True, fade out will occur immediately. Default is False.
+        :type immediate: bool, optional
+        :param additional_channels: A collection of additional channels. The order of the inner tuple is Manager Id, Sim Id, and Mask. Default is None.
+        :type additional_channels: Iterator[Tuple[int, int, int]], optional
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return
+        sim.fade_out(fade_duration=fade_duration, immediate=immediate, additional_channels=additional_channels)

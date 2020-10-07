@@ -14,6 +14,21 @@ class CommonMathUtils:
     """ Utilities for math operations. """
 
     @staticmethod
+    def calculate_degrees_between_positions(position_one: CommonVector3, position_two: CommonVector3) -> float:
+        """calculate_degrees_between_positions(position_one, position_two)
+
+        Calculate the degrees between two positions.
+
+        :param position_one: An instance of a Vector.
+        :type position_one: CommonVector3
+        :param position_two: An instance of a Vector.
+        :type position_two: CommonVector3
+        :return: The degrees between the specified Vectors.
+        :rtype: float
+        """
+        return CommonMathUtils.radian_to_degrees(math.atan2(position_two.x - position_one.x, position_two.z - position_one.z))
+
+    @staticmethod
     def radian_to_degrees(radian: float) -> float:
         """radian_to_degrees(radian)
 

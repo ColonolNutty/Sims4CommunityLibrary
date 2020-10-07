@@ -56,3 +56,69 @@ Sim Event Types
    :members:
    :undoc-members:
    :show-inheritance:
+
+`Gender Options`
+-------------------------------------------------------
+
+*********************
+`Sim Changed Gender`
+*********************
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_changed_gender.S4CLSimChangedGenderEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*************************
+`Sim Changed Body Frame`
+*************************
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_changed_gender_options_body_frame.S4CLSimChangedGenderOptionsBodyFrameEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************************
+`Sim Changed Can Be Impregnated`
+*********************************
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_changed_gender_options_can_be_impregnated.S4CLSimChangedGenderOptionsCanBeImpregnatedEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************************
+`Sim Changed Can Impregnate`
+*********************************
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_changed_gender_options_can_impregnate.S4CLSimChangedGenderOptionsCanImpregnateEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************************
+`Sim Changed Can Reproduce`
+*********************************
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_changed_gender_options_can_reproduce.S4CLSimChangedGenderOptionsCanReproduceEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************************
+`Sim Changed Clothing Preference`
+*********************************
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_changed_gender_options_clothing_preference.S4CLSimChangedGenderOptionsClothingPreferenceEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************************
+`Sim Changed Toilet Usage`
+*********************************
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_changed_gender_options_toilet_usage.S4CLSimChangedGenderOptionsToiletUsageEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
