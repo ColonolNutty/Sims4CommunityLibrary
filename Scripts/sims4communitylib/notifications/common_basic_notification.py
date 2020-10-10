@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import sims4.commands
-from typing import Any, Union, Iterator
+from typing import Any, Union, Iterator, Tuple
 from distributor.shared_messages import IconInfoData
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.enums.strings_enum import CommonStringId
@@ -15,6 +15,7 @@ from sims4communitylib.utils.localization.common_localized_string_colors import 
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from ui.ui_dialog import UiDialogResponse
 from ui.ui_dialog_notification import UiDialogNotification
 
 log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 'common_basic_notification')
@@ -28,7 +29,8 @@ class CommonBasicNotification:
         description_tokens=(),\
         urgency=UiDialogNotification.UiDialogNotificationUrgency.DEFAULT,\
         information_level=UiDialogNotification.UiDialogNotificationLevel.SIM,\
-        expand_behavior=UiDialogNotification.UiDialogNotificationExpandBehavior.USER_SETTING\
+        expand_behavior=UiDialogNotification.UiDialogNotificationExpandBehavior.USER_SETTING,\
+        ui_responses=()\
     )
 
     A basic notification.
@@ -81,6 +83,8 @@ class CommonBasicNotification:
     :type information_level: UiDialogNotification.UiDialogNotificationLevel, optional
     :param expand_behavior: Specify how the notification will expand.
     :type expand_behavior: UiDialogNotification.UiDialogNotificationExpandBehavior, optional
+    :param ui_responses: A collection of UI Responses that may be performed within the notification.
+    :type ui_responses: Tuple[UiDialogResponse], optional
     """
     def __init__(
         self,
@@ -90,7 +94,8 @@ class CommonBasicNotification:
         description_tokens: Iterator[Any]=(),
         urgency: UiDialogNotification.UiDialogNotificationUrgency=UiDialogNotification.UiDialogNotificationUrgency.DEFAULT,
         information_level: UiDialogNotification.UiDialogNotificationLevel=UiDialogNotification.UiDialogNotificationLevel.SIM,
-        expand_behavior: UiDialogNotification.UiDialogNotificationExpandBehavior=UiDialogNotification.UiDialogNotificationExpandBehavior.USER_SETTING
+        expand_behavior: UiDialogNotification.UiDialogNotificationExpandBehavior=UiDialogNotification.UiDialogNotificationExpandBehavior.USER_SETTING,
+        ui_responses: Tuple[UiDialogResponse]=()
     ):
         self.title = CommonLocalizationUtils.create_localized_string(title_identifier, tokens=tuple(title_tokens))
         self.description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=tuple(description_tokens))
@@ -98,7 +103,7 @@ class CommonBasicNotification:
         self.urgency = urgency
         self.information_level = information_level
         self.expand_behavior = expand_behavior
-        self.ui_responses = ()
+        self.ui_responses = ui_responses
 
     def show(self, icon: IconInfoData=None, secondary_icon: IconInfoData=None):
         """show(icon=None, secondary_icon=None)
@@ -121,6 +126,7 @@ class CommonBasicNotification:
 
     def _create_dialog(self) -> Union[UiDialogNotification, None]:
         """_create_dialog()
+
         Create a dialog for use in :func:``show`.
 
         .. note:: Override this method with any arguments you want to.

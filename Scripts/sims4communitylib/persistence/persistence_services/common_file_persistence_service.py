@@ -15,17 +15,27 @@ from sims4communitylib.utils.save_load.common_save_utils import CommonSaveUtils
 
 
 class CommonFilePersistenceService(CommonPersistenceService):
-    """CommonFilePersistenceService()
+    """CommonFilePersistenceService(per_save=True)
 
-    A service that persists data into a file. (This data is per save file, it won't carry to other Saves)
+    A service that persists data into a file on the system.
+
+    :param per_save: If True, the data will persist for each Save file individually. If False, the data will persist for all Save files. Default is True.
+    :type per_save: bool, optional
     """
 
     def _file_path(self, mod_identity: CommonModIdentity, identifier: str=None) -> str:
         from sims4communitylib.utils.common_log_utils import CommonLogUtils
-        save_slot_id = CommonSaveUtils.get_save_slot_id()
-        save_slot_guid = CommonSaveUtils.get_save_slot_guid()
         data_name = self._format_data_name(mod_identity, identifier=identifier)
-        return os.path.join(CommonLogUtils.get_sims_documents_location_path(), 'saves', mod_identity.base_namespace.lower(), f'{data_name}_id_{save_slot_id}_guid_{save_slot_guid}.json')
+        if self._per_save:
+            save_slot_id = CommonSaveUtils.get_save_slot_id()
+            save_slot_guid = CommonSaveUtils.get_save_slot_guid()
+            return os.path.join(CommonLogUtils.get_sims_documents_location_path(), 'saves', mod_identity.base_namespace.lower(), f'{data_name}_id_{save_slot_id}_guid_{save_slot_guid}.json')
+        else:
+            return os.path.join(CommonLogUtils.get_sims_documents_location_path(), 'saves', mod_identity.base_namespace.lower(), f'{data_name}.json')
+
+    def __init__(self, per_save: bool=True) -> None:
+        super().__init__()
+        self._per_save = per_save
 
     # noinspection PyMissingOrEmptyDocstring
     def load(self, mod_identity: CommonModIdentity, identifier: str=None) -> Dict[str, Any]:

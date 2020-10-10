@@ -21,18 +21,10 @@ class CommonBuff(Buff, HasClassLog):
 
     """
 
+    # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_log_identifier(cls) -> str:
-        """get_log_identifier()
-
-        The string identifier for the Log of this class.
-
-        .. note:: This is the string that will appear when logging messages using this logger
-
-        :return: The identifier for the log
-        :rtype: str
-        """
-        return 's4cl_common_buff'
+        return 'common_buff'
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
