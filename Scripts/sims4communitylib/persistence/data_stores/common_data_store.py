@@ -68,7 +68,10 @@ class CommonDataStore:
         :rtype: Any
         """
         if key not in self._storage:
-            self._storage[key] = self.get_default_value_by_key(key)
+            result = self.get_default_value_by_key(key)
+            if result is None:
+                return None
+            self._storage[key] = result
         return self._storage[key]
 
     def get_default_value_by_key(self, key: str) -> Any:
