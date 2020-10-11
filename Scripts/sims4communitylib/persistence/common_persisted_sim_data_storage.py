@@ -14,7 +14,6 @@ from sims4communitylib.persistence.data_management.common_data_manager import Co
 from sims4communitylib.persistence.data_stores.common_data_store import CommonDataStore
 from sims4communitylib.persistence.common_sim_data_storage import CommonSimDataStorage
 from sims4communitylib.persistence.data_stores.common_sim_data_store import CommonSimDataStore
-from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonPersistedSimDataStorage(CommonSimDataStorage):
@@ -109,20 +108,13 @@ class CommonPersistedSimDataStorage(CommonSimDataStorage):
                 raise RuntimeError('Failed to locate a data manager for {}, maybe you forgot to register one?'.format(self.mod_identity.name))
         return self.__data_manager
 
-    def set_data(self, value: Any, key: str=None):
-        key = key or str(sys._getframe(1).f_code.co_name)
-        super().set_data(value, key=key)
-        self._save_persisted_data()
-
     def _save_persisted_data(self) -> None:
         data_to_save = dict()
         for data_property_name in self._data.keys():
             if data_property_name not in self.whitelist_property_names or data_property_name in self.blacklist_property_names:
                 continue
             data_to_save[data_property_name] = self._data[data_property_name]
-        sim_id = CommonSimUtils.get_sim_id(self.sim_info)
-        self._data_manager.get_data_store_by_type(self.data_store_type).set_value_by_key(str(sim_id), data_to_save)
+        self._data_manager.get_data_store_by_type(self.data_store_type).set_value_by_key(str(self.sim_id), data_to_save)
 
     def _load_persisted_data(self) -> Dict[str, Any]:
-        sim_id = CommonSimUtils.get_sim_id(self.sim_info)
-        return self._data_manager.get_data_store_by_type(self.data_store_type).get_value_by_key(str(sim_id))
+        return self._data_manager.get_data_store_by_type(self.data_store_type).get_value_by_key(str(self.sim_id))

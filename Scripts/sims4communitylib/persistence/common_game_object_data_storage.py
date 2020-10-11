@@ -16,7 +16,7 @@ from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtil
 
 
 class _CommonGameObjectDataStorageMetaclass(type):
-    _game_object_storage_instances: Dict[str, Dict[int, '_CommonGameObjectDataStorageMetaclass']] = {}
+    _game_object_storage_instances: Dict[str, Dict[int, '_CommonGameObjectDataStorageMetaclass']] = dict()
 
     def __call__(cls, game_object: GameObject) -> Union['_CommonGameObjectDataStorageMetaclass', None]:
         mod_identity = cls.get_mod_identity()
@@ -61,6 +61,15 @@ class _CommonGameObjectDataStorage(HasClassLog, metaclass=_CommonGameObjectDataS
         :rtype: GameObject
         """
         return self._game_object
+
+    @property
+    def game_object_id(self) -> int:
+        """The decimal identifier of the GameObject.
+
+        :return: The decimal identifier of the GameObject.
+        :rtype: int
+        """
+        return self._game_object_id
 
     def get_data(self, default: Any=None, key: str=None) -> Union[Any, None]:
         """get_data(default=None, key=None)
