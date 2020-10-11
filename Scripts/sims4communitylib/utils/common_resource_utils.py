@@ -12,8 +12,6 @@ from io import BytesIO
 from typing import ItemsView, Any, Union, Tuple
 from sims4.resources import ResourceLoader, get_resource_key, Types
 from sims4.tuning.instance_manager import InstanceManager
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.modinfo import ModInfo
 
 
 class CommonResourceUtils:
@@ -166,17 +164,13 @@ class CommonResourceUtils:
         :return: The enum value with a name matching the specified name.
         :rtype: Any
         """
-        try:
-            if hasattr(enum_type, name):
-                return getattr(enum_type, name)
-            if name in enum_type:
-                return enum_type[name]
-            if hasattr(enum_type, 'name_to_value') and name in enum_type.name_to_value:
-                return enum_type.name_to_value.get(name)
-            return default_value
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to retrieve enum with name {} within type {}'.format(name, enum_type), exception=ex)
-            return default_value
+        if hasattr(enum_type, name):
+            return getattr(enum_type, name)
+        if name in enum_type:
+            return enum_type[name]
+        if hasattr(enum_type, 'name_to_value') and name in enum_type.name_to_value:
+            return enum_type.name_to_value.get(name)
+        return default_value
 
     @staticmethod
     def convert_str_to_fnv32(text: str, seed: int=2166136261, high_bit: bool=True) -> int:
