@@ -62,6 +62,15 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         """
         return self._sim_info
 
+    @property
+    def sim_id(self) -> int:
+        """The decimal identifier of a Sim.
+
+        :return: The decimal identifier of a Sim.
+        :rtype: int
+        """
+        return self._sim_id
+
     def get_data(self, default: Any=None, key: str=None) -> Union[Any, None]:
         """get_data(default=None, key=None)
 

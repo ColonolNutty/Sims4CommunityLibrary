@@ -108,19 +108,13 @@ class CommonPersistedGameObjectDataStorage(CommonGameObjectDataStorage):
                 raise RuntimeError('Failed to locate a data manager for {}, maybe you forgot to register one?'.format(self.mod_identity.name))
         return self.__data_manager
 
-    # noinspection PyMissingOrEmptyDocstring
-    def set_data(self, value: Any, key: str=None):
-        key = key or str(sys._getframe(1).f_code.co_name)
-        super().set_data(value, key=key)
-        self._save_persisted_data()
-
     def _save_persisted_data(self) -> None:
         data_to_save = dict()
         for data_property_name in self._data.keys():
             if data_property_name not in self.whitelist_property_names or data_property_name in self.blacklist_property_names:
                 continue
             data_to_save[data_property_name] = self._data[data_property_name]
-        self._data_manager.get_data_store_by_type(self.data_store_type).set_value_by_key(str(self._game_object_id), data_to_save)
+        self._data_manager.get_data_store_by_type(self.data_store_type).set_value_by_key(str(self.game_object_id), data_to_save)
 
     def _load_persisted_data(self) -> Dict[str, Any]:
-        return self._data_manager.get_data_store_by_type(self.data_store_type).get_value_by_key(str(self._game_object_id)).copy()
+        return self._data_manager.get_data_store_by_type(self.data_store_type).get_value_by_key(str(self.game_object_id))

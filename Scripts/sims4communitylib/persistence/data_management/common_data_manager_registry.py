@@ -108,6 +108,18 @@ class CommonDataManagerRegistry(CommonService, HasClassLog):
 
         """
         self.log.debug('Saving data managers.')
+        from sims4communitylib.persistence.common_game_object_data_storage import _CommonGameObjectDataStorageMetaclass
+        for (mod_name, data_storage_library) in _CommonGameObjectDataStorageMetaclass._game_object_storage_instances.items():
+            data_storage_library: Dict[int, '_CommonGameObjectDataStorageMetaclass'] = data_storage_library
+            for data_storage in data_storage_library.values():
+                if hasattr(data_storage, '_save_persisted_data'):
+                    data_storage._save_persisted_data()
+        from sims4communitylib.persistence.common_sim_data_storage import _CommonSimDataStorageMetaclass
+        for (mod_name, data_storage_library) in _CommonSimDataStorageMetaclass._sim_storage_instances.items():
+            data_storage_library: Dict[int, '_CommonSimDataStorageMetaclass'] = data_storage_library
+            for data_storage in data_storage_library.values():
+                if hasattr(data_storage, '_save_persisted_data'):
+                    data_storage._save_persisted_data()
         for data_manager in self._data_managers.values():
             self.log.format_with_message('Saving data manager', data_manager=data_manager)
             data_manager.save()
