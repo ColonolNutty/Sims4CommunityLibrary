@@ -17,6 +17,7 @@ from cas.cas import OutfitData
 from sims.outfits.outfit_enums import OutfitCategory, BodyType
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.buffs_enum import CommonBuffId
+from sims4communitylib.enums.tags_enum import CommonGameTag
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
@@ -713,6 +714,117 @@ class CommonOutfitUtils:
         except Exception as ex:
             CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Problem occurred running function \'{}\'.'.format(CommonOutfitUtils.update_outfits.__name__), exception=ex)
         return False
+
+    @staticmethod
+    def has_tag_on_outfit(sim_info: SimInfo, tag: Union[int, CommonGameTag], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+        """has_tag_on_outfit(sim_info, tag, outfit_category_and_index=None)
+
+        Determine if the Outfit of a Sim has the specified tag.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param tag: A tag to locate.
+        :type tag: Union[int, CommonGameTag]
+        :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
+        :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
+        :return: True, if the Outfit of the Sim has the specified tag. False, if not.
+        :rtype: bool
+        """
+        return CommonOutfitUtils.has_any_tags_on_outfit(sim_info, (tag, ), outfit_category_and_index=outfit_category_and_index)
+
+    @staticmethod
+    def has_any_tags_on_outfit(sim_info: SimInfo, tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+        """has_any_tags_on_outfit(sim_info, tags, outfit_category_and_index=None)
+
+        Determine if the Outfit of a Sim has any of the specified tags.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param tags: A collection of tags to locate.
+        :type tags: Iterator[Union[int, CommonGameTag]]
+        :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
+        :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
+        :return: True, if the Outfit of the Sim has any of the specified tags. False, if not.
+        :rtype: bool
+        """
+        if sim_info is None:
+            return False
+        if not tags:
+            return False
+        outfit_tags = CommonOutfitUtils.get_all_outfit_tags(sim_info, outfit_category_and_index=outfit_category_and_index)
+        for tag in tags:
+            if tag in outfit_tags:
+                return True
+        return False
+
+    @staticmethod
+    def has_all_tags_on_outfit(sim_info: SimInfo, tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+        """has_all_tags_on_outfit(sim_info, tags, outfit_category_and_index=None)
+
+        Determine if the Outfit of a Sim has all of the specified tags.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param tags: A collection of tags to locate.
+        :type tags: Iterator[Union[int, CommonGameTag]]
+        :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
+        :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
+        :return: True, if the Outfit of the Sim has all of the specified tags. False, if not.
+        :rtype: bool
+        """
+        if sim_info is None:
+            return False
+        if not tags:
+            return False
+        outfit_tags = CommonOutfitUtils.get_all_outfit_tags(sim_info, outfit_category_and_index=outfit_category_and_index)
+        for tag in tags:
+            if tag not in outfit_tags:
+                return False
+        return True
+
+    @staticmethod
+    def get_all_outfit_tags(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Tuple[CommonGameTag]:
+        """get_all_outfit_tags(sim_info, outfit_category_and_index=None)
+
+        Retrieve a collection of game tags that apply to the outfit of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
+        :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
+        :return: A collection of Game Tags that apply to the outfit of a Sim.
+        :rtype: Tuple[CommonGameTag]
+        """
+        if sim_info is None:
+            return tuple()
+        combined_game_tags = list()
+        for game_tags in CommonOutfitUtils.get_outfit_tags_by_cas_part_id(sim_info, outfit_category_and_index=outfit_category_and_index).values():
+            for game_tag in game_tags:
+                combined_game_tags.append(game_tag)
+        return tuple(combined_game_tags)
+
+    @staticmethod
+    def get_outfit_tags_by_cas_part_id(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[int, Tuple[CommonGameTag]]:
+        """get_outfit_tags_by_cas_part_id(sim_info, outfit_category_and_index=None)
+
+        Retrieve the game tags of the outfit of a Sim grouped by CAS Part Id.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
+        :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
+        :return: A library of Game Tags grouped by CAS Part Id.
+        :rtype: Dict[int, Tuple[CommonGameTag]]
+        """
+        if sim_info is None:
+            return dict()
+        from cas.cas import get_tags_from_outfit
+        outfit_category_and_index = outfit_category_and_index or CommonOutfitUtils.get_current_outfit(sim_info)
+        # noinspection PyBroadException
+        try:
+            return get_tags_from_outfit(sim_info._base, outfit_category_and_index[0], outfit_category_and_index[1])
+        except:
+            return dict()
 
 
 @sims4.commands.Command('s4clib_testing.show_all_outfit_categories', command_type=sims4.commands.CommandType.Live)
