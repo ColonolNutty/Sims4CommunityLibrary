@@ -30,6 +30,7 @@ class CommonGameTag(CommonInt):
     OUTFIT_CATEGORY_SLEEP: 'CommonGameTag' = 81
     OUTFIT_CATEGORY_BATHING: 'CommonGameTag' = 82
     OUTFIT_CATEGORY_PARTY: 'CommonGameTag' = 83
+    OUTFIT_CATEGORY_BATUU = 2470
     AGE_APPROPRIATE_ADULT: 'CommonGameTag' = 84
     AGE_APPROPRIATE_CHILD: 'CommonGameTag' = 85
     SKILL_ATHLETIC: 'CommonGameTag' = 86
@@ -3579,3 +3580,4 @@ class CommonGameTag(CommonInt):
     FUNC_DEW_COLLECTOR_HIGH_QUALITY: 'CommonGameTag' = 67646
     SITUATION_SUN_RAY: 'CommonGameTag' = 67647
     FUNC_MEATWALL: 'CommonGameTag' = 67648
+    PIERCING = 718645
