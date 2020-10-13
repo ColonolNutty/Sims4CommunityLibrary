@@ -8,7 +8,7 @@ Copyright (c) COLONOLNUTTY
 from pprint import pformat
 
 import sims4.commands
-from typing import Tuple, Union, Dict, Callable, Iterator
+from typing import Tuple, Union, Dict, Callable, Iterator, Set
 
 from buffs.appearance_modifier.appearance_modifier import AppearanceModifier
 from buffs.appearance_modifier.appearance_modifier_type import AppearanceModifierType
@@ -22,6 +22,7 @@ from sims4communitylib.exceptions.common_exceptions_handler import CommonExcepti
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonOutfitUtils:
@@ -804,7 +805,7 @@ class CommonOutfitUtils:
         return tuple(combined_game_tags)
 
     @staticmethod
-    def get_outfit_tags_by_cas_part_id(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[int, Tuple[CommonGameTag]]:
+    def get_outfit_tags_by_cas_part_id(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[int, Set[CommonGameTag]]:
         """get_outfit_tags_by_cas_part_id(sim_info, outfit_category_and_index=None)
 
         Retrieve the game tags of the outfit of a Sim grouped by CAS Part Id.
@@ -833,3 +834,25 @@ def _s4clib_testing_show_all_outfit_categories(_connection: int=None):
     output('Showing all outfit categories.')
     categories = CommonOutfitUtils.get_all_outfit_categories()
     output('Outfit categories: {}'.format(pformat(categories)))
+
+
+@sims4.commands.Command('s4clib_testing.print_outfit_tags_of_active_sim', command_type=sims4.commands.CommandType.Live)
+def _s4clib_testing_print_outfit_tags_of_active_sim(_connection: int=None):
+    output = sims4.commands.CheatOutput(_connection)
+    output('Showing all game tags of the outfit of the current Sim.')
+    tags = CommonOutfitUtils.get_all_outfit_tags(CommonSimUtils.get_active_sim_info())
+    output('Tags: {}'.format(pformat(sorted([CommonGameTag.value_to_name[tag] for tag in tags if tag in CommonGameTag.value_to_name]))))
+
+
+@sims4.commands.Command('s4clib_testing.print_outfit_tags_by_cas_part_of_active_sim', command_type=sims4.commands.CommandType.Live)
+def _s4clib_testing_print_outfit_tags_by_cas_part_of_active_sim(_connection: int=None):
+    from sims4communitylib.utils.cas.common_cas_utils import CommonCASUtils
+    output = sims4.commands.CheatOutput(_connection)
+    output('Showing game tags by cas part id of the outfit of the current Sim.')
+    active_sim_info = CommonSimUtils.get_active_sim_info()
+    tags_by_cas_part_id = CommonOutfitUtils.get_outfit_tags_by_cas_part_id(active_sim_info)
+    for (cas_part_id, tags) in tags_by_cas_part_id.items():
+        output('CAS Part Id: {}'.format(cas_part_id))
+        body_type = CommonCASUtils.get_body_type_cas_part_is_attached_to(active_sim_info, cas_part_id)
+        output('Body Type: {}'.format(BodyType.value_to_name[body_type] if body_type in BodyType.value_to_name else body_type))
+        output('Tags: {}'.format(pformat(sorted([CommonGameTag.value_to_name[tag] for tag in tags if tag in CommonGameTag.value_to_name]))))
