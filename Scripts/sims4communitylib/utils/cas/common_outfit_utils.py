@@ -801,7 +801,8 @@ class CommonOutfitUtils:
         combined_game_tags = list()
         for game_tags in CommonOutfitUtils.get_outfit_tags_by_cas_part_id(sim_info, outfit_category_and_index=outfit_category_and_index).values():
             for game_tag in game_tags:
-                combined_game_tags.append(game_tag)
+                if game_tag not in combined_game_tags:
+                    combined_game_tags.append(game_tag)
         return tuple(combined_game_tags)
 
     @staticmethod
