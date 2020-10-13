@@ -47,7 +47,7 @@ class CommonStopWatch:
 
         Stop the stop watch.
 
-        ..warning:: This will also reset the start time of the stop watch. It will also stop the stop watch.
+        .. warning:: This will also reset the start time of the stop watch. It will also stop the stop watch.
 
         :return: The number of seconds that occurred since starting the stop watch.
         :rtype: float
