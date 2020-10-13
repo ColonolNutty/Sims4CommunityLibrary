@@ -12,6 +12,17 @@ Services
    :undoc-members:
    :show-inheritance:
 
+`Sim`
+------------------------------------------------------
+
+`Sim Outfit IO`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.services.common_sim_outfit_io.CommonSimOutfitIO
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 `Resource`
 ------------------------------------------------------

@@ -5,7 +5,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import sys
 from typing import Dict, Any, Tuple, Type
 
 from objects.game_object import GameObject
