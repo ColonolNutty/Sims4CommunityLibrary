@@ -8,7 +8,7 @@ Time Classes
 `Stop Watch`
 -----------------------------------------------------------------
 
-.. autoclass:: sims4communitylib.classes.math.common_location.CommonLocation
+.. autoclass:: sims4communitylib.classes.time.common_stop_watch.CommonStopWatch
    :members:
    :private-members:
    :show-inheritance:
