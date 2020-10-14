@@ -99,7 +99,7 @@ class CommonSimOutfitIO(HasLog):
         :return: True, if the specified BodyType is attached to the outfit. False, if not.
         :rtype: bool
         """
-        return self.is_any_cas_part_attached((body_type,))
+        return self.is_any_body_type_attached((body_type,))
 
     def is_any_body_type_attached(self, body_types: Tuple[Union[BodyType, int]]) -> bool:
         """is_any_body_type_attached(body_types)
