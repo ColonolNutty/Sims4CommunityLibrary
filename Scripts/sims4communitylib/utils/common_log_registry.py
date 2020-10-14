@@ -94,7 +94,7 @@ class CommonLog:
 
         Log a non-descriptive message containing pformatted arguments and keyword arguments with the specified message type.
 
-        :param message_type: The MessageType of the logged message.
+        :param message_type: The MessageType of the logged message. Default is CommonMessageType.DEBUG.
         :type message_type: CommonMessageType, optional
         :param args: Arguments to format into the message.
         :type args: Any
@@ -111,7 +111,7 @@ class CommonLog:
 
         :param message: The message to log.
         :type message: str
-        :param message_type: The type of message being logged.
+        :param message_type: The type of message being logged. Default is CommonMessageType.DEBUG.
         :type message_type: CommonMessageType, optional
         :param args: Arguments to format into the message.
         :type args: Any
@@ -119,7 +119,12 @@ class CommonLog:
         :type kwargs: Any
         """
         if self.enabled:
-            self._log_message(message_type, '{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)))
+            if args and kwargs:
+                self._log_message(message_type, '{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)))
+            elif args:
+                self._log_message(message_type, '{} {}\n'.format(message, pformat(args)))
+            else:
+                self._log_message(message_type, '{} {}\n'.format(message, pformat(kwargs)))
 
     def warn(self, message: str):
         """warn(message)
@@ -200,9 +205,9 @@ class CommonLog:
 
         :param message: The message to log.
         :type message: str
-        :param exception: The exception that occurred.
+        :param exception: The exception that occurred. Default is None.
         :type exception: Exception, None
-        :param throw: If set to True, the exception will be rethrown.
+        :param throw: If set to True, the exception will be rethrown. Default is True.
         :type throw: bool, optional
         :param args: Arguments to format into the message.
         :type args: Any
