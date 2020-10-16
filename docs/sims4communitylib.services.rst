@@ -18,7 +18,7 @@ Services
 `Sim Outfit IO`
 -------------------------------------------------
 
-.. autoclass:: sims4communitylib.services.common_sim_outfit_io.CommonSimOutfitIO
+.. autoclass:: sims4communitylib.services.sim.cas.common_sim_outfit_io.CommonSimOutfitIO
    :members:
    :undoc-members:
    :show-inheritance:

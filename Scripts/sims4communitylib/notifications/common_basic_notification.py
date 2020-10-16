@@ -18,8 +18,6 @@ from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog import UiDialogResponse
 from ui.ui_dialog_notification import UiDialogNotification
 
-log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 'common_basic_notification')
-
 
 class CommonBasicNotification:
     """CommonBasicNotification(\
@@ -145,6 +143,7 @@ class CommonBasicNotification:
 
 @sims4.commands.Command('s4clib_testing.show_basic_notification', command_type=sims4.commands.CommandType.Live)
 def _common_testing_show_basic_notification(_connection: int=None):
+    log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 'common_basic_notification')
     output = sims4.commands.CheatOutput(_connection)
     output('Showing test basic notification.')
 
