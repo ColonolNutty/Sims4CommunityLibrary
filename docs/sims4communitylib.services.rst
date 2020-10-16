@@ -31,7 +31,7 @@ Services
 `Posture Constraints`
 **********************
 
-.. autoclass:: sims4communitylib.services.resources.common_posture_constraint_service
+.. autoclass:: sims4communitylib.services.resources.common_posture_constraint_service.CommonPostureConstraintService
    :members:
    :undoc-members:
    :show-inheritance:
