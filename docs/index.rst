@@ -11,6 +11,7 @@ To see the readme and the actual code, take a look at the repository on `Github`
 .. toctree::
    :maxdepth: 2
 
+   sims4communitylib.classes.buffs
    sims4communitylib.classes.options
    sims4communitylib.classes.math
    sims4communitylib.classes.interactions
