@@ -9,10 +9,7 @@ from typing import Any, Callable, Iterator
 
 from event_testing.results import EnqueueResult
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegistry
-
-func_utils_log = CommonLogRegistry.get().register_log(ModInfo.get_identity().name, 's4clib_common_function_utils')
+from sims4communitylib.utils.common_log_registry import CommonLog
 
 
 class CommonFunctionUtils:
@@ -135,7 +132,6 @@ class CommonFunctionUtils:
                     if primary_function is None:
                         continue
                     if not primary_function(*_, **__):
-                        func_utils_log.format_with_message('Function failed.', function_name=primary_function.__name__)
                         return False
                 return True
             else:
@@ -143,7 +139,6 @@ class CommonFunctionUtils:
                     if primary_function is None:
                         continue
                     if primary_function(*_, **__):
-                        func_utils_log.format_with_message('Function passed.', function_name=primary_function.__name__)
                         return True
                 return False
         _wrapper.__name__ = ', '.join([func.__name__ for func in predicate_functions if func is not None])
