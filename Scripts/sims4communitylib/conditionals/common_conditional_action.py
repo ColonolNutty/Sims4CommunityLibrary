@@ -9,7 +9,6 @@ from typing import Union
 
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.modinfo import ModInfo
 
 
 class CommonConditionalAction(HasLog):
