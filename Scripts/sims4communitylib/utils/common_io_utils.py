@@ -7,7 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 import os
 from typing import Union
-from sims4communitylib.modinfo import ModInfo
 
 
 class CommonIOUtils:
@@ -35,9 +34,7 @@ class CommonIOUtils:
         except Exception as ex:
             if ignore_errors:
                 return False
-            from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while writing to file \'{}\''.format(file_path), exception=ex)
-            return False
+            raise ex
         return True
 
     @staticmethod
@@ -69,9 +66,7 @@ class CommonIOUtils:
         except Exception as ex:
             if ignore_errors:
                 return False
-            from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while writing to file \'{}\''.format(file_path), exception=ex)
-            return False
+            raise ex
         return True
 
     @staticmethod
@@ -91,10 +86,5 @@ class CommonIOUtils:
         """
         if not os.path.isfile(file_path):
             return None
-        try:
-            with open(file_path, mode='r', buffering=buffering, encoding=encoding) as file:
-                return file.read()
-        except Exception as ex:
-            from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while reading from file \'{}\''.format(file_path), exception=ex)
-            return None
+        with open(file_path, mode='r', buffering=buffering, encoding=encoding) as file:
+            return file.read()

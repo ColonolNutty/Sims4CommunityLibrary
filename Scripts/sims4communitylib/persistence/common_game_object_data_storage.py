@@ -46,7 +46,7 @@ class _CommonGameObjectDataStorage(HasClassLog, metaclass=_CommonGameObjectDataS
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(cls) -> CommonModIdentity:
-        raise NotImplementedError('Missing \'{}\'.'.format(cls.get_mod_identity.__name__))
+        raise NotImplementedError('Missing \'{}\' inside {}.'.format(cls.get_mod_identity.__name__, cls.__class__))
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
@@ -84,7 +84,6 @@ class _CommonGameObjectDataStorage(HasClassLog, metaclass=_CommonGameObjectDataS
         :rtype: Dict[Any, Any]
         """
         key = key or str(sys._getframe(1).f_code.co_name)
-        self.log.format_with_message('Getting data', key=key)
         if key not in self._data:
             self.log.format_with_message('Key not found in data.', key=key, data=self._data)
             self._data[key] = default
@@ -101,7 +100,6 @@ class _CommonGameObjectDataStorage(HasClassLog, metaclass=_CommonGameObjectDataS
         :type key: str, optional
         """
         key = key or str(sys._getframe(1).f_code.co_name)
-        self.log.format_with_message('Setting data', key=key, value=value)
         self._data[key] = value
 
     def remove_data(self, key: str=None):
@@ -113,11 +111,9 @@ class _CommonGameObjectDataStorage(HasClassLog, metaclass=_CommonGameObjectDataS
         :type key: str, optional
         """
         key = key or str(sys._getframe(1).f_code.co_name)
-        self.log.format_with_message('Removing data', key=key)
         if key not in self._data:
             self.log.format_with_message('Key not found in data.', key=key, data=self._data)
             return
-        self.log.debug('Key found, deleting it now.')
         del self._data[key]
 
     def __repr__(self) -> str:
@@ -141,7 +137,7 @@ class CommonGameObjectDataStorage(_CommonGameObjectDataStorage):
     .. code-block:: python
 
         # Inherit from CommonGameObjectDataStorage
-        class ExampleGameObjectDataStorage(CommonGameObjectDataStorage):
+        class _ExampleGameObjectDataStorage(CommonGameObjectDataStorage):
             # noinspection PyMissingOrEmptyDocstring
             @classmethod
             def get_mod_identity(cls) -> CommonModIdentity:
@@ -166,7 +162,7 @@ class CommonGameObjectDataStorage(_CommonGameObjectDataStorage):
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(cls) -> CommonModIdentity:
-        return super().get_mod_identity()
+        raise NotImplementedError('Missing \'{}\' inside {}.'.format(cls.get_mod_identity.__name__, cls.__class__))
 
     def __init__(self, game_object: GameObject):
         super().__init__(game_object)
@@ -175,7 +171,7 @@ class CommonGameObjectDataStorage(_CommonGameObjectDataStorage):
 
 
 # noinspection PyMissingOrEmptyDocstring
-class ExampleGameObjectDataStorage(CommonGameObjectDataStorage):
+class _ExampleGameObjectDataStorage(CommonGameObjectDataStorage):
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(cls) -> CommonModIdentity:

@@ -34,15 +34,16 @@ class CommonSimOutfitIO(HasLog):
     # noinspection PyMissingOrEmptyDocstring
     @property
     def mod_identity(self) -> CommonModIdentity:
-        return ModInfo.get_identity()
+        return self._mod_identity
 
     # noinspection PyMissingOrEmptyDocstring
     @property
     def log_identifier(self) -> str:
         return 'common_sim_outfit_io'
 
-    def __init__(self, sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]=None, initial_outfit_parts: Dict[BodyType, int]=None):
+    def __init__(self, sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]=None, initial_outfit_parts: Dict[BodyType, int]=None, mod_identity: CommonModIdentity=None):
         super().__init__()
+        self._mod_identity = mod_identity
         self._sim_info: SimInfo = sim_info
         self._current_outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
         self._outfit_category_and_index: Tuple[OutfitCategory, int] = outfit_category_and_index or self._current_outfit_category_and_index

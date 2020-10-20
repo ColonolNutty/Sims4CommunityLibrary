@@ -5,13 +5,10 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from pprint import pformat
 from typing import Union
 
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Age
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.modinfo import ModInfo
 
 
 class CommonAgeUtils:
@@ -55,12 +52,8 @@ class CommonAgeUtils:
         :return: True, if the Age was set successfully. False, if not.
         :rtype: bool
         """
-        try:
-            sim_info.apply_age(age)
-            return True
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set age of sim {} to {}.'.format(pformat(sim_info), age), exception=ex)
-            return False
+        sim_info.apply_age(age)
+        return True
 
     @staticmethod
     def are_same_age(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:

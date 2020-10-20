@@ -177,7 +177,7 @@ class CommonChooseSimDialog(CommonChooseDialog):
                 column_count=column_count
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
+            self.log.error('show', exception=ex)
 
     def _show(
         self,
@@ -223,16 +223,19 @@ class CommonChooseSimDialog(CommonChooseDialog):
         if len(self.rows) == 0:
             raise AssertionError('No rows have been provided. Add rows to the dialog before attempting to display it.')
 
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
         def _on_chosen(dialog: UiSimPicker) -> bool:
-            if not dialog.accepted:
-                self.log.debug('Dialog cancelled.')
-                return on_chosen(None, CommonChoiceOutcome.CANCEL)
-            choice = CommonDialogUtils.get_chosen_item(dialog)
-            self.log.format_with_message('Choice made.', choice=choice)
-            result = on_chosen(choice, CommonChoiceOutcome.CHOICE_MADE)
-            self.log.format_with_message('Finished handling choice.', result=result)
-            return result
+            try:
+                if not dialog.accepted:
+                    self.log.debug('Dialog cancelled.')
+                    return on_chosen(None, CommonChoiceOutcome.CANCEL)
+                choice = CommonDialogUtils.get_chosen_item(dialog)
+                self.log.format_with_message('Choice made.', choice=choice)
+                result = on_chosen(choice, CommonChoiceOutcome.CHOICE_MADE)
+                self.log.format_with_message('Finished handling choice.', result=result)
+                return result
+            except Exception as ex:
+                self.log.error('Error occurred on choosing a value.', exception=ex)
+            return False
 
         self.log.debug('Adding all choices')
         for row in self.rows:
@@ -266,7 +269,7 @@ class CommonChooseSimDialog(CommonChooseDialog):
                 column_count=column_count
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, '_create_dialog', exception=ex)
+            self.log.error('_create_dialog', exception=ex)
         return None
 
 

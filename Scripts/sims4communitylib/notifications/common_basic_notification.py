@@ -10,6 +10,7 @@ from typing import Any, Union, Iterator, Tuple
 from distributor.shared_messages import IconInfoData
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.enums.strings_enum import CommonStringId
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
@@ -143,7 +144,6 @@ class CommonBasicNotification:
 
 @sims4.commands.Command('s4clib_testing.show_basic_notification', command_type=sims4.commands.CommandType.Live)
 def _common_testing_show_basic_notification(_connection: int=None):
-    log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 'common_basic_notification')
     output = sims4.commands.CheatOutput(_connection)
     output('Showing test basic notification.')
 
@@ -171,6 +171,6 @@ def _common_testing_show_basic_notification(_connection: int=None):
         )
         dialog.show()
     except Exception as ex:
-        log.format_error_with_message('Failed to show a basic notification', exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show a basic notification', exception=ex)
         output('Failed to show a basic notification, please locate your exception log file.')
     output('Done showing.')

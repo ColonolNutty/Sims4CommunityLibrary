@@ -49,6 +49,12 @@ class CommonPersistedSimDataStorage(CommonSimDataStorage):
     :param sim_info: The SimInfo of a Sim.
     :type sim_info: SimInfo
     """
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
+        raise NotImplementedError('Missing \'{}\' inside {}.'.format(cls.get_mod_identity.__name__, cls.__class__))
+
     def __init__(self, sim_info: SimInfo):
         super().__init__(sim_info)
         if self.__class__.__name__ is CommonPersistedSimDataStorage.__name__:
@@ -57,11 +63,6 @@ class CommonPersistedSimDataStorage(CommonSimDataStorage):
         self._data_manager_registry = CommonDataManagerRegistry()
         self.__data_manager: CommonDataManager = None
         self._data = self._load_persisted_data()
-
-    # noinspection PyMissingOrEmptyDocstring,PyMethodParameters
-    @classmethod
-    def get_mod_identity(cls) -> CommonModIdentity:
-        return super().get_mod_identity()
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod

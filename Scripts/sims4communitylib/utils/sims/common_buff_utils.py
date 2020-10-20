@@ -13,8 +13,6 @@ from sims.sim_info import SimInfo
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.types.component_types import CommonComponentType
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 
@@ -105,8 +103,7 @@ class CommonBuffUtils:
         :rtype: int
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.has_buff.__name__, CommonBuffUtils.__name__))
-            return False
+            raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
         if not buff_ids:
@@ -130,8 +127,7 @@ class CommonBuffUtils:
         :rtype: Tuple[Buff]
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.get_buffs.__name__, CommonBuffUtils.__name__))
-            return list()
+            raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return list()
         from objects.components.buff_component import BuffComponent
@@ -159,8 +155,7 @@ class CommonBuffUtils:
         :rtype: bool
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.add_buff.__name__, CommonBuffUtils.__name__))
-            return False
+            raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
         localized_buff_reason = CommonLocalizationUtils.create_localized_string(buff_reason)
@@ -187,8 +182,7 @@ class CommonBuffUtils:
         :rtype: bool
         """
         if sim_info is None:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Argument \'sim_info\' was \'None\' for \'{}\' of class \'{}\''.format(CommonBuffUtils.remove_buff.__name__, CommonBuffUtils.__name__))
-            return False
+            raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
         success = True

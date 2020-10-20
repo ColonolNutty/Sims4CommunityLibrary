@@ -8,6 +8,8 @@ Copyright (c) COLONOLNUTTY
 import math
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
 from sims4communitylib.events.zone_update.events.zone_update_event import S4CLZoneUpdateEvent
+from sims4communitylib.logging.has_log import HasLog
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
@@ -15,7 +17,7 @@ from sims4communitylib.utils.common_time_utils import CommonTimeUtils
 from zone import Zone
 
 
-class CommonZoneUpdateEventDispatcherService(CommonService):
+class CommonZoneUpdateEventDispatcherService(CommonService, HasLog):
     """A service that dispatches zone update events.
 
     .. warning:: Do not use this service directly to listen for events!\
@@ -23,7 +25,13 @@ class CommonZoneUpdateEventDispatcherService(CommonService):
 
     """
 
+    # noinspection PyMissingOrEmptyDocstring
+    @property
+    def mod_identity(self) -> CommonModIdentity:
+        return ModInfo.get_identity()
+
     def __init__(self: 'CommonZoneUpdateEventDispatcherService'):
+        super().__init__()
         self._last_absolute_ticks = 0
         self._ticks_since_last_zone_update = 0
         self._ticks_since_last_zone_update_error = 0
@@ -63,8 +71,7 @@ class CommonZoneUpdateEventDispatcherService(CommonService):
             self._last_absolute_ticks = absolute_ticks
             return CommonEventRegistry.get().dispatch(S4CLZoneUpdateEvent(zone, is_paused, self.ticks_since_last_zone_update))
         except Exception as ex:
-            from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to run internal method \'{}\' at \'{}\'.'.format(CommonZoneUpdateEventDispatcherService._on_zone_update.__name__, Zone.update.__name__), exception=ex)
+            self.log.error('Failed to run internal method \'{}\' at \'{}\'.'.format(CommonZoneUpdateEventDispatcherService._on_zone_update.__name__, Zone.update.__name__), exception=ex)
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity().name, Zone, Zone.update.__name__)

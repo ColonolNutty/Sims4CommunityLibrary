@@ -44,9 +44,7 @@ class HasLog(HasModIdentity):
         :rtype: CommonLog
         """
         if self._log is None:
-            mod_name = 'Missing Mod Name'
-            if self.mod_identity is not None:
-                mod_name = self.mod_identity.name
+            mod_name = CommonModIdentity._get_mod_name(self.mod_identity)
             self._log = CommonLogRegistry.get().register_log(mod_name, self.log_identifier)
         return self._log
 

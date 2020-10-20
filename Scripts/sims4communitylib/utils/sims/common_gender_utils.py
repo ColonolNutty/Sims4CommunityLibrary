@@ -5,13 +5,10 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from pprint import pformat
 from typing import Union
 
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Gender
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.modinfo import ModInfo
 
 
 class CommonGenderUtils:
@@ -51,14 +48,10 @@ class CommonGenderUtils:
         :return: True, if the Gender of the Sim was set successfully. False, if not.
         :rtype: bool
         """
-        try:
-            sim_info.gender = gender
-            from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
-            CommonSimEventDispatcherService()._on_sim_change_gender(sim_info)
-            return True
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set gender of Sim {} to {}.'.format(pformat(sim_info), gender), exception=ex)
-            return False
+        sim_info.gender = gender
+        from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
+        CommonSimEventDispatcherService()._on_sim_change_gender(sim_info)
+        return True
 
     @staticmethod
     def swap_gender(sim_info: SimInfo, update_gender_options: bool=True) -> bool:

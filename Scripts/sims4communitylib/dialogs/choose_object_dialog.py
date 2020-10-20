@@ -148,11 +148,6 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         self._always_visible_rows = tuple()
         self._current_page = 1
 
-    # noinspection PyMissingOrEmptyDocstring
-    @property
-    def log_identifier(self) -> str:
-        return 's4cl_choose_object_dialog'
-
     @property
     def current_page(self) -> int:
         """Retrieve the current page.
@@ -196,7 +191,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         try:
             self._always_visible_rows += (choice,)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'An error occurred while running \'{}\''.format(CommonChooseObjectDialog.add_row.__name__), exception=ex)
+            self.log.error('An error occurred while running \'{}\''.format(CommonChooseObjectDialog.add_row.__name__), exception=ex)
 
     def show(
         self,
@@ -242,7 +237,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                 include_pagination=include_pagination
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'An error occurred while running \'{}\''.format(CommonChooseObjectDialog.show.__name__), exception=ex)
+            self.log.error('An error occurred while running \'{}\''.format(CommonChooseObjectDialog.show.__name__), exception=ex)
 
     def _show(
         self,
@@ -253,21 +248,24 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         categories: Iterator[CommonDialogObjectOptionCategory]=(),
         include_pagination: bool=True
     ):
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
         def _on_chosen(choice: Any, outcome: CommonChoiceOutcome) -> bool:
-            self.log.debug('Choice made.')
-            if choice == CommonDialogNavigationButtonTag.NEXT:
-                self.log.debug('Next chosen.')
-                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page + 1, sim_info=sim_info, categories=categories)
-                return True
-            elif choice == CommonDialogNavigationButtonTag.PREVIOUS:
-                self.log.debug('Previous chosen.')
-                self.show(on_chosen=on_chosen, picker_type=picker_type, page=page - 1, sim_info=sim_info, categories=categories)
-                return True
-            self.log.format_with_message('Choose Object Choice made.', choice=choice)
-            result = on_chosen(choice, outcome)
-            self.log.format_with_message('Finished handling choose object _show.', result=result)
-            return result
+            try:
+                self.log.debug('Choice made.')
+                if choice == CommonDialogNavigationButtonTag.NEXT:
+                    self.log.debug('Next chosen.')
+                    self.show(on_chosen=on_chosen, picker_type=picker_type, page=page + 1, sim_info=sim_info, categories=categories)
+                    return True
+                elif choice == CommonDialogNavigationButtonTag.PREVIOUS:
+                    self.log.debug('Previous chosen.')
+                    self.show(on_chosen=on_chosen, picker_type=picker_type, page=page - 1, sim_info=sim_info, categories=categories)
+                    return True
+                self.log.format_with_message('Choose Object Choice made.', choice=choice)
+                result = on_chosen(choice, outcome)
+                self.log.format_with_message('Finished handling choose object _show.', result=result)
+                return result
+            except Exception as ex:
+                self.log.error('Error occurred on choosing a value.', exception=ex)
+            return False
 
         _dialog = self.build_dialog(
             on_chosen=_on_chosen,
@@ -307,18 +305,21 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         if len(self.always_visible_rows) == 0 and len(self.rows) == 0:
             raise AssertionError('No rows have been provided. Add rows to the dialog before attempting to display it.')
 
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
         def _on_chosen(dialog: UiObjectPicker) -> bool:
-            self.log.debug('Choice made.')
-            if not dialog.accepted:
-                self.log.debug('Dialog cancelled.')
-                return on_chosen(None, CommonChoiceOutcome.CANCEL)
-            self.log.debug('Choice not made.')
-            choice = CommonDialogUtils.get_chosen_item(dialog)
-            self.log.format_with_message('Choose Object Choice made.', choice=pformat(choice))
-            result = on_chosen(choice, CommonChoiceOutcome.CHOICE_MADE)
-            self.log.format_with_message('Finished handling choose object _on_chosen.', result=result)
-            return result
+            try:
+                self.log.debug('Choice made.')
+                if not dialog.accepted:
+                    self.log.debug('Dialog cancelled.')
+                    return on_chosen(None, CommonChoiceOutcome.CANCEL)
+                self.log.debug('Choice not made.')
+                choice = CommonDialogUtils.get_chosen_item(dialog)
+                self.log.format_with_message('Choose Object Choice made.', choice=pformat(choice))
+                result = on_chosen(choice, CommonChoiceOutcome.CHOICE_MADE)
+                self.log.format_with_message('Finished handling choose object _on_chosen.', result=result)
+                return result
+            except Exception as ex:
+                self.log.error('Error occurred on choosing a value.', exception=ex)
+            return False
 
         if include_pagination:
             self._setup_dialog_rows(
@@ -444,7 +445,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                     max_selectable=max_selectable
                 )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, '_create_dialog', exception=ex)
+            self.log.error('_create_dialog', exception=ex)
         return None
 
 

@@ -18,8 +18,6 @@ from sims.outfits.outfit_enums import OutfitCategory, BodyType
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.tags_enum import CommonGameTag
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -629,13 +627,9 @@ class CommonOutfitUtils:
         :return: True, if an outfit was generated successfully. False, if not.
         :rtype: bool
         """
-        try:
-            sim_info.on_outfit_generated(sim_info, CommonOutfitUtils.get_current_outfit(sim_info))
-            sim_info.generate_outfit(*outfit_category_and_index)
-            return True
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Problem occurred running function \'{}\'.'.format(CommonOutfitUtils.generate_outfit.__name__), exception=ex)
-        return False
+        sim_info.on_outfit_generated(sim_info, CommonOutfitUtils.get_current_outfit(sim_info))
+        sim_info.generate_outfit(*outfit_category_and_index)
+        return True
 
     @staticmethod
     def resend_outfits(sim_info: SimInfo) -> bool:
@@ -648,12 +642,8 @@ class CommonOutfitUtils:
         :return: True, if outfits were resent successfully. False, if not.
         :rtype: bool
         """
-        try:
-            sim_info.resend_outfits()
-            return True
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Problem occurred running function \'{}\'.'.format(CommonOutfitUtils.resend_outfits.__name__), exception=ex)
-        return False
+        sim_info.resend_outfits()
+        return True
 
     @staticmethod
     def get_previous_outfit(sim_info: SimInfo, default_outfit_category_and_index: Tuple[OutfitCategory, int]=(OutfitCategory.EVERYDAY, 0)) -> Tuple[OutfitCategory, int]:
@@ -707,14 +697,10 @@ class CommonOutfitUtils:
         :return: True, if the outfits were updated successfully. False, if not.
         :rtype: bool
         """
-        try:
-            sim_info.on_outfit_changed(sim_info, CommonOutfitUtils.get_current_outfit(sim_info))
-            CommonOutfitUtils.resend_outfits(sim_info)
-            sim_info.appearance_tracker.evaluate_appearance_modifiers()
-            return True
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Problem occurred running function \'{}\'.'.format(CommonOutfitUtils.update_outfits.__name__), exception=ex)
-        return False
+        sim_info.on_outfit_changed(sim_info, CommonOutfitUtils.get_current_outfit(sim_info))
+        CommonOutfitUtils.resend_outfits(sim_info)
+        sim_info.appearance_tracker.evaluate_appearance_modifiers()
+        return True
 
     @staticmethod
     def has_tag_on_outfit(sim_info: SimInfo, tag: Union[int, CommonGameTag], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:

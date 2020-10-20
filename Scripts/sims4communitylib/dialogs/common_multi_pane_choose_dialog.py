@@ -220,7 +220,7 @@ class CommonMultiPaneChooseDialog(CommonDialog):
                 sim_info=sim_info
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'An error occurred while running \'{}\''.format(CommonMultiPaneChooseDialog.show.__name__), exception=ex)
+            self.log.error('An error occurred while running \'{}\''.format(CommonMultiPaneChooseDialog.show.__name__), exception=ex)
 
     def _show(
         self,
@@ -251,31 +251,34 @@ class CommonMultiPaneChooseDialog(CommonDialog):
         if len(self._sub_dialogs) == 0:
             raise AssertionError('No dialogs have been added to the container. Add dialogs before attempting to display the multi pane dialog.')
 
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
         def _on_submit(_dialog: CommonUiMultiPicker) -> bool:
-            if not _dialog.accepted:
-                self.log.debug('Dialog cancelled.')
-                return on_submit(dict(), CommonChoiceOutcome.CANCEL)
+            try:
+                if not _dialog.accepted:
+                    self.log.debug('Dialog cancelled.')
+                    return on_submit(dict(), CommonChoiceOutcome.CANCEL)
 
-            made_choices: bool = CommonDialogUtils.get_chosen_items(_dialog)
-            if not made_choices:
-                self.log.debug('No choices made. Cancelling dialog.')
-                return on_submit(dict(), CommonChoiceOutcome.CANCEL)
-            self.log.debug('Choices made, combining choices.')
-            index = 0
-            dialog_choices: Dict[int, Tuple[Any]] = dict()
-            for _sub_dialog_submit_id in _dialog._picker_dialogs:
-                _sub_dialog_submit = _dialog._picker_dialogs[_sub_dialog_submit_id]
-                sub_dialog_choices: List[Any] = list()
-                for choice in CommonDialogUtils.get_chosen_items(_sub_dialog_submit):
-                    sub_dialog_choices.append(choice)
-                dialog_choices[index] = tuple(sub_dialog_choices)
-                index += 1
+                made_choices: bool = CommonDialogUtils.get_chosen_items(_dialog)
+                if not made_choices:
+                    self.log.debug('No choices made. Cancelling dialog.')
+                    return on_submit(dict(), CommonChoiceOutcome.CANCEL)
+                self.log.debug('Choices made, combining choices.')
+                index = 0
+                dialog_choices: Dict[int, Tuple[Any]] = dict()
+                for _sub_dialog_submit_id in _dialog._picker_dialogs:
+                    _sub_dialog_submit = _dialog._picker_dialogs[_sub_dialog_submit_id]
+                    sub_dialog_choices: List[Any] = list()
+                    for choice in CommonDialogUtils.get_chosen_items(_sub_dialog_submit):
+                        sub_dialog_choices.append(choice)
+                    dialog_choices[index] = tuple(sub_dialog_choices)
+                    index += 1
 
-            self.log.format_with_message('Choices were made, submitting.', choice=made_choices)
-            result = on_submit(dialog_choices, CommonChoiceOutcome.CHOICE_MADE)
-            self.log.format_with_message('Finished handling choice.', result=result)
-            return result
+                self.log.format_with_message('Choices were made, submitting.', choice=made_choices)
+                result = on_submit(dialog_choices, CommonChoiceOutcome.CHOICE_MADE)
+                self.log.format_with_message('Finished handling choice.', result=result)
+                return result
+            except Exception as ex:
+                self.log.error('Error occurred on submitting a value.', exception=ex)
+            return False
 
         for (sub_dialog, sub_dialog_arguments, sub_dialog_keyword_arguments) in self._sub_dialogs:
             sub_dialog: CommonChooseDialog = sub_dialog
@@ -314,7 +317,7 @@ class CommonMultiPaneChooseDialog(CommonDialog):
                 pickers=()
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'multi_pane_choose._create_dialog', exception=ex)
+            self.log.error('multi_pane_choose._create_dialog', exception=ex)
         return None
 
 

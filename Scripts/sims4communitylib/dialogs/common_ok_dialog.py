@@ -117,7 +117,7 @@ class CommonOkDialog(CommonDialog):
                 on_acknowledged=on_acknowledged
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
+            self.log.error('show', exception=ex)
 
     def _show(
         self,
@@ -142,7 +142,7 @@ class CommonOkDialog(CommonDialog):
                 text_ok=lambda *_, **__: self.ok_text
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, '_create_dialog', exception=ex)
+            self.log.error('_create_dialog', exception=ex)
         return None
 
 

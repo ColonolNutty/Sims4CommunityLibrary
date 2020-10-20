@@ -184,7 +184,7 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
                 max_selectable=max_selectable
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
+            self.log.error('show', exception=ex)
 
     def _show(
         self,

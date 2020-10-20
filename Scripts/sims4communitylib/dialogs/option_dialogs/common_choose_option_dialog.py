@@ -10,7 +10,6 @@ from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
 from sims4communitylib.dialogs.common_choose_dialog import CommonChooseDialog
 from sims4communitylib.dialogs.option_dialogs.common_option_dialog import CommonOptionDialog
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option import CommonDialogOption
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from ui.ui_dialog import UiDialogBase
 
@@ -66,7 +65,7 @@ class CommonChooseOptionDialog(CommonOptionDialog):
         try:
             return self.option_count > 0
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'has_options', exception=ex)
+            self.log.error('has_options', exception=ex)
         return False
 
     def add_option(self, option: CommonDialogOption):
@@ -83,7 +82,7 @@ class CommonChooseOptionDialog(CommonOptionDialog):
             self._options.append(option)
             self._add_row(option)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'add_option', exception=ex)
+            self.log.error('add_option', exception=ex)
 
     def _add_row(self, option: CommonDialogOption):
         self._internal_dialog.add_row(option.as_row(len(self._options)))
@@ -99,7 +98,7 @@ class CommonChooseOptionDialog(CommonOptionDialog):
         try:
             return self._internal_dialog.show(*_, on_chosen=self._on_chosen(), **__)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'choose_option.show', exception=ex)
+            self.log.error('choose_option.show', exception=ex)
 
     def build_dialog(self, *_: Any, **__: Any) -> Union[UiDialogBase, None]:
         """build_dialog(*_, **__)
@@ -114,14 +113,17 @@ class CommonChooseOptionDialog(CommonOptionDialog):
         try:
             return self._internal_dialog.build_dialog(*_, on_chosen=self._on_chosen(), **__)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'choose_option.build_dialog', exception=ex)
+            self.log.error('choose_option.build_dialog', exception=ex)
         return None
 
     def _on_chosen(self) -> Callable[[CommonDialogOption, CommonChoiceOutcome], bool]:
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
         def _on_chosen(chosen_option: CommonDialogOption, outcome: CommonChoiceOutcome) -> bool:
-            if chosen_option is None or CommonChoiceOutcome.is_error_or_cancel(outcome):
-                self.close()
-                return False
-            return chosen_option.choose()
+            try:
+                if chosen_option is None or CommonChoiceOutcome.is_error_or_cancel(outcome):
+                    self.close()
+                    return False
+                return chosen_option.choose()
+            except Exception as ex:
+                self.log.error('Error occurred on choosing a value.', exception=ex)
+            return False
         return _on_chosen

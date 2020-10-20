@@ -5,7 +5,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from pprint import pformat
 from typing import Union, Iterator
 
 import services
@@ -13,14 +12,13 @@ from sims.household import Household
 from sims.sim_info import SimInfo
 from sims.sim_spawner import SimSpawner
 from world.lot import Lot
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_state_utils import CommonSimStateUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
-log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 's4cl_household_utils')
+# noinspection PyTypeChecker
+log = CommonLogRegistry().register_log(None, 's4cl_household_utils')
 
 
 class CommonHouseholdUtils:
@@ -391,17 +389,15 @@ class CommonHouseholdUtils:
             log.info('Household was specified, getting household of the sim.')
             destination_household = services.household_manager().get(household_id)
         if destination_household is None:
-            log.error('Destination Household not specified!')
+            raise AssertionError('Destination Household not specified!')
         log.format_info('Destination household acquired', destination_household=destination_household)
         if CommonSimStateUtils.is_hidden(sim_info):
             log.info('Making hidden Sim visible.')
             services.hidden_sim_service().unhide(sim_info.id)
         if starting_household is destination_household:
-            log.error('The Sim being moved is already in the destination household.', throw=False)
-            return False
+            raise AssertionError('The Sim being moved is already in the destination household.')
         if not destination_household.can_add_sim_info(sim_info):
-            log.error('The destination household has no room for additions.', throw=False)
-            return False
+            raise AssertionError('The destination household has no room for additions.')
         log.info('Removing Sim from the starting household.')
         starting_household.remove_sim_info(sim_info, destroy_if_empty_household=destroy_if_empty_household)
         log.info('Adding Sim to the destination household.')
@@ -614,12 +610,8 @@ class CommonHouseholdUtils:
         :return: True, if the Household was deleted successfully. False, if not.
         :rtype: bool
         """
-        try:
-            services.get_persistence_service().del_household_proto_buff(household.id)
-            services.household_manager().remove(household)
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to delete household \'{}\'.'.format(pformat(household)), exception=ex)
-            return False
+        services.get_persistence_service().del_household_proto_buff(household.id)
+        services.household_manager().remove(household)
         return True
 
     @staticmethod

@@ -5,7 +5,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from pprint import pformat
 from typing import Iterator, Union, Any, Callable
 
 from event_testing.results import EnqueueResult, TestResult
@@ -16,8 +15,6 @@ from interactions.interaction_finisher import FinishingType
 from interactions.priority import Priority
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.interactions_enum import CommonInteractionId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -298,14 +295,9 @@ class CommonSimInteractionUtils:
         :return: True, if all running interactions were successfully cancelled. False, if not.
         :rtype: bool
         """
-        result = True
         for interaction in CommonSimInteractionUtils.get_running_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback):
-            try:
-                interaction.cancel(finishing_type, cancel_reason_msg=cancel_reason, **kwargs)
-            except Exception as ex:
-                CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to cancel running interaction \'{}\' due to an exception.'.format(pformat(interaction)), exception=ex)
-                result = False
-        return result
+            interaction.cancel(finishing_type, cancel_reason_msg=cancel_reason, **kwargs)
+        return True
 
     @staticmethod
     def cancel_all_queued_interactions(sim_info: SimInfo, cancel_reason: str, finishing_type: FinishingType=FinishingType.USER_CANCEL, include_interaction_callback: Callable[[Interaction], bool]=None, **kwargs) -> bool:
@@ -324,14 +316,9 @@ class CommonSimInteractionUtils:
         :return: True, if all queued interactions were successfully cancelled. False, if not.
         :rtype: bool
         """
-        result = True
         for interaction in CommonSimInteractionUtils.get_queued_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback):
-            try:
-                interaction.cancel(finishing_type, cancel_reason_msg=cancel_reason, **kwargs)
-            except Exception as ex:
-                CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to cancel queued interaction \'{}\' due to an exception.'.format(pformat(interaction)), exception=ex)
-                result = False
-        return result
+            interaction.cancel(finishing_type, cancel_reason_msg=cancel_reason, **kwargs)
+        return True
 
     @staticmethod
     def get_running_interactions_gen(sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:

@@ -12,6 +12,8 @@ from interactions.context import InteractionContext
 from sims.sim import Sim
 from sims4communitylib.classes.interactions.common_immediate_super_interaction import CommonImmediateSuperInteraction
 from sims4communitylib.enums.strings_enum import CommonStringId
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
 from sims4communitylib.utils.common_log_utils import CommonLogUtils
 from sims4communitylib.utils.objects.common_object_interaction_utils import CommonObjectInteractionUtils
@@ -20,6 +22,12 @@ from sims4communitylib.utils.resources.common_interaction_utils import CommonInt
 
 class S4CLDebugLogAllInteractionsInteraction(CommonImmediateSuperInteraction):
     """ Log All Interactions of an object. """
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
+        return ModInfo.get_identity()
+
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_log_identifier(cls) -> str:

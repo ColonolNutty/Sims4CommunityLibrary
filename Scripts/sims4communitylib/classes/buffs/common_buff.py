@@ -8,7 +8,6 @@ Copyright (c) COLONOLNUTTY
 from typing import Union
 from buffs.buff import Buff
 from sims.sim import Sim
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -55,7 +54,7 @@ class CommonBuff(Buff, HasClassLog):
         try:
             self.on_added(self.sim, from_load=from_load, apply_buff_loot=apply_buff_loot)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running buff \'{}\' on_added.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running buff \'{}\' on_added.'.format(self.__class__.__name__), exception=ex)
 
     def on_remove(self, apply_loot_on_remove: bool=True):
         """on_remove(apply_loot_on_remove=True)
@@ -69,7 +68,7 @@ class CommonBuff(Buff, HasClassLog):
         try:
             self.on_removed(self.sim, apply_loot_on_remove=apply_loot_on_remove)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running buff \'{}\' on_removed.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running buff \'{}\' on_removed.'.format(self.__class__.__name__), exception=ex)
 
     # The following functions are hooks into various parts of a buff, override them in your own buff to provide custom functionality.
 

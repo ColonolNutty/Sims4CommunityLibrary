@@ -267,7 +267,7 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
         try:
             return self._internal_dialog.show(on_submit=self._on_submit(on_submit=on_submit), sim_info=sim_info)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'multi_pane_choose_option.show', exception=ex)
+            self.log.error('multi_pane_choose_option.show', exception=ex)
 
     def build_dialog(
         self,
@@ -290,34 +290,37 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
         try:
             return self._internal_dialog.build_dialog(on_submit=self._on_submit(on_submit=on_submit), sim_info=sim_info)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'multi_pane_choose_option.build_dialog', exception=ex)
+            self.log.error('multi_pane_choose_option.build_dialog', exception=ex)
         return None
 
     def _on_submit(
         self,
         on_submit: Callable[[Dict[int, Tuple[Any]]], Any]=CommonFunctionUtils.noop
     ) -> Callable[[Dict[int, Tuple[CommonDialogOption]], CommonChoiceOutcome], bool]:
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
         def _on_submit(chosen_options: Dict[int, Tuple[CommonDialogOption]], outcome: CommonChoiceOutcome) -> bool:
-            if chosen_options is None or not chosen_options or CommonChoiceOutcome.is_error_or_cancel(outcome):
-                self.log.debug('No options chosen.')
-                self.close()
-                return False
+            try:
+                if chosen_options is None or not chosen_options or CommonChoiceOutcome.is_error_or_cancel(outcome):
+                    self.log.debug('No options chosen.')
+                    self.close()
+                    return False
 
-            self.log.debug('Chose options: {} with outcome: {}'.format(pformat(chosen_options), pformat(outcome)))
-            chosen_values: Dict[int, DialogOptionValueType] = dict()
-            for chosen_option_index in chosen_options:
-                self.log.debug('Chosen option index: {}'.format(chosen_option_index))
-                chosen_option_options = chosen_options[chosen_option_index]
-                chosen_option_values: List[Any] = list()
-                for chosen_option_option in chosen_option_options:
-                    chosen_option_values.append(chosen_option_option.value)
-                    self.log.debug('Chose value for option: {}'.format(chosen_option_option.value))
-                    chosen_option_option.choose()
-                chosen_values[chosen_option_index] = tuple(chosen_option_values)
+                self.log.debug('Chose options: {} with outcome: {}'.format(pformat(chosen_options), pformat(outcome)))
+                chosen_values: Dict[int, DialogOptionValueType] = dict()
+                for chosen_option_index in chosen_options:
+                    self.log.debug('Chosen option index: {}'.format(chosen_option_index))
+                    chosen_option_options = chosen_options[chosen_option_index]
+                    chosen_option_values: List[Any] = list()
+                    for chosen_option_option in chosen_option_options:
+                        chosen_option_values.append(chosen_option_option.value)
+                        self.log.debug('Chose value for option: {}'.format(chosen_option_option.value))
+                        chosen_option_option.choose()
+                    chosen_values[chosen_option_index] = tuple(chosen_option_values)
 
-            self.log.debug('Submitting choices: {}'.format(pformat(chosen_values)))
-            return on_submit(chosen_values)
+                self.log.debug('Submitting choices: {}'.format(pformat(chosen_values)))
+                return on_submit(chosen_values)
+            except Exception as ex:
+                self.log.error('Error occurred on submitting a value.', exception=ex)
+            return False
         return _on_submit
 
 

@@ -66,10 +66,8 @@ class HasClassLog(HasClassModIdentity, HasLog):
         :rtype: CommonLog
         """
         if not hasattr(cls, '_log') or getattr(cls, '_log', None) is None:
-            mod_name = 'Missing Mod Name'
-            if cls.get_mod_identity() is not None:
-                mod_name = cls.get_mod_identity().name
-            setattr(cls, '_log', CommonLogRegistry.get().register_log(mod_name, cls.get_log_identifier()))
+            mod_name = CommonModIdentity._get_mod_name(cls.get_mod_identity())
+            setattr(cls, '_log', CommonLogRegistry().register_log(mod_name, cls.get_log_identifier()))
         return getattr(cls, '_log', None)
 
     @classmethod

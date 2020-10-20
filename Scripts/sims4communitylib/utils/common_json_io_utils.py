@@ -7,9 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 import json
 from typing import Union, Any
-
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_io_utils import CommonIOUtils
 
 
@@ -36,12 +33,8 @@ class CommonJSONIOUtils:
         """
         if file_path is None or obj is None:
             return False
-        try:
-            with open(file_path, mode='w+', buffering=buffering, encoding=encoding) as file:
-                json.dump(obj, file)
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while writing JSON to file \'{}\''.format(file_path), exception=ex)
-            return False
+        with open(file_path, mode='w+', buffering=buffering, encoding=encoding) as file:
+            json.dump(obj, file)
         return True
 
     @staticmethod
@@ -62,8 +55,4 @@ class CommonJSONIOUtils:
         file_contents: str = CommonIOUtils.load_from_file(file_path, buffering=buffering, encoding=encoding)
         if file_contents is None:
             return None
-        try:
-            return json.loads(file_contents)
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while reading JSON from file \'{}\''.format(file_path), exception=ex)
-            return None
+        return json.loads(file_contents)
