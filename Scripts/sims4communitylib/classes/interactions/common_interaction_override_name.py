@@ -12,10 +12,8 @@ from interactions.context import InteractionContext
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims.sim import Sim
 from sims4.utils import flexmethod
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.modinfo import ModInfo
 
 
 class CommonInteractionOverrideName(HasClassLog):
@@ -28,8 +26,8 @@ class CommonInteractionOverrideName(HasClassLog):
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
-    def get_mod_identity(cls) -> CommonModIdentity:
-        return ModInfo.get_identity()
+    def get_mod_identity(cls) -> Union[CommonModIdentity, None]:
+        return None
 
     def __init__(self) -> None:
         super().__init__()
@@ -42,7 +40,7 @@ class CommonInteractionOverrideName(HasClassLog):
             inst_or_cls = context or inst or cls
             return cls._create_display_name(inst_or_cls.sim, target or inst_or_cls.target, interaction=inst, interaction_context=context, *args, **kwargs)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(cls.get_mod_identity(), 'An error occurred while running get_name of interaction {}'.format(cls.__name__), exception=ex)
+            cls.get_log().error('An error occurred while running get_name of interaction {}'.format(cls.__name__), exception=ex)
 
     # noinspection PyUnusedLocal
     @classmethod

@@ -5,12 +5,10 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from pprint import pformat
 from typing import Union
 
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Species
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
@@ -53,12 +51,8 @@ class CommonSpeciesUtils:
         :return: True, if successful. False, if not.
         :rtype: bool
         """
-        try:
-            sim_info.species = species
-            return True
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set species of sim {} to {}.'.format(pformat(sim_info), species), exception=ex)
-            return False
+        sim_info.species = species
+        return True
     
     @staticmethod
     def are_same_species(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:
@@ -78,31 +72,11 @@ class CommonSpeciesUtils:
         if sim_info is None or other_sim_info is None:
             log.debug('Either sim_info or other_sim_info is None')
             return False
-        log.format_with_message('Checking if sims are the same species.', sim_info=sim_info, other_sim_info=other_sim_info)
-        species_one = CommonSpeciesUtils.get_species(sim_info)
-        species_two = CommonSpeciesUtils.get_species(other_sim_info)
-        if species_one != species_two:
-            log.format_with_message('Sims not the same species.', species_one=species_one, species_two=species_two)
-            return False
-    
-        if CommonSpeciesUtils.is_human(sim_info):
-            log.debug('Both sims are human.')
-            return True
-    
-        if CommonSpeciesUtils.is_cat(sim_info):
-            log.debug('Both sims are cats.')
-            return True
-    
-        if CommonSpeciesUtils.is_large_dog(sim_info) and CommonSpeciesUtils.is_large_dog(other_sim_info):
-            log.debug('Both sims are large dogs.')
-            return True
-    
-        if CommonSpeciesUtils.is_small_dog(sim_info) and CommonSpeciesUtils.is_small_dog(other_sim_info):
-            log.debug('Both sims are small dogs.')
-            return True
-    
-        log.debug('Sims are not the same species.')
-        return False
+        from sims4communitylib.enums.common_species import CommonSpecies
+        species_one = CommonSpecies.get_species(sim_info)
+        species_two = CommonSpecies.get_species(other_sim_info)
+        log.format(species_one=species_one, species_two=species_two, sim_one=sim_info, other_sim_info=other_sim_info)
+        return species_one == species_two
     
     @staticmethod
     def is_human_species(species: Union[Species, int]) -> bool:

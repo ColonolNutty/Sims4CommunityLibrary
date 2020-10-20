@@ -27,8 +27,6 @@ from postures.posture_specs import get_origin_spec, PostureSpecVariable
 from postures.posture_state import PostureState
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -102,11 +100,7 @@ class CommonSimSpawnUtils:
         :return: True, if the Sim was spawned successfully. False, if not.
         :rtype: bool
         """
-        try:
-            SimSpawner.spawn_sim(sim_info, sim_location=location, sim_position=position, **kwargs)
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to spawn Sim with SimInfo \'{}\' at location \'{}\'.'.format(sim_info, location), exception=ex)
-            return False
+        SimSpawner.spawn_sim(sim_info, sim_location=location, sim_position=position, **kwargs)
         return True
 
     @staticmethod

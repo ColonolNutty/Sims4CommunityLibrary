@@ -13,6 +13,7 @@ from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtils
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 from sims4communitylib.enums.strings_enum import CommonStringId
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
@@ -20,8 +21,6 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog_picker import UiObjectPicker, ObjectPickerRow
-
-log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'choose_item_dialog')
 
 
 class CommonChooseItemResult(CommonInt):
@@ -196,6 +195,6 @@ def _common_testing_show_choose_item_dialog(_connection: int=None):
                                         description_tokens=description_tokens)
         dialog.show(on_item_chosen=_item_chosen)
     except Exception as ex:
-        log.format_error_with_message('Failed to show dialog', exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
         output('Failed to show dialog, please locate your exception log file.')
     output('Done showing.')

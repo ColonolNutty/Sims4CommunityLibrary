@@ -138,7 +138,7 @@ class CommonTargetedQuestionDialog(CommonDialog):
                 on_cancel_selected=on_cancel_selected
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
+            self.log.error('show', exception=ex)
 
     def _show(
         self,
@@ -157,14 +157,17 @@ class CommonTargetedQuestionDialog(CommonDialog):
             self.log.debug('Failed to create dialog.')
             return
 
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
         def _on_option_selected(dialog: UiDialogOkCancel) -> bool:
-            self.log.debug('Option selected.')
-            if dialog.accepted:
-                self.log.debug('Ok chosen.')
-                return on_ok_selected(dialog)
-            self.log.debug('Cancel chosen.')
-            return on_cancel_selected(dialog)
+            try:
+                self.log.debug('Option selected.')
+                if dialog.accepted:
+                    self.log.debug('Ok chosen.')
+                    return on_ok_selected(dialog)
+                self.log.debug('Cancel chosen.')
+                return on_cancel_selected(dialog)
+            except Exception as ex:
+                self.log.error('Error occurred on choosing an option.', exception=ex)
+            return False
 
         _dialog.add_listener(_on_option_selected)
         self.log.debug('Displaying dialog.')
@@ -185,7 +188,7 @@ class CommonTargetedQuestionDialog(CommonDialog):
                 resolver=DoubleSimResolver(sim_info, target_sim_info)
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, '_create_dialog', exception=ex)
+            self.log.error('_create_dialog', exception=ex)
         return None
 
 

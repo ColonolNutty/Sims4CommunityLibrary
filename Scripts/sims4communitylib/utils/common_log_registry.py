@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import sims4.commands
-from typing import List, Dict, Any, Union
+from typing import List, Dict, Any, Union, Tuple
 from pprint import pformat
 
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
@@ -63,49 +63,63 @@ class CommonLog:
         if self.enabled:
             self._log_message(CommonMessageType.INFO, message)
 
-    def format_info(self, *args: Any, **kwargs: Any):
-        """format_info(*args, **kwargs)
+    def format_info(self, *args: Any, update_tokens: bool=True, **kwargs: Any):
+        """format_info(*args, update_tokens=True, **kwargs)
 
         Log a non-descriptive message containing pformatted arguments and keyword arguments with message type INFO.
 
+        :param update_tokens: If set to True, when an arg or kwarg value is a Sim or SimInfo, it will be converted to their name before format occurs. Default is True.
+        :type update_tokens: bool, optional
         :param args: Arguments to format into the message.
         :type args: Any
         :param kwargs: Keyword Arguments to format into the message.
         :type kwargs: Any
         """
-        self.format(*args, message_type=CommonMessageType.INFO, **kwargs)
+        self.format(*args, message_type=CommonMessageType.INFO, update_tokens=update_tokens, **kwargs)
 
-    def format_info_with_message(self, message: str, *args, **kwargs):
-        """format_info_with_message(message, *args, **kwargs)
+    def format_info_with_message(self, message: str, *args, update_tokens: bool=True, **kwargs):
+        """format_info_with_message(message, *args, update_tokens=True, **kwargs)
 
         Log a message containing pformatted arguments and keyword arguments with message type INFO.
 
         :param message: The message to log.
         :type message: str
+        :param update_tokens: If set to True, when an arg or kwarg value is a Sim or SimInfo, it will be converted to their name before format occurs. Default is True.
+        :type update_tokens: bool, optional
         :param args: Arguments to format into the message.
         :type args: Any
         :param kwargs: Keyword Arguments to format into the message.
         :type kwargs: Any
         """
-        self.format_with_message(message, *args, message_type=CommonMessageType.INFO, **kwargs)
+        self.format_with_message(message, *args, message_type=CommonMessageType.INFO, update_tokens=update_tokens, **kwargs)
 
-    def format(self, *args, message_type: CommonMessageType=CommonMessageType.DEBUG, **kwargs):
-        """format(*args, message_type=CommonMessageType.DEBUG, **kwargs)
+    def format(self, *args, message_type: CommonMessageType=CommonMessageType.DEBUG, update_tokens: bool=True, **kwargs):
+        """format(*args, message_type=CommonMessageType.DEBUG, update_tokens=True, **kwargs)
 
         Log a non-descriptive message containing pformatted arguments and keyword arguments with the specified message type.
 
         :param message_type: The MessageType of the logged message. Default is CommonMessageType.DEBUG.
         :type message_type: CommonMessageType, optional
+        :param update_tokens: If set to True, when an arg or kwarg value is a Sim or SimInfo, it will be converted to their name before format occurs. Default is True.
+        :type update_tokens: bool, optional
         :param args: Arguments to format into the message.
         :type args: Any
         :param kwargs: Keyword Arguments to format into the message.
         :type kwargs: Any
         """
         if self.enabled:
-            self._log_message(message_type, '{}, {}\n'.format(pformat(args), pformat(kwargs)))
+            if update_tokens:
+                args = self._update_args(*args)
+                kwargs = self._update_kwargs(**kwargs)
+            if args and kwargs:
+                self._log_message(message_type, '{}, {}\n'.format(pformat(args), pformat(kwargs)))
+            elif args:
+                self._log_message(message_type, '{}\n'.format(pformat(args)))
+            else:
+                self._log_message(message_type, '{}\n'.format(pformat(kwargs)))
 
-    def format_with_message(self, message: str, *args, message_type: CommonMessageType=CommonMessageType.DEBUG, **kwargs):
-        """format_with_message(message, *args, message_type=CommonMessageType.DEBUG, **kwargs)
+    def format_with_message(self, message: str, *args, message_type: CommonMessageType=CommonMessageType.DEBUG, update_tokens: bool=True, **kwargs):
+        """format_with_message(message, *args, message_type=CommonMessageType.DEBUG, update_tokens=True, **kwargs)
 
         Log a message containing pformatted arguments and keyword arguments with the specified message type.
 
@@ -113,12 +127,17 @@ class CommonLog:
         :type message: str
         :param message_type: The type of message being logged. Default is CommonMessageType.DEBUG.
         :type message_type: CommonMessageType, optional
+        :param update_tokens: If set to True, when an arg or kwarg value is a Sim or SimInfo, it will be converted to their name before format occurs. Default is True.
+        :type update_tokens: bool, optional
         :param args: Arguments to format into the message.
         :type args: Any
         :param kwargs: Keyword Arguments to format into the message.
         :type kwargs: Any
         """
         if self.enabled:
+            if update_tokens:
+                args = self._update_args(*args)
+                kwargs = self._update_kwargs(**kwargs)
             if args and kwargs:
                 self._log_message(message_type, '{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)))
             elif args:
@@ -137,31 +156,35 @@ class CommonLog:
         if self.enabled:
             self._log_message(CommonMessageType.WARN, message)
 
-    def format_warn(self, *args: Any, **kwargs: Any):
-        """format_warn(*args, **kwargs)
+    def format_warn(self, *args: Any, update_tokens: bool=True, **kwargs: Any):
+        """format_warn(*args, update_tokens=True, **kwargs)
 
         Log a non-descriptive message containing pformatted arguments and keyword arguments with message type WARN.
 
+        :param update_tokens: If set to True, when an arg or kwarg value is a Sim or SimInfo, it will be converted to their name before format occurs. Default is True.
+        :type update_tokens: bool, optional
         :param args: Arguments to format into the message.
         :type args: Any
         :param kwargs: Keyword Arguments to format into the message.
         :type kwargs: Any
         """
-        self.format(*args, message_type=CommonMessageType.WARN, **kwargs)
+        self.format(*args, message_type=CommonMessageType.WARN, update_tokens=update_tokens, **kwargs)
 
-    def format_warn_with_message(self, message: str, *args, **kwargs):
-        """format_warn_with_message(message, *args, **kwargs)
+    def format_warn_with_message(self, message: str, *args, update_tokens: bool=True, **kwargs):
+        """format_warn_with_message(message, *args, update_tokens=True, **kwargs)
 
         Log a message containing pformatted arguments and keyword arguments with message type WARN.
 
         :param message: The message to log.
         :type message: str
+        :param update_tokens: If set to True, when an arg or kwarg value is a Sim or SimInfo, it will be converted to their name before format occurs. Default is True.
+        :type update_tokens: bool, optional
         :param args: Arguments to format into the message.
         :type args: Any
         :param kwargs: Keyword Arguments to format into the message.
         :type kwargs: Any
         """
-        self.format_with_message(message, *args, message_type=CommonMessageType.WARN, **kwargs)
+        self.format_with_message(message, *args, message_type=CommonMessageType.WARN, update_tokens=update_tokens, **kwargs)
 
     def error(self, message: str, message_type: CommonMessageType=CommonMessageType.ERROR, exception: Exception=None, throw: bool=True):
         """error(message, message_type=CommonMessageType.ERROR, exception=None, throw=True)
@@ -182,8 +205,8 @@ class CommonLog:
         if exception is not None:
             self._log_message(message_type, pformat(exception))
 
-    def format_error(self, *args, exception: Exception=None, throw: bool=True, **kwargs):
-        """format_error(*args, exception=None, throw=True, **kwargs)
+    def format_error(self, *args, exception: Exception=None, throw: bool=True, update_tokens: bool=True, **kwargs):
+        """format_error(*args, exception=None, throw=True, update_tokens=True, **kwargs)
 
         Log a non-descriptive error message containing pformatted arguments and keyword arguments.
 
@@ -191,15 +214,25 @@ class CommonLog:
         :type exception: Exception, optional
         :param throw: If set to True, the exception will be rethrown.
         :type throw: bool, optional
+        :param update_tokens: If set to True, when an arg or kwarg value is a Sim or SimInfo, it will be converted to their name before format occurs. Default is True.
+        :type update_tokens: bool, optional
         :param args: Arguments to format into the message.
         :type args: Any
         :param kwargs: Keyword Arguments to format into the message.
         :type kwargs: Any
         """
-        self.error('{}, {}\n'.format(pformat(args), pformat(kwargs)), exception=exception, throw=throw)
+        if update_tokens:
+            args = self._update_args(*args)
+            kwargs = self._update_kwargs(**kwargs)
+        if args and kwargs:
+            self.error('{}, {}\n'.format(pformat(args), pformat(kwargs)), exception=exception, throw=throw)
+        elif args:
+            self.error('{}\n'.format(pformat(args)), exception=exception, throw=throw)
+        else:
+            self.error('{}\n'.format(pformat(kwargs)), exception=exception, throw=throw)
 
-    def format_error_with_message(self, message: str, *args, exception: Exception=None, throw: bool=True, **kwargs):
-        """format_error_with_message(message, *args, exception=None, throw=True, **kwargs)
+    def format_error_with_message(self, message: str, *args, exception: Exception=None, throw: bool=True, update_tokens: bool=True, **kwargs):
+        """format_error_with_message(message, *args, exception=None, throw=True, update_tokens=True, **kwargs)
 
         Log an error message containing pformatted arguments and keyword arguments.
 
@@ -209,12 +242,22 @@ class CommonLog:
         :type exception: Exception, None
         :param throw: If set to True, the exception will be rethrown. Default is True.
         :type throw: bool, optional
+        :param update_tokens: If set to True, when an arg or kwarg value is a Sim or SimInfo, it will be converted to their name before format occurs. Default is True.
+        :type update_tokens: bool, optional
         :param args: Arguments to format into the message.
         :type args: Any
         :param kwargs: Keyword Arguments to format into the message.
         :type kwargs: Any
         """
-        self.error('{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)), exception=exception, throw=throw)
+        if update_tokens:
+            args = self._update_args(*args)
+            kwargs = self._update_kwargs(**kwargs)
+        if args and kwargs:
+            self.error('{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)), exception=exception, throw=throw)
+        elif args:
+            self.error('{} {}\n'.format(message, pformat(args)), exception=exception, throw=throw)
+        else:
+            self.error('{} {}\n'.format(message, pformat(kwargs)), exception=exception, throw=throw)
 
     def log_stack(self) -> None:
         """log_stack()
@@ -289,6 +332,42 @@ class CommonLog:
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_name, 'Error occurred while attempting to log message: {}'.format(pformat(message)), exception=ex)
 
+    def _update_args(self, *args: Any) -> Tuple[Any]:
+        if not args:
+            return args
+        from sims4communitylib.utils.common_type_utils import CommonTypeUtils
+        from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+        new_args: List[Any] = list()
+        for arg in args:
+            if CommonTypeUtils.is_sim_or_sim_info(arg):
+                sim_info = CommonSimUtils.get_sim_info(arg)
+                if sim_info is None:
+                    new_args.append(arg)
+                else:
+                    new_args.append('{} ({})'.format(CommonSimNameUtils.get_full_name(sim_info), str(CommonSimUtils.get_sim_id(sim_info))))
+            else:
+                new_args.append(arg)
+        return tuple(new_args)
+
+    def _update_kwargs(self, **kwargs: Any) -> Dict[str, Any]:
+        if not kwargs:
+            return kwargs
+        new_kwargs: Dict[str, Any] = dict()
+        from sims4communitylib.utils.common_type_utils import CommonTypeUtils
+        from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+        for (key, val) in kwargs.items():
+            if CommonTypeUtils.is_sim_or_sim_info(val):
+                sim_info = CommonSimUtils.get_sim_info(val)
+                if sim_info is None:
+                    new_kwargs[key] = val
+                else:
+                    new_kwargs[key] = '{} ({})'.format(CommonSimNameUtils.get_full_name(sim_info), str(CommonSimUtils.get_sim_id(sim_info)))
+            else:
+                new_kwargs[key] = val
+        return new_kwargs
+
 
 class CommonLogRegistry(CommonService):
     """CommonLogRegistry()
@@ -339,14 +418,14 @@ class CommonLogRegistry(CommonService):
         """
         if self._registered_logs is None:
             return list()
-        mod_name = CommonModIdentity._get_mod_name(mod_identifier)
-        if mod_name is None:
+        if mod_identifier is None:
             log_names = []
             for log_mod_name in self._registered_logs:
                 for log_name in self._registered_logs[log_mod_name]:
                     log_names.append(log_name)
             return log_names
         else:
+            mod_name = CommonModIdentity._get_mod_name(mod_identifier)
             mod_name = mod_name.lower()
             if mod_name not in self._registered_logs:
                 return list()
@@ -369,8 +448,6 @@ class CommonLogRegistry(CommonService):
         if self._registered_logs is None:
             self._registered_logs = dict()
         mod_name = CommonModIdentity._get_mod_name(mod_identifier)
-        if mod_name is None:
-            mod_name = 'Unknown_Mod_Name'
         mod_name = mod_name.lower()
         # Dict[str, Dict[str, CommonLog]]
         if mod_name not in self._registered_logs:
@@ -386,8 +463,6 @@ class CommonLogRegistry(CommonService):
     def _delete_old_log_files(self, mod_identifier: Union[str, CommonModIdentity]):
         from sims4communitylib.utils.common_io_utils import CommonIOUtils
         mod_name = CommonModIdentity._get_mod_name(mod_identifier)
-        if mod_name is None:
-            mod_name = 'Unknown_Mod_Name'
         files_to_delete = (
             CommonLogUtils.get_message_file_path(mod_name),
             CommonLogUtils.get_exceptions_file_path(mod_name),
@@ -414,13 +489,15 @@ class CommonLogRegistry(CommonService):
         :return: True, if a handler exists with the specified name.
         :rtype: bool
         """
-        mod_name = CommonModIdentity._get_mod_name(mod_identifier)
-        if mod_name is None:
+        if self._registered_logs is None:
+            return False
+        if mod_identifier is None:
             for log_mod_name in self._registered_logs:
                 if log_name not in self._registered_logs[log_mod_name]:
                     continue
                 return True
         else:
+            mod_name = CommonModIdentity._get_mod_name(mod_identifier)
             mod_name = mod_name.lower()
             return mod_name in self._registered_logs and log_name in self._registered_logs[mod_name]
 
@@ -439,14 +516,14 @@ class CommonLogRegistry(CommonService):
         """
         if self._registered_logs is None:
             self._registered_logs = dict()
-        mod_name = CommonModIdentity._get_mod_name(mod_identifier)
-        if mod_name is None:
+        if mod_identifier is None:
             for log_mod_name in self._registered_logs:
                 if log_name not in self._registered_logs[log_mod_name]:
                     continue
                 log = self._registered_logs[log_mod_name][log_name]
                 log.enable()
         else:
+            mod_name = CommonModIdentity._get_mod_name(mod_identifier)
             mod_name = mod_name.lower()
             if log_name not in self._registered_logs[mod_name]:
                 return False
@@ -468,14 +545,14 @@ class CommonLogRegistry(CommonService):
         """
         if self._registered_logs is None:
             self._registered_logs = dict()
-        mod_name = CommonModIdentity._get_mod_name(mod_identifier)
-        if mod_name is None:
+        if mod_identifier is None:
             for log_mod_name in self._registered_logs:
                 if log_name not in self._registered_logs[log_mod_name]:
                     continue
                 log = self._registered_logs[log_mod_name][log_name]
                 log.disable()
         else:
+            mod_name = CommonModIdentity._get_mod_name(mod_identifier)
             mod_name = mod_name.lower()
             if log_name not in self._registered_logs[mod_name]:
                 return False
@@ -495,12 +572,12 @@ class CommonLogRegistry(CommonService):
         """
         if self._registered_logs is None:
             self._registered_logs = dict()
-        mod_name = CommonModIdentity._get_mod_name(mod_identifier)
-        if mod_name is None:
+        if mod_identifier is None:
             for log_mod_name in self._registered_logs:
                 for log_name in self._registered_logs[log_mod_name]:
                     self._registered_logs[log_mod_name][log_name].disable()
         else:
+            mod_name = CommonModIdentity._get_mod_name(mod_identifier)
             mod_name = mod_name.lower()
             for log_name in self._registered_logs.get(mod_name, dict()):
                 self._registered_logs[mod_name][log_name].disable()

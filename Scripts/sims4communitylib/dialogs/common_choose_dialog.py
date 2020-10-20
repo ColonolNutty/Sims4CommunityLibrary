@@ -10,7 +10,6 @@ from typing import Tuple, Any, Union, Iterator
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.dialogs.common_dialog import CommonDialog
 from sims4communitylib.enums.strings_enum import CommonStringId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from ui.ui_dialog_picker import BasePickerRow
@@ -100,4 +99,4 @@ class CommonChooseDialog(CommonDialog, ABC):
         try:
             self._rows += (row,)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'add_row', exception=ex)
+            self.log.error('add_row', exception=ex)

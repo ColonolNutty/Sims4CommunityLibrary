@@ -9,7 +9,6 @@ from functools import wraps
 from typing import Any, Callable, Union
 from sims4communitylib.exceptions.common_stacktrace_utils import CommonStacktraceUtil
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
 from sims4communitylib.utils.common_io_utils import CommonIOUtils
 
@@ -34,6 +33,7 @@ class CommonExceptionHandler:
         :return: True, if the message was successfully logged. False, if the message was not successfully logged.
         :rtype: bool
         """
+        mod_identifier = CommonModIdentity._get_mod_name(mod_identifier)
         exceptions = CommonStacktraceUtil.get_full_stack_trace()
         stack_trace = '{}{} -> {}: {}\n'.format(''.join(exceptions), exception_message, type(exception).__name__, exception)
         from sims4communitylib.utils.common_log_registry import CommonLogUtils
@@ -58,8 +58,7 @@ class CommonExceptionHandler:
         :return: A function wrapped to catch and log exceptions.
         :rtype: Callable[..., Any]
         """
-        if isinstance(mod_identifier, CommonModIdentity):
-            mod_identifier = mod_identifier.name
+        mod_identifier = CommonModIdentity._get_mod_name(mod_identifier)
 
         def _catch_exception(exception_function: Callable[..., Any]):
             @wraps(exception_function)
@@ -74,8 +73,7 @@ class CommonExceptionHandler:
 
     @staticmethod
     def _log_stacktrace(mod_identifier: Union[str, CommonModIdentity], _traceback: str, file_path: str) -> bool:
-        if isinstance(mod_identifier, CommonModIdentity):
-            mod_identifier = mod_identifier.name
+        mod_identifier = CommonModIdentity._get_mod_name(mod_identifier)
         exception_traceback_text = '[{}] {} {}\n'.format(mod_identifier, CommonRealDateUtils.get_current_date_string(), _traceback)
         return CommonIOUtils.write_to_file(file_path, exception_traceback_text, ignore_errors=True)
 
@@ -87,10 +85,7 @@ class CommonExceptionHandler:
         from sims4communitylib.events.zone_spin.common_zone_spin_event_dispatcher import CommonZoneSpinEventDispatcher
         if not CommonZoneSpinEventDispatcher.get().game_loaded:
             return
-        if mod_identifier is None or not mod_identifier:
-            mod_identifier = ModInfo.get_identity().name
-        if isinstance(mod_identifier, CommonModIdentity):
-            mod_identifier = mod_identifier.name
+        mod_identifier = CommonModIdentity._get_mod_name(mod_identifier)
         basic_notification = CommonBasicNotification(
             CommonStringId.EXCEPTION_OCCURRED_TITLE_FOR_MOD,
             CommonStringId.EXCEPTION_OCCURRED_TEXT,

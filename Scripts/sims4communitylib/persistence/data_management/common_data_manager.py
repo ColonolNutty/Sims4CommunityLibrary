@@ -8,7 +8,6 @@ Copyright (c) COLONOLNUTTY
 from typing import Dict, Any, Type, Tuple
 
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.persistence.data_stores.common_data_store import CommonDataStore
 from sims4communitylib.persistence.persistence_services.common_persistence_service import CommonPersistenceService
@@ -155,7 +154,7 @@ class CommonDataManager(HasLog):
                 self._data_store_data[name] = data_store._storage
             return self._save()
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity.name, 'Error occurred while saving data \'{}\'.'.format(self.__repr__()), exception=ex)
+            self.log.error('Error occurred while saving data \'{}\'.'.format(self.__repr__()), exception=ex)
         return False
 
     def remove_all_data(self, prevent_save: bool=False) -> bool:

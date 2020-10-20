@@ -79,7 +79,7 @@ class CommonModIdentity:
     @staticmethod
     def _get_mod_name(mod_identifier: Union[str, 'CommonModIdentity']) -> Union[str, None]:
         if mod_identifier is None:
-            return None
+            return 'Unknown_Mod'
         if isinstance(mod_identifier, CommonModIdentity):
             return mod_identifier.name
         if isinstance(mod_identifier, str):

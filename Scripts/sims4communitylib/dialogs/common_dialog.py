@@ -10,7 +10,6 @@ from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from ui.ui_dialog import UiDialogBase
 
@@ -56,7 +55,7 @@ class CommonDialog(HasLog):
     # noinspection PyMissingOrEmptyDocstring
     @property
     def mod_identity(self) -> CommonModIdentity:
-        return self._mod_identity or ModInfo.get_identity()
+        return self._mod_identity
 
     def show(self, *_: Any, **__: Any):
         """show(*_, **__)

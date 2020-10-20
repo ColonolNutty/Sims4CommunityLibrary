@@ -15,9 +15,6 @@ from scheduling import Timeline
 from sims.sim import Sim
 from sims4.utils import flexmethod
 from sims4communitylib.classes.interactions.common_interaction import CommonInteraction
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.modinfo import ModInfo
 
 # ReadTheDocs
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
@@ -128,7 +125,7 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
         try:
             return self.on_run(self.sim, self.target, timeline)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running interaction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
         return False
 
     # noinspection PyUnusedLocal
@@ -158,11 +155,6 @@ class CommonConstrainedSuperInteraction(SuperInteraction):
 
     """
 
-    # noinspection PyMissingOrEmptyDocstring
-    @classmethod
-    def get_mod_identity(cls) -> CommonModIdentity:
-        return ModInfo.get_identity()
-
     # noinspection PyMethodParameters
     @flexmethod
     def _constraint_gen(cls, inst: Interaction, sim: Sim, target: Any, participant_type: ParticipantType=ParticipantType.Actor, **kwargs) -> Constraint:
@@ -174,7 +166,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction):
             else:
                 return super(CommonConstrainedSuperInteraction, inst_or_cls)._constraint_gen(sim, target, participant_type=participant_type, **kwargs)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(cls.get_mod_identity(), 'Error occurred while running interaction \'{}\' _on_constraint_gen.'.format(cls.__name__), exception=ex)
+            cls.get_log().error('Error occurred while running interaction \'{}\' _on_constraint_gen.'.format(cls.__name__), exception=ex)
 
     @classmethod
     def on_constraint_gen(cls, inst: Interaction, sim: Sim, target: Any) -> Union[Constraint, None]:

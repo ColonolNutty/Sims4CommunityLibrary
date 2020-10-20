@@ -58,10 +58,10 @@ class CommonPersistedGameObjectDataStorage(CommonGameObjectDataStorage):
         self.__data_manager: CommonDataManager = None
         self._data = self._load_persisted_data()
 
-    # noinspection PyMissingOrEmptyDocstring,PyMethodParameters
+    # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(cls) -> CommonModIdentity:
-        return super().get_mod_identity()
+        raise NotImplementedError('Missing \'{}\' inside {}.'.format(cls.get_mod_identity.__name__, cls.__class__))
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod

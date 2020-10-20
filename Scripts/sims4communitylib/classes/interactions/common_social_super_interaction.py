@@ -14,7 +14,6 @@ from scheduling import Timeline
 from sims.sim import Sim
 from sims4.utils import classproperty, flexmethod
 from sims4communitylib.classes.interactions.common_super_interaction import CommonSuperInteraction
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 
 # ReadTheDocs
@@ -106,7 +105,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
         try:
             return self.on_run(self.sim, self.target, timeline)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running interaction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
         return False
 
     # noinspection PyUnusedLocal
@@ -133,7 +132,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
             target = self.get_participant(ParticipantType.TargetSim)
             self.on_started(self.context.sim, target)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' on_started.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running interaction \'{}\' on_started.'.format(self.__class__.__name__), exception=ex)
 
     # noinspection PyMissingOrEmptyDocstring
     def setup_asm_default(self, asm: NativeAsm, *args, **kwargs) -> bool:
@@ -142,7 +141,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
             if result is not None:
                 return result
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while running interaction \'{}\' setup_asm_default.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running interaction \'{}\' setup_asm_default.'.format(self.__class__.__name__), exception=ex)
         return super().setup_asm_default(asm, *args, **kwargs)
 
     # SocialSuperInteraction has a different signature for its _test function, so we override it in here.
@@ -170,7 +169,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                             return TestResult(False, 'Sim {} is already running matching affordance:{} ', sim, cls)
                 test_result = cls.on_test(context.sim, target, context, *args, **kwargs)
             except Exception as ex:
-                CommonExceptionHandler.log_exception(cls.get_mod_identity(), 'Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
+                cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
                 return TestResult.NONE
 
             if test_result is None:
@@ -187,7 +186,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                 return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
             return super(CommonSocialSuperInteraction, inst_or_cls)._test(target, context, *args, **kwargs)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(cls.get_mod_identity(), 'Error occurred while running _test of interaction \'{}\''.format(cls.__name__), exception=ex)
+            cls.get_log().error('Error occurred while running _test of interaction \'{}\''.format(cls.__name__), exception=ex)
         return TestResult(False)
 
     @classmethod

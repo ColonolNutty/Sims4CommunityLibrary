@@ -12,7 +12,6 @@ from sims4communitylib.dialogs.common_choose_dialog import CommonChooseDialog
 from sims4communitylib.dialogs.option_dialogs.common_choose_option_dialog import CommonChooseOptionDialog
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option import CommonDialogOption
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_context import DialogOptionValueType
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
@@ -81,7 +80,7 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
                 **__
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'choose_options.show', exception=ex)
+            self.log.error('choose_options.show', exception=ex)
 
     def build_dialog(
         self,
@@ -122,7 +121,7 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
                 **__
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'choose_options.build_dialog', exception=ex)
+            self.log.error('choose_options.build_dialog', exception=ex)
         return None
 
     def _on_chosen(self) -> Callable[[Union[Tuple[CommonDialogOption], None], CommonChoiceOutcome], bool]:
@@ -132,13 +131,16 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
         self,
         on_submit: Callable[[Tuple[DialogOptionValueType]], Any]=CommonFunctionUtils.noop
     ) -> Callable[[Union[Tuple[CommonDialogOption], None], CommonChoiceOutcome], bool]:
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
         def _on_submit(chosen_options: Union[Tuple[CommonDialogOption], None], outcome: CommonChoiceOutcome) -> bool:
-            if chosen_options is None or len(chosen_options) == 0 or CommonChoiceOutcome.is_error_or_cancel(outcome):
-                return self.close()
-            chosen_values: List[DialogOptionValueType] = list()
-            for chosen_option in chosen_options:
-                chosen_values.append(chosen_option.value)
-                chosen_option.choose()
-            return on_submit(tuple(chosen_values))
+            try:
+                if chosen_options is None or len(chosen_options) == 0 or CommonChoiceOutcome.is_error_or_cancel(outcome):
+                    return self.close()
+                chosen_values: List[DialogOptionValueType] = list()
+                for chosen_option in chosen_options:
+                    chosen_values.append(chosen_option.value)
+                    chosen_option.choose()
+                return on_submit(tuple(chosen_values))
+            except Exception as ex:
+                self.log.error('Error occurred on submitting a value.', exception=ex)
+            return False
         return _on_submit

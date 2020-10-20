@@ -5,6 +5,8 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from typing import Union
+
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
@@ -20,8 +22,8 @@ class CommonConditionalAction(HasLog):
     """
     # noinspection PyMissingOrEmptyDocstring
     @property
-    def mod_identity(self) -> CommonModIdentity:
-        return ModInfo.get_identity()
+    def mod_identity(self) -> Union[CommonModIdentity, None]:
+        return None
 
     def _should_apply(self, *_, **__) -> bool:
         """_should_apply(*_, **__)

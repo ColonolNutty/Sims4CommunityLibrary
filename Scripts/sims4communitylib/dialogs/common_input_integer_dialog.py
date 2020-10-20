@@ -124,7 +124,7 @@ class CommonInputIntegerDialog(CommonDialog):
                 on_submit=on_submit
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'show', exception=ex)
+            self.log.error('show', exception=ex)
 
     def _show(
         self,
@@ -141,27 +141,30 @@ class CommonInputIntegerDialog(CommonDialog):
             return
 
         # noinspection PyBroadException
-        @CommonExceptionHandler.catch_exceptions(self.mod_identity, fallback_return=False)
         def _on_submit(dialog: UiDialogTextInput) -> bool:
-            input_value = CommonDialogUtils.get_input_value(dialog)
-            if not input_value or not dialog.accepted:
-                self.log.debug('Dialog cancelled.')
-                return on_submit(None, CommonChoiceOutcome.CANCEL)
-            self.log.format_with_message('Value entered, attempting to convert it to an integer.', value=input_value)
-
             try:
-                input_value = int(input_value)
-                self.log.debug('Conversion successful.')
-                input_value = max(self.min_value, input_value)
-                input_value = min(self.max_value, input_value)
-            except:
-                self.log.format_with_message('Failed to convert value', value=input_value)
-                return on_submit(None, CommonChoiceOutcome.ERROR)
+                input_value = CommonDialogUtils.get_input_value(dialog)
+                if not input_value or not dialog.accepted:
+                    self.log.debug('Dialog cancelled.')
+                    return on_submit(None, CommonChoiceOutcome.CANCEL)
+                self.log.format_with_message('Value entered, attempting to convert it to an integer.', value=input_value)
 
-            self.log.format_with_message('Value entered.', input_value=input_value)
-            result = on_submit(input_value, CommonChoiceOutcome.CHOICE_MADE)
-            self.log.format_with_message('Finished handling input.', result=result)
-            return result
+                try:
+                    input_value = int(input_value)
+                    self.log.debug('Conversion successful.')
+                    input_value = max(self.min_value, input_value)
+                    input_value = min(self.max_value, input_value)
+                except:
+                    self.log.format_with_message('Failed to convert value', value=input_value)
+                    return on_submit(None, CommonChoiceOutcome.ERROR)
+
+                self.log.format_with_message('Value entered.', input_value=input_value)
+                result = on_submit(input_value, CommonChoiceOutcome.CHOICE_MADE)
+                self.log.format_with_message('Finished handling input.', result=result)
+                return result
+            except Exception as ex:
+                self.log.error('Error occurred on submitting a value.', exception=ex)
+            return False
 
         _dialog.add_listener(_on_submit)
         if self.initial_value is not None:
@@ -177,7 +180,7 @@ class CommonInputIntegerDialog(CommonDialog):
                 title=lambda *_, **__: self.title
             )
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, '_create_dialog', exception=ex)
+            self.log.error('_create_dialog', exception=ex)
         return None
 
 

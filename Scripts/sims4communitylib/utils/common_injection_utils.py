@@ -9,7 +9,6 @@ import inspect
 from functools import wraps
 from typing import Any, Callable
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.modinfo import ModInfo
 
 
 class CommonInjectionUtils:
@@ -24,7 +23,8 @@ class CommonInjectionUtils:
             Use :func:`~inject_safely_into` instead.
 
         """
-        return CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), target_object, target_function_name)
+        # noinspection PyTypeChecker
+        return CommonInjectionUtils.inject_safely_into(None, target_object, target_function_name)
 
     @staticmethod
     def inject_safely_into(mod_identity: CommonModIdentity, target_object: Any, target_function_name: str) -> Callable:
