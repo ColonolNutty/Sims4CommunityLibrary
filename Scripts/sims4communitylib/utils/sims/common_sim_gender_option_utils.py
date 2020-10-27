@@ -7,6 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.traits_enum import CommonTraitId
+from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 
@@ -216,6 +217,25 @@ class CommonSimGenderOptionUtils:
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING)
 
     @staticmethod
+    def has_breasts(sim_info: SimInfo) -> bool:
+        """has_breasts(sim_info)
+
+        Determine if a Sim has breasts.
+
+        .. note:: This will True if breasts are being forced on the Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the Sim has breasts. False, if not.
+        :rtype: bool
+        """
+        if CommonGenderUtils.is_female(sim_info) and not CommonTraitUtils.has_trait(sim_info, CommonTraitId.BREASTS_FORCE_OFF):
+            return True
+        if CommonGenderUtils.is_male(sim_info) and CommonTraitUtils.has_trait(sim_info, CommonTraitId.BREASTS_FORCE_ON):
+            return True
+        return False
+
+    @staticmethod
     def update_gender_options_to_vanilla_male(sim_info: SimInfo) -> bool:
         """update_gender_options_to_vanilla_male(sim_info)
 
@@ -252,6 +272,39 @@ class CommonSimGenderOptionUtils:
         CommonSimGenderOptionUtils.update_can_reproduce(sim_info, True)
         CommonSimGenderOptionUtils.update_toilet_usage(sim_info, False)
         return True
+
+    @staticmethod
+    def update_has_breasts(sim_info: SimInfo, has_breasts: bool) -> bool:
+        """update_has_breasts(sim_info, has_breasts)
+
+        Give or Take Away the breasts of a Sim.
+
+        .. note:: Will only update Human Sims.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param has_breasts: If True, the Sim will be given breasts.\
+        If False, the Sim will not longer have breasts.
+        :type has_breasts: bool
+        :return: True, if the state of a Sim having breasts or not was changed. False, if not.
+        :rtype: bool
+        """
+        if sim_info is None:
+            return False
+        from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
+        CommonTraitUtils.remove_trait(sim_info, CommonTraitId.BREASTS_FORCE_OFF)
+        CommonTraitUtils.remove_trait(sim_info, CommonTraitId.BREASTS_FORCE_ON)
+        if has_breasts:
+            if CommonGenderUtils.is_male(sim_info):
+                CommonTraitUtils.add_trait(sim_info, CommonTraitId.BREASTS_FORCE_ON)
+                CommonSimEventDispatcherService()._on_sim_change_gender_options_breasts(sim_info)
+                return True
+        else:
+            if CommonGenderUtils.is_female(sim_info):
+                CommonTraitUtils.add_trait(sim_info, CommonTraitId.BREASTS_FORCE_OFF)
+                CommonSimEventDispatcherService()._on_sim_change_gender_options_breasts(sim_info)
+                return True
+        return False
 
     @staticmethod
     def update_body_frame(sim_info: SimInfo, masculine: bool) -> bool:
