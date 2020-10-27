@@ -5,6 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import os
 from functools import wraps
 from typing import Any, Callable, Union
 from sims4communitylib.exceptions.common_stacktrace_utils import CommonStacktraceUtil
@@ -19,8 +20,8 @@ class CommonExceptionHandler:
     """
 
     @staticmethod
-    def log_exception(mod_identifier: Union[str, CommonModIdentity], exception_message: str, exception: Exception=None) -> bool:
-        """log_exception(mod_identifier, exception_message, exception=None)
+    def log_exception(mod_identifier: Union[str, CommonModIdentity], exception_message: str, exception: Exception=None, custom_file_path: str=None) -> bool:
+        """log_exception(mod_identifier, exception_message, exception=None, custom_file_path=None)
 
         Manually log an exception with a custom message.
 
@@ -30,6 +31,8 @@ class CommonExceptionHandler:
         :type exception_message: str
         :param exception: The exception being logged. Default is None.
         :type exception: Exception, optional
+        :param custom_file_path: A custom file path relative to The Sims 4 folder. Example: Value is 'fake_path/to/directory', the final path would be 'The Sims 4/fake_path/to_directory'. Default is None.
+        :type custom_file_path: str, optional
         :return: True, if the message was successfully logged. False, if the message was not successfully logged.
         :rtype: bool
         """
@@ -37,7 +40,7 @@ class CommonExceptionHandler:
         exceptions = CommonStacktraceUtil.get_full_stack_trace()
         stack_trace = '{}{} -> {}: {}\n'.format(''.join(exceptions), exception_message, type(exception).__name__, exception)
         from sims4communitylib.utils.common_log_registry import CommonLogUtils
-        file_path = CommonLogUtils.get_exceptions_file_path(mod_identifier)
+        file_path = CommonLogUtils.get_exceptions_file_path(mod_identifier, custom_file_path=custom_file_path)
         result = CommonExceptionHandler._log_stacktrace(mod_identifier, stack_trace, file_path)
         if result:
             CommonExceptionHandler._notify_exception_occurred(file_path, mod_identifier=mod_identifier)

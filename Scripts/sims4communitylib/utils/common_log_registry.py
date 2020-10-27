@@ -5,14 +5,16 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import os
 import sims4.commands
 from typing import List, Dict, Any, Union, Tuple
 from pprint import pformat
 
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.exceptions.common_stacktrace_utils import CommonStacktraceUtil
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.services.common_service import CommonService
+from sims4communitylib.utils.common_io_utils import CommonIOUtils
 from sims4communitylib.utils.common_log_utils import CommonLogUtils
 
 
@@ -27,7 +29,7 @@ class CommonMessageType(CommonInt):
 
 
 class CommonLog:
-    """CommonLog(mod_identifier, log_name)
+    """CommonLog(mod_identifier, log_name, custom_file_path=None)
 
     A class used to log messages.
 
@@ -35,10 +37,13 @@ class CommonLog:
     :type mod_identifier: Union[str, CommonModIdentity]
     :param log_name: The name of the log, used when enabling/disabling logs via commands
     :type log_name: str
+    :param custom_file_path: A custom file path relative to The Sims 4 folder. Example: Value is 'fake_path/to/directory', the final path would be 'The Sims 4/fake_path/to_directory'. Default is None.
+    :type custom_file_path: str, optional
     """
-    def __init__(self, mod_identifier: Union[str, CommonModIdentity], log_name: str):
+    def __init__(self, mod_identifier: Union[str, CommonModIdentity], log_name: str, custom_file_path: str=None):
         self._log_name = log_name
         self._mod_name = mod_identifier.name if isinstance(mod_identifier, CommonModIdentity) else mod_identifier
+        self._custom_file_path = custom_file_path
         self._enabled = False
 
     def debug(self, message: str):
@@ -200,7 +205,7 @@ class CommonLog:
         :type throw: bool, optional
         """
         if throw:
-            CommonExceptionHandler.log_exception(self.mod_name, message, exception=exception)
+            self._log_error(message, exception=exception)
         self._log_message(message_type, message)
         if exception is not None:
             self._log_message(message_type, pformat(exception))
@@ -319,18 +324,54 @@ class CommonLog:
         """
         return self._mod_name
 
+    @property
+    def messages_file_path(self) -> str:
+        """The file path messages are logged to.
+
+        :return: The file path messages are logged to.
+        :rtype: str
+        """
+        return CommonLogUtils.get_message_file_path(self.mod_name, custom_file_path=self._custom_file_path)
+
+    @property
+    def exceptions_file_path(self) -> str:
+        """The file path exceptions are logged to.
+
+        :return: The file path exceptions are logged to.
+        :rtype: str
+        """
+        return CommonLogUtils.get_exceptions_file_path(self.mod_name, custom_file_path=self._custom_file_path)
+
     def _log_message(self, message_type: CommonMessageType, message: str):
         from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
-        from pprint import pformat
         from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
         current_date_time = CommonRealDateUtils.get_current_date_string()
         new_message = '{} {}: [{}]: {}\n'.format(current_date_time, message_type.name, self.name, message)
         try:
             from sims4communitylib.utils.common_io_utils import CommonIOUtils
-            file_path = CommonLogUtils.get_message_file_path(self.mod_name)
+            file_path = self.messages_file_path
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
             CommonIOUtils.write_to_file(file_path, new_message, ignore_errors=True)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_name, 'Error occurred while attempting to log message: {}'.format(pformat(message)), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_name, 'Error occurred while attempting to log message: {}'.format(pformat(message)), exception=ex, custom_file_path=self._custom_file_path)
+
+    def _log_error(self, message: str, exception: Exception=None):
+        from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
+        from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+        try:
+            exceptions = CommonStacktraceUtil.get_full_stack_trace()
+            if exception is not None:
+                stack_trace = '{}{} -> {}: {}\n'.format(''.join(exceptions), message, type(exception).__name__, exception)
+            else:
+                stack_trace = 'No stack trace provided.'
+            file_path = self.exceptions_file_path
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            exception_traceback_text = '[{}] {} {}\n'.format(self.mod_name, CommonRealDateUtils.get_current_date_string(), stack_trace)
+            result = CommonIOUtils.write_to_file(file_path, exception_traceback_text, ignore_errors=True)
+            if result:
+                CommonExceptionHandler._notify_exception_occurred(file_path, mod_identifier=self.mod_name)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(self.mod_name, 'Error occurred while attempting to log message: {}'.format(pformat(message)), exception=ex, custom_file_path=self._custom_file_path)
 
     def _update_args(self, *args: Any) -> Tuple[Any]:
         if not args:
@@ -431,8 +472,8 @@ class CommonLogRegistry(CommonService):
                 return list()
             return list(self._registered_logs[mod_name].keys())
 
-    def register_log(self, mod_identifier: Union[str, CommonModIdentity], log_name: str) -> CommonLog:
-        """register_log(mod_identifier, log_name)
+    def register_log(self, mod_identifier: Union[str, CommonModIdentity], log_name: str, custom_file_path: str=None) -> CommonLog:
+        """register_log(mod_identifier, log_name, custom_file_path: str=None)
 
         Create and register a log with the specified name.
 
@@ -442,6 +483,8 @@ class CommonLogRegistry(CommonService):
         :type mod_identifier: Union[str, CommonModIdentity]
         :param log_name: The name of the log.
         :type log_name: str
+        :param custom_file_path: A custom file path relative to The Sims 4 folder. Example: Value is 'fake_path/to/directory', the final path would be 'The Sims 4/fake_path/to_directory'. Default is None.
+        :type custom_file_path: str, optional
         :return: An object of type CommonLog
         :rtype: CommonLog
         """
@@ -452,22 +495,22 @@ class CommonLogRegistry(CommonService):
         # Dict[str, Dict[str, CommonLog]]
         if mod_name not in self._registered_logs:
             self._registered_logs[mod_name] = dict()
-            self._delete_old_log_files(mod_name)
+            self._delete_old_log_files(mod_name, custom_file_path=custom_file_path)
         # Dict[str, CommonLog]
         if log_name in self._registered_logs[mod_name]:
             return self._registered_logs[mod_name][log_name]
-        log = CommonLog(mod_identifier, log_name)
+        log = CommonLog(mod_identifier, log_name, custom_file_path=custom_file_path)
         self._registered_logs[mod_name][log_name] = log
         return log
 
-    def _delete_old_log_files(self, mod_identifier: Union[str, CommonModIdentity]):
+    def _delete_old_log_files(self, mod_identifier: Union[str, CommonModIdentity], custom_file_path: str=None):
         from sims4communitylib.utils.common_io_utils import CommonIOUtils
         mod_name = CommonModIdentity._get_mod_name(mod_identifier)
         files_to_delete = (
-            CommonLogUtils.get_message_file_path(mod_name),
-            CommonLogUtils.get_exceptions_file_path(mod_name),
-            CommonLogUtils.get_old_message_file_path(mod_name),
-            CommonLogUtils.get_old_exceptions_file_path(mod_name)
+            CommonLogUtils.get_message_file_path(mod_name, custom_file_path=custom_file_path),
+            CommonLogUtils.get_exceptions_file_path(mod_name, custom_file_path=custom_file_path),
+            CommonLogUtils.get_old_message_file_path(mod_name, custom_file_path=custom_file_path),
+            CommonLogUtils.get_old_exceptions_file_path(mod_name, custom_file_path=custom_file_path)
         )
         for file_to_delete in files_to_delete:
             # noinspection PyBroadException

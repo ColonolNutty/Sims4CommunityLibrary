@@ -17,6 +17,8 @@ from sims4communitylib.events.event_handling.common_event_registry import Common
 from sims4communitylib.events.sim.events.sim_added_occult_type import S4CLSimAddedOccultTypeEvent
 from sims4communitylib.events.sim.events.sim_changed_age import S4CLSimChangedAgeEvent
 from sims4communitylib.events.sim.events.sim_changed_gender_options_body_frame import S4CLSimChangedGenderOptionsBodyFrameEvent
+from sims4communitylib.events.sim.events.sim_changed_gender_options_breasts import \
+    S4CLSimChangedGenderOptionsBreastsEvent
 from sims4communitylib.events.sim.events.sim_changed_gender_options_can_impregnate import \
     S4CLSimChangedGenderOptionsCanImpregnateEvent
 from sims4communitylib.events.sim.events.sim_changed_gender_options_can_reproduce import \
@@ -53,6 +55,9 @@ class CommonSimEventDispatcherService(CommonService):
             # If they are now Female, it means they used to be Male.
             old_gender = Gender.MALE
         return CommonEventRegistry.get().dispatch(S4CLSimChangedGenderEvent(sim_info, old_gender, new_gender))
+
+    def _on_sim_change_gender_options_breasts(self, sim_info: SimInfo) -> bool:
+        return CommonEventRegistry.get().dispatch(S4CLSimChangedGenderOptionsBreastsEvent(sim_info))
 
     def _on_sim_change_gender_options_toilet_usage(self, sim_info: SimInfo) -> bool:
         return CommonEventRegistry.get().dispatch(S4CLSimChangedGenderOptionsToiletUsageEvent(sim_info))
