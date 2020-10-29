@@ -48,7 +48,7 @@ else:
 
 
     # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring,SpellCheckingInspection
-    def flexmethod():
+    def flexmethod(*_, **__):
         pass
 
 

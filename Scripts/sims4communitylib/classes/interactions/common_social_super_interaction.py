@@ -63,11 +63,11 @@ else:
 
 
     # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring,SpellCheckingInspection
-    def flexmethod():
+    def flexmethod(*_, **__):
         pass
 
     # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring,SpellCheckingInspection
-    def classproperty():
+    def classproperty(*_, **__):
         pass
 
 
