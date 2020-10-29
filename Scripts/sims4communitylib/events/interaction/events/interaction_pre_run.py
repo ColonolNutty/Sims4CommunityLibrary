@@ -5,10 +5,21 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import os
 from interactions.base.interaction import Interaction
 from interactions.interaction_queue import InteractionQueue
-from scheduling import Timeline
 from sims4communitylib.events.event_handling.common_event import CommonEvent
+
+# ReadTheDocs
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+# If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
+if not ON_RTD:
+    from scheduling import Timeline
+else:
+    # noinspection PyMissingOrEmptyDocstring
+    class Timeline:
+        pass
 
 
 class S4CLInteractionPreRunEvent(CommonEvent):
