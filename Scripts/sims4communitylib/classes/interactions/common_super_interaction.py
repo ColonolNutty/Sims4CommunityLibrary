@@ -11,9 +11,6 @@ from typing import Any, Union
 from interactions import ParticipantType
 from interactions.base.interaction import Interaction
 from interactions.constraints import Constraint
-from scheduling import Timeline
-from sims.sim import Sim
-from sims4.utils import flexmethod
 from sims4communitylib.classes.interactions.common_interaction import CommonInteraction
 
 # ReadTheDocs
@@ -22,6 +19,9 @@ ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
 if not ON_RTD:
     from interactions.base.super_interaction import SuperInteraction
+    from scheduling import Timeline
+    from sims4.utils import flexmethod
+    from sims.sim import Sim
 else:
     # noinspection PyMissingOrEmptyDocstring
     class MockClass(object):
@@ -35,6 +35,20 @@ else:
 
     # noinspection PyMissingOrEmptyDocstring
     class SuperInteraction(MockClass):
+        pass
+
+
+    # noinspection PyMissingOrEmptyDocstring
+    class Sim:
+        pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    class Timeline:
+        pass
+
+
+    # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring,SpellCheckingInspection
+    def flexmethod():
         pass
 
 

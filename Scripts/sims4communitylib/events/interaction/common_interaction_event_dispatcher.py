@@ -5,6 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import os
 from pprint import pformat
 from typing import Union, Any
 from event_testing.results import TestResult
@@ -15,7 +16,6 @@ from interactions.interaction_finisher import FinishingType
 from interactions.interaction_queue import InteractionQueue
 from interactions.utils.outcome import InteractionOutcome
 from interactions.utils.outcome_enums import OutcomeResult
-from scheduling import Timeline
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
 from sims4communitylib.events.interaction.events.interaction_cancelled import S4CLInteractionCancelledEvent
 from sims4communitylib.events.interaction.events.interaction_outcome import S4CLInteractionOutcomeEvent
@@ -32,6 +32,17 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
+
+# ReadTheDocs
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+# If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
+if not ON_RTD:
+    from scheduling import Timeline
+else:
+    # noinspection PyMissingOrEmptyDocstring
+    class Timeline:
+        pass
 
 
 class CommonInteractionEventDispatcherService(CommonService, HasLog):

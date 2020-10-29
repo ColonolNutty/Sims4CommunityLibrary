@@ -5,7 +5,20 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import terrain
+import os
+# ReadTheDocs
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+# If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
+if not ON_RTD:
+    import terrain
+else:
+    # noinspection PyPep8Naming,PyMissingOrEmptyDocstring
+    class terrain:
+        # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring
+        @staticmethod
+        def get_water_depth(_: float, __: float, level: int=None):
+            pass
 
 
 class CommonTerrainUtils:

@@ -7,12 +7,6 @@ Copyright (c) COLONOLNUTTY
 import os
 from pprint import pformat
 from typing import Any
-from event_testing.results import TestResult
-from interactions.context import InteractionContext
-from native.animation import NativeAsm
-from scheduling import Timeline
-from sims.sim import Sim
-from sims4.utils import classproperty, flexmethod
 from sims4communitylib.classes.interactions.common_super_interaction import CommonSuperInteraction
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 
@@ -22,6 +16,12 @@ ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
 if not ON_RTD:
     from interactions.social.social_super_interaction import SocialSuperInteraction
+    from event_testing.results import TestResult
+    from interactions.context import InteractionContext
+    from native.animation import NativeAsm
+    from scheduling import Timeline
+    from sims.sim import Sim
+    from sims4.utils import classproperty, flexmethod
 else:
     # noinspection PyMissingOrEmptyDocstring
     class MockClass(object):
@@ -35,6 +35,39 @@ else:
 
     # noinspection PyMissingOrEmptyDocstring
     class SocialSuperInteraction(MockClass):
+        pass
+
+
+    # noinspection PyMissingOrEmptyDocstring
+    class TestResult:
+        pass
+
+
+    # noinspection PyMissingOrEmptyDocstring
+    class Sim:
+        pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    class Timeline:
+        pass
+
+
+    # noinspection PyMissingOrEmptyDocstring
+    class NativeAsm:
+        pass
+
+
+    # noinspection PyMissingOrEmptyDocstring
+    class InteractionContext:
+        pass
+
+
+    # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring,SpellCheckingInspection
+    def flexmethod():
+        pass
+
+    # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring,SpellCheckingInspection
+    def classproperty():
         pass
 
 
@@ -205,4 +238,3 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
         :rtype: TestResult
         """
         return TestResult.TRUE
-
