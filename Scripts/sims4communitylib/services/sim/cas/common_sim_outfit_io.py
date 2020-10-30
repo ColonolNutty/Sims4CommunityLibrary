@@ -141,6 +141,24 @@ class CommonSimOutfitIO(HasLog):
         """
         return any((int(cas_part_id) in self._outfit_part_ids for cas_part_id in cas_part_ids))
 
+    def get_body_type_cas_part_is_attached_to(self, cas_part_id: int) -> int:
+        """get_body_type_cas_part_is_attached_to(cas_part_id)
+
+        Retrieve the Body Type the specified CAS Part is attached to.
+
+        :param cas_part_id: The decimal identifier of a CAS Part.
+        :type cas_part_id: int
+        :return: The Body Type the specified CAS Part was located at or -1 if the Outfit does not have the CAS Part or the CAS Part is empty.
+        :rtype: Union[int, BodyType]
+        """
+        for outfit_part_index in range(len(self._outfit_part_ids)):
+            if outfit_part_index not in self._outfit_part_ids or int(self._outfit_part_ids[outfit_part_index]) != cas_part_id:
+                self.log.format_with_message('CAS Part not found.', cas_part_id=cas_part_id)
+                continue
+
+            return int(self._outfit_body_types[outfit_part_index])
+        return -1
+
     def get_cas_part_at_body_type(self, body_type: Union[BodyType, int]) -> int:
         """get_cas_part_at_body_type(body_type)
 
@@ -153,7 +171,7 @@ class CommonSimOutfitIO(HasLog):
         """
         for body_type_index in range(len(self._outfit_body_types)):
             if body_type_index not in self._outfit_body_types or int(self._outfit_body_types[body_type_index]) != int(body_type):
-                self.log.format_with_message('Body type not found or already removed.', body_type=body_type)
+                self.log.format_with_message('Body type not found.', body_type=body_type)
                 continue
 
             return self._outfit_part_ids[body_type_index]
