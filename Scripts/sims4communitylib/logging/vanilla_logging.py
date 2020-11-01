@@ -78,6 +78,13 @@ class _CommonVanillaLogOverride(CommonService):
         to_log_message = _CommonVanillaLogOverride()._format_message(message, *args, owner=owner, **kwargs)
         _log.error(to_log_message, throw=False)
 
+    def _exception(self, log_name: str, message: str, *args, exc: Exception=None, owner=None, **kwargs) -> Any:
+        if not self.logs_enabled:
+            return
+        _log = _CommonVanillaLogOverride().get_log(log_name)
+        to_log_message = _CommonVanillaLogOverride()._format_message(message, *args, owner=owner, **kwargs)
+        _log.error(to_log_message, exception=exc, throw=True)
+
 
 @Command('s4clib.enable_vanilla_logs', command_type=CommandType.Live)
 def _common_enable_vanilla_logs(_connection: int=None):
@@ -95,36 +102,43 @@ def _common_disable_vanilla_logs(_connection: int=None):
     output('Done')
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, Logger.log.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, Logger.log.__name__, handle_exceptions=False)
 def _common_logger_log(original, self, message, *args, level, owner=None, **kwargs) -> Any:
     log_name = self.group
     _CommonVanillaLogOverride()._log(log_name, message, *args, level, owner=owner or self.default_owner, **kwargs)
     return original(self, message, *args, level, owner=owner, **kwargs)
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, Logger.debug.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, Logger.debug.__name__, handle_exceptions=False)
 def _common_logger_debug(original, self, message, *args, owner=None, **kwargs) -> Any:
     log_name = self.group
     _CommonVanillaLogOverride()._debug(log_name, message, *args, owner=owner or self.default_owner, **kwargs)
     return original(self, message, *args, owner=owner, **kwargs)
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, Logger.info.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, Logger.info.__name__, handle_exceptions=False)
 def _common_logger_info(original, self, message, *args, owner=None, **kwargs) -> Any:
     log_name = self.group
     _CommonVanillaLogOverride()._info(log_name, message, *args, owner=owner or self.default_owner, **kwargs)
     return original(self, message, *args, owner=owner, **kwargs)
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, Logger.warn.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, Logger.warn.__name__, handle_exceptions=False)
 def _common_logger_warn(original, self, message, *args, owner=None, **kwargs) -> Any:
     log_name = self.group
     _CommonVanillaLogOverride()._warn(log_name, message, *args, owner=owner or self.default_owner, **kwargs)
     return original(self, message, *args, owner=owner, **kwargs)
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, Logger.error.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, Logger.error.__name__, handle_exceptions=False)
 def _common_logger_error(original, self, message, *args, owner=None, **kwargs) -> Any:
     log_name = self.group
     _CommonVanillaLogOverride()._error(log_name, message, *args, owner=owner or self.default_owner, **kwargs)
     return original(self, message, *args, owner=owner, **kwargs)
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, Logger.exception.__name__, handle_exceptions=False)
+def _common_logger_exception(original, self, message, *args, exc=None, owner=None, **kwargs) -> Any:
+    log_name = self.group
+    _CommonVanillaLogOverride()._exception(log_name, message, *args, exc=exc, owner=owner or self.default_owner, **kwargs)
+    return original(self, message, *args, exc=exc, owner=owner, **kwargs)

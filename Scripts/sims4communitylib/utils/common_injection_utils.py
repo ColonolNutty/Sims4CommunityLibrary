@@ -27,11 +27,12 @@ class CommonInjectionUtils:
         return CommonInjectionUtils.inject_safely_into(None, target_object, target_function_name)
 
     @staticmethod
-    def inject_safely_into(mod_identity: CommonModIdentity, target_object: Any, target_function_name: str) -> Callable:
-        """inject_safely_into(mod_identity, target_object, target_function_name)
+    def inject_safely_into(mod_identity: CommonModIdentity, target_object: Any, target_function_name: str, handle_exceptions: bool=True) -> Callable:
+        """inject_safely_into(mod_identity, target_object, target_function_name, handle_exceptions=True)
 
         A decorator used to inject code into a function.
-        It will catch and log exceptions, as well as run the original function should any problems occur.
+        It will run the original function should any problems occur.
+        If handle_exceptions is True, it will catch and log exceptions.
 
         :Example of cls usage:
 
@@ -74,36 +75,52 @@ class CommonInjectionUtils:
         :type target_object: Any
         :param target_function_name: The name of the function being injected to.
         :type target_function_name: str
+        :param handle_exceptions: If set to True, any exceptions thrown by the wrapped function will be handled. If set to False, any exceptions thrown by the wrapped function will not be caught. Default is True.
+        :type handle_exceptions: bool, optional
         :return: A wrapped function.
         :rtype: Callable
         """
 
-        def _function_wrapper(original_function, new_function: Callable[..., Any]) -> Any:
-            # noinspection PyBroadException
-            try:
+        if handle_exceptions:
+            def _function_wrapper(original_function, new_function: Callable[..., Any]) -> Any:
+                # noinspection PyBroadException
+                try:
+                    @wraps(original_function)
+                    def _wrapped_function(*args, **kwargs) -> Any:
+                        try:
+                            if type(original_function) is property:
+                                return new_function(original_function.fget, *args, **kwargs)
+                            return new_function(original_function, *args, **kwargs)
+                        except Exception as ex:
+                            # noinspection PyBroadException
+                            try:
+                                from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+                                CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while injecting into function \'{}\' of class \'{}\''.format(new_function.__name__, target_object.__name__), exception=ex)
+                            except Exception:
+                                pass
+                            return original_function(*args, **kwargs)
+                    if inspect.ismethod(original_function):
+                        return classmethod(_wrapped_function)
+                    if type(original_function) is property:
+                        return property(_wrapped_function)
+                    return _wrapped_function
+                except:
+                    def _func(*_, **__) -> Any:
+                        pass
+                    return _func
+        else:
+            def _function_wrapper(original_function, new_function: Callable[..., Any]) -> Any:
                 @wraps(original_function)
                 def _wrapped_function(*args, **kwargs) -> Any:
-                    try:
-                        if type(original_function) is property:
-                            return new_function(original_function.fget, *args, **kwargs)
-                        return new_function(original_function, *args, **kwargs)
-                    except Exception as ex:
-                        # noinspection PyBroadException
-                        try:
-                            from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-                            CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while injecting into function \'{}\' of class \'{}\''.format(new_function.__name__, target_object.__name__), exception=ex)
-                        except Exception:
-                            pass
-                        return original_function(*args, **kwargs)
+                    if type(original_function) is property:
+                        return new_function(original_function.fget, *args, **kwargs)
+                    return new_function(original_function, *args, **kwargs)
+
                 if inspect.ismethod(original_function):
                     return classmethod(_wrapped_function)
-                if type(original_function) is property:
+                elif type(original_function) is property:
                     return property(_wrapped_function)
                 return _wrapped_function
-            except:
-                def _func(*_, **__) -> Any:
-                    pass
-                return _func
 
         def _injected(wrap_function) -> Any:
             original_function = getattr(target_object, str(target_function_name))
