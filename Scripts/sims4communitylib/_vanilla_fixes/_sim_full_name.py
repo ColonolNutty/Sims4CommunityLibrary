@@ -6,27 +6,17 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 # noinspection PyBroadException
-try:
-    # The purpose of this file is to fix the fact that when trying to access the "full_name" attribute on Sims, nothing is returned.
-    import sims.sim_info_mixin
-    import sims.sim_info_base_wrapper
-    from sims.sim import Sim
-    from sims.sim_info import SimInfo
-    from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+from sims.sim_info import SimInfo
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
+# The purpose of this file is to fix the fact that when trying to access the "full_name" attribute on Sims an empty string is returned.
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
-    @property
-    def _sim_full_name(self: Sim) -> str:
-        return CommonSimNameUtils.get_full_name(self.sim_info)
-
-    @property
-    def _sim_info_full_name(self: SimInfo) -> str:
-        return CommonSimNameUtils.get_full_name(self)
-
-
-    # noinspection PyPropertyAccess
-    sims.sim_info_mixin.HasSimInfoBasicMixin.full_name = _sim_full_name
-    # noinspection PyPropertyAccess
-    sims.sim_info_base_wrapper.SimInfoBaseWrapper.full_name = _sim_info_full_name
-except:
-    pass
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, 'full_name')
+def _common_fix_full_name_returning_empty_string(original, self: SimInfo, *_, **__):
+    original_value = original(self, *_, **__)
+    if original_value == '':
+        return CommonSimNameUtils.get_full_name(CommonSimUtils.get_sim_info(self))
+    return original_value
