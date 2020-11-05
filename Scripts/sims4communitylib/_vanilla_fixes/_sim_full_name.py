@@ -5,11 +5,11 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+# The purpose of this file is to fix the fact that when trying to access the "full_name" attribute on Sims an empty string is returned.
 # noinspection PyBroadException
 from sims.sim_info import SimInfo
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
-# The purpose of this file is to fix the fact that when trying to access the "full_name" attribute on Sims an empty string is returned.
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
