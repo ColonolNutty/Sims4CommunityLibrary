@@ -36,9 +36,9 @@ class CommonPersistenceService(HasLog):
 
     def _format_data_name(self, mod_identity: CommonModIdentity, identifier: str=None) -> str:
         if identifier is not None:
-            return 'do_not_remove_{}_{}_{}'.format(mod_identity.base_namespace, mod_identity.author, identifier.replace(' ', '_')).lower()
+            return '{}_{}'.format(mod_identity.base_namespace, identifier.replace(' ', '_')).lower()
         else:
-            return 'do_not_remove_{}_{}'.format(mod_identity.base_namespace, mod_identity.author).lower()
+            return '{}_main'.format(mod_identity.base_namespace).lower()
 
     def load(self, mod_identity: CommonModIdentity, identifier: str=None) -> Dict[str, Any]:
         """load(mod_identity, identifier=None)
