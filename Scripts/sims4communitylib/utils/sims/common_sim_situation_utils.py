@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import services
-from typing import Callable, Iterator, Union
+from typing import Callable, Iterator, Union, List
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.situations_enum import CommonSituationId
 from sims4communitylib.utils.resources.common_situation_utils import CommonSituationUtils
@@ -19,6 +19,23 @@ class CommonSimSituationUtils:
 
     """
     @staticmethod
+    def has_situation(sim_info: SimInfo, situation_id: Union[int, CommonSituationId]) -> bool:
+        """has_situation(sim_info, situation_id)
+
+        Determine if a Sim is involved in the specified Situation.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param situation_id: The decimal identifiers of a Situation.
+        :type situation_id: Union[int, CommonSituationId]
+        :return: True, if the Sim is involved in the specified Situation. False, if not.
+        :rtype: bool
+        """
+        if sim_info is None:
+            return False
+        return situation_id in CommonSimSituationUtils.get_situation_ids(sim_info)
+
+    @staticmethod
     def has_situations(sim_info: SimInfo, situation_ids: Iterator[Union[int, CommonSituationId]]) -> bool:
         """has_situations(sim_info, situation_ids)
 
@@ -28,13 +45,12 @@ class CommonSimSituationUtils:
         :type sim_info: SimInfo
         :param situation_ids: The decimal identifiers of Situations.
         :type situation_ids: Iterator[Union[int, CommonSituationId]]
-        :return: True, if the Sim has any of the specified buffs. False, if not.
+        :return: True, if the Sim has any of the specified situations. False, if not.
         :rtype: bool
         """
         if sim_info is None:
             return False
-        for situation in CommonSimSituationUtils.get_situations(sim_info):
-            situation_id = CommonSituationUtils.get_situation_id(situation)
+        for situation_id in CommonSimSituationUtils.get_situation_ids(sim_info):
             if situation_id in situation_ids:
                 return True
         return False
@@ -60,3 +76,22 @@ class CommonSimSituationUtils:
             if include_situation_callback is not None and not include_situation_callback(situation):
                 continue
             yield situation
+
+    @staticmethod
+    def get_situation_ids(sim_info: SimInfo) -> List[int]:
+        """get_situation_ids(sim_info)
+
+        Retrieve decimal identifiers for all Situations a Sim is involved in.
+
+        :param sim_info: The sim to check.
+        :type sim_info: SimInfo
+        :return: A collection of Situation decimal identifiers the specified Sim is involved in.
+        :rtype: List[int]
+        """
+        situation_ids = []
+        for situation in CommonSimSituationUtils.get_situations(sim_info):
+            situation_id = CommonSituationUtils.get_situation_id(situation)
+            if situation_id is None:
+                continue
+            situation_ids.append(situation_id)
+        return situation_ids
