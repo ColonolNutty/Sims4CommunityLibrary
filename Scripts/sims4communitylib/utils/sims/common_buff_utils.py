@@ -108,10 +108,9 @@ class CommonBuffUtils:
             return False
         if not buff_ids:
             return False
-        sim_buffs = CommonBuffUtils.get_buffs(sim_info)
-        for buff in sim_buffs:
-            buff_id = CommonBuffUtils.get_buff_id(buff)
-            if buff_id in buff_ids:
+        sim_buff_ids = CommonBuffUtils.get_buff_ids(sim_info)
+        for sim_buff_id in sim_buff_ids:
+            if sim_buff_id in buff_ids:
                 return True
         return False
 
@@ -138,6 +137,30 @@ class CommonBuffUtils:
                 continue
             buffs.append(buff)
         return buffs
+
+    @staticmethod
+    def get_buff_ids(sim_info: SimInfo) -> List[int]:
+        """get_buff_ids(sim_info)
+
+        Retrieve decimal identifiers for all Buffs of a sim.
+
+        :param sim_info: The sim to checked.
+        :type sim_info: SimInfo
+        :return: A collection of Buff identifiers on a Sim.
+        :rtype: List[int]
+        """
+        if sim_info is None:
+            raise AssertionError('Argument sim_info was None')
+        if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
+            return list()
+        buff_ids = list()
+        sim_buffs = CommonBuffUtils.get_buffs(sim_info)
+        for buff in sim_buffs:
+            buff_id = CommonBuffUtils.get_buff_id(buff)
+            if buff_id is None:
+                continue
+            buff_ids.append(buff_id)
+        return buff_ids
 
     @staticmethod
     def add_buff(sim_info: SimInfo, *buff_ids: Union[int, CommonBuffId], buff_reason: Union[int, str, LocalizedString, CommonStringId]=None) -> bool:
@@ -267,9 +290,3 @@ class CommonBuffUtils:
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.load_instance(Types.BUFF, buff_id)
-
-    @staticmethod
-    def _load_buff_instance(buff_identifier: int) -> Union[Buff, None]:
-        from sims4.resources import Types
-        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-        return CommonResourceUtils.load_instance(Types.BUFF, buff_identifier)
