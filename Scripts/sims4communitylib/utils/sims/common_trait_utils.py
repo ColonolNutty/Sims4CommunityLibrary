@@ -980,9 +980,8 @@ class CommonTraitUtils:
         """
         if not trait_ids:
             return False
-        sim_traits = CommonTraitUtils.get_traits(sim_info)
-        for trait in sim_traits:
-            trait_id = getattr(trait, 'guid64', None)
+        sim_trait_ids = CommonTraitUtils.get_trait_ids(sim_info)
+        for trait_id in sim_trait_ids:
             if trait_id in trait_ids:
                 return True
         return False

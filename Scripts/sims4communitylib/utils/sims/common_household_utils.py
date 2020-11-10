@@ -11,6 +11,7 @@ import services
 from sims.household import Household
 from sims.sim_info import SimInfo
 from sims.sim_spawner import SimSpawner
+from sims4communitylib.modinfo import ModInfo
 from world.lot import Lot
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_state_utils import CommonSimStateUtils
@@ -18,7 +19,7 @@ from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
 # noinspection PyTypeChecker
-log = CommonLogRegistry().register_log(None, 's4cl_household_utils')
+log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_household_utils')
 
 
 class CommonHouseholdUtils:

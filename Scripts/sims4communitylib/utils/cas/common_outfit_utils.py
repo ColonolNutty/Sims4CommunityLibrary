@@ -456,6 +456,8 @@ class CommonOutfitUtils:
         :return: The OutfitCategory and index of the current outfit a Sim is wearing.
         :rtype: Tuple[OutfitCategory, int]
         """
+        if sim_info is None:
+            return OutfitCategory.EVERYDAY, 0
         return sim_info.get_current_outfit()
 
     @staticmethod
