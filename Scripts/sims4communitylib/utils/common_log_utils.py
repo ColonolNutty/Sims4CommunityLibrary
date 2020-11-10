@@ -87,12 +87,12 @@ class CommonLogUtils:
         :return: The file path to 'Documents\Electronic Arts\The Sims 4' folder.
         :rtype: str
         """
-        file_path = ''
         from sims4communitylib.modinfo import ModInfo
         root_file = os.path.normpath(os.path.dirname(os.path.realpath(ModInfo.get_identity().file_path))).replace(os.sep, '/')
         root_file_split = root_file.split('/')
         if 'Mods' not in root_file_split:
             return ''
+        file_path = ''
         # noinspection PyTypeChecker
         exit_index = len(root_file_split) - root_file_split.index('Mods')
         for index in range(0, len(root_file_split) - exit_index):
@@ -105,15 +105,16 @@ class CommonLogUtils:
         root_path = CommonLogUtils.get_sims_documents_location_path()
         file_name = '{}_{}.txt'.format(mod_identifier, file_name)
         file_path = root_path
-        if os.path.exists(file_path) and CommonLogUtils._file_is_too_big(file_path):
-            old_file_name = 'Old_{}'.format(file_name)
-            old_file_path = os.path.join(root_path, custom_file_path, old_file_name)
-            if os.path.exists(old_file_path):
-                os.remove(old_file_path)
-            os.rename(file_path, old_file_path)
         if custom_file_path is not None:
             file_path = os.path.join(file_path, custom_file_path)
-        return os.path.join(file_path, file_name)
+        current_file = os.path.join(file_path, file_name)
+        if os.path.exists(current_file) and CommonLogUtils._file_is_too_big(current_file):
+            old_file_name = 'Old_{}'.format(file_name)
+            old_file_path = os.path.join(file_path, old_file_name)
+            if os.path.exists(old_file_path):
+                os.remove(old_file_path)
+            os.rename(current_file, old_file_path)
+        return current_file
 
     @staticmethod
     def _get_old_file_path_name(mod_identifier: Union[str, CommonModIdentity], file_name: str, custom_file_path: str=None) -> str:
