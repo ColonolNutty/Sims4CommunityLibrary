@@ -147,6 +147,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
         self._per_page = per_page
         self._always_visible_rows = tuple()
         self._current_page = 1
+        self._dialog = None
 
     @property
     def current_page(self) -> int:
@@ -267,16 +268,17 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                 self.log.error('Error occurred on choosing a value.', exception=ex)
             return False
 
-        _dialog = self.build_dialog(
-            on_chosen=_on_chosen,
-            picker_type=picker_type,
-            page=page,
-            sim_info=sim_info,
-            categories=categories,
-            include_pagination=include_pagination
-        )
+        if self._dialog is None:
+            self._dialog = self.build_dialog(
+                on_chosen=_on_chosen,
+                picker_type=picker_type,
+                page=page,
+                sim_info=sim_info,
+                categories=categories,
+                include_pagination=include_pagination
+            )
         self.log.debug('Showing dialog.')
-        _dialog.show_dialog()
+        self._dialog.show_dialog()
 
     # noinspection PyMissingOrEmptyDocstring
     def build_dialog(

@@ -10,6 +10,7 @@ from typing import Any
 from sims4.commands import Command, CommandType, CheatOutput
 from sims4.log import Logger
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.s4cl_configuration import S4CLConfiguration
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry, CommonLog
@@ -17,7 +18,7 @@ from sims4communitylib.utils.common_log_registry import CommonLogRegistry, Commo
 
 class _CommonVanillaLogOverride(CommonService):
     def __init__(self) -> None:
-        self.logs_enabled = False
+        self.logs_enabled = S4CLConfiguration().enable_vanilla_logging
         self.logs = list()
 
     def get_log(self, log_name: str) -> CommonLog:
