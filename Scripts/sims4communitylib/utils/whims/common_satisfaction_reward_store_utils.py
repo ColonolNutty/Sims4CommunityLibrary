@@ -80,6 +80,19 @@ class CommonSatisfactionRewardStoreUtils:
         return CommonSatisfactionRewardStoreUtils._add_reward_to_rewards_store(reward_cas_part_definition_id, reward_point_cost, WhimsTracker.WhimAwardTypes.CASPART)
 
     @staticmethod
+    def remove_reward_from_rewards_store(reward_item_definition_id: int) -> bool:
+        """remove_reward_from_rewards_store(reward_item_definition_id)
+
+        Remove a Reward Item from the Satisfaction Rewards Store.
+
+        :param reward_item_definition_id: The decimal identifier of a Reward Item.
+        :type reward_item_definition_id: int
+        :return: True, if the Reward Item was removed from the Rewards Store successfully. False, if not.
+        :rtype: bool
+        """
+        return CommonSatisfactionRewardStoreUtils._remove_reward_from_rewards_store(reward_item_definition_id)
+
+    @staticmethod
     def get_all_satisfaction_reward_store_items_generator(
         include_satisfaction_reward_callback: Callable[[CommonSatisfactionRewardStoreItem], bool]=None
     ) -> Iterator[CommonSatisfactionRewardStoreItem]:
@@ -112,6 +125,17 @@ class CommonSatisfactionRewardStoreUtils:
         store_items = dict(WhimsTracker.SATISFACTION_STORE_ITEMS)
         store_items[sim_reward_instance] = reward_data
         WhimsTracker.SATISFACTION_STORE_ITEMS = sims4.collections.FrozenAttributeDict(store_items)
+        return True
+
+    @staticmethod
+    def _remove_reward_from_rewards_store(reward_definition_id: int) -> bool:
+        sim_reward_instance = CommonSatisfactionRewardStoreUtils._load_reward_instance(reward_definition_id)
+        if sim_reward_instance is None:
+            return False
+        store_items = dict(WhimsTracker.SATISFACTION_STORE_ITEMS)
+        if sim_reward_instance in store_items:
+            del store_items[sim_reward_instance]
+            WhimsTracker.SATISFACTION_STORE_ITEMS = sims4.collections.FrozenAttributeDict(store_items)
         return True
 
     @staticmethod
