@@ -7,14 +7,19 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Any
 
+from buffs.buff import Buff
+from objects.components.buff_component import BuffComponent
 from sims.aging.aging_mixin import AgingMixin
 from sims.occult.occult_enums import OccultType
 from sims.occult.occult_tracker import OccultTracker
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Age, Gender
 from sims.sim_spawner import SimSpawner
+from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
 from sims4communitylib.events.sim.events.sim_added_occult_type import S4CLSimAddedOccultTypeEvent
+from sims4communitylib.events.sim.events.sim_buff_added import S4CLSimBuffAddedEvent
+from sims4communitylib.events.sim.events.sim_buff_removed import S4CLSimBuffRemovedEvent
 from sims4communitylib.events.sim.events.sim_changed_age import S4CLSimChangedAgeEvent
 from sims4communitylib.events.sim.events.sim_changed_gender_options_body_frame import S4CLSimChangedGenderOptionsBodyFrameEvent
 from sims4communitylib.events.sim.events.sim_changed_gender_options_breasts import \
@@ -34,7 +39,9 @@ from sims4communitylib.events.sim.events.sim_removed_occult_type import S4CLSimR
 from sims4communitylib.events.sim.events.sim_spawned import S4CLSimSpawnedEvent
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
+from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonSimEventDispatcherService(CommonService):
@@ -106,6 +113,18 @@ class CommonSimEventDispatcherService(CommonService):
         sim_info = occult_tracker._sim_info
         return CommonEventRegistry.get().dispatch(S4CLSimRemovedOccultTypeEvent(sim_info, occult_type, occult_tracker))
 
+    def _on_sim_buff_added(self, buff: Buff, sim_id: int) -> None:
+        sim_info = CommonSimUtils.get_sim_info(sim_id)
+        if sim_info is None:
+            return
+        CommonEventRegistry.get().dispatch(S4CLSimBuffAddedEvent(sim_info, buff))
+
+    def _on_sim_buff_removed(self, buff: Buff, sim_id: int) -> None:
+        sim_info = CommonSimUtils.get_sim_info(sim_id)
+        if sim_info is None:
+            return
+        CommonEventRegistry.get().dispatch(S4CLSimBuffRemovedEvent(sim_info, buff))
+
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.__init__.__name__)
 def _common_on_sim_init(original, self, *args, **kwargs) -> Any:
@@ -156,3 +175,18 @@ def _common_on_sim_remove_occult_type(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_remove_occult_type(self, *args, **kwargs)
     return result
+
+
+@CommonEventRegistry.handle_events(ModInfo.get_identity())
+def _common_register_buff_added_or_removed_on_sim_spawned(event_data: S4CLSimSpawnedEvent) -> bool:
+    buff_component: BuffComponent = CommonComponentUtils.get_component(event_data.sim_info, CommonComponentType.BUFF)
+    if not buff_component:
+        return False
+
+    dispatcher_service = CommonSimEventDispatcherService()
+    if dispatcher_service._on_sim_buff_added not in buff_component.on_buff_added:
+        buff_component.on_buff_added.append(dispatcher_service._on_sim_buff_added)
+
+    if dispatcher_service._on_sim_buff_removed not in buff_component.on_buff_removed:
+        buff_component.on_buff_removed.append(dispatcher_service._on_sim_buff_removed)
+    return True
