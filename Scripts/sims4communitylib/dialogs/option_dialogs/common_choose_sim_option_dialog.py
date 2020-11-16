@@ -109,7 +109,7 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
     :param description_tokens: An iterable of Tokens to format into the description.
     :type description_tokens: Iterator[Any], optional
     :param on_close: A callback invoked upon the dialog closing.
-    :type on_close: Callable[..., Any], optional
+    :type on_close: Callable[[], None], optional
     :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
     :type mod_identity: CommonModIdentity, optional
     :param required_tooltip: If provided, this text will display when the dialog requires at least one choice and a choice has not been made. Default is None.
@@ -123,7 +123,7 @@ class CommonChooseSimOptionDialog(CommonChooseOptionDialog):
         description_identifier: Union[int, str, LocalizedString, CommonStringId],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
-        on_close: Callable[..., Any]=CommonFunctionUtils.noop,
+        on_close: Callable[[], None]=CommonFunctionUtils.noop,
         mod_identity: CommonModIdentity=None,
         required_tooltip: Union[int, str, LocalizedString, CommonStringId]=None,
         required_tooltip_tokens: Iterator[Any]=()

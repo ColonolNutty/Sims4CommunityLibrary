@@ -27,12 +27,12 @@ class CommonOptionDialog(HasLog):
     :param internal_dialog: The dialog this option dialog wraps.
     :type internal_dialog: CommonDialog
     :param on_close: A callback invoked upon the dialog closing. Default is CommonFunctionUtils.noop.
-    :type on_close: Callable[..., Any], optional
+    :type on_close: Callable[[], None], optional
     """
     def __init__(
         self,
         internal_dialog: CommonDialog,
-        on_close: Callable[..., Any]=CommonFunctionUtils.noop
+        on_close: Callable[[], None]=CommonFunctionUtils.noop
     ):
         super().__init__()
         self._on_close = on_close
@@ -87,12 +87,9 @@ class CommonOptionDialog(HasLog):
         """
         raise NotImplementedError('\'{}\' not implemented.'.format(self.__class__.build_dialog.__name__))
 
-    def close(self) -> bool:
+    def close(self) -> None:
         """close()
 
         Close the dialog.
-
-        :return: True, if the dialog closed successfully. False, if not.
-        :rtype: bool
         """
         return self._on_close()

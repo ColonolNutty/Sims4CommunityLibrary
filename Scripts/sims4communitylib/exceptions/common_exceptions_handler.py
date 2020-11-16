@@ -5,7 +5,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import os
 from functools import wraps
 from typing import Any, Callable, Union
 from sims4communitylib.exceptions.common_stacktrace_utils import CommonStacktraceUtil

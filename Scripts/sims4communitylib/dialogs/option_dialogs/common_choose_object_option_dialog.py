@@ -52,7 +52,7 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
     .. highlight:: python
     .. code-block:: python
 
-        def _on_option_chosen(option_identifier: str, choice: str):
+        def _on_option_chosen(option_identifier: DialogOptionIdentifierType, choice: DialogOptionValueType):
             pass
 
         # LocalizedStrings within other LocalizedStrings
@@ -135,7 +135,7 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
     :param description_tokens: An iterable of Tokens to format into the description. Default is an empty collection.
     :type description_tokens: Iterator[Any], optional
     :param on_close: A callback invoked upon the dialog closing. Default is CommonFunctionUtils.noop.
-    :type on_close: Callable[..., Any], optional
+    :type on_close: Callable[[], None], optional
     :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information. Default is None.
     :type mod_identity: CommonModIdentity, optional
     :param per_page: The number of rows to display per page. If the number of rows (including rows added after creation) exceeds this value, pagination will be added. Default is 25.
@@ -151,7 +151,7 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         description_identifier: Union[int, str, LocalizedString, CommonStringId],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
-        on_close: Callable[..., Any]=CommonFunctionUtils.noop,
+        on_close: Callable[[], None]=CommonFunctionUtils.noop,
         mod_identity: CommonModIdentity=None,
         per_page: int=25,
         required_tooltip: Union[int, str, LocalizedString, CommonStringId]=None,

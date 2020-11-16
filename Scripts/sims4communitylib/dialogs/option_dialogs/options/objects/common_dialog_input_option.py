@@ -12,7 +12,8 @@ from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_object_option import CommonDialogObjectOption
+from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_object_option import \
+    CommonDialogObjectOption, DialogOptionIdentifierType
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_context import CommonDialogOptionContext
 from sims4communitylib.dialogs.common_input_float_dialog import CommonInputFloatDialog
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
@@ -34,7 +35,7 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
     An option to open a dialog to input a float value.
 
     :param option_identifier: A string that identifies the option from other options.
-    :type option_identifier: str
+    :type option_identifier: DialogOptionIdentifierType
     :param initial_value: The value the option will have initially
     :type initial_value: float
     :param context: A context to customize the dialog option.
@@ -44,7 +45,7 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
     :param max_value: The maximum value allowed to be entered.
     :type max_value: float, optional
     :param on_chosen: A callback invoked when the dialog option is chosen. args: (option_identifier, entered value, outcome)
-    :type on_chosen: Callable[[str, float, CommonChoiceOutcome], Any], optional
+    :type on_chosen: Callable[[DialogOptionIdentifierType, float, CommonChoiceOutcome], None], optional
     :param always_visible: If set to True, the option will always appear in the dialog no matter which page.\
     If False, the option will act as normal. Default is False.
     :type always_visible: bool, optional
@@ -56,12 +57,12 @@ class CommonDialogInputFloatOption(CommonDialogObjectOption):
     """
     def __init__(
         self,
-        option_identifier: str,
+        option_identifier: DialogOptionIdentifierType,
         initial_value: float,
         context: CommonDialogOptionContext,
         min_value: float=0.0,
         max_value: float=2147483647.0,
-        on_chosen: Callable[[str, float, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
+        on_chosen: Callable[[DialogOptionIdentifierType, float, CommonChoiceOutcome], None]=CommonFunctionUtils.noop,
         always_visible: bool=False,
         dialog_description_identifier: Union[int, str, LocalizedString, CommonStringId]=None,
         dialog_description_tokens: Iterator[Any]=()
