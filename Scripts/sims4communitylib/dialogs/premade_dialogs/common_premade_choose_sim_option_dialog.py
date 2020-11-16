@@ -91,7 +91,7 @@ class CommonPremadeChooseSimOptionDialog(CommonChooseSimOptionDialog):
     :param description_tokens: An iterable of Tokens to format into the description.
     :type description_tokens: Iterator[Any], optional
     :param on_close: A callback invoked upon the dialog closing.
-    :type on_close: Callable[..., Any], optional
+    :type on_close: Callable[[], None], optional
     :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
     :type mod_identity: CommonModIdentity, optional
     :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. If set to None, All sims will be included.
@@ -107,7 +107,7 @@ class CommonPremadeChooseSimOptionDialog(CommonChooseSimOptionDialog):
         description_identifier: Union[int, str, LocalizedString, CommonStringId],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
-        on_close: Callable[..., Any]=CommonFunctionUtils.noop,
+        on_close: Callable[[], None]=CommonFunctionUtils.noop,
         mod_identity: CommonModIdentity=None,
         include_sim_callback: Callable[[SimInfo], bool]=None,
         instanced_sims_only: bool=True,

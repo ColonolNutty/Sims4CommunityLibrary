@@ -32,12 +32,12 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
     :param internal_dialog: The dialog this option dialog wraps.
     :type internal_dialog: CommonChooseDialog
     :param on_close: A callback invoked upon the dialog closing.
-    :type on_close: Callable[..., Any], optional
+    :type on_close: Callable[[], None], optional
     """
     def __init__(
         self,
         internal_dialog: CommonChooseDialog,
-        on_close: Callable[..., Any]=CommonFunctionUtils.noop
+        on_close: Callable[[], None]=CommonFunctionUtils.noop
     ):
         super().__init__(
             internal_dialog,
@@ -134,7 +134,8 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
         def _on_submit(chosen_options: Union[Tuple[CommonDialogOption], None], outcome: CommonChoiceOutcome) -> bool:
             try:
                 if chosen_options is None or len(chosen_options) == 0 or CommonChoiceOutcome.is_error_or_cancel(outcome):
-                    return self.close()
+                    self.close()
+                    return True
                 chosen_values: List[DialogOptionValueType] = list()
                 for chosen_option in chosen_options:
                     chosen_values.append(chosen_option.value)

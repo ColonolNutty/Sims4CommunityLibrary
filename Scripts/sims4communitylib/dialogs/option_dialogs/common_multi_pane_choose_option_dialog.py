@@ -200,7 +200,7 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
     :param description_tokens: An iterable of Tokens to format into the description. Default is an empty collection.
     :type description_tokens: Iterator[Any], optional
     :param on_close: A callback invoked upon the dialog closing. Default is CommonFunctionUtils.noop.
-    :type on_close: Callable[..., Any], optional
+    :type on_close: Callable[[], None], optional
     """
     def __init__(
         self,
@@ -209,7 +209,7 @@ class CommonMultiPaneChooseOptionDialog(CommonOptionDialog):
         description_identifier: Union[int, str, LocalizedString, CommonStringId],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
-        on_close: Callable[..., Any]=CommonFunctionUtils.noop
+        on_close: Callable[[], None]=CommonFunctionUtils.noop
     ):
         super().__init__(
             CommonMultiPaneChooseDialog(

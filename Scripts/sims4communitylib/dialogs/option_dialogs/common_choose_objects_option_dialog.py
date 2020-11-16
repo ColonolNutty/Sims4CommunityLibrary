@@ -144,7 +144,7 @@ class CommonChooseObjectsOptionDialog(CommonChooseOptionsDialog):
     :param description_tokens: An iterable of Tokens to format into the description. Default is an empty collection.
     :type description_tokens: Iterator[Any], optional
     :param on_close: A callback invoked upon the dialog closing. Default is CommonFunctionUtils.noop.
-    :type on_close: Callable[..., Any], optional
+    :type on_close: Callable[[], None], optional
     :param per_page: The number of rows to display per page. If the number of rows (including rows added after creation) exceeds this value, pagination will be added. Default is 25.
     :type per_page: int, optional
     :param required_tooltip: If provided, this text will display when the dialog requires at least one choice and a choice has not been made. Default is None.
@@ -158,7 +158,7 @@ class CommonChooseObjectsOptionDialog(CommonChooseOptionsDialog):
         description_identifier: Union[int, str, LocalizedString, CommonStringId],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
-        on_close: Callable[..., Any]=CommonFunctionUtils.noop,
+        on_close: Callable[[], None]=CommonFunctionUtils.noop,
         mod_identity: CommonModIdentity=None,
         per_page: int=25,
         required_tooltip: Union[int, str, LocalizedString, CommonStringId]=None,

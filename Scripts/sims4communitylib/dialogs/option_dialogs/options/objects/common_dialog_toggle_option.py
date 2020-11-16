@@ -10,7 +10,8 @@ from typing import Any, Callable
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_context import CommonDialogOptionContext
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_object_option import CommonDialogObjectOption
+from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_object_option import \
+    CommonDialogObjectOption, DialogOptionIdentifierType
 
 
 class CommonDialogToggleOption(CommonDialogObjectOption):
@@ -19,23 +20,23 @@ class CommonDialogToggleOption(CommonDialogObjectOption):
     An option with two states, on or off.
 
     :param option_identifier: A string that identifies the option from other options.
-    :type option_identifier: str
+    :type option_identifier: DialogOptionIdentifierType
     :param value: The value of the option.
     :type value: bool
     :param context: A context to customize the dialog option.
     :type context: CommonDialogOptionContext
-    :param on_chosen: A callback invoked when the dialog option is chosen.
-    :type on_chosen: Callable[[str, bool], Any], optional
+    :param on_chosen: A callback invoked when the dialog option is chosen. The values are as follows: (option_identifier, not value)
+    :type on_chosen: Callable[[DialogOptionIdentifierType, bool], None], optional
     :param always_visible: If set to True, the option will always appear in the dialog no matter which page.\
     If False, the option will act as normal. Default is False.
     :type always_visible: bool, optional
     """
     def __init__(
         self,
-        option_identifier: str,
+        option_identifier: DialogOptionIdentifierType,
         value: bool,
         context: CommonDialogOptionContext,
-        on_chosen: Callable[[str, bool], Any]=CommonFunctionUtils.noop,
+        on_chosen: Callable[[DialogOptionIdentifierType, bool], None]=CommonFunctionUtils.noop,
         always_visible: bool=False
     ):
         super().__init__(option_identifier, value, context, on_chosen=on_chosen, always_visible=always_visible)
@@ -68,7 +69,7 @@ class CommonDialogToggleOption(CommonDialogObjectOption):
         return super().on_chosen
 
     # noinspection PyMissingOrEmptyDocstring
-    def choose(self) -> Any:
+    def choose(self) -> None:
         if self.on_chosen is None:
             return None
         return self.on_chosen(not bool(self.value))

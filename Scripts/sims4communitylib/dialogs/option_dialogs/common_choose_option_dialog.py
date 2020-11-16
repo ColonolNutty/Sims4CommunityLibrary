@@ -27,12 +27,12 @@ class CommonChooseOptionDialog(CommonOptionDialog):
     :param internal_dialog: The dialog this option dialog wraps.
     :type internal_dialog: CommonChooseDialog
     :param on_close: A callback invoked upon the dialog closing.
-    :type on_close: Callable[..., Any], optional
+    :type on_close: Callable[[], None], optional
     """
     def __init__(
         self,
         internal_dialog: CommonChooseDialog,
-        on_close: Callable[..., Any]=CommonFunctionUtils.noop
+        on_close: Callable[[], None]=CommonFunctionUtils.noop
     ):
         super().__init__(
             internal_dialog,

@@ -5,12 +5,14 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any, Callable
+from typing import Any, Callable, TypeVar
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from ui.ui_dialog_picker import ObjectPickerRow
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option import CommonDialogOption
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_context import CommonDialogOptionContext, \
     DialogOptionValueType
+
+DialogOptionIdentifierType = TypeVar('DialogOptionIdentifierType')
 
 
 class CommonDialogObjectOption(CommonDialogOption):
@@ -19,23 +21,23 @@ class CommonDialogObjectOption(CommonDialogOption):
     An option the player can choose within a dialog.
 
     :param option_identifier: A string that identifies the option from other options.
-    :type option_identifier: str
+    :type option_identifier: DialogOptionIdentifierType
     :param value: The value of the option.
     :type value: DialogOptionValueType
     :param context: A context to customize the dialog option.
     :type context: CommonDialogOptionContext
-    :param on_chosen: A callback invoked when the dialog option is chosen.
-    :type on_chosen: Callable[[str, DialogOptionValueType], Any], optional
+    :param on_chosen: A callback invoked when the dialog option is chosen. The values are as follows: (option_identifier, value)
+    :type on_chosen: Callable[[DialogOptionIdentifierType, DialogOptionValueType], None], optional
     :param always_visible: If set to True, the option will always appear in the dialog no matter which page.\
     If False, the option will act as normal. Default is False.
     :type always_visible: bool, optional
     """
     def __init__(
         self,
-        option_identifier: str,
+        option_identifier: DialogOptionIdentifierType,
         value: DialogOptionValueType,
         context: CommonDialogOptionContext,
-        on_chosen: Callable[[str, DialogOptionValueType], Any]=CommonFunctionUtils.noop,
+        on_chosen: Callable[[DialogOptionIdentifierType, DialogOptionValueType], None]=CommonFunctionUtils.noop,
         always_visible: bool=False
     ):
         if option_identifier is None:
@@ -50,7 +52,7 @@ class CommonDialogObjectOption(CommonDialogOption):
         super().__init__(value, context, on_chosen=_on_chosen)
 
     @property
-    def option_identifier(self) -> str:
+    def option_identifier(self) -> DialogOptionIdentifierType:
         """Used to identify the option.
 
         :return: The identity of the option.
