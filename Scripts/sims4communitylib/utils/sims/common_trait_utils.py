@@ -5,9 +5,17 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from pprint import pformat
 from typing import List, Union, Callable, Iterator, Tuple
+
+from relationships.relationship_tracker import RelationshipTracker
+from relationships.sim_knowledge import SimKnowledge
 from sims.sim_info import SimInfo
+from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.traits_enum import CommonTraitId
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from traits.traits import Trait
 
@@ -1218,3 +1226,55 @@ class CommonTraitUtils:
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.load_instance(Types.TRAIT, trait_id)
+
+
+@Command('s4clib.show_known_traits', command_type=CommandType.Live)
+def _common_show_known_traits(target_sim_id: int=None, _connection: int=None):
+    output = CheatOutput(_connection)
+    output('Doing')
+    active_sim_info = CommonSimUtils.get_active_sim_info()
+    active_sim_id = CommonSimUtils.get_sim_id(active_sim_info)
+    output('Active sim id: {}'.format(active_sim_id))
+    if target_sim_id is None:
+        output('No target specified.')
+        return
+    target_sim_info = CommonSimUtils.get_sim_info(target_sim_id)
+    if target_sim_info is None:
+        output('Target with id not found: {}'.format(target_sim_id))
+        return
+    output('Getting relationship {}'.format(CommonSimNameUtils.get_full_name(target_sim_info)))
+    relationship_tracker: RelationshipTracker = active_sim_info.relationship_tracker
+    output('Getting knowledge')
+    knowledge: SimKnowledge = relationship_tracker.get_knowledge(target_sim_id, initialize=False)
+    output('Printing knowledge')
+    if knowledge.known_traits is None:
+        output('No known traits.')
+        return
+    output('Known Traits:')
+    output(pformat(knowledge.known_traits))
+    output('Done')
+
+
+@Command('s4clib.remove_trait', command_type=CommandType.Live)
+def _common_remove_trait(trait_id: int=None, target_sim_id: int=None, _connection: int=None):
+    output = CheatOutput(_connection)
+    if trait_id is None:
+        output('Missing trait_id')
+        return
+    if target_sim_id is None:
+        output('No Target specified, using the Active Sim.')
+        target_sim_info = CommonSimUtils.get_active_sim_info()
+    else:
+        target_sim_info = CommonSimUtils.get_sim_info(target_sim_id)
+    if target_sim_info is None:
+        output('No target Sim found with id {}'.format(target_sim_id))
+        return
+    try:
+        output('Attempting to remove trait {} from Sim {}'.format(trait_id, CommonSimNameUtils.get_full_name(target_sim_info)))
+        if CommonTraitUtils.remove_trait(target_sim_info, trait_id):
+            output('Successfully removed trait.')
+        else:
+            output('Failed to remove trait.')
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to remove trait {} from Sim {}'.format(trait_id, CommonSimNameUtils.get_full_name(target_sim_info)), exception=ex)
+    output('Done')
