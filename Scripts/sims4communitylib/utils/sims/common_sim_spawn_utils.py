@@ -350,7 +350,7 @@ class CommonSimSpawnUtils:
 
 
 @Command('s4clib.spawn_human_sims', command_type=CommandType.Live)
-def _spawn_human_sims(number: int=100, gender_str: str='male', age_str: str='adult', _connection: int=None):
+def _spawn_human_sims(count: int=100, gender_str: str= 'male', age_str: str= 'adult', _connection: int=None):
     output = CheatOutput(_connection)
     gender: Gender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), Gender, default_value=None)
     if gender is None:
@@ -360,11 +360,14 @@ def _spawn_human_sims(number: int=100, gender_str: str='male', age_str: str='adu
     if age is None:
         output('{} is not a valid age'.format(age_str))
         return
-    output('Spawning {} Sims of Gender: {} and Age: {}.'.format(number, gender.name, age.name))
+    if count <= 0:
+        output('Please enter a count above zero.')
+        return
+    output('Spawning {} Sims of Gender: {} and Age: {}.'.format(count, gender.name, age.name))
     try:
         active_sim_info = CommonSimUtils.get_active_sim_info()
         active_sim_location = CommonSimLocationUtils.get_location(active_sim_info)
-        for x in range(number):
+        for x in range(count):
             created_sim_info = CommonSimSpawnUtils.create_human_sim_info(gender=gender, age=age, first_name=str(x), last_name=str(x))
             CommonSimSpawnUtils.spawn_sim(created_sim_info, location=active_sim_location)
     except Exception as ex:
