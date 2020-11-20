@@ -8,6 +8,11 @@ Copyright (c) COLONOLNUTTY
 import services
 import build_buy
 from interactions.interaction_finisher import FinishingType
+from sims4.commands import Command, CommandType, CheatOutput
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
 
 try:
     import _buildbuy
@@ -342,3 +347,26 @@ class CommonSimSpawnUtils:
         if sim is None:
             return
         sim.fade_out(fade_duration=fade_duration, immediate=immediate, additional_channels=additional_channels)
+
+
+@Command('s4clib.spawn_human_sims', command_type=CommandType.Live)
+def _spawn_human_sims(number: int=100, gender_str: str='male', age_str: str='adult', _connection: int=None):
+    output = CheatOutput(_connection)
+    gender: Gender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), Gender, default_value=None)
+    if gender is None:
+        output('{} is not a valid gender'.format(gender_str))
+        return
+    age: Age = CommonResourceUtils.get_enum_by_name(age_str.upper(), Age, default_value=None)
+    if age is None:
+        output('{} is not a valid age'.format(age_str))
+        return
+    output('Spawning {} Sims of Gender: {} and Age: {}.'.format(number, gender.name, age.name))
+    try:
+        active_sim_info = CommonSimUtils.get_active_sim_info()
+        active_sim_location = CommonSimLocationUtils.get_location(active_sim_info)
+        for x in range(number):
+            created_sim_info = CommonSimSpawnUtils.create_human_sim_info(gender=gender, age=age, first_name=str(x), last_name=str(x))
+            CommonSimSpawnUtils.spawn_sim(created_sim_info, location=active_sim_location)
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error spawning Sims.', exception=ex)
+    output('Done spawning Sims.')
