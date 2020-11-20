@@ -9,6 +9,7 @@ from typing import Union
 
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Gender
+from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
 
 
 class CommonGenderUtils:
@@ -32,7 +33,7 @@ class CommonGenderUtils:
             # noinspection PyPropertyAccess
             return sim_info.gender
         if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, 'gender'):
-            return sim_info.siminfo.gender
+            return sim_info.sim_info.gender
         return None
 
     @staticmethod
@@ -70,19 +71,36 @@ class CommonGenderUtils:
         :rtype: bool
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        result = False
+        frame = CommonSimGenderOptionUtils.has_masculine_frame(sim_info)
+        prefers_menswear = CommonSimGenderOptionUtils.prefers_menswear(sim_info)
+        can_impregnate = CommonSimGenderOptionUtils.can_impregnate(sim_info)
+        can_be_impregnated = CommonSimGenderOptionUtils.can_be_impregnated(sim_info)
+        can_reproduce = CommonSimGenderOptionUtils.can_reproduce(sim_info)
+        uses_toilet_standing = CommonSimGenderOptionUtils.uses_toilet_standing(sim_info)
+        has_breasts = CommonSimGenderOptionUtils.has_breasts(sim_info)
+        saved_outfits = sim_info.save_outfits()
+        current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
         if CommonGenderUtils.is_male(sim_info):
             result = CommonGenderUtils.set_gender(sim_info, Gender.FEMALE)
-            if not update_gender_options:
-                return result
-            CommonSimGenderOptionUtils.update_gender_options_to_vanilla_female(sim_info)
-            return result
+            if update_gender_options:
+                CommonSimGenderOptionUtils.update_gender_options_to_vanilla_female(sim_info)
         elif CommonGenderUtils.is_female(sim_info):
             result = CommonGenderUtils.set_gender(sim_info, Gender.MALE)
-            if not update_gender_options:
-                return result
-            CommonSimGenderOptionUtils.update_gender_options_to_vanilla_male(sim_info)
-            return result
-        return False
+            if update_gender_options:
+                CommonSimGenderOptionUtils.update_gender_options_to_vanilla_male(sim_info)
+        if not update_gender_options:
+            CommonSimGenderOptionUtils.update_body_frame(sim_info, frame)
+            CommonSimGenderOptionUtils.update_clothing_preference(sim_info, prefers_menswear)
+            CommonSimGenderOptionUtils.update_can_impregnate(sim_info, can_impregnate)
+            CommonSimGenderOptionUtils.update_can_be_impregnated(sim_info, can_be_impregnated)
+            CommonSimGenderOptionUtils.update_can_reproduce(sim_info, can_reproduce)
+            CommonSimGenderOptionUtils.update_toilet_usage(sim_info, uses_toilet_standing)
+            CommonSimGenderOptionUtils.update_has_breasts(sim_info, has_breasts)
+            sim_info.load_outfits(saved_outfits)
+            CommonOutfitUtils.resend_outfits(sim_info)
+            CommonOutfitUtils.set_current_outfit(sim_info, current_outfit)
+        return result
 
     @staticmethod
     def are_same_gender(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:
