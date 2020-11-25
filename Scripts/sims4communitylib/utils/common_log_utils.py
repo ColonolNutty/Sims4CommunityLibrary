@@ -104,7 +104,9 @@ class CommonLogUtils:
         mod_identifier = CommonModIdentity._get_mod_name(mod_identifier)
         root_path = CommonLogUtils.get_sims_documents_location_path()
         file_name = '{}_{}.txt'.format(mod_identifier, file_name)
-        file_path = root_path
+        file_path = os.path.join(root_path, 'mod_logs')
+        if not os.path.exists(file_path):
+            os.mkdir(file_path)
         if custom_file_path is not None:
             file_path = os.path.join(file_path, custom_file_path)
         current_file = os.path.join(file_path, file_name)
@@ -121,7 +123,9 @@ class CommonLogUtils:
         mod_identifier = CommonModIdentity._get_mod_name(mod_identifier)
         root_path = CommonLogUtils.get_sims_documents_location_path()
         old_file_name = 'Old_{}_{}.txt'.format(mod_identifier, file_name)
-        file_path = root_path
+        file_path = os.path.join(root_path, 'mod_logs')
+        if not os.path.exists(file_path):
+            os.mkdir(file_path)
         if custom_file_path is not None:
             file_path = os.path.join(file_path, custom_file_path)
         return os.path.join(file_path, old_file_name)
