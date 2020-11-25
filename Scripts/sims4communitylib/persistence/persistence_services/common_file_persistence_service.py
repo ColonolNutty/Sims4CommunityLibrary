@@ -29,9 +29,9 @@ class CommonFilePersistenceService(CommonPersistenceService):
         if self._per_save:
             save_slot_id = CommonSaveUtils.get_save_slot_id()
             save_slot_guid = CommonSaveUtils.get_save_slot_guid()
-            return os.path.join(CommonLogUtils.get_sims_documents_location_path(), 'saves', mod_identity.base_namespace.lower(), f'{data_name}_id_{save_slot_id}_guid_{save_slot_guid}.json')
+            return os.path.join(CommonLogUtils.get_sims_documents_location_path(), 'Mods', 'mod_data', mod_identity.base_namespace.lower(), f'{data_name}_id_{save_slot_id}_guid_{save_slot_guid}.json')
         else:
-            return os.path.join(CommonLogUtils.get_sims_documents_location_path(), 'saves', mod_identity.base_namespace.lower(), f'{data_name}.json')
+            return os.path.join(CommonLogUtils.get_sims_documents_location_path(), 'Mods', 'mod_data', mod_identity.base_namespace.lower(), f'{data_name}.json')
 
     def __init__(self, per_save: bool=True) -> None:
         super().__init__()
