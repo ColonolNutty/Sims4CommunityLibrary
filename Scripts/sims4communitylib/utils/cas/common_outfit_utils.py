@@ -38,7 +38,7 @@ class CommonOutfitUtils:
         :return: True, if the OutfitCategory is OutfitCategory.EVERYDAY. False, if it is not.
         :rtype: bool
         """
-        return outfit_category == OutfitCategory.EVERYDAY
+        return int(outfit_category) == int(OutfitCategory.EVERYDAY)
 
     @staticmethod
     def is_formal_category(outfit_category: OutfitCategory) -> bool:
@@ -51,7 +51,7 @@ class CommonOutfitUtils:
         :return: True, if the OutfitCategory is OutfitCategory.FORMAL. False, if it is not.
         :rtype: bool
         """
-        return outfit_category == OutfitCategory.FORMAL
+        return int(outfit_category) == int(OutfitCategory.FORMAL)
 
     @staticmethod
     def is_athletic_category(outfit_category: OutfitCategory) -> bool:
@@ -64,7 +64,7 @@ class CommonOutfitUtils:
         :return: True, if the OutfitCategory is OutfitCategory.ATHLETIC. False, if it is not.
         :rtype: bool
         """
-        return outfit_category == OutfitCategory.ATHLETIC
+        return int(outfit_category) == int(OutfitCategory.ATHLETIC)
 
     @staticmethod
     def is_sleep_category(outfit_category: OutfitCategory) -> bool:
@@ -77,7 +77,7 @@ class CommonOutfitUtils:
         :return: True, if the OutfitCategory is OutfitCategory.SLEEP. False, if it is not.
         :rtype: bool
         """
-        return outfit_category == OutfitCategory.SLEEP
+        return int(outfit_category) == int(OutfitCategory.SLEEP)
 
     @staticmethod
     def is_party_category(outfit_category: OutfitCategory) -> bool:
@@ -90,7 +90,7 @@ class CommonOutfitUtils:
         :return: True, if the OutfitCategory is OutfitCategory.PARTY. False, if it is not.
         :rtype: bool
         """
-        return outfit_category == OutfitCategory.PARTY
+        return int(outfit_category) == int(OutfitCategory.PARTY)
 
     @staticmethod
     def is_bathing_category(outfit_category: OutfitCategory) -> bool:
@@ -103,7 +103,7 @@ class CommonOutfitUtils:
         :return: True, if the OutfitCategory is OutfitCategory.BATHING. False, if it is not.
         :rtype: bool
         """
-        return outfit_category == OutfitCategory.BATHING
+        return int(outfit_category) == int(OutfitCategory.BATHING)
 
     @staticmethod
     def is_career_category(outfit_category: OutfitCategory) -> bool:
@@ -116,7 +116,7 @@ class CommonOutfitUtils:
         :return: True, if the OutfitCategory is OutfitCategory.CAREER. False, if it is not.
         :rtype: bool
         """
-        return outfit_category == OutfitCategory.CAREER
+        return int(outfit_category) == int(OutfitCategory.CAREER)
 
     @staticmethod
     def is_situation_category(outfit_category: OutfitCategory) -> bool:
@@ -129,7 +129,7 @@ class CommonOutfitUtils:
         :return: True, if the OutfitCategory is OutfitCategory.SITUATION. False, if it is not.
         :rtype: bool
         """
-        return outfit_category == OutfitCategory.SITUATION
+        return int(outfit_category) == int(OutfitCategory.SITUATION)
 
     @staticmethod
     def is_special_category(outfit_category: OutfitCategory) -> bool:
@@ -142,7 +142,7 @@ class CommonOutfitUtils:
         :return: True, if the OutfitCategory is OutfitCategory.SPECIAL. False, if it is not.
         :rtype: bool
         """
-        return outfit_category == OutfitCategory.SPECIAL
+        return int(outfit_category) == int(OutfitCategory.SPECIAL)
 
     @staticmethod
     def is_swimwear_category(outfit_category: OutfitCategory) -> bool:
@@ -155,7 +155,7 @@ class CommonOutfitUtils:
         :return: True, if the OutfitCategory is OutfitCategory.SWIMWEAR. False, if it is not.
         :rtype: bool
         """
-        return outfit_category == OutfitCategory.SWIMWEAR
+        return int(outfit_category) == int(OutfitCategory.SWIMWEAR)
 
     @staticmethod
     def is_hot_weather_category(outfit_category: OutfitCategory) -> bool:
@@ -170,7 +170,7 @@ class CommonOutfitUtils:
         """
         # noinspection PyBroadException
         try:
-            return outfit_category == OutfitCategory.HOTWEATHER
+            return int(outfit_category) == int(OutfitCategory.HOTWEATHER)
         except:
             return False
 
@@ -187,7 +187,7 @@ class CommonOutfitUtils:
         """
         # noinspection PyBroadException
         try:
-            return outfit_category == OutfitCategory.COLDWEATHER
+            return int(outfit_category) == int(OutfitCategory.COLDWEATHER)
         except:
             return False
 
@@ -204,7 +204,7 @@ class CommonOutfitUtils:
         """
         # noinspection PyBroadException
         try:
-            return outfit_category == OutfitCategory.BATUU
+            return int(outfit_category) == int(OutfitCategory.BATUU)
         except:
             return False
 
@@ -458,7 +458,15 @@ class CommonOutfitUtils:
         """
         if sim_info is None:
             return OutfitCategory.EVERYDAY, 0
-        return sim_info.get_current_outfit()
+        current_outfit = sim_info.get_current_outfit()
+        # noinspection PyBroadException
+        try:
+            current_outfit_category = CommonResourceUtils.get_enum_by_name(OutfitCategory.value_to_name[current_outfit[0]], OutfitCategory, default_value=None)
+        except:
+            current_outfit_category = current_outfit[0]
+        if current_outfit_category is None:
+            current_outfit_category = current_outfit[0]
+        return current_outfit_category, current_outfit[0]
 
     @staticmethod
     def get_appearance_modifiers_gen(sim_info: SimInfo, appearance_modifier_type: AppearanceModifierType, include_appearance_modifier_callback: Callable[[ModifierInfo], bool]=None) -> Iterator[AppearanceModifier]:
