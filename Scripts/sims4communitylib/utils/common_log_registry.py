@@ -446,6 +446,7 @@ class CommonLogRegistry(CommonService):
     """
     def __init__(self) -> None:
         self._registered_logs: Dict[str, Dict[str, CommonLog]] = dict()
+        self._delete_old_log_files()
 
     def get_registered_log_names(self, mod_identifier: Union[str, CommonModIdentity]=None) -> List[str]:
         """get_registered_log_names()
@@ -495,7 +496,6 @@ class CommonLogRegistry(CommonService):
         # Dict[str, Dict[str, CommonLog]]
         if mod_name not in self._registered_logs:
             self._registered_logs[mod_name] = dict()
-            self._delete_old_log_files(mod_name, custom_file_path=custom_file_path)
         # Dict[str, CommonLog]
         if log_name in self._registered_logs[mod_name]:
             return self._registered_logs[mod_name][log_name]
@@ -503,19 +503,18 @@ class CommonLogRegistry(CommonService):
         self._registered_logs[mod_name][log_name] = log
         return log
 
-    def _delete_old_log_files(self, mod_identifier: Union[str, CommonModIdentity], custom_file_path: str=None):
+    def _delete_old_log_files(self) -> None:
         from sims4communitylib.utils.common_io_utils import CommonIOUtils
-        mod_name = CommonModIdentity._get_mod_name(mod_identifier)
         files_to_delete = (
-            CommonLogUtils.get_message_file_path(mod_name, custom_file_path=custom_file_path),
-            CommonLogUtils.get_exceptions_file_path(mod_name, custom_file_path=custom_file_path),
-            CommonLogUtils.get_old_message_file_path(mod_name, custom_file_path=custom_file_path),
-            CommonLogUtils.get_old_exceptions_file_path(mod_name, custom_file_path=custom_file_path)
+            os.path.join(CommonLogUtils.get_sims_documents_location_path(), 'mod_logs'),
         )
         for file_to_delete in files_to_delete:
             # noinspection PyBroadException
             try:
-                CommonIOUtils.delete_file(file_to_delete, ignore_errors=True)
+                if os.path.isfile(file_to_delete):
+                    CommonIOUtils.delete_file(file_to_delete, ignore_errors=True)
+                else:
+                    CommonIOUtils.delete_directory(file_to_delete, ignore_errors=True)
             except:
                 continue
 

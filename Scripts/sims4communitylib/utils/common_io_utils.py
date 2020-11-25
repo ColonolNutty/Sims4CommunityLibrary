@@ -6,6 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
+import shutil
 from typing import Union
 
 
@@ -31,6 +32,30 @@ class CommonIOUtils:
         try:
             if os.path.exists(file_path):
                 os.remove(file_path)
+        except Exception as ex:
+            if ignore_errors:
+                return False
+            raise ex
+        return True
+
+    @staticmethod
+    def delete_directory(directory_path: str, ignore_errors: bool=False) -> bool:
+        """delete_directory(directory_path, ignore_errors=False)
+
+        Delete a directory.
+
+        :param directory_path: The folder to delete.
+        :type directory_path: str
+        :param ignore_errors: If True, any exceptions thrown will be ignored (Useful in preventing infinite loops)
+        :type ignore_errors: bool, optional
+        :return: True if successful. False if not.
+        :rtype: bool
+        """
+        if directory_path is None:
+            return False
+        try:
+            if os.path.exists(directory_path):
+                shutil.rmtree(directory_path)
         except Exception as ex:
             if ignore_errors:
                 return False
