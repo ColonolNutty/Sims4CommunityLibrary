@@ -402,18 +402,20 @@ class CommonOutfitUtils:
         return CommonBuffUtils.has_buff(sim_info, CommonBuffId.IS_WEARING_TOWEL)
 
     @staticmethod
-    def get_outfit_category_by_name(name: str) -> OutfitCategory:
-        """get_outfit_category_by_name(name)
+    def get_outfit_category_by_name(name: str, default_category: Union[OutfitCategory, None]=OutfitCategory.CURRENT_OUTFIT) -> OutfitCategory:
+        """get_outfit_category_by_name(name, default_value=OutfitCategory.CURRENT_OUTFIT)
 
         Retrieve an OutfitCategory by its a name.
 
         :param name: The name of an outfit category.
         :type name: str
+        :param default_category: The default outfit category to use if the outfit category is not found using the specified name. Default is OutfitCategory.CURRENT_OUTFIT.
+        :type default_category: Union[OutfitCategory, None], optional
         :return: The OutfitCategory with the specified name or OutfitCategory.CURRENT_OUTFIT if no outfit category was found using the specified name.
         :rtype: OutfitCategory
         """
         upper_case_name = str(name).upper().strip()
-        return CommonResourceUtils.get_enum_by_name(upper_case_name, OutfitCategory, default_value=OutfitCategory.CURRENT_OUTFIT)
+        return CommonResourceUtils.get_enum_by_name(upper_case_name, OutfitCategory, default_value=default_category)
 
     @staticmethod
     def get_current_outfit_category(sim_info: SimInfo) -> OutfitCategory:
@@ -461,7 +463,7 @@ class CommonOutfitUtils:
         current_outfit = sim_info.get_current_outfit()
         # noinspection PyBroadException
         try:
-            current_outfit_category = CommonResourceUtils.get_enum_by_name(OutfitCategory.value_to_name[current_outfit[0]], OutfitCategory, default_value=None)
+            current_outfit_category = CommonOutfitUtils.get_outfit_category_by_name(OutfitCategory.value_to_name[current_outfit[0]], default_category=None)
         except:
             current_outfit_category = current_outfit[0]
         if current_outfit_category is None:
