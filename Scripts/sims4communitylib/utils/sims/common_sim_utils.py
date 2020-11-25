@@ -40,6 +40,22 @@ class CommonSimUtils:
         return client.active_sim
 
     @staticmethod
+    def get_active_sim_id() -> int:
+        """get_active_sim_id()
+
+        Retrieve the decimal identifier for the Currently Active Sim.
+
+        .. note:: The Active Sim is the Sim with the Plumbob above their head.
+
+        :return: The decimal identifier of the active Sim or -1 if the active Sim does not have an id.
+        :rtype: int
+        """
+        active_sim_info = CommonSimUtils.get_active_sim_info()
+        if active_sim_info is None:
+            return -1
+        return CommonSimUtils.get_sim_id(active_sim_info)
+
+    @staticmethod
     def get_active_sim_info() -> SimInfo:
         """get_active_sim_info()
 
