@@ -460,15 +460,7 @@ class CommonOutfitUtils:
         """
         if sim_info is None:
             return OutfitCategory.EVERYDAY, 0
-        current_outfit = sim_info.get_current_outfit()
-        # noinspection PyBroadException
-        try:
-            current_outfit_category = CommonOutfitUtils.get_outfit_category_by_name(OutfitCategory.value_to_name[current_outfit[0]], default_category=None)
-        except:
-            current_outfit_category = current_outfit[0]
-        if current_outfit_category is None:
-            current_outfit_category = current_outfit[0]
-        return current_outfit_category, current_outfit[0]
+        return sim_info.get_current_outfit()
 
     @staticmethod
     def get_appearance_modifiers_gen(sim_info: SimInfo, appearance_modifier_type: AppearanceModifierType, include_appearance_modifier_callback: Callable[[ModifierInfo], bool]=None) -> Iterator[AppearanceModifier]:
