@@ -15,7 +15,7 @@ from sims4communitylib.utils.common_json_io_utils import CommonJSONIOUtils
 
 
 class CommonFolderPersistenceService(CommonPersistenceService):
-    """CommonFolderPersistenceService(main_file_name='main.json', combined_file_name='combined.json')
+    """CommonFolderPersistenceService(main_file_name='main.json', combined_file_name='combined.json', allow_duplicates_in_collections=False)
 
     A service that persists data to a file within a folder on the system. It also loads all data from a folder on the system while loading the main file last.
 
@@ -23,6 +23,8 @@ class CommonFolderPersistenceService(CommonPersistenceService):
     :type main_file_name: str, optional
     :param combined_file_name: The name of the file to persist data to when saving. Default is combined.json
     :type combined_file_name: str, optional
+    :param allow_duplicates_in_collections: When loading the dictionary data and merging it, if set to True, duplicate values will be allowed to exist within collections within those dictionaries. Default is False.
+    :type allow_duplicates_in_collections: bool, optional
     """
 
     def _folder_path(self, mod_identity: CommonModIdentity, identifier: str=None) -> str:
@@ -32,10 +34,11 @@ class CommonFolderPersistenceService(CommonPersistenceService):
             folder_path = os.path.join(folder_path, identifier)
         return folder_path
 
-    def __init__(self, main_file_name: str= 'main.json', combined_file_name: str= 'combined.json') -> None:
+    def __init__(self, main_file_name: str= 'main.json', combined_file_name: str= 'combined.json', allow_duplicates_in_collections: bool=False) -> None:
         super().__init__()
         self._main_file_name = main_file_name
         self._combined_file_name = combined_file_name
+        self._allow_duplicates_in_collections = allow_duplicates_in_collections
 
     # noinspection PyMissingOrEmptyDocstring
     def load(self, mod_identity: CommonModIdentity, identifier: str=None) -> Dict[str, Any]:
@@ -53,18 +56,13 @@ class CommonFolderPersistenceService(CommonPersistenceService):
             self.log.format_with_message('Missing main data!', main_file_path=main_file_path)
             return dict()
 
-        combined_file_path = os.path.join(folder_path, self._combined_file_name)
-        loaded_combined_data: Dict[str, Any] = CommonJSONIOUtils.load_from_file(combined_file_path)
-
         loaded_data: Dict[str, Dict[str, Any]] = CommonJSONIOUtils.load_from_folder(folder_path, skip_file_names=(self._main_file_name, self._combined_file_name))
         if loaded_data is None:
             return dict()
         complete_data = dict()
         for (key, val) in loaded_data.items():
-            complete_data = CommonCollectionUtils.merge_dict(complete_data, val, prefer_source_values=True, allow_duplicates_in_collections=False)
-        complete_data = CommonCollectionUtils.merge_dict(complete_data, loaded_main_data, prefer_source_values=True, allow_duplicates_in_collections=False)
-        if loaded_combined_data is not None:
-            complete_data = CommonCollectionUtils.merge_dict(complete_data, loaded_combined_data, prefer_source_values=True, allow_duplicates_in_collections=False)
+            complete_data = CommonCollectionUtils.merge_dict(complete_data, val, prefer_source_values=True, allow_duplicates_in_collections=self._allow_duplicates_in_collections)
+        complete_data = CommonCollectionUtils.merge_dict(complete_data, loaded_main_data, prefer_source_values=True, allow_duplicates_in_collections=self._allow_duplicates_in_collections)
         self.log.format_with_message('Done loading data.', mod=mod_identity, folder_path=folder_path, complete_data=complete_data)
         return complete_data
 
