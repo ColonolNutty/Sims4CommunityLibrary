@@ -128,6 +128,57 @@ class CommonCollectionUtils:
         return possible_combinations
 
     @staticmethod
+    def merge_dict(destination: Dict[Any, Any], source: Dict[Any, Any], prefer_source_values: bool=True, allow_duplicates_in_collections: bool=True) -> Dict[Any, Any]:
+        """merge_dict(destination, source, prefer_source_values=True, allow_duplicates_in_collections=True)
+
+        Merge a source dictionary into a destination dictionary. The destination will not be modified!
+
+        :param destination: The dictionary to use as the destination. Source will be merged into this.
+        :type destination: Dict[Any, Any]
+        :param source: The dictionary to use as the source. Destination will have this merged into itself.
+        :type source: Dict[Any, Any]
+        :param prefer_source_values: When an entry is found within both the destination and the source, setting it to True will prefer to overwrite the destination value with the source value, setting this to False will prefer to use the destination value. Default is True.
+        :type prefer_source_values: bool, optional
+        :param allow_duplicates_in_collections: When a collection is found within both dictionaries, setting this to True will allow duplicate entries, setting it to False will not allow duplicate entries. Default is True.
+        :type allow_duplicates_in_collections: bool, optional
+        :return: A dictionary containing the source merged into the destination.
+        :rtype: Dict[Any, Any]
+        """
+        merged = destination.copy()
+        for (source_key, source_val) in source.items():
+            source_val = source[source_key]
+            if source_key in merged:
+                destination_val = merged[source_key]
+                if isinstance(source_val, dict) and isinstance(destination_val, dict):
+                    merged[source_key] = CommonCollectionUtils.merge_dict(destination_val, source_val, allow_duplicates_in_collections=allow_duplicates_in_collections)
+                elif CommonCollectionUtils.is_collection(source_val) and CommonCollectionUtils.is_collection(destination_val):
+                    if allow_duplicates_in_collections:
+                        if prefer_source_values:
+                            merged[source_key] = (
+                                *source_val,
+                                *destination_val
+                            )
+                        else:
+                            merged[source_key] = (
+                                *destination_val,
+                                *source_val
+                            )
+                    else:
+                        new_collection = list(destination_val)
+                        for val in source_val:
+                            if val not in new_collection:
+                                new_collection.append(val)
+                        merged[source_key] = tuple(new_collection)
+                elif source_val == destination_val:
+                    continue
+                else:
+                    if prefer_source_values:
+                        merged[source_key] = source_val
+            else:
+                merged[source_key] = source_val
+        return merged
+
+    @staticmethod
     def _process_item_sets(item_set: Union[Tuple[Any], List[Any], Set[Any]]) -> Tuple[bool, Union[Set[Any], List[Any]]]:
         item_sets = []
         # Item count 2

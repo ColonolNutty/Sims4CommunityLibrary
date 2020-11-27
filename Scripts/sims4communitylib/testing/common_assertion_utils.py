@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any, List, Union, Tuple, Callable
+from typing import Any, List, Union, Tuple, Callable, Dict
 
 from sims4communitylib.utils.common_collection_utils import CommonCollectionUtils
 
@@ -192,13 +192,13 @@ class CommonAssertionUtils:
         return True
 
     @staticmethod
-    def contains(collection: Union[Tuple[Any], List[Any]], value: Any, message: str='') -> bool:
+    def contains(collection: Union[Tuple[Any], List[Any], Dict[Any, Any]], value: Any, message: str='') -> bool:
         """contains(collection, value, message='')
 
         Assert a value is contained within a collection
 
         :param collection: The collection being checked (Any collection that works with `len()` can be used)
-        :type collection: Union[Tuple[Any], List[Any]]
+        :type collection: Union[Tuple[Any], List[Any], Dict[Any, Any]]
         :param value: The value being located.
         :type value: Any
         :param message: A custom message to include when the assertion fails. Default is Empty String.
