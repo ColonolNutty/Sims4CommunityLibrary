@@ -61,10 +61,10 @@ class CommonFolderPersistenceService(CommonPersistenceService):
             return dict()
         complete_data = dict()
         for (key, val) in loaded_data.items():
-            complete_data = CommonCollectionUtils.merge_dict(complete_data, val, prefer_source_values=True)
-        complete_data = CommonCollectionUtils.merge_dict(complete_data, loaded_main_data, prefer_source_values=True)
+            complete_data = CommonCollectionUtils.merge_dict(complete_data, val, prefer_source_values=True, allow_duplicates_in_collections=False)
+        complete_data = CommonCollectionUtils.merge_dict(complete_data, loaded_main_data, prefer_source_values=True, allow_duplicates_in_collections=False)
         if loaded_combined_data is not None:
-            complete_data = CommonCollectionUtils.merge_dict(complete_data, loaded_combined_data, prefer_source_values=True)
+            complete_data = CommonCollectionUtils.merge_dict(complete_data, loaded_combined_data, prefer_source_values=True, allow_duplicates_in_collections=False)
         self.log.format_with_message('Done loading data.', mod=mod_identity, folder_path=folder_path, complete_data=complete_data)
         return complete_data
 
