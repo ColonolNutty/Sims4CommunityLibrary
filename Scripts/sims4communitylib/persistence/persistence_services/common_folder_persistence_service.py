@@ -56,6 +56,9 @@ class CommonFolderPersistenceService(CommonPersistenceService):
             self.log.format_with_message('Missing main data!', main_file_path=main_file_path)
             return dict()
 
+        combined_file_path = os.path.join(folder_path, self._combined_file_name)
+        loaded_combined_data: Dict[str, Any] = CommonJSONIOUtils.load_from_file(combined_file_path)
+
         loaded_data: Dict[str, Dict[str, Any]] = CommonJSONIOUtils.load_from_folder(folder_path, skip_file_names=(self._main_file_name, self._combined_file_name))
         if loaded_data is None:
             return dict()
@@ -63,6 +66,8 @@ class CommonFolderPersistenceService(CommonPersistenceService):
         for (key, val) in loaded_data.items():
             complete_data = CommonCollectionUtils.merge_dict(complete_data, val, prefer_source_values=True, allow_duplicates_in_collections=self._allow_duplicates_in_collections)
         complete_data = CommonCollectionUtils.merge_dict(complete_data, loaded_main_data, prefer_source_values=True, allow_duplicates_in_collections=self._allow_duplicates_in_collections)
+        if loaded_combined_data is not None:
+            complete_data = CommonCollectionUtils.merge_dict(complete_data, loaded_combined_data, prefer_source_values=True, allow_duplicates_in_collections=self._allow_duplicates_in_collections)
         self.log.format_with_message('Done loading data.', mod=mod_identity, folder_path=folder_path, complete_data=complete_data)
         return complete_data
 
