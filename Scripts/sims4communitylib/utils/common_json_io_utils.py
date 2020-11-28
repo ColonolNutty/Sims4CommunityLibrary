@@ -87,5 +87,5 @@ class CommonJSONIOUtils:
             file_contents: str = CommonJSONIOUtils.load_from_file(entry.path, buffering=buffering, encoding=encoding)
             if file_contents is None:
                 continue
-            data[entry.name] = json.loads(file_contents)
+            data[entry.name] = file_contents
         return data
