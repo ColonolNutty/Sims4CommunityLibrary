@@ -15,27 +15,38 @@ from sims4communitylib.utils.save_load.common_save_utils import CommonSaveUtils
 
 
 class CommonFilePersistenceService(CommonPersistenceService):
-    """CommonFilePersistenceService(per_save=True)
+    """CommonFilePersistenceService(per_save=True, folder_name=None, custom_file_name=None)
 
-    A service that persists data into a file on the system.
+    A service that persists data into a file and loads data from a file on the system.
 
     :param per_save: If True, the data will persist for each Save file individually. If False, the data will persist for all Save files. Default is True.
     :type per_save: bool, optional
+    :param folder_name: Use to specify a custom file path after the normal file path, example: "The Sims 4/Mods/mod_data/<mod_name>/<folder_name>". Default is None.
+    :type folder_name: str, optional
+    :param custom_file_name: Use to specify a custom name for the loaded and saved file. example: "The Sims 4/Mods/mod_data/<mod_name>/<custom_file_name>" and if "folder_name" is specified: "The Sims 4/Mods/mod_data/<mod_name>/<folder_name>/<custom_file_name>". Default is None.
+    :type custom_file_name; str, optional
     """
 
     def _file_path(self, mod_identity: CommonModIdentity, identifier: str=None) -> str:
         from sims4communitylib.utils.common_log_utils import CommonLogUtils
         data_name = self._format_data_name(mod_identity, identifier=identifier)
+        folder_path = os.path.join(CommonLogUtils.get_sims_documents_location_path(), 'Mods', 'mod_data', mod_identity.base_namespace.lower())
+        if self._folder_name is not None:
+            folder_path = os.path.join(folder_path, self._folder_name)
+        if self._custom_file_name is not None:
+            return os.path.join(folder_path, self._custom_file_name)
         if self._per_save:
             save_slot_id = CommonSaveUtils.get_save_slot_id()
             save_slot_guid = CommonSaveUtils.get_save_slot_guid()
-            return os.path.join(CommonLogUtils.get_sims_documents_location_path(), 'Mods', 'mod_data', mod_identity.base_namespace.lower(), f'{data_name}_id_{save_slot_id}_guid_{save_slot_guid}.json')
+            return os.path.join(folder_path, f'{data_name}_id_{save_slot_id}_guid_{save_slot_guid}.json')
         else:
-            return os.path.join(CommonLogUtils.get_sims_documents_location_path(), 'Mods', 'mod_data', mod_identity.base_namespace.lower(), f'{data_name}.json')
+            return os.path.join(folder_path, f'{data_name}.json')
 
-    def __init__(self, per_save: bool=True) -> None:
+    def __init__(self, per_save: bool=True, folder_name: str=None, custom_file_name: str=None) -> None:
         super().__init__()
         self._per_save = per_save
+        self._folder_name = folder_name
+        self._custom_file_name = custom_file_name
 
     # noinspection PyMissingOrEmptyDocstring
     def load(self, mod_identity: CommonModIdentity, identifier: str=None) -> Dict[str, Any]:
