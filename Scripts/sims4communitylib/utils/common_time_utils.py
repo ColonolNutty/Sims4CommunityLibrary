@@ -185,92 +185,124 @@ class CommonTimeUtils:
         return services.time_service().sim_now
     
     @staticmethod
-    def get_current_second() -> int:
-        """get_current_second()
+    def get_current_second(date_and_time: DateAndTime=None) -> int:
+        """get_current_second(date_and_time)
 
         Retrieve the current sim second.
 
+        :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
+        :type date_and_time: DateAndTime, optional
         :return: The current second of the minute.
         :rtype: int
         """
-        return int(CommonTimeUtils.get_current_date_and_time().second())
+        if date_and_time is None:
+            date_and_time = CommonTimeUtils.get_current_date_and_time()
+        return int(date_and_time.second())
     
     @staticmethod
-    def get_current_minute() -> int:
-        """get_current_minute()
+    def get_current_minute(date_and_time: DateAndTime=None) -> int:
+        """get_current_minute(date_and_time)
 
         Retrieve the current sim minute.
 
+        :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
+        :type date_and_time: DateAndTime, optional
         :return: The current minute of the hour.
         :rtype: int
         """
-        return int(CommonTimeUtils.get_current_date_and_time().minute())
+        if date_and_time is None:
+            date_and_time = CommonTimeUtils.get_current_date_and_time()
+        return int(date_and_time.minute())
     
     @staticmethod
-    def get_current_hour() -> int:
-        """get_current_hour()
+    def get_current_hour(date_and_time: DateAndTime=None) -> int:
+        """get_current_hour(date_and_time)
 
         Retrieve the current sim hour.
 
+        :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
+        :type date_and_time: DateAndTime, optional
         :return: The current hour of the day.
         :rtype: int
         """
-        return int(CommonTimeUtils.get_current_date_and_time().hour())
+        if date_and_time is None:
+            date_and_time = CommonTimeUtils.get_current_date_and_time()
+        return int(date_and_time.hour())
     
     @staticmethod
-    def get_total_ticks() -> int:
-        """get_total_ticks()
+    def get_total_ticks(date_and_time: DateAndTime=None) -> int:
+        """get_total_ticks(date_and_time)
 
         Retrieve the total sim ticks since the start of the game.
 
+        :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
+        :type date_and_time: DateAndTime, optional
         :return: The total number of ticks in milliseconds since the start of the game.
         :rtype: int
         """
-        return int(CommonTimeUtils.get_current_date_and_time().absolute_ticks())
+        if date_and_time is None:
+            date_and_time = CommonTimeUtils.get_current_date_and_time()
+        return int(date_and_time.absolute_ticks())
 
     @staticmethod
-    def get_total_hours() -> int:
-        """get_total_hours()
+    def get_total_hours(date_and_time: DateAndTime=None) -> int:
+        """get_total_hours(date_and_time)
 
         Retrieve the total sim hours since the start of the game.
 
+        :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
+        :type date_and_time: DateAndTime, optional
         :return: The total number of hours since the start of the game.
         :rtype: int
         """
-        return int(CommonTimeUtils.get_current_date_and_time().absolute_hours())
+        if date_and_time is None:
+            date_and_time = CommonTimeUtils.get_current_date_and_time()
+        return int(date_and_time.absolute_hours())
 
     @staticmethod
-    def get_total_days() -> int:
-        """get_total_days()
+    def get_total_days(date_and_time: DateAndTime=None) -> int:
+        """get_total_days(date_and_time)
 
         Retrieve the total sim days since the start of the game.
 
+        :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
+        :type date_and_time: DateAndTime, optional
         :return: The total number of days since the start of the game.
         :rtype: int
         """
-        return int(CommonTimeUtils.get_current_date_and_time().absolute_days())
+        if date_and_time is None:
+            date_and_time = CommonTimeUtils.get_current_date_and_time()
+        return int(date_and_time.absolute_days())
 
     @staticmethod
-    def get_total_weeks() -> int:
-        """get_total_weeks()
+    def get_total_weeks(date_and_time: DateAndTime=None) -> int:
+        """get_total_weeks(date_and_time)
 
         Retrieve the total sim weeks since the start of the game.
 
+        :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
+        :type date_and_time: DateAndTime, optional
         :return: The total number of weeks since the start of the game.
         :rtype: int
         """
-        return int(CommonTimeUtils.get_current_date_and_time().absolute_weeks())
+        if date_and_time is None:
+            date_and_time = CommonTimeUtils.get_current_date_and_time()
+        return int(date_and_time.absolute_weeks())
 
     @staticmethod
-    def get_day_of_week() -> int:
-        """get_day_of_week()
+    def get_day_of_week(date_and_time: DateAndTime=None) -> int:
+        """get_day_of_week(date_and_time)
 
         Retrieve the current day of the week.
 
+        :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
+        :type date_and_time: DateAndTime, optional
         :return: The current day of the week. 0-6
         :rtype: int
         """
-        return int(CommonTimeUtils.get_current_date_and_time().day())
+        if date_and_time is None:
+            date_and_time = CommonTimeUtils.get_current_date_and_time()
+        return int(date_and_time.day())
 
     @staticmethod
     def is_sun_out() -> bool:
