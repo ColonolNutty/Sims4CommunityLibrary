@@ -7,16 +7,19 @@ Copyright (c) COLONOLNUTTY
 """
 import json
 import os
+from json import JSONEncoder, JSONDecoder
 from os import DirEntry
-from typing import Union, Any, Iterator, Dict
+from typing import Union, Any, Iterator, Dict, Type, Callable
+
+from sims4communitylib.classes.serialization.common_serializable import CommonSerializable
 from sims4communitylib.utils.common_io_utils import CommonIOUtils
 
 
 class CommonJSONIOUtils:
     """Utilities for reading/writing JSON data to and from files."""
     @staticmethod
-    def write_to_file(file_path: str, obj: Any, buffering: int=1, encoding: str= 'utf-8') -> bool:
-        """write_to_file(file_path, obj, buffering=1, encoding='utf-8')
+    def write_to_file(file_path: str, obj: Any, buffering: int=1, encoding: str= 'utf-8', encoder_class: Type[JSONEncoder]=None) -> bool:
+        """write_to_file(file_path, obj, buffering=1, encoding='utf-8', encoder_class=None)
 
         Serialize an object to a file as JSON.
 
@@ -28,18 +31,25 @@ class CommonJSONIOUtils:
         :type buffering: int, optional
         :param encoding: See the built-in python :func:`~open` function documentation for more details.
         :type encoding: str, optional
+        :param encoder_class: Specify a custom JSON encoder class to use in place of the default serialization. Default is None.
+        :type encoder_class: Type[JSONEncoder], optional
         :return: True if successful. False if not.
         :rtype: bool
         """
         if file_path is None or obj is None:
             return False
+        if encoder_class is not None:
+            json_obj = json.dumps(obj, cls=encoder_class, indent=2)
+        else:
+            json_obj = json.dumps(obj, default=lambda o: o.serialize() if isinstance(o, CommonSerializable) else o.__dict__ if hasattr(o, '__dict__') else o, indent=2)
         with open(file_path, mode='w+', buffering=buffering, encoding=encoding) as file:
-            json.dump(obj, file)
+            file.write(json_obj)
+            file.flush()
         return True
 
     @staticmethod
-    def load_from_file(file_path: str, buffering: int=1, encoding: str= 'utf-8') -> Union[Any, None]:
-        """load_from_file(file_path, buffering=1, encoding='utf-8')
+    def load_from_file(file_path: str, buffering: int=1, encoding: str= 'utf-8', decoder_class: Type[JSONDecoder]=None, object_hook: Callable[[Dict[str, Any]], Any]=None) -> Union[Any, None]:
+        """load_from_file(file_path, buffering=1, encoding='utf-8', decoder_class=None, object_hook=None)
 
         Deserialize an object from a JSON file.
 
@@ -49,17 +59,21 @@ class CommonJSONIOUtils:
         :type buffering: int, optional
         :param encoding: See the built-in python :func:`~open` function documentation for more details.
         :type encoding: str, optional
+        :param decoder_class: Specify a custom JSON decoder class to use in place of the default deserialization. Default is None.
+        :type decoder_class: Type[JSONDecoder], optional
+        :param object_hook: A callable that will be called whenever a dictionary appears while decoding JSON. It can be used to create custom objects from data. Default is None.
+        :type object_hook: Callable[[Dict[str, Any]], Any], optional
         :return: The contents of the file as an object or None if an error occurred.
         :rtype: Union[Any, None]
         """
         file_contents: str = CommonIOUtils.load_from_file(file_path, buffering=buffering, encoding=encoding)
         if file_contents is None:
             return None
-        return json.loads(file_contents)
+        return json.loads(file_contents, cls=decoder_class, object_hook=object_hook)
 
     @staticmethod
-    def load_from_folder(folder_path: str, skip_file_names: Iterator[str]=(), buffering: int=1, encoding: str= 'utf-8') -> Union[Dict[str, Any], None]:
-        """load_from_folder(folder_path, skip_file_names=(), buffering=1, encoding='utf-8')
+    def load_from_folder(folder_path: str, skip_file_names: Iterator[str]=(), buffering: int=1, encoding: str= 'utf-8', decoder_class: Type[JSONDecoder]=None, object_hook: Callable[[Dict[str, Any]], Any]=None) -> Union[Dict[str, Any], None]:
+        """load_from_folder(folder_path, skip_file_names=(), buffering=1, encoding='utf-8', decoder_class=None, object_hook=None)
 
         Deserialize objects from a folder containing JSON files.
 
@@ -71,6 +85,10 @@ class CommonJSONIOUtils:
         :type buffering: int, optional
         :param encoding: See the built-in python :func:`~open` function documentation for more details.
         :type encoding: str, optional
+        :param decoder_class: Specify a custom JSON decoder class to use in place of the default deserialization. Default is None.
+        :type decoder_class: Type[JSONDecoder], optional
+        :param object_hook: A callable that will be called whenever a dictionary appears while decoding JSON. It can be used to create custom objects from data. Default is None.
+        :type object_hook: Callable[[Dict[str, Any]], Any], optional
         :return: An dictionary of the contents of each file within the specified folder organized by file name or None if the folder path does not exist.
         :rtype: Union[Dict[str, Any], None]
         """
@@ -84,7 +102,7 @@ class CommonJSONIOUtils:
             entry: DirEntry = entry
             if not entry.is_file() or entry.name is None or entry.name in skip_file_names:
                 continue
-            file_contents: str = CommonJSONIOUtils.load_from_file(entry.path, buffering=buffering, encoding=encoding)
+            file_contents: str = CommonJSONIOUtils.load_from_file(entry.path, buffering=buffering, encoding=encoding, decoder_class=decoder_class, object_hook=object_hook)
             if file_contents is None:
                 continue
             data[entry.name] = file_contents

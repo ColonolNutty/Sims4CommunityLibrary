@@ -245,7 +245,7 @@ class CommonInteraction(Interaction, HasClassLog):
         :param tooltip: The tooltip displayed when hovering the interaction while it is disabled.
         :type tooltip: Union[int, str, LocalizedTooltip], optional
         :param icon: The icon of the outcome.
-        :type icon: _resourceman.Key, optional
+        :type icon: CommonResourceKey, optional
         :param influence_by_active_mood: If true, the Test Result will be influenced by the active mood.
         :type influence_by_active_mood: bool, optional
         :return: The desired outcome for a call of :func:`~on_test`, default is `TestResult.NONE`

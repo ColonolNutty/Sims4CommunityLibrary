@@ -5,13 +5,12 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-# noinspection PyUnresolvedReferences
-import _resourceman
 import services
 from io import BytesIO
 from typing import ItemsView, Any, Union, Tuple
 from sims4.resources import ResourceLoader, get_resource_key, Types
 from sims4.tuning.instance_manager import InstanceManager
+from sims4communitylib.classes.common_resource_key import CommonResourceKey
 
 
 class CommonResourceUtils:
@@ -92,7 +91,7 @@ class CommonResourceUtils:
         return services.get_instance_manager(instance_manager_type)
 
     @staticmethod
-    def get_resource_key(resource_type: Types, instance_id: int) -> _resourceman.Key:
+    def get_resource_key(resource_type: Types, instance_id: int) -> CommonResourceKey:
         """get_resource_key(resource_type, instance_id)
 
         Retrieve the resource key of a resource in the format: 00000000(Type):00000000(Group):00000000000000000(Instance Guid)
@@ -117,7 +116,7 @@ class CommonResourceUtils:
         :param instance_id: The decimal identifier of the resource.
         :type instance_id: int
         :return: The resource key of an instance or None if no instance was found.
-        :rtype: _resourceman.Key
+        :rtype: CommonResourceKey
         """
         return get_resource_key(instance_id, resource_type)
 
@@ -222,13 +221,13 @@ class CommonResourceUtils:
         return hash_value
 
     @staticmethod
-    def load_resource_bytes(resource_key: _resourceman.Key, silent_fail: bool=True) -> BytesIO:
+    def load_resource_bytes(resource_key: CommonResourceKey, silent_fail: bool=True) -> BytesIO:
         """load_resource_bytes(resource_key, silent_fail=True)
 
         Retrieve the bytes of a resource.
 
         :param resource_key: The key of the resource.
-        :type resource_key: _resourceman.Key
+        :type resource_key: CommonResourceKey
         :param silent_fail: Set to True to ignore errors if they occur. Set to False to throw errors when they occur. Default is True.
         :type silent_fail: bool, optional
         :return: An Input Output Byte reader/writer for the resource.
