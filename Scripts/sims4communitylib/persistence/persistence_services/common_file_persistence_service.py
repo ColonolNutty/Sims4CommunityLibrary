@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 import os
 from typing import Dict, Any
 
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.persistence.persistence_services.common_persistence_service import CommonPersistenceService
 from sims4communitylib.utils.common_json_io_utils import CommonJSONIOUtils
@@ -73,10 +74,18 @@ class CommonFilePersistenceService(CommonPersistenceService):
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
         if os.path.exists(file_path):
             self.log.debug('File existed already, removing the existing one.')
-            os.remove(file_path)
+            os.rename(file_path, file_path + '.Old')
 
-        result = CommonJSONIOUtils.write_to_file(file_path, data)
-        self.log.format_with_message('Done saving data.', file_path=file_path)
+        try:
+            result = CommonJSONIOUtils.write_to_file(file_path, data)
+            self.log.format_with_message('Done saving data.', file_path=file_path)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(mod_identity, 'Failed to save data', exception=ex)
+            if os.path.exists(file_path + '.Old'):
+                os.rename(file_path + '.Old', file_path)
+            return False
+        if result and os.path.exists(file_path + '.Old'):
+            os.remove(file_path + '.Old')
         return result
 
     # noinspection PyMissingOrEmptyDocstring

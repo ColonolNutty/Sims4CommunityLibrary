@@ -7,9 +7,10 @@ Copyright (c) COLONOLNUTTY
 """
 import sys
 from pprint import pformat
-from typing import Dict, Any
+from typing import Dict, Any, Callable
 from typing import Union
 from objects.game_object import GameObject
+from sims4communitylib.classes.serialization.common_serializable import CommonSerializable
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
@@ -71,8 +72,8 @@ class _CommonGameObjectDataStorage(HasClassLog, metaclass=_CommonGameObjectDataS
         """
         return self._game_object_id
 
-    def get_data(self, default: Any=None, key: str=None) -> Union[Any, None]:
-        """get_data(default=None, key=None)
+    def get_data(self, default: Any=None, key: str=None, encode: Callable[[Any], Any]=None, decode: Callable[[Any], CommonSerializable]=None) -> Union[Any, None]:
+        """get_data(default=None, key=None, encode=None, decode=None)
 
         Retrieve stored data.
 
@@ -80,17 +81,29 @@ class _CommonGameObjectDataStorage(HasClassLog, metaclass=_CommonGameObjectDataS
         :type default: Dict[Any, Any], optional
         :param key: The key for the data. If None, the name of the calling function will be used.
         :type key: str, optional
+        :param encode: If specified, the data will be encoded using this function and the result will be the new data stored. Default is None.
+        :type encode: Callable[[Any], Any], optional
+        :param decode: If specified, the data will be decoded using this function and the result will be the new result of "get_data". Default is None.
+        :type decode: Callable[[Any], CommonSerializable], optional
         :return: The stored data.
-        :rtype: Dict[Any, Any]
+        :rtype: Union[Any, None]
         """
         key = key or str(sys._getframe(1).f_code.co_name)
         if key not in self._data:
             self.log.format_with_message('Key not found in data.', key=key, data=self._data)
-            self._data[key] = default
-        return self._data.get(key)
+            if encode is not None:
+                self._data[key] = encode(default)
+            else:
+                self._data[key] = default
+            return default
+        data = self._data.get(key)
+        if decode is not None and not isinstance(data, CommonSerializable):
+            self._data[key] = decode(data)
+            return self._data[key]
+        return data
 
-    def set_data(self, value: Any, key: str=None):
-        """set_data(value, key=None)
+    def set_data(self, value: Any, key: str=None, encode: Callable[[Any], Any]=None):
+        """set_data(value, key=None, encode=None)
 
         Set stored data.
 
@@ -98,8 +111,12 @@ class _CommonGameObjectDataStorage(HasClassLog, metaclass=_CommonGameObjectDataS
         :type value: Any
         :param key: The key for the data. If None, the name of the calling function will be used.
         :type key: str, optional
+        :param encode: If specified, the data will be encoded using this function and the result will be the new data stored. Default is None.
+        :type encode: Callable[[Any], Any], optional
         """
         key = key or str(sys._getframe(1).f_code.co_name)
+        if encode is not None:
+            value = encode(value)
         self._data[key] = value
 
     def remove_data(self, key: str=None):

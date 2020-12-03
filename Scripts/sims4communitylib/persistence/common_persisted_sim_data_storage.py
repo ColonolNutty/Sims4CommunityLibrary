@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from typing import Dict, Any, Tuple, Type
 
 from sims.sim_info import SimInfo
+from sims4communitylib.classes.serialization.common_serializable import CommonSerializable
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.persistence.data_management.common_data_manager import CommonDataManager
 from sims4communitylib.persistence.data_stores.common_data_store import CommonDataStore
@@ -113,7 +114,8 @@ class CommonPersistedSimDataStorage(CommonSimDataStorage):
         for data_property_name in self._data.keys():
             if data_property_name not in self.whitelist_property_names or data_property_name in self.blacklist_property_names:
                 continue
-            data_to_save[data_property_name] = self._data[data_property_name]
+            data = self._data[data_property_name]
+            data_to_save[data_property_name] = data.serialize() if isinstance(data, CommonSerializable) else data
         self._data_manager.get_data_store_by_type(self.data_store_type).set_value_by_key(str(self.sim_id), data_to_save)
 
     def _load_persisted_data(self) -> Dict[str, Any]:

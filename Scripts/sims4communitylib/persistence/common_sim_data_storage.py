@@ -7,9 +7,10 @@ Copyright (c) COLONOLNUTTY
 """
 import sys
 from pprint import pformat
-from typing import Dict, Any
+from typing import Dict, Any, Callable
 from typing import Union
 from sims.sim_info import SimInfo
+from sims4communitylib.classes.serialization.common_serializable import CommonSerializable
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -42,6 +43,11 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         self._sim_id = CommonSimUtils.get_sim_id(sim_info)
         self._sim_info = sim_info
         self._data = dict()
+        if sim_info is not None:
+            from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+            sim_name = CommonSimNameUtils.get_full_name(sim_info)
+            if sim_name is not None:
+                self._data['sim_name'] = sim_name
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
@@ -71,8 +77,8 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         """
         return self._sim_id
 
-    def get_data(self, default: Any=None, key: str=None) -> Union[Any, None]:
-        """get_data(default=None, key=None)
+    def get_data(self, default: Any=None, key: str=None, encode: Callable[[Any], Any]=None, decode: Callable[[Any], CommonSerializable]=None) -> Union[Any, None]:
+        """get_data(default=None, key=None, encode=None, decode=None)
 
         Retrieve stored data.
 
@@ -80,17 +86,29 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         :type default: Dict[Any, Any], optional
         :param key: The key for the data. If None, the name of the calling function will be used.
         :type key: str, optional
+        :param encode: If specified, the data will be encoded using this function and the result will be the new data stored. Default is None.
+        :type encode: Callable[[Any], Any], optional
+        :param decode: If specified, the data will be decoded using this function and the result will be the new result of "get_data". Default is None.
+        :type decode: Callable[[Any], CommonSerializable], optional
         :return: The stored data.
-        :rtype: Dict[Any, Any]
+        :rtype: Union[Any, None]
         """
         key = key or str(sys._getframe(1).f_code.co_name)
         if key not in self._data:
             self.log.format_with_message('Key not found in data.', key=key, data=self._data)
-            self._data[key] = default
-        return self._data.get(key)
+            if encode is not None:
+                self._data[key] = encode(default)
+            else:
+                self._data[key] = default
+            return default
+        data = self._data.get(key)
+        if decode is not None and not isinstance(data, CommonSerializable):
+            self._data[key] = decode(data)
+            return self._data[key]
+        return data
 
-    def set_data(self, value: Any, key: str=None):
-        """set_data(value, key=None)
+    def set_data(self, value: Any, key: str=None, encode: Callable[[Any], Any]=None):
+        """set_data(value, key=None, encode=None)
 
         Set stored data.
 
@@ -98,8 +116,12 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         :type value: Any
         :param key: The key for the data. If None, the name of the calling function will be used.
         :type key: str, optional
+        :param encode: If specified, the data will be encoded using this function and the result will be the new data stored. Default is None.
+        :type encode: Callable[[Any], Any], optional
         """
         key = key or str(sys._getframe(1).f_code.co_name)
+        if encode is not None:
+            value = encode(value)
         self._data[key] = value
 
     def remove_data(self, key: str=None):
