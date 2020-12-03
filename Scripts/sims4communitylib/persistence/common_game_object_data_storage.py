@@ -42,7 +42,7 @@ class _CommonGameObjectDataStorage(HasClassLog, metaclass=_CommonGameObjectDataS
         super().__init__()
         self._game_object_id = CommonObjectUtils.get_object_id(game_object)
         self._game_object = game_object
-        self._data = dict()
+        self._data: Dict[str, Any] = dict()
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod

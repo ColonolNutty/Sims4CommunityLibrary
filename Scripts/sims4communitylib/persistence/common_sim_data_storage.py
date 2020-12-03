@@ -42,7 +42,7 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         super().__init__()
         self._sim_id = CommonSimUtils.get_sim_id(sim_info)
         self._sim_info = sim_info
-        self._data = dict()
+        self._data: Dict[str, Any] = dict()
         if sim_info is not None:
             from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
             sim_name = CommonSimNameUtils.get_full_name(sim_info)
