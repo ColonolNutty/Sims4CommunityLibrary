@@ -178,7 +178,7 @@ class CommonCASUtils:
         """
         log.format_with_message('Retrieving BodyType for CAS part.', sim=sim_info, cas_part_id=cas_part_id, outfit_category_and_index=outfit_category_and_index)
         outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=outfit_category_and_index)
-        return outfit_io.get_body_type_cas_part_is_attached_to(cas_part_id) != -1
+        return outfit_io.get_body_type_cas_part_is_attached_to(cas_part_id)
 
     @staticmethod
     def get_cas_part_id_at_body_type(sim_info: SimInfo, body_type: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> int:
@@ -197,4 +197,4 @@ class CommonCASUtils:
         """
         log.format_with_message('Checking if CAS part is attached to Sim.', sim=sim_info, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
         outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=outfit_category_and_index)
-        return outfit_io.get_cas_part_at_body_type(body_type) != -1
+        return outfit_io.get_cas_part_at_body_type(body_type)
