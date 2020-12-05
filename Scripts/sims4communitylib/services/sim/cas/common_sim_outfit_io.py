@@ -151,12 +151,10 @@ class CommonSimOutfitIO(HasLog):
         :return: The Body Type the specified CAS Part was located at or -1 if the Outfit does not have the CAS Part or the CAS Part is empty.
         :rtype: Union[int, BodyType]
         """
-        for outfit_part_index in range(len(self._outfit_part_ids)):
-            if outfit_part_index not in self._outfit_part_ids or int(self._outfit_part_ids[outfit_part_index]) != cas_part_id:
-                self.log.format_with_message('CAS Part not found.', cas_part_id=cas_part_id)
-                continue
-
-            return int(self._outfit_body_types[outfit_part_index])
+        for (_body_type, _cas_part_id) in zip(self.body_types, self.cas_part_ids):
+            if int(_cas_part_id) == int(cas_part_id):
+                return _body_type
+        self.log.format_with_message('CAS Part not found.', cas_part_id=cas_part_id)
         return -1
 
     def get_cas_part_at_body_type(self, body_type: Union[BodyType, int]) -> int:
@@ -169,12 +167,10 @@ class CommonSimOutfitIO(HasLog):
         :return: The decimal identifier of the CAS Part located at the specified body part or -1 if the Outfit does not have the body type or the body type is empty.
         :rtype: int
         """
-        for body_type_index in range(len(self._outfit_body_types)):
-            if body_type_index not in self._outfit_body_types or int(self._outfit_body_types[body_type_index]) != int(body_type):
-                self.log.format_with_message('Body type not found.', body_type=body_type)
-                continue
-
-            return self._outfit_part_ids[body_type_index]
+        for (_body_type, _cas_part_id) in zip(self.body_types, self.cas_part_ids):
+            if int(_body_type) == int(body_type):
+                return _cas_part_id
+        self.log.format_with_message('Body type not found.', body_type=body_type)
         return -1
 
     def attach_cas_part(self, cas_part_id: int, body_type: Union[BodyType, int]=BodyType.NONE) -> bool:
@@ -215,13 +211,13 @@ class CommonSimOutfitIO(HasLog):
         self.log.format_with_message('Attempting to remove cas part', cas_part=cas_part_id, current_body_types=pformat(self._outfit_body_types), current_cas_parts=pformat(self._outfit_body_types))
         new_body_types = list()
         new_part_ids = list()
-        for body_type_index in range(len(self._outfit_body_types)):
-            if int(self._outfit_part_ids[body_type_index]) == int(cas_part_id):
+        for (_body_type, _cas_part_id) in zip(self.body_types, self.cas_part_ids):
+            if int(_cas_part_id) == int(cas_part_id):
                 self.log.format_with_message('Detaching CAS Part.', cas_part=cas_part_id)
                 continue
-            self.log.format_with_message('Keeping CAS Part.', cas_part=int(cas_part_id), other_cas_part=int(self._outfit_part_ids[body_type_index]))
-            new_body_types.append(self._outfit_body_types[body_type_index])
-            new_part_ids.append(self._outfit_part_ids[body_type_index])
+            self.log.format_with_message('Keeping CAS Part.', cas_part=int(cas_part_id), other_cas_part=int(_cas_part_id))
+            new_body_types.append(_body_type)
+            new_part_ids.append(_cas_part_id)
         self._outfit_body_types = new_body_types
         self._outfit_part_ids = new_part_ids
         return True
@@ -240,13 +236,13 @@ class CommonSimOutfitIO(HasLog):
         self.log.format(current_body_types=pformat(self._outfit_body_types))
         new_body_types = list()
         new_part_ids = list()
-        for body_type_index in range(len(self._outfit_body_types)):
-            if int(self._outfit_body_types[body_type_index]) == int(body_type):
+        for (_body_type, _cas_part_id) in zip(self.body_types, self.cas_part_ids):
+            if int(_body_type) == int(body_type):
                 self.log.format_with_message('Detaching body type', body_type=body_type)
                 continue
-            self.log.format_with_message('Keeping body type.', body_type=int(body_type), other_body_type=int(self._outfit_body_types[body_type_index]))
-            new_body_types.append(self._outfit_body_types[body_type_index])
-            new_part_ids.append(self._outfit_part_ids[body_type_index])
+            self.log.format_with_message('Keeping body type.', body_type=int(body_type), other_body_type=int(_body_type))
+            new_body_types.append(_body_type)
+            new_part_ids.append(_cas_part_id)
         self._outfit_body_types = new_body_types
         self._outfit_part_ids = new_part_ids
         return True
