@@ -102,6 +102,11 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, CommonInteraction):
             super()._trigger_interaction_start_event()
             from interactions import ParticipantType
             target = self.get_participant(ParticipantType.TargetSim)
+            self.log.format_with_message(
+                'Running \'{}\' on_started.'.format(self.__class__.__name__),
+                interaction_sim=self.context.sim,
+                interaction_target=target
+            )
             self.on_started(self.context.sim, target)
         except Exception as ex:
             self.log.error('Error occurred while running interaction \'{}\' on_started.'.format(self.__class__.__name__), exception=ex)
@@ -126,6 +131,14 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, CommonInteraction):
                 pick_target = context.pick.target if context.source == context.SOURCE_PIE_MENU else None
                 if context.sim is pick_target:
                     return TestResult(False, 'Social Mixer Interactions cannot target self!')
+            cls.get_log().format_with_message(
+                'Running \'{}\' on_test.'.format(cls.__name__),
+                interaction_sim=context.sim,
+                interaction_target=target,
+                interaction_context=context,
+                argles=args,
+                kwargles=kwargs
+            )
             test_result = cls.on_test(context.sim, target, context, *args, **kwargs)
         except Exception as ex:
             cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)

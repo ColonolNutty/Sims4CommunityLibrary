@@ -91,6 +91,13 @@ class CommonInteraction(Interaction, HasClassLog):
     def _test(cls, target: Any, context: InteractionContext, **kwargs) -> TestResult:
         try:
             try:
+                cls.get_log().format_with_message(
+                    'Running \'{}\' on_test.'.format(cls.__name__),
+                    interaction_sim=context.sim,
+                    interaction_target=target,
+                    interaction_context=context,
+                    kwargles=kwargs
+                )
                 test_result = cls.on_test(context.sim, target, context, **kwargs)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
