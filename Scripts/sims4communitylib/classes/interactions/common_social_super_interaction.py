@@ -136,6 +136,12 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
     def _run_interaction_gen(self, timeline: Timeline):
         super()._run_interaction_gen(timeline)
         try:
+            self.log.format_with_message(
+                'Running \'{}\' on_run.'.format(self.__class__.__name__),
+                interaction_sim=self.sim,
+                interaction_target=self.target,
+                timeline=timeline
+            )
             return self.on_run(self.sim, self.target, timeline)
         except Exception as ex:
             self.log.error('Error occurred while running interaction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
@@ -163,6 +169,11 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
             super()._trigger_interaction_start_event()
             from interactions import ParticipantType
             target = self.get_participant(ParticipantType.TargetSim)
+            self.log.format_with_message(
+                'Running \'{}\' on_started.'.format(self.__class__.__name__),
+                interaction_sim=self.context.sim,
+                interaction_target=target
+            )
             self.on_started(self.context.sim, target)
         except Exception as ex:
             self.log.error('Error occurred while running interaction \'{}\' on_started.'.format(self.__class__.__name__), exception=ex)
@@ -200,6 +211,14 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                                 return TestResult(False, 'Cannot run social since sim already has an interaction that is registered to group.')
                         else:
                             return TestResult(False, 'Sim {} is already running matching affordance:{} ', sim, cls)
+                cls.get_log().format_with_message(
+                    'Running \'{}\' on_test.'.format(cls.__name__),
+                    interaction_sim=context.sim,
+                    interaction_target=target,
+                    interaction_context=context,
+                    argles=args,
+                    kwargles=kwargs
+                )
                 test_result = cls.on_test(context.sim, target, context, *args, **kwargs)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)

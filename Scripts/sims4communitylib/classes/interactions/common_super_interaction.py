@@ -137,6 +137,12 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
     def _run_interaction_gen(self, timeline: Timeline):
         super()._run_interaction_gen(timeline)
         try:
+            self.log.format_with_message(
+                'Running \'{}\' on_run.'.format(self.__class__.__name__),
+                interaction_sim=self.sim,
+                interaction_target=self.target,
+                timeline=timeline
+            )
             return self.on_run(self.sim, self.target, timeline)
         except Exception as ex:
             self.log.error('Error occurred while running interaction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
