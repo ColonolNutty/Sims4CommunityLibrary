@@ -99,6 +99,7 @@ class CommonInteraction(Interaction, HasClassLog):
                     kwargles=kwargs
                 )
                 test_result = cls.on_test(context.sim, target, context, **kwargs)
+                cls.get_log().format_with_message('Test Result', test_result=test_result)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
                 return TestResult.NONE
@@ -114,14 +115,22 @@ class CommonInteraction(Interaction, HasClassLog):
                 else:
                     tooltip = None
                 return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
-            return super()._test(target, context, **kwargs)
+            super_test_result = super()._test(target, context, **kwargs)
+            cls.get_log().format_with_message('Super Test Result', super_test_result=super_test_result)
+            return super_test_result
         except Exception as ex:
             cls.get_log().error('An error occurred while testing interaction {}'.format(cls.__name__), exception=ex)
+        cls.get_log().format_with_message('Returning generic test result.')
         return TestResult(False)
 
     def _trigger_interaction_start_event(self: 'CommonInteraction'):
         try:
             super()._trigger_interaction_start_event()
+            self.log.format_with_message(
+                'Running \'{}\' on_started.'.format(self.__class__.__name__),
+                sim=self.sim,
+                target=self.target
+            )
             self.on_started(self.sim, self.target)
         except Exception as ex:
             self.log.error('Error occurred while running interaction \'{}\' on_started.'.format(self.__class__.__name__), exception=ex)
@@ -129,6 +138,12 @@ class CommonInteraction(Interaction, HasClassLog):
     # noinspection PyMissingOrEmptyDocstring
     def apply_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT):
         try:
+            self.log.format_with_message(
+                'Running \'{}\' modify_posture_state.'.format(self.__class__.__name__),
+                posture_state=posture_state,
+                participant_type=participant_type,
+                sim=sim
+            )
             (new_posture_state, new_participant_type, new_sim) = self.modify_posture_state(posture_state, participant_type=participant_type, sim=sim)
         except Exception as ex:
             self.log.error('Error occurred while running interaction \'{}\' modify_posture_state.'.format(self.__class__.__name__), exception=ex)
@@ -144,6 +159,11 @@ class CommonInteraction(Interaction, HasClassLog):
         :rtype: bool
         """
         try:
+            self.log.format_with_message(
+                'Running \'{}\' on_killed.'.format(self.__class__.__name__),
+                sim=self.sim,
+                target=self.target
+            )
             self.on_killed(self.sim, self.target)
         except Exception as ex:
             self.log.error('Error occurred while running interaction \'{}\' on_killed.'.format(self.__class__.__name__), exception=ex)
@@ -162,6 +182,14 @@ class CommonInteraction(Interaction, HasClassLog):
         :rtype: bool
         """
         try:
+            self.log.format_with_message(
+                'Running \'{}\' on_cancelled.'.format(self.__class__.__name__),
+                sim=self.sim,
+                target=self.target,
+                finishing_type=finishing_type,
+                cancel_reason_msg=cancel_reason_msg,
+                kwargles=kwargs
+            )
             self.on_cancelled(self.sim, self.target, finishing_type, cancel_reason_msg, **kwargs)
         except Exception as ex:
             self.log.error('Error occurred while running interaction \'{}\' cancel.'.format(self.__class__.__name__), exception=ex)
@@ -174,6 +202,11 @@ class CommonInteraction(Interaction, HasClassLog):
 
         """
         try:
+            self.log.format_with_message(
+                'Running \'{}\' on_reset.'.format(self.__class__.__name__),
+                sim=self.sim,
+                target=self.target
+            )
             self._on_reset(self.sim, self.target)
         except Exception as ex:
             self.log.error('Error occurred while running interaction \'{}\' on_reset.'.format(self.__class__.__name__), exception=ex)
@@ -181,6 +214,11 @@ class CommonInteraction(Interaction, HasClassLog):
 
     def _post_perform(self: 'CommonInteraction'):
         try:
+            self.log.format_with_message(
+                'Running \'{}\' on_performed.'.format(self.__class__.__name__),
+                sim=self.sim,
+                target=self.target
+            )
             self.on_performed(self.sim, self.target)
         except Exception as ex:
             self.log.error('Error occurred while running interaction \'{}\' _post_perform.'.format(self.__class__.__name__), exception=ex)
@@ -193,6 +231,13 @@ class CommonInteraction(Interaction, HasClassLog):
 
         """
         try:
+            self.log.format_with_message(
+                'Running \'{}\' _send_current_progress.'.format(self.__class__.__name__),
+                sim=self.sim,
+                target=self.target,
+                argles=args,
+                kwargles=kwargs
+            )
             result = self._send_current_progress(self.sim, self.target, *args, **kwargs)
             if result is not None:
                 return result
@@ -211,6 +256,14 @@ class CommonInteraction(Interaction, HasClassLog):
         :rtype: bool
         """
         try:
+            self.log.format_with_message(
+                'Running \'{}\' _setup_asm_default.'.format(self.__class__.__name__),
+                sim=self.sim,
+                target=self.target,
+                asm=asm,
+                argles=args,
+                kwargles=kwargs
+            )
             result = self._setup_asm_default(self.sim, self.target, asm, *args, **kwargs)
             if result is not None:
                 return result
