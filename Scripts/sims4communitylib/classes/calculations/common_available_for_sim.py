@@ -16,11 +16,12 @@ from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
 from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
 
 
-class CommonAvailableFor:
-    """CommonAvailableFor(\
+class CommonAvailableForSim:
+    """CommonAvailableForSim(\
         genders=(),\
         ages=(),\
-        species=()\
+        species=(),\
+        occult_types=()\
     )
 
     Holds information for what types of Sims this is available for.
@@ -106,9 +107,9 @@ class CommonAvailableFor:
             return False, 'No Genders, Ages, Species, nor Occult Types were specified!'
         return True, 'Success'
 
-    def clone(self) -> 'CommonAvailableFor':
+    def clone(self) -> 'CommonAvailableForSim':
         """Clone the available for."""
-        return CommonAvailableFor(
+        return CommonAvailableForSim(
             genders=tuple(self.genders),
             ages=tuple(self.ages),
             species=tuple(self.species),
@@ -116,7 +117,7 @@ class CommonAvailableFor:
         )
 
     @staticmethod
-    def generate_for_sim(sim_info: SimInfo) -> 'CommonAvailableFor':
+    def generate_for_sim(sim_info: SimInfo) -> 'CommonAvailableForSim':
         """generate_for_sim(sim_info)
 
         Generate an available for, for a Sim.
@@ -124,7 +125,7 @@ class CommonAvailableFor:
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :return: An available for matching the specified Sim.
-        :rtype: CommonAvailableFor
+        :rtype: CommonAvailableForSim
         """
         gender = CommonGenderUtils.get_gender(sim_info)
         if gender is None:
@@ -148,7 +149,7 @@ class CommonAvailableFor:
             occult_types = (occult_type,)
         else:
             occult_types = (CommonOccultType.NON_OCCULT, occult_type)
-        return CommonAvailableFor(
+        return CommonAvailableForSim(
             genders=genders,
             ages=ages,
             species=species,
@@ -156,9 +157,9 @@ class CommonAvailableFor:
         )
 
     @staticmethod
-    def everything() -> 'CommonAvailableFor':
+    def everything() -> 'CommonAvailableForSim':
         """ Create an Available For instance that applies to everything. """
-        return CommonAvailableFor(
+        return CommonAvailableForSim(
             genders=(Gender.MALE, Gender.FEMALE),
             ages=(Age.BABY, Age.TODDLER, Age.CHILD, Age.TEEN, Age.YOUNGADULT, Age.ADULT, Age.ELDER),
             species=(CommonSpecies.HUMAN, CommonSpecies.SMALL_DOG, CommonSpecies.LARGE_DOG, CommonSpecies.CAT),
