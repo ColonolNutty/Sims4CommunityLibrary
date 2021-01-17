@@ -70,6 +70,30 @@ class CommonAvailableFor:
         """Occult Types this is available for."""
         return self._occult_types
 
+    def is_available_for(self, sim_info: SimInfo) -> bool:
+        """is_available_for(sim_info)
+
+        Determine if available for a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if is available for the specified Sim. False, if not.
+        :rtype: bool
+        """
+        age = CommonAgeUtils.get_age(sim_info)
+        if self.ages and age not in self.ages:
+            return False
+        gender = CommonGenderUtils.get_gender(sim_info)
+        if self.genders and gender not in self.genders:
+            return False
+        common_species = CommonSpecies.get_species(sim_info)
+        if self.species and common_species not in self.species:
+            return False
+        common_occult_type = CommonOccultType.determine_occult_type(sim_info)
+        if self.occult_types and common_occult_type not in self.occult_types:
+            return False
+        return True
+
     def is_valid(self) -> Tuple[bool, str]:
         """is_valid()
 
