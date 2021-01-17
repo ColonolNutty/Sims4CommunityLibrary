@@ -605,22 +605,22 @@ class CommonSimTypeUtils:
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
-    def determine_sim_type(self, sim_info: SimInfo, combine_teen_adult_and_elder_age: bool=True) -> CommonSimType:
-        """determine_sim_type(sim_info, combine_teen_adult_and_elder_age=True)
+    def determine_sim_type(self, sim_info: SimInfo, combine_teen_young_adult_and_elder_age: bool=True) -> CommonSimType:
+        """determine_sim_type(sim_info, combine_teen_young_adult_and_elder_age=True)
 
         Determine the type of Sim a Sim is based on their Age, Species, and Occult Type.
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :param combine_teen_adult_and_elder_age: If set to True, Teen, Young Adult, Adult, and Elder, will all receive an ADULT denoted Sim Type instead of TEEN, YOUNG_ADULT, ADULT, and ELDER respectively. i.e. A Human Teen Sim would be denoted as ADULT_HUMAN.
+        :param combine_teen_young_adult_and_elder_age: If set to True, Teen, Young Adult, Adult, and Elder, will all receive an ADULT denoted Sim Type instead of TEEN, YOUNG_ADULT, ADULT, and ELDER respectively. i.e. A Human Teen Sim would be denoted as ADULT_HUMAN.
         If set to False, they will receive their own Sim Types. i.e. A Human Teen Sim would be denoted as TEEN_HUMAN. Default is True.
-        :type combine_teen_adult_and_elder_age: bool, optional
+        :type combine_teen_young_adult_and_elder_age: bool, optional
         :return: The type of Sim the Sim is or CommonSimType.NONE if no type was found for the Sim.
         :rtype: CommonSimType
         """
         species = CommonSpecies.get_species(sim_info)
         age = CommonAgeUtils.get_age(sim_info)
-        if CommonAgeUtils.is_teen_adult_or_elder_age(age) and combine_teen_adult_and_elder_age:
+        if combine_teen_young_adult_and_elder_age and CommonAgeUtils.is_teen_adult_or_elder_age(age):
             age = Age.ADULT
         occult_type = CommonOccultType.determine_occult_type(sim_info)
         return self._determine_sim_type(species, age, occult_type)
