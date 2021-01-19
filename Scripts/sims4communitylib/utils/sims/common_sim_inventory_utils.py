@@ -5,13 +5,16 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Callable, Iterator, Union, Tuple
+from typing import Callable, Iterator, Union, Tuple, Any
 from interactions.base.create_object_interaction import ObjectDefinition
 from objects.components.sim_inventory_component import SimInventoryComponent
 from objects.game_object import GameObject
 from sims.sim_info import SimInfo
+from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.enums.types.component_types import CommonComponentType
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.objects.common_object_spawn_utils import CommonObjectSpawnUtils
 from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
@@ -181,3 +184,49 @@ class CommonSimInventoryUtils:
         if sim is None:
             return None
         return CommonComponentUtils.get_component(sim, CommonComponentType.INVENTORY)
+
+
+@Command('s4clib_testing.add_object_to_inventory', command_type=CommandType.Live)
+def _s4clib_testing_add_object_to_inventory(object_id: str='20359', count: str='1', sim_id: str=None, _connection: Any=None):
+    from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+    output = CheatOutput(_connection)
+    # noinspection PyBroadException
+    try:
+        object_id = int(object_id)
+    except Exception:
+        output('ERROR: object_id must be a number.')
+        return
+    if object_id < 0:
+        output('ERROR: object_id must be a positive number.')
+        return
+    # noinspection PyBroadException
+    try:
+        count = int(count)
+    except Exception:
+        output('ERROR: count must be a number.')
+        return
+    if count <= 0:
+        output('ERROR: count must be greater than zero.')
+        return
+    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+    if sim_id is not None:
+        # noinspection PyBroadException
+        try:
+            sim_id = int(sim_id)
+        except Exception:
+            output('ERROR: sim_id must be a number.')
+            return
+        sim_info = CommonSimUtils.get_sim_info(sim_id)
+        if sim_info is None:
+            output('ERROR: No sim found with id: {}'.format(sim_id))
+            return
+    else:
+        sim_info = CommonSimUtils.get_active_sim_info()
+    output('Attempting to add object with id \'{}\' to the inventory of Sim \'{}\'.'.format(object_id, CommonSimNameUtils.get_full_name(sim_info)))
+    try:
+        if CommonSimInventoryUtils.add_to_inventory(sim_info, object_id, count):
+            output('Object added the object to the inventory of Sim {} successfully.'.format(CommonSimNameUtils.get_full_name(sim_info)))
+    except Exception as ex:
+        output('ERROR: A problem occurred while attempting to add the object.')
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to add an object to the inventory of a Sim.', exception=ex)
+    output('Done adding object to the inventory of the Sim.')
