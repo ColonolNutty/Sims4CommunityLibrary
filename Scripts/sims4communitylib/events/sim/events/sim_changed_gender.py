@@ -6,14 +6,14 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from sims.sim_info import SimInfo
-from sims.sim_info_types import Gender
+from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
 class S4CLSimChangedGenderEvent(CommonEvent):
     """S4CLSimChangedGenderEvent(sim_info, old_gender, new_gender)
 
-    An event that occurs when a Sim has changed their current Gender.
+    An event that occurs when a Sim has changed their current gender.
 
     :Example usage:
 
@@ -37,40 +37,28 @@ class S4CLSimChangedGenderEvent(CommonEvent):
 
     :param sim_info: The Sim that changed.
     :type sim_info: SimInfo
-    :param old_gender: The Gender the Sim has changed from.
-    :type old_gender: Gender
-    :param new_gender: The Gender the Sim has changed to.
-    :type new_gender: Gender
+    :param old_gender: The gender the Sim has changed from.
+    :type old_gender: CommonGender
+    :param new_gender: The gender the Sim has changed to.
+    :type new_gender: CommonGender
     """
 
-    def __init__(self, sim_info: SimInfo, old_gender: Gender, new_gender: Gender):
+    def __init__(self, sim_info: SimInfo, old_gender: CommonGender, new_gender: CommonGender):
         self._sim_info = sim_info
         self._old_gender = old_gender
         self._new_gender = new_gender
 
     @property
     def sim_info(self) -> SimInfo:
-        """The Sim that changed.
-
-        :return: The Sim that changed.
-        :rtype: SimInfo
-        """
+        """The Sim that changed."""
         return self._sim_info
 
     @property
-    def old_gender(self) -> Gender:
-        """The Gender the Sim has changed from.
-
-        :return: The Gender the Sim has changed from.
-        :rtype: Gender
-        """
+    def old_gender(self) -> CommonGender:
+        """The gender the Sim has changed from."""
         return self._old_gender
 
     @property
-    def new_gender(self) -> Gender:
-        """The Gender the Sim has changed to.
-
-        :return: The Gender the Sim has changed to.
-        :rtype: Gender
-        """
+    def new_gender(self) -> CommonGender:
+        """The gender the Sim has changed to."""
         return self._new_gender

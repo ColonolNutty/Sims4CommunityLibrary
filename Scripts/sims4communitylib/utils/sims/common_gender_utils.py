@@ -9,6 +9,7 @@ from typing import Union
 
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Gender
+from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
 
 
@@ -37,7 +38,7 @@ class CommonGenderUtils:
         return None
 
     @staticmethod
-    def set_gender(sim_info: SimInfo, gender: Union[int, Gender]) -> bool:
+    def set_gender(sim_info: SimInfo, gender: Union[Gender, CommonGender, int]) -> bool:
         """set_gender(sim_info, gender)
 
         Set the Gender of a Sim.
@@ -45,10 +46,13 @@ class CommonGenderUtils:
         :param sim_info: The Sim to set the Gender of.
         :type sim_info: SimInfo
         :param gender: The Gender to set the Sim to.
-        :type gender: Union[int, Gender]
+        :type gender: Union[Gender, CommonGender, int]
         :return: True, if the Gender of the Sim was set successfully. False, if not.
         :rtype: bool
         """
+        gender = CommonGender.convert_to_vanilla(gender)
+        if gender is None:
+            return False
         sim_info.gender = gender
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender(sim_info)
@@ -82,11 +86,11 @@ class CommonGenderUtils:
         saved_outfits = sim_info.save_outfits()
         current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
         if CommonGenderUtils.is_male(sim_info):
-            result = CommonGenderUtils.set_gender(sim_info, Gender.FEMALE)
+            result = CommonGenderUtils.set_gender(sim_info, CommonGender.FEMALE)
             if update_gender_options:
                 CommonSimGenderOptionUtils.update_gender_options_to_vanilla_female(sim_info)
         elif CommonGenderUtils.is_female(sim_info):
-            result = CommonGenderUtils.set_gender(sim_info, Gender.MALE)
+            result = CommonGenderUtils.set_gender(sim_info, CommonGender.MALE)
             if update_gender_options:
                 CommonSimGenderOptionUtils.update_gender_options_to_vanilla_male(sim_info)
         if not update_gender_options:
@@ -115,33 +119,33 @@ class CommonGenderUtils:
         :return: True, if both Sims are the same Gender. False, if not.
         :rtype: bool
         """
-        return CommonGenderUtils.get_gender(sim_info) == CommonGenderUtils.get_gender(other_sim_info)
+        return int(CommonGenderUtils.get_gender(sim_info)) == int(CommonGenderUtils.get_gender(other_sim_info))
 
     @staticmethod
-    def is_female_gender(gender: Gender) -> bool:
+    def is_female_gender(gender: Union[Gender, CommonGender, int]) -> bool:
         """is_female_gender(gender)
 
         Determine if a Gender is Female.
 
         :param gender: The gender to check.
-        :type gender: Gender
+        :type gender: Union[Gender, CommonGender, int]
         :return: True, if the gender is female. False, if the gender is not female.
         :rtype: bool
         """
-        return gender == Gender.FEMALE
+        return int(gender) == int(Gender.FEMALE)
 
     @staticmethod
-    def is_male_gender(gender: Gender) -> bool:
+    def is_male_gender(gender: Union[Gender, CommonGender, int]) -> bool:
         """is_male_gender(gender)
 
         Determine if a Gender is Male.
 
         :param gender: The gender to check.
-        :type gender: Gender
+        :type gender: Union[Gender, CommonGender, int]
         :return: True, if the gender is male. False, if the gender is not male.
         :rtype: bool
         """
-        return gender == Gender.MALE
+        return int(gender) == int(Gender.MALE)
 
     @staticmethod
     def is_female(sim_info: SimInfo) -> bool:

@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from sims.sim_info import SimInfo
-from sims.sim_info_types import Age
+from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
@@ -39,40 +39,28 @@ class S4CLSimChangedAgeEvent(CommonEvent):
 
     :param sim_info: The Sim that changed.
     :type sim_info: SimInfo
-    :param old_age: The Age the Sim has changed from.
-    :type old_age: Age
-    :param new_age: The Age the Sim has changed to.
-    :type new_age: Age
+    :param old_age: The age the Sim has changed from.
+    :type old_age: CommonAge
+    :param new_age: The age the Sim has changed to.
+    :type new_age: CommonAge
     """
 
-    def __init__(self, sim_info: SimInfo, old_age: Age, new_age: Age):
+    def __init__(self, sim_info: SimInfo, old_age: CommonAge, new_age: CommonAge):
         self._sim_info = sim_info
         self._old_age = old_age
         self._new_age = new_age
 
     @property
     def sim_info(self) -> SimInfo:
-        """The Sim that changed.
-
-        :return: The Sim that changed.
-        :rtype: SimInfo
-        """
+        """The Sim that changed."""
         return self._sim_info
 
     @property
-    def old_age(self) -> Age:
-        """The Age the Sim has changed from.
-
-        :return: The Age the Sim has changed from.
-        :rtype: Age
-        """
+    def old_age(self) -> CommonAge:
+        """The age the Sim has changed from."""
         return self._old_age
 
     @property
-    def new_age(self) -> Age:
-        """The Age the Sim has changed to.
-
-        :return: The Age the Sim has changed to.
-        :rtype: Age
-        """
+    def new_age(self) -> CommonAge:
+        """The age the Sim has changed to."""
         return self._new_age

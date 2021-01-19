@@ -12,8 +12,8 @@ from _resourceman import Key
 class CommonResourceKey:
     """A resource key wrapper."""
 
-    def __init__(self, type: str, instance: str, group: str):
-        self._type = type
+    def __init__(self, resource_type: str, instance: str, group: str):
+        self._type = resource_type
         self._instance = instance
         self._group = group
 

@@ -13,8 +13,10 @@ from sims.aging.aging_mixin import AgingMixin
 from sims.occult.occult_enums import OccultType
 from sims.occult.occult_tracker import OccultTracker
 from sims.sim_info import SimInfo
-from sims.sim_info_types import Age, Gender
+from sims.sim_info_types import Age
 from sims.sim_spawner import SimSpawner
+from sims4communitylib.enums.common_age import CommonAge
+from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
 from sims4communitylib.events.sim.events.sim_added_occult_type import S4CLSimAddedOccultTypeEvent
@@ -54,13 +56,13 @@ class CommonSimEventDispatcherService(CommonService):
 
     def _on_sim_change_gender(self, sim_info: SimInfo) -> bool:
         from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
-        new_gender = CommonGenderUtils.get_gender(sim_info)
+        new_gender = CommonGender.get_gender(sim_info)
         if CommonGenderUtils.is_male_gender(new_gender):
             # If they are now Male, it means they used to be Female.
-            old_gender = Gender.FEMALE
+            old_gender = CommonGender.FEMALE
         else:
             # If they are now Female, it means they used to be Male.
-            old_gender = Gender.MALE
+            old_gender = CommonGender.MALE
         return CommonEventRegistry.get().dispatch(S4CLSimChangedGenderEvent(sim_info, old_gender, new_gender))
 
     def _on_sim_change_gender_options_breasts(self, sim_info: SimInfo) -> bool:
@@ -99,7 +101,7 @@ class CommonSimEventDispatcherService(CommonService):
 
     def _on_sim_change_age(self, sim_info: SimInfo, new_age: Age, current_age: Age) -> bool:
         from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-        return CommonEventRegistry.get().dispatch(S4CLSimChangedAgeEvent(CommonSimUtils.get_sim_info(sim_info), current_age, new_age))
+        return CommonEventRegistry.get().dispatch(S4CLSimChangedAgeEvent(CommonSimUtils.get_sim_info(sim_info), CommonAge.convert_from_vanilla(current_age), CommonAge.convert_from_vanilla(new_age)))
 
     def _on_sim_add_occult_type(self, occult_tracker: OccultTracker, occult_type: OccultType) -> bool:
         sim_info = occult_tracker._sim_info

@@ -9,6 +9,7 @@ from typing import Union
 
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Age
+from sims4communitylib.enums.common_age import CommonAge
 
 
 class CommonAgeUtils:
@@ -16,7 +17,7 @@ class CommonAgeUtils:
 
     """
     @staticmethod
-    def get_age(sim_info: SimInfo) -> Union[Age, None]:
+    def get_age(sim_info: SimInfo) -> Union[Age, int, None]:
         """get_age(sim_info)
 
         Retrieve the Age of a Sim.
@@ -40,7 +41,7 @@ class CommonAgeUtils:
         return None
 
     @staticmethod
-    def set_age(sim_info: SimInfo, age: Union[Age, int]) -> bool:
+    def set_age(sim_info: SimInfo, age: Union[CommonAge, Age, int]) -> bool:
         """set_age(sim_info, age)
 
         Set the Age of a Sim.
@@ -48,10 +49,13 @@ class CommonAgeUtils:
         :param sim_info: The Sim to set the Age of.
         :type sim_info: SimInfo
         :param age: The Age to set the Sim to.
-        :type age: Union[Age, int]
+        :type age: Union[CommonAge, Age, int]
         :return: True, if the Age was set successfully. False, if not.
         :rtype: bool
         """
+        age = CommonAge.convert_to_vanilla(age)
+        if age is None:
+            return False
         sim_info.apply_age(age)
         return True
 
@@ -68,10 +72,10 @@ class CommonAgeUtils:
         :return: True, if both Sims are the same Age.
         :rtype: bool
         """
-        return CommonAgeUtils.get_age(sim_info) == CommonAgeUtils.get_age(other_sim_info)
+        return int(CommonAgeUtils.get_age(sim_info)) == int(CommonAgeUtils.get_age(other_sim_info))
 
     @staticmethod
-    def is_younger_than(sim_info: SimInfo, age: Union[Age, int], or_equal: bool=False) -> bool:
+    def is_younger_than(sim_info: SimInfo, age: Union[CommonAge, Age, int], or_equal: bool=False) -> bool:
         """is_younger_than(sim_info, age, or_equal=False)
 
         Determine if a Sim is younger than the specified Age.
@@ -79,19 +83,20 @@ class CommonAgeUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param age: The age to check with.
-        :type age: Union[Age, int]
+        :type age: Union[CommonAge, Age, int]
         :param or_equal: If True, the age check will be younger than or equal to. If False, the age check will be younger than.
         :type or_equal: bool
         :return: True, if the Sim is younger than the specified Age or equal to the specified age if `or_equal` is True. False, if not.
         :rtype: bool
         """
-        sim_age = CommonAgeUtils.get_age(sim_info)
+        age = int(age)
+        sim_age = int(CommonAgeUtils.get_age(sim_info))
         if or_equal:
             return sim_age <= age
         return sim_age < age
 
     @staticmethod
-    def is_older_than(sim_info: SimInfo, age: Union[Age, int], or_equal: bool=False) -> bool:
+    def is_older_than(sim_info: SimInfo, age: Union[CommonAge, Age, int], or_equal: bool=False) -> bool:
         """is_older_than(sim_info, age, or_equal=False)
 
         Determine if a Sim is older than the specified Age.
@@ -99,233 +104,234 @@ class CommonAgeUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param age: The age to check with.
-        :type age: Union[Age, int]
+        :type age: Union[CommonAge, Age, int]
         :param or_equal: If True, the age check will be older than or equal to. If False, the Age check will be older than.
         :type or_equal: bool
         :return: True, if the Sim is older than the specified Age or equal to the specified Age if `or_equal` is True. False, if not.
         :rtype: bool
         """
-        sim_age = CommonAgeUtils.get_age(sim_info)
+        age = int(age)
+        sim_age = int(CommonAgeUtils.get_age(sim_info))
         if or_equal:
             return sim_age >= age
         return sim_age > age
 
     @staticmethod
-    def is_baby_age(age: Union[Age, int]) -> bool:
+    def is_baby_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_baby_age(age)
 
         Determine if an Age is a Baby.
 
         :param age: The age to check.
-        :type age: Union[Age, int]
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return age == Age.BABY
+        return int(age) == int(Age.BABY)
 
     @staticmethod
-    def is_toddler_age(age: Union[Age, int]) -> bool:
+    def is_toddler_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_toddler_age(age)
 
         Determine if an Age is a Toddler.
 
         :param age: The age to check.
-        :type age: Union[Age, int]
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return age == Age.TODDLER
+        return int(age) == int(Age.TODDLER)
 
     @staticmethod
-    def is_child_age(age: Union[Age, int]) -> bool:
+    def is_child_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_child_age(age)
 
         Determine if an Age is a Child.
 
         :param age: The age to check.
-        :type age: Union[Age, int]
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return age == Age.CHILD
+        return int(age) == int(Age.CHILD)
 
     @staticmethod
-    def is_teen_age(age: Union[Age, int]) -> bool:
+    def is_teen_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_teen_age(age)
 
         Determine if an Age is a Teen.
 
         :param age: The age to check.
-        :type age: Union[Age, int]
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return age == Age.TEEN
+        return int(age) == int(Age.TEEN)
 
     @staticmethod
-    def is_adult_age(age: Union[Age, int]) -> bool:
+    def is_adult_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_adult_age(age)
 
         Determine if an Age is a Young Adult or an Adult.
 
         :param age: The age to check.
-        :type age: Union[Age, int]
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
         return CommonAgeUtils.is_young_adult_age(age) or CommonAgeUtils.is_mature_adult_age(age)
 
     @staticmethod
-    def is_young_adult_age(age: Union[Age, int]) -> bool:
+    def is_young_adult_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_young_adult_age(age)
 
         Determine if an Age is a Young Adult.
 
         :param age: The age to check.
-        :type age: Union[Age, int]
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return age == Age.YOUNGADULT
+        return int(age) == int(Age.YOUNGADULT)
 
     @staticmethod
-    def is_mature_adult_age(age: Union[Age, int]) -> bool:
+    def is_mature_adult_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_mature_adult_age(age)
 
         Determine if an Age is an Adult.
 
         :param age: The age to check.
-        :type age: Union[Age, int]
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return age == Age.ADULT
+        return int(age) == int(Age.ADULT)
 
     @staticmethod
-    def is_elder_age(age: Union[Age, int]) -> bool:
+    def is_elder_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_elder_age(age)
 
         Determine if an Age is an Elder.
 
         :param age: The age to check.
-        :type age: Union[Age, int]
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return age == Age.ELDER
+        return int(age) == int(Age.ELDER)
 
     @staticmethod
-    def is_baby_or_toddler_age(age: Age) -> bool:
+    def is_baby_or_toddler_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_baby_or_toddler_age(age)
 
         Determine if an age is Baby or Toddler.
 
         :param age: The age to check.
-        :type age: Age
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
         return CommonAgeUtils.is_baby_age(age) or CommonAgeUtils.is_toddler_age(age)
 
     @staticmethod
-    def is_baby_toddler_or_child_age(age: Age) -> bool:
+    def is_baby_toddler_or_child_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_baby_toddler_or_child_age(age)
 
         Determine if an age is Baby, Toddler, or Child.
 
         :param age: The age to check.
-        :type age: Age
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
         return CommonAgeUtils.is_baby_age(age) or CommonAgeUtils.is_toddler_age(age) or CommonAgeUtils.is_child_age(age)
 
     @staticmethod
-    def is_toddler_or_child_age(age: Age) -> bool:
+    def is_toddler_or_child_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_toddler_or_child_age(age)
 
         Determine if an age is Toddler or Child.
 
         :param age: The age to check.
-        :type age: Age
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
         return CommonAgeUtils.is_toddler_age(age) or CommonAgeUtils.is_child_age(age)
 
     @staticmethod
-    def is_child_or_teen_age(age: Age) -> bool:
+    def is_child_or_teen_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_child_or_teen_age(age)
 
         Determine if an age is Child or Teen.
 
         :param age: The age to check.
-        :type age: Age
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
         return CommonAgeUtils.is_child_age(age) or CommonAgeUtils.is_teen_age(age)
 
     @staticmethod
-    def is_teen_or_young_adult_age(age: Age) -> bool:
+    def is_teen_or_young_adult_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_teen_or_young_adult_age(age)
 
         Determine if an age is Teen or Young Adult.
 
         :param age: The age to check.
-        :type age: Age
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
         return CommonAgeUtils.is_teen_age(age) or CommonAgeUtils.is_young_adult_age(age)
 
     @staticmethod
-    def is_teen_or_adult_age(age: Age) -> bool:
+    def is_teen_or_adult_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_teen_or_adult_age(age)
 
         Determine if an age is Teen, Young Adult, or Adult.
 
         :param age: The age to check.
-        :type age: Age
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
         return CommonAgeUtils.is_teen_age(age) or CommonAgeUtils.is_adult_age(age)
 
     @staticmethod
-    def is_teen_adult_or_elder_age(age: Age) -> bool:
+    def is_teen_adult_or_elder_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_teen_adult_or_elder_age(age)
 
         Determine if an age is Teen, Young Adult, Adult, or Elder.
 
         :param age: The age to check.
-        :type age: Age
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
         return CommonAgeUtils.is_teen_age(age) or CommonAgeUtils.is_adult_age(age) or CommonAgeUtils.is_elder_age(age)
 
     @staticmethod
-    def is_adult_or_elder_age(age: Age) -> bool:
+    def is_adult_or_elder_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_adult_or_elder_age(age)
 
         Determine if an age is Young Adult, Adult, or Elder.
 
         :param age: The age to check.
-        :type age: Age
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
         return CommonAgeUtils.is_adult_age(age) or CommonAgeUtils.is_elder_age(age)
 
     @staticmethod
-    def is_mature_adult_or_elder_age(age: Age) -> bool:
+    def is_mature_adult_or_elder_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_mature_adult_or_elder_age(age)
 
         Determine if an age is Adult or Elder.
 
         :param age: The age to check.
-        :type age: Age
+        :type age: Union[CommonAge, Age, int]
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
@@ -565,4 +571,4 @@ class CommonAgeUtils:
         .. warning:: Obsolete: Don't use this function. Use the :func:'~is_baby_toddler_or_child' function instead.
 
         """
-        return CommonAgeUtils.is_baby(sim_info) or CommonAgeUtils.is_toddler(sim_info) or CommonAgeUtils.is_child(sim_info)
+        return CommonAgeUtils.is_baby_toddler_or_child(sim_info)

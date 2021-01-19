@@ -8,20 +8,19 @@ Copyright (c) COLONOLNUTTY
 from typing import Dict
 
 from sims.sim_info import SimInfo
-from sims.sim_info_types import Age
+from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_occult_type import CommonOccultType
 from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.enums.sim_type import CommonSimType
-from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
 
 
 class CommonSimTypeUtils:
     """Utilities for determining the type of a Sim. i.e. Player, NPC, Service, etc.
 
     """
-    _SIM_TO_SIM_TYPE_MAPPING: Dict[CommonSpecies, Dict[Age, Dict[CommonOccultType, CommonSimType]]] = {
+    _SIM_TO_SIM_TYPE_MAPPING: Dict[CommonSpecies, Dict[CommonAge, Dict[CommonOccultType, CommonSimType]]] = {
         CommonSpecies.HUMAN: {
-            int(Age.ELDER): {
+            CommonAge.ELDER: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ELDER_HUMAN,
                 CommonOccultType.VAMPIRE: CommonSimType.ELDER_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ELDER_HUMAN_GHOST,
@@ -30,7 +29,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ELDER_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_HUMAN_ROBOT
             },
-            int(Age.ADULT): {
+            CommonAge.ADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_HUMAN,
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_HUMAN_GHOST,
@@ -39,7 +38,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_HUMAN_ROBOT
             },
-            int(Age.YOUNGADULT): {
+            CommonAge.YOUNG_ADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.YOUNG_ADULT_HUMAN,
                 CommonOccultType.VAMPIRE: CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.YOUNG_ADULT_HUMAN_GHOST,
@@ -48,7 +47,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.YOUNG_ADULT_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.YOUNG_ADULT_HUMAN_ROBOT
             },
-            int(Age.TEEN): {
+            CommonAge.TEEN: {
                 CommonOccultType.NON_OCCULT: CommonSimType.TEEN_HUMAN,
                 CommonOccultType.VAMPIRE: CommonSimType.TEEN_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.TEEN_HUMAN_GHOST,
@@ -57,7 +56,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.TEEN_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.TEEN_HUMAN_ROBOT
             },
-            int(Age.CHILD): {
+            CommonAge.CHILD: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_HUMAN,
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_HUMAN_GHOST,
@@ -66,7 +65,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_HUMAN_ROBOT
             },
-            int(Age.TODDLER): {
+            CommonAge.TODDLER: {
                 CommonOccultType.NON_OCCULT: CommonSimType.TODDLER_HUMAN,
                 CommonOccultType.VAMPIRE: CommonSimType.TODDLER_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.TODDLER_HUMAN_GHOST,
@@ -75,7 +74,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.TODDLER_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.TODDLER_HUMAN_ROBOT
             },
-            int(Age.BABY): {
+            CommonAge.BABY: {
                 CommonOccultType.NON_OCCULT: CommonSimType.BABY_HUMAN,
                 CommonOccultType.VAMPIRE: CommonSimType.BABY_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.BABY_HUMAN_GHOST,
@@ -86,7 +85,7 @@ class CommonSimTypeUtils:
             }
         },
         CommonSpecies.SMALL_DOG: {
-            int(Age.ELDER): {
+            CommonAge.ELDER: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ELDER_SMALL_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.ELDER_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ELDER_SMALL_DOG_GHOST,
@@ -95,7 +94,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ELDER_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_SMALL_DOG_ROBOT
             },
-            int(Age.ADULT): {
+            CommonAge.ADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_SMALL_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_SMALL_DOG_GHOST,
@@ -104,7 +103,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_SMALL_DOG_ROBOT
             },
-            int(Age.YOUNGADULT): {
+            CommonAge.YOUNG_ADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_SMALL_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_SMALL_DOG_GHOST,
@@ -113,7 +112,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_SMALL_DOG_ROBOT
             },
-            int(Age.TEEN): {
+            CommonAge.TEEN: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_SMALL_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_SMALL_DOG_GHOST,
@@ -122,7 +121,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_SMALL_DOG_ROBOT
             },
-            int(Age.CHILD): {
+            CommonAge.CHILD: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_SMALL_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_SMALL_DOG_GHOST,
@@ -131,7 +130,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_SMALL_DOG_ROBOT
             },
-            int(Age.TODDLER): {
+            CommonAge.TODDLER: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_SMALL_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_SMALL_DOG_GHOST,
@@ -140,7 +139,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_SMALL_DOG_ROBOT
             },
-            int(Age.BABY): {
+            CommonAge.BABY: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_SMALL_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_SMALL_DOG_GHOST,
@@ -151,7 +150,7 @@ class CommonSimTypeUtils:
             }
         },
         CommonSpecies.LARGE_DOG: {
-            int(Age.ELDER): {
+            CommonAge.ELDER: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ELDER_LARGE_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.ELDER_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ELDER_LARGE_DOG_GHOST,
@@ -160,7 +159,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ELDER_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_LARGE_DOG_ROBOT
             },
-            int(Age.ADULT): {
+            CommonAge.ADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_LARGE_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_LARGE_DOG_GHOST,
@@ -169,7 +168,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_LARGE_DOG_ROBOT
             },
-            int(Age.YOUNGADULT): {
+            CommonAge.YOUNG_ADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_LARGE_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_LARGE_DOG_GHOST,
@@ -178,7 +177,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_LARGE_DOG_ROBOT
             },
-            int(Age.TEEN): {
+            CommonAge.TEEN: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_LARGE_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_LARGE_DOG_GHOST,
@@ -187,16 +186,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_LARGE_DOG_ROBOT
             },
-            int(Age.TODDLER): {
-                CommonOccultType.NON_OCCULT: CommonSimType.CHILD_CAT,
-                CommonOccultType.VAMPIRE: CommonSimType.CHILD_CAT_VAMPIRE,
-                CommonOccultType.GHOST: CommonSimType.CHILD_CAT_GHOST,
-                CommonOccultType.ALIEN: CommonSimType.CHILD_CAT_ALIEN,
-                CommonOccultType.MERMAID: CommonSimType.CHILD_CAT_MERMAID,
-                CommonOccultType.WITCH: CommonSimType.CHILD_CAT_WITCH,
-                CommonOccultType.ROBOT: CommonSimType.CHILD_CAT_ROBOT
-            },
-            int(Age.CHILD): {
+            CommonAge.CHILD: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_LARGE_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_LARGE_DOG_GHOST,
@@ -205,18 +195,27 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_LARGE_DOG_ROBOT
             },
-            int(Age.BABY): {
-                CommonOccultType.NON_OCCULT: CommonSimType.CHILD_CAT,
-                CommonOccultType.VAMPIRE: CommonSimType.CHILD_CAT_VAMPIRE,
-                CommonOccultType.GHOST: CommonSimType.CHILD_CAT_GHOST,
-                CommonOccultType.ALIEN: CommonSimType.CHILD_CAT_ALIEN,
-                CommonOccultType.MERMAID: CommonSimType.CHILD_CAT_MERMAID,
-                CommonOccultType.WITCH: CommonSimType.CHILD_CAT_WITCH,
-                CommonOccultType.ROBOT: CommonSimType.CHILD_CAT_ROBOT
+            CommonAge.TODDLER: {
+                CommonOccultType.NON_OCCULT: CommonSimType.CHILD_LARGE_DOG,
+                CommonOccultType.VAMPIRE: CommonSimType.CHILD_LARGE_DOG_VAMPIRE,
+                CommonOccultType.GHOST: CommonSimType.CHILD_LARGE_DOG_GHOST,
+                CommonOccultType.ALIEN: CommonSimType.CHILD_LARGE_DOG_ALIEN,
+                CommonOccultType.MERMAID: CommonSimType.CHILD_LARGE_DOG_MERMAID,
+                CommonOccultType.WITCH: CommonSimType.CHILD_LARGE_DOG_WITCH,
+                CommonOccultType.ROBOT: CommonSimType.CHILD_LARGE_DOG_ROBOT
+            },
+            CommonAge.BABY: {
+                CommonOccultType.NON_OCCULT: CommonSimType.CHILD_LARGE_DOG,
+                CommonOccultType.VAMPIRE: CommonSimType.CHILD_LARGE_DOG_VAMPIRE,
+                CommonOccultType.GHOST: CommonSimType.CHILD_LARGE_DOG_GHOST,
+                CommonOccultType.ALIEN: CommonSimType.CHILD_LARGE_DOG_ALIEN,
+                CommonOccultType.MERMAID: CommonSimType.CHILD_LARGE_DOG_MERMAID,
+                CommonOccultType.WITCH: CommonSimType.CHILD_LARGE_DOG_WITCH,
+                CommonOccultType.ROBOT: CommonSimType.CHILD_LARGE_DOG_ROBOT
             }
         },
         CommonSpecies.CAT: {
-            int(Age.ELDER): {
+            CommonAge.ELDER: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ELDER_CAT,
                 CommonOccultType.VAMPIRE: CommonSimType.ELDER_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ELDER_CAT_GHOST,
@@ -225,7 +224,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ELDER_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_CAT_ROBOT
             },
-            int(Age.ADULT): {
+            CommonAge.ADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_CAT,
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_CAT_GHOST,
@@ -234,25 +233,25 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_CAT_ROBOT
             },
-            int(Age.YOUNGADULT): {
-                CommonOccultType.NON_OCCULT: CommonSimType.ADULT_LARGE_DOG,
-                CommonOccultType.VAMPIRE: CommonSimType.ADULT_LARGE_DOG_VAMPIRE,
-                CommonOccultType.GHOST: CommonSimType.ADULT_LARGE_DOG_GHOST,
-                CommonOccultType.ALIEN: CommonSimType.ADULT_LARGE_DOG_ALIEN,
-                CommonOccultType.MERMAID: CommonSimType.ADULT_LARGE_DOG_MERMAID,
-                CommonOccultType.WITCH: CommonSimType.ADULT_LARGE_DOG_WITCH,
-                CommonOccultType.ROBOT: CommonSimType.ADULT_LARGE_DOG_ROBOT
+            CommonAge.YOUNG_ADULT: {
+                CommonOccultType.NON_OCCULT: CommonSimType.ADULT_CAT,
+                CommonOccultType.VAMPIRE: CommonSimType.ADULT_CAT_VAMPIRE,
+                CommonOccultType.GHOST: CommonSimType.ADULT_CAT_GHOST,
+                CommonOccultType.ALIEN: CommonSimType.ADULT_CAT_ALIEN,
+                CommonOccultType.MERMAID: CommonSimType.ADULT_CAT_MERMAID,
+                CommonOccultType.WITCH: CommonSimType.ADULT_CAT_WITCH,
+                CommonOccultType.ROBOT: CommonSimType.ADULT_CAT_ROBOT
             },
-            int(Age.TEEN): {
-                CommonOccultType.NON_OCCULT: CommonSimType.ADULT_LARGE_DOG,
-                CommonOccultType.VAMPIRE: CommonSimType.ADULT_LARGE_DOG_VAMPIRE,
-                CommonOccultType.GHOST: CommonSimType.ADULT_LARGE_DOG_GHOST,
-                CommonOccultType.ALIEN: CommonSimType.ADULT_LARGE_DOG_ALIEN,
-                CommonOccultType.MERMAID: CommonSimType.ADULT_LARGE_DOG_MERMAID,
-                CommonOccultType.WITCH: CommonSimType.ADULT_LARGE_DOG_WITCH,
-                CommonOccultType.ROBOT: CommonSimType.ADULT_LARGE_DOG_ROBOT
+            CommonAge.TEEN: {
+                CommonOccultType.NON_OCCULT: CommonSimType.ADULT_CAT,
+                CommonOccultType.VAMPIRE: CommonSimType.ADULT_CAT_VAMPIRE,
+                CommonOccultType.GHOST: CommonSimType.ADULT_CAT_GHOST,
+                CommonOccultType.ALIEN: CommonSimType.ADULT_CAT_ALIEN,
+                CommonOccultType.MERMAID: CommonSimType.ADULT_CAT_MERMAID,
+                CommonOccultType.WITCH: CommonSimType.ADULT_CAT_WITCH,
+                CommonOccultType.ROBOT: CommonSimType.ADULT_CAT_ROBOT
             },
-            int(Age.CHILD): {
+            CommonAge.CHILD: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_CAT,
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_CAT_GHOST,
@@ -261,7 +260,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_CAT_ROBOT
             },
-            int(Age.TODDLER): {
+            CommonAge.TODDLER: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_CAT,
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_CAT_GHOST,
@@ -270,7 +269,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_CAT_ROBOT
             },
-            int(Age.BABY): {
+            CommonAge.BABY: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_CAT,
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_CAT_GHOST,
@@ -619,13 +618,13 @@ class CommonSimTypeUtils:
         :rtype: CommonSimType
         """
         species = CommonSpecies.get_species(sim_info)
-        age = CommonAgeUtils.get_age(sim_info)
-        if combine_teen_young_adult_and_elder_age and CommonAgeUtils.is_teen_adult_or_elder_age(age):
-            age = Age.ADULT
+        age = CommonAge.get_age(sim_info)
+        if combine_teen_young_adult_and_elder_age and age in (CommonAge.TEEN, CommonAge.YOUNG_ADULT, CommonAge.ADULT, CommonAge.ELDER):
+            age = CommonAge.ADULT
         occult_type = CommonOccultType.determine_occult_type(sim_info)
-        return self._determine_sim_type(species, int(age), occult_type)
+        return self._determine_sim_type(species, age, occult_type)
 
-    def _determine_sim_type(self, species: CommonSpecies, age: Age, occult_type: CommonOccultType) -> CommonSimType:
+    def _determine_sim_type(self, species: CommonSpecies, age: CommonAge, occult_type: CommonOccultType) -> CommonSimType:
         if species not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING or age not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species] or occult_type not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species][age]:
             return CommonSimType.NONE
         return CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species][age][occult_type]

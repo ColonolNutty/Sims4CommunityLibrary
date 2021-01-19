@@ -8,7 +8,10 @@ Copyright (c) COLONOLNUTTY
 import services
 import build_buy
 from interactions.interaction_finisher import FinishingType
+from sims.sim_info_types import Species
 from sims4.commands import Command, CommandType, CheatOutput
+from sims4communitylib.enums.common_age import CommonAge
+from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
@@ -22,7 +25,6 @@ except ImportError:
 from typing import Union, Tuple, Callable, Any, Iterator
 from sims.household import Household
 from sims.sim_info import SimInfo
-from sims.sim_info_types import Gender, Age, Species
 from sims.sim_spawner import SimCreator, SimSpawner
 from animation.posture_manifest import Hand
 from interactions.si_state import SIState
@@ -42,8 +44,8 @@ class CommonSimSpawnUtils:
 
     @staticmethod
     def create_human_sim_info(
-        gender: Gender=None,
-        age: Age=None,
+        gender: CommonGender=None,
+        age: CommonAge=None,
         first_name: str='',
         last_name: str='',
         trait_ids: Tuple[int]=(),
@@ -63,10 +65,10 @@ class CommonSimSpawnUtils:
 
         Create SimInfo for a Human Sim.
 
-        :param gender: The Gender of the created Sim. Default is None.
-        :type gender: Gender, optional
-        :param age: The Age of the created Sim. Default is None.
-        :type age: Age, optional
+        :param gender: The gender of the created Sim. Default is None.
+        :type gender: CommonGender, optional
+        :param age: The age of the created Sim. Default is None.
+        :type age: CommonAge, optional
         :param first_name: The First Name of the created Sim. Default is an empty string.
         :type first_name: str, optional
         :param last_name: The Last Name of the created Sim. Default is an empty string.
@@ -82,6 +84,8 @@ class CommonSimSpawnUtils:
         """
         from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
         household = household or CommonHouseholdUtils.create_empty_household(as_hidden_household=True)
+        gender = CommonGender.convert_to_vanilla(gender)
+        age = CommonAge.convert_to_vanilla(age)
         sim_creator = SimCreator(gender=gender, age=age, first_name=first_name or SimSpawner.get_random_first_name(gender, Species.HUMAN), last_name=last_name, traits=trait_ids)
         (sim_info_list, _) = SimSpawner.create_sim_infos((sim_creator,), household=household, generate_deterministic_sim=True, creation_source=source)
         if not sim_info_list:
@@ -352,13 +356,13 @@ class CommonSimSpawnUtils:
 @Command('s4clib.spawn_human_sims', command_type=CommandType.Live)
 def _spawn_human_sims(count: int=100, gender_str: str= 'male', age_str: str= 'adult', _connection: int=None):
     output = CheatOutput(_connection)
-    gender: Gender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), Gender, default_value=None)
+    gender: CommonGender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), CommonGender, default_value=None)
     if gender is None:
-        output('{} is not a valid gender'.format(gender_str))
+        output('{} is not a valid gender. Valid Genders: ({})'.format(gender_str, ', '.join([common_gender.name for common_gender in CommonGender.values if common_gender != CommonGender.INVALID])))
         return
-    age: Age = CommonResourceUtils.get_enum_by_name(age_str.upper(), Age, default_value=None)
+    age: CommonAge = CommonResourceUtils.get_enum_by_name(age_str.upper(), CommonAge, default_value=None)
     if age is None:
-        output('{} is not a valid age'.format(age_str))
+        output('{} is not a valid age. Valid Ages: ({})'.format(age_str, ', '.join([common_age.name for common_age in CommonAge.values if common_age != CommonAge.INVALID])))
         return
     if count <= 0:
         output('Please enter a count above zero.')
