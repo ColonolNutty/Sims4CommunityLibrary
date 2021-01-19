@@ -225,7 +225,11 @@ def _common_testing_spawn_object_on_lot(object_id: str='20359', _connection: Any
     try:
         object_id = int(object_id)
     except Exception:
-        output('object_id must be an number.')
+        output('ERROR: object_id must be a number.')
+        return
+    if object_id < 0:
+        output('ERROR: object_id must be a positive number.')
+        return
     output('Attempting to spawn object on the current lot with id \'{}\'.'.format(object_id))
     from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
     from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -235,9 +239,10 @@ def _common_testing_spawn_object_on_lot(object_id: str='20359', _connection: Any
     try:
         game_object = CommonObjectSpawnUtils.spawn_object_on_lot(object_id, location)
         if game_object is None:
-            output('Failed to spawn object.')
+            output('ERROR: Failed to spawn object.')
         else:
             output('Object spawned successfully. Can you see it? Object Id: {}'.format(CommonObjectUtils.get_object_id(game_object)))
     except Exception as ex:
+        output('ERROR: A problem occurred while attempting to spawn the object.')
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to spawn object.', exception=ex)
     output('Done spawning object.')

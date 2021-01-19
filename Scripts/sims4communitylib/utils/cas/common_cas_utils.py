@@ -5,12 +5,15 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Tuple, Union
+from typing import Tuple, Union, Any
 from sims.outfits.outfit_enums import OutfitCategory, BodyType
 from sims.sim_info import SimInfo
+from sims4.commands import Command, CheatOutput, CommandType
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
 log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 's4cl_common_cas_utils')
 
@@ -198,3 +201,89 @@ class CommonCASUtils:
         log.format_with_message('Checking if CAS part is attached to Sim.', sim=sim_info, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
         outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=outfit_category_and_index)
         return outfit_io.get_cas_part_at_body_type(body_type)
+
+
+@Command('s4clib_testing.attach_cas_part', command_type=CommandType.Live)
+def _s4clib_testing_attach_cas_part(cas_part_id: str='6563', sim_id: str=None, body_type: str=None, _connection: Any=None):
+    from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+    output = CheatOutput(_connection)
+    # noinspection PyBroadException
+    try:
+        cas_part_id = int(cas_part_id)
+    except Exception:
+        output('ERROR: cas_part_id must be a number.')
+        return
+    if cas_part_id < 0:
+        output('ERROR: cas_part_id must be a positive number.')
+        return
+    if not CommonCASUtils.is_cas_part_loaded(cas_part_id):
+        output('ERROR: No cas part was found with id: {}'.format(cas_part_id))
+        return
+    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+    if sim_id is not None:
+        # noinspection PyBroadException
+        try:
+            sim_id = int(sim_id)
+        except Exception:
+            output('ERROR: sim_id must be a number.')
+            return
+        sim_info = CommonSimUtils.get_sim_info(sim_id)
+        if sim_info is None:
+            output('ERROR: No sim found with id: {}'.format(sim_id))
+            return
+    else:
+        sim_info = CommonSimUtils.get_active_sim_info()
+    if body_type is not None:
+        body_type = CommonResourceUtils.get_enum_by_name(body_type.upper(), BodyType, default_value=BodyType.NONE)
+    else:
+        body_type = BodyType.NONE
+    output('Attempting to attach CAS Part \'{}\' to Sim \'{}\''.format(cas_part_id, CommonSimNameUtils.get_full_name(sim_info)))
+    try:
+        if CommonCASUtils.attach_cas_part_to_sim(sim_info, cas_part_id, body_type=body_type):
+            output('CAS Part attached to Sim {} successfully.'.format(CommonSimNameUtils.get_full_name(sim_info)))
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to attach a CAS Part to a Sim.', exception=ex)
+    output('Done attaching CAS Pat to the Sim.')
+
+
+@Command('s4clib_testing.detach_cas_part', command_type=CommandType.Live)
+def _s4clib_testing_detach_cas_part(cas_part_id: str='6563', sim_id: str=None, body_type: str=None, _connection: Any=None):
+    from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+    output = CheatOutput(_connection)
+    # noinspection PyBroadException
+    try:
+        cas_part_id = int(cas_part_id)
+    except Exception:
+        output('ERROR: cas_part_id must be a number.')
+        return
+    if cas_part_id < 0:
+        output('ERROR: cas_part_id must be a positive number.')
+        return
+    if not CommonCASUtils.is_cas_part_loaded(cas_part_id):
+        output('ERROR: No cas part was found with id: {}'.format(cas_part_id))
+        return
+    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+    if sim_id is not None:
+        # noinspection PyBroadException
+        try:
+            sim_id = int(sim_id)
+        except Exception:
+            output('ERROR: sim_id must be a number.')
+            return
+        sim_info = CommonSimUtils.get_sim_info(sim_id)
+        if sim_info is None:
+            output('ERROR: No sim found with id: {}'.format(sim_id))
+            return
+    else:
+        sim_info = CommonSimUtils.get_active_sim_info()
+    if body_type is not None:
+        body_type = CommonResourceUtils.get_enum_by_name(body_type.upper(), BodyType, default_value=BodyType.NONE)
+    else:
+        body_type = BodyType.NONE
+    output('Attempting to detach CAS Part \'{}\' from Sim \'{}\''.format(cas_part_id, CommonSimNameUtils.get_full_name(sim_info)))
+    try:
+        if CommonCASUtils.detach_cas_part_from_sim(sim_info, cas_part_id, body_type=body_type):
+            output('CAS Part detached from Sim {} successfully.'.format(CommonSimNameUtils.get_full_name(sim_info)))
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to detach a CAS Part from a Sim.', exception=ex)
+    output('Done detaching CAS Pat to the Sim.')
