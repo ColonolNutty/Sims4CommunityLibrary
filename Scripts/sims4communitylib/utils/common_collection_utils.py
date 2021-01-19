@@ -122,9 +122,9 @@ class CommonCollectionUtils:
             (is_processed, new_combination_sets) = CommonCollectionUtils._process_item_sets(combination)
             if is_processed:
                 for new_combination_set in new_combination_sets:
-                    possible_combinations.add(tuple(sorted(new_combination_set)))
+                    possible_combinations.add(tuple(new_combination_set))
             else:
-                possible_combinations.add(tuple(sorted(combination)))
+                possible_combinations.add(tuple(combination))
         return possible_combinations
 
     @staticmethod

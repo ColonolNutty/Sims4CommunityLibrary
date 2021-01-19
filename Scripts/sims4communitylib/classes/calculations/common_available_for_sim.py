@@ -9,11 +9,10 @@ from pprint import pformat
 from typing import Tuple, Iterator
 
 from sims.sim_info import SimInfo
-from sims.sim_info_types import Age, Gender
+from sims4communitylib.enums.common_age import CommonAge
+from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.common_occult_type import CommonOccultType
 from sims4communitylib.enums.common_species import CommonSpecies
-from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
-from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
 
 
 class CommonAvailableForSim:
@@ -28,10 +27,10 @@ class CommonAvailableForSim:
 
     .. note:: At least one argument must be supplied with values.
 
-    :param genders: An iterable of Gender. Default is an empty collection.
-    :type genders: Iterator[Gender], optional
-    :param ages: An iterable of Age. Default is an empty collection.
-    :type ages: Iterator[Age], optional
+    :param genders: An iterable of CommonGender. Default is an empty collection.
+    :type genders: Iterator[CommonGender], optional
+    :param ages: An iterable of CommonAge. Default is an empty collection.
+    :type ages: Iterator[CommonAge], optional
     :param species: An iterable of CommonSpecies. Default is an empty collection.
     :type species: Iterator[CommonSpecies], optional
     :param occult_types: An iterable of CommonOccultType. Default is an empty collection.
@@ -39,8 +38,8 @@ class CommonAvailableForSim:
     """
     def __init__(
         self,
-        genders: Iterator[Gender]=(),
-        ages: Iterator[Age]=(),
+        genders: Iterator[CommonGender]=(),
+        ages: Iterator[CommonAge]=(),
         species: Iterator[CommonSpecies]=(),
         occult_types: Iterator[CommonOccultType]=()
     ):
@@ -52,12 +51,12 @@ class CommonAvailableForSim:
             raise AssertionError('No Genders, Ages, Species, nor Occult Types were specified!')
 
     @property
-    def genders(self) -> Tuple[Gender]:
+    def genders(self) -> Tuple[CommonGender]:
         """Genders this is available for."""
         return self._genders
 
     @property
-    def ages(self) -> Tuple[Age]:
+    def ages(self) -> Tuple[CommonAge]:
         """Ages this is available for."""
         return self._ages
 
@@ -81,10 +80,10 @@ class CommonAvailableForSim:
         :return: True, if is available for the specified Sim. False, if not.
         :rtype: bool
         """
-        age = CommonAgeUtils.get_age(sim_info)
+        age = CommonAge.get_age(sim_info)
         if self.ages and age not in self.ages:
             return False
-        gender = CommonGenderUtils.get_gender(sim_info)
+        gender = CommonGender.get_gender(sim_info)
         if self.genders and gender not in self.genders:
             return False
         common_species = CommonSpecies.get_species(sim_info)
@@ -127,16 +126,17 @@ class CommonAvailableForSim:
         :return: An available for matching the specified Sim.
         :rtype: CommonAvailableForSim
         """
-        gender = CommonGenderUtils.get_gender(sim_info)
-        if gender is None:
+        from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
+        gender = CommonGender.get_gender(sim_info)
+        if gender == CommonGender.INVALID:
             genders = tuple()
         else:
             genders = (gender,)
-        age = CommonAgeUtils.get_age(sim_info)
-        if age is None:
+        age = CommonAge.get_age(sim_info)
+        if age == CommonAge.INVALID:
             ages = tuple()
         elif CommonAgeUtils.is_teen_adult_or_elder_age(age):
-            ages = (Age.TEEN, Age.YOUNG_ADULT, Age.ADULT, Age.ELDER)
+            ages = (CommonAge.TEEN, CommonAge.YOUNG_ADULT, CommonAge.ADULT, CommonAge.ELDER)
         else:
             ages = (age,)
         sim_species = CommonSpecies.get_species(sim_info)
@@ -160,8 +160,8 @@ class CommonAvailableForSim:
     def everything() -> 'CommonAvailableForSim':
         """ Create an Available For instance that applies to everything. """
         return CommonAvailableForSim(
-            genders=(Gender.MALE, Gender.FEMALE),
-            ages=(Age.BABY, Age.TODDLER, Age.CHILD, Age.TEEN, Age.YOUNGADULT, Age.ADULT, Age.ELDER),
+            genders=(CommonGender.MALE, CommonGender.FEMALE),
+            ages=(CommonAge.BABY, CommonAge.TODDLER, CommonAge.CHILD, CommonAge.TEEN, CommonAge.YOUNG_ADULT, CommonAge.ADULT, CommonAge.ELDER),
             species=(CommonSpecies.HUMAN, CommonSpecies.SMALL_DOG, CommonSpecies.LARGE_DOG, CommonSpecies.CAT),
             occult_types=(
                 CommonOccultType.NON_OCCULT,
