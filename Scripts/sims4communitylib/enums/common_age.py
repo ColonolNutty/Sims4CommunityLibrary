@@ -21,7 +21,7 @@ class CommonAge(CommonInt):
     TODDLER: 'CommonAge' = 2
     CHILD: 'CommonAge' = 4
     TEEN: 'CommonAge' = 8
-    YOUNG_ADULT: 'CommonAge' = 16
+    YOUNGADULT: 'CommonAge' = 16
     ADULT: 'CommonAge' = 32
     ELDER: 'CommonAge' = 64
 
@@ -46,7 +46,7 @@ class CommonAge(CommonInt):
         elif CommonAgeUtils.is_teen(sim_info):
             return CommonAge.TEEN
         elif CommonAgeUtils.is_young_adult(sim_info):
-            return CommonAge.YOUNG_ADULT
+            return CommonAge.YOUNGADULT
         elif CommonAgeUtils.is_adult(sim_info):
             return CommonAge.ADULT
         elif CommonAgeUtils.is_elder(sim_info):
@@ -73,7 +73,7 @@ class CommonAge(CommonInt):
             CommonAge.TODDLER: Age.TODDLER,
             CommonAge.CHILD: Age.CHILD,
             CommonAge.TEEN: Age.TEEN,
-            CommonAge.YOUNG_ADULT: Age.YOUNGADULT,
+            CommonAge.YOUNGADULT: Age.YOUNGADULT,
             CommonAge.ADULT: Age.ADULT,
             CommonAge.ELDER: Age.ELDER
         }
@@ -101,7 +101,7 @@ class CommonAge(CommonInt):
             int(Age.TODDLER): CommonAge.TODDLER,
             int(Age.CHILD): CommonAge.CHILD,
             int(Age.TEEN): CommonAge.TEEN,
-            int(Age.YOUNGADULT): CommonAge.YOUNG_ADULT,
+            int(Age.YOUNGADULT): CommonAge.YOUNGADULT,
             int(Age.ADULT): CommonAge.ADULT,
             int(Age.ELDER): CommonAge.ELDER
         }
