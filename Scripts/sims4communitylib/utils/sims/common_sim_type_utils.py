@@ -38,7 +38,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_HUMAN_ROBOT
             },
-            CommonAge.YOUNG_ADULT: {
+            CommonAge.YOUNGADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.YOUNG_ADULT_HUMAN,
                 CommonOccultType.VAMPIRE: CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.YOUNG_ADULT_HUMAN_GHOST,
@@ -103,7 +103,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_SMALL_DOG_ROBOT
             },
-            CommonAge.YOUNG_ADULT: {
+            CommonAge.YOUNGADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_SMALL_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_SMALL_DOG_GHOST,
@@ -168,7 +168,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_LARGE_DOG_ROBOT
             },
-            CommonAge.YOUNG_ADULT: {
+            CommonAge.YOUNGADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_LARGE_DOG,
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_LARGE_DOG_GHOST,
@@ -233,7 +233,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_CAT_ROBOT
             },
-            CommonAge.YOUNG_ADULT: {
+            CommonAge.YOUNGADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_CAT,
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_CAT_GHOST,
@@ -619,7 +619,7 @@ class CommonSimTypeUtils:
         """
         species = CommonSpecies.get_species(sim_info)
         age = CommonAge.get_age(sim_info)
-        if combine_teen_young_adult_and_elder_age and age in (CommonAge.TEEN, CommonAge.YOUNG_ADULT, CommonAge.ADULT, CommonAge.ELDER):
+        if combine_teen_young_adult_and_elder_age and age in (CommonAge.TEEN, CommonAge.YOUNGADULT, CommonAge.ADULT, CommonAge.ELDER):
             age = CommonAge.ADULT
         occult_type = CommonOccultType.determine_occult_type(sim_info)
         return self._determine_sim_type(species, age, occult_type)

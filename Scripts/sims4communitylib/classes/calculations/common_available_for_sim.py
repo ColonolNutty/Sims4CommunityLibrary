@@ -136,7 +136,7 @@ class CommonAvailableForSim:
         if age == CommonAge.INVALID:
             ages = tuple()
         elif CommonAgeUtils.is_teen_adult_or_elder_age(age):
-            ages = (CommonAge.TEEN, CommonAge.YOUNG_ADULT, CommonAge.ADULT, CommonAge.ELDER)
+            ages = (CommonAge.TEEN, CommonAge.YOUNGADULT, CommonAge.ADULT, CommonAge.ELDER)
         else:
             ages = (age,)
         sim_species = CommonSpecies.get_species(sim_info)
@@ -161,7 +161,7 @@ class CommonAvailableForSim:
         """ Create an Available For instance that applies to everything. """
         return CommonAvailableForSim(
             genders=(CommonGender.MALE, CommonGender.FEMALE),
-            ages=(CommonAge.BABY, CommonAge.TODDLER, CommonAge.CHILD, CommonAge.TEEN, CommonAge.YOUNG_ADULT, CommonAge.ADULT, CommonAge.ELDER),
+            ages=(CommonAge.BABY, CommonAge.TODDLER, CommonAge.CHILD, CommonAge.TEEN, CommonAge.YOUNGADULT, CommonAge.ADULT, CommonAge.ELDER),
             species=(CommonSpecies.HUMAN, CommonSpecies.SMALL_DOG, CommonSpecies.LARGE_DOG, CommonSpecies.CAT),
             occult_types=(
                 CommonOccultType.NON_OCCULT,
