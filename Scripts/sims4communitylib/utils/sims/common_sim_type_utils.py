@@ -604,7 +604,8 @@ class CommonSimTypeUtils:
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
-    def determine_sim_type(self, sim_info: SimInfo, combine_teen_young_adult_and_elder_age: bool=True) -> CommonSimType:
+    @staticmethod
+    def determine_sim_type(sim_info: SimInfo, combine_teen_young_adult_and_elder_age: bool=True) -> CommonSimType:
         """determine_sim_type(sim_info, combine_teen_young_adult_and_elder_age=True)
 
         Determine the type of Sim a Sim is based on their Age, Species, and Occult Type.
@@ -622,14 +623,33 @@ class CommonSimTypeUtils:
         if combine_teen_young_adult_and_elder_age and age in (CommonAge.TEEN, CommonAge.YOUNGADULT, CommonAge.ADULT, CommonAge.ELDER):
             age = CommonAge.ADULT
         occult_type = CommonOccultType.determine_occult_type(sim_info)
-        return self._determine_sim_type(species, age, occult_type)
+        return CommonSimTypeUtils._determine_sim_type(species, age, occult_type)
 
-    def _determine_sim_type(self, species: CommonSpecies, age: CommonAge, occult_type: CommonOccultType) -> CommonSimType:
+    @staticmethod
+    def _determine_sim_type(species: CommonSpecies, age: CommonAge, occult_type: CommonOccultType) -> CommonSimType:
         if species not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING or age not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species] or occult_type not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species][age]:
             return CommonSimType.NONE
         return CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species][age][occult_type]
 
-    def convert_to_signature(self, sim_type: CommonSimType) -> str:
+    @staticmethod
+    def are_same_age_and_species(sim_type_one: CommonSimType, sim_type_two: CommonSimType) -> bool:
+        """are_same_age_and_species(sim_type_one, sim_type_two)
+
+        Determine if two Sim Types are comprised of the same Age and Species.
+
+        :param sim_type_one: An instance of a Sim Type.
+        :type sim_type_one: CommonSimType
+        :param sim_type_two: An instance of a Sim Type.
+        :type sim_type_two: CommonSimType
+        :return: True, if both Sim types are the same Age and Species, ignoring Occult Types. False, if not.
+        :rtype: bool
+        """
+        if sim_type_one == sim_type_two:
+            return True
+        return CommonSimTypeUtils.convert_to_non_occult_variant(sim_type_one) == CommonSimTypeUtils.convert_to_non_occult_variant(sim_type_two)
+
+    @staticmethod
+    def convert_to_signature(sim_type: CommonSimType) -> str:
         """convert_to_signature(sim_type)
 
         Convert a Sim Type to a unique signature.
@@ -643,7 +663,8 @@ class CommonSimTypeUtils:
             return sim_type.name
         return CommonSimTypeUtils._SIM_TYPE_TO_SIGNATURE_MAPPING[sim_type]
 
-    def convert_to_non_occult_variant(self, sim_type: CommonSimType) -> CommonSimType:
+    @staticmethod
+    def convert_to_non_occult_variant(sim_type: CommonSimType) -> CommonSimType:
         """convert_sim_type_to_non_occult_variant(sim_type)
 
         Convert an Occult sim type to a Non-Occult Sim Type.

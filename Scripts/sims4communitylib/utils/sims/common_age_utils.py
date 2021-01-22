@@ -9,6 +9,7 @@ from typing import Union
 
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Age
+from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.common_age import CommonAge
 
 
@@ -17,28 +18,52 @@ class CommonAgeUtils:
 
     """
     @staticmethod
-    def get_age(sim_info: SimInfo) -> Union[Age, int, None]:
-        """get_age(sim_info)
+    def get_age(sim_info: SimInfo, exact_age: bool=False) -> Union[Age, int, None]:
+        """get_age(sim_info, exact_age=False)
 
         Retrieve the Age of a Sim.
 
         :param sim_info: The Sim to get the Age of.
         :type sim_info: SimInfo
+        :param exact_age: If set to True, the exact age of the Sim will be returned (Age 24 will be returned as 24). If set to False, the age of the Sim rounded to the nearest Age value will be returned. (Age 24 will be returned as Age.YOUNGADULT) Default is False.
+        :type exact_age: bool, optional
         :return: The Age of the Sim or None if a problem occurs.
         :rtype: Union[Age, None]
         """
         if sim_info is None:
             return None
-        if hasattr(sim_info, '_base') and hasattr(sim_info._base, 'age'):
-            return sim_info._base.age
-        if hasattr(sim_info, 'age'):
+        age = None
+        if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age') and exact_age:
+            age = sim_info.sim_info._base.age
+        elif hasattr(sim_info, '_base') and hasattr(sim_info._base, 'age'):
+            age = sim_info._base.age
+        elif hasattr(sim_info, 'age'):
             # noinspection PyPropertyAccess
-            return sim_info.age
-        if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age'):
-            return sim_info.sim_info._base.age
-        if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, 'age'):
-            return sim_info.sim_info.age
-        return None
+            age = sim_info.age
+        elif hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age') and exact_age:
+            age = sim_info.sim_info._base.age
+        elif hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, 'age'):
+            age = sim_info.sim_info.age
+        if age is None:
+            return None
+        if isinstance(age, Age):
+            return age
+        if exact_age:
+            return age
+        age: int = age
+        if int(Age.BABY) <= age < int(Age.TODDLER):
+            return Age.BABY
+        if int(Age.TODDLER) <= age < int(Age.CHILD):
+            return Age.TODDLER
+        if int(Age.CHILD) <= age < int(Age.TEEN):
+            return Age.CHILD
+        if int(Age.TEEN) <= age < int(Age.YOUNGADULT):
+            return Age.TEEN
+        if int(Age.YOUNGADULT) <= age < int(Age.ADULT):
+            return Age.YOUNGADULT
+        if int(Age.ADULT) <= age < int(Age.ELDER):
+            return Age.ADULT
+        return Age.ELDER
 
     @staticmethod
     def set_age(sim_info: SimInfo, age: Union[CommonAge, Age, int]) -> bool:
@@ -572,3 +597,25 @@ class CommonAgeUtils:
 
         """
         return CommonAgeUtils.is_baby_toddler_or_child(sim_info)
+
+
+@Command('s4clib.show_sim_age', command_type=CommandType.Live)
+def _s4clib_show_sim_age(_connection: int=None):
+    output = CheatOutput(_connection)
+    output('Showing Sim age.')
+    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+    sim_info = CommonSimUtils.get_active_sim_info()
+    if hasattr(sim_info, '_base') and hasattr(sim_info._base, 'age'):
+        output('_base.age {}'.format(sim_info._base.age))
+    if hasattr(sim_info, 'age'):
+        # noinspection PyPropertyAccess
+        output('age {}'.format(sim_info.age))
+    if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age'):
+        output('sim_info._base.age {}'.format(sim_info.sim_info._base.age))
+    if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, 'age'):
+        output('sim_info.age {}'.format(sim_info.sim_info.age))
+    get_age_result = CommonAgeUtils.get_age(sim_info)
+    output('Get Age Result: {}'.format(get_age_result))
+    get_age_exact_result = CommonAgeUtils.get_age(sim_info, exact_age=True)
+    output('Get Age Exact Result: {}'.format(get_age_exact_result))
+    output('Done showing Sim age.')
