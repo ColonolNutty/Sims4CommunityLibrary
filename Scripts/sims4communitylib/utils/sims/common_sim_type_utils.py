@@ -18,6 +18,23 @@ class CommonSimTypeUtils:
     """Utilities for determining the type of a Sim. i.e. Player, NPC, Service, etc.
 
     """
+    _COMBINE_SIM_TYPE_MAPPING: Dict[CommonSimType, CommonSimType] = {
+        CommonSimType.CHILD_SMALL_DOG: CommonSimType.CHILD_DOG,
+        CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonSimType.CHILD_DOG_VAMPIRE,
+        CommonSimType.CHILD_SMALL_DOG_GHOST: CommonSimType.CHILD_DOG_GHOST,
+        CommonSimType.CHILD_SMALL_DOG_ALIEN: CommonSimType.CHILD_DOG_ALIEN,
+        CommonSimType.CHILD_SMALL_DOG_MERMAID: CommonSimType.CHILD_DOG_MERMAID,
+        CommonSimType.CHILD_SMALL_DOG_WITCH: CommonSimType.CHILD_DOG_WITCH,
+        CommonSimType.CHILD_SMALL_DOG_ROBOT: CommonSimType.CHILD_DOG_ROBOT,
+        CommonSimType.CHILD_LARGE_DOG: CommonSimType.CHILD_DOG,
+        CommonSimType.CHILD_LARGE_DOG_VAMPIRE: CommonSimType.CHILD_DOG_VAMPIRE,
+        CommonSimType.CHILD_LARGE_DOG_GHOST: CommonSimType.CHILD_DOG_GHOST,
+        CommonSimType.CHILD_LARGE_DOG_ALIEN: CommonSimType.CHILD_DOG_ALIEN,
+        CommonSimType.CHILD_LARGE_DOG_MERMAID: CommonSimType.CHILD_DOG_MERMAID,
+        CommonSimType.CHILD_LARGE_DOG_WITCH: CommonSimType.CHILD_DOG_WITCH,
+        CommonSimType.CHILD_LARGE_DOG_ROBOT: CommonSimType.CHILD_DOG_ROBOT
+    }
+
     _SIM_TO_SIM_TYPE_MAPPING: Dict[CommonSpecies, Dict[CommonAge, Dict[CommonOccultType, CommonSimType]]] = {
         CommonSpecies.HUMAN: {
             CommonAge.ELDER: {
@@ -339,6 +356,15 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_SMALL_DOG_MERMAID: 'AdSdMer',
         CommonSimType.ADULT_SMALL_DOG_WITCH: 'AdSdWi',
         CommonSimType.ADULT_SMALL_DOG_ROBOT: 'AdSdRo',
+        # Child Dog
+        CommonSimType.CHILD_DOG: 'ChldDg',
+        CommonSimType.CHILD_DOG_VAMPIRE: 'ChldDgVa',
+        CommonSimType.CHILD_DOG_GHOST: 'ChldDgGh',
+        CommonSimType.CHILD_DOG_ALIEN: 'ChldDgAl',
+        CommonSimType.CHILD_DOG_MERMAID: 'ChldDgMer',
+        CommonSimType.CHILD_DOG_WITCH: 'ChldDgWi',
+        CommonSimType.CHILD_DOG_ROBOT: 'ChldDgRo',
+        # Small Dog
         CommonSimType.CHILD_SMALL_DOG: 'ChldSd',
         CommonSimType.CHILD_SMALL_DOG_VAMPIRE: 'ChldSdVa',
         CommonSimType.CHILD_SMALL_DOG_GHOST: 'ChldSdGh',
@@ -451,6 +477,14 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_SMALL_DOG_MERMAID: CommonSimType.ADULT_SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_WITCH: CommonSimType.ADULT_SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_ROBOT: CommonSimType.ADULT_SMALL_DOG,
+        CommonSimType.CHILD_DOG: CommonSimType.CHILD_DOG,
+        CommonSimType.CHILD_DOG_VAMPIRE: CommonSimType.CHILD_DOG,
+        CommonSimType.CHILD_DOG_GHOST: CommonSimType.CHILD_DOG,
+        CommonSimType.CHILD_DOG_ALIEN: CommonSimType.CHILD_DOG,
+        CommonSimType.CHILD_DOG_MERMAID: CommonSimType.CHILD_DOG,
+        CommonSimType.CHILD_DOG_WITCH: CommonSimType.CHILD_DOG,
+        CommonSimType.CHILD_DOG_ROBOT: CommonSimType.CHILD_DOG,
+
         CommonSimType.CHILD_SMALL_DOG: CommonSimType.CHILD_SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonSimType.CHILD_SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_GHOST: CommonSimType.CHILD_SMALL_DOG,
@@ -605,8 +639,8 @@ class CommonSimTypeUtils:
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
     @staticmethod
-    def determine_sim_type(sim_info: SimInfo, combine_teen_young_adult_and_elder_age: bool=True) -> CommonSimType:
-        """determine_sim_type(sim_info, combine_teen_young_adult_and_elder_age=True)
+    def determine_sim_type(sim_info: SimInfo, combine_teen_young_adult_and_elder_age: bool=True, combine_child_dog_types: bool=True) -> CommonSimType:
+        """determine_sim_type(sim_info, combine_teen_young_adult_and_elder_age=True, combine_child_dog_types=True)
 
         Determine the type of Sim a Sim is based on their Age, Species, and Occult Type.
 
@@ -615,6 +649,8 @@ class CommonSimTypeUtils:
         :param combine_teen_young_adult_and_elder_age: If set to True, Teen, Young Adult, Adult, and Elder, will all receive an ADULT denoted Sim Type instead of TEEN, YOUNG_ADULT, ADULT, and ELDER respectively. i.e. A Human Teen Sim would be denoted as ADULT_HUMAN.
         If set to False, they will receive their own Sim Types. i.e. A Human Teen Sim would be denoted as TEEN_HUMAN. Default is True.
         :type combine_teen_young_adult_and_elder_age: bool, optional
+        :param combine_child_dog_types: If set to True, the Child Dog Sim Types will be combined into a single Sim Type, i.e. CHILD_DOG. If set to False, the Child Dog Sim Types will be returned as their more specific values. i.e. CHILD_LARGE_DOG, CHILD_SMALL_DOG, etc. Default is True.
+        :type combine_child_dog_types: bool, optional
         :return: The type of Sim the Sim is or CommonSimType.NONE if no type was found for the Sim.
         :rtype: CommonSimType
         """
@@ -623,11 +659,16 @@ class CommonSimTypeUtils:
         if combine_teen_young_adult_and_elder_age and age in (CommonAge.TEEN, CommonAge.YOUNGADULT, CommonAge.ADULT, CommonAge.ELDER):
             age = CommonAge.ADULT
         occult_type = CommonOccultType.determine_occult_type(sim_info)
-        return CommonSimTypeUtils._determine_sim_type(species, age, occult_type)
+        sim_type = CommonSimTypeUtils._determine_sim_type(species, age, occult_type)
+        if combine_child_dog_types and sim_type in CommonSimTypeUtils._COMBINE_SIM_TYPE_MAPPING:
+            return CommonSimTypeUtils._COMBINE_SIM_TYPE_MAPPING[sim_type]
+        return sim_type
 
     @staticmethod
     def _determine_sim_type(species: CommonSpecies, age: CommonAge, occult_type: CommonOccultType) -> CommonSimType:
-        if species not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING or age not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species] or occult_type not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species][age]:
+        if species not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING\
+                or age not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species]\
+                or occult_type not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species][age]:
             return CommonSimType.NONE
         return CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species][age][occult_type]
 

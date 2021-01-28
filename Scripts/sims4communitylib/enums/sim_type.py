@@ -70,6 +70,14 @@ class CommonSimType(CommonInt):
     BABY_HUMAN_WITCH: 'CommonSimType' = 48
     BABY_HUMAN_ROBOT: 'CommonSimType' = 49
 
+    CHILD_DOG: 'CommonSimType' = 100
+    CHILD_DOG_VAMPIRE: 'CommonSimType' = 101
+    CHILD_DOG_GHOST: 'CommonSimType' = 102
+    CHILD_DOG_ALIEN: 'CommonSimType' = 103
+    CHILD_DOG_MERMAID: 'CommonSimType' = 104
+    CHILD_DOG_WITCH: 'CommonSimType' = 105
+    CHILD_DOG_ROBOT: 'CommonSimType' = 106
+
     ELDER_SMALL_DOG: 'CommonSimType' = 200
     ELDER_SMALL_DOG_VAMPIRE: 'CommonSimType' = 201
     ELDER_SMALL_DOG_GHOST: 'CommonSimType' = 202
@@ -110,13 +118,13 @@ class CommonSimType(CommonInt):
     ADULT_LARGE_DOG_WITCH: 'CommonSimType' = 312
     ADULT_LARGE_DOG_ROBOT: 'CommonSimType' = 313
 
-    CHILD_LARGE_DOG: 'CommonSimType' = 314
-    CHILD_LARGE_DOG_VAMPIRE: 'CommonSimType' = 315
-    CHILD_LARGE_DOG_GHOST: 'CommonSimType' = 316
-    CHILD_LARGE_DOG_ALIEN: 'CommonSimType' = 317
-    CHILD_LARGE_DOG_MERMAID: 'CommonSimType' = 318
-    CHILD_LARGE_DOG_WITCH: 'CommonSimType' = 319
-    CHILD_LARGE_DOG_ROBOT: 'CommonSimType' = 320
+    CHILD_LARGE_DOG: 'CommonSimType' = 321
+    CHILD_LARGE_DOG_VAMPIRE: 'CommonSimType' = 322
+    CHILD_LARGE_DOG_GHOST: 'CommonSimType' = 323
+    CHILD_LARGE_DOG_ALIEN: 'CommonSimType' = 324
+    CHILD_LARGE_DOG_MERMAID: 'CommonSimType' = 325
+    CHILD_LARGE_DOG_WITCH: 'CommonSimType' = 326
+    CHILD_LARGE_DOG_ROBOT: 'CommonSimType' = 327
 
     ELDER_CAT: 'CommonSimType' = 400
     ELDER_CAT_VAMPIRE: 'CommonSimType' = 401
@@ -143,8 +151,8 @@ class CommonSimType(CommonInt):
     CHILD_CAT_ROBOT: 'CommonSimType' = 420
 
     @staticmethod
-    def get_all(include_teen_young_adult_and_elder: bool=False, include_baby: bool=False) -> Tuple['CommonSimType']:
-        """get_all(include_teen_young_adult_and_elder=False, include_baby=False)
+    def get_all(include_teen_young_adult_and_elder: bool=False, include_baby: bool=False, include_separate_child_dog_types: bool=False) -> Tuple['CommonSimType']:
+        """get_all(include_teen_young_adult_and_elder=False, include_baby=False, include_separate_child_dog_types=False)
 
         Retrieve a collection of all Sim Types.
 
@@ -152,6 +160,8 @@ class CommonSimType(CommonInt):
         :type include_teen_young_adult_and_elder: bool, optional
         :param include_baby: If set to True, the BABY Sim Type will be included in the result. If False, the BABY Sim Type will not be included. Default is False.
         :type include_baby: bool, optional
+        :param include_separate_child_dog_types: If set to True, the Child Dog Sim Types (CHILD_LARGE_DOG, CHILD_SMALL_DOG, etc.) will be included in the result. If False, they will not be included. Default is False.
+        :type include_separate_child_dog_types: bool, optional
         :return: A collection of all Sim Types.
         :rtype: Tuple[CommonSimType]
         """
@@ -188,14 +198,6 @@ class CommonSimType(CommonInt):
             CommonSimType.ADULT_SMALL_DOG_WITCH,
             CommonSimType.ADULT_SMALL_DOG_ROBOT,
 
-            CommonSimType.CHILD_SMALL_DOG,
-            CommonSimType.CHILD_SMALL_DOG_VAMPIRE,
-            CommonSimType.CHILD_SMALL_DOG_GHOST,
-            CommonSimType.CHILD_SMALL_DOG_ALIEN,
-            CommonSimType.CHILD_SMALL_DOG_MERMAID,
-            CommonSimType.CHILD_SMALL_DOG_WITCH,
-            CommonSimType.CHILD_SMALL_DOG_ROBOT,
-
             CommonSimType.ADULT_LARGE_DOG,
             CommonSimType.ADULT_LARGE_DOG_VAMPIRE,
             CommonSimType.ADULT_LARGE_DOG_GHOST,
@@ -203,14 +205,6 @@ class CommonSimType(CommonInt):
             CommonSimType.ADULT_LARGE_DOG_MERMAID,
             CommonSimType.ADULT_LARGE_DOG_WITCH,
             CommonSimType.ADULT_LARGE_DOG_ROBOT,
-
-            CommonSimType.CHILD_LARGE_DOG,
-            CommonSimType.CHILD_LARGE_DOG_VAMPIRE,
-            CommonSimType.CHILD_LARGE_DOG_GHOST,
-            CommonSimType.CHILD_LARGE_DOG_ALIEN,
-            CommonSimType.CHILD_LARGE_DOG_MERMAID,
-            CommonSimType.CHILD_LARGE_DOG_WITCH,
-            CommonSimType.CHILD_LARGE_DOG_ROBOT,
 
             CommonSimType.ADULT_CAT,
             CommonSimType.ADULT_CAT_VAMPIRE,
@@ -227,6 +221,14 @@ class CommonSimType(CommonInt):
             CommonSimType.CHILD_CAT_MERMAID,
             CommonSimType.CHILD_CAT_WITCH,
             CommonSimType.CHILD_CAT_ROBOT,
+
+            CommonSimType.CHILD_DOG,
+            CommonSimType.CHILD_DOG_VAMPIRE,
+            CommonSimType.CHILD_DOG_GHOST,
+            CommonSimType.CHILD_DOG_ALIEN,
+            CommonSimType.CHILD_DOG_MERMAID,
+            CommonSimType.CHILD_DOG_WITCH,
+            CommonSimType.CHILD_DOG_ROBOT,
         )
         if include_teen_young_adult_and_elder:
             sim_types: Tuple[CommonSimType] = (
@@ -289,5 +291,24 @@ class CommonSimType(CommonInt):
                 CommonSimType.BABY_HUMAN_MERMAID,
                 CommonSimType.BABY_HUMAN_WITCH,
                 CommonSimType.BABY_HUMAN_ROBOT
+            )
+        if include_separate_child_dog_types:
+            sim_types: Tuple[CommonSimType] = (
+                *sim_types,
+                CommonSimType.CHILD_SMALL_DOG,
+                CommonSimType.CHILD_SMALL_DOG_VAMPIRE,
+                CommonSimType.CHILD_SMALL_DOG_GHOST,
+                CommonSimType.CHILD_SMALL_DOG_ALIEN,
+                CommonSimType.CHILD_SMALL_DOG_MERMAID,
+                CommonSimType.CHILD_SMALL_DOG_WITCH,
+                CommonSimType.CHILD_SMALL_DOG_ROBOT,
+
+                CommonSimType.CHILD_LARGE_DOG,
+                CommonSimType.CHILD_LARGE_DOG_VAMPIRE,
+                CommonSimType.CHILD_LARGE_DOG_GHOST,
+                CommonSimType.CHILD_LARGE_DOG_ALIEN,
+                CommonSimType.CHILD_LARGE_DOG_MERMAID,
+                CommonSimType.CHILD_LARGE_DOG_WITCH,
+                CommonSimType.CHILD_LARGE_DOG_ROBOT,
             )
         return sim_types
