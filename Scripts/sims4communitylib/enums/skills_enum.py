@@ -48,6 +48,10 @@ class CommonSkillId(CommonInt):
     ADULT_MINOR_LOCAL_CULTURE: 'CommonSkillId' = 174687
     ADULT_MINOR_MEDIA_PRODUCTION: 'CommonSkillId' = 192655
     BOWLING: 'CommonSkillId' = 158659
+    CHILD_CREATIVITY: 'CommonSkillId' = 16718
+    CHILD_MENTAL: 'CommonSkillId' = 16719
+    CHILD_MOTOR: 'CommonSkillId' = 16720
+    CHILD_SOCIAL: 'CommonSkillId' = 16721
     DOG_TRAINING: 'CommonSkillId' = 161220
     FITNESS: 'CommonSkillId' = 16659
     HIDDEN_SKATING: 'CommonSkillId' = 179925
@@ -57,10 +61,6 @@ class CommonSkillId(CommonInt):
     RETAIL_MAINTENANCE: 'CommonSkillId' = 111904
     RETAIL_SALES: 'CommonSkillId' = 111902
     RETAIL_WORK_ETHIC: 'CommonSkillId' = 111903
-    CHILD_CREATIVITY: 'CommonSkillId' = 16718
-    CHILD_MENTAL: 'CommonSkillId' = 16719
-    CHILD_MOTOR: 'CommonSkillId' = 16720
-    CHILD_SOCIAL: 'CommonSkillId' = 16721
     TODDLER_COMMUNICATION: 'CommonSkillId' = 140170
     TODDLER_IMAGINATION: 'CommonSkillId' = 140706
     TODDLER_MOVEMENT: 'CommonSkillId' = 136140
