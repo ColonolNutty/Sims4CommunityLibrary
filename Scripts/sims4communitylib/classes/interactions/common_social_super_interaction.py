@@ -137,7 +137,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
     def _run_interaction_gen(self, timeline: Timeline):
         super()._run_interaction_gen(timeline)
         try:
-            self.log.format_with_message(
+            self.verbose_log.format_with_message(
                 'Running \'{}\' on_run.'.format(self.__class__.__name__),
                 interaction_sim=self.sim,
                 interaction_target=self.target,
@@ -170,7 +170,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
             super()._trigger_interaction_start_event()
             from interactions import ParticipantType
             target = self.get_participant(ParticipantType.TargetSim)
-            self.log.format_with_message(
+            self.verbose_log.format_with_message(
                 'Running \'{}\' on_started.'.format(self.__class__.__name__),
                 interaction_sim=self.context.sim,
                 interaction_target=target
@@ -212,7 +212,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                                 return TestResult(False, 'Cannot run social since sim already has an interaction that is registered to group.')
                         else:
                             return TestResult(False, 'Sim {} is already running matching affordance:{} ', sim, cls)
-                cls.get_log().format_with_message(
+                cls.get_verbose_log().format_with_message(
                     'Running \'{}\' on_test.'.format(cls.__name__),
                     interaction_sim=context.sim,
                     interaction_target=target,

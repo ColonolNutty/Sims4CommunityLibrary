@@ -35,8 +35,18 @@ class HasClassLog(HasClassModIdentity, HasLog):
 
     # noinspection PyMissingOrEmptyDocstring
     @property
+    def verbose_log_identifier(self) -> str:
+        return self.__class__.get_verbose_log_identifier()
+
+    # noinspection PyMissingOrEmptyDocstring
+    @property
     def log(self) -> CommonLog:
         return self.__class__.get_log()
+
+    # noinspection PyMissingOrEmptyDocstring
+    @property
+    def verbose_log(self) -> CommonLog:
+        return self.__class__.get_verbose_log()
 
     @classmethod
     def get_mod_identity(cls) -> CommonModIdentity:
@@ -71,6 +81,24 @@ class HasClassLog(HasClassModIdentity, HasLog):
         return getattr(cls, '_log', None)
 
     @classmethod
+    def get_verbose_log(cls) -> CommonLog:
+        """get_verbose_log()
+
+        Retrieve a verbose log for the class.
+
+        .. note:: This function uses the :func:`~get_mod_identity` and :func:`~get_verbose_log_identifier` functions when logging.
+
+        .. note:: This log can be used to log extra details that you don't want to appear when using the non verbose log.
+
+        :return: An instance of CommonLog
+        :rtype: CommonLog
+        """
+        if not hasattr(cls, '_verbose_log') or getattr(cls, '_verbose_log', None) is None:
+            mod_name = CommonModIdentity._get_mod_name(cls.get_mod_identity())
+            setattr(cls, '_verbose_log', CommonLogRegistry().register_log(mod_name, cls.get_verbose_log_identifier()))
+        return getattr(cls, '_verbose_log', None)
+
+    @classmethod
     def get_log_identifier(cls) -> str:
         """get_log_identifier()
 
@@ -82,3 +110,16 @@ class HasClassLog(HasClassModIdentity, HasLog):
         :rtype: str
         """
         return cls.__name__
+
+    @classmethod
+    def get_verbose_log_identifier(cls) -> str:
+        """get_verbose_log_identifier()
+
+        A string identifier for the log of the class.
+
+        .. note:: This is the text that will appear when logging messages.
+
+        :return: The identifier for the log
+        :rtype: str
+        """
+        return '{}_verbose'.format(cls.get_log_identifier())

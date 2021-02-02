@@ -91,7 +91,7 @@ class CommonInteraction(Interaction, HasClassLog):
     def _test(cls, target: Any, context: InteractionContext, **kwargs) -> TestResult:
         try:
             try:
-                cls.get_log().format_with_message(
+                cls.get_verbose_log().format_with_message(
                     'Running \'{}\' on_test.'.format(cls.__name__),
                     interaction_sim=context.sim,
                     interaction_target=target,
@@ -99,7 +99,7 @@ class CommonInteraction(Interaction, HasClassLog):
                     kwargles=kwargs
                 )
                 test_result = cls.on_test(context.sim, target, context, **kwargs)
-                cls.get_log().format_with_message('Test Result', test_result=test_result)
+                cls.get_verbose_log().format_with_message('Test Result', test_result=test_result)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
                 return TestResult.NONE
@@ -116,17 +116,17 @@ class CommonInteraction(Interaction, HasClassLog):
                     tooltip = None
                 return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
             super_test_result = super()._test(target, context, **kwargs)
-            cls.get_log().format_with_message('Super Test Result', super_test_result=super_test_result)
+            cls.get_verbose_log().format_with_message('Super Test Result', super_test_result=super_test_result)
             return super_test_result
         except Exception as ex:
             cls.get_log().error('An error occurred while testing interaction {}'.format(cls.__name__), exception=ex)
-        cls.get_log().format_with_message('Returning generic test result.')
+        cls.get_verbose_log().format_with_message('Returning generic test result.')
         return TestResult(False)
 
     def _trigger_interaction_start_event(self: 'CommonInteraction'):
         try:
             super()._trigger_interaction_start_event()
-            self.log.format_with_message(
+            self.verbose_log.format_with_message(
                 'Running \'{}\' on_started.'.format(self.__class__.__name__),
                 sim=self.sim,
                 target=self.target
@@ -138,7 +138,7 @@ class CommonInteraction(Interaction, HasClassLog):
     # noinspection PyMissingOrEmptyDocstring
     def apply_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT):
         try:
-            self.log.format_with_message(
+            self.verbose_log.format_with_message(
                 'Running \'{}\' modify_posture_state.'.format(self.__class__.__name__),
                 posture_state=posture_state,
                 participant_type=participant_type,
@@ -159,7 +159,7 @@ class CommonInteraction(Interaction, HasClassLog):
         :rtype: bool
         """
         try:
-            self.log.format_with_message(
+            self.verbose_log.format_with_message(
                 'Running \'{}\' on_killed.'.format(self.__class__.__name__),
                 sim=self.sim,
                 target=self.target
@@ -182,7 +182,7 @@ class CommonInteraction(Interaction, HasClassLog):
         :rtype: bool
         """
         try:
-            self.log.format_with_message(
+            self.verbose_log.format_with_message(
                 'Running \'{}\' on_cancelled.'.format(self.__class__.__name__),
                 sim=self.sim,
                 target=self.target,
@@ -202,7 +202,7 @@ class CommonInteraction(Interaction, HasClassLog):
 
         """
         try:
-            self.log.format_with_message(
+            self.verbose_log.format_with_message(
                 'Running \'{}\' on_reset.'.format(self.__class__.__name__),
                 sim=self.sim,
                 target=self.target
@@ -214,7 +214,7 @@ class CommonInteraction(Interaction, HasClassLog):
 
     def _post_perform(self: 'CommonInteraction'):
         try:
-            self.log.format_with_message(
+            self.verbose_log.format_with_message(
                 'Running \'{}\' on_performed.'.format(self.__class__.__name__),
                 sim=self.sim,
                 target=self.target
@@ -231,7 +231,7 @@ class CommonInteraction(Interaction, HasClassLog):
 
         """
         try:
-            self.log.format_with_message(
+            self.verbose_log.format_with_message(
                 'Running \'{}\' _send_current_progress.'.format(self.__class__.__name__),
                 sim=self.sim,
                 target=self.target,
@@ -256,7 +256,7 @@ class CommonInteraction(Interaction, HasClassLog):
         :rtype: bool
         """
         try:
-            self.log.format_with_message(
+            self.verbose_log.format_with_message(
                 'Running \'{}\' _setup_asm_default.'.format(self.__class__.__name__),
                 sim=self.sim,
                 target=self.target,

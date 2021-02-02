@@ -18,6 +18,7 @@ class HasLog(HasModIdentity):
     """
     def __init__(self) -> None:
         self._log: CommonLog = None
+        self._verbose_log: CommonLog = None
         self._mod_identity: CommonModIdentity = None
 
     @property
@@ -33,6 +34,22 @@ class HasLog(HasModIdentity):
         :exception NotImplementedError: Thrown when the property is not implemented.
         """
         raise NotImplementedError('Missing \'{}.mod_identity\'.'.format(self.__class__.__name__))
+
+    @property
+    def verbose_log(self) -> CommonLog:
+        """The verbose log for instances of the class.
+
+        .. note:: It uses the `mod_identity` and `verbose_log_identifier` when logging.
+
+        .. note:: This log can be used to log extra details that you don't want to appear when using the non verbose log.
+
+        :return: An instance of CommonLog
+        :rtype: CommonLog
+        """
+        if self._verbose_log is None:
+            mod_name = CommonModIdentity._get_mod_name(self.mod_identity)
+            self._verbose_log = CommonLogRegistry.get().register_log(mod_name, self.verbose_log_identifier)
+        return self._verbose_log
 
     @property
     def log(self) -> CommonLog:
@@ -52,9 +69,20 @@ class HasLog(HasModIdentity):
     def log_identifier(self) -> str:
         """A string identifier for the log used by instances of the class.
 
-        .. note:: This is the text that will appear when logging messages.
+        .. note:: This is the message identifier that will appear when logging messages.
 
         :return: The identifier of the log
         :rtype: str
         """
         return self.__class__.__name__
+
+    @property
+    def verbose_log_identifier(self) -> str:
+        """A string identifier for the verbose log used by instances of the class.
+
+        .. note:: This is the message identifier that will appear when logging messages.
+
+        :return: The identifier of the verbose log
+        :rtype: str
+        """
+        return '{}_verbose'.format(self.log_identifier)
