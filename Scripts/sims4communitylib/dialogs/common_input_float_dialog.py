@@ -79,6 +79,11 @@ class CommonInputFloatDialog(CommonDialog):
     :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
     :type mod_identity: CommonModIdentity, optional
     """
+    # noinspection PyMissingOrEmptyDocstring
+    @property
+    def log_identifier(self) -> str:
+        return 's4cl_input_float_dialog'
+
     def __init__(
         self,
         title_identifier: Union[int, str, LocalizedString, CommonStringId],
@@ -100,11 +105,6 @@ class CommonInputFloatDialog(CommonDialog):
         self.initial_value = initial_value
         self.min_value = min_value
         self.max_value = max_value
-
-    # noinspection PyMissingOrEmptyDocstring
-    @property
-    def log_identifier(self) -> str:
-        return 's4cl_input_float_dialog'
 
     def show(
         self,
