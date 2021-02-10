@@ -191,8 +191,8 @@ class CommonLog:
         """
         self.format_with_message(message, *args, message_type=CommonMessageType.WARN, update_tokens=update_tokens, **kwargs)
 
-    def error(self, message: str, message_type: CommonMessageType=CommonMessageType.ERROR, exception: Exception=None, throw: bool=True):
-        """error(message, message_type=CommonMessageType.ERROR, exception=None, throw=True)
+    def error(self, message: str, message_type: CommonMessageType=CommonMessageType.ERROR, exception: Exception=None, throw: bool=True, stack_trace: List[str]=None):
+        """error(message, message_type=CommonMessageType.ERROR, exception=None, throw=True, stack_trace=None)
 
         Log an error message with the specified message type
 
@@ -200,18 +200,22 @@ class CommonLog:
         :type message: str
         :param message_type: The message type of the error message. Default is CommonMessageType.ERROR.
         :type message_type: CommonMessageType, optional
-        :param exception: The exception that occurred.
+        :param exception: The exception that occurred. Default is None.
+        :type exception: Exception, optional
+        :param stack_trace: The stack trace leading to the exception, if not supplied, a stack trace will be gathered for you. Default is None.
+        :type stack_trace: List[str], optional
         :param throw: If set to True, the exception will be rethrown.
         :type throw: bool, optional
         """
         if throw:
-            self._log_error(message, exception=exception)
+            stack_trace = stack_trace or CommonStacktraceUtil.get_full_stack_trace()[:-2]
+            self._log_error(message, exception=exception, stack_trace=stack_trace)
         self._log_message(message_type, message)
         if exception is not None:
             self._log_message(message_type, pformat(exception))
 
-    def format_error(self, *args, exception: Exception=None, throw: bool=True, update_tokens: bool=True, **kwargs):
-        """format_error(*args, exception=None, throw=True, update_tokens=True, **kwargs)
+    def format_error(self, *args, exception: Exception=None, throw: bool=True, update_tokens: bool=True, stack_trace: List[str]=None, **kwargs):
+        """format_error(*args, exception=None, throw=True, update_tokens=True, stack_trace=None, **kwargs)
 
         Log a non-descriptive error message containing pformatted arguments and keyword arguments.
 
@@ -221,6 +225,8 @@ class CommonLog:
         :type throw: bool, optional
         :param update_tokens: If set to True, when an arg or kwarg value is a Sim or SimInfo, it will be converted to their name before format occurs. Default is True.
         :type update_tokens: bool, optional
+        :param stack_trace: The stack trace leading to the exception, if not supplied, a stack trace will be gathered for you. Default is None.
+        :type stack_trace: List[str], optional
         :param args: Arguments to format into the message.
         :type args: Any
         :param kwargs: Keyword Arguments to format into the message.
@@ -229,15 +235,16 @@ class CommonLog:
         if update_tokens:
             args = self._update_args(*args)
             kwargs = self._update_kwargs(**kwargs)
+        stack_trace = stack_trace or CommonStacktraceUtil.get_full_stack_trace()[:-2]
         if args and kwargs:
-            self.error('{}, {}\n'.format(pformat(args), pformat(kwargs)), exception=exception, throw=throw)
+            self.error('{}, {}\n'.format(pformat(args), pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
         elif args:
-            self.error('{}\n'.format(pformat(args)), exception=exception, throw=throw)
+            self.error('{}\n'.format(pformat(args)), exception=exception, throw=throw, stack_trace=stack_trace)
         else:
-            self.error('{}\n'.format(pformat(kwargs)), exception=exception, throw=throw)
+            self.error('{}\n'.format(pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
 
-    def format_error_with_message(self, message: str, *args, exception: Exception=None, throw: bool=True, update_tokens: bool=True, **kwargs):
-        """format_error_with_message(message, *args, exception=None, throw=True, update_tokens=True, **kwargs)
+    def format_error_with_message(self, message: str, *args, exception: Exception=None, throw: bool=True, update_tokens: bool=True, stack_trace: List[str]=None, **kwargs):
+        """format_error_with_message(message, *args, exception=None, throw=True, update_tokens=True, stack_trace=None, **kwargs)
 
         Log an error message containing pformatted arguments and keyword arguments.
 
@@ -249,6 +256,8 @@ class CommonLog:
         :type throw: bool, optional
         :param update_tokens: If set to True, when an arg or kwarg value is a Sim or SimInfo, it will be converted to their name before format occurs. Default is True.
         :type update_tokens: bool, optional
+        :param stack_trace: The stack trace leading to the exception, if not supplied, a stack trace will be gathered for you. Default is None.
+        :type stack_trace: List[str], optional
         :param args: Arguments to format into the message.
         :type args: Any
         :param kwargs: Keyword Arguments to format into the message.
@@ -257,12 +266,13 @@ class CommonLog:
         if update_tokens:
             args = self._update_args(*args)
             kwargs = self._update_kwargs(**kwargs)
+        stack_trace = stack_trace or CommonStacktraceUtil.get_full_stack_trace()[:-2]
         if args and kwargs:
-            self.error('{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)), exception=exception, throw=throw)
+            self.error('{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
         elif args:
-            self.error('{} {}\n'.format(message, pformat(args)), exception=exception, throw=throw)
+            self.error('{} {}\n'.format(message, pformat(args)), exception=exception, throw=throw, stack_trace=stack_trace)
         else:
-            self.error('{} {}\n'.format(message, pformat(kwargs)), exception=exception, throw=throw)
+            self.error('{} {}\n'.format(message, pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
 
     def log_stack(self) -> None:
         """log_stack()
@@ -355,18 +365,18 @@ class CommonLog:
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_name, 'Error occurred while attempting to log message: {}'.format(pformat(message)), exception=ex, custom_file_path=self._custom_file_path)
 
-    def _log_error(self, message: str, exception: Exception=None):
+    def _log_error(self, message: str, exception: Exception=None, stack_trace: List[str]=None):
         from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
         from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
         try:
-            exceptions = CommonStacktraceUtil.get_full_stack_trace()
+            exceptions = stack_trace or CommonStacktraceUtil.get_full_stack_trace()[:-3]
             if exception is not None:
-                stack_trace = '{}{} -> {}: {}\n'.format(''.join(exceptions), message, type(exception).__name__, exception)
+                stack_trace_message = '{}{} -> {}: {}\n'.format(''.join(exceptions), message, type(exception).__name__, exception)
             else:
-                stack_trace = 'No stack trace provided.'
+                stack_trace_message = '{}{}\n'.format(''.join(exceptions), message)
             file_path = self.exceptions_file_path
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
-            exception_traceback_text = '[{}] {} {}\n'.format(self.mod_name, CommonRealDateUtils.get_current_date_string(), stack_trace)
+            exception_traceback_text = '[{}] {} {}\n'.format(self.mod_name, CommonRealDateUtils.get_current_date_string(), stack_trace_message)
             result = CommonIOUtils.write_to_file(file_path, exception_traceback_text, ignore_errors=True)
             if result:
                 CommonExceptionHandler._notify_exception_occurred(file_path, mod_identifier=self.mod_name)

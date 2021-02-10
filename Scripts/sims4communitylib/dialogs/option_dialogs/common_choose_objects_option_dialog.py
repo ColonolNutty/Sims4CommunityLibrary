@@ -152,6 +152,12 @@ class CommonChooseObjectsOptionDialog(CommonChooseOptionsDialog):
     :param required_tooltip_tokens: Tokens to format into the required tooltip. Default is an empty collection.
     :type required_tooltip_tokens: Iterator[Any], optional
     """
+
+    # noinspection PyMissingOrEmptyDocstring
+    @property
+    def log_identifier(self) -> str:
+        return 's4cl_choose_objects_option_dialog'
+
     def __init__(
         self,
         title_identifier: Union[int, str, LocalizedString, CommonStringId],
@@ -178,11 +184,6 @@ class CommonChooseObjectsOptionDialog(CommonChooseOptionsDialog):
             ),
             on_close=on_close
         )
-
-    # noinspection PyMissingOrEmptyDocstring
-    @property
-    def log_identifier(self) -> str:
-        return 's4cl_choose_objects_option_dialog'
 
     @property
     def current_page(self) -> int:
