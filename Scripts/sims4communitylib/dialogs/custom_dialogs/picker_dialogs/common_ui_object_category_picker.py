@@ -11,14 +11,6 @@ from sims4.localization import TunableLocalizedString
 from sims4.tuning.tunable import TunableTuple, TunableList, Tunable
 from ui.ui_dialog_picker import UiObjectPicker
 from distributor.shared_messages import build_icon_info_msg
-# noinspection PyBroadException
-try:
-    # noinspection PyUnresolvedReferences
-    from enum import Int
-except:
-    # noinspection PyMissingOrEmptyDocstring
-    class Int:
-        pass
 
 
 class CommonUiObjectCategoryPicker(UiObjectPicker):
