@@ -49,8 +49,8 @@ class CommonSimOutfitIO(HasLog):
         self._outfit_data: OutfitData = None
         self._outfit_parts: Dict[BodyType, int] = None
         self._original_outfit_data: FrozenSet[int] = None
-        self._outfit_body_types: List[Union[BodyType, int]] = None
-        self._outfit_part_ids: List[int] = None
+        self._outfit_body_types: List[Union[BodyType, int]] = list()
+        self._outfit_part_ids: List[int] = list()
         self._load(initial_outfit_parts=initial_outfit_parts)
 
     @property
@@ -307,10 +307,6 @@ class CommonSimOutfitIO(HasLog):
 
     def _load(self, initial_outfit_parts: Dict[BodyType, int]=None) -> bool:
         target_sim_name = CommonSimNameUtils.get_full_name(self.sim_info)
-        self._outfit_data: OutfitData = CommonOutfitUtils.get_outfit_data(self.sim_info, outfit_category_and_index=self._outfit_category_and_index)
-        if self._outfit_data is None:
-            self.log.error('Missing outfit data for Sim \'{}\' and Outfit Category and Index {}'.format(target_sim_name, self._outfit_category_and_index), throw=True)
-            return False
         self._outfit_parts = CommonOutfitUtils.get_outfit_parts(self.sim_info, outfit_category_and_index=self._outfit_category_and_index)
         self._original_outfit_data: FrozenSet[int] = frozenset(self._outfit_parts.items())
         if initial_outfit_parts is not None:
@@ -322,6 +318,10 @@ class CommonSimOutfitIO(HasLog):
             self._outfit_body_types = list(initial_outfit_parts.keys())
             self._outfit_part_ids = list(initial_outfit_parts.values())
         else:
+            self._outfit_data: OutfitData = CommonOutfitUtils.get_outfit_data(self.sim_info, outfit_category_and_index=self._outfit_category_and_index)
+            if self._outfit_data is None:
+                self.log.error('Missing outfit data for Sim \'{}\' and Outfit Category and Index {}'.format(target_sim_name, self._outfit_category_and_index), throw=True)
+                return False
             if not self._outfit_data.part_ids or not self._outfit_data.body_types:
                 self.log.error('\'{}\' is missing outfit parts or body types for Outfit Category and Index {}.'.format(target_sim_name, self._outfit_category_and_index))
                 return False

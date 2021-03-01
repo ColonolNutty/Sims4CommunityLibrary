@@ -208,7 +208,7 @@ class CommonLog:
         :type throw: bool, optional
         """
         if throw:
-            stack_trace = stack_trace or CommonStacktraceUtil.get_full_stack_trace()[:-2]
+            stack_trace = stack_trace or CommonStacktraceUtil.get_full_stack_trace()
             self._log_error(message, exception=exception, stack_trace=stack_trace)
         self._log_message(message_type, message)
         if exception is not None:
@@ -235,7 +235,7 @@ class CommonLog:
         if update_tokens:
             args = self._update_args(*args)
             kwargs = self._update_kwargs(**kwargs)
-        stack_trace = stack_trace or CommonStacktraceUtil.get_full_stack_trace()[:-2]
+        stack_trace = stack_trace or CommonStacktraceUtil.get_full_stack_trace()
         if args and kwargs:
             self.error('{}, {}\n'.format(pformat(args), pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
         elif args:
@@ -266,7 +266,7 @@ class CommonLog:
         if update_tokens:
             args = self._update_args(*args)
             kwargs = self._update_kwargs(**kwargs)
-        stack_trace = stack_trace or CommonStacktraceUtil.get_full_stack_trace()[:-2]
+        stack_trace = stack_trace or CommonStacktraceUtil.get_full_stack_trace()
         if args and kwargs:
             self.error('{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
         elif args:
@@ -369,7 +369,7 @@ class CommonLog:
         from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
         from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
         try:
-            exceptions = stack_trace or CommonStacktraceUtil.get_full_stack_trace()[:-3]
+            exceptions = stack_trace or CommonStacktraceUtil.get_full_stack_trace()
             if exception is not None:
                 stack_trace_message = '{}{} -> {}: {}\n'.format(''.join(exceptions), message, type(exception).__name__, exception)
             else:

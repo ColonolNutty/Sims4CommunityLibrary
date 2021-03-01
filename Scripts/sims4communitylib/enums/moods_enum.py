@@ -29,3 +29,6 @@ class CommonMoodId(CommonInt):
     FINE: 'CommonMoodId' = 14637
     INSPIRED: 'CommonMoodId' = 14641
     POSSESSED: 'CommonMoodId' = 201531
+    SCARED: 'CommonMoodId' = 251719
+    SCARED_DOG: 'CommonMoodId' = 158181
+    SCARED_CAT: 'CommonMoodId' = 158442
