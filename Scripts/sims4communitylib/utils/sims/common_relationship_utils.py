@@ -12,6 +12,7 @@ from sims4communitylib.enums.relationship_bits_enum import CommonRelationshipBit
 from sims4communitylib.enums.relationship_tracks_enum import CommonRelationshipTrackId
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 
 
 class CommonRelationshipUtils:
@@ -74,7 +75,10 @@ class CommonRelationshipUtils:
         :return: The current level of friendship between two Sims.
         :rtype: float
         """
-        return CommonRelationshipUtils.get_relationship_level_of_sims(sim_info, target_sim_info, CommonRelationshipTrackId.FRIENDSHIP)
+        track_id = CommonRelationshipUtils._determine_friendship_track(sim_info, target_sim_info)
+        if track_id == -1:
+            return -1.0
+        return CommonRelationshipUtils.get_relationship_level_of_sims(sim_info, target_sim_info, track_id)
 
     @staticmethod
     def get_romance_level(sim_info: SimInfo, target_sim_info: SimInfo) -> float:
@@ -89,7 +93,10 @@ class CommonRelationshipUtils:
         :return: The current level of romance between two Sims.
         :rtype: float
         """
-        return CommonRelationshipUtils.get_relationship_level_of_sims(sim_info, target_sim_info, CommonRelationshipTrackId.ROMANCE)
+        track_id = CommonRelationshipUtils._determine_romance_track(sim_info, target_sim_info)
+        if track_id == -1:
+            return -1.0
+        return CommonRelationshipUtils.get_relationship_level_of_sims(sim_info, target_sim_info, track_id)
 
     @staticmethod
     def calculate_average_relationship_level(sim_info: SimInfo, target_sim_info: SimInfo) -> float:
@@ -249,6 +256,35 @@ class CommonRelationshipUtils:
             return False
         target_sim_id = CommonSimUtils.get_sim_id(target_sim_info)
         sim_info.relationship_tracker.add_relationship_score(target_sim_id, level, relationship_track)
+        return True
+
+    @staticmethod
+    def set_relationship_level_of_sims(
+        sim_info: SimInfo,
+        target_sim_info: SimInfo,
+        relationship_track_id: Union[int, CommonRelationshipTrackId],
+        level: float
+    ) -> bool:
+        """set_relationship_level_of_sims(sim_info, target_sim_info, relationship_track_id, level)
+
+        Set the level of a relationship track between two Sims.
+
+        :param sim_info: The sim that owns the relationship track.
+        :type sim_info: SimInfo
+        :param target_sim_info: The target of the relationship track.
+        :type target_sim_info: SimInfo
+        :param relationship_track_id: The identifier of the Relationship Track to set.
+        :type relationship_track_id: : Union[int, CommonRelationshipTrackId]
+        :param level: The amount to set the relationship track to (Can be positive or negative).
+        :type level: float
+        :return: True, if the relationship track was set successfully. False, if not.
+        :rtype: bool
+        """
+        relationship_track = CommonResourceUtils.load_instance(Types.STATISTIC, relationship_track_id)
+        if relationship_track is None:
+            return False
+        target_sim_id = CommonSimUtils.get_sim_id(target_sim_info)
+        sim_info.relationship_tracker.set_relationship_score(target_sim_id, level, relationship_track)
         return True
 
     @staticmethod
@@ -455,3 +491,23 @@ class CommonRelationshipUtils:
         )
         for target_sim_info in CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, romance_relationship_ids, instanced_only=instanced_only):
             yield target_sim_info
+
+    @staticmethod
+    def _determine_friendship_track(sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, int]:
+        if CommonSpeciesUtils.is_human(sim_info_a):
+            if CommonSpeciesUtils.is_pet(sim_info_b):
+                return CommonRelationshipTrackId.SIM_TO_PET_FRIENDSHIP
+            elif CommonSpeciesUtils.is_human(sim_info_b):
+                return CommonRelationshipTrackId.FRIENDSHIP
+        elif CommonSpeciesUtils.is_pet(sim_info_a):
+            if CommonSpeciesUtils.is_pet(sim_info_b):
+                return -1
+            elif CommonSpeciesUtils.is_human(sim_info_b):
+                return CommonRelationshipTrackId.SIM_TO_PET_FRIENDSHIP
+        return -1
+
+    @staticmethod
+    def _determine_romance_track(sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, int]:
+        if CommonSpeciesUtils.is_human(sim_info_a) and CommonSpeciesUtils.is_human(sim_info_b):
+            return CommonRelationshipTrackId.ROMANCE
+        return -1
