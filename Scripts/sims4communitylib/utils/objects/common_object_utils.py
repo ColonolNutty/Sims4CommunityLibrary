@@ -75,7 +75,7 @@ class CommonObjectUtils:
 
     @staticmethod
     def get_object_definition(object_id: int, pack_safe: bool=False, get_fallback_definition_id: bool=True) -> Definition:
-        """get_definition(object_id)
+        """get_object_definition(object_id, pack_safe=False, get_fallback_definition_id=True)
 
         Retrieve the definition for an Object.
 
@@ -88,7 +88,33 @@ class CommonObjectUtils:
         :return: The definition of the object with the id.
         :rtype: Definition
         """
+        game_object = CommonObjectUtils.get_game_object(object_id)
+        if game_object is not None:
+            if game_object.definition is not None:
+                return game_object.definition
         return services.definition_manager().get(object_id, pack_safe=pack_safe, get_fallback_definition_id=get_fallback_definition_id)
+
+    @staticmethod
+    def get_game_object_definition(game_object: GameObject, pack_safe: bool=False, get_fallback_definition_id: bool=True) -> Union[Definition, None]:
+        """get_game_object_definition(game_object, pack_safe=False, get_fallback_definition_id=True)
+
+        Retrieve the definition for an Object.
+
+        :param game_object: An instance of a GameObject.
+        :type game_object: GameObject
+        :param pack_safe: If true, objects will be searched for keeping package safety in mind. Default is False.
+        :type pack_safe: bool, optional
+        :param get_fallback_definition_id: Whether or not to locate a fallback definition id. Default is True.
+        :type get_fallback_definition_id: bool, optional
+        :return: The definition of the Game Object or None if no definition is found.
+        :rtype: Definition
+        """
+        if game_object is None:
+            return None
+        if game_object.definition is not None:
+            return game_object.definition
+        game_object_id = CommonObjectUtils.get_object_id(game_object)
+        return services.definition_manager().get(game_object_id, pack_safe=pack_safe, get_fallback_definition_id=get_fallback_definition_id)
 
     @staticmethod
     def get_catalog_name(game_object: GameObject) -> int:
