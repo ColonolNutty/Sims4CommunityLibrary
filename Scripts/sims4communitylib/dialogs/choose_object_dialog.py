@@ -187,7 +187,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
 
         :param choice: The row to add.
         :type choice: ObjectPickerRow
-        :param always_visible: If set to True, the row will always appear in the dialog no matter which page. If False, the row will act as normal.
+        :param always_visible: If set to True, the row will always appear in the dialog no matter which page. If False, the row will act as normal. Default is False.
         :type always_visible: bool, optional
         """
         if not always_visible:
@@ -361,8 +361,8 @@ class CommonChooseObjectDialog(CommonChooseDialog):
             if page > number_of_pages:
                 raise AssertionError('page was out of range. Number of Pages: {}, Requested Page: {}'.format(str(number_of_pages), str(page)))
             # Add the rows that are always visible.
-            for always_visible_rows in self.always_visible_rows:
-                _dialog.add_row(always_visible_rows)
+            for always_visible_row in self.always_visible_rows:
+                _dialog.add_row(always_visible_row)
 
             # Add the rows that should show on the current page.
             start_index = (page - 1) * self._per_page
@@ -406,8 +406,8 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                 self.log.format_with_message('Not adding Next.', page=page, number_of_pages=number_of_pages)
         else:
             self.log.debug('Adding always visible rows.')
-            for always_visible_rows in self.always_visible_rows:
-                _dialog.add_row(always_visible_rows)
+            for always_visible_row in self.always_visible_rows:
+                _dialog.add_row(always_visible_row)
             self.log.debug('Adding rows.')
             for row in self.rows:
                 _dialog.add_row(row)

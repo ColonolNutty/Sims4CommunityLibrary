@@ -38,6 +38,8 @@ class CommonFilePersistenceService(CommonPersistenceService):
             return os.path.join(folder_path, self._custom_file_name)
         if self._per_save:
             save_slot_id = CommonSaveUtils.get_save_slot_id()
+            if save_slot_id == 0:
+                return ''
             save_slot_guid = CommonSaveUtils.get_save_slot_guid()
             return os.path.join(folder_path, f'{data_name}_id_{save_slot_id}_guid_{save_slot_guid}.json')
         else:
@@ -52,6 +54,8 @@ class CommonFilePersistenceService(CommonPersistenceService):
     # noinspection PyMissingOrEmptyDocstring
     def load(self, mod_identity: CommonModIdentity, identifier: str=None) -> Dict[str, Any]:
         file_path = self._file_path(mod_identity, identifier=identifier)
+        if not file_path:
+            return dict()
 
         self.log.format_with_message('Loading data.', mod=mod_identity, file_path=file_path)
 
@@ -67,7 +71,11 @@ class CommonFilePersistenceService(CommonPersistenceService):
 
     # noinspection PyMissingOrEmptyDocstring
     def save(self, mod_identity: CommonModIdentity, data: Dict[str, Any], identifier: str=None) -> bool:
+        if not data:
+            return False
         file_path = self._file_path(mod_identity, identifier=identifier)
+        if not file_path:
+            return False
 
         self.log.format_with_message('Loading data.', mod=mod_identity, file_path=file_path)
 
