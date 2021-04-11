@@ -40,7 +40,7 @@ class CommonGender(CommonInt):
 
     @staticmethod
     def convert_to_vanilla(gender: 'CommonGender') -> Union[Gender, None]:
-        """convert_to_gender(gender)
+        """convert_to_vanilla(gender)
 
         Convert a CommonGender into the vanilla Gender enum.
 
@@ -49,7 +49,7 @@ class CommonGender(CommonInt):
         :return: The specified CommonGender translated to a Gender or None if the CommonGender could not be translated.
         :rtype: Union[Gender, None]
         """
-        if gender == CommonGender.INVALID:
+        if gender is None or gender == CommonGender.INVALID:
             return None
         if isinstance(gender, Gender):
             return gender
@@ -57,9 +57,7 @@ class CommonGender(CommonInt):
             CommonGender.MALE: Gender.MALE,
             CommonGender.FEMALE: Gender.FEMALE
         }
-        if gender not in conversion_mapping:
-            return None
-        return conversion_mapping[gender]
+        return conversion_mapping.get(gender, None)
 
     @staticmethod
     def convert_from_vanilla(gender: Gender) -> 'CommonGender':

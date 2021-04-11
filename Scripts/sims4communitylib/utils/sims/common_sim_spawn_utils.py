@@ -8,10 +8,10 @@ Copyright (c) COLONOLNUTTY
 import services
 import build_buy
 from interactions.interaction_finisher import FinishingType
-from sims.sim_info_types import Species
 from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_gender import CommonGender
+from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
@@ -43,6 +43,51 @@ class CommonSimSpawnUtils:
     """
 
     @staticmethod
+    def create_sim_info(
+        species: CommonSpecies,
+        gender: CommonGender=None,
+        age: CommonAge=None,
+        first_name: str='',
+        last_name: str='',
+        trait_ids: Tuple[int]=(),
+        household: Household=None,
+        source: str='testing'
+    ) -> Union[SimInfo, None]:
+        """create_sim_info(\
+            species,\
+            gender=None,\
+            age=None,\
+            first_name='',\
+            last_name='',\
+            trait_ids=(),\
+            household=None,\
+            source='testing'\
+        )
+
+        Create SimInfo for a Sim.
+
+        :param species: The species to create a SimInfo for.
+        :type species: CommonSpecies
+        :param gender: The gender of the created Sim. Default is None.
+        :type gender: CommonGender, optional
+        :param age: The age of the created Sim. Default is None.
+        :type age: CommonAge, optional
+        :param first_name: The First Name of the created Sim. Default is an empty string.
+        :type first_name: str, optional
+        :param last_name: The Last Name of the created Sim. Default is an empty string.
+        :type last_name: str, optional
+        :param trait_ids: The decimal identifiers of the Traits to add to the created Sim. Default is an empty collection.
+        :type trait_ids: Tuple[int], optional
+        :param household: The household to place the created Sim in. If None, the Sim will be placed in a hidden household. Default is None.
+        :type household: Household, optional
+        :param source: The reason for the Sims creation. Default is 'testing'.
+        :type source: str, optional
+        :return: The SimInfo of the created Sim or None if the Sim failed to be created.
+        :rtype: SimInfo
+        """
+        return CommonSimSpawnUtils._create_sim_info(species, gender=gender, age=age, first_name=first_name, last_name=last_name, trait_ids=trait_ids, household=household, source=source)
+
+    @staticmethod
     def create_human_sim_info(
         gender: CommonGender=None,
         age: CommonAge=None,
@@ -55,7 +100,6 @@ class CommonSimSpawnUtils:
         """create_human_sim_info(\
             gender=None,\
             age=None,\
-            species=None,\
             first_name='',\
             last_name='',\
             trait_ids=(),\
@@ -82,11 +126,150 @@ class CommonSimSpawnUtils:
         :return: The SimInfo of the created Sim or None if the Sim failed to be created.
         :rtype: SimInfo
         """
+        return CommonSimSpawnUtils._create_sim_info(CommonSpecies.HUMAN, gender=gender, age=age, first_name=first_name, last_name=last_name, trait_ids=trait_ids, household=household, source=source)
+
+    @staticmethod
+    def create_large_dog_sim_info(
+        gender: CommonGender=None,
+        age: CommonAge=None,
+        first_name: str='',
+        last_name: str='',
+        trait_ids: Tuple[int]=(),
+        household: Household=None,
+        source: str='testing'
+    ) -> Union[SimInfo, None]:
+        """create_large_dog_sim_info(\
+            gender=None,\
+            age=None,\
+            first_name='',\
+            last_name='',\
+            trait_ids=(),\
+            household=None,\
+            source='testing'\
+        )
+
+        Create SimInfo for a Large Dog Sim.
+
+        :param gender: The gender of the created Sim. Default is None.
+        :type gender: CommonGender, optional
+        :param age: The age of the created Sim. Default is None.
+        :type age: CommonAge, optional
+        :param first_name: The First Name of the created Sim. Default is an empty string.
+        :type first_name: str, optional
+        :param last_name: The Last Name of the created Sim. Default is an empty string.
+        :type last_name: str, optional
+        :param trait_ids: The decimal identifiers of the Traits to add to the created Sim. Default is an empty collection.
+        :type trait_ids: Tuple[int], optional
+        :param household: The household to place the created Sim in. If None, the Sim will be placed in a hidden household. Default is None.
+        :type household: Household, optional
+        :param source: The reason for the Sims creation. Default is 'testing'.
+        :type source: str, optional
+        :return: The SimInfo of the created Sim or None if the Sim failed to be created.
+        :rtype: SimInfo
+        """
+        return CommonSimSpawnUtils._create_sim_info(CommonSpecies.LARGE_DOG, gender=gender, age=age, first_name=first_name, last_name=last_name, trait_ids=trait_ids, household=household, source=source)
+
+    @staticmethod
+    def create_small_dog_sim_info(
+        gender: CommonGender=None,
+        age: CommonAge=None,
+        first_name: str='',
+        last_name: str='',
+        trait_ids: Tuple[int]=(),
+        household: Household=None,
+        source: str='testing'
+    ) -> Union[SimInfo, None]:
+        """create_small_dog_sim_info(\
+            gender=None,\
+            age=None,\
+            first_name='',\
+            last_name='',\
+            trait_ids=(),\
+            household=None,\
+            source='testing'\
+        )
+
+        Create SimInfo for a Small Dog Sim.
+
+        :param gender: The gender of the created Sim. Default is None.
+        :type gender: CommonGender, optional
+        :param age: The age of the created Sim. Default is None.
+        :type age: CommonAge, optional
+        :param first_name: The First Name of the created Sim. Default is an empty string.
+        :type first_name: str, optional
+        :param last_name: The Last Name of the created Sim. Default is an empty string.
+        :type last_name: str, optional
+        :param trait_ids: The decimal identifiers of the Traits to add to the created Sim. Default is an empty collection.
+        :type trait_ids: Tuple[int], optional
+        :param household: The household to place the created Sim in. If None, the Sim will be placed in a hidden household. Default is None.
+        :type household: Household, optional
+        :param source: The reason for the Sims creation. Default is 'testing'.
+        :type source: str, optional
+        :return: The SimInfo of the created Sim or None if the Sim failed to be created.
+        :rtype: SimInfo
+        """
+        return CommonSimSpawnUtils._create_sim_info(CommonSpecies.SMALL_DOG, gender=gender, age=age, first_name=first_name, last_name=last_name, trait_ids=trait_ids, household=household, source=source)
+
+    @staticmethod
+    def create_cat_sim_info(
+        gender: CommonGender=None,
+        age: CommonAge=None,
+        first_name: str='',
+        last_name: str='',
+        trait_ids: Tuple[int]=(),
+        household: Household=None,
+        source: str='testing'
+    ) -> Union[SimInfo, None]:
+        """create_cat_sim_info(\
+            gender=None,\
+            age=None,\
+            first_name='',\
+            last_name='',\
+            trait_ids=(),\
+            household=None,\
+            source='testing'\
+        )
+
+        Create SimInfo for a Cat Sim.
+
+        :param gender: The gender of the created Sim. Default is None.
+        :type gender: CommonGender, optional
+        :param age: The age of the created Sim. Default is None.
+        :type age: CommonAge, optional
+        :param first_name: The First Name of the created Sim. Default is an empty string.
+        :type first_name: str, optional
+        :param last_name: The Last Name of the created Sim. Default is an empty string.
+        :type last_name: str, optional
+        :param trait_ids: The decimal identifiers of the Traits to add to the created Sim. Default is an empty collection.
+        :type trait_ids: Tuple[int], optional
+        :param household: The household to place the created Sim in. If None, the Sim will be placed in a hidden household. Default is None.
+        :type household: Household, optional
+        :param source: The reason for the Sims creation. Default is 'testing'.
+        :type source: str, optional
+        :return: The SimInfo of the created Sim or None if the Sim failed to be created.
+        :rtype: SimInfo
+        """
+        return CommonSimSpawnUtils._create_sim_info(CommonSpecies.CAT, gender=gender, age=age, first_name=first_name, last_name=last_name, trait_ids=trait_ids, household=household, source=source)
+
+    @staticmethod
+    def _create_sim_info(
+        species: CommonSpecies,
+        gender: CommonGender=None,
+        age: CommonAge=None,
+        first_name: str='',
+        last_name: str='',
+        trait_ids: Tuple[int]=(),
+        household: Household=None,
+        source: str='testing'
+    ) -> Union[SimInfo, None]:
         from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
         household = household or CommonHouseholdUtils.create_empty_household(as_hidden_household=True)
-        gender = CommonGender.convert_to_vanilla(gender)
-        age = CommonAge.convert_to_vanilla(age)
-        sim_creator = SimCreator(gender=gender, age=age, first_name=first_name or SimSpawner.get_random_first_name(gender, Species.HUMAN), last_name=last_name, traits=trait_ids)
+        vanilla_gender = CommonGender.convert_to_vanilla(gender)
+        vanilla_age = CommonAge.convert_to_vanilla(age)
+        vanilla_species = CommonSpecies.convert_to_vanilla(species)
+        if species is None:
+            raise AssertionError(f'Invalid species specified for SimInfo creation! {species}')
+        sim_creator = SimCreator(gender=vanilla_gender, age=vanilla_age, species=vanilla_species, first_name=first_name or SimSpawner.get_random_first_name(vanilla_gender, species=vanilla_species), last_name=last_name, traits=trait_ids)
         (sim_info_list, _) = SimSpawner.create_sim_infos((sim_creator,), household=household, generate_deterministic_sim=True, creation_source=source)
         if not sim_info_list:
             return None

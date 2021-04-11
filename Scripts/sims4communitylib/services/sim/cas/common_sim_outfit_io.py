@@ -193,6 +193,7 @@ class CommonSimOutfitIO(HasLog):
         self.log.format_with_message('Attempting to add cas part to body type.', cas_part=cas_part_id, body_type=body_type)
         if self.is_body_type_attached(body_type):
             self.detach_body_type(body_type)
+        self.log.format_with_message('Attaching CAS Part.', cas_part=cas_part_id, body_type=body_type)
         self._outfit_body_types.append(int(body_type))
         self._outfit_part_ids.append(cas_part_id)
         self.log.format_with_message('Finished adding cas part to body type.', cas_part=cas_part_id, body_type=body_type)
@@ -273,18 +274,24 @@ class CommonSimOutfitIO(HasLog):
             apply_to_outfit_category_and_index=apply_to_outfit_category_and_index
         )
         apply_to_outfit_category_and_index = apply_to_outfit_category_and_index or self.outfit_category_and_index
+        outfit_to_apply_to_data = CommonOutfitUtils.get_outfit_data(self.sim_info, outfit_category_and_index=apply_to_outfit_category_and_index)
+        outfit_to_apply_to_parts = CommonOutfitUtils.get_outfit_parts(self.sim_info, outfit_category_and_index=apply_to_outfit_category_and_index)
+        outfit_to_apply_to_original_data: FrozenSet[int] = frozenset(outfit_to_apply_to_parts.items())
         saved_outfits = self.sim_info.save_outfits()
+        self.log.format_with_message('Updating outfits', outfits=saved_outfits.outfits)
         for saved_outfit in saved_outfits.outfits:
             if int(saved_outfit.category) != int(apply_to_outfit_category_and_index[0]):
                 continue
 
-            if apply_to_all_outfits_in_same_category:
-                pass
-            else:
+            if not apply_to_all_outfits_in_same_category:
                 # noinspection PyUnresolvedReferences
-                sub_outfit_data = self._to_outfit_data(saved_outfit.body_types_list.body_types, saved_outfit.parts.ids)
-                if int(saved_outfit.outfit_id) != int(self._outfit_data.outfit_id) or sub_outfit_data != self._original_outfit_data:
+                saved_outfit_data = self._to_outfit_data(saved_outfit.body_types_list.body_types, saved_outfit.parts.ids)
+                self.log.format_with_message('Checking if sub outfit data matches', saved_outfit_data=saved_outfit_data)
+                if int(saved_outfit.outfit_id) != int(outfit_to_apply_to_data.outfit_id) or saved_outfit_data != outfit_to_apply_to_original_data:
+                    self.log.format_with_message('Sub outfit data did not match!', saved_outfit_id=saved_outfit.outfit_id, self_outfit_id=outfit_to_apply_to_data.outfit_id, saved_outfit_data=saved_outfit_data, original_outfit_data=outfit_to_apply_to_original_data)
                     continue
+                else:
+                    self.log.format_with_message('Sub outfit matches.', saved_outfit_id=saved_outfit.outfit_id, self_outfit_id=outfit_to_apply_to_data.outfit_id, saved_outfit_data=saved_outfit_data, original_outfit_data=outfit_to_apply_to_original_data)
 
             saved_outfit.parts = S4Common_pb2.IdList()
             # noinspection PyUnresolvedReferences
@@ -318,15 +325,16 @@ class CommonSimOutfitIO(HasLog):
             self._outfit_body_types = list(initial_outfit_parts.keys())
             self._outfit_part_ids = list(initial_outfit_parts.values())
         else:
-            self._outfit_data: OutfitData = CommonOutfitUtils.get_outfit_data(self.sim_info, outfit_category_and_index=self._outfit_category_and_index)
-            if self._outfit_data is None:
-                self.log.error('Missing outfit data for Sim \'{}\' and Outfit Category and Index {}'.format(target_sim_name, self._outfit_category_and_index), throw=True)
+            if self._outfit_parts is None:
+                self.log.error('Missing outfit parts for Sim \'{}\' and Outfit Category and Index {}'.format(target_sim_name, self._outfit_category_and_index), throw=True)
                 return False
-            if not self._outfit_data.part_ids or not self._outfit_data.body_types:
+            body_types = list(self._outfit_parts.keys())
+            part_ids = list(self._outfit_parts.values())
+            if not part_ids or not body_types:
                 self.log.error('\'{}\' is missing outfit parts or body types for Outfit Category and Index {}.'.format(target_sim_name, self._outfit_category_and_index))
                 return False
-            self._outfit_body_types: List[Union[BodyType, int]] = list(self._outfit_data.body_types)
-            self._outfit_part_ids: List[int] = list(self._outfit_data.part_ids)
+            self._outfit_body_types: List[Union[BodyType, int]] = body_types
+            self._outfit_part_ids: List[int] = part_ids
             if len(self._outfit_body_types) != len(self._outfit_part_ids):
                 self.log.error('\'{}\': The number of outfit parts did not match the number of body types for Outfit Category and Index {}.'.format(target_sim_name, self._outfit_category_and_index))
                 return False

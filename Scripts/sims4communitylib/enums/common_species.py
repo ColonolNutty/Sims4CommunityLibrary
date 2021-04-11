@@ -5,7 +5,10 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from typing import Union, Dict
+
 from sims.sim_info import SimInfo
+from sims.sim_info_types import Species, SpeciesExtended
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 
@@ -34,3 +37,26 @@ class CommonSpecies(CommonInt):
         elif CommonSpeciesUtils.is_cat(sim_info):
             return CommonSpecies.CAT
         return CommonSpecies.INVALID
+
+    @staticmethod
+    def convert_to_vanilla(species: 'CommonSpecies') -> Union[Species, None]:
+        """convert_to_vanilla(species)
+
+        Convert a CommonSpecies into the vanilla Species enum.
+
+        :param species: An instance of a CommonSpecies
+        :type species: CommonSpecies
+        :return: The specified CommonSpecies translated to a Species or SpeciesExtended or None if the CommonSpecies could not be translated.
+        :rtype: Union[Species, None]
+        """
+        if species is None or species == CommonSpecies.INVALID:
+            return None
+        if isinstance(species, Species):
+            return species
+        conversion_mapping: Dict[CommonSpecies, Species] = {
+            CommonSpecies.HUMAN: Species.HUMAN,
+            CommonSpecies.SMALL_DOG: SpeciesExtended.SMALLDOG,
+            CommonSpecies.LARGE_DOG: Species.DOG,
+            CommonSpecies.CAT: Species.CAT
+        }
+        return conversion_mapping.get(species, None)
