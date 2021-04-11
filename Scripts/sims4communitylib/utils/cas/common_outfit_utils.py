@@ -14,13 +14,14 @@ from buffs.appearance_modifier.appearance_modifier import AppearanceModifier
 from buffs.appearance_modifier.appearance_modifier_type import AppearanceModifierType
 from buffs.appearance_modifier.appearance_tracker import ModifierInfo
 from cas.cas import OutfitData
-from sims.outfits.outfit_enums import OutfitCategory, BodyType
+from sims.outfits.outfit_enums import OutfitCategory, BodyType, OutfitFilterFlag, BodyTypeFlag
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.tags_enum import CommonGameTag
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from singletons import DEFAULT
 
 
 class CommonOutfitUtils:
@@ -625,8 +626,8 @@ class CommonOutfitUtils:
         sim_info.clear_outfit_dirty(outfit_category)
 
     @staticmethod
-    def generate_outfit(sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]) -> bool:
-        """generate_outfit(sim_info, outfit_category_and_index)
+    def generate_outfit(sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int], tag_list: Tuple[CommonGameTag]=(), outfit_filter_flag: OutfitFilterFlag=DEFAULT, body_type_flags: BodyTypeFlag=DEFAULT, **kwargs) -> bool:
+        """generate_outfit(sim_info, outfit_category_and_index, tag_list=(), outfit_filter_flag=DEFAULT, body_type_flags=DEFAULT, **kwargs)
 
         Generate an outfit for a Sim for the specified OutfitCategory and Index.
 
@@ -636,12 +637,18 @@ class CommonOutfitUtils:
         :type sim_info: SimInfo
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to generate.
         :type outfit_category_and_index: Tuple[OutfitCategory, int]
+        :param tag_list: A collection of tags to match CAS Parts to. Default is any tag.
+        :type tag_list: Tuple[CommonGameTag], optional
+        :param outfit_filter_flag: Flags to filter CAS Parts with. Default is no flags.
+        :type outfit_filter_flag: OutfitFilterFlag, optional
+        :param body_type_flags: Flags to filter CAS Parts with. Default is no flags.
+        :type body_type_flags: BodyTypeFlag, optional
         :return: True, if an outfit was generated successfully. False, if not.
         :rtype: bool
         """
-        sim_info.on_outfit_generated(sim_info, CommonOutfitUtils.get_current_outfit(sim_info))
-        sim_info.generate_outfit(*outfit_category_and_index)
-        return True
+        outfit_category = outfit_category_and_index[0]
+        outfit_index = outfit_category_and_index[1]
+        return sim_info.generate_outfit(outfit_category, outfit_index=outfit_index, tag_list=tag_list, filter_flag=outfit_filter_flag, body_type_flags=body_type_flags, **kwargs)
 
     @staticmethod
     def resend_outfits(sim_info: SimInfo) -> bool:

@@ -55,7 +55,7 @@ class CommonAge(CommonInt):
 
     @staticmethod
     def convert_to_vanilla(age: 'CommonAge') -> Union[Age, None]:
-        """convert_to_age(age)
+        """convert_to_vanilla(age)
 
         Convert a CommonAge into the vanilla Age enum.
 
@@ -64,7 +64,7 @@ class CommonAge(CommonInt):
         :return: The specified CommonAge translated to an Age or None if the CommonAge could not be translated.
         :rtype: Union[Age, None]
         """
-        if age == CommonAge.INVALID:
+        if age is None or age == CommonAge.INVALID:
             return None
         if isinstance(age, Age):
             return age
@@ -77,9 +77,7 @@ class CommonAge(CommonInt):
             CommonAge.ADULT: Age.ADULT,
             CommonAge.ELDER: Age.ELDER
         }
-        if age not in age_conversion_mapping:
-            return None
-        return age_conversion_mapping[age]
+        return age_conversion_mapping.get(age, None)
 
     @staticmethod
     def convert_from_vanilla(age: Age) -> 'CommonAge':
