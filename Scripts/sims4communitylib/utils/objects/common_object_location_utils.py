@@ -16,6 +16,7 @@ from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
 from sims4communitylib.utils.objects.common_object_type_utils import CommonObjectTypeUtils
+from world.lot import Lot
 
 
 class CommonObjectLocationUtils:
@@ -60,6 +61,78 @@ class CommonObjectLocationUtils:
             return False
         live_drag_component._set_can_live_drag(False)
         return True
+
+    @staticmethod
+    def is_within_range_of_position(game_object: GameObject, position: CommonVector3, distance_in_squares: float) -> bool:
+        """is_within_range_of_position(game_object, position, distance_in_squares)
+
+        Determine if a Game Object is within a certain distance of a Position.
+
+        :param game_object: The object to check.
+        :type game_object: GameObject
+        :param position: A position.
+        :type position: CommonVector3
+        :param distance_in_squares: A unit measured in squares. 1 square is the size of 1 square in the Build/Buy mode visual grid. For comparison, a dining chair would be 1 square by 1 square. 0.5 would be half a square, or half a dining chair.
+        :type distance_in_squares: float
+        :return: True, if the distance between the Object and the Position is less than or equal to the specified distance in squares. False, if not.
+        :return: bool
+        """
+        object_position = CommonObjectLocationUtils.get_position(game_object)
+        if object_position is None:
+            return False
+        return CommonLocationUtils.is_position_within_range_of_position(object_position, position, distance_in_squares)
+
+    @staticmethod
+    def is_within_range_of_location(game_object: GameObject, location: CommonLocation, distance_in_squares: float) -> bool:
+        """is_within_range_of_location(game_object, location, distance_in_squares)
+
+        Determine if a Game Object is within a certain distance of a Location.
+
+        :param game_object: The object to check.
+        :type game_object: GameObject
+        :param location: A location.
+        :type location: CommonLocation
+        :param distance_in_squares: A unit measured in squares. 1 square is the size of 1 square in the Build/Buy mode visual grid. For comparison, a dining chair would be 1 square by 1 square. 0.5 would be half a square, or half a dining chair.
+        :type distance_in_squares: float
+        :return: True, if the distance between the Object and the Location is less than or equal to the specified distance in squares. False, if not.
+        :return: bool
+        """
+        object_location = CommonObjectLocationUtils.get_location(game_object)
+        if object_location is None:
+            return False
+        return CommonLocationUtils.is_location_within_range_of_location(object_location, location, distance_in_squares)
+
+    @staticmethod
+    def is_on_current_lot(game_object: GameObject) -> bool:
+        """is_on_current_lot(game_object)
+
+        Determine if a Sim is on the active Lot.
+
+        :param game_object: The object to check.
+        :type game_object: GameObject
+        :return: True, if the Object is on the active Lot. False, if not.
+        :rtype: bool
+        """
+        active_lot = CommonLocationUtils.get_current_lot()
+        return CommonObjectLocationUtils.is_on_lot(game_object, active_lot)
+
+    @staticmethod
+    def is_on_lot(game_object: GameObject, lot: Lot) -> bool:
+        """is_on_lot(sim_info, lot)
+
+        Determine if a Game Object is on a Lot.
+
+        :param game_object: The object to check.
+        :type game_object: GameObject
+        :param lot: An instance of a Lot.
+        :type lot: Lot
+        :return: True, if the Object is on the specified Lot. False, if not.
+        :rtype: bool
+        """
+        object_position = CommonObjectLocationUtils.get_position(game_object)
+        if object_position is None:
+            return False
+        return CommonLocationUtils.is_position_on_lot(object_position, lot)
 
     @staticmethod
     def can_drag_object_in_live_mode(game_object: GameObject) -> bool:

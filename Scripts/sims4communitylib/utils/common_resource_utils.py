@@ -7,10 +7,14 @@ Copyright (c) COLONOLNUTTY
 """
 import services
 from io import BytesIO
-from typing import ItemsView, Any, Union, Tuple
+from typing import ItemsView, Any, Union, Tuple, Type
 from sims4.resources import ResourceLoader, get_resource_key, Types
 from sims4.tuning.instance_manager import InstanceManager
+from sims4.tuning.merged_tuning_manager import get_manager
+from sims4.tuning.serialization import ETreeTuningLoader
+from sims4.tuning.tunable_base import LoadingTags
 from sims4communitylib.classes.common_resource_key import CommonResourceKey
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 
 
 class CommonResourceUtils:
@@ -210,6 +214,36 @@ class CommonResourceUtils:
         if high_bit:
             fnv_hash |= 9223372036854775808
         return fnv_hash
+
+    @staticmethod
+    def register_tuning(mod_identity: CommonModIdentity, class_type: Type, tuning_type: Types, tuning_id: int, tuning_contents: str):
+        """register_tuning(mod_identity, class_type, tuning_type, tuning_identifier, tuning_contents)
+
+        Dynamically register a tuning instance.
+
+        :param mod_identity: The identity of the mod registering the tuning.
+        :type mod_identity: CommonModIdentity
+        :param class_type: The type of class being registered.
+        :type class_type: Type
+        :param tuning_type: The type of tuning being registered.
+        :type tuning_type: Types
+        :param tuning_id: The decimal identifier of the tuning being registered.
+        :type tuning_id: int
+        :param tuning_contents: The xml contents of the tuning.
+        :type tuning_contents: str
+        """
+        from sims4.resources import TYPE_RES_DICT
+        tuning_instance_key = CommonResourceUtils.get_resource_key(tuning_type, tuning_id)
+        tuning_loader = ETreeTuningLoader(class_type, '[{}] Dynamic Instance: {}'.format(mod_identity.name.replace(' ', '_'), class_type), loading_tag=LoadingTags.Instance)
+        tuning_loader.feed(BytesIO(tuning_contents.encode('utf-8')))
+        if tuning_instance_key.type in TYPE_RES_DICT:
+            res_ext = TYPE_RES_DICT[tuning_instance_key.type]
+            mtg = get_manager()
+            mtg._tuning_resources[res_ext][tuning_instance_key.instance] = tuning_loader.root
+        else:
+            cls = tuning_loader.module
+            tuning_manage = services.get_instance_manager(tuning_type)
+            tuning_manage.register_tuned_class(cls, tuning_instance_key)
 
     @staticmethod
     def _str_to_fnv(text: str, seed: int, prime: int, size: int) -> int:

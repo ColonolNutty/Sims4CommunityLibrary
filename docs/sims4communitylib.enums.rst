@@ -6,6 +6,14 @@ Resource Identifiers
    sims4communitylib.enums.enumtypes
    sims4communitylib.enums.types
 
+`Body Frame`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_body_frame.CommonBodyFrame
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Buffs`
 ------------------------------------------
 
@@ -22,18 +30,18 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`Species`
-----------------------------------------------
-
-.. autoclass:: sims4communitylib.enums.common_species.CommonSpecies
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 `Furniture`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.furniture_objects_enum.CommonFurnitureObjectId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Game Tags`
+-----------------------------------------
+
+.. autoclass:: sims4communitylib.enums.tags_enum.CommonGameTag
    :members:
    :undoc-members:
    :show-inheritance:
@@ -74,6 +82,14 @@ Resource Identifiers
 --------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.motives_enum.CommonMotiveId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Object Delivery Method`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_object_delivery_method.CommonObjectDeliveryMethod
    :members:
    :undoc-members:
    :show-inheritance:
@@ -134,6 +150,14 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Species`
+----------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_species.CommonSpecies
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Statistics`
 -----------------------------------------------
 
@@ -142,18 +166,18 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`Strings`
---------------------------------------------
+`Statistic Category`
+-----------------------------------------------
 
-.. autoclass:: sims4communitylib.enums.strings_enum.CommonStringId
+.. autoclass:: sims4communitylib.enums.common_statistic_category.CommonStatisticCategory
    :members:
    :undoc-members:
    :show-inheritance:
 
-`Game Tags`
------------------------------------------
+`Strings`
+--------------------------------------------
 
-.. autoclass:: sims4communitylib.enums.tags_enum.CommonGameTag
+.. autoclass:: sims4communitylib.enums.strings_enum.CommonStringId
    :members:
    :undoc-members:
    :show-inheritance:

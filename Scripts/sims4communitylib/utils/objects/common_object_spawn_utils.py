@@ -5,11 +5,15 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import random
+
 import objects.system
 from objects.object_enums import ItemLocation
 from sims4.commands import Command, CommandType, CheatOutput
 from typing import Any, Callable, Union, Tuple, Iterator
 from sims4communitylib.classes.math.common_location import CommonLocation
+from sims4communitylib.classes.math.common_transform import CommonTransform
+from sims4communitylib.classes.math.common_vector3 import CommonVector3
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from carry.carry_postures import CarryingObject
@@ -59,6 +63,65 @@ class CommonObjectSpawnUtils:
             return None
         CommonObjectLocationUtils.set_location(game_object, location)
         return game_object
+
+    @staticmethod
+    def spawn_object_near_location(
+        object_definition_id: int,
+        location: CommonLocation,
+        radius: int=1,
+        on_object_initialize_callback: Callable[[GameObject], Any]=None,
+        post_object_spawned_callback: Callable[[GameObject], Any]=None
+    ) -> GameObject:
+        """spawn_object_on_lot(\
+            object_definition_id,\
+            location,\
+            radius=1,\
+            on_object_initialize_callback=None,\
+            post_object_spawned_callback=None\
+        )
+
+        Spawn an Object near a location.
+
+        :param object_definition_id: The decimal identifier of an Object.
+        :type object_definition_id: int
+        :param location: The location to spawn the Object at.
+        :type location: CommonLocation
+        :param radius: The radius at which the object may spawn in with the location at the center. Default is 1 square out.
+        :type radius: int, optional
+        :param on_object_initialize_callback: Called when initializing the Object.
+        :type on_object_initialize_callback: Callable[[GameObject], Any], optional
+        :param post_object_spawned_callback: Called after the Object was added to the lot.
+        :type post_object_spawned_callback: Callable[[GameObject], Any], optional
+        :return: An instance of the spawned Object or None if not successfully spawned.
+        :rtype: GameObject
+        """
+        current_translation = location.transform.translation
+        x = int(current_translation.x)
+        min_x = x - radius
+        max_x = x + radius
+        new_x = random.randint(min_x, max_x)
+        z = int(current_translation.z)
+        min_z = z - radius
+        max_z = z + radius
+        new_z = random.randint(min_z, max_z)
+        new_translation = CommonVector3(new_x, current_translation.y, new_z)
+        new_transform = CommonTransform(
+            new_translation,
+            location.transform.orientation
+        )
+        new_location = CommonLocation(
+            new_transform,
+            location.routing_surface,
+            parent_ref=location.parent_ref,
+            joint_name_or_hash=location.joint_name_or_hash,
+            slot_hash=location.slot_hash
+        )
+        return CommonObjectSpawnUtils.spawn_object_on_lot(
+            object_definition_id,
+            new_location,
+            on_object_initialize_callback=on_object_initialize_callback,
+            post_object_spawned_callback=post_object_spawned_callback
+        )
 
     @staticmethod
     def destroy_object(game_object: GameObject, source: str=None, cause: str=None, **kwargs) -> bool:
