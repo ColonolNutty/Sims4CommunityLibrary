@@ -1,7 +1,7 @@
 Resource Utilities
 =========================================
 
-`Component Utils`
+`Components`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_component_utils.CommonComponentUtils
@@ -9,7 +9,7 @@ Resource Utilities
    :undoc-members:
    :show-inheritance:
 
-`Resource Utils`
+`Resources`
 ------------------------------------------------------
 
 .. autoclass:: sims4communitylib.utils.common_resource_utils.CommonResourceUtils
@@ -17,7 +17,7 @@ Resource Utilities
    :undoc-members:
    :show-inheritance:
 
-`Situation Utils`
+`Situations`
 -----------------------------------------------------------------
 
 .. note:: To manipulate situations of Sims, take a look at :class:`.CommonSimSituationUtils`
@@ -27,12 +27,22 @@ Resource Utilities
    :undoc-members:
    :show-inheritance:
 
-`Statistic Utils`
+`Statistics`
 -----------------------------------------------------------------
 
 .. note:: To manipulate statistics/commodities of Sims, take a look at :class:`.CommonSimStatisticUtils`
 
 .. autoclass:: sims4communitylib.utils.resources.common_statistic_utils.CommonStatisticUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Loot Actions`
+-----------------------------------------------------------------
+
+.. note:: To manipulate or apply Loot Actions to Sims, take a look at :class:`.CommonSimLootActionUtils`
+
+.. autoclass:: sims4communitylib.utils.resources.common_loot_action_utils.CommonLootActionUtils
    :members:
    :undoc-members:
    :show-inheritance:

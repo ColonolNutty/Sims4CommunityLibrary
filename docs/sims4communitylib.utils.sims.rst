@@ -67,6 +67,15 @@ Sim Utilities
    :undoc-members:
    :show-inheritance:
 
+*******************
+`Genealogy`
+*******************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_genealogy_utils.CommonSimGenealogyUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Outfits`
 ------------------------------------------------------
 
@@ -187,6 +196,15 @@ Sim Utilities
    :undoc-members:
    :show-inheritance:
 
+***************************
+`Crafting`
+***************************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_crafting_utils.CommonSimCraftingUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Misc`
 ------------------------------------------------------
 
@@ -196,6 +214,15 @@ Sim Utilities
 *********************
 
 .. autoclass:: sims4communitylib.utils.sims.common_sim_utils.CommonSimUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
+`Loot Actions`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_loot_action_utils.CommonSimLootActionUtils
    :members:
    :undoc-members:
    :show-inheritance:

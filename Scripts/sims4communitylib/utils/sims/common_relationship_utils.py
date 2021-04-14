@@ -35,6 +35,23 @@ class CommonRelationshipUtils:
         return CommonRelationshipUtils.has_relationship_bit_with_sim(sim_info, target_sim_info, CommonRelationshipBitId.HAS_MET)
 
     @staticmethod
+    def are_blood_relatives(sim_info_a: SimInfo, sim_info_b: SimInfo) -> bool:
+        """are_blood_relatives(sim_info_a, sim_info_b)
+
+        Determine if two Sims are blood relatives.
+
+        :param sim_info_a: An instance of a Sim.
+        :type sim_info_a: SimInfo
+        :param sim_info_b: An instance of a Sim.
+        :type sim_info_b: SimInfo
+        :return: True, if Sim A is blood relative of Sim B. False, if not.
+        :rtype: bool
+        """
+        if sim_info_a is None or sim_info_b is None:
+            return False
+        return not sim_info_a.incest_prevention_test(sim_info_b)
+
+    @staticmethod
     def is_romantically_committed_to_any_sims(sim_info: SimInfo) -> bool:
         """is_romantically_committed_to_any_sims(sim_info)
 

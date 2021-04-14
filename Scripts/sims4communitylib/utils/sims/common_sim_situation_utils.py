@@ -6,12 +6,18 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import services
-from typing import Callable, Iterator, Union, List
+from typing import Callable, Iterator, Union, List, Tuple
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.situations_enum import CommonSituationId
+from sims4communitylib.enums.tags_enum import CommonGameTag
 from sims4communitylib.utils.resources.common_situation_utils import CommonSituationUtils
+from situations.dynamic_situation_goal_tracker import DynamicSituationGoalTracker
 from situations.situation import Situation
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from situations.situation_goal import SituationGoal
+from situations.situation_goal_targeted_sim import SituationGoalTargetedSim
+from situations.situation_goal_tracker import SituationGoalTracker
+from whims.whim_set import WhimSetBaseMixin
 
 
 class CommonSimSituationUtils:
@@ -56,6 +62,160 @@ class CommonSimSituationUtils:
         return False
 
     @staticmethod
+    def has_leave_situation(sim_info: SimInfo) -> bool:
+        """has_situation_jobs(sim_info, situation_job_ids)
+
+        Determine if a Sim is currently involved in a leaving situation.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is currently involved in a leaving situation. False, if not.
+        :rtype: bool
+        """
+        leave_tags: Tuple[CommonGameTag] = (CommonGameTag.ROLE_LEAVE,)
+        return CommonSimSituationUtils.has_situations(sim_info, (CommonSituationId.LEAVE, )) or CommonSimSituationUtils.is_in_situations_with_any_tags(sim_info, leave_tags)
+
+    @staticmethod
+    def is_assigned_situation_job(sim_info: SimInfo, situation_job_id: int) -> bool:
+        """is_assigned_situation_job(sim_info, situation_job_id)
+
+        Determine if a Sim is currently assigned a situation job.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param situation_job_id: The decimal identifier of a Situation Job.
+        :type situation_job_id: int
+        :return: True, if the Sim is assigned the specified situation job. False, if not.
+        :rtype: bool
+        """
+        return CommonSimSituationUtils.is_assigned_situation_jobs(sim_info, (situation_job_id, ))
+
+    @staticmethod
+    def is_assigned_situation_jobs(sim_info: SimInfo, situation_job_ids: Tuple[int]) -> bool:
+        """is_assigned_situation_jobs(sim_info, situation_job_ids)
+
+        Determine if a Sim is currently assigned any of the specified situation jobs.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param situation_job_ids: A collection of decimal identifier for Situation Jobs.
+        :type situation_job_ids: Tuple[int]
+        :return: True, if the Sim is assigned any of the specified situation jobs. False, if not.
+        :rtype: bool
+        """
+        sim_situations = CommonSimSituationUtils.get_situations(sim_info)
+        for situation in sim_situations:
+            for situation_job in situation.all_jobs_gen():
+                situation_job_id = getattr(situation_job, 'guid64', None)
+                if situation_job_id in situation_job_ids:
+                    return True
+        return False
+
+    @staticmethod
+    def is_in_situations_with_any_tags(sim_info: SimInfo, tags: Tuple[CommonGameTag]) -> bool:
+        """is_in_situations_with_any_tags(sim_info, tags)
+
+        Determine if a Sim is currently in a situation with any of the specified tags.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param tags: A collection of game tags.
+        :type tags: Tuple[CommonGameTag]
+        :return: True, if the Sim is involved in any situations with any of the specified tags. False, if not.
+        :rtype: bool
+        """
+        tags = set(tags)
+        situations = CommonSimSituationUtils.get_situations(sim_info)
+        for tag in tags:
+            for situation in situations:
+                if tag in getattr(situation, 'tags', tuple()):
+                    return True
+                for situation_job in situation.all_jobs_gen():
+                    if tag in getattr(situation_job, 'tags', tuple()):
+                        return True
+        return False
+
+    @staticmethod
+    def make_sim_leave(sim_info: SimInfo):
+        """make_sim_leave(sim_info)
+
+        Make a Sim leave the current lot.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return
+        services.get_zone_situation_manager().make_sim_leave(sim)
+
+    @staticmethod
+    def remove_sim_from_situation(sim_info: SimInfo, situation_id: int) -> bool:
+        """remove_sim_from_situation(sim_info, situation_id)
+
+        Remove a Sim from a Situation.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param situation_id: The decimal identifier of the Situation to remove the Sim from.
+        :type situation_id: int
+        :return: True, if the Sim was successfully removed from the situation. False, if not.
+        :rtype: bool
+        """
+        situation_manager = services.get_zone_situation_manager()
+        if sim_info is None or situation_id is None:
+            return False
+        situation_manager.remove_sim_from_situation(sim_info, situation_id)
+        return True
+
+    @staticmethod
+    def create_visit_situation(sim_info: SimInfo, duration_override_in_sim_seconds: int=None, visit_situation_override: Situation=None):
+        """create_visit_situation(sim_info, duration_override_in_sim_seconds=None, visit_situation_override=None)
+
+        Create a visit situation for a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param duration_override_in_sim_seconds: An override in Sim seconds for the visit to last. Default is None.
+        :type duration_override_in_sim_seconds: int, optional
+        :param visit_situation_override: An instance of a Situation to use for the Visit. If not specified, the default visit situation will be used. Default is None.
+        :type visit_situation_override: Situation, optional
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return
+        services.get_zone_situation_manager().create_visit_situation(sim, duration_override=duration_override_in_sim_seconds, visit_type_override=visit_situation_override)
+
+    @staticmethod
+    def complete_situation_goal(sim_info: SimInfo, situation_goal_id: int, target_sim_info: SimInfo=None, score_override: int=None, start_cooldown: bool=True):
+        """complete_situation_goal(sim_info, situation_goal_id, target_sim_info=None, score_override=None, start_cooldown=True)
+
+        Complete a situation goal for a Sim using the specified Target Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param situation_goal_id: The decimal identifier of a Situation Goal to mark as completed.
+        :type situation_goal_id: int
+        :param target_sim_info: A target used in the completion of the situation goal. Default is None.
+        :type target_sim_info: SimInfo, optional
+        :param score_override: An alternative score to award to the Sim instead of the score specified by the goal. Default is None.
+        :type score_override: int, optional
+        :param start_cooldown: Whether or not to start a cooldown for the situation. Default is True.
+        :type start_cooldown: bool, optional
+        """
+        from sims4communitylib.utils.sims.common_whim_utils import CommonWhimUtils
+        if target_sim_info is not None:
+            if CommonSimUtils.get_sim_instance(target_sim_info) is None:
+                return
+        goal_instances: List[Union[SituationGoal, SituationGoalTargetedSim, WhimSetBaseMixin]] = []
+        goal_instances.extend(CommonSimSituationUtils.get_situation_goals(sim_info))
+        goal_instances.extend(CommonWhimUtils.get_current_whims(sim_info))
+        for goal_instance in goal_instances:
+            if goal_instance.guid64 != situation_goal_id:
+                continue
+            goal_instance.force_complete(target_sim=CommonSimUtils.get_sim_instance(target_sim_info), score_override=score_override, start_cooldown=start_cooldown)
+
+    @staticmethod
     def get_situations(sim_info: SimInfo, include_situation_callback: Callable[[Situation], bool]=None) -> Iterator[Situation]:
         """get_situations(sim_info, include_situation_callback=None)
 
@@ -69,6 +229,8 @@ class CommonSimSituationUtils:
         :rtype: Iterator[Situation]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return
         situations = tuple(services.get_zone_situation_manager().get_situations_sim_is_in(sim))
         if sim is None or not situations:
             return tuple()
@@ -95,3 +257,28 @@ class CommonSimSituationUtils:
                 continue
             situation_ids.append(situation_id)
         return situation_ids
+
+    @staticmethod
+    def get_situation_goals(sim_info: SimInfo) -> Tuple[Union[SituationGoal, SituationGoalTargetedSim]]:
+        """get_situation_goals(sim_info)
+
+        Retrieve the goals of all situations a Sim is currently in.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The situation goals of all Situations the Sim is currently involved in.
+        :rtype: Tuple[Union[SituationGoal, SituationGoalTargetedSim]]
+        """
+        goal_instances: List[Union[SituationGoal, SituationGoalTargetedSim]] = []
+        for situation in CommonSimSituationUtils.get_situations(sim_info):
+            goal_tracker = situation._get_goal_tracker()
+            if goal_tracker is None:
+                continue
+            if isinstance(goal_tracker, SituationGoalTracker):
+                if goal_tracker._realized_minor_goals is not None:
+                    goal_instances.extend(goal_tracker._realized_minor_goals.keys())
+                if goal_tracker._realized_main_goal is not None:
+                    goal_instances.insert(0, goal_tracker._realized_main_goal)
+            elif isinstance(goal_tracker, DynamicSituationGoalTracker):
+                goal_instances.extend(goal_tracker.goals)
+        return tuple(goal_instances)

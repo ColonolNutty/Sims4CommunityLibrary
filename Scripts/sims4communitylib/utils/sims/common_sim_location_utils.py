@@ -289,6 +289,46 @@ class CommonSimLocationUtils:
         return CommonSimLocationUtils.can_route_to_location(sim_info, location)
 
     @staticmethod
+    def is_within_range_of_position(sim_info: SimInfo, position: CommonVector3, distance_in_squares: float) -> bool:
+        """is_within_range_of_position(sim_info, position, distance_in_squares)
+
+        Determine if a Sim is within a certain distance of a Position.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param position: A position.
+        :type position: CommonVector3
+        :param distance_in_squares: A unit measured in squares. 1 square is the size of 1 square in the Build/Buy mode visual grid. For comparison, a dining chair would be 1 square by 1 square. 0.5 would be half a square, or half a dining chair.
+        :type distance_in_squares: float
+        :return: True, if the distance between the Sim and the Position is less than or equal to the specified distance in squares. False, if not.
+        :return: bool
+        """
+        sim_position = CommonSimLocationUtils.get_position(sim_info)
+        if sim_position is None:
+            return False
+        return CommonLocationUtils.is_position_within_range_of_position(sim_position, position, distance_in_squares)
+
+    @staticmethod
+    def is_within_range_of_location(sim_info: SimInfo, location: CommonLocation, distance_in_squares: float) -> bool:
+        """is_within_range_of_location(sim_info, location, distance_in_squares)
+
+        Determine if a Sim is within a certain distance of a Location.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param location: A location.
+        :type location: CommonLocation
+        :param distance_in_squares: A unit measured in squares. 1 square is the size of 1 square in the Build/Buy mode visual grid. For comparison, a dining chair would be 1 square by 1 square. 0.5 would be half a square, or half a dining chair.
+        :type distance_in_squares: float
+        :return: True, if the distance between the Sim and the Location is less than or equal to the specified distance in squares. False, if not.
+        :return: bool
+        """
+        sim_location = CommonSimLocationUtils.get_location(sim_info)
+        if sim_location is None:
+            return False
+        return CommonLocationUtils.is_location_within_range_of_location(sim_location, location, distance_in_squares)
+
+    @staticmethod
     def is_on_current_lot(sim_info: SimInfo) -> bool:
         """is_on_current_lot(sim_info)
 
@@ -379,8 +419,8 @@ class CommonSimLocationUtils:
         return sim.push_super_affordance(CommandTuning.TERRAIN_GOHERE_AFFORDANCE, target, context)
 
     @staticmethod
-    def send_near_position(sim_info: SimInfo, position: CommonVector3, level: int, go_here_interaction_id: int=None) -> EnqueueResult:
-        """send_near_position(sim_info, position, level, go_here_interaction_id=None)
+    def send_near_position(sim_info: SimInfo, position: CommonVector3, level: int, go_here_interaction_id: int=None, position_search_flags: FGLSearchFlag=FGLSearchFlag.STAY_IN_CURRENT_BLOCK) -> EnqueueResult:
+        """send_near_position(sim_info, position, level, go_here_interaction_id=None, position_search_flags=FGLSearchFlag.STAY_IN_CURRENT_BLOCK)
 
         Send a Sim near the specified position.
 
@@ -392,6 +432,8 @@ class CommonSimLocationUtils:
         :type level: int
         :param go_here_interaction_id: If supplied, this interaction will be used instead of the vanilla Go Here interaction. Default is None.
         :type go_here_interaction_id: int, optional
+        :param position_search_flags: Flags used when locating a nearby position. Default is FGLSearchFlag.STAY_IN_CURRENT_BLOCK, which will limit the search to the current Room.
+        :type position_search_flags: FGLSearchFlag, optional
         :return: The result of sending the Sim near the specified position.
         :rtype: EnqueueResult
         """
@@ -400,7 +442,7 @@ class CommonSimLocationUtils:
 
         transform = CommonTransform(position, CommonQuaternion.empty())
         location = CommonLocation(transform, CommonSurfaceIdentifier.empty(secondary_id=level))
-        return CommonSimLocationUtils.send_near_location(sim_info, location, go_here_interaction_id=go_here_interaction_id)
+        return CommonSimLocationUtils.send_near_location(sim_info, location, go_here_interaction_id=go_here_interaction_id, location_search_flags=position_search_flags)
 
     @staticmethod
     def send_to_location(sim_info: SimInfo, location: CommonLocation, go_here_interaction_id: int=None) -> EnqueueResult:
@@ -425,8 +467,8 @@ class CommonSimLocationUtils:
         return CommonSimLocationUtils.send_to_position(sim_info, position, level, go_here_interaction_id=go_here_interaction_id)
 
     @staticmethod
-    def send_near_location(sim_info: SimInfo, location: CommonLocation, go_here_interaction_id: int=None) -> EnqueueResult:
-        """send_near_location(sim_info, position, level, go_here_interaction_id=None)
+    def send_near_location(sim_info: SimInfo, location: CommonLocation, go_here_interaction_id: int=None, location_search_flags: FGLSearchFlag=FGLSearchFlag.STAY_IN_CURRENT_BLOCK) -> EnqueueResult:
+        """send_near_location(sim_info, location, go_here_interaction_id=None, location_search_flags=FGLSearchFlag.STAY_IN_CURRENT_BLOCK)
 
         Send a Sim near the specified location.
 
@@ -436,6 +478,8 @@ class CommonSimLocationUtils:
         :type location: CommonLocation
         :param go_here_interaction_id: If supplied, this interaction will be used instead of the vanilla Go Here interaction. Default is None.
         :type go_here_interaction_id: int, optional
+        :param location_search_flags: Flags used when locating a nearby location. Default is FGLSearchFlag.STAY_IN_CURRENT_BLOCK, which will limit the search to the current Room.
+        :type location_search_flags: FGLSearchFlag, optional
         :return: The result of sending the Sim near the specified location.
         :rtype: EnqueueResult
         """
@@ -447,7 +491,7 @@ class CommonSimLocationUtils:
         from placement import find_good_location, create_starting_location, create_fgl_context_for_sim
         routing_surface = location.routing_surface
         starting_location = create_starting_location(transform=location.transform, routing_surface=routing_surface)
-        fgl_context = create_fgl_context_for_sim(starting_location, sim, search_flags=FGLSearchFlagsDefault | FGLSearchFlag.STAY_IN_CURRENT_BLOCK)
+        fgl_context = create_fgl_context_for_sim(starting_location, sim, search_flags=(FGLSearchFlagsDefault | location_search_flags) if location_search_flags is not None and location_search_flags != FGLSearchFlag.NONE else FGLSearchFlagsDefault)
         (position, orientation) = find_good_location(fgl_context)
         if position is None or orientation is None:
             fgl_context = create_fgl_context_for_sim(starting_location, sim)

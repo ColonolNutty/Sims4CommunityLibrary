@@ -339,6 +339,44 @@ class CommonLocationUtils:
         return position is not None and services.active_lot().is_position_on_lot(position)
 
     @staticmethod
+    def is_position_within_range_of_position(position_a: CommonVector3, position_b: CommonVector3, distance_in_squares: float) -> bool:
+        """is_position_within_range_of_position(position_a, position_b, distance_in_squares)
+
+        Determine if Position A is within a certain distance of Position B.
+
+        :param position_a: The first position.
+        :type position_a: CommonVector3
+        :param position_b: The second position.
+        :type position_b: CommonVector3
+        :param distance_in_squares: A unit measured in squares. 1 square is the size of 1 square in the Build/Buy mode visual grid. For comparison, a dining chair would be 1 square by 1 square. 0.5 would be half a square, or half a dining chair.
+        :type distance_in_squares: float
+        :return: True, if the distance between Position A and Position B is less than or equal to the specified distance in squares. False, if not.
+        :return: bool
+        """
+        from sims4communitylib.utils.common_math_utils import CommonMathUtils
+        distance_between_positions = CommonMathUtils.calculate_distance(position_a, position_b, flatten_positions=False)
+        return distance_between_positions <= distance_in_squares
+
+    @staticmethod
+    def is_location_within_range_of_location(location_a: CommonLocation, location_b: CommonLocation, distance_in_squares: float) -> bool:
+        """is_location_within_range_of_location(location_a, location_b, distance_in_squares)
+
+        Determine if Location A is within a certain distance of Location B.
+
+        :param location_a: The first location.
+        :type location_a: CommonLocation
+        :param location_b: The second location.
+        :type location_b: CommonLocation
+        :param distance_in_squares: A unit measured in squares. 1 square is the size of 1 square in the Build/Buy mode visual grid. For comparison, a dining chair would be 1 square by 1 square. 0.5 would be half a square, or half a dining chair.
+        :type distance_in_squares: float
+        :return: True, if the distance between Location A and Location B is less than or equal to the specified distance in squares. False, if not.
+        :return: bool
+        """
+        position_a = location_a.transform.translation
+        position_b = location_b.transform.translation
+        return CommonLocationUtils.is_position_within_range_of_position(position_a, position_b, distance_in_squares)
+
+    @staticmethod
     def get_lot_traits(zone_id: int) -> Tuple[ZoneModifier]:
         """get_lot_traits(lot_id)
 

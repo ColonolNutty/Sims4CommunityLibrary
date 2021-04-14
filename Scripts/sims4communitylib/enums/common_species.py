@@ -24,8 +24,14 @@ class CommonSpecies(CommonInt):
 
     @staticmethod
     def get_species(sim_info: SimInfo) -> 'CommonSpecies':
-        """Retrieve the CommonSpecies of a sim. Use this instead of CommonSpeciesUtils.get_species to determine a more specific species.
+        """get_species(sim_info)
 
+        Retrieve the CommonSpecies of a sim. Use this instead of CommonSpeciesUtils.get_species to determine a more specific species.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: A species matching the Sim or CommonSpecies.INVALID if no matching species is found.
+        :rtype: CommonSpecies
         """
         from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
         if CommonSpeciesUtils.is_human(sim_info):

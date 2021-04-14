@@ -5,6 +5,7 @@ Option Dialogs
 
    sims4communitylib.dialogs.option_dialogs.options.objects
    sims4communitylib.dialogs.option_dialogs.options.sims
+   sims4communitylib.dialogs.option_dialogs.options.response
    sims4communitylib.dialogs.option_dialogs.options.multi_pane
 
 `Choose Option Dialog`

@@ -6,6 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import math
+import sims4.math as sims_math
 
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
 
@@ -73,3 +74,24 @@ class CommonMathUtils:
             position_one = CommonVector3.flatten(position_one)
             position_two = CommonVector3.flatten(position_one)
         return CommonVector3.distance_between(position_one, position_two)
+
+    @staticmethod
+    def calculate_offset_from_degrees(position: CommonVector3, degrees: float, length: float) -> CommonVector3:
+        """calculate_offset_from_degrees(position, degrees, length)
+
+        Calculate an offset vector based on the forward axis from a vector.
+
+        :param position: The original position.
+        :type position: CommonVector3
+        :param degrees: Amount of degrees to offset.
+        :type degrees: float
+        :param length: The length of the offset.
+        :type length: float
+        :return: The vector offset.
+        :rtype: CommonVector3
+        """
+        offset_vector = sims_math.FORWARD_AXIS
+        # noinspection PyUnresolvedReferences
+        offset_vector = CommonQuaternion.from_degrees(degrees).transform_vector(offset_vector)
+        offset_vector = sims_math.vector_normalize(offset_vector) * length
+        return position + offset_vector
