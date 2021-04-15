@@ -257,14 +257,14 @@ class CommonChooseResponseDialog(CommonDialog):
                 self.log.debug('Choice made.')
                 if choice == CommonDialogNavigationButtonTag.NEXT:
                     self.log.debug('Next chosen.')
-                    self.show(on_chosen=on_chosen, on_previous=on_previous, dialog_options=dialog_options, include_previous_button=include_previous_button, sim_info=sim_info, page=page + 1)
+                    self.show(on_chosen=on_chosen, on_previous=on_previous, dialog_options=dialog_options, include_previous_button=include_previous_button, sim_info=sim_info, target_sim_info=target_sim_info, page=page + 1)
                     return
                 elif choice == CommonDialogNavigationButtonTag.PREVIOUS:
                     self.log.debug('Previous chosen.')
                     if page == 1:
                         on_previous()
                     else:
-                        self.show(on_chosen=on_chosen, on_previous=on_previous, dialog_options=dialog_options, include_previous_button=include_previous_button, sim_info=sim_info, page=page - 1)
+                        self.show(on_chosen=on_chosen, on_previous=on_previous, dialog_options=dialog_options, include_previous_button=include_previous_button, sim_info=sim_info, target_sim_info=target_sim_info, page=page - 1)
                     return
                 self.log.format_with_message('Choice made.', choice=choice)
                 on_chosen(choice, outcome)
