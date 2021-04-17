@@ -7,7 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 from sims4.utils import classproperty
 from collections import OrderedDict
-from typing import Iterator
+from typing import Iterator, Union, Tuple
 
 # noinspection PyBroadException
 try:
@@ -39,6 +39,51 @@ except:
         # noinspection PyPropertyDefinition,PyMethodParameters
         @classproperty
         def value_to_name(cls) -> OrderedDict:
+            pass
+
+        def __int__(self) -> int:
+            pass
+
+        def __float__(self) -> float:
+            pass
+
+        def __sub__(self, other: Union['Int', int]) -> int:
+            pass
+
+        def __invert__(self) -> int:
+            pass
+
+        def __add__(self, other: Union['Int', int]) -> int:
+            pass
+
+        def __divmod__(self, other: Union['Int', int]) -> Tuple[int, int]:
+            pass
+
+        def __mod__(self, other: Union['Int', int]) -> int:
+            pass
+
+        def __mul__(self, other: Union['Int', int]) -> int:
+            pass
+
+        def __neg__(self) -> int:
+            pass
+
+        def __ge__(self, other: Union['Int', int]) -> bool:
+            pass
+
+        def __le__(self, other: Union['Int', int]) -> bool:
+            pass
+
+        def __lt__(self, other: Union['Int', int]) -> bool:
+            pass
+
+        def __gt__(self, other: Union['Int', int]) -> bool:
+            pass
+
+        def __eq__(self, other: Union['Int', int]) -> bool:
+            pass
+
+        def __hash__(self) -> int:
             pass
 
 
