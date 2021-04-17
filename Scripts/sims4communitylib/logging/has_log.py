@@ -63,6 +63,9 @@ class HasLog(HasModIdentity):
         if self._log is None:
             mod_name = CommonModIdentity._get_mod_name(self.mod_identity)
             self._log = CommonLogRegistry.get().register_log(mod_name, self.log_identifier)
+            if self._verbose_log is None:
+                mod_name = CommonModIdentity._get_mod_name(self.mod_identity)
+                self._verbose_log = CommonLogRegistry.get().register_log(mod_name, self.verbose_log_identifier)
         return self._log
 
     @property
