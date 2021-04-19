@@ -109,20 +109,28 @@ class CommonPersistedSimDataStorage(CommonSimDataStorage):
                 raise RuntimeError('Failed to locate a data manager for {}, maybe you forgot to register one?'.format(self.mod_identity.name))
         return self.__data_manager
 
+    @property
+    def _persist_empty_values(self) -> bool:
+        return False
+
     def _save_persisted_data(self) -> None:
         data_to_save = dict()
         for data_property_name in self._data.keys():
             if data_property_name not in self.whitelist_property_names or data_property_name in self.blacklist_property_names:
                 continue
             data = self._data[data_property_name]
-            if data is None or (data != 0 and not data):
-                continue
-            serialized_data = data.serialize() if isinstance(data, CommonSerializable) else data
-            if data is None or (serialized_data != 0 and not serialized_data):
-                continue
-            data_to_save[data_property_name] = serialized_data
-        if not data_to_save:
-            return
+            if self._persist_empty_values:
+                data_to_save[data_property_name] = data.serialize() if isinstance(data, CommonSerializable) else data
+            else:
+                if data is None or (data != 0 and not data):
+                    continue
+                serialized_data = data.serialize() if isinstance(data, CommonSerializable) else data
+                if data is None or (serialized_data != 0 and not serialized_data):
+                    continue
+                data_to_save[data_property_name] = serialized_data
+        if not self._persist_empty_values:
+            if not data_to_save:
+                return
         self._data_manager.get_data_store_by_type(self.data_store_type).set_value_by_key(str(self.sim_id), data_to_save)
 
     def _load_persisted_data(self) -> Dict[str, Any]:
