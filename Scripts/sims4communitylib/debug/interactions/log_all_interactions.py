@@ -64,7 +64,7 @@ class S4CLDebugLogAllInteractionsInteraction(CommonImmediateSuperInteraction):
         for interaction in interactions:
             interaction: Interaction = interaction
             try:
-                interaction_short_names.append(CommonInteractionUtils.get_interaction_short_name(interaction))
+                interaction_short_names.append('{} ({})'.format(CommonInteractionUtils.get_interaction_short_name(interaction), CommonInteractionUtils.get_interaction_id(interaction)))
             except Exception as ex:
                 self.log.error('Problem while attempting to handle interaction {}'.format(pformat(interaction)), exception=ex)
                 continue
@@ -73,13 +73,13 @@ class S4CLDebugLogAllInteractionsInteraction(CommonImmediateSuperInteraction):
                 continue
             for affordance in component.component_super_affordances_gen():
                 try:
-                    interaction_short_names.append(CommonInteractionUtils.get_interaction_short_name(affordance))
+                    interaction_short_names.append('{} ({})'.format(CommonInteractionUtils.get_interaction_short_name(affordance), CommonInteractionUtils.get_interaction_id(affordance)))
                 except Exception as ex:
                     self.log.error('Problem while attempting to handle affordance {}'.format(pformat(affordance)), exception=ex)
                     continue
 
         sorted_short_names = sorted(interaction_short_names, key=lambda x: x)
-        self.log.debug(pformat(sorted_short_names))
+        self.log.format(interactions=sorted_short_names)
         self.log.debug('Done Logging Available Interactions.')
         self.log.disable()
         CommonBasicNotification(
