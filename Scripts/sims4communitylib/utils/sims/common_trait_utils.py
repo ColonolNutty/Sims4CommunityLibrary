@@ -10,8 +10,10 @@ from typing import List, Union, Callable, Iterator, Tuple
 
 from relationships.relationship_tracker import RelationshipTracker
 from relationships.sim_knowledge import SimKnowledge
+from server_commands.argument_helpers import TunableInstanceParam, OptionalTargetParam
 from sims.sim_info import SimInfo
 from sims4.commands import Command, CommandType, CheatOutput
+from sims4.resources import Types
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
@@ -1090,46 +1092,48 @@ class CommonTraitUtils:
         return list(sim_info.trait_tracker.equipped_traits)
 
     @staticmethod
-    def add_trait(sim_info: SimInfo, *trait_ids: Union[int, CommonTraitId]) -> bool:
-        """add_trait(sim_info, *trait_ids)
+    def add_trait(sim_info: SimInfo, *traits: Union[int, CommonTraitId, Trait]) -> bool:
+        """add_trait(sim_info, *traits)
 
         Add the specified traits to a Sim.
 
         :param sim_info: The Sim to add the specified traits to.
         :type sim_info: SimInfo
-        :param trait_ids: An iterable of Trait identifiers of traits being added.
-        :type trait_ids: Union[int, CommonTraitId]
+        :param traits: An iterable of Trait identifiers of traits being added.
+        :type traits: Union[int, CommonTraitId, Trait]
         :return: True, if all specified traits were successfully added to the Sim. False, if not.
         :rtype: bool
         """
         success = True
-        for trait_id in trait_ids:
-            trait_instance = CommonTraitUtils.load_trait_by_id(trait_id)
-            if trait_instance is None:
+        for trait in traits:
+            if isinstance(trait, int) or isinstance(trait, CommonTraitId):
+                trait = CommonTraitUtils.load_trait_by_id(trait)
+            if trait is None:
                 continue
-            if not sim_info.add_trait(trait_instance):
+            if not sim_info.add_trait(trait):
                 success = False
         return success
 
     @staticmethod
-    def remove_trait(sim_info: SimInfo, *trait_ids: Union[int, CommonTraitId]) -> bool:
-        """remove_trait(sim_info, *trait_ids)
+    def remove_trait(sim_info: SimInfo, *traits: Union[int, CommonTraitId, Trait]) -> bool:
+        """remove_trait(sim_info, *trait)
 
         Remove the specified traits from a Sim.
 
         :param sim_info: The Sim to remove the specified traits from.
         :type sim_info: SimInfo
-        :param trait_ids: The decimal identifier of the trait being removed.
-        :type trait_ids: Union[int, CommonTraitId]
+        :param traits: An iterable of Trait identifiers of traits being removed.
+        :type traits: Union[int, CommonTraitId, Trait]
         :return: True, if all specified traits were successfully removed from the Sim. False, if not.
         :rtype: bool
         """
         success = True
-        for trait_id in trait_ids:
-            trait_instance = CommonTraitUtils.load_trait_by_id(trait_id)
-            if trait_instance is None:
+        for trait in traits:
+            if isinstance(trait, int) or isinstance(trait, CommonTraitId):
+                trait = CommonTraitUtils.load_trait_by_id(trait)
+            if trait is None:
                 continue
-            if not sim_info.remove_trait(trait_instance):
+            if not sim_info.remove_trait(trait):
                 success = False
         return success
 
@@ -1213,68 +1217,95 @@ class CommonTraitUtils:
         return getattr(trait_identifier, 'guid64', None)
 
     @staticmethod
-    def load_trait_by_id(trait_id: Union[int, CommonTraitId]) -> Union[Trait, None]:
-        """load_trait_by_id(trait_id)
+    def load_trait_by_id(trait: Union[int, CommonTraitId, Trait]) -> Union[Trait, None]:
+        """load_trait_by_id(trait)
 
-        Load an instance of a Trait by its decimal identifier.
+        Load an instance of a Trait by its identifier.
 
-        :param trait_id: The decimal identifier of a Trait.
-        :type trait_id: Union[int, CommonTraitId]
+        :param trait: The identifier of a Trait.
+        :type trait: Union[int, CommonTraitId, Trait]
         :return: An instance of a Trait matching the decimal identifier or None if not found.
         :rtype: Union[Trait, None]
         """
+        if isinstance(trait, Trait):
+            return trait
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-        return CommonResourceUtils.load_instance(Types.TRAIT, trait_id)
+        return CommonResourceUtils.load_instance(Types.TRAIT, trait)
 
 
 @Command('s4clib.show_known_traits', command_type=CommandType.Live)
-def _common_show_known_traits(target_sim_id: int=None, _connection: int=None):
+def _common_show_known_traits(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
     output = CheatOutput(_connection)
-    output('Doing')
+    output('Attempting to show known traits.')
     active_sim_info = CommonSimUtils.get_active_sim_info()
-    active_sim_id = CommonSimUtils.get_sim_id(active_sim_info)
-    output('Active sim id: {}'.format(active_sim_id))
-    if target_sim_id is None:
-        output('No target specified.')
-        return
-    target_sim_info = CommonSimUtils.get_sim_info(target_sim_id)
+    output('Active sim: {}'.format(CommonSimNameUtils.get_full_name(active_sim_info)))
+    target_sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if target_sim_info is None:
-        output('Target with id not found: {}'.format(target_sim_id))
+        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    output('Getting relationship {}'.format(CommonSimNameUtils.get_full_name(target_sim_info)))
-    relationship_tracker: RelationshipTracker = active_sim_info.relationship_tracker
-    output('Getting knowledge')
-    knowledge: SimKnowledge = relationship_tracker.get_knowledge(target_sim_id, initialize=False)
-    output('Printing knowledge')
-    if knowledge.known_traits is None:
-        output('No known traits.')
+    if active_sim_info is target_sim_info:
+        output('Failed, Target Sim is the same as the Active Sim.')
         return
-    output('Known Traits:')
-    output(pformat(knowledge.known_traits))
-    output('Done')
+    target_sim_id = CommonSimUtils.get_sim_id(target_sim_info)
+    try:
+        output('Getting relationship of {} towards {}'.format(CommonSimNameUtils.get_full_name(active_sim_info), CommonSimNameUtils.get_full_name(target_sim_info)))
+        relationship_tracker: RelationshipTracker = active_sim_info.relationship_tracker
+        output('Getting knowledge')
+        knowledge: SimKnowledge = relationship_tracker.get_knowledge(target_sim_id, initialize=False)
+        output('Printing knowledge')
+        if knowledge.known_traits is None:
+            output('No known traits.')
+            return
+        output('Known Traits:')
+        output(pformat(knowledge.known_traits))
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to retrieve knowledge for Sim {} to Sim {}'.format(CommonSimNameUtils.get_full_name(active_sim_info), CommonSimNameUtils.get_full_name(target_sim_info)), exception=ex)
+        output('Failed to retrieve knowledge for Sim {} to Sim {}. {}'.format(CommonSimNameUtils.get_full_name(active_sim_info), CommonSimNameUtils.get_full_name(target_sim_info), str(ex)))
+
+
+@Command('s4clib.add_trait', command_type=CommandType.Live)
+def _common_add_trait(trait: TunableInstanceParam(Types.TRAIT), opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    if trait is None:
+        output('Failed, Trait not specified or Trait did not exist! s4clib.add_trait <trait_name_or_id> [opt_sim=None]')
+        return
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Adding trait {} to Sim {}'.format(str(trait), sim_name))
+    try:
+        if CommonTraitUtils.add_trait(sim_info, trait):
+            output('Successfully added trait.')
+        else:
+            output('Failed to add trait.')
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to add trait {} to Sim {}.'.format(str(trait), sim_name), exception=ex)
+        output('Failed to add trait {} to Sim {}. {}'.format(str(trait), sim_name, str(ex)))
 
 
 @Command('s4clib.remove_trait', command_type=CommandType.Live)
-def _common_remove_trait(trait_id: int=None, target_sim_id: int=None, _connection: int=None):
+def _common_remove_trait(trait: TunableInstanceParam(Types.TRAIT), opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
     output = CheatOutput(_connection)
-    if trait_id is None:
-        output('Missing trait_id')
+    if trait is None:
+        output('Failed, Trait not specified or Trait did not exist! s4clib.remove_trait <trait_name_or_id> [opt_sim=None]')
         return
-    if target_sim_id is None:
-        output('No Target specified, using the Active Sim.')
-        target_sim_info = CommonSimUtils.get_active_sim_info()
-    else:
-        target_sim_info = CommonSimUtils.get_sim_info(target_sim_id)
-    if target_sim_info is None:
-        output('No target Sim found with id {}'.format(target_sim_id))
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Removing trait {} from Sim {}'.format(str(trait), sim_name))
     try:
-        output('Attempting to remove trait {} from Sim {}'.format(trait_id, CommonSimNameUtils.get_full_name(target_sim_info)))
-        if CommonTraitUtils.remove_trait(target_sim_info, trait_id):
+        if CommonTraitUtils.remove_trait(sim_info, trait):
             output('Successfully removed trait.')
         else:
             output('Failed to remove trait.')
     except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to remove trait {} from Sim {}'.format(trait_id, CommonSimNameUtils.get_full_name(target_sim_info)), exception=ex)
-    output('Done')
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to remove trait {} from Sim {}.'.format(str(trait), sim_name), exception=ex)
+        output('Failed to remove trait {} from Sim {}. {}'.format(str(trait), sim_name, str(ex)))

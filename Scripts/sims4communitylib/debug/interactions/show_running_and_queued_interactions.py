@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any
+from typing import Any, List
 
 from distributor.shared_messages import IconInfoData
 from event_testing.results import TestResult
@@ -40,13 +40,6 @@ class S4CLDebugShowRunningAndQueuedInteractionsInteraction(CommonImmediateSuperI
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
-        cls.get_log().format_with_message(
-            'Running \'{}\' on_test.'.format(cls.__name__),
-            interaction_sim=interaction_sim,
-            interaction_target=interaction_target,
-            interaction_context=interaction_context,
-            kwargles=kwargs
-        )
         if interaction_target is None or not CommonTypeUtils.is_sim_or_sim_info(interaction_target):
             cls.get_log().debug('Failed, Target is not a Sim.')
             return TestResult.NONE
@@ -55,22 +48,28 @@ class S4CLDebugShowRunningAndQueuedInteractionsInteraction(CommonImmediateSuperI
 
     # noinspection PyMissingOrEmptyDocstring
     def on_started(self, interaction_sim: Sim, interaction_target: Sim) -> bool:
-        self.log.format_with_message(
-            'Running \'{}\' on_started.'.format(self.__class__.__name__),
-            interaction_sim=interaction_sim,
-            interaction_target=interaction_target
-        )
         target_sim_info = CommonSimUtils.get_sim_info(interaction_target)
         target_sim_name = CommonSimNameUtils.get_full_name(target_sim_info)
         from sims4communitylib.utils.sims.common_sim_interaction_utils import CommonSimInteractionUtils
         from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
-        running_interaction_names = ', '.join(CommonInteractionUtils.get_interaction_short_names(CommonSimInteractionUtils.get_running_interactions_gen(target_sim_info)))
-        queued_interaction_names = ', '.join(CommonInteractionUtils.get_interaction_short_names(CommonSimInteractionUtils.get_queued_interactions_gen(target_sim_info)))
+        running_interaction_strings: List[str] = list()
+        for interaction in CommonSimInteractionUtils.get_running_interactions_gen(target_sim_info):
+            interaction_name = CommonInteractionUtils.get_interaction_short_name(interaction)
+            interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
+            running_interaction_strings.append('{} ({})'.format(interaction_name, interaction_id))
+        running_interaction_names = ', '.join(running_interaction_strings)
+
+        queued_interaction_strings: List[str] = list()
+        for interaction in CommonSimInteractionUtils.get_queued_interactions_gen(target_sim_info):
+            interaction_name = CommonInteractionUtils.get_interaction_short_name(interaction)
+            interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
+            queued_interaction_strings.append('{} ({})'.format(interaction_name, interaction_id))
+        queued_interaction_names = ', '.join(queued_interaction_strings)
         text = ''
         text += 'Running Interactions:\n{}\n\n'.format(running_interaction_names)
         text += 'Queued Interactions:\n{}\n\n'.format(queued_interaction_names)
         CommonBasicNotification(
-            CommonLocalizationUtils.create_localized_string('{} Running and Queued Interactions'.format(target_sim_name)),
+            CommonLocalizationUtils.create_localized_string('{} Running and Queued Interactions ({})'.format(target_sim_name, CommonSimUtils.get_sim_id(target_sim_info))),
             CommonLocalizationUtils.create_localized_string(text)
         ).show(
             icon=IconInfoData(obj_instance=interaction_target)

@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any
+from typing import Any, List
 
 from distributor.shared_messages import IconInfoData
 from event_testing.results import TestResult
@@ -41,13 +41,6 @@ class S4CLDebugShowActiveBuffsInteraction(CommonImmediateSuperInteraction):
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
-        cls.get_log().format_with_message(
-            'Running \'{}\' on_test.'.format(cls.__name__),
-            interaction_sim=interaction_sim,
-            interaction_target=interaction_target,
-            interaction_context=interaction_context,
-            kwargles=kwargs
-        )
         if interaction_target is None or not CommonTypeUtils.is_sim_or_sim_info(interaction_target):
             cls.get_log().debug('Failed, Target is not a Sim.')
             return TestResult.NONE
@@ -56,18 +49,18 @@ class S4CLDebugShowActiveBuffsInteraction(CommonImmediateSuperInteraction):
 
     # noinspection PyMissingOrEmptyDocstring
     def on_started(self, interaction_sim: Sim, interaction_target: Sim) -> bool:
-        self.log.format_with_message(
-            'Running \'{}\' on_started.'.format(self.__class__.__name__),
-            interaction_sim=interaction_sim,
-            interaction_target=interaction_target
-        )
         target_sim_info = CommonSimUtils.get_sim_info(interaction_target)
         target_sim_name = CommonSimNameUtils.get_full_name(target_sim_info)
-        sim_buffs = ', '.join(CommonBuffUtils.get_buff_names(CommonBuffUtils.get_buffs(target_sim_info)))
+        sim_buff_strings: List[str] = list()
+        for buff in CommonBuffUtils.get_buffs(target_sim_info):
+            buff_name = CommonBuffUtils.get_buff_name(buff)
+            buff_id = CommonBuffUtils.get_buff_id(buff)
+            sim_buff_strings.append('{} ({})'.format(buff_name, buff_id))
+        sim_buffs = ', '.join(sim_buff_strings)
         text = ''
         text += 'Active Buffs:\n{}\n\n'.format(sim_buffs)
         CommonBasicNotification(
-            CommonLocalizationUtils.create_localized_string('{} Active Buffs'.format(target_sim_name)),
+            CommonLocalizationUtils.create_localized_string('{} Active Buffs ({})'.format(target_sim_name, CommonSimUtils.get_sim_id(target_sim_info))),
             CommonLocalizationUtils.create_localized_string(text)
         ).show(
             icon=IconInfoData(obj_instance=interaction_target)

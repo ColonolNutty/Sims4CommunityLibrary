@@ -9,12 +9,19 @@ from typing import Union, List, Tuple, Iterator
 
 from buffs.buff import Buff
 from protocolbuffers.Localization_pb2 import LocalizedString
+from server_commands.argument_helpers import TunableInstanceParam, OptionalTargetParam
 from sims.sim_info import SimInfo
+from sims4.commands import Command, CommandType, CheatOutput
+from sims4.resources import Types
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.types.component_types import CommonComponentType
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonBuffUtils:
@@ -90,24 +97,25 @@ class CommonBuffUtils:
         return CommonBuffUtils.has_buff(sim_info, *buff_ids)
 
     @staticmethod
-    def has_buff(sim_info: SimInfo, *buff_ids: Union[int, CommonBuffId]) -> bool:
-        """has_buff(sim_info, *buff_ids)
+    def has_buff(sim_info: SimInfo, *buffs: Union[int, CommonBuffId, Buff]) -> bool:
+        """has_buff(sim_info, *buffs)
 
         Determine if any of the specified buffs are currently active on a sim.
 
         :param sim_info: The sim being checked.
         :type sim_info: SimInfo
-        :param buff_ids: The decimal identifiers of Buffs.
-        :type buff_ids: int
-        :return: True if the sim has any of the specified buffs.
+        :param buffs: The identifiers of Buffs.
+        :type buffs: Union[int, CommonBuffId, Buff]
+        :return: True, if the sim has any of the specified buffs.
         :rtype: int
         """
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
-        if not buff_ids:
+        if not buffs:
             return False
+        buff_ids = [CommonBuffUtils.get_buff_id(buff) for buff in buffs]
         sim_buff_ids = CommonBuffUtils.get_buff_ids(sim_info)
         for sim_buff_id in sim_buff_ids:
             if sim_buff_id in buff_ids:
@@ -163,15 +171,15 @@ class CommonBuffUtils:
         return buff_ids
 
     @staticmethod
-    def add_buff(sim_info: SimInfo, *buff_ids: Union[int, CommonBuffId], buff_reason: Union[int, str, LocalizedString, CommonStringId]=None) -> bool:
-        """add_buff(sim_info, *buff_ids, buff_reason=None)
+    def add_buff(sim_info: SimInfo, *buffs: Union[int, CommonBuffId], buff_reason: Union[int, str, LocalizedString, CommonStringId]=None) -> bool:
+        """add_buff(sim_info, *buffs, buff_reason=None)
 
         Add the specified buffs to a sim.
 
         :param sim_info: The sim to add the specified buffs to.
         :type sim_info: SimInfo
-        :param buff_ids: The decimal identifiers of buffs to add.
-        :type buff_ids: int
+        :param buffs: An iterable of identifiers of buffs being added.
+        :type buffs: Union[int, CommonBuffId, Buff]
         :param buff_reason: The text that will display when the player hovers over the buffs. What caused the buffs to be added.
         :type buff_reason: Union[int, str, LocalizedString, CommonStringId], optional
         :return: True, if all of the specified buffs were successfully added. False, if not.
@@ -181,26 +189,32 @@ class CommonBuffUtils:
             raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
-        localized_buff_reason = CommonLocalizationUtils.create_localized_string(buff_reason)
+        localized_buff_reason = None
+        if buff_reason is not None:
+            localized_buff_reason = CommonLocalizationUtils.create_localized_string(buff_reason)
+        has_any = False
         success = True
-        for buff_identifier in buff_ids:
-            buff_instance = CommonBuffUtils.load_buff_by_id(buff_identifier)
-            if buff_instance is None:
+        for buff in buffs:
+            if isinstance(buff, int) or isinstance(buff, CommonBuffId):
+                buff = CommonBuffUtils.load_buff_by_id(buff)
+            if buff is None:
                 continue
-            if not sim_info.add_buff_from_op(buff_instance, buff_reason=localized_buff_reason):
+            if not sim_info.add_buff_from_op(buff, buff_reason=localized_buff_reason):
                 success = False
-        return success
+            else:
+                has_any = True
+        return success and has_any
 
     @staticmethod
-    def remove_buff(sim_info: SimInfo, *buff_ids: Union[int, CommonBuffId]) -> bool:
-        """remove_buff(sim_info, *buff_ids)
+    def remove_buff(sim_info: SimInfo, *buffs: Union[int, CommonBuffId, Buff]) -> bool:
+        """remove_buff(sim_info, *buffs)
 
         Remove the specified buffs from a sim.
 
         :param sim_info: The sim to remove the specified buffs from.
         :type sim_info: SimInfo
-        :param buff_ids: The decimal identifiers of Buffs to remove.
-        :type buff_ids: int
+        :param buffs: An iterable of identifiers of buffs being removed.
+        :type buffs: Union[int, CommonBuffId, Buff]
         :return: True, if all of the specified buffs were successfully removed. False, if not.
         :rtype: bool
         """
@@ -208,14 +222,18 @@ class CommonBuffUtils:
             raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return False
+        has_any = False
         success = True
-        for buff_identifier in buff_ids:
-            buff_instance = CommonBuffUtils.load_buff_by_id(buff_identifier)
-            if buff_instance is None:
+        for buff in buffs:
+            if isinstance(buff, int) or isinstance(buff, CommonBuffId):
+                buff = CommonBuffUtils.load_buff_by_id(buff)
+            if buff is None:
                 continue
-            if not sim_info.remove_buff_by_type(buff_instance):
+            sim_info.remove_buff_by_type(buff)
+            has_any = True
+            if CommonBuffUtils.has_buff(sim_info, buff):
                 success = False
-        return success
+        return success and has_any
 
     @staticmethod
     def get_buff_id(buff_identifier: Union[int, Buff]) -> Union[int, None]:
@@ -277,16 +295,64 @@ class CommonBuffUtils:
         return tuple(names)
 
     @staticmethod
-    def load_buff_by_id(buff_id: Union[int, CommonBuffId]) -> Union[Buff, None]:
-        """load_buff_by_id(buff_id)
+    def load_buff_by_id(buff: Union[int, CommonBuffId, Buff]) -> Union[Buff, None]:
+        """load_buff_by_id(buff)
 
-        Load an instance of a Buff by its decimal identifier.
+        Load an instance of a Buff by its identifier.
 
-        :param buff_id: The decimal identifier of a Buff.
-        :type buff_id: Union[int, CommonBuffId]
+        :param buff: The identifier of a Buff.
+        :type buff: Union[int, CommonBuffId, Buff]
         :return: An instance of a Buff matching the decimal identifier or None if not found.
         :rtype: Union[Buff, None]
         """
+        if isinstance(buff, Buff):
+            return buff
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-        return CommonResourceUtils.load_instance(Types.BUFF, buff_id)
+        return CommonResourceUtils.load_instance(Types.BUFF, buff)
+
+
+@Command('s4clib.add_buff', command_type=CommandType.Live)
+def _common_add_buff(buff: TunableInstanceParam(Types.BUFF), buff_reason: str='(From Command)', opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    if buff is None:
+        output('Failed, Buff not specified or Buff did not exist! s4clib.add_buff <buff_name_or_id> [opt_sim=None]')
+        return
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Adding buff {} to Sim {}'.format(str(buff), sim_name))
+    try:
+        if CommonBuffUtils.add_buff(sim_info, buff, buff_reason=buff_reason):
+            output('Successfully added buff.')
+        else:
+            output('Failed to add buff.')
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to add buff {} to Sim {}.'.format(str(buff), sim_name), exception=ex)
+        output('Failed to add buff {} to Sim {}. {}'.format(str(buff), sim_name, str(ex)))
+
+
+@Command('s4clib.remove_buff', command_type=CommandType.Live)
+def _common_remove_buff(buff: TunableInstanceParam(Types.BUFF), opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    if buff is None:
+        output('Failed, Buff not specified or Buff did not exist! s4clib.remove_buff <buff_name_or_id> [opt_sim=None]')
+        return
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Removing buff {} from Sim {}'.format(str(buff), sim_name))
+    try:
+        if CommonBuffUtils.remove_buff(sim_info, buff):
+            output('Successfully removed buff.')
+        else:
+            output('Failed to remove buff.')
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to remove buff {} from Sim {}.'.format(str(buff), sim_name), exception=ex)
+        output('Failed to remove buff {} from Sim {}. {}'.format(str(buff), sim_name, str(ex)))
