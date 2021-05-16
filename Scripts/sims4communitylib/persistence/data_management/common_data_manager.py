@@ -105,10 +105,10 @@ class CommonDataManager(HasLog):
         if name in self._data_stores:
             return self._data_stores[name]
         default_data_store: CommonDataStore = data_store_type()
-        if name in self._data_store_data:
-            default_data_store.update_data(self._data_store_data[name])
-        else:
-            default_data_store.update_data(dict())
+        if name not in self._data_store_data:
+            self._data_store_data[name] = dict()
+
+        default_data_store.update_data(self._data_store_data[name])
         self.log.format_with_message('Created data store', name=default_data_store.get_identifier())
         self._data_store_data[name] = default_data_store._storage
         self._data_stores[name] = default_data_store
@@ -196,7 +196,9 @@ class CommonDataManager(HasLog):
     def _load(self) -> Dict[str, Dict[str, Any]]:
         data = dict()
         for persistence_service in self.persistence_services:
-            data.update(persistence_service.load(self.mod_identity, identifier=self._identifier))
+            loaded_data = persistence_service.load(self.mod_identity, identifier=self._identifier)
+            self.log.format_with_message('Loaded data.', loaded_data=loaded_data)
+            data.update(loaded_data)
         return data
 
     def _save(self) -> bool:

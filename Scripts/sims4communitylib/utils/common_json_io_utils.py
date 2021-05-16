@@ -72,8 +72,24 @@ class CommonJSONIOUtils:
         return json.loads(file_contents, cls=decoder_class, object_hook=object_hook)
 
     @staticmethod
-    def load_from_folder(folder_path: str, skip_file_names: Iterator[str]=(), buffering: int=1, encoding: str= 'utf-8', decoder_class: Type[JSONDecoder]=None, object_hook: Callable[[Dict[str, Any]], Any]=None) -> Union[Dict[str, Any], None]:
-        """load_from_folder(folder_path, skip_file_names=(), buffering=1, encoding='utf-8', decoder_class=None, object_hook=None)
+    def load_from_folder(
+        folder_path: str,
+        skip_file_names: Iterator[str]=(),
+        buffering: int=1,
+        encoding: str= 'utf-8',
+        decoder_class: Type[JSONDecoder]=None,
+        object_hook: Callable[[Dict[str, Any]], Any]=None,
+        on_file_read_failure: Callable[[str, Exception], bool]=lambda *_, **__: True
+    ) -> Union[Dict[str, Any], None]:
+        """load_from_folder(\
+            folder_path,\
+            skip_file_names=(),\
+            buffering=1,\
+            encoding='utf-8',\
+            decoder_class=None,\
+            object_hook=None,\
+            on_file_read_failure=lambda *_, **__: True
+        )
 
         Deserialize objects from a folder containing JSON files.
 
@@ -89,7 +105,9 @@ class CommonJSONIOUtils:
         :type decoder_class: Type[JSONDecoder], optional
         :param object_hook: A callable that will be called whenever a dictionary appears while decoding JSON. It can be used to create custom objects from data. Default is None.
         :type object_hook: Callable[[Dict[str, Any]], Any], optional
-        :return: An dictionary of the contents of each file within the specified folder organized by file name or None if the folder path does not exist.
+        :param on_file_read_failure: When a file fails to read due to an exception, this callback will be called. If the callback returns False, no more files will be read. If the callback returns True, the rest of the files will continue to be read. Default is a callback that returns True.
+        :type on_file_read_failure: Callable[[str, Exception], bool], optional
+        :return: A dictionary of the contents of each file within the specified folder organized by file name or None if the folder path does not exist.
         :rtype: Union[Dict[str, Any], None]
         """
         if not os.path.exists(folder_path):
@@ -102,7 +120,12 @@ class CommonJSONIOUtils:
             entry: DirEntry = entry
             if not entry.is_file() or entry.name is None or entry.name in skip_file_names:
                 continue
-            file_contents: str = CommonJSONIOUtils.load_from_file(entry.path, buffering=buffering, encoding=encoding, decoder_class=decoder_class, object_hook=object_hook)
+            try:
+                file_contents: str = CommonJSONIOUtils.load_from_file(entry.path, buffering=buffering, encoding=encoding, decoder_class=decoder_class, object_hook=object_hook)
+            except Exception as ex:
+                if not on_file_read_failure(entry.path, ex):
+                    break
+                continue
             if file_contents is None:
                 continue
             data[entry.name] = file_contents
