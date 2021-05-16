@@ -12,6 +12,8 @@ from sims.sim_info import SimInfo
 from sims4.commands import Command, CommandType, CheatOutput
 from sims4.resources import Types
 from sims4communitylib.enums.skills_enum import CommonSkillId
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.resources.common_statistic_utils import CommonStatisticUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -339,18 +341,18 @@ def _common_get_skill_level(skill: TunableInstanceParam(Types.STATISTIC), use_ef
     if skill is None:
         output('Failed, Skill not specified or Skill did not exist! s4clib.get_skill_level <skill_name_or_id> [use_effective_skill_level=True] [opt_sim=None]')
         return
-    sim_info = None
-    if opt_sim is not None:
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        sim_info = CommonSimUtils.get_active_sim_info()
-    output('Getting skill level for skill {} with use_effective_skill_level {} for Sim {}'.format(str(skill), use_effective_skill_level, CommonSimNameUtils.get_full_name(sim_info)))
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Getting skill level for skill {} with use_effective_skill_level {} for Sim {}'.format(str(skill), use_effective_skill_level, sim_name))
     try:
         skill_value = CommonSimSkillUtils.get_current_skill_level(sim_info, skill, use_effective_skill_level=use_effective_skill_level)
         output('Skill Level: {}'.format(skill_value))
     except Exception as ex:
-        output('An error occurred while getting the skill level for the Sim. {}'.format(str(ex)))
-    output('Done')
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'An error occurred while getting the skill level of skill {} for Sim {}.'.format(str(skill), sim_name), exception=ex)
+        output('An error occurred while getting the skill level of skill {} for Sim {}. {}'.format(str(skill), sim_name, str(ex)))
 
 
 @Command('s4clib.set_skill_level', command_type=CommandType.Live)
@@ -366,20 +368,20 @@ def _common_set_skill_level(skill: TunableInstanceParam(Types.STATISTIC), level:
     except:
         output('Failed, Level not specified s4clib.set_skill_level <skill_name_or_id> <level> [opt_sim=None]')
         return
-    sim_info = None
-    if opt_sim is not None:
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        sim_info = CommonSimUtils.get_active_sim_info()
-    output('Setting skill level for skill {} to level {} for Sim {}'.format(str(skill), level, CommonSimNameUtils.get_full_name(sim_info)))
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Setting skill level for skill {} to level {} for Sim {}'.format(str(skill), level, sim_name))
     try:
         if CommonSimSkillUtils.set_current_skill_level(sim_info, skill, level):
             output('Successfully set the skill level of the Sim.')
         else:
             output('Failed to set the skill level of the Sim.')
     except Exception as ex:
-        output('An error occurred while setting the skill level for the Sim. {}'.format(str(ex)))
-    output('Done')
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'An error occurred while setting the skill level of skill {} for Sim {}.'.format(str(skill), sim_name), exception=ex)
+        output('An error occurred while setting the skill level of skill {} for Sim {}. {}'.format(str(skill), sim_name, str(ex)))
 
 
 @Command('s4clib.remove_skill', command_type=CommandType.Live)
@@ -389,17 +391,17 @@ def _common_remove_skill(skill: TunableInstanceParam(Types.STATISTIC), opt_sim: 
     if skill is None:
         output('Failed, Skill not specified or Skill did not exist! s4clib.remove_skill <skill_name_or_id> [opt_sim=None]')
         return
-    sim_info = None
-    if opt_sim is not None:
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        sim_info = CommonSimUtils.get_active_sim_info()
-    output('Removing skill {} from Sim {}'.format(str(skill), CommonSimNameUtils.get_full_name(sim_info)))
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Removing skill {} from Sim {}'.format(str(skill), sim_name))
     try:
         if CommonSimSkillUtils.remove_skill(sim_info, skill):
             output('Successfully remove the skill of the Sim.')
         else:
             output('Failed to remove the skill of the Sim.')
     except Exception as ex:
-        output('An error occurred while removing the skill for the Sim. {}'.format(str(ex)))
-    output('Done')
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'An error occurred while removing the skill {} from Sim {}.'.format(str(skill), sim_name), exception=ex)
+        output('An error occurred while removing the skill {} from Sim {}. {}'.format(str(skill), sim_name, str(ex)))

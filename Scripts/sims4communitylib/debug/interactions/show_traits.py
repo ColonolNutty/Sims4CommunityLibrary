@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any
+from typing import Any, List
 
 from distributor.shared_messages import IconInfoData
 from event_testing.results import TestResult
@@ -41,13 +41,6 @@ class S4CLDebugShowTraitsInteraction(CommonImmediateSuperInteraction):
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
-        cls.get_log().format_with_message(
-            'Running \'{}\' on_test.'.format(cls.__name__),
-            interaction_sim=interaction_sim,
-            interaction_target=interaction_target,
-            interaction_context=interaction_context,
-            kwargles=kwargs
-        )
         if interaction_target is None or not CommonTypeUtils.is_sim_or_sim_info(interaction_target):
             cls.get_log().debug('Failed, Target is not a Sim.')
             return TestResult.NONE
@@ -56,18 +49,18 @@ class S4CLDebugShowTraitsInteraction(CommonImmediateSuperInteraction):
 
     # noinspection PyMissingOrEmptyDocstring
     def on_started(self, interaction_sim: Sim, interaction_target: Sim) -> bool:
-        self.log.format_with_message(
-            'Running \'{}\' on_started.'.format(self.__class__.__name__),
-            interaction_sim=interaction_sim,
-            interaction_target=interaction_target
-        )
         target_sim_info = CommonSimUtils.get_sim_info(interaction_target)
         target_sim_name = CommonSimNameUtils.get_full_name(target_sim_info)
-        sim_traits = ', '.join(CommonTraitUtils.get_trait_names(CommonTraitUtils.get_traits(target_sim_info)))
+        trait_strings: List[str] = list()
+        for trait in CommonTraitUtils.get_traits(target_sim_info):
+            trait_name = CommonTraitUtils.get_trait_name(trait)
+            trait_id = CommonTraitUtils.get_trait_id(trait)
+            trait_strings.append('{} ({})'.format(trait_name, trait_id))
+        sim_traits = ', '.join(trait_strings)
         text = ''
         text += 'Traits:\n{}\n\n'.format(sim_traits)
         CommonBasicNotification(
-            CommonLocalizationUtils.create_localized_string('{} Traits'.format(target_sim_name)),
+            CommonLocalizationUtils.create_localized_string('{} Traits ({})'.format(target_sim_name, CommonSimUtils.get_sim_id(target_sim_info))),
             CommonLocalizationUtils.create_localized_string(text)
         ).show(
             icon=IconInfoData(obj_instance=interaction_target)
