@@ -157,6 +157,7 @@ Follow the installation instructions below for details.
 - Unpack the archive using your favorite archiving tool.
 - Drag the files/folders to your Mods directory.
 - Keep in mind the ts4script file MUST be either top level (Directly in the Mods/<ts4script file>�folder) or one folder deep (Mods/Blah/<ts4script file>). Any deeper and it will not work.
+- Keep the `sims4communitylib.ts4script` and `sims4communitylib.config` files together!
 
 
 ### Requirements:
