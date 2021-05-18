@@ -44,7 +44,7 @@ class CommonLog:
         self._log_name = log_name
         self._mod_name = mod_identifier.name if isinstance(mod_identifier, CommonModIdentity) else mod_identifier
         self._custom_file_path = custom_file_path
-        self._enabled = False
+        self._enabled_message_types = tuple()
 
     def debug(self, message: str):
         """debug(message)
@@ -54,7 +54,7 @@ class CommonLog:
         :param message: The message to log.
         :type message: str
         """
-        if self.enabled:
+        if self.is_enabled(CommonMessageType.DEBUG):
             self._log_message(CommonMessageType.DEBUG, message)
 
     def info(self, message: str):
@@ -65,7 +65,7 @@ class CommonLog:
         :param message: The message to log.
         :type message: str
         """
-        if self.enabled:
+        if self.is_enabled(CommonMessageType.INFO):
             self._log_message(CommonMessageType.INFO, message)
 
     def format_info(self, *args: Any, update_tokens: bool=True, **kwargs: Any):
@@ -112,7 +112,7 @@ class CommonLog:
         :param kwargs: Keyword Arguments to format into the message.
         :type kwargs: Any
         """
-        if self.enabled:
+        if self.is_enabled(message_type):
             if update_tokens:
                 args = self._update_args(*args)
                 kwargs = self._update_kwargs(**kwargs)
@@ -139,7 +139,7 @@ class CommonLog:
         :param kwargs: Keyword Arguments to format into the message.
         :type kwargs: Any
         """
-        if self.enabled:
+        if self.is_enabled(message_type):
             if update_tokens:
                 args = self._update_args(*args)
                 kwargs = self._update_kwargs(**kwargs)
@@ -158,7 +158,7 @@ class CommonLog:
         :param message: The message to log.
         :type message: str
         """
-        if self.enabled:
+        if self.is_enabled(CommonMessageType.WARN):
             self._log_message(CommonMessageType.WARN, message)
 
     def format_warn(self, *args: Any, update_tokens: bool=True, **kwargs: Any):
@@ -282,20 +282,22 @@ class CommonLog:
         .. note:: The best use for this is to find the path of invocation to the location this function is called at.
 
         """
-        if not self.enabled:
+        if not self.is_enabled(CommonMessageType.DEBUG):
             return
         import inspect
         current_frame = inspect.currentframe()
         calling_frame = inspect.getouterframes(current_frame, 2)
         self.format(calling_frame)
 
-    def enable(self) -> None:
-        """enable()
+    def enable(self, message_types: Tuple[CommonMessageType]=(CommonMessageType.WARN, CommonMessageType.DEBUG, CommonMessageType.INFO)) -> None:
+        """enable(message_types=(CommonMessageType.WARN, CommonMessageType.DEBUG, CommonMessageType.INFO))
 
-        Enable the log
+        Enable the log or specific types of logs.
 
+        :param message_types: The types of messages to enable for logging. Default message types are Info, Debug, and Warn.
+        :rtype message_types: Tuple[CommonMessageTypes], optional
         """
-        self._enabled = True
+        self._enabled_message_types = message_types
 
     def disable(self) -> None:
         """disable()
@@ -303,7 +305,7 @@ class CommonLog:
         Disable the log
 
         """
-        self._enabled = False
+        self._enabled_message_types = tuple()
     
     @property
     def enabled(self) -> bool:
@@ -314,7 +316,7 @@ class CommonLog:
         :return: True, if the log is enabled. False, if the log is disabled.
         :rtype: bool
         """
-        return self._enabled
+        return any(self._enabled_message_types)
 
     @property
     def name(self) -> str:
@@ -351,6 +353,18 @@ class CommonLog:
         :rtype: str
         """
         return CommonLogUtils.get_exceptions_file_path(self.mod_name, custom_file_path=self._custom_file_path)
+
+    def is_enabled(self, message_type: CommonMessageType) -> bool:
+        """is_enabled(log_type)
+
+        Determine if a specific message type is enabled in for logging.
+
+        :param message_type: The type of messages to check for allowance.
+        :type message_type: CommonMessageType
+        :return: True, if the message type is enabled for logging. False, if not.
+        :rtype: bool
+        """
+        return message_type in self._enabled_message_types
 
     def _log_message(self, message_type: CommonMessageType, message: str):
         from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
@@ -510,6 +524,9 @@ class CommonLogRegistry(CommonService):
         if log_name in self._registered_logs[mod_name]:
             return self._registered_logs[mod_name][log_name]
         log = CommonLog(mod_identifier, log_name, custom_file_path=custom_file_path)
+        from sims4communitylib.s4cl_configuration import S4CLConfiguration
+        if log_name in S4CLConfiguration().enable_logs:
+            log.enable(message_types=S4CLConfiguration().enable_logs[log_name])
         self._registered_logs[mod_name][log_name] = log
         return log
 
