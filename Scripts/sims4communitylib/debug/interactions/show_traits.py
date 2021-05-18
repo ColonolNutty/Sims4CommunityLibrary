@@ -56,6 +56,8 @@ class S4CLDebugShowTraitsInteraction(CommonImmediateSuperInteraction):
             trait_name = CommonTraitUtils.get_trait_name(trait)
             trait_id = CommonTraitUtils.get_trait_id(trait)
             trait_strings.append('{} ({})'.format(trait_name, trait_id))
+
+        trait_strings = sorted(trait_strings, key=lambda x: x)
         sim_traits = ', '.join(trait_strings)
         text = ''
         text += 'Traits:\n{}\n\n'.format(sim_traits)

@@ -56,6 +56,7 @@ class S4CLDebugShowActiveBuffsInteraction(CommonImmediateSuperInteraction):
             buff_name = CommonBuffUtils.get_buff_name(buff)
             buff_id = CommonBuffUtils.get_buff_id(buff)
             sim_buff_strings.append('{} ({})'.format(buff_name, buff_id))
+        sim_buff_strings = sorted(sim_buff_strings, key=lambda x: x)
         sim_buffs = ', '.join(sim_buff_strings)
         text = ''
         text += 'Active Buffs:\n{}\n\n'.format(sim_buffs)

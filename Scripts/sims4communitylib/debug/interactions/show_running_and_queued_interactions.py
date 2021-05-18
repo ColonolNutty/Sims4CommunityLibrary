@@ -57,6 +57,7 @@ class S4CLDebugShowRunningAndQueuedInteractionsInteraction(CommonImmediateSuperI
             interaction_name = CommonInteractionUtils.get_interaction_short_name(interaction)
             interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
             running_interaction_strings.append('{} ({})'.format(interaction_name, interaction_id))
+        running_interaction_strings = sorted(running_interaction_strings, key=lambda x: x)
         running_interaction_names = ', '.join(running_interaction_strings)
 
         queued_interaction_strings: List[str] = list()
@@ -64,6 +65,7 @@ class S4CLDebugShowRunningAndQueuedInteractionsInteraction(CommonImmediateSuperI
             interaction_name = CommonInteractionUtils.get_interaction_short_name(interaction)
             interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
             queued_interaction_strings.append('{} ({})'.format(interaction_name, interaction_id))
+        queued_interaction_strings = sorted(queued_interaction_strings, key=lambda x: x)
         queued_interaction_names = ', '.join(queued_interaction_strings)
         text = ''
         text += 'Running Interactions:\n{}\n\n'.format(running_interaction_names)
