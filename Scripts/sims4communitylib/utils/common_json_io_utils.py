@@ -115,6 +115,10 @@ class CommonJSONIOUtils:
         if skip_file_names is None:
             skip_file_names = tuple()
         skip_file_names = tuple(skip_file_names)
+        skip_file_names = (
+            *skip_file_names,
+            '.DS_Store'
+        )
         data = dict()
         for entry in os.scandir(folder_path):
             entry: DirEntry = entry
