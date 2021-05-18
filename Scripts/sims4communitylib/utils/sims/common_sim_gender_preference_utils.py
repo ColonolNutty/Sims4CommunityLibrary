@@ -15,8 +15,8 @@ from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 
 class CommonSimGenderPreferenceUtils:
     """ Utilities for Sim gender preferences. """
-    LOW_PREFERENCE_THRESHOLD = 5
-    HIGH_PREFERENCE_THRESHOLD = 20
+    LOW_PREFERENCE_THRESHOLD = 20
+    HIGH_PREFERENCE_THRESHOLD = 80
 
     @staticmethod
     def set_gender_preference_amount(sim_info: SimInfo, gender: CommonGender, amount: int) -> bool:

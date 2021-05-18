@@ -58,6 +58,7 @@ class S4CLDebugShowRunningSituationsInteraction(CommonImmediateSuperInteraction)
             situation_id = CommonSituationUtils.get_situation_id(situation)
             situation_strings.append('{} ({})'.format(situation_name, situation_id))
 
+        situation_strings = sorted(situation_strings, key=lambda x: x)
         sim_situations = ', '.join(situation_strings)
         text = ''
         text += 'Running Situations:\n{}\n\n'.format(sim_situations)
