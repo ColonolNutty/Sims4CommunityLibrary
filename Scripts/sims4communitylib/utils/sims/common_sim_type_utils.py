@@ -646,6 +646,42 @@ class CommonSimTypeUtils:
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
     @staticmethod
+    def is_occult(sim_info: SimInfo, combine_teen_young_adult_and_elder_age: bool=True, combine_child_dog_types: bool=True) -> bool:
+        """is_occult(sim_info, combine_teen_young_adult_and_elder_age=True, combine_child_dog_types=True)
+
+        Determine if a Sim has an Occult Sim Type.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param combine_teen_young_adult_and_elder_age: See description of CommonSimTypeUtils.determine_sim_type. Default is True.
+        :type combine_teen_young_adult_and_elder_age: bool, optional
+        :param combine_child_dog_types: See description of CommonSimTypeUtils.determine_sim_type. Default is True.
+        :type combine_child_dog_types: bool, optional
+        :return: True, if the specified Sim has an Occult Sim Type. False, if not.
+        :rtype: bool
+        """
+        sim_type = CommonSimTypeUtils.determine_sim_type(
+            sim_info,
+            combine_teen_young_adult_and_elder_age=combine_teen_young_adult_and_elder_age,
+            combine_child_dog_types=combine_child_dog_types
+        )
+        return CommonSimTypeUtils.is_occult_type(sim_type)
+
+    @staticmethod
+    def is_occult_type(sim_type: CommonSimType) -> bool:
+        """is_occult_type(sim_type)
+
+        Determine if a Sim Type is for an Occult Sim.
+
+        :param sim_type: A Sim Type.
+        :type sim_type: CommonSimType
+        :return: True, if the Sim Type is for an Occult Sim. False, if not.
+        :rtype: bool
+        """
+        # If the sim_type is an Occult, it will change to its Human variant, thus making them not equal and proving it was an occult. If the sim type is Human, it will not change.
+        return CommonSimTypeUtils.convert_to_non_occult_variant(sim_type) != sim_type
+
+    @staticmethod
     def determine_sim_type(sim_info: SimInfo, combine_teen_young_adult_and_elder_age: bool=True, combine_child_dog_types: bool=True) -> CommonSimType:
         """determine_sim_type(sim_info, combine_teen_young_adult_and_elder_age=True, combine_child_dog_types=True)
 
