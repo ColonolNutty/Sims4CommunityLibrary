@@ -6,12 +6,15 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
+from typing import Tuple, Dict, List
 
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_json_io_utils import CommonJSONIOUtils
+from sims4communitylib.utils.common_log_registry import CommonMessageType
+from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
 
 class S4CLConfiguration(HasLog, CommonService):
@@ -40,10 +43,24 @@ class S4CLConfiguration(HasLog, CommonService):
 
     @property
     def enable_vanilla_logging(self) -> bool:
-        """
-        Whether or not vanilla logging should be enabled.
-
-        :return: True, if vanilla logging should be enabled. False, if not.
-        :rtype: bool
-        """
+        """ Whether or not vanilla logging should be enabled. """
         return self._config_data.get('enable_vanilla_logging', False)
+
+    @property
+    def enable_logs(self) -> Dict[str, Tuple[CommonMessageType]]:
+        """ Logs to enable before loading The Sims 4. """
+        enable_logs = self._config_data.get('enable_logs', dict())
+        enable_logs_result: Dict[str, Tuple[CommonMessageType]] = dict()
+        for (key, values) in enable_logs.items():
+            message_types: List[CommonMessageType] = list()
+            try:
+                for value in values:
+                    message_type: CommonMessageType = CommonResourceUtils.get_enum_by_name(value, CommonMessageType, default_value=None)
+                    if message_type is None:
+                        continue
+                    message_types.append(message_type)
+                if message_types:
+                    enable_logs_result[key] = tuple(message_types)
+            except:
+                continue
+        return enable_logs_result
