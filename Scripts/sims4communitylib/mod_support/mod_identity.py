@@ -81,10 +81,10 @@ class CommonModIdentity:
         if mod_identifier is None:
             return 'Unknown_Mod'
         if isinstance(mod_identifier, CommonModIdentity):
-            return mod_identifier.name
+            return mod_identifier.name.replace(' ', '_')
         if isinstance(mod_identifier, str):
-            return mod_identifier
-        return str(mod_identifier)
+            return mod_identifier.replace(' ', '_')
+        return str(mod_identifier).replace(' ', '_')
 
     def __repr__(self) -> str:
         return 'mod_{}_author_{}_namespace_{}'.format(self.name, self.author, self.base_namespace)

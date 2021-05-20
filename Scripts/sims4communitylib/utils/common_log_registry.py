@@ -595,6 +595,10 @@ class CommonLogRegistry(CommonService):
             mod_name = CommonModIdentity._get_mod_name(mod_identifier)
             mod_name = mod_name.lower()
             if log_name not in self._registered_logs[mod_name]:
+                log = self.register_log(mod_name, log_name)
+                if log is not None:
+                    log.enable()
+                    return True
                 return False
             self._registered_logs[mod_name][log_name].enable()
         return True
@@ -661,7 +665,7 @@ def _common_command_enable_log(log_name: str=None, mod_name: str=None, _connecti
             output('specify a log name (See all logs via "s4clib.logs" command)')
             return
         output('Attempting to enable log with name \'{}\''.format(log_name))
-        if CommonLogRegistry.get().log_exists(log_name, mod_identifier=mod_name):
+        if CommonLogRegistry.get().log_exists(log_name, mod_identifier=mod_name) or mod_name is not None:
             if CommonLogRegistry.get().enable_logs(log_name, mod_identifier=mod_name):
                 output('Log enabled: {}'.format(log_name))
             else:
