@@ -14,8 +14,8 @@ from sims4communitylib.modinfo import ModInfo
 # noinspection PyBroadException
 try:
     if os.name == 'nt':
-        import ctypes_module as _ctypes_module
-        _user32 = _ctypes_module.WinDLL('user32', use_last_error=True)
+        import _s4cl_ctypes_module
+        _user32 = _s4cl_ctypes_module.WinDLL('user32', use_last_error=True)
 
         def _can_detect_key_state_for_current_os() -> bool:
             return _user32 is not None
