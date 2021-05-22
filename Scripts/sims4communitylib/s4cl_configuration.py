@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 import os
 from typing import Tuple, Dict, List
 
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
@@ -50,10 +51,10 @@ class S4CLConfiguration(HasLog, CommonService):
     def enable_logs(self) -> Dict[str, Tuple[CommonMessageType]]:
         """ Logs to enable before loading The Sims 4. """
         enable_logs = self._config_data.get('enable_logs', dict())
-        enable_logs_result: Dict[str, Tuple[CommonMessageType]] = dict()
-        for (key, values) in enable_logs.items():
-            message_types: List[CommonMessageType] = list()
-            try:
+        try:
+            enable_logs_result: Dict[str, Tuple[CommonMessageType]] = dict()
+            for (key, values) in enable_logs.items():
+                message_types: List[CommonMessageType] = list()
                 for value in values:
                     message_type: CommonMessageType = CommonResourceUtils.get_enum_by_name(value, CommonMessageType, default_value=None)
                     if message_type is None:
@@ -61,6 +62,7 @@ class S4CLConfiguration(HasLog, CommonService):
                     message_types.append(message_type)
                 if message_types:
                     enable_logs_result[key] = tuple(message_types)
-            except:
-                continue
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while parsing enable_logs', exception=ex)
+            return dict()
         return enable_logs_result

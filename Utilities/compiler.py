@@ -66,7 +66,7 @@ def extract_folder(ea_folder, gameplay_folder):
                 extract_subfolder(root, filename, ea_folder)
 
 
-def compile_module(mod_creator_name=None, root=None, mod_scripts_folder=None, mod_name=None, ignore_folders=None, include_folders=None):
+def compile_module(mod_creator_name=None, root=None, mod_scripts_folder=None, mod_name=None, ignore_folders=None, include_folders=None, include_files=None):
     if not mod_creator_name:
         mod_creator_name = creator_name
     if not mod_name:
@@ -92,6 +92,10 @@ def compile_module(mod_creator_name=None, root=None, mod_scripts_folder=None, mo
             os.remove(ts4script)
             print('Script archive removed.')
         zf = PyZipFile(ts4script, mode='w', allowZip64=True, optimize=2)
+        if include_files is not None:
+            for include_file_path in include_files:
+                if os.path.exists(include_file_path):
+                    zf.write(include_file_path)
         child_directories = get_child_directories(mod_scripts_folder)
         previous_working_directory = os.getcwd()
         print('Changing the working directory to \'{}\''.format(mod_scripts_folder))

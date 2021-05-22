@@ -6,10 +6,15 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Tuple
+
+from interactions.context import InteractionContext
 from objects.script_object import ScriptObject
 from sims4communitylib.enums.interactions_enum import CommonInteractionId
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.interactions.interaction_registration_service import CommonInteractionRegistry, \
     CommonInteractionType, CommonScriptObjectInteractionHandler, CommonInteractionHandler
+from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
+from sims4communitylib.utils.common_keyboard_utils import CommonKeyboardUtils, CommonKeyCode
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 
 
@@ -56,3 +61,10 @@ class _S4CLDebugEverywhereTerrainInteractionHandler(CommonInteractionHandler):
             CommonInteractionId.S4CL_DEBUG_LOG_ALL_INTERACTIONS,
         )
         return result
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), InteractionContext, InteractionContext.__init__.__name__)
+def _common_ensure_shift_held_is_true_when_it_should_be(original, self: InteractionContext, *_, **__):
+    if 'shift_held' not in __ or not __['shift_held']:
+        __['shift_held'] = CommonKeyboardUtils.is_key_pressed(CommonKeyCode.SHIFT)
+    return original(self, *_, **__)

@@ -49,7 +49,7 @@ class S4CLDebugLogAllInteractionsInteraction(CommonImmediateSuperInteraction):
     # noinspection PyMissingOrEmptyDocstring
     def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
         self.log.enable()
-        object_id = -1
+        object_id = CommonObjectUtils.get_object_id(interaction_target) if interaction_target is not None else -1
         definition_id = -1
         if isinstance(interaction_target, Sim):
             object_id = CommonSimUtils.get_sim_id(interaction_target)
