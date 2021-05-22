@@ -6,7 +6,7 @@ The contents of this file came from http://svn.python.org/projects/python/trunk/
 #  This file should be kept compatible with Python 2.3, see PEP 291. #
 ######################################################################
 import sys
-from ctypes_module import *
+from _s4cl_ctypes_module import *
 
 _array_type = type(c_int * 3)
 

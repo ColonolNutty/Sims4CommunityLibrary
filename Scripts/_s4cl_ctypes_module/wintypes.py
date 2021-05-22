@@ -7,8 +7,8 @@ The contents of this file came from http://svn.python.org/projects/python/trunk/
 ######################################################################
 
 # The most useful windows datatypes
-from ctypes_module import *
-from ctypes_module import c_wchar, c_char
+from _s4cl_ctypes_module import *
+from _s4cl_ctypes_module import c_wchar, c_char
 
 BYTE = c_byte
 WORD = c_ushort
@@ -25,7 +25,7 @@ FLOAT = c_float
 BOOLEAN = BYTE
 BOOL = c_long
 
-from ctypes_module import _SimpleCData
+from _s4cl_ctypes_module import _SimpleCData
 class VARIANT_BOOL(_SimpleCData):
     _type_ = "v"
     def __repr__(self):
