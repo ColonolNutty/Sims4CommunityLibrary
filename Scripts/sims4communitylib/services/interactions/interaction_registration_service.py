@@ -10,11 +10,13 @@ from typing import Tuple, Iterator, Callable, Any
 from interactions.base.interaction import Interaction
 from objects.script_object import ScriptObject
 from services.terrain_service import TerrainService
+from sims.sim import Sim
 from sims4.resources import Types
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
+from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 
 
 class CommonInteractionType(CommonInt):
@@ -24,6 +26,8 @@ class CommonInteractionType(CommonInt):
     ON_TERRAIN_LOAD: 'CommonInteractionType' = 0
     ON_OCEAN_LOAD: 'CommonInteractionType' = 1
     ON_SCRIPT_OBJECT_LOAD: 'CommonInteractionType' = 2
+    ADD_TO_SIM_RELATIONSHIP_PANEL_INTERACTIONS: 'CommonInteractionType' = 3
+    ADD_TO_SIM_PHONE_INTERACTIONS: 'CommonInteractionType' = 4
 
 
 class CommonInteractionHandler:
@@ -86,6 +90,7 @@ class CommonScriptObjectInteractionHandler(CommonInteractionHandler):
 
     def should_add(self, script_object: ScriptObject, *args, **kwargs) -> bool:
         """should_add(script_object, args, kwargs)
+
         Determine whether to add the interactions of this handler to the script object.
 
         :param script_object: An object of type ScriptObject
@@ -107,7 +112,9 @@ class CommonInteractionRegistry(CommonService):
         self._interaction_handlers = {
             CommonInteractionType.ON_TERRAIN_LOAD: [],
             CommonInteractionType.ON_OCEAN_LOAD: [],
-            CommonInteractionType.ON_SCRIPT_OBJECT_LOAD: []
+            CommonInteractionType.ON_SCRIPT_OBJECT_LOAD: [],
+            CommonInteractionType.ADD_TO_SIM_RELATIONSHIP_PANEL_INTERACTIONS: [],
+            CommonInteractionType.ADD_TO_SIM_PHONE_INTERACTIONS: []
         }
 
     def on_script_object_add(self, script_object: ScriptObject, *args, **kwargs):
@@ -129,6 +136,32 @@ class CommonInteractionRegistry(CommonService):
                     continue
                 new_super_affordances.append(interaction_instance)
         script_object._super_affordances += tuple(new_super_affordances)
+
+    def _on_sim_relationship_panel_load(self, sim: Sim, *args, **kwargs):
+        new_relationship_panel_affordances = []
+        for interaction_handler in self._interaction_handlers[CommonInteractionType.ADD_TO_SIM_RELATIONSHIP_PANEL_INTERACTIONS]:
+            if hasattr(interaction_handler, 'should_add') and not interaction_handler.should_add(sim, *args, **kwargs):
+                continue
+            if not hasattr(sim, '_relation_panel_affordances'):
+                continue
+            for interaction_instance in interaction_handler._interactions_to_add_gen():
+                if interaction_instance in new_relationship_panel_affordances:
+                    continue
+                new_relationship_panel_affordances.append(interaction_instance)
+        sim._relation_panel_affordances += tuple(new_relationship_panel_affordances)
+
+    def _on_sim_phone_load(self, sim: Sim, *args, **kwargs):
+        new_phone_affordances_affordances = []
+        for interaction_handler in self._interaction_handlers[CommonInteractionType.ADD_TO_SIM_RELATIONSHIP_PANEL_INTERACTIONS]:
+            if hasattr(interaction_handler, 'should_add') and not interaction_handler.should_add(sim, *args, **kwargs):
+                continue
+            if not hasattr(sim, '_phone_affordances'):
+                continue
+            for interaction_instance in interaction_handler._interactions_to_add_gen():
+                if interaction_instance in new_phone_affordances_affordances:
+                    continue
+                new_phone_affordances_affordances.append(interaction_instance)
+        sim._phone_affordances += tuple(new_phone_affordances_affordances)
 
     def on_terrain_load(self, terrain_service: TerrainService, *_, **__):
         """on_terrain_load(terrain_service, *_, **__)
@@ -203,21 +236,24 @@ class CommonInteractionRegistry(CommonService):
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), ScriptObject, ScriptObject.on_add.__name__)
 def _common_script_object_on_add(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
-    CommonInteractionRegistry.get().on_script_object_add(self, *args, **kwargs)
+    CommonInteractionRegistry().on_script_object_add(self, *args, **kwargs)
+    if CommonTypeUtils.is_sim_instance(self):
+        CommonInteractionRegistry()._on_sim_relationship_panel_load(self, *args, **kwargs)
+        CommonInteractionRegistry()._on_sim_phone_load(self, *args, **kwargs)
     return result
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TerrainService, TerrainService.start.__name__)
 def _common_terrain_service_start(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
-    CommonInteractionRegistry.get().on_terrain_load(self, *args, **kwargs)
+    CommonInteractionRegistry().on_terrain_load(self, *args, **kwargs)
     return result
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TerrainService, TerrainService.on_zone_load.__name__)
 def _common_terrain_service_on_zone_load(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
-    CommonInteractionRegistry.get().on_ocean_load(self, *args, **kwargs)
+    CommonInteractionRegistry().on_ocean_load(self, *args, **kwargs)
     return result
 
 
