@@ -34,12 +34,16 @@ class S4CLConfiguration(HasLog, CommonService):
 
     def __init__(self) -> None:
         super().__init__()
-        file_path = os.path.dirname(os.path.dirname(os.path.dirname(self.mod_identity.file_path.strip('/'))))
-        full_file_path = os.path.join(file_path, S4CLConfiguration._CONFIGURATION_FILE_NAME)
-        if os.path.exists(full_file_path):
-            self._config_data = CommonJSONIOUtils.load_from_file(full_file_path)
-        else:
-            self.log.error('Failed to locate configuration file named {} at path {}'.format(S4CLConfiguration._CONFIGURATION_FILE_NAME, file_path))
+        try:
+            file_path = os.path.dirname(os.path.dirname(os.path.dirname(self.mod_identity.file_path.strip('/'))))
+            full_file_path = os.path.join(file_path, S4CLConfiguration._CONFIGURATION_FILE_NAME)
+            if os.path.exists(full_file_path):
+                self._config_data = CommonJSONIOUtils.load_from_file(full_file_path)
+            else:
+                self.log.error('Failed to locate configuration file named {} at path {}'.format(S4CLConfiguration._CONFIGURATION_FILE_NAME, file_path))
+                self._config_data = dict()
+        except Exception as ex:
+            self.log.error('Failed to locate configuration file named {} next to the sims4communitylib.ts4script file!'.format(S4CLConfiguration._CONFIGURATION_FILE_NAME), exception=ex)
             self._config_data = dict()
 
     @property
