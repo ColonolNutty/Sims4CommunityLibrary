@@ -7,7 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 import os
 
-from sims4communitylib.enums.common_key_code import CommonKey
+from sims4communitylib.enums.common_key import CommonKey
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 
