@@ -66,5 +66,5 @@ class _S4CLDebugEverywhereTerrainInteractionHandler(CommonInteractionHandler):
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), InteractionContext, InteractionContext.__init__.__name__)
 def _common_ensure_shift_held_is_true_when_it_should_be(original, self: InteractionContext, *_, **__):
     if 'shift_held' not in __ or not __['shift_held']:
-        __['shift_held'] = CommonKeyboardUtils.is_key_pressed(CommonKeyCode.SHIFT)
+        __['shift_held'] = CommonKeyboardUtils.is_key_currently_pressed(CommonKeyCode.SHIFT)
     return original(self, *_, **__)
