@@ -13,6 +13,7 @@ from objects.game_object import GameObject
 from sims4communitylib.classes.serialization.common_serializable import CommonSerializable
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
+from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
 
 
@@ -40,6 +41,8 @@ class _CommonGameObjectDataStorageMetaclass(type):
 class _CommonGameObjectDataStorage(HasClassLog, metaclass=_CommonGameObjectDataStorageMetaclass):
     def __init__(self, game_object: GameObject):
         super().__init__()
+        if not CommonTypeUtils.is_game_object(game_object):
+            raise AssertionError('game_object was not of type GameObject! {}'.format(game_object))
         self._game_object_id = CommonObjectUtils.get_object_id(game_object)
         self._game_object = game_object
         self._data: Dict[str, Any] = dict()

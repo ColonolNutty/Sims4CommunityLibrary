@@ -41,11 +41,12 @@ class CommonSimInventoryUtils:
             return tuple()
         inventory_objects = tuple(inventory)
         if not inventory_objects or include_object_callback is None:
-            return inventory_objects
-
-        for inventory_object in inventory_objects:
-            if include_object_callback(inventory_object):
+            for inventory_object in inventory_objects:
                 yield inventory_object
+        else:
+            for inventory_object in inventory_objects:
+                if include_object_callback(inventory_object):
+                    yield inventory_object
 
     @staticmethod
     def add_to_inventory(sim_info: SimInfo, object_id: int, count: int=1) -> bool:

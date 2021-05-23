@@ -13,6 +13,7 @@ from sims.sim_info import SimInfo
 from sims4communitylib.classes.serialization.common_serializable import CommonSerializable
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
+from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -40,6 +41,8 @@ class _CommonSimDataStorageMetaclass(type):
 class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclass):
     def __init__(self, sim_info: SimInfo):
         super().__init__()
+        if not CommonTypeUtils.is_sim_info(sim_info):
+            raise AssertionError('sim_info was not of type SimInfo! {}'.format(sim_info))
         self._sim_id = CommonSimUtils.get_sim_id(sim_info)
         self._sim_info = sim_info
         self._data: Dict[str, Any] = dict()
