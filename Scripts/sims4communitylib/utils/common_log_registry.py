@@ -22,10 +22,11 @@ class CommonMessageType(CommonInt):
     """Message types for use when logging.
 
     """
-    DEBUG: 'CommonMessageType' = 0
+    INVALID: 'CommonMessageType' = 0
     ERROR: 'CommonMessageType' = 1
-    INFO: 'CommonMessageType' = 2
-    WARN: 'CommonMessageType' = 3
+    WARN: 'CommonMessageType' = 2
+    DEBUG: 'CommonMessageType' = 3
+    INFO: 'CommonMessageType' = 4
 
 
 class CommonLog:
@@ -297,7 +298,7 @@ class CommonLog:
         :param message_types: The types of messages to enable for logging. Default message types are Info, Debug, and Warn.
         :rtype message_types: Tuple[CommonMessageTypes], optional
         """
-        self._enabled_message_types = message_types
+        self._enabled_message_types = message_types or tuple()
 
     def disable(self) -> None:
         """disable()
@@ -355,13 +356,13 @@ class CommonLog:
         return CommonLogUtils.get_exceptions_file_path(self.mod_name, custom_file_path=self._custom_file_path)
 
     def is_enabled(self, message_type: CommonMessageType) -> bool:
-        """is_enabled(log_type)
+        """is_enabled(message_type)
 
-        Determine if a specific message type is enabled in for logging.
+        Determine if a message type is enabled for logging.
 
         :param message_type: The type of messages to check for allowance.
         :type message_type: CommonMessageType
-        :return: True, if the message type is enabled for logging. False, if not.
+        :return: True, if the specified message type is enabled for logging. False, if not.
         :rtype: bool
         """
         return message_type in self._enabled_message_types

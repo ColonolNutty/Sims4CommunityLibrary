@@ -113,6 +113,22 @@ class CommonPersistedSimDataStorage(CommonSimDataStorage):
     def _persist_empty_values(self) -> bool:
         return False
 
+    def customize_data_pre_save(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """customize_data_pre_save(data)
+
+        A hook that allows customization of data before it is persisted/saved.
+
+        :param data: The data intending to be saved, it is available for customization.
+        :type data: Dict[str, Any]
+        :return: The customized data.
+        :rtype: Dict[str, Any]
+        """
+        data_to_save = dict(data)
+        for (key, value) in data_to_save.items():
+            if not hasattr(self, key):
+                del data[key]
+        return data
+
     def _save_persisted_data(self) -> None:
         data_to_save = dict()
         for data_property_name in self._data.keys():
@@ -128,8 +144,12 @@ class CommonPersistedSimDataStorage(CommonSimDataStorage):
                 if data is None or (serialized_data != 0 and not serialized_data):
                     continue
                 data_to_save[data_property_name] = serialized_data
+        data_to_save = self.customize_data_pre_save(data_to_save)
+        if data_to_save is None:
+            return
         if not self._persist_empty_values:
             if not data_to_save:
+                self._data_manager.get_data_store_by_type(self.data_store_type).remove_data_by_key(str(self.sim_id))
                 return
         self._data_manager.get_data_store_by_type(self.data_store_type).set_value_by_key(str(self.sim_id), data_to_save)
 
