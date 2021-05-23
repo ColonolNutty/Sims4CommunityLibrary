@@ -27,46 +27,47 @@ class S4CLConfiguration(HasLog, CommonService):
     def mod_identity(self) -> CommonModIdentity:
         return ModInfo.get_identity()
 
-    # noinspection PyMissingOrEmptyDocstring
-    @property
-    def log_identifier(self) -> str:
-        return 'common_s4cl_configuration'
-
     def __init__(self) -> None:
+        self._config_data = dict()
         super().__init__()
         try:
-            file_path = os.path.dirname(os.path.dirname(os.path.dirname(self.mod_identity.file_path.strip('/'))))
+            file_path = os.path.dirname(os.path.dirname(os.path.dirname(self.mod_identity.file_path.strip('/').strip('\\'))))
             full_file_path = os.path.join(file_path, S4CLConfiguration._CONFIGURATION_FILE_NAME)
             if os.path.exists(full_file_path):
-                self._config_data = CommonJSONIOUtils.load_from_file(full_file_path)
+                self._config_data = CommonJSONIOUtils.load_from_file(full_file_path) or dict()
             else:
-                self.log.error('Failed to locate configuration file named {} at path {}'.format(S4CLConfiguration._CONFIGURATION_FILE_NAME, file_path))
-                self._config_data = dict()
+                CommonExceptionHandler.log_exception(self.mod_identity, 'Failed to locate configuration file named {} at path {}'.format(S4CLConfiguration._CONFIGURATION_FILE_NAME, full_file_path))
         except Exception as ex:
-            self.log.error('Failed to locate configuration file named {} next to the sims4communitylib.ts4script file!'.format(S4CLConfiguration._CONFIGURATION_FILE_NAME), exception=ex)
-            self._config_data = dict()
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Failed to locate configuration file named {} next to the sims4communitylib.ts4script file!'.format(S4CLConfiguration._CONFIGURATION_FILE_NAME), exception=ex)
 
     @property
     def enable_vanilla_logging(self) -> bool:
         """ Whether or not vanilla logging should be enabled. """
+        if self._config_data is None or not self._config_data:
+            return False
         return self._config_data.get('enable_vanilla_logging', False)
 
     @property
     def enable_logs(self) -> Dict[str, Tuple[CommonMessageType]]:
         """ Logs to enable before loading The Sims 4. """
+        if self._config_data is None or not self._config_data:
+            return dict()
+        if 'enable_logs_result' in self._config_data:
+            return self._config_data.get('enable_logs_result', dict())
         enable_logs = self._config_data.get('enable_logs', dict())
+        enable_logs_result: Dict[str, Tuple[CommonMessageType]] = dict()
         try:
-            enable_logs_result: Dict[str, Tuple[CommonMessageType]] = dict()
-            for (key, values) in enable_logs.items():
+            for (key, message_type_strings) in enable_logs.items():
                 message_types: List[CommonMessageType] = list()
-                for value in values:
-                    message_type: CommonMessageType = CommonResourceUtils.get_enum_by_name(value, CommonMessageType, default_value=None)
+                for message_type_string in message_type_strings:
+                    message_type: CommonMessageType = CommonResourceUtils.get_enum_by_name(message_type_string, CommonMessageType, default_value=CommonMessageType.INVALID)
                     if message_type is None:
                         continue
                     message_types.append(message_type)
                 if message_types:
                     enable_logs_result[key] = tuple(message_types)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while parsing enable_logs', exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Error occurred while parsing the enable_logs configuration value.', exception=ex)
             return dict()
+        self._config_data['enable_logs_result'] = enable_logs_result
         return enable_logs_result
