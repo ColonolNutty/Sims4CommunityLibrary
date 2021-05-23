@@ -15,7 +15,6 @@ from sims4communitylib.services.interactions.interaction_registration_service im
     CommonInteractionType, CommonScriptObjectInteractionHandler, CommonInteractionHandler
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.common_keyboard_utils import CommonKeyboardUtils, CommonKey
-from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 
 
