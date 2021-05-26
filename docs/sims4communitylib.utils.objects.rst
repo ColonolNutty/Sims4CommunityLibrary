@@ -17,15 +17,6 @@ Object Utilities
 ------------------------------------------------------
 
 *************************
-`Household Ownership`
-*************************
-
-.. autoclass:: sims4communitylib.utils.objects.common_object_household_utils.CommonObjectHouseholdUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-*************************
 `Location`
 *************************
 
@@ -50,6 +41,33 @@ Object Utilities
 ------------------------------------------------------
 
 *************************
+`Inventory`
+*************************
+
+.. autoclass:: sims4communitylib.utils.objects.common_object_inventory_utils.CommonObjectInventoryUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*************************
+`Lock Utils`
+*************************
+
+.. autoclass:: sims4communitylib.utils.objects.common_object_lock_utils.CommonObjectLockUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*************************
+`State`
+*************************
+
+.. autoclass:: sims4communitylib.utils.objects.common_object_state_utils.CommonObjectStateUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*************************
 `Tags`
 *************************
 
@@ -70,6 +88,10 @@ Object Utilities
    :undoc-members:
    :show-inheritance:
 
+*************************
+`Object Type`
+*************************
+
 .. autoclass:: sims4communitylib.utils.objects.common_object_type_utils.CommonObjectTypeUtils
    :members:
    :undoc-members:
@@ -80,6 +102,15 @@ Object Utilities
 *************************
 
 .. autoclass:: sims4communitylib.utils.objects.common_object_interaction_utils.CommonObjectInteractionUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*************************
+`Ownership`
+*************************
+
+.. autoclass:: sims4communitylib.utils.objects.common_object_household_utils.CommonObjectOwnershipUtils
    :members:
    :undoc-members:
    :show-inheritance:

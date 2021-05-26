@@ -12,6 +12,7 @@ class CommonLotTraitId(CommonInt):
     """Identifiers for vanilla lot traits.
 
     """
+    INVALID: 'CommonLotTraitId' = 0
     CELEBRITY_HANG_OUT_HIGH_FAME: 'CommonLotTraitId' = 191710
     CELEBRITY_HANG_OUT_LOW_FAME: 'CommonLotTraitId' = 191708
     CELEBRITY_HOME_LOT_TRAIT: 'CommonLotTraitId' = 199661

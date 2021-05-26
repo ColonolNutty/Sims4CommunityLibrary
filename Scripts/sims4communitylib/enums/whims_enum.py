@@ -12,6 +12,7 @@ class CommonWhimSetId(CommonInt):
     """Identifiers for vanilla whim sets.
 
     """
+    INVALID: 'CommonWhimSetId' = 0
     APARTMENT_PROBLEMS: 'CommonWhimSetId' = 142026
     APARTMENTS_INDOORS_GO_OUTSIDE: 'CommonWhimSetId' = 142732
     APARTMENTS_LOT_TRAITS: 'CommonWhimSetId' = 142085

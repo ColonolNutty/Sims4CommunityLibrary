@@ -13,6 +13,7 @@ class CommonIconId(CommonInt):
 
     """
     # S4CL
+    INVALID: 'CommonIconId' = 0
     S4CLIB_ARROW_RIGHT_ICON: 'CommonIconId' = 3589997896388655139
     S4CLIB_ARROW_LEFT_ICON: 'CommonIconId' = 13667220474349513917
     S4CLIB_BLANK_SQUARE_ICON: 'CommonIconId' = 4439072745437234428

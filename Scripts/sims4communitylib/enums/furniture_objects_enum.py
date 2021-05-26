@@ -12,4 +12,5 @@ class CommonFurnitureObjectId(CommonInt):
     """Identifiers for vanilla furniture.
 
     """
+    INVALID: 'CommonFurnitureObjectId' = 0
     BASSINET_EMPTY_01: 'CommonFurnitureObjectId' = 36210

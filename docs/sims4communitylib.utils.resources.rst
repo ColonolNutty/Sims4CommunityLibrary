@@ -1,6 +1,16 @@
 Resource Utilities
 =========================================
 
+`Clubs`
+------------------------------------------------------
+
+.. note:: To manipulate clubs of Sims, take a look at :class:`.CommonSimClubUtils`
+
+.. autoclass:: sims4communitylib.utils.common_resource_utils.CommonClubUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Components`
 -------------------------------------------------------
 
@@ -23,6 +33,16 @@ Resource Utilities
 .. note:: To manipulate situations of Sims, take a look at :class:`.CommonSimSituationUtils`
 
 .. autoclass:: sims4communitylib.utils.resources.common_situation_utils.CommonSituationUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Skills`
+-----------------------------------------------------------------
+
+.. note:: To manipulate skills of Sims, take a look at :class:`.CommonSimSkillUtils`
+
+.. autoclass:: sims4communitylib.utils.resources.common_skill_utils.CommonSkillUtils
    :members:
    :undoc-members:
    :show-inheritance:

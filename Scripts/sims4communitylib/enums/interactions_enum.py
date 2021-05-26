@@ -12,6 +12,7 @@ class CommonInteractionId(CommonInt):
     """Identifiers for interactions.
 
     """
+    INVALID: 'CommonInteractionId' = 0
     PICK_UP_SIM: 'CommonInteractionId' = 141018
     PICK_UP_SIM_REVERSED: 'CommonInteractionId' = 141925
     CARRY_PICK_UP_TO_BED: 'CommonInteractionId' = 156217

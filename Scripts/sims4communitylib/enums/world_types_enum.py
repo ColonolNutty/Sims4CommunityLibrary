@@ -12,6 +12,7 @@ class CommonWorldTypeId(CommonInt):
     """Identifiers for various vanilla world types.
 
     """
+    INVALID: 'CommonWorldTypeId' = 0
     ACQUISITION_BUTTE: 'CommonWorldTypeId' = 23279
     ARTS_QUARTER: 'CommonWorldTypeId' = 121286
     SPICE_MARKET: 'CommonWorldTypeId' = 117423

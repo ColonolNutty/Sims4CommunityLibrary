@@ -12,6 +12,7 @@ from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 class CommonKey(CommonInt):
     """Keys and their Key Codes for various keys on the keyboard. Currently recognizes Windows, Mac, and Linux keys."""
+    INVALID: 'CommonKey' = -1
     # Windows Keys
     BACKSPACE: 'CommonKey' = 8
     TAB: 'CommonKey' = 9

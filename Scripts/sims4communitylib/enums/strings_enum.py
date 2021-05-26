@@ -14,6 +14,7 @@ class CommonStringId(CommonInt):
     .. note:: These identifiers point to strings within String Tables within package files.
 
     """
+    INVALID: 'CommonStringId' = 0
     # Notifications
     EXCEPTION_OCCURRED_TITLE: 'CommonStringId' = 3506527463
     EXCEPTION_OCCURRED_TITLE_FOR_MOD: 'CommonStringId' = 1541569535

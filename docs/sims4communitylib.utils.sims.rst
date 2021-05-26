@@ -219,15 +219,6 @@ Sim Utilities
    :show-inheritance:
 
 *********************
-`Loot Actions`
-*********************
-
-.. autoclass:: sims4communitylib.utils.sims.common_sim_loot_action_utils.CommonSimLootActionUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-*********************
 `Autonomy`
 *********************
 
@@ -236,20 +227,30 @@ Sim Utilities
    :undoc-members:
    :show-inheritance:
 
+
 *********************
-`Situations`
+`Club`
 *********************
 
-.. autoclass:: sims4communitylib.utils.sims.common_sim_situation_utils.CommonSimSituationUtils
+.. autoclass:: sims4communitylib.utils.sims.common_sim_club_utils.CommonSimClubUtils
    :members:
    :undoc-members:
    :show-inheritance:
 
 *********************
-`Relationships`
+`Gender Options`
 *********************
 
-.. autoclass:: sims4communitylib.utils.sims.common_relationship_utils.CommonRelationshipUtils
+.. autoclass:: sims4communitylib.utils.sims.common_sim_gender_option_utils.CommonSimGenderOptionUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
+`Gender Preferences`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_gender_preference_utils.CommonSimGenderPreferenceUtils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -263,11 +264,56 @@ Sim Utilities
    :undoc-members:
    :show-inheritance:
 
+*******************
+`Inventory`
+*******************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_inventory_utils.CommonSimInventoryUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
+`Loot Actions`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_loot_action_utils.CommonSimLootActionUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
+`Relationships`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_relationship_utils.CommonRelationshipUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*******************
+`Phone`
+*******************
+
+.. autoclass:: sims4communitylib.utils.sims.common_phone_utils.CommonPhoneUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 *********************
 `Pregnancy`
 *********************
 
 .. autoclass:: sims4communitylib.utils.sims.common_sim_pregnancy_utils.CommonSimPregnancyUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
+`Situations`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_situation_utils.CommonSimSituationUtils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -286,51 +332,6 @@ Sim Utilities
 *********************
 
 .. autoclass:: sims4communitylib.utils.sims.common_sim_type_utils.CommonSimTypeUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-*******************
-`Phone`
-*******************
-
-.. autoclass:: sims4communitylib.utils.sims.common_phone_utils.CommonPhoneUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-*******************
-`Club`
-*******************
-
-.. autoclass:: sims4communitylib.utils.sims.common_sim_club_utils.CommonSimClubUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-*********************
-`Gender Preferences`
-*********************
-
-.. autoclass:: sims4communitylib.utils.sims.common_sim_gender_preference_utils.CommonSimGenderPreferenceUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-*********************
-`Gender Options`
-*********************
-
-.. autoclass:: sims4communitylib.utils.sims.common_sim_gender_option_utils.CommonSimGenderOptionUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-*******************
-`Inventory`
-*******************
-
-.. autoclass:: sims4communitylib.utils.sims.common_sim_inventory_utils.CommonSimInventoryUtils
    :members:
    :undoc-members:
    :show-inheritance:

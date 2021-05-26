@@ -12,6 +12,7 @@ class CommonSituationJobId(CommonInt):
     """Identifiers for vanilla situation jobs.
 
     """
+    INVALID: 'CommonSituationJobId' = 0
     ACTOR_CAREER_BACKGROUND_ACTOR: 'CommonSituationJobId' = 191066
     ACTOR_CAREER_BACKGROUND_PRODUCER: 'CommonSituationJobId' = 191067
     ACTOR_CAREER_COSTAR1: 'CommonSituationJobId' = 189270
