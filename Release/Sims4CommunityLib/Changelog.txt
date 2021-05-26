@@ -1,0 +1,59 @@
+v1.64:
+---New---
+- Added function `CommonSimSkillUtils.set_current_skill_level_to_max` to allow setting a skill to its maximum without needing to know what the maximum level is.
+- Added `CommonSimTypeUtils.is_occult` and `CommonSimTypeUtils.is_occult_type` functions
+- Added commands `s4clib.set_skill_level`, `s4clib.get_skill_level`, and `s4clib.remove_skill`
+- Added commands `s4clib.add_trait`, `s4clib.add_buff`, and `s4clib.remove_buff`
+- Added commands `s4clib.set_statistic_value`, `s4clib.set_statistic_user_value`, and `s4clib.remove_statistic`
+- Added the ability to specify a picked_object when queuing an interaction.
+- Added the ability to enable specific logs before the game is launched by enabling them within the `sims4communitylib.config` file.
+- Added the ability to enable specific message types individually like DEBUG, INFO, and WARN without enabling other message types
+- Added the ability to enable a log even when it does not exist yet by including the mod name in the enable log command.
+- Added the ability to register interactions to the Phone and Relationship Panel
+- Added code to allow SHIFT+CLICKing on the relationship panel as well as the phone to access the "cheat" menus.
+- Added the ability to customize data before it is persisted within CommonGameObjectDataStore and CommonSimDataStore.
+- Added a class and various functions for manipulating the inventory of an Object.
+- Added many new classes and utilities
+  - CommonSerializableLocation
+  - CommonSimToSimTestBasedScore
+  - CommonSingleSimTestBasedScore
+  - CommonTestBasedScore
+  - CommonObjectStateUtils
+  - CommonClubUtils
+  - CommonSkillUtils
+  - CommonObjectOwnershipUtils
+  - CommonKeyboardUtils
+  - CommonObjectInventoryUtils
+- Made a couple functions of CommonObjectHouseholdUtils obsolete and created the CommonObjectOwnershipUtils instead.
+- Add new functions for manipulating the inventory of Sims
+
+---Fixes---
+- Added the missing TEEN_HUMAN values to the signature conversion function in the CommonSimTypeUtils class
+- Fixed a few issues when checking the inventory of a Sim.
+- Fixed an issue where the configuration file was not being loaded on a Mac because the file path did not have a leading slash
+- Fixed an error where hitting the Next/Previous buttons in a CommonButtonOptionDialog would not keep the Target Sim Info around
+- Fixed an issue where the verbose log would only be available if you had already called for it, it will now be available after grabbing the log property initially
+- Fixed Social Mixer Interactions not properly queuing in CommonSimInteractionUtils.
+- Fixed a few issues with various functions in CommonSimSkillUtils
+  - Skill levels are now properly set on Sims in most scenarios.
+
+---Updates/Changes---
+- Added an `INVALID` value for many Enums that may be used as a Default value.
+- Added a few motives that were missing from the motive utils and motive enum, such as Servo Charge, Servo Durability, Witch Magic, and Mermaid Hydration (Which is really just Hygiene)
+- Update `CommonSkillId` to include skills that were missing
+- CommonInt instances are now convertable to and comparible with Integers naturally. Such as Greater Than/Less Than, Equal To, etc.
+- Updated the Common Persisted Sim Data so you can opt in to writing empty values
+- Log All Interactions now logs interactions with their name as well as their decimal identifier
+- `CommonJsonIOUtils.load_from_folder` will now handle exceptions per file and allow those who call its function to decide if the rest of the files should be loaded or not.
+- The `CommonFolderPersistenceService` will now include a list of file names it found with the data from CommonFolderPersistenceService.load
+- The debug interactions now display the Sim Id as well as the identifiers for each of whatever they are showing (i.e. Show Traits will now show the trait ids next to each trait)
+- When using the debug interactions to print Sim data, the data is now sorted alphabetically.
+- If an object is not a Sim within the init of SimDataStore, an exception will now be thrown.
+- If an object is not a GameObject within the init of GameObjectDataStore, an exception will now be thrown.
+- If no data is available to persist, the data will instead of removed from the data storage. This will reduce memory usage as well as json file bloat.
+- When reading JSON from a folder, `.DS_Store` files will now be ignored from being read as JSON.
+- Rename the ctypes_module package so its name does not conflict with any other mods
+- In all code that uses the InteractionContext, the shift_held value will now be properly calculated (For Windows Users only for now. I can't test whether it works for Mac users without having a Mac)
+- Updated the documentation to include many of the classes and utilities that were missing.
+- **Renamed the S4CL Configuration file extension to config from json to reduce confusion**
+  - Make sure you remove the previous file `sims4communitylib.json`!
