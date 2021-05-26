@@ -101,10 +101,10 @@ class CommonSimStatisticUtils:
             return False
         if response.statistics_tracker is None:
             return False
-        statistic = response.statistics_tracker.get_statistic(response.statistic_instance, add=add)
-        if statistic is None:
+        statistic_instance = response.statistics_tracker.get_statistic(response.statistic_instance, add=add)
+        if statistic_instance is None:
             return False
-        return statistic.get_decay_rate_modifier() == 0 or response.statistics_component.is_locked(statistic)
+        return statistic_instance.get_decay_rate_modifier() == 0 or response.statistics_component.is_locked(statistic_instance)
 
     @staticmethod
     def get_statistic_level(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic]) -> float:
@@ -119,10 +119,10 @@ class CommonSimStatisticUtils:
         :return: The value of the statistic, `-1.0` if the statistic is not found, or `0.0` if a problem occurs.
         :rtype: float
         """
-        statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic)
-        if statistic is None:
+        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic)
+        if statistic_instance is None:
             return 0.0
-        return statistic.get_user_value()
+        return statistic_instance.get_user_value()
 
     @staticmethod
     def get_statistic(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic], add_dynamic: bool=True, add: bool=False) -> Union[BaseStatistic, None]:
@@ -170,9 +170,9 @@ class CommonSimStatisticUtils:
         if statistic_instance is None:
             return -1.0
         if response.statistics_tracker is not None:
-            statistic = response.statistics_tracker.get_statistic(statistic_instance, add=add)
-            if statistic is not None:
-                return statistic.get_value()
+            statistic_of_sim = response.statistics_tracker.get_statistic(statistic_instance, add=add)
+            if statistic_of_sim is not None:
+                return statistic_of_sim.get_value()
         if hasattr(statistic_instance, 'get_initial_value'):
             return statistic_instance.get_initial_value()
         return statistic_instance.default_value
@@ -227,10 +227,10 @@ class CommonSimStatisticUtils:
         """
         if sim_info is None:
             return False
-        statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add_dynamic=add_dynamic, add=add)
-        if statistic is None:
+        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add_dynamic=add_dynamic, add=add)
+        if statistic_instance is None:
             return False
-        return statistic.set_user_value(value)
+        return statistic_instance.set_user_value(value)
 
     @staticmethod
     def add_statistic_value(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
@@ -255,6 +255,10 @@ class CommonSimStatisticUtils:
             return False
         if isinstance(statistic, int) or isinstance(statistic, CommonStatisticId):
             statistic = CommonStatisticUtils.load_statistic_by_id(statistic)
+        if statistic is None:
+            return False
+        if not isinstance(statistic, Statistic):
+            return False
         if CommonSimStatisticUtils.is_statistic_locked(sim_info, statistic):
             return False
         response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic, add_dynamic=add_dynamic)
@@ -278,6 +282,10 @@ class CommonSimStatisticUtils:
         """
         if isinstance(statistic, int) or isinstance(statistic, CommonStatisticId):
             statistic = CommonStatisticUtils.load_statistic_by_id(statistic)
+        if statistic is None:
+            return False
+        if not isinstance(statistic, Statistic):
+            return False
         tracker = sim_info.get_tracker(statistic)
         tracker.remove_statistic(statistic)
         return True
@@ -303,10 +311,10 @@ class CommonSimStatisticUtils:
         """
         if sim_info is None:
             return False
-        statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add_dynamic=add_dynamic, add=add)
-        if statistic is None:
+        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add_dynamic=add_dynamic, add=add)
+        if statistic_instance is None:
             return False
-        statistic.add_statistic_modifier(value)
+        statistic_instance.add_statistic_modifier(value)
         return True
 
     @staticmethod
@@ -330,10 +338,10 @@ class CommonSimStatisticUtils:
         """
         if sim_info is None:
             return False
-        statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add_dynamic=add_dynamic, add=add)
-        if statistic is None:
+        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add_dynamic=add_dynamic, add=add)
+        if statistic_instance is None:
             return False
-        statistic.remove_statistic_modifier(value)
+        statistic_instance.remove_statistic_modifier(value)
         return True
 
     @staticmethod
@@ -355,13 +363,13 @@ class CommonSimStatisticUtils:
         """
         if sim_info is None:
             return False
-        statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add_dynamic=add_dynamic, add=add)
-        if statistic is None:
+        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add_dynamic=add_dynamic, add=add)
+        if statistic_instance is None:
             return False
-        if statistic._statistic_modifiers is None:
+        if statistic_instance._statistic_modifiers is None:
             return False
-        for value in list(statistic._statistic_modifiers):
-            statistic.remove_statistic_modifier(value)
+        for value in list(statistic_instance._statistic_modifiers):
+            statistic_instance.remove_statistic_modifier(value)
         return True
 
     @staticmethod
@@ -371,6 +379,8 @@ class CommonSimStatisticUtils:
         if isinstance(statistic, int) or isinstance(statistic, CommonStatisticId):
             statistic = CommonStatisticUtils.load_statistic_by_id(statistic)
         if statistic is None:
+            return CommonGetStatisticTrackerResponse(None, None, None)
+        if not isinstance(statistic, Statistic):
             return CommonGetStatisticTrackerResponse(None, None, None)
         statistics_component: StatisticComponent = CommonComponentUtils.get_component(sim_info, CommonComponentType.STATISTIC, add_dynamic=add_dynamic)
         if statistics_component is None:
