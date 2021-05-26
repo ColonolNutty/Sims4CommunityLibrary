@@ -18,6 +18,7 @@ class CommonObjectHouseholdUtils:
         """set_owning_household_id(game_object, household_id)
 
         Set the Household that owns the Object.
+        .. note: THIS FUNCTION IS OBSOLETE PLEASE USE See :class:`.CommonObjectOwnershipUtils` for updated functions.
 
         :param game_object: An instance of an Object.
         :type game_object: GameObject
@@ -26,10 +27,8 @@ class CommonObjectHouseholdUtils:
         :return: True, if the Household was successfully set as the owner. False, if not.
         :rtype: bool
         """
-        if game_object is None or household_id == -1:
-            return False
-        game_object.set_household_owner_id(household_id)
-        return True
+        from sims4communitylib.utils.objects.common_object_ownership_utils import CommonObjectOwnershipUtils
+        return CommonObjectOwnershipUtils.set_owning_household_id(game_object, household_id)
 
     @staticmethod
     def get_owning_household_id(game_object: GameObject) -> int:
@@ -37,11 +36,12 @@ class CommonObjectHouseholdUtils:
 
         Retrieve the decimal identifier of the Household that owns the Object.
 
+        .. note: THIS FUNCTION IS OBSOLETE PLEASE USE See :class:`.CommonObjectOwnershipUtils` for updated functions.
+
         :param game_object: An instance of an Object.
         :type game_object: GameObject
         :return: The decimal identifier of the Household that owns the object.
         :rtype: int
         """
-        if game_object is None:
-            return -1
-        return game_object.get_household_owner_id()
+        from sims4communitylib.utils.objects.common_object_ownership_utils import CommonObjectOwnershipUtils
+        return CommonObjectOwnershipUtils.get_owning_household_id(game_object)
