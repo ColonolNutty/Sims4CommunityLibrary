@@ -12,6 +12,7 @@ class CommonVenueType(CommonInt):
     """Identifiers for vanilla venue types.
 
      """
+    INVALID: 'CommonVenueType' = 0
     ACTING_STUDIO: 'CommonVenueType' = 190058
     ARTS_CENTER: 'CommonVenueType' = 144206
     BAR: 'CommonVenueType' = 16869

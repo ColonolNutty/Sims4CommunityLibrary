@@ -12,4 +12,5 @@ class CommonAnimationStateMachineId(CommonInt):
     """Identifiers for vanilla animation state machines (ASM).
 
     """
-    STAND_POSTURE = 15425961973529743787
+    INVALID: 'CommonAnimationStateMachineId' = 0
+    STAND_POSTURE: 'CommonAnimationStateMachineId' = 15425961973529743787

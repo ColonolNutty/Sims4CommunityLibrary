@@ -12,6 +12,7 @@ class CommonSkillId(CommonInt):
     """Identifiers for sim skills.
 
     """
+    INVALID: 'CommonSkillId' = 0
     ACTING: 'CommonSkillId' = 194727
     ARCHAEOLOGY: 'CommonSkillId' = 174237
     BAKING: 'CommonSkillId' = 104198

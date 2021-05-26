@@ -221,8 +221,11 @@ class CommonSimInteractionUtils:
         :return: True, if the Sim has any of the specified interactions running or queued. False, if not.
         :rtype: bool
         """
-        return CommonSimInteractionUtils.has_interactions_running(sim_info, interaction_ids)\
-               or CommonSimInteractionUtils.has_interactions_queued(sim_info, interaction_ids)
+        for interaction in CommonSimInteractionUtils.get_queued_or_running_interactions_gen(sim_info):
+            interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
+            if interaction_id in interaction_ids:
+                return True
+        return False
 
     @staticmethod
     def has_interactions_running(sim_info: SimInfo, interaction_ids: Iterator[int]) -> bool:
@@ -276,7 +279,7 @@ class CommonSimInteractionUtils:
         :type finishing_type: FinishingType, optional
         :param include_interaction_callback: If the result of this callback is True, the Interaction will be cancelled. If set to None, All interactions will be cancelled. Default is None.
         :type include_interaction_callback: Callable[[Interaction], bool], optional
-        :return: True, if all queued and running interactions were successfully cancelled. False, if not.
+        :return: True, if all queued and running Interactions that pass the include callback were successfully cancelled. False, if not.
         :rtype: bool
         """
         return CommonSimInteractionUtils.cancel_all_queued_interactions(sim_info, cancel_reason, finishing_type=finishing_type, include_interaction_callback=include_interaction_callback, **kwargs)\
@@ -294,7 +297,7 @@ class CommonSimInteractionUtils:
         :type cancel_reason: str
         :param finishing_type: The type of finish to finish the interaction with. Default is FinishingType.USER_CANCEL.
         :type finishing_type: FinishingType, optional
-        :param include_interaction_callback: If the result of this callback is True, the Interaction will be cancelled. If set to None, All interactions will be cancelled. Default is None.
+        :param include_interaction_callback: If the result of this callback is True, the Interaction will be cancelled. If set to None, all interactions will be cancelled. Default is None.
         :type include_interaction_callback: Callable[[Interaction], bool], optional
         :return: True, if all running interactions were successfully cancelled. False, if not.
         :rtype: bool
@@ -315,7 +318,7 @@ class CommonSimInteractionUtils:
         :type cancel_reason: str
         :param finishing_type: The type of finish to finish the interaction with. Default is FinishingType.USER_CANCEL.
         :type finishing_type: FinishingType, optional
-        :param include_interaction_callback: If the result of this callback is True, the Interaction will be cancelled. If set to None, All interactions will be cancelled. Default is None.
+        :param include_interaction_callback: If the result of this callback is True, the Interaction will be cancelled. If set to None, all interactions will be cancelled. Default is None.
         :type include_interaction_callback: Callable[[Interaction], bool], optional
         :return: True, if all queued interactions were successfully cancelled. False, if not.
         :rtype: bool
@@ -325,6 +328,22 @@ class CommonSimInteractionUtils:
         return True
 
     @staticmethod
+    def get_queued_or_running_interactions_gen(sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
+        """get_queued_or_running_interactions_gen(sim_info, include_interaction_callback=None)
+
+        Retrieve all interactions that a Sim has queued or is currently running.
+
+        :param sim_info: An instance of a Sim
+        :type sim_info: SimInfo
+        :param include_interaction_callback: If the result of this callback is True, the Interaction will be included in the results. If set to None, all interactions will be included. Default is None.
+        :type include_interaction_callback: Callable[[Interaction], bool], optional
+        :return: An iterable of all queued or running Interactions that pass the include callback filter.
+        :rtype: Iterator[Interaction]
+        """
+        yield from CommonSimInteractionUtils.get_queued_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)
+        yield from CommonSimInteractionUtils.get_running_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)
+
+    @staticmethod
     def get_running_interactions_gen(sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
         """get_running_interactions_gen(sim_info, include_interaction_callback=None)
 
@@ -332,15 +351,15 @@ class CommonSimInteractionUtils:
 
         :param sim_info: An instance of a Sim
         :type sim_info: SimInfo
-        :param include_interaction_callback: If the result of this callback is True, the Interaction will be included in the results. If set to None, All interactions will be included. Default is None.
+        :param include_interaction_callback: If the result of this callback is True, the Interaction will be included in the results. If set to None, all interactions will be included. Default is None.
         :type include_interaction_callback: Callable[[Interaction], bool], optional
-        :return: An iterable of Interactions that pass the include callback filter.
+        :return: An iterable of all running Interactions that pass the include callback filter.
         :rtype: Iterator[Interaction]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return tuple()
-        if sim.si_state is None or not tuple(sim.si_state):
+        if sim.si_state is None:
             return tuple()
         for interaction in sim.si_state:
             if include_interaction_callback is not None and not include_interaction_callback(interaction):
@@ -357,13 +376,13 @@ class CommonSimInteractionUtils:
         :type sim_info: SimInfo
         :param include_interaction_callback: If the result of this callback is True, the Interaction will be included in the results. If set to None, All interactions will be included. Default is None.
         :type include_interaction_callback: Callable[[Interaction], bool], optional
-        :return: An iterable of Interactions that pass the include callback filter.
+        :return: An iterable of all queued Interactions that pass the include callback filter.
         :rtype: Iterator[Interaction]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return tuple()
-        if sim.queue is None or not tuple(sim.queue):
+        if sim.queue is None:
             return tuple()
         for interaction in sim.queue:
             if include_interaction_callback is not None and not include_interaction_callback(interaction):
@@ -412,11 +431,17 @@ class CommonSimInteractionUtils:
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None or sim.si_state is None or sim.queue is None or sim.posture_state is None or sim.posture is None:
+            if sim is not None:
+                log.format_with_message('No posture, sim, or state', sim=sim, si_state=sim.si_state, queue=sim.queue, posture_state=sim.posture_state, posture=sim.posture)
+            else:
+                log.format_with_message('No sim instance.', sim=sim_info)
             return EnqueueResult.NONE
         interaction_instance = CommonInteractionUtils.load_interaction_by_id(interaction_id)
         if interaction_instance is None:
+            log.format_with_message('No interaction found with id.', id=interaction_id)
             return EnqueueResult.NONE
         if skip_if_running and CommonSimInteractionUtils.has_interaction_running_or_queued(sim_info, interaction_id):
+            log.debug('Skipping queue because it is already running.')
             return EnqueueResult.NONE
 
         interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(
@@ -425,6 +450,7 @@ class CommonSimInteractionUtils:
         )
 
         if CommonInteractionUtils.is_super_interaction(interaction_instance):
+            log.debug('Is super.')
             return CommonSimInteractionUtils.queue_super_interaction(
                 sim_info,
                 interaction_id,
@@ -435,6 +461,7 @@ class CommonSimInteractionUtils:
             )
 
         if CommonInteractionUtils.is_social_mixer_interaction(interaction_instance):
+            log.debug('Is social mixer')
             return CommonSimInteractionUtils.queue_social_mixer_interaction(
                 sim_info,
                 interaction_id,
@@ -445,6 +472,7 @@ class CommonSimInteractionUtils:
                 **kwargs
             )
 
+        log.debug('Is mixer')
         return CommonSimInteractionUtils.queue_mixer_interaction(
             sim_info,
             interaction_id,
@@ -488,7 +516,7 @@ class CommonSimInteractionUtils:
         log.format_with_message('Pushing super interaction', sim=sim_info, interaction_id=super_interaction_id, target=target, interaction_context=interaction_context)
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            log.debug('No sim instance.')
+            log.debug('No sim instance for super interaction.')
             return EnqueueResult.NONE
 
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
@@ -500,13 +528,16 @@ class CommonSimInteractionUtils:
             log.format_with_message('No super interaction instance found for id.', super_interaction_id=super_interaction_id)
             return EnqueueResult.NONE
 
-        return sim.push_super_affordance(
+        result = sim.push_super_affordance(
             super_interaction_instance,
             target,
             interaction_context,
             picked_object=picked_object or target,
             **kwargs
         )
+        if not result:
+            log.format_with_message('Failed to push super interaction.', result=result)
+        return result
 
     @staticmethod
     def queue_social_mixer_interaction(
@@ -546,6 +577,7 @@ class CommonSimInteractionUtils:
         :rtype: EnqueueResult
         """
         if social_super_interaction_id is not None and social_mixer_interaction_id is None:
+            log.format_with_message('Interaction was actually a Super interaction!', sim=sim_info, super_interaction_id=social_super_interaction_id)
             return CommonSimInteractionUtils.queue_super_interaction(
                 sim_info,
                 social_super_interaction_id,

@@ -1,7 +1,7 @@
 Sim Event Types
 ===========================================
 
-`Sim Added Occult Type Event`
+`Added Occult Type`
 -------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_added_occult_type.S4CLSimAddedOccultTypeEvent
@@ -9,7 +9,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`Sim Changed Age Event`
+`Changed Age`
 ------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_changed_age.S4CLSimChangedAgeEvent
@@ -17,7 +17,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`Sim Changed Occult Type Event`
+`Changed Occult Type`
 ---------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_changed_occult_type.S4CLSimChangedOccultTypeEvent
@@ -25,7 +25,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`Sim Initialized Event`
+`Initialized`
 -----------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_initialized.S4CLSimInitializedEvent
@@ -33,7 +33,15 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`Sim Loaded Event`
+`Leveled Up Skill`
+-----------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_skill_leveled_up.S4CLSimSkillLeveledUpEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Loaded`
 ------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_loaded.S4CLSimLoadedEvent
@@ -41,7 +49,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`Sim Removed Occult Type Event`
+`Removed Occult Type`
 ---------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_removed_occult_type.S4CLSimRemovedOccultTypeEvent
@@ -49,7 +57,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`Sim Spawned Event`
+`Spawned Event`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_spawned.S4CLSimSpawnedEvent

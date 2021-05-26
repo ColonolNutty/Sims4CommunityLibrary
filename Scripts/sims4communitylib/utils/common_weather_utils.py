@@ -9,6 +9,7 @@ from typing import Iterator
 
 import services
 from weather.weather_enums import Temperature, WeatherEffectType, CloudType
+from weather.weather_service import WeatherService
 
 
 class CommonWeatherUtils:
@@ -42,7 +43,7 @@ class CommonWeatherUtils:
         """
         if not hasattr(services, 'weather_service'):
             return False
-        weather_service = services.weather_service()
+        weather_service: WeatherService = services.weather_service()
         if weather_service is None:
             return False
         for weather_effect_type in weather_effect_types:

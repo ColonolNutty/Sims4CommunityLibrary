@@ -12,6 +12,7 @@ class CommonTraitId(CommonInt):
     """Identifiers for vanilla sim traits.
 
     """
+    INVALID: 'CommonTraitId' = 0
     ACTIVE: 'CommonTraitId' = 27419
     ACTOR_CAREER_HIDDEN_AUDITION_AWAITING_AUDITION: 'CommonTraitId' = 198564
     ACTOR_CAREER_HIDDEN_CHECKPOINTS_AUDITION_SUCCESS_COMMERCIAL: 'CommonTraitId' = 198583

@@ -12,6 +12,7 @@ class CommonRelationshipBitId(CommonInt):
     """Identifiers for vanilla sim relationship bits.
 
     """
+    INVALID: 'CommonRelationshipBitId' = 0
     ACTOR_CAREER_COWORKER_REL_BITS_COMMERCIAL_DIRECTOR: 'CommonRelationshipBitId' = 194371
     ACTOR_CAREER_COWORKER_REL_BITS_COSTAR1: 'CommonRelationshipBitId' = 196312
     ACTOR_CAREER_COWORKER_REL_BITS_COSTAR2: 'CommonRelationshipBitId' = 197701

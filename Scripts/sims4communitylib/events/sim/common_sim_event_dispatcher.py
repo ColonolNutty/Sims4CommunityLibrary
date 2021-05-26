@@ -38,12 +38,14 @@ from sims4communitylib.events.sim.events.sim_changed_gender_options_toilet_usage
 from sims4communitylib.events.sim.events.sim_initialized import S4CLSimInitializedEvent
 from sims4communitylib.events.sim.events.sim_loaded import S4CLSimLoadedEvent
 from sims4communitylib.events.sim.events.sim_removed_occult_type import S4CLSimRemovedOccultTypeEvent
+from sims4communitylib.events.sim.events.sim_skill_leveled_up import S4CLSimSkillLeveledUpEvent
 from sims4communitylib.events.sim.events.sim_spawned import S4CLSimSpawnedEvent
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from statistics.skill import Skill
 
 
 class CommonSimEventDispatcherService(CommonService):
@@ -127,6 +129,12 @@ class CommonSimEventDispatcherService(CommonService):
             return
         CommonEventRegistry.get().dispatch(S4CLSimBuffRemovedEvent(sim_info, buff))
 
+    def _on_skill_leveled_up(self, skill: Skill, old_skill_level: int, new_skill_level: int) -> None:
+        if skill.tracker is None or skill.tracker._owner is None:
+            return
+        sim_info = CommonSimUtils.get_sim_info(skill.tracker._owner)
+        CommonEventRegistry.get().dispatch(S4CLSimSkillLeveledUpEvent(sim_info, skill, old_skill_level, new_skill_level))
+
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.__init__.__name__)
 def _common_on_sim_init(original, self, *args, **kwargs) -> Any:
@@ -148,6 +156,15 @@ def _common_on_sim_spawn(original, cls, *args, **kwargs) -> Any:
     result = original(*args, **kwargs)
     if result:
         CommonSimEventDispatcherService.get()._on_sim_spawned(*args, **kwargs)
+    return result
+
+
+# noinspection PyUnusedLocal
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Skill, Skill.on_skill_level_up.__name__)
+def _common_on_sim_skill_level_up(original, cls, *args, **kwargs) -> Any:
+    result = original(*args, **kwargs)
+    if result:
+        CommonSimEventDispatcherService.get()._on_skill_leveled_up(*args, **kwargs)
     return result
 
 

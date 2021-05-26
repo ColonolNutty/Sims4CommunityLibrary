@@ -10,6 +10,7 @@ from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 class CommonShortTermSentimentId(CommonInt):
     """Identifiers for vanilla short term sentiments."""
+    INVALID: 'CommonShortTermSentimentId' = 0
     ADORING_GENERIC: 'CommonShortTermSentimentId' = 246530
     ADORING_IMPRESSED: 'CommonShortTermSentimentId' = 246535
     BITTER_BREAKUP: 'CommonShortTermSentimentId' = 246538

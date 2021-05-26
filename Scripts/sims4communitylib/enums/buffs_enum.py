@@ -12,6 +12,7 @@ class CommonBuffId(CommonInt):
     """Identifiers for vanilla buffs
 
     """
+    INVALID: 'CommonBuffId' = 0
     A_GREAT_SCARE: 'CommonBuffId' = 103141
     A_GREAT_SCARE_GREAT_STORYTELLER: 'CommonBuffId' = 109738
     A_NEW_BEGINNING: 'CommonBuffId' = 100146

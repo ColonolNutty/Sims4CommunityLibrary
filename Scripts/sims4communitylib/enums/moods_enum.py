@@ -12,6 +12,7 @@ class CommonMoodId(CommonInt):
     """Identifiers for vanilla sim moods.
 
     """
+    INVALID: 'CommonMoodId' = 0
     CONFIDENT: 'CommonMoodId' = 14634
     SLEEPING: 'CommonMoodId' = 27149
     STRESSED: 'CommonMoodId' = 14645

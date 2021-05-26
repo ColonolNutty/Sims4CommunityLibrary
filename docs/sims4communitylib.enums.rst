@@ -46,6 +46,14 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Genders`
+-----------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_gender.CommonGender
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Icons`
 ------------------------------------------
 
@@ -58,6 +66,22 @@ Resource Identifiers
 -------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.interactions_enum.CommonInteractionId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Keyboard Keys`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_key.CommonKey
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Long Term Sentiments`
+------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.long_term_sentiments_enum.CommonLongTermSentimentId
    :members:
    :undoc-members:
    :show-inheritance:
@@ -86,10 +110,26 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
-`Object Delivery Method`
+`Object Delivery Methods`
 ------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.common_object_delivery_method.CommonObjectDeliveryMethod
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Object Preference Tags`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_object_preference_tag.CommonObjectPreferenceTag
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Occult Types`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_occult_type.CommonOccultType
    :members:
    :undoc-members:
    :show-inheritance:
@@ -102,6 +142,22 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Relationship Bit Collection UIDs`
+-------------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.relationship_bit_collection_uids_enum.CommonRelationshipBitCollectionUid
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Relationship Bit Collections`
+-------------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.relationship_bit_collections_enum.CommonRelationshipBitCollectionId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Relationship Tracks`
 ---------------------------------------------------------
 
@@ -110,10 +166,34 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Relationship Types`
+-------------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.relationship_types_enum.CommonRelationshipTypeId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Short-Term Relationship Tracks`
 ----------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.short_term_relationship_tracks_enum.CommonShortTermRelationshipTrackId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Short-Term Sentiments`
+----------------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.short_term_sentiments_enum.CommonShortTermSentimentId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Sim Type`
+----------------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.sim_type.CommonSimType
    :members:
    :undoc-members:
    :show-inheritance:

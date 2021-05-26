@@ -9,6 +9,14 @@ Objects
    :undoc-members:
    :show-inheritance:
 
+`Object Option Category`
+""""""""""""""""""""""""""""""""""""
+
+.. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_option_category.CommonDialogObjectOptionCategory
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Options`
 ---------------------------------------------------------------------------------------
 

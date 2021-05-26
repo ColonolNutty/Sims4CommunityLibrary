@@ -12,6 +12,7 @@ class CommonRelationshipTrackId(CommonInt):
     """Identifiers for vanilla sim relationship tracks.
 
     """
+    INVALID: 'CommonRelationshipTrackId' = 0
     AUTHORITY: 'CommonRelationshipTrackId' = 161998
     FEUD: 'CommonRelationshipTrackId' = 193901
     FRIENDSHIP: 'CommonRelationshipTrackId' = 16650

@@ -10,6 +10,7 @@ from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 class CommonRelationshipTypeId(CommonInt):
     """Identifiers for relationship types."""
+    INVALID: 'CommonRelationshipTypeId' = 0
     ROMANTIC: 'CommonRelationshipTypeId' = 2
     UPSET_WITH: 'CommonRelationshipTypeId' = 3
     FAMILY: 'CommonRelationshipTypeId' = 4

@@ -12,6 +12,7 @@ class CommonClubInteractionGroupId(CommonInt):
     """Identifiers for vanilla club activities.
 
     """
+    INVALID: 'CommonClubInteractionGroupId' = 0
     FOOD_AND_DRINK_GRILLED_CHEESE: 'CommonClubInteractionGroupId' = 132512
     FUN_AND_GAMES_BASKETBALL: 'CommonClubInteractionGroupId' = 151720
     FUN_AND_GAMES_SLIPPY_SLIDE: 'CommonClubInteractionGroupId' = 140842

@@ -12,9 +12,12 @@ To see the readme and the actual code, take a look at the repository on `Github`
    :maxdepth: 2
 
    sims4communitylib.classes.buffs
+   sims4communitylib.classes.calculations
+   sims4communitylib.classes.interactions
    sims4communitylib.classes.options
    sims4communitylib.classes.math
-   sims4communitylib.classes.interactions
+   sims4communitylib.classes.serialization
+   sims4communitylib.classes.test_based_scores
    sims4communitylib.classes.time
    sims4communitylib.conditionals
    sims4communitylib.dialogs

@@ -12,6 +12,7 @@ class CommonShortTermRelationshipTrackId(CommonInt):
     """Identifiers for vanilla sim short-term relationship tracks.
 
     """
+    INVALID: 'CommonShortTermRelationshipTrackId' = 0
     AWKWARDNESS: 'CommonShortTermRelationshipTrackId' = 24098
     FRIENDSHIP: 'CommonShortTermRelationshipTrackId' = 24099
     FUN: 'CommonShortTermRelationshipTrackId' = 24100

@@ -12,6 +12,7 @@ class CommonMotiveId(CommonInt):
     """Identifiers for vanilla sim motives.
 
     """
+    INVALID: 'CommonMotiveId' = 0
     BLADDER: 'CommonMotiveId' = 16652
     PET_CAT_BLADDER: 'CommonMotiveId' = 151036
     PET_DOG_BLADDER: 'CommonMotiveId' = 151032
@@ -39,3 +40,5 @@ class CommonMotiveId(CommonInt):
     VAMPIRE_THIRST: 'CommonMotiveId' = 149541
     PLANT_SIM_WATER: 'CommonMotiveId' = 162675
     SERVO_DURABILITY: 'CommonMotiveId' = 218485
+    MERMAID_HYDRATION: 'CommonMotiveId' = HYGIENE
+    WITCH_MAGIC: 'CommonMotiveId' = 213024

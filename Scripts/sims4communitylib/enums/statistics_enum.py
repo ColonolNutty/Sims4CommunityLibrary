@@ -12,6 +12,7 @@ class CommonStatisticId(CommonInt):
     """Identifiers for vanilla statistics.
 
     """
+    INVALID: 'CommonStatisticId' = 0
     ACTOR_CAREER_MAIN_GOAL: 'CommonStatisticId' = 197925
     ACTOR_CAREER_PRE_PERFORMANCE_DIRECTOR_PRODUCER: 'CommonStatisticId' = 193186
     ACTOR_CAREER_PRE_PERFORMANCE_DOLLY_CAMERA: 'CommonStatisticId' = 194698

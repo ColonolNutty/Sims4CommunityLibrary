@@ -64,6 +64,21 @@ class CommonSimMotiveUtils:
         return True
 
     @staticmethod
+    def get_motive_level(sim_info: SimInfo, motive_id: CommonMotiveId) -> float:
+        """get_motive_level(sim_info, motive_id, amount)
+
+        Retrieve the current level of a Motive of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param motive_id: The identifier of the Motive to get.
+        :type motive_id: CommonMotiveId
+        :return: True, if the specified Motive was changed successfully. False, if not.
+        :rtype: bool
+        """
+        return CommonSimMotiveUtils._get_motive_level(sim_info, motive_id)
+
+    @staticmethod
     def increase_motive_level(sim_info: SimInfo, motive_id: CommonMotiveId, amount: float) -> bool:
         """increase_motive_level(sim_info, motive_id, amount)
 
@@ -234,6 +249,36 @@ class CommonSimMotiveUtils:
         return motive_level
 
     @staticmethod
+    def get_robot_charge_level(sim_info: SimInfo) -> float:
+        """get_robot_charge_level(sim_info)
+
+        Retrieve the charge level of a Sim.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim or `-1.0` if the Sim is not a Robot.
+        :rtype: float
+        """
+        if not CommonOccultUtils.is_robot(sim_info):
+            return -1.0
+        return CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.SERVO_CHARGE)
+
+    @staticmethod
+    def get_robot_durability_level(sim_info: SimInfo) -> float:
+        """get_robot_durability_level(sim_info)
+
+        Retrieve the durability level of a Sim.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim or `-1.0` if the Sim is not a Robot.
+        :rtype: float
+        """
+        if not CommonOccultUtils.is_robot(sim_info):
+            return -1.0
+        return CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.SERVO_DURABILITY)
+
+    @staticmethod
     def get_vampire_power_level(sim_info: SimInfo) -> float:
         """get_vampire_power_level(sim_info)
 
@@ -279,6 +324,38 @@ class CommonSimMotiveUtils:
         return CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.PLANT_SIM_WATER)
 
     @staticmethod
+    def get_mermaid_hydration_level(sim_info: SimInfo) -> float:
+        """get_mermaid_hydration_level(sim_info)
+
+        Retrieve the hydration level of a Sim.
+
+        .. note:: This level is basically the Hygiene motive.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim or `-1.0` if the Sim is not a Mermaid.
+        :rtype: float
+        """
+        if not CommonOccultUtils.is_mermaid(sim_info):
+            return -1.0
+        return CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.MERMAID_HYDRATION)
+
+    @staticmethod
+    def get_witch_magic_level(sim_info: SimInfo) -> float:
+        """get_witch_magic_level(sim_info)
+
+        Retrieve the magic level of a Sim.
+
+        :param sim_info: The Sim to get the level of.
+        :type sim_info: SimInfo
+        :return: The current level of the Motive of the Sim or `-1.0` if the Sim is not a Witch.
+        :rtype: float
+        """
+        if not CommonOccultUtils.is_witch(sim_info):
+            return -1.0
+        return CommonSimMotiveUtils._get_motive_level(sim_info, CommonMotiveId.WITCH_MAGIC)
+
+    @staticmethod
     def _get_motive_level(sim_info: SimInfo, motive_id: CommonMotiveId) -> float:
         motive_id: int = CommonSimMotiveUtils._map_motive_id(sim_info, motive_id)
         if motive_id == -1:
@@ -307,6 +384,11 @@ class CommonSimMotiveUtils:
                     Species.DOG: CommonMotiveId.PET_DOG_HUNGER
                 },
                 CommonMotiveId.HYGIENE: {
+                    Species.HUMAN: CommonMotiveId.HYGIENE,
+                    Species.CAT: CommonMotiveId.PET_CAT_HYGIENE,
+                    Species.DOG: CommonMotiveId.PET_DOG_HYGIENE
+                },
+                CommonMotiveId.MERMAID_HYDRATION: {
                     Species.HUMAN: CommonMotiveId.HYGIENE,
                     Species.CAT: CommonMotiveId.PET_CAT_HYGIENE,
                     Species.DOG: CommonMotiveId.PET_DOG_HYGIENE
