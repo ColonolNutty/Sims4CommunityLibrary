@@ -18,7 +18,6 @@ from sims4communitylib.utils.resources.common_statistic_utils import CommonStati
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from statistics.skill import Skill
-from sims4communitylib.utils.sims.common_sim_statistic_utils import CommonSimStatisticUtils
 
 
 class CommonSimSkillUtils:
@@ -58,19 +57,11 @@ class CommonSimSkillUtils:
         :return: True, if successful. False, if not successful, the skill does not exist, or the skill is not valid for the Sim.
         :rtype: bool
         """
-        sim = CommonSimUtils.get_sim_instance(sim_info)
-        if sim is None:
-            return False
-        if isinstance(skill, int) or isinstance(skill, CommonSkillId):
-            skill: Skill = CommonStatisticUtils.load_statistic_by_id(int(skill))
-        if skill is None:
-            return False
-        sim_skill = sim.commodity_tracker.add_statistic(skill)
+        sim_skill: Skill = CommonSimSkillUtils.get_skill(sim_info, skill, add=add)
         if sim_skill is None:
             return False
-        if level > skill.max_level:
-            level = skill.max_level
-        sim.commodity_tracker.set_user_value(skill, level)
+        new_skill_experience = sim_skill.convert_from_user_value(level)
+        sim_skill.set_value(new_skill_experience)
         return True
 
     @staticmethod
@@ -191,7 +182,11 @@ class CommonSimSkillUtils:
         :return: True, if successful. False, if not.
         :rtype: bool
         """
-        return CommonSimStatisticUtils.set_statistic_value(sim_info, skill, value, add=add)
+        sim_skill: Skill = CommonSimSkillUtils.get_skill(sim_info, skill, add=add)
+        if sim_skill is None:
+            return False
+        sim_skill.set_value(value)
+        return True
 
     @staticmethod
     def get_progress_toward_max_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], add: bool=True) -> float:
@@ -208,7 +203,11 @@ class CommonSimSkillUtils:
         :return: True, if successful. False, if not.
         :rtype: bool
         """
-        return CommonSimStatisticUtils.get_statistic_value(sim_info, skill, add=add)
+        sim_skill: Skill = CommonSimSkillUtils.get_skill(sim_info, skill, add=add)
+        if sim_skill is None:
+            return False
+        sim_skill.get_value()
+        return True
 
     @staticmethod
     def change_progress_toward_max_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], value: float, add: bool=True) -> bool:
@@ -227,7 +226,11 @@ class CommonSimSkillUtils:
         :return: True, if successful. False, if not.
         :rtype: bool
         """
-        return CommonSimStatisticUtils.add_statistic_value(sim_info, skill, value, add=add)
+        sim_skill: Skill = CommonSimSkillUtils.get_skill(sim_info, skill, add=add)
+        if sim_skill is None:
+            return False
+        sim_skill.add_value(value)
+        return True
 
     @staticmethod
     def change_progress_toward_next_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], value: float, add: bool=True) -> bool:
@@ -246,18 +249,7 @@ class CommonSimSkillUtils:
         :return: True, if successful. False, if not.
         :rtype: bool
         """
-        skill = CommonSimSkillUtils.get_skill(sim_info, skill, add=add)
-        if skill is None or skill.reached_max_level:
-            return False
-        current_skill_level = skill.get_user_value()
-        current_skill_experience = skill.get_value()
-        total_experience_for_level = skill.get_skill_value_for_level(current_skill_level)
-        relative_experience_needed_for_next_level = skill.get_skill_value_for_level(current_skill_level + 1) - total_experience_for_level
-        experience_gained_or_lost = relative_experience_needed_for_next_level / 100 * value
-        skill_initial_value = getattr(skill, 'initial_value', 0.0)
-        if current_skill_experience < skill_initial_value:
-            experience_gained_or_lost = max(skill_initial_value, experience_gained_or_lost)
-        return CommonSimSkillUtils.change_progress_toward_max_skill_level(sim_info, skill, experience_gained_or_lost)
+        return CommonSimSkillUtils.set_progress_toward_max_skill_level(sim_info, skill, value, add=add)
 
     @staticmethod
     def get_progress_toward_next_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], add: bool=False) -> float:
