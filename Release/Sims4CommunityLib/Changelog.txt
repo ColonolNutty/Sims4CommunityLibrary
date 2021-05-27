@@ -1,3 +1,7 @@
+v1.65:
+- Added Skeletons to the CommonSimType Enum as well as handle them in the CommonSimTypeUtils
+- Fixed an error with dialogs when using Object Categories
+
 v1.64:
 ---New---
 - Added function `CommonSimSkillUtils.set_current_skill_level_to_max` to allow setting a skill to its maximum without needing to know what the maximum level is.
