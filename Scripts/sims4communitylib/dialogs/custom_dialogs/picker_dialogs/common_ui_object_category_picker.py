@@ -32,11 +32,19 @@ class CommonUiObjectCategoryPicker(UiObjectPicker):
     }
 
     def _build_customize_picker(self, picker_data) -> None:
-        with ProtocolBufferRollback(picker_data.filter_data) as filter_data_list:
-            for category in self.object_categories:
-                with ProtocolBufferRollback(filter_data_list.filter_data) as category_data:
+        try:
+            with ProtocolBufferRollback(picker_data.filter_data) as filter_data_list:
+                for category in self.object_categories:
+                    with ProtocolBufferRollback(filter_data_list.filter_data) as category_data:
+                        category_data.tag_type = abs(hash(category.object_category)) % (10 ** 8)
+                        build_icon_info_msg(category.icon(None), None, category_data.icon_info)
+                        category_data.description = category.category_name
+                filter_data_list.use_dropdown_filter = self.use_dropdown_filter
+            super()._build_customize_picker(picker_data)
+        except:
+            with ProtocolBufferRollback(picker_data.filter_data) as category_data:
+                for category in self.object_categories:
                     category_data.tag_type = abs(hash(category.object_category)) % (10 ** 8)
                     build_icon_info_msg(category.icon(None), None, category_data.icon_info)
                     category_data.description = category.category_name
-            filter_data_list.use_dropdown_filter = self.use_dropdown_filter
-        super()._build_customize_picker(picker_data)
+            super()._build_customize_picker(picker_data)
