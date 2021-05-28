@@ -161,10 +161,10 @@ def _common_on_sim_spawn(original, cls, *args, **kwargs) -> Any:
 
 # noinspection PyUnusedLocal
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Skill, Skill.on_skill_level_up.__name__)
-def _common_on_sim_skill_level_up(original, cls, *args, **kwargs) -> Any:
-    result = original(*args, **kwargs)
+def _common_on_sim_skill_level_up(original, self, *args, **kwargs) -> Any:
+    result = original(self, *args, **kwargs)
     if result:
-        CommonSimEventDispatcherService.get()._on_skill_leveled_up(*args, **kwargs)
+        CommonSimEventDispatcherService.get()._on_skill_leveled_up(self, *args, **kwargs)
     return result
 
 
