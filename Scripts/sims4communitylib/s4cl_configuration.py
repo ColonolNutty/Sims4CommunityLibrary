@@ -21,6 +21,12 @@ from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 class S4CLConfiguration(HasLog, CommonService):
     """ Manages configuration via the sims4communitylib.config file. """
     _CONFIGURATION_FILE_NAME = 'sims4communitylib.config'
+    _DEFAULT_CONFIG_DATA = {
+        'enable_vanilla_logging': False,
+        'enable_logs': {
+            'example_log_that_is_enabled': [CommonMessageType.DEBUG.name, CommonMessageType.WARN.name]
+        }
+    }
 
     # noinspection PyMissingOrEmptyDocstring
     @property
@@ -30,15 +36,27 @@ class S4CLConfiguration(HasLog, CommonService):
     def __init__(self) -> None:
         self._config_data = dict()
         super().__init__()
+        self._config_data = S4CLConfiguration._DEFAULT_CONFIG_DATA.copy()
         try:
             file_path = os.path.dirname(os.path.dirname(os.path.dirname(self.mod_identity.file_path.rstrip('/').rstrip('\\'))))
             full_file_path = os.path.join(file_path, S4CLConfiguration._CONFIGURATION_FILE_NAME)
-            if os.path.exists(full_file_path):
-                self._config_data = CommonJSONIOUtils.load_from_file(full_file_path) or dict()
-            else:
-                CommonExceptionHandler.log_exception(self.mod_identity, 'Failed to locate configuration file named {} at path {}'.format(S4CLConfiguration._CONFIGURATION_FILE_NAME, full_file_path))
+            try:
+                if os.path.exists(full_file_path):
+                    self._config_data = CommonJSONIOUtils.load_from_file(full_file_path) or dict()
+                    if 'enable_logs_result' in self._config_data:
+                        del self._config_data['enable_logs_result']
+                else:
+                    CommonJSONIOUtils.write_to_file(full_file_path, self._config_data)
+            except Exception as ex:
+                CommonExceptionHandler.log_exception(self.mod_identity, 'Failed to read the configuration file named {} at path "{}"!'.format(S4CLConfiguration._CONFIGURATION_FILE_NAME, full_file_path), exception=ex)
+                if not os.path.exists(full_file_path):
+                    # noinspection PyBroadException
+                    try:
+                        CommonJSONIOUtils.write_to_file(full_file_path, self._config_data)
+                    except:
+                        pass
         except Exception as ex:
-            CommonExceptionHandler.log_exception(self.mod_identity, 'Failed to locate configuration file named {} next to the sims4communitylib.ts4script file!'.format(S4CLConfiguration._CONFIGURATION_FILE_NAME), exception=ex)
+            CommonExceptionHandler.log_exception(self.mod_identity, 'Failed to format the file path to the S4CL configuration file.', exception=ex)
 
     @property
     def enable_vanilla_logging(self) -> bool:
