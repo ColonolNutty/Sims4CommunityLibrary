@@ -1,3 +1,6 @@
+v1.66:
+- Fixed an error that would occur when a Sim levels up in a Skill
+
 v1.65:
 - Added Skeletons to the CommonSimType Enum as well as handle them in the CommonSimTypeUtils
 - Fixed an error with dialogs when using Object Categories
