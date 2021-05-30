@@ -6,14 +6,194 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Union, Tuple
+
+from event_testing.resolver import SingleObjectResolver
+from event_testing.tests import TestSetInstance
 from objects.components.state import StateComponent, ObjectStateValue
 from objects.game_object import GameObject
+from sims4.resources import Types
+from sims4communitylib.enums.statistics_enum import CommonStatisticId
 from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
+from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+from sims4communitylib.utils.common_type_utils import CommonTypeUtils
+from statistics.commodity import Commodity
+from statistics.commodity_tracker import CommodityTracker
 
 
 class CommonObjectStateUtils:
     """ Utilities for manipulating the state of Objects. """
+
+    @staticmethod
+    def can_become_broken(game_object: GameObject) -> bool:
+        """can_become_broken(game_object)
+
+        Determine if an Object is able to break.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the specified Object is able to break. False, if not.
+        :rtype: bool
+        """
+        if game_object is None or not hasattr(game_object, 'commodity_tracker'):
+            return False
+        if CommonTypeUtils.is_sim_or_sim_info(game_object):
+            return False
+        commodity: Commodity = CommonResourceUtils.load_instance(Types.STATISTIC, int(CommonStatisticId.OBJECT_BROKENNESS))
+        commodity_tracker: CommodityTracker = game_object.commodity_tracker
+        if commodity_tracker is None:
+            return False
+        return commodity_tracker.has_statistic(commodity)
+
+    @staticmethod
+    def can_become_dirty(game_object: GameObject) -> bool:
+        """can_become_dirty(game_object)
+
+        Determine if an Object is able to get dirty.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the specified Object is able to get dirty. False, if not.
+        :rtype: bool
+        """
+        if game_object is None or not hasattr(game_object, 'commodity_tracker'):
+            return False
+        if CommonTypeUtils.is_sim_or_sim_info(game_object):
+            return False
+        commodity: Commodity = CommonResourceUtils.load_instance(Types.STATISTIC, int(CommonStatisticId.DIRTINESS))
+        commodity_tracker: CommodityTracker = game_object.commodity_tracker
+        if commodity_tracker is None:
+            return False
+        return commodity_tracker.has_statistic(commodity)
+
+    @staticmethod
+    def is_broken(game_object: GameObject) -> bool:
+        """is_broken(game_object)
+
+        Determine if an Object is broken.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the specified Object is broken. False, if not.
+        :rtype: bool
+        """
+        if game_object is None or not hasattr(game_object, 'commodity_tracker'):
+            return False
+        if CommonTypeUtils.is_sim_or_sim_info(game_object):
+            return False
+        # testSet_StateBroken
+        test_set_instance: TestSetInstance = CommonResourceUtils.load_instance(Types.SNIPPET, 33738)
+        # noinspection PyUnresolvedReferences
+        tests: CompoundTestList = test_set_instance.test
+        resolver = SingleObjectResolver(game_object)
+        result = tests.run_tests(resolver)
+        return bool(result)
+
+    @staticmethod
+    def is_dirty(game_object: GameObject) -> bool:
+        """is_dirty(game_object)
+
+        Determine if an Object is dirty.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the specified Object is dirty. False, if not.
+        :rtype: bool
+        """
+        if game_object is None or not hasattr(game_object, 'commodity_tracker'):
+            return False
+        commodity: Commodity = CommonResourceUtils.load_instance(Types.STATISTIC, int(CommonStatisticId.DIRTINESS))
+        commodity_tracker: CommodityTracker = game_object.commodity_tracker
+        if commodity_tracker is None:
+            return False
+        if not commodity_tracker.has_statistic(commodity):
+            return False
+        return commodity_tracker.get_value(commodity) == commodity.min_value
+
+    @staticmethod
+    def break_object(game_object: GameObject) -> bool:
+        """break_object(game_object)
+
+        Break an Object.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the specified Object has been broken. False, if not.
+        :rtype: bool
+        """
+        if game_object is None or not hasattr(game_object, 'commodity_tracker'):
+            return False
+        commodity: Commodity = CommonResourceUtils.load_instance(Types.STATISTIC, int(CommonStatisticId.OBJECT_BROKENNESS))
+        commodity_tracker: CommodityTracker = game_object.commodity_tracker
+        if commodity_tracker is None:
+            return False
+        if not commodity_tracker.has_statistic(commodity):
+            return False
+        return commodity_tracker.set_min(commodity)
+
+    @staticmethod
+    def fix_object(game_object: GameObject) -> bool:
+        """fix_object(game_object)
+
+        Fix an Object.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the specified Object has been fixed. False, if not.
+        :rtype: bool
+        """
+        if game_object is None or not hasattr(game_object, 'commodity_tracker'):
+            return False
+        commodity: Commodity = CommonResourceUtils.load_instance(Types.STATISTIC, int(CommonStatisticId.OBJECT_BROKENNESS))
+        commodity_tracker: CommodityTracker = game_object.commodity_tracker
+        if commodity_tracker is None:
+            return False
+        if not commodity_tracker.has_statistic(commodity):
+            return False
+        return commodity_tracker.set_max(commodity)
+
+    @staticmethod
+    def make_dirty(game_object: GameObject) -> bool:
+        """make_dirty(game_object)
+
+        Make an Object dirty.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the specified Object has been made dirty. False, if not.
+        :rtype: bool
+        """
+        if game_object is None or not hasattr(game_object, 'commodity_tracker'):
+            return False
+        commodity: Commodity = CommonResourceUtils.load_instance(Types.STATISTIC, int(CommonStatisticId.DIRTINESS))
+        commodity_tracker: CommodityTracker = game_object.commodity_tracker
+        if commodity_tracker is None:
+            return False
+        if not commodity_tracker.has_statistic(commodity):
+            return False
+        return commodity_tracker.set_min(commodity)
+
+    @staticmethod
+    def make_clean(game_object: GameObject) -> bool:
+        """make_clean(game_object)
+
+        Make an Object clean.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the specified Object has been made clean. False, if not.
+        :rtype: bool
+        """
+        if game_object is None or not hasattr(game_object, 'commodity_tracker'):
+            return False
+        commodity: Commodity = CommonResourceUtils.load_instance(Types.STATISTIC, int(CommonStatisticId.DIRTINESS))
+        commodity_tracker: CommodityTracker = game_object.commodity_tracker
+        if commodity_tracker is None:
+            return False
+        if not commodity_tracker.has_statistic(commodity):
+            return False
+        return commodity_tracker.set_max(commodity)
+
     @staticmethod
     def is_object_usable(game_object: GameObject) -> bool:
         """is_object_usable(game_object)
