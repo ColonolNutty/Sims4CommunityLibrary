@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<I c="S4CLDebugObjectMakeCleanInteraction" i="interaction" m="sims4communitylib.debug.interactions.object_make_clean" n="S4CL_Debug_Object_Make_Clean" s="5335871574274933500">
+  <V n="pie_menu_icon" t="enabled">
+    <V n="enabled" t="resource_key">
+      <U n="resource_key">
+        <T n="key" p="InGame\UI\Icons\PieMenu\Interactions\icon_pieMenu_immediateInteraction.png">2f7d0004:00000000:25eea5cdba6a6fd6</T>
+      </U>
+    </V>
+  </V>
+  <V t="disabled" n="_saveable" />
+  <T n="cheat">True</T>
+  <T n="debug">True</T>
+  <T n="category">1933473823803033950<!--PieMenuCategory: S4CL_Pie_Object_State--></T>
+  <T n="display_name">0x4847D964<!--Make Clean--></T>
+  <L n="interaction_category_tags">
+    <E>INVALID</E>
+  </L>
+  <T n="pie_menu_priority">9</T>
+  <U n="progress_bar_enabled">
+    <T n="bar_enabled">False</T>
+  </U>
+  <E n="target_type">OBJECT</E>
+</I>

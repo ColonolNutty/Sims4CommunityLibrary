@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<I c="SocialSuperInteraction" i="interaction" m="interactions.social.social_super_interaction" n="S4CL_SocialSuper_PetSocial_Sim_To_Pet_NonTouching_Pet" s="17048453908224900188">
+  <!--This Social Super Interaction may be used as a super interaction override rather than the vanilla version petSocial_SimToPet_NonTouching_Pet-->
+  <V n="_affordance_key_override_for_autonomy" t="enabled">
+    <T n="enabled">SimToPet_Socials</T>
+  </V>
+  <V n="_icon" t="participant">
+    <U n="participant">
+      <L n="participant_type">
+        <E>TargetSim</E>
+      </L>
+    </U>
+  </V>
+  <L n="_party_size_weight_tuning">
+    <U>
+      <T n="y">100</T>
+    </U>
+    <U>
+      <T n="x">1</T>
+      <T n="y">100</T>
+    </U>
+    <U>
+      <T n="x">2</T>
+      <T n="y">50</T>
+    </U>
+    <U>
+      <T n="x">3</T>
+      <T n="y">0</T>
+    </U>
+    <U>
+      <T n="x">4</T>
+    </U>
+  </L>
+  <V n="_saveable" t="enabled" />
+  <T n="_social_group_type">164327<!--group_SimToPet--></T>
+  <V n="affordance_to_push_on_target" t="push_self_or_none">
+    <T n="push_self_or_none">False</T>
+  </V>
+  <T n="allow_autonomous">False</T>
+  <T n="allow_user_directed">False</T>
+  <T n="attention_cost">0</T>
+  <V n="basic_content" t="flexible_length">
+    <U n="flexible_length">
+      <V n="content" t="staging_content">
+        <U n="staging_content">
+          <U n="content_set">
+            <L n="affordance_lists" />
+          </U>
+        </U>
+      </V>
+    </U>
+  </V>
+  <L n="basic_extras" />
+  <V n="basic_focus" t="tunable_focus">
+    <U n="tunable_focus">
+      <T n="layer">5</T>
+      <T n="score">10</T>
+      <L n="subject">
+        <E>TargetSim</E>
+      </L>
+    </U>
+  </V>
+  <V n="basic_reserve_object" t="enabled" />
+  <T n="category">15507<!--sim_Friendly--></T>
+  <V n="content_score" t="enabled">
+    <U n="enabled">
+      <T n="base_score">1</T>
+    </U>
+  </V>
+  <T n="display_name">0x82D7D627<!--Talk to {1.SimFirstName}--></T>
+  <U n="display_name_text_tokens">
+    <L n="tokens">
+      <V t="participant_type">
+        <U n="participant_type">
+          <V n="objects" t="from_participant">
+            <U n="from_participant">
+              <E n="participant">Actor</E>
+            </U>
+          </V>
+        </U>
+      </V>
+      <V t="participant_type">
+        <U n="participant_type">
+          <V n="objects" t="from_participant">
+            <U n="from_participant">
+              <E n="participant">Object</E>
+            </U>
+          </V>
+        </U>
+      </V>
+    </L>
+  </U>
+  <V n="idle_animation" t="enabled">
+    <U n="enabled">
+      <T n="factory">162069<!--pet_Solo_Listen_Looping--></T>
+    </U>
+  </V>
+  <T n="ignore_group_socials">False</T>
+  <T n="ignores_greetings">False</T>
+  <L n="interaction_category_tags">
+    <E>Interaction_SocialSuper</E>
+    <E>Interaction_Super</E>
+    <E>Interaction_All</E>
+    <E>Interaction_Social_Contagious</E>
+  </L>
+  <T n="invite_in_after_interaction">False</T>
+  <U n="listen_animation">
+    <T n="factory">162069<!--pet_Solo_Listen_Looping--></T>
+  </U>
+  <U n="progress_bar_enabled">
+    <T n="bar_enabled">False</T>
+  </U>
+  <T n="relationship_scoring">True</T>
+  <E n="scoring_priority">NORMAL</E>
+  <V n="sim_affinity_posture_scoring_data" t="disabled" />
+  <T n="subaction_selection_weight">1</T>
+  <V n="super_affordance_compatibility" t="reference">
+    <T n="reference">177633<!--af_PetSocialsCompatablity--></T>
+  </V>
+  <V n="super_affordance_klobberers" t="enabled">
+    <V n="enabled" t="literal">
+      <U n="literal">
+        <V n="default_inclusion" t="exclude_all">
+          <U n="exclude_all">
+            <L n="include_lists">
+              <T>176632<!--affordanceList_Pets_PetToPet_Socials--></T>
+              <T>173922<!--affordanceList_Pets_SimToPet_Social_ValidInterruptions--></T>
+            </L>
+          </U>
+        </V>
+      </U>
+    </V>
+  </V>
+  <E n="target_type">TARGET</E>
+  <L n="test_globals" />
+  <T n="time_overhead">30</T>
+  <T n="use_best_scoring_aop">False</T>
+  <T n="visible">True</T>
+</I>
