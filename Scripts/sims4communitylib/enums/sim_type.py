@@ -22,6 +22,7 @@ class CommonSimType(CommonInt):
     ELDER_HUMAN_WITCH: 'CommonSimType' = 6
     ELDER_HUMAN_ROBOT: 'CommonSimType' = 7
     ELDER_HUMAN_SKELETON: 'CommonSimType' = 8
+    ELDER_HUMAN_PLANT_SIM: 'CommonSimType' = 9
 
     ADULT_HUMAN: 'CommonSimType' = 15
     ADULT_HUMAN_VAMPIRE: 'CommonSimType' = 16
@@ -31,6 +32,7 @@ class CommonSimType(CommonInt):
     ADULT_HUMAN_WITCH: 'CommonSimType' = 20
     ADULT_HUMAN_ROBOT: 'CommonSimType' = 21
     ADULT_HUMAN_SKELETON: 'CommonSimType' = 22
+    ADULT_HUMAN_PLANT_SIM: 'CommonSimType' = 23
 
     YOUNG_ADULT_HUMAN: 'CommonSimType' = 30
     YOUNG_ADULT_HUMAN_VAMPIRE: 'CommonSimType' = 31
@@ -40,6 +42,7 @@ class CommonSimType(CommonInt):
     YOUNG_ADULT_HUMAN_WITCH: 'CommonSimType' = 35
     YOUNG_ADULT_HUMAN_ROBOT: 'CommonSimType' = 36
     YOUNG_ADULT_HUMAN_SKELETON: 'CommonSimType' = 37
+    YOUNG_ADULT_HUMAN_PLANT_SIM: 'CommonSimType' = 38
 
     TEEN_HUMAN: 'CommonSimType' = 45
     TEEN_HUMAN_VAMPIRE: 'CommonSimType' = 46
@@ -49,6 +52,7 @@ class CommonSimType(CommonInt):
     TEEN_HUMAN_WITCH: 'CommonSimType' = 50
     TEEN_HUMAN_ROBOT: 'CommonSimType' = 51
     TEEN_HUMAN_SKELETON: 'CommonSimType' = 52
+    TEEN_HUMAN_PLANT_SIM: 'CommonSimType' = 53
 
     CHILD_HUMAN: 'CommonSimType' = 58
     CHILD_HUMAN_VAMPIRE: 'CommonSimType' = 59
@@ -58,6 +62,7 @@ class CommonSimType(CommonInt):
     CHILD_HUMAN_WITCH: 'CommonSimType' = 63
     CHILD_HUMAN_ROBOT: 'CommonSimType' = 64
     CHILD_HUMAN_SKELETON: 'CommonSimType' = 65
+    CHILD_HUMAN_PLANT_SIM: 'CommonSimType' = 66
 
     TODDLER_HUMAN: 'CommonSimType' = 70
     TODDLER_HUMAN_VAMPIRE: 'CommonSimType' = 71
@@ -67,6 +72,7 @@ class CommonSimType(CommonInt):
     TODDLER_HUMAN_WITCH: 'CommonSimType' = 75
     TODDLER_HUMAN_ROBOT: 'CommonSimType' = 76
     TODDLER_HUMAN_SKELETON: 'CommonSimType' = 77
+    TODDLER_HUMAN_PLANT_SIM: 'CommonSimType' = 78
 
     BABY_HUMAN: 'CommonSimType' = 82
     BABY_HUMAN_VAMPIRE: 'CommonSimType' = 83
@@ -76,6 +82,7 @@ class CommonSimType(CommonInt):
     BABY_HUMAN_WITCH: 'CommonSimType' = 87
     BABY_HUMAN_ROBOT: 'CommonSimType' = 88
     BABY_HUMAN_SKELETON: 'CommonSimType' = 89
+    BABY_HUMAN_PLANT_SIM: 'CommonSimType' = 90
 
     CHILD_DOG: 'CommonSimType' = 100
     CHILD_DOG_VAMPIRE: 'CommonSimType' = 101
@@ -85,6 +92,7 @@ class CommonSimType(CommonInt):
     CHILD_DOG_WITCH: 'CommonSimType' = 105
     CHILD_DOG_ROBOT: 'CommonSimType' = 106
     CHILD_DOG_SKELETON: 'CommonSimType' = 107
+    CHILD_DOG_PLANT_SIM: 'CommonSimType' = 108
 
     ELDER_SMALL_DOG: 'CommonSimType' = 200
     ELDER_SMALL_DOG_VAMPIRE: 'CommonSimType' = 201
@@ -94,6 +102,7 @@ class CommonSimType(CommonInt):
     ELDER_SMALL_DOG_WITCH: 'CommonSimType' = 205
     ELDER_SMALL_DOG_ROBOT: 'CommonSimType' = 206
     ELDER_SMALL_DOG_SKELETON: 'CommonSimType' = 207
+    ELDER_SMALL_DOG_PLANT_SIM: 'CommonSimType' = 208
 
     ADULT_SMALL_DOG: 'CommonSimType' = 215
     ADULT_SMALL_DOG_VAMPIRE: 'CommonSimType' = 216
@@ -103,6 +112,7 @@ class CommonSimType(CommonInt):
     ADULT_SMALL_DOG_WITCH: 'CommonSimType' = 220
     ADULT_SMALL_DOG_ROBOT: 'CommonSimType' = 221
     ADULT_SMALL_DOG_SKELETON: 'CommonSimType' = 222
+    ADULT_SMALL_DOG_PLANT_SIM: 'CommonSimType' = 223
 
     CHILD_SMALL_DOG: 'CommonSimType' = 227
     CHILD_SMALL_DOG_VAMPIRE: 'CommonSimType' = 228
@@ -112,6 +122,7 @@ class CommonSimType(CommonInt):
     CHILD_SMALL_DOG_WITCH: 'CommonSimType' = 232
     CHILD_SMALL_DOG_ROBOT: 'CommonSimType' = 233
     CHILD_SMALL_DOG_SKELETON: 'CommonSimType' = 234
+    CHILD_SMALL_DOG_PLANT_SIM: 'CommonSimType' = 235
 
     ELDER_LARGE_DOG: 'CommonSimType' = 300
     ELDER_LARGE_DOG_VAMPIRE: 'CommonSimType' = 301
@@ -121,6 +132,7 @@ class CommonSimType(CommonInt):
     ELDER_LARGE_DOG_WITCH: 'CommonSimType' = 305
     ELDER_LARGE_DOG_ROBOT: 'CommonSimType' = 306
     ELDER_LARGE_DOG_SKELETON: 'CommonSimType' = 307
+    ELDER_LARGE_DOG_PLANT_SIM: 'CommonSimType' = 308
 
     ADULT_LARGE_DOG: 'CommonSimType' = 315
     ADULT_LARGE_DOG_VAMPIRE: 'CommonSimType' = 316
@@ -130,6 +142,7 @@ class CommonSimType(CommonInt):
     ADULT_LARGE_DOG_WITCH: 'CommonSimType' = 320
     ADULT_LARGE_DOG_ROBOT: 'CommonSimType' = 321
     ADULT_LARGE_DOG_SKELETON: 'CommonSimType' = 322
+    ADULT_LARGE_DOG_PLANT_SIM: 'CommonSimType' = 323
 
     CHILD_LARGE_DOG: 'CommonSimType' = 327
     CHILD_LARGE_DOG_VAMPIRE: 'CommonSimType' = 328
@@ -139,6 +152,7 @@ class CommonSimType(CommonInt):
     CHILD_LARGE_DOG_WITCH: 'CommonSimType' = 332
     CHILD_LARGE_DOG_ROBOT: 'CommonSimType' = 333
     CHILD_LARGE_DOG_SKELETON: 'CommonSimType' = 334
+    CHILD_LARGE_DOG_PLANT_SIM: 'CommonSimType' = 335
 
     ELDER_CAT: 'CommonSimType' = 400
     ELDER_CAT_VAMPIRE: 'CommonSimType' = 401
@@ -148,6 +162,7 @@ class CommonSimType(CommonInt):
     ELDER_CAT_WITCH: 'CommonSimType' = 405
     ELDER_CAT_ROBOT: 'CommonSimType' = 406
     ELDER_CAT_SKELETON: 'CommonSimType' = 407
+    ELDER_CAT_PLANT_SIM: 'CommonSimType' = 408
 
     ADULT_CAT: 'CommonSimType' = 415
     ADULT_CAT_VAMPIRE: 'CommonSimType' = 416
@@ -157,6 +172,7 @@ class CommonSimType(CommonInt):
     ADULT_CAT_WITCH: 'CommonSimType' = 420
     ADULT_CAT_ROBOT: 'CommonSimType' = 421
     ADULT_CAT_SKELETON: 'CommonSimType' = 422
+    ADULT_CAT_PLANT_SIM: 'CommonSimType' = 423
 
     CHILD_CAT: 'CommonSimType' = 427
     CHILD_CAT_VAMPIRE: 'CommonSimType' = 428
@@ -166,6 +182,7 @@ class CommonSimType(CommonInt):
     CHILD_CAT_WITCH: 'CommonSimType' = 432
     CHILD_CAT_ROBOT: 'CommonSimType' = 433
     CHILD_CAT_SKELETON: 'CommonSimType' = 434
+    CHILD_CAT_PLANT_SIM: 'CommonSimType' = 435
 
     @staticmethod
     def get_all(include_teen_young_adult_and_elder: bool=False, include_baby: bool=False, include_separate_child_dog_types: bool=False) -> Tuple['CommonSimType']:
@@ -191,6 +208,7 @@ class CommonSimType(CommonInt):
             CommonSimType.ADULT_HUMAN_WITCH,
             CommonSimType.ADULT_HUMAN_ROBOT,
             CommonSimType.ADULT_HUMAN_SKELETON,
+            CommonSimType.ADULT_HUMAN_PLANT_SIM,
 
             CommonSimType.CHILD_HUMAN,
             CommonSimType.CHILD_HUMAN_VAMPIRE,
@@ -200,6 +218,7 @@ class CommonSimType(CommonInt):
             CommonSimType.CHILD_HUMAN_WITCH,
             CommonSimType.CHILD_HUMAN_ROBOT,
             CommonSimType.CHILD_HUMAN_SKELETON,
+            CommonSimType.CHILD_HUMAN_PLANT_SIM,
 
             CommonSimType.TODDLER_HUMAN,
             CommonSimType.TODDLER_HUMAN_VAMPIRE,
@@ -209,6 +228,7 @@ class CommonSimType(CommonInt):
             CommonSimType.TODDLER_HUMAN_WITCH,
             CommonSimType.TODDLER_HUMAN_ROBOT,
             CommonSimType.TODDLER_HUMAN_SKELETON,
+            CommonSimType.TODDLER_HUMAN_PLANT_SIM,
 
             CommonSimType.ADULT_SMALL_DOG,
             CommonSimType.ADULT_SMALL_DOG_VAMPIRE,
@@ -218,6 +238,7 @@ class CommonSimType(CommonInt):
             CommonSimType.ADULT_SMALL_DOG_WITCH,
             CommonSimType.ADULT_SMALL_DOG_ROBOT,
             CommonSimType.ADULT_SMALL_DOG_SKELETON,
+            CommonSimType.ADULT_SMALL_DOG_PLANT_SIM,
 
             CommonSimType.ADULT_LARGE_DOG,
             CommonSimType.ADULT_LARGE_DOG_VAMPIRE,
@@ -227,6 +248,7 @@ class CommonSimType(CommonInt):
             CommonSimType.ADULT_LARGE_DOG_WITCH,
             CommonSimType.ADULT_LARGE_DOG_ROBOT,
             CommonSimType.ADULT_LARGE_DOG_SKELETON,
+            CommonSimType.ADULT_LARGE_DOG_PLANT_SIM,
 
             CommonSimType.ADULT_CAT,
             CommonSimType.ADULT_CAT_VAMPIRE,
@@ -236,6 +258,7 @@ class CommonSimType(CommonInt):
             CommonSimType.ADULT_CAT_WITCH,
             CommonSimType.ADULT_CAT_ROBOT,
             CommonSimType.ADULT_CAT_SKELETON,
+            CommonSimType.ADULT_CAT_PLANT_SIM,
 
             CommonSimType.CHILD_CAT,
             CommonSimType.CHILD_CAT_VAMPIRE,
@@ -245,6 +268,7 @@ class CommonSimType(CommonInt):
             CommonSimType.CHILD_CAT_WITCH,
             CommonSimType.CHILD_CAT_ROBOT,
             CommonSimType.CHILD_CAT_SKELETON,
+            CommonSimType.CHILD_CAT_PLANT_SIM,
 
             CommonSimType.CHILD_DOG,
             CommonSimType.CHILD_DOG_VAMPIRE,
@@ -254,6 +278,7 @@ class CommonSimType(CommonInt):
             CommonSimType.CHILD_DOG_WITCH,
             CommonSimType.CHILD_DOG_ROBOT,
             CommonSimType.CHILD_DOG_SKELETON,
+            CommonSimType.CHILD_DOG_PLANT_SIM,
         )
         if include_teen_young_adult_and_elder:
             sim_types: Tuple[CommonSimType] = (
@@ -266,6 +291,7 @@ class CommonSimType(CommonInt):
                 CommonSimType.ELDER_HUMAN_WITCH,
                 CommonSimType.ELDER_HUMAN_ROBOT,
                 CommonSimType.ELDER_HUMAN_SKELETON,
+                CommonSimType.ELDER_HUMAN_PLANT_SIM,
 
                 CommonSimType.YOUNG_ADULT_HUMAN,
                 CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE,
@@ -275,6 +301,7 @@ class CommonSimType(CommonInt):
                 CommonSimType.YOUNG_ADULT_HUMAN_WITCH,
                 CommonSimType.YOUNG_ADULT_HUMAN_ROBOT,
                 CommonSimType.YOUNG_ADULT_HUMAN_SKELETON,
+                CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM,
 
                 CommonSimType.TEEN_HUMAN,
                 CommonSimType.TEEN_HUMAN_VAMPIRE,
@@ -284,6 +311,7 @@ class CommonSimType(CommonInt):
                 CommonSimType.TEEN_HUMAN_WITCH,
                 CommonSimType.TEEN_HUMAN_ROBOT,
                 CommonSimType.TEEN_HUMAN_SKELETON,
+                CommonSimType.TEEN_HUMAN_PLANT_SIM,
 
                 CommonSimType.ELDER_SMALL_DOG,
                 CommonSimType.ELDER_SMALL_DOG_VAMPIRE,
@@ -293,6 +321,7 @@ class CommonSimType(CommonInt):
                 CommonSimType.ELDER_SMALL_DOG_WITCH,
                 CommonSimType.ELDER_SMALL_DOG_ROBOT,
                 CommonSimType.ELDER_SMALL_DOG_SKELETON,
+                CommonSimType.ELDER_SMALL_DOG_PLANT_SIM,
 
                 CommonSimType.ELDER_LARGE_DOG,
                 CommonSimType.ELDER_LARGE_DOG_VAMPIRE,
@@ -302,6 +331,7 @@ class CommonSimType(CommonInt):
                 CommonSimType.ELDER_LARGE_DOG_WITCH,
                 CommonSimType.ELDER_LARGE_DOG_ROBOT,
                 CommonSimType.ELDER_LARGE_DOG_SKELETON,
+                CommonSimType.ELDER_LARGE_DOG_PLANT_SIM,
 
                 CommonSimType.ELDER_CAT,
                 CommonSimType.ELDER_CAT_VAMPIRE,
@@ -311,6 +341,7 @@ class CommonSimType(CommonInt):
                 CommonSimType.ELDER_CAT_WITCH,
                 CommonSimType.ELDER_CAT_ROBOT,
                 CommonSimType.ELDER_CAT_SKELETON,
+                CommonSimType.ELDER_CAT_PLANT_SIM,
             )
         if include_baby:
             sim_types: Tuple[CommonSimType] = (
@@ -322,7 +353,8 @@ class CommonSimType(CommonInt):
                 CommonSimType.BABY_HUMAN_MERMAID,
                 CommonSimType.BABY_HUMAN_WITCH,
                 CommonSimType.BABY_HUMAN_ROBOT,
-                CommonSimType.BABY_HUMAN_SKELETON
+                CommonSimType.BABY_HUMAN_SKELETON,
+                CommonSimType.BABY_HUMAN_PLANT_SIM
             )
         if include_separate_child_dog_types:
             sim_types: Tuple[CommonSimType] = (
@@ -335,6 +367,7 @@ class CommonSimType(CommonInt):
                 CommonSimType.CHILD_SMALL_DOG_WITCH,
                 CommonSimType.CHILD_SMALL_DOG_ROBOT,
                 CommonSimType.CHILD_SMALL_DOG_SKELETON,
+                CommonSimType.CHILD_SMALL_DOG_PLANT_SIM,
 
                 CommonSimType.CHILD_LARGE_DOG,
                 CommonSimType.CHILD_LARGE_DOG_VAMPIRE,
@@ -344,5 +377,6 @@ class CommonSimType(CommonInt):
                 CommonSimType.CHILD_LARGE_DOG_WITCH,
                 CommonSimType.CHILD_LARGE_DOG_ROBOT,
                 CommonSimType.CHILD_LARGE_DOG_SKELETON,
+                CommonSimType.CHILD_LARGE_DOG_PLANT_SIM,
             )
         return sim_types
