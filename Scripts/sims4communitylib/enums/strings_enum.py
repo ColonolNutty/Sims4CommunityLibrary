@@ -100,3 +100,9 @@ class CommonStringId(CommonInt):
     S4CL_DONE_LOGGING_ALL_INTERACTIONS: 'CommonStringId' = 207690817
     # Tokens: {0.SimFirstName}
     S4CL_SIM_IS_NOT_PREGNANT: 'CommonStringId' = 1234364497
+    S4CL_YES: 'CommonStringId' = 979470758
+    S4CL_NO: 'CommonStringId' = 1668749452
+    S4CL_RANDOM: 'CommonStringId' = 3048058352
+    S4CL_CONFIRMATION: 'CommonStringId' = 2520436614
+    # {0.String}{1.String}
+    S4CL_COMBINE_TWO_STRINGS: 'CommonStringId' = 4217460952

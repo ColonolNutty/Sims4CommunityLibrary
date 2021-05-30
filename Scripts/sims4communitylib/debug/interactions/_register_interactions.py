@@ -7,6 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Tuple
 from interactions.context import InteractionContext
+from objects.game_object import GameObject
 from objects.script_object import ScriptObject
 from sims.sim import Sim
 from sims4communitylib.enums.interactions_enum import CommonInteractionId
@@ -16,25 +17,45 @@ from sims4communitylib.services.interactions.interaction_registration_service im
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.common_keyboard_utils import CommonKeyboardUtils, CommonKey
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
+from sims4communitylib.utils.objects.common_object_state_utils import CommonObjectStateUtils
 
 
 @CommonInteractionRegistry.register_interaction_handler(CommonInteractionType.ON_SCRIPT_OBJECT_LOAD)
-class _S4CLDebugInteractionHandler(CommonScriptObjectInteractionHandler):
+class _S4CLObjectBrokennessDebugInteractionHandler(CommonScriptObjectInteractionHandler):
     # noinspection PyMissingOrEmptyDocstring
     @property
     def interactions_to_add(self) -> Tuple[int]:
         result: Tuple[int] = (
-            CommonInteractionId.S4CL_DEBUG_SHOW_RUNNING_AND_QUEUED_INTERACTIONS,
-            CommonInteractionId.S4CL_DEBUG_SHOW_ACTIVE_BUFFS,
-            CommonInteractionId.S4CL_DEBUG_SHOW_TRAITS,
-            CommonInteractionId.S4CL_DEBUG_SHOW_RUNNING_SITUATIONS,
-            CommonInteractionId.S4CL_DEBUG_INDUCE_LABOR
+            CommonInteractionId.S4CL_DEBUG_OBJECT_BREAK,
+            CommonInteractionId.S4CL_DEBUG_OBJECT_FIX
         )
         return result
 
     # noinspection PyMissingOrEmptyDocstring
     def should_add(self, script_object: ScriptObject, *args, **kwargs) -> bool:
-        return CommonTypeUtils.is_sim_instance(script_object)
+        if not CommonTypeUtils.is_game_object(script_object):
+            return False
+        script_object: GameObject = script_object
+        return CommonObjectStateUtils.can_become_broken(script_object)
+
+
+@CommonInteractionRegistry.register_interaction_handler(CommonInteractionType.ON_SCRIPT_OBJECT_LOAD)
+class _S4CLObjectDirtinessDebugInteractionHandler(CommonScriptObjectInteractionHandler):
+    # noinspection PyMissingOrEmptyDocstring
+    @property
+    def interactions_to_add(self) -> Tuple[int]:
+        result: Tuple[int] = (
+            CommonInteractionId.S4CL_DEBUG_OBJECT_MAKE_DIRTY,
+            CommonInteractionId.S4CL_DEBUG_OBJECT_MAKE_CLEAN
+        )
+        return result
+
+    # noinspection PyMissingOrEmptyDocstring
+    def should_add(self, script_object: ScriptObject, *args, **kwargs) -> bool:
+        if not CommonTypeUtils.is_game_object(script_object):
+            return False
+        script_object: GameObject = script_object
+        return CommonObjectStateUtils.can_become_dirty(script_object)
 
 
 @CommonInteractionRegistry.register_interaction_handler(CommonInteractionType.ON_SCRIPT_OBJECT_LOAD)
@@ -49,7 +70,7 @@ class _S4CLDebugEverywhereObjectInteractionHandler(CommonScriptObjectInteraction
 
     # noinspection PyMissingOrEmptyDocstring
     def should_add(self, script_object: ScriptObject, *args, **kwargs) -> bool:
-        return True
+        return not CommonTypeUtils.is_sim_or_sim_info(script_object)
 
 
 @CommonInteractionRegistry.register_interaction_handler(CommonInteractionType.ON_TERRAIN_LOAD)
