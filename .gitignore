@@ -15,11 +15,14 @@ __pycache__
 */*.pyo
 Utilities/*.pyc
 .idea/dictionaries
-tunings
 **/*.7z
 **/*.zip
 **/Release/*.7z
 **/Release/*.zip
 **/*.ts4script
 **/*.lnk
+**/*.xml___jb_old___
 docs/build
+Tunings/Temp
+Libraries/**/*
+EA_Tuning/**/*
