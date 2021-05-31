@@ -1,3 +1,17 @@
+v1.67:
+- Fixed a small issue when creating an interaction context within CommonSimInteractionUtils
+- Updated the test queue functions to work the same as the queue ones (Only they test instead) in CommonSimInteractionUtils
+- Added logging in the test queue functions in CommonSimInteractionUtils
+- Add Plant Sim to CommonSimType
+- Added a SocialSuperInteraction for Sim To Pet interactions that may be used as an alternative to the vanilla ones
+- Changed how S4CL registers its own debug interactions by using traits instead of via Python
+- Added a Break Object interaction
+- Added a Fix Object interaction
+- Added a Make Dirty interaction
+- Added a Make Clean interaction
+- Added functions to CommonObjectStateUtils to modify broken and dirty states of objects as well as check for them.
+- If the S4CL configuration file does not exist where it is expected to be, it will be created instead of S4CL simply throwing an error.
+
 v1.66:
 - Fixed an error that would occur when a Sim levels up in a Skill
 
