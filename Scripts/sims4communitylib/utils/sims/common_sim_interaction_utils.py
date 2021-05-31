@@ -594,11 +594,7 @@ class CommonSimInteractionUtils:
             log.debug('No social mixer affordance instance found with id.')
             return EnqueueResult.NONE
 
-        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(
-            sim_info,
-            picked_object=picked_object or target,
-            **kwargs
-        )
+        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
         # noinspection PyTypeChecker
         super_affordance_instance = CommonInteractionUtils.load_interaction_by_id(social_super_interaction_id)
         if super_affordance_instance is None:
@@ -692,27 +688,41 @@ class CommonSimInteractionUtils:
         :return: The result of pushing the interaction to the queue of a Sim.
         :rtype: EnqueueResult
         """
+        log.format_with_message(
+            'Attempting to queue mixer interaction.',
+            sim=sim_info,
+            target=target,
+            mixer_interaction_id=mixer_interaction_id,
+            interaction_context=interaction_context
+        )
         from autonomy.content_sets import get_valid_aops_gen
 
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
+            log.debug('No Sim instance.')
             return EnqueueResult.NONE
         if sim.posture is None:
+            log.debug('No Sim Posture.')
+            return EnqueueResult.NONE
+        mixer_interaction_instance = CommonInteractionUtils.load_interaction_by_id(mixer_interaction_id)
+        if mixer_interaction_instance is None:
+            log.debug('No mixer interaction instance found.')
             return EnqueueResult.NONE
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
             target = CommonSimUtils.get_sim_instance(target)
-        mixer_interaction_instance = CommonInteractionUtils.load_interaction_by_id(mixer_interaction_id)
-        if mixer_interaction_instance is None:
-            return EnqueueResult.NONE
         source_interaction = sim.posture.source_interaction
         if source_interaction is None:
+            log.debug('Sim did not have a source interaction.')
             return EnqueueResult.NONE
         if hasattr(mixer_interaction_instance, 'lock_out_time') and mixer_interaction_instance.lock_out_time:
+            log.debug('Using Sim specific lock out time.')
             sim_specific_lockout = mixer_interaction_instance.lock_out_time.target_based_lock_out
         else:
+            log.debug('Not using Sim specific lock out time.')
             sim_specific_lockout = False
 
         if sim_specific_lockout and sim.is_sub_action_locked_out(mixer_interaction_instance):
+            log.debug('Sim was locked out of performing the mixer interaction.')
             return EnqueueResult.NONE
 
         super_interaction_instance = source_interaction.super_affordance
@@ -728,13 +738,16 @@ class CommonSimInteractionUtils:
         ):
             test_result: TestResult = test_result
             if test_result is None or test_result.result:
+                log.format_with_message('Failed to queue using affordance.', aop=aop, affordance=aop.affordance)
                 continue
             interaction_constraint = aop.constraint_intersection(sim=sim, posture_state=None)
             # noinspection PyPropertyAccess
             posture_constraint = sim.posture_state.posture_constraint_strict
             constraint_intersection = interaction_constraint.intersect(posture_constraint)
             if not constraint_intersection.valid:
+                log.format_with_message('Constraint interaction was invalid.', constraint_intersection=constraint_intersection)
                 continue
+            log.format_with_message('Executing interaction using Aop.', aop=aop, affordance=aop.affordance)
             return aop.execute(interaction_context, **kwargs)
 
     @staticmethod
@@ -743,6 +756,7 @@ class CommonSimInteractionUtils:
         interaction_id: Union[int, CommonInteractionId],
         social_super_interaction_id: Union[int, CommonInteractionId]=None,
         target: Any=None,
+        picked_object: Any=None,
         interaction_context: InteractionContext=None,
         **kwargs
     ) -> TestResult:
@@ -751,6 +765,7 @@ class CommonSimInteractionUtils:
             interaction_id,\
             social_super_interaction_id=None,\
             target=None,\
+            picked_object=None,\
             interaction_context,\
             skip_if_running=False,\
             **kwargs\
@@ -766,6 +781,8 @@ class CommonSimInteractionUtils:
         :type social_super_interaction_id: Union[int, CommonInteractionId], optional
         :param target: The target of the interaction. Default is None.
         :type target: Any, optional
+        :param picked_object: The picked object of the interaction. Default is None.
+        :type picked_object: Any, optional
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
         :type interaction_context: InteractionContext, optional
         :return: The result of testing a push of the interaction to the queue of a Sim.
@@ -773,9 +790,14 @@ class CommonSimInteractionUtils:
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None or sim.si_state is None or sim.queue is None or sim.posture_state is None or sim.posture is None:
+            if sim is not None:
+                log.format_with_message('No posture, sim, or state', sim=sim, si_state=sim.si_state, queue=sim.queue, posture_state=sim.posture_state, posture=sim.posture)
+            else:
+                log.format_with_message('No sim instance.', sim=sim_info)
             return TestResult.NONE
         interaction_instance = CommonInteractionUtils.load_interaction_by_id(interaction_id)
         if interaction_instance is None:
+            log.format_with_message('No interaction found with id.', id=interaction_id)
             return TestResult.NONE
 
         interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(
@@ -784,24 +806,29 @@ class CommonSimInteractionUtils:
         )
 
         if CommonInteractionUtils.is_super_interaction(interaction_instance):
+            log.debug('Is super.')
             return CommonSimInteractionUtils.test_super_interaction(
                 sim_info,
                 interaction_id,
                 target=target,
+                picked_object=picked_object,
                 interaction_context=interaction_context,
                 **kwargs
             )
 
         if CommonInteractionUtils.is_social_mixer_interaction(interaction_instance):
+            log.debug('Is social mixer')
             return CommonSimInteractionUtils.test_social_mixer_interaction(
                 sim_info,
                 interaction_id,
                 social_super_interaction_id,
                 target=target,
+                picked_object=picked_object,
                 interaction_context=interaction_context,
                 **kwargs
             )
 
+        log.debug('Is mixer')
         return CommonSimInteractionUtils.test_mixer_interaction(
             sim_info,
             interaction_id,
@@ -814,6 +841,7 @@ class CommonSimInteractionUtils:
         sim_info: SimInfo,
         super_interaction_id: Union[int, CommonInteractionId],
         target: Any=None,
+        picked_object: Any=None,
         interaction_context: InteractionContext=None,
         **kwargs
     ) -> TestResult:
@@ -821,6 +849,7 @@ class CommonSimInteractionUtils:
             sim_info,\
             super_interaction_id,\
             target=None,\
+            picked_object=None,\
             interaction_context=None,\
             **kwargs\
         )
@@ -833,28 +862,34 @@ class CommonSimInteractionUtils:
         :type super_interaction_id: Union[int, CommonInteractionId]
         :param target: The target of the interaction. Default is None.
         :type target: Any, optional
+        :param picked_object: The picked object of the interaction. Default is None.
+        :type picked_object: Any, optional
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
         :type interaction_context: InteractionContext, optional
         :return: The result of testing a push of the interaction to the queue of a Sim.
         :rtype: TestResult
         """
+        log.format_with_message('Testing super interaction', sim=sim_info, interaction_id=super_interaction_id, target=target, interaction_context=interaction_context)
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
+            log.debug('No sim instance for super interaction.')
+            return TestResult.NONE
+
+        super_interaction_instance = CommonInteractionUtils.load_interaction_by_id(super_interaction_id)
+        if super_interaction_instance is None:
+            log.format_with_message('No super interaction instance found for id.', super_interaction_id=super_interaction_id)
             return TestResult.NONE
 
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
             target = CommonSimUtils.get_sim_instance(target)
 
         interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
-        super_interaction_instance = CommonInteractionUtils.load_interaction_by_id(super_interaction_id)
-        if super_interaction_instance is None:
-            return TestResult.NONE
 
         return sim.test_super_affordance(
             super_interaction_instance,
             target,
             interaction_context,
-            picked_object=target,
+            picked_object=picked_object or target,
             **kwargs
         )
 
@@ -864,6 +899,7 @@ class CommonSimInteractionUtils:
         social_mixer_interaction_id: Union[int, CommonInteractionId],
         social_super_interaction_id: Union[int, CommonInteractionId],
         target: SimInfo=None,
+        picked_object: Any=None,
         interaction_context: InteractionContext=None,
         **kwargs
     ) -> TestResult:
@@ -872,6 +908,7 @@ class CommonSimInteractionUtils:
             social_mixer_interaction_id,\
             social_super_interaction_id,\
             target=None,\
+            picked_object=None,\
             interaction_context=None,\
             **kwargs\
         )
@@ -886,67 +923,92 @@ class CommonSimInteractionUtils:
         :type social_super_interaction_id: Union[int, CommonInteractionId]
         :param target: The target of the interaction. Default is None.
         :type target: Any, optional
+        :param picked_object: The picked object of the interaction. Default is None.
+        :type picked_object: Any, optional
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
         :type interaction_context: InteractionContext, optional
         :return: The result of testing a push of the interaction to the queue of a Sim.
         :rtype: TestResult
         """
         if social_super_interaction_id is not None and social_mixer_interaction_id is None:
-            return CommonSimInteractionUtils.test_super_interaction(sim_info, social_super_interaction_id, target=target, interaction_context=interaction_context)
+            log.format_with_message('Interaction was actually a Super interaction!', sim=sim_info, super_interaction_id=social_super_interaction_id)
+            return CommonSimInteractionUtils.queue_super_interaction(
+                sim_info,
+                social_super_interaction_id,
+                target=target,
+                picked_object=picked_object,
+                interaction_context=interaction_context,
+                **kwargs
+            )
+
+        social_super_interaction_id: Union[int, CommonInteractionId] = social_super_interaction_id
         sim = CommonSimUtils.get_sim_instance(sim_info)
+        social_mixer_affordance_instance = CommonInteractionUtils.load_interaction_by_id(social_mixer_interaction_id)
+        if social_mixer_affordance_instance is None:
+            log.debug('No social mixer affordance instance found with id.')
+            return EnqueueResult.NONE
+
+        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
         # noinspection PyTypeChecker
         super_affordance_instance = CommonInteractionUtils.load_interaction_by_id(social_super_interaction_id)
         if super_affordance_instance is None:
-            return TestResult.NONE
-        mixer_affordance_instance = CommonInteractionUtils.load_interaction_by_id(social_mixer_interaction_id)
-        if mixer_affordance_instance is None:
-            return TestResult.NONE
+            def _get_existing_social_super_interaction(si_iter) -> Interaction:
+                for si in si_iter:
+                    if si.super_affordance != super_affordance_instance:
+                        continue
+                    if si.social_group is None:
+                        continue
+                    target_sim = CommonSimUtils.get_sim_instance(target)
+                    if target_sim is not None and target_sim not in si.social_group:
+                        continue
+                    log.format_with_message('Got existing super', existing_super=si.super_interaction)
+                    return si.super_interaction
 
-        def _get_existing_social_super_interaction(si_iter) -> Interaction:
-            for si in si_iter:
-                if si.super_affordance != super_affordance_instance:
-                    continue
-                if si.social_group is None:
-                    continue
-                target_sim = CommonSimUtils.get_sim_instance(target)
-                if target_sim is not None and target_sim not in si.social_group:
-                    continue
-                return si.super_interaction
+            log.debug('No super affordance found with id.')
+            super_interaction = _get_existing_social_super_interaction(sim.si_state) or _get_existing_social_super_interaction(sim.queue)
+            if super_interaction is None:
+                si_result = CommonSimInteractionUtils.queue_interaction(
+                    sim_info,
+                    social_super_interaction_id,
+                    target=target,
+                    picked_object=picked_object or target,
+                    interaction_context=interaction_context,
+                    **kwargs
+                )
+                if not si_result:
+                    log.format_with_message('Failed to locate existing super interaction.', super_interaction=super_interaction)
+                    return EnqueueResult.NONE
+                log.format_with_message('Found si result', si_result=si_result)
+                super_interaction = si_result.interaction
+                log.format_with_message('Found si interaction', si_interaction=super_interaction)
+            else:
+                log.format_with_message('Located existing super interaction.', existing_super=super_interaction)
 
-        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
-        super_interaction = _get_existing_social_super_interaction(sim.si_state) or _get_existing_social_super_interaction(sim.queue)
-        if super_interaction is None:
-            si_result = sim.test_super_affordance(
-                super_affordance_instance,
-                target,
-                interaction_context,
-                picked_object=target,
+            pick = interaction_context.pick if interaction_context.pick is not None else super_interaction.context.pick
+            log.format_with_message('Found pick', pick=pick)
+            interaction_context = super_interaction.context.clone_for_continuation(
+                super_interaction,
+                insert_strategy=interaction_context.insert_strategy,
+                source_interaction_id=super_interaction.id,
+                source_interaction_sim_id=CommonSimUtils.get_sim_id(sim_info),
+                pick=pick,
+                picked_object=picked_object,
+                must_run_next=interaction_context.must_run_next,
                 **kwargs
             )
-            if not si_result or not si_result.result:
-                return TestResult.NONE
-            super_interaction = si_result.interaction
+        else:
+            super_interaction = None
 
-        pick = super_interaction.context.pick
-        preferred_objects = super_interaction.context.preferred_objects
-        context = super_interaction.context.clone_for_continuation(
-            super_interaction,
-            insert_strategy=interaction_context.insert_strategy,
-            source_interaction_id=super_interaction.id,
-            source_interaction_sim_id=CommonSimUtils.get_sim_id(sim_info),
-            pick=pick,
-            preferred_objects=preferred_objects,
-            must_run_next=interaction_context.must_run_next
-        )
         aop = AffordanceObjectPair(
-            mixer_affordance_instance,
+            social_mixer_affordance_instance,
             target,
             super_affordance_instance,
             super_interaction,
-            picked_object=target,
-            push_super_on_prepare=True
+            picked_object=picked_object or target,
+            push_super_on_prepare=True,
+            **kwargs
         )
-        return aop.test(context)
+        return aop.test(interaction_context)
 
     @staticmethod
     def test_mixer_interaction(
@@ -977,27 +1039,41 @@ class CommonSimInteractionUtils:
         :return: The result of testing a push of the interaction to the queue of a Sim.
         :rtype: TestResult
         """
+        log.format_with_message(
+            'Attempting to test mixer interaction.',
+            sim=sim_info,
+            target=target,
+            mixer_interaction_id=mixer_interaction_id,
+            interaction_context=interaction_context
+        )
         from autonomy.content_sets import get_valid_aops_gen
 
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
+            log.debug('No Sim instance.')
             return TestResult.NONE
         if sim.posture is None:
+            log.debug('No Sim Posture.')
             return TestResult.NONE
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
             target = CommonSimUtils.get_sim_instance(target)
         mixer_interaction_instance = CommonInteractionUtils.load_interaction_by_id(mixer_interaction_id)
         if mixer_interaction_instance is None:
+            log.debug('No mixer interaction instance found.')
             return TestResult.NONE
         source_interaction = sim.posture.source_interaction
         if source_interaction is None:
+            log.debug('Sim did not have a source interaction.')
             return TestResult.NONE
         if hasattr(mixer_interaction_instance, 'lock_out_time') and mixer_interaction_instance.lock_out_time:
+            log.debug('Using Sim specific lock out time.')
             sim_specific_lockout = mixer_interaction_instance.lock_out_time.target_based_lock_out
         else:
+            log.debug('Not using Sim specific lock out time.')
             sim_specific_lockout = False
 
         if sim_specific_lockout and sim.is_sub_action_locked_out(mixer_interaction_instance):
+            log.debug('Sim was locked out of performing the mixer interaction.')
             return TestResult.NONE
 
         super_interaction_instance = source_interaction.super_affordance
@@ -1013,13 +1089,16 @@ class CommonSimInteractionUtils:
         ):
             test_result: TestResult = test_result
             if test_result is None or test_result.result:
+                log.format_with_message('Failed to queue using affordance.', aop=aop, affordance=aop.affordance)
                 continue
             interaction_constraint = aop.constraint_intersection(sim=sim, posture_state=None)
             # noinspection PyPropertyAccess
             posture_constraint = sim.posture_state.posture_constraint_strict
             constraint_intersection = interaction_constraint.intersect(posture_constraint)
             if not constraint_intersection.valid:
+                log.format_with_message('Constraint interaction was invalid.', constraint_intersection=constraint_intersection)
                 continue
+            log.format_with_message('Executing interaction using Aop.', aop=aop, affordance=aop.affordance)
             return aop.test(interaction_context, **kwargs)
 
     @staticmethod
