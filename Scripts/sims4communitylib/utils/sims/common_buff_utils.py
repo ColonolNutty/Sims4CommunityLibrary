@@ -313,7 +313,7 @@ class CommonBuffUtils:
 
 
 @Command('s4clib.add_buff', command_type=CommandType.Live)
-def _common_add_buff(buff: TunableInstanceParam(Types.BUFF), buff_reason: str='(From Command)', opt_sim: OptionalTargetParam=None, _connection: int=None):
+def _common_add_buff(buff: TunableInstanceParam(Types.BUFF), opt_sim: OptionalTargetParam=None, buff_reason: str='(From Command)', _connection: int=None):
     from server_commands.argument_helpers import get_optional_target
     output = CheatOutput(_connection)
     if buff is None:
