@@ -1,3 +1,6 @@
+v1.68:
+- Fixed an error that could occur when running the game in Chinese.
+
 v1.67:
 - Fixed a small issue when creating an interaction context within CommonSimInteractionUtils
 - Updated the test queue functions to work the same as the queue ones (Only they test instead) in CommonSimInteractionUtils
