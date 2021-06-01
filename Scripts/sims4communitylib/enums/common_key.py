@@ -6,7 +6,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-import platform
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 
@@ -115,109 +114,7 @@ class CommonKey(CommonInt):
     SQUARE_BRACKET_RIGHT: 'CommonKey' = 221
     SINGLE_QUOTE: 'CommonKey' = 222
 
-    if platform.system() == 'Linux':
-        BACKSPACE: 'CommonKey' = 14
-        TAB: 'CommonKey' = 15
-        ENTER: 'CommonKey' = 28
-        SHIFT: 'CommonKey' = 42  # Left Shift since Linux does not have a common key code
-        CTRL: 'CommonKey' = 29  # Left Shift since Linux does not have a common key code
-        ALT: 'CommonKey' = 56  # Left Alt since Linux does not have a common key code
-        CAPS_LOCK: 'CommonKey' = 58
-        ESCAPE: 'CommonKey' = 1
-        SPACE: 'CommonKey' = 57
-        PAGE_UP: 'CommonKey' = 104
-        PAGE_DOWN: 'CommonKey' = 109
-        END: 'CommonKey' = 107
-        HOME: 'CommonKey' = 102
-        ARROW_LEFT: 'CommonKey' = 105
-        ARROW_UP: 'CommonKey' = 103
-        ARROW_RIGHT: 'CommonKey' = 106
-        ARROW_DOWN: 'CommonKey' = 108
-        INSERT: 'CommonKey' = 110
-        DELETE: 'CommonKey' = 111
-        KEY_0: 'CommonKey' = 11
-        KEY_1: 'CommonKey' = 2
-        KEY_2: 'CommonKey' = 3
-        KEY_3: 'CommonKey' = 4
-        KEY_4: 'CommonKey' = 5
-        KEY_5: 'CommonKey' = 6
-        KEY_6: 'CommonKey' = 7
-        KEY_7: 'CommonKey' = 8
-        KEY_8: 'CommonKey' = 9
-        KEY_9: 'CommonKey' = 10
-        KEY_A: 'CommonKey' = 30
-        KEY_B: 'CommonKey' = 48
-        KEY_C: 'CommonKey' = 46
-        KEY_D: 'CommonKey' = 32
-        KEY_E: 'CommonKey' = 18
-        KEY_F: 'CommonKey' = 33
-        KEY_G: 'CommonKey' = 34
-        KEY_H: 'CommonKey' = 35
-        KEY_I: 'CommonKey' = 23
-        KEY_J: 'CommonKey' = 36
-        KEY_K: 'CommonKey' = 37
-        KEY_L: 'CommonKey' = 38
-        KEY_M: 'CommonKey' = 50
-        KEY_N: 'CommonKey' = 49
-        KEY_O: 'CommonKey' = 24
-        KEY_P: 'CommonKey' = 25
-        KEY_Q: 'CommonKey' = 16
-        KEY_R: 'CommonKey' = 19
-        KEY_S: 'CommonKey' = 31
-        KEY_T: 'CommonKey' = 20
-        KEY_U: 'CommonKey' = 22
-        KEY_V: 'CommonKey' = 47
-        KEY_W: 'CommonKey' = 17
-        KEY_X: 'CommonKey' = 45
-        KEY_Y: 'CommonKey' = 21
-        KEY_Z: 'CommonKey' = 44
-        NUM_PAD_0: 'CommonKey' = 82
-        NUM_PAD_1: 'CommonKey' = 79
-        NUM_PAD_2: 'CommonKey' = 80
-        NUM_PAD_3: 'CommonKey' = 81
-        NUM_PAD_4: 'CommonKey' = 75
-        NUM_PAD_5: 'CommonKey' = 76
-        NUM_PAD_6: 'CommonKey' = 77
-        NUM_PAD_7: 'CommonKey' = 71
-        NUM_PAD_8: 'CommonKey' = 72
-        NUM_PAD_9: 'CommonKey' = 73
-        NUM_PAD_MULTIPLY: 'CommonKey' = 55
-        NUM_PAD_ADD: 'CommonKey' = 78
-        NUM_PAD_SUBTRACT: 'CommonKey' = 74
-        NUM_PAD_DECIMAL: 'CommonKey' = 83
-        NUM_PAD_DIVIDE: 'CommonKey' = 98
-        NUM_PAD_ENTER: 'CommonKey' = 96
-        F1: 'CommonKey' = 59
-        F2: 'CommonKey' = 60
-        F3: 'CommonKey' = 61
-        F4: 'CommonKey' = 62
-        F5: 'CommonKey' = 63
-        F6: 'CommonKey' = 64
-        F7: 'CommonKey' = 65
-        F8: 'CommonKey' = 66
-        F9: 'CommonKey' = 67
-        F10: 'CommonKey' = 68
-        F11: 'CommonKey' = 87
-        F12: 'CommonKey' = 88
-        EQUAL: 'CommonKey' = 13
-        SHIFT_LEFT: 'CommonKey' = 42
-        SHIFT_RIGHT: 'CommonKey' = 54
-        CTRL_LEFT: 'CommonKey' = 29
-        CTRL_RIGHT: 'CommonKey' = 97
-        ALT_LEFT: 'CommonKey' = 56
-        ALT_RIGHT: 'CommonKey' = 100
-        SEMICOLON: 'CommonKey' = 39
-        COMMA: 'CommonKey' = 51
-        SUBTRACT: 'CommonKey' = 12
-        PERIOD: 'CommonKey' = 52
-        FORWARD_SLASH: 'CommonKey' = 53
-        BACK_SLASH: 'CommonKey' = 43
-        TILDE: 'CommonKey' = 41
-        SQUARE_BRACKET_LEFT: 'CommonKey' = 26
-        SQUARE_BRACKET_RIGHT: 'CommonKey' = 27
-        SINGLE_QUOTE: 'CommonKey' = 40
-
-    elif os.name != 'nt':
+    if os.name != 'nt':
         # Mac Keys
         BACKSPACE: 'CommonKey' = 51
         TAB: 'CommonKey' = 48
