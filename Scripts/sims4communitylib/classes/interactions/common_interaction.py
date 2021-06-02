@@ -14,7 +14,9 @@ from interactions.context import InteractionContext
 from interactions.interaction_finisher import FinishingType
 from native.animation import NativeAsm
 from postures.posture_state import PostureState
+from protocolbuffers.Localization_pb2 import LocalizedString
 from sims.sim import Sim
+from sims4.utils import flexmethod
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
@@ -92,7 +94,8 @@ class CommonInteraction(Interaction, HasClassLog):
         try:
             try:
                 cls.get_verbose_log().format_with_message(
-                    'Running \'{}\' on_test.'.format(cls.__name__),
+                    'Running on_test.',
+                    class_name=cls.__name__,
                     interaction_sim=context.sim,
                     interaction_target=target,
                     interaction_context=context,
@@ -123,11 +126,41 @@ class CommonInteraction(Interaction, HasClassLog):
         cls.get_verbose_log().format_with_message('Returning generic test result.')
         return TestResult(False)
 
+    # noinspection PyMethodParameters,PyMissingOrEmptyDocstring
+    @flexmethod
+    def get_name(cls, inst: Interaction, target: Any=DEFAULT, context: InteractionContext=DEFAULT, **interaction_parameters) -> Union[LocalizedString, None]:
+        inst_or_cls = inst or cls
+        try:
+            context_inst_or_cls = context or inst_or_cls
+            interaction_sim = context_inst_or_cls.sim
+            interaction_target = target or context_inst_or_cls.target
+
+            cls.get_verbose_log().format_with_message(
+                'Creating display name.',
+                interaction_sim=interaction_sim,
+                interaction_target=interaction_target,
+                interaction=inst,
+                interaction_context=context
+            )
+            override_name = cls._create_override_display_name(
+                interaction_sim,
+                interaction_target,
+                interaction=inst,
+                interaction_context=context,
+                **interaction_parameters
+            )
+            if override_name is not None:
+                return override_name
+        except Exception as ex:
+            cls.get_log().error('An error occurred while running get_name of interaction {}'.format(cls.__name__), exception=ex)
+        return super(CommonInteraction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+
     def _trigger_interaction_start_event(self: 'CommonInteraction'):
         try:
             super()._trigger_interaction_start_event()
             self.verbose_log.format_with_message(
-                'Running \'{}\' on_started.'.format(self.__class__.__name__),
+                'Running on_started.',
+                class_name=self.__class__.__name__,
                 sim=self.sim,
                 target=self.target
             )
@@ -139,7 +172,8 @@ class CommonInteraction(Interaction, HasClassLog):
     def apply_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT):
         try:
             self.verbose_log.format_with_message(
-                'Running \'{}\' modify_posture_state.'.format(self.__class__.__name__),
+                'Running modify_posture_state.',
+                class_name=self.__class__.__name__,
                 posture_state=posture_state,
                 participant_type=participant_type,
                 sim=sim
@@ -160,7 +194,8 @@ class CommonInteraction(Interaction, HasClassLog):
         """
         try:
             self.verbose_log.format_with_message(
-                'Running \'{}\' on_killed.'.format(self.__class__.__name__),
+                'Running on_killed.',
+                class_name=self.__class__.__name__,
                 sim=self.sim,
                 target=self.target
             )
@@ -183,7 +218,8 @@ class CommonInteraction(Interaction, HasClassLog):
         """
         try:
             self.verbose_log.format_with_message(
-                'Running \'{}\' on_cancelled.'.format(self.__class__.__name__),
+                'Running on_cancelled.',
+                class_name=self.__class__.__name__,
                 sim=self.sim,
                 target=self.target,
                 finishing_type=finishing_type,
@@ -203,7 +239,8 @@ class CommonInteraction(Interaction, HasClassLog):
         """
         try:
             self.verbose_log.format_with_message(
-                'Running \'{}\' on_reset.'.format(self.__class__.__name__),
+                'Running on_reset.',
+                class_name=self.__class__.__name__,
                 sim=self.sim,
                 target=self.target
             )
@@ -215,7 +252,8 @@ class CommonInteraction(Interaction, HasClassLog):
     def _post_perform(self: 'CommonInteraction'):
         try:
             self.verbose_log.format_with_message(
-                'Running \'{}\' on_performed.'.format(self.__class__.__name__),
+                'Running on_performed.',
+                class_name=self.__class__.__name__,
                 sim=self.sim,
                 target=self.target
             )
@@ -232,7 +270,8 @@ class CommonInteraction(Interaction, HasClassLog):
         """
         try:
             self.verbose_log.format_with_message(
-                'Running \'{}\' _send_current_progress.'.format(self.__class__.__name__),
+                'Running _send_current_progress.',
+                class_name=self.__class__.__name__,
                 sim=self.sim,
                 target=self.target,
                 argles=args,
@@ -257,7 +296,8 @@ class CommonInteraction(Interaction, HasClassLog):
         """
         try:
             self.verbose_log.format_with_message(
-                'Running \'{}\' _setup_asm_default.'.format(self.__class__.__name__),
+                'Running _setup_asm_default.',
+                class_name=self.__class__.__name__,
                 sim=self.sim,
                 target=self.target,
                 asm=asm,
@@ -340,7 +380,7 @@ class CommonInteraction(Interaction, HasClassLog):
         """
         return TestResult.TRUE
 
-    def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
+    def on_started(self, interaction_sim: Sim, interaction_target: Any) -> None:
         """on_started(interaction_sim, interaction_target)
 
         A hook that occurs upon the interaction being started.
@@ -355,7 +395,7 @@ class CommonInteraction(Interaction, HasClassLog):
         pass
 
     # noinspection PyUnusedLocal
-    def on_killed(self, interaction_sim: Sim, interaction_target: Any) -> bool:
+    def on_killed(self, interaction_sim: Sim, interaction_target: Any) -> None:
         """on_killed(interaction_sim, interaction_target)
 
         A hook that occurs upon the interaction being killed.
@@ -367,7 +407,7 @@ class CommonInteraction(Interaction, HasClassLog):
         :return: True, if the interaction hook was executed successfully. False, if the interaction hook was not executed successfully.
         :rtype: bool
         """
-        return True
+        pass
 
     def on_cancelled(self, interaction_sim: Sim, interaction_target: Any, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> None:
         """on_cancelled(interaction_sim, interaction_target, finishing_type, cancel_reason_msg, **kwargs)
@@ -424,6 +464,42 @@ class CommonInteraction(Interaction, HasClassLog):
         :rtype: Tuple[PostureState, ParticipantType, Sim]
         """
         return posture_state, participant_type, sim
+
+    @classmethod
+    def _create_override_display_name(
+        cls,
+        interaction_sim: Sim,
+        interaction_target: Any,
+        interaction: Interaction=None,
+        interaction_context: InteractionContext=None,
+        **interaction_parameters
+    ) -> Union[LocalizedString, None]:
+        """_create_override_display_name(\
+            interaction_sim,\
+            interaction_target,\
+            interaction=None,\
+            interaction_context=None,\
+            **interaction_parameters\
+        )
+
+        If overridden you may supply a custom name for the interaction to display.
+
+        .. warning:: The returned value from here replaces the original returned value. Return None from here to return the original value.
+
+        :param interaction_sim: The source Sim of the interaction.
+        :type interaction_sim: Sim
+        :param interaction_target: The target Object of the interaction.
+        :type interaction_target: Any
+        :param interaction: The interaction being performed or None.
+        :type interaction: Interaction
+        :param interaction_context: The context of the interaction being performed or None.
+        :type interaction_context: InteractionContext
+        :param interaction_parameters: Parameters for the interaction.
+        :type interaction_parameters: Iterator[Any]
+        :return: The name to use in place of the original name of the interaction or None if you want the original name to be used.
+        :rtype: Union[LocalizedString, None]
+        """
+        pass
 
     # noinspection PyUnusedLocal
     def _setup_asm_default(self, interaction_sim: Sim, interaction_target: Any, interaction_asm: NativeAsm, *args, **kwargs) -> Union[bool, None]:

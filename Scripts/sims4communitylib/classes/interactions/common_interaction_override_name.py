@@ -35,17 +35,37 @@ class CommonInteractionOverrideName(HasClassLog):
 
     # noinspection PyMethodParameters,PyMissingOrEmptyDocstring
     @flexmethod
-    def get_name(cls, inst: Interaction, target: Any=None, context: InteractionContext=None, *args, **kwargs) -> Union[LocalizedString, None]:
+    def get_name(cls, inst: Interaction, target: Any=None, context: InteractionContext=None, **interaction_parameters) -> Union[LocalizedString, None]:
+        inst_or_cls = inst or cls
         try:
-            inst_or_cls = context or inst or cls
-            return cls._create_display_name(inst_or_cls.sim, target or inst_or_cls.target, interaction=inst, interaction_context=context, *args, **kwargs)
+            context_inst_or_cls = context or inst_or_cls
+            interaction_sim = context_inst_or_cls.sim
+            interaction_target = target or context_inst_or_cls.target
+
+            cls.get_verbose_log().format_with_message(
+                'Creating display name.',
+                interaction_sim=interaction_sim,
+                interaction_target=interaction_target,
+                interaction=inst,
+                interaction_context=context
+            )
+            override_name = cls._create_display_name(
+                interaction_sim,
+                interaction_target,
+                interaction=inst,
+                interaction_context=context,
+                **interaction_parameters
+            )
+            if override_name is not None:
+                return override_name
         except Exception as ex:
             cls.get_log().error('An error occurred while running get_name of interaction {}'.format(cls.__name__), exception=ex)
+        return super(Interaction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
 
     # noinspection PyUnusedLocal
     @classmethod
-    def _create_display_name(cls, interaction_sim: Sim, interaction_target: Any, interaction: Union[Interaction, None]=None, interaction_context: Union[InteractionContext, None]=None, *args, **kwargs) -> Union[LocalizedString, None]:
-        """_create_display_name(interaction_sim, interaction_target, interaction=None, interaction_context=None)
+    def _create_display_name(cls, interaction_sim: Sim, interaction_target: Any, interaction: Union[Interaction, None]=None, interaction_context: Union[InteractionContext, None]=None, **interaction_parameters) -> Union[LocalizedString, None]:
+        """_create_display_name(interaction_sim, interaction_target, interaction=None, interaction_context=None, **interaction_parameters)
 
         A hook that allows using a custom display name for an Interaction.
 
@@ -57,10 +77,8 @@ class CommonInteractionOverrideName(HasClassLog):
         :type interaction: Union[Interaction, None], optional
         :param interaction_context: The context of the interaction or None if no interaction context is available. Default is None.
         :type interaction_context: Union[InteractionContext, None], optional
-        :param args: Extra arguments not accounted for.
-        :type args: Any
-        :param kwargs: Extra Keyword arguments not accounted for.
-        :type kwargs: Any
+        :param interaction_parameters: Extra interaction parameters.
+        :type interaction_parameters: Any
         :return: A Localized String to display for the interaction or None if the original display name should be used.
         :rtype: Union[LocalizedString, None]
         """
