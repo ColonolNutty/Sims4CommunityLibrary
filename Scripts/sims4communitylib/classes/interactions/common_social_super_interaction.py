@@ -146,7 +146,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
             return self.on_run(self.sim, self.target, timeline)
         except Exception as ex:
             self.log.error('Error occurred while running interaction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
-        return False
+        return super()._run_interaction_gen(timeline)
 
     # noinspection PyUnusedLocal
     def on_run(self, interaction_sim: Sim, interaction_target: Any, timeline: Timeline) -> bool:

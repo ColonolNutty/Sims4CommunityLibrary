@@ -14,7 +14,7 @@ Custom Interactions
    :members:
    :private-members:
    :show-inheritance:
-   :exclude-members: apply_posture_state, on_reset, send_current_progress, setup_asm_default, _test, _trigger_interaction_start_event, _post_perform
+   :exclude-members: apply_posture_state, get_name, on_reset, send_current_progress, setup_asm_default, _post_perform, _test, _trigger_interaction_start_event
 
 `Immediate Super Interaction`
 -----------------------------------------------------------------------------------
