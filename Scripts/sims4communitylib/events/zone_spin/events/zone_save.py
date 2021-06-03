@@ -16,7 +16,7 @@ class S4CLZoneSaveEvent(CommonEvent):
 
     An event that occurs upon a Zone being saved (Before it has been saved).
 
-    .. note:: This event can occur when the Player is saving the game.
+    .. note:: This event can occur when the Player is saving the game, switching save files, or traveling to a new zone.
 
     .. warning:: This event will also occur when the Player closes the game without saving.
 
