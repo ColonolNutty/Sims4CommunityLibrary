@@ -1,3 +1,12 @@
+v1.69:
+- Added functions to lock or unlock a door for Sims.
+- Added an is_active_sim function to CommonSimUtils
+- Added two new events S4CLSaveSavedEvent and S4CLSaveLoadedEvent
+- Each will only occur when the Player either manually saves the game or manually loads a new save file.
+- Fixed an issue where persisted data from one save file would transfer and conflict with the persisted data of another save file if the player decides to change save files without restarting the entire game.
+- Fixed a couple errors within CommonSocialSuperInteraction.
+- Provided an override for get_name within CommonInteraction
+
 v1.68:
 - Fixed an error that could occur when running the game in Chinese.
 
