@@ -68,6 +68,19 @@ class CommonSimUtils:
         return client.active_sim_info
 
     @staticmethod
+    def is_active_sim(sim_info: SimInfo) -> bool:
+        """is_active_sim(sim_info)
+
+        Determine whether or not a Sim is the active Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the specified Sim is the active Sim. False, if not.
+        :rtype: bool
+        """
+        return CommonSimUtils.get_active_sim_info() is sim_info
+
+    @staticmethod
     def get_sim_info_of_sim_with_name(first_name: str, last_name: str) -> Union[SimInfo, None]:
         """get_sim_info_of_sim_with_name(first_name, last_name)
 
