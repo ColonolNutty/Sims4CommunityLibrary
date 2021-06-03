@@ -8,7 +8,8 @@ Copyright (c) COLONOLNUTTY
 from typing import Union, Dict, Any, Type, Callable
 
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
-from sims4communitylib.events.zone_spin.events.zone_save import S4CLZoneSaveEvent
+from sims4communitylib.events.save.events.save_loaded import S4CLSaveLoadedEvent
+from sims4communitylib.events.save.events.save_saved import S4CLSaveSavedEvent
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
@@ -79,7 +80,7 @@ class CommonDataManagerRegistry(CommonService, HasClassLog):
 
     def __init__(self) -> None:
         super().__init__()
-        self._data_managers: Dict[str, CommonDataManager] = {}
+        self._data_managers: Dict[str, CommonDataManager] = dict()
 
     @staticmethod
     def common_data_manager(identifier: str=None) -> Callable[[Type[CommonDataManager]], Any]:
@@ -125,6 +126,17 @@ class CommonDataManagerRegistry(CommonService, HasClassLog):
             data_manager.save()
         self.log.debug('Done saving data managers.')
 
+    def clear_data(self) -> None:
+        self.log.debug('Clearing data managers.')
+        from sims4communitylib.persistence.common_game_object_data_storage import _CommonGameObjectDataStorageMetaclass
+        _CommonGameObjectDataStorageMetaclass._game_object_storage_instances = dict()
+        from sims4communitylib.persistence.common_sim_data_storage import _CommonSimDataStorageMetaclass
+        _CommonSimDataStorageMetaclass._sim_storage_instances = dict()
+        for data_manager in self._data_managers.values():
+            self.log.format_with_message('Saving data manager', data_manager=data_manager)
+            data_manager.clear()
+        self.log.debug('Done clearing data managers.')
+
     def locate_data_manager(self, mod_identity: CommonModIdentity, identifier: str=None) -> Union[CommonDataManager, None]:
         """locate_data_manager(mod_identity, identifier=None)
 
@@ -154,6 +166,13 @@ class CommonDataManagerRegistry(CommonService, HasClassLog):
 
 # noinspection PyUnusedLocal
 @CommonEventRegistry.handle_events(ModInfo.get_identity())
-def _common_save_data_on_zone_save(event_data: S4CLZoneSaveEvent) -> bool:
+def _common_save_data_on_save_saved(event_data: S4CLSaveSavedEvent) -> bool:
     CommonDataManagerRegistry().save_data()
+    return True
+
+
+# noinspection PyUnusedLocal
+@CommonEventRegistry.handle_events(ModInfo.get_identity())
+def _common_clear_data_on_save_loaded(event_data: S4CLSaveLoadedEvent) -> bool:
+    CommonDataManagerRegistry().clear_data()
     return True

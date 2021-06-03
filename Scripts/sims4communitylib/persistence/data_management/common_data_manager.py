@@ -68,13 +68,9 @@ class CommonDataManager(HasLog):
         :return: Data stores in serializable form organized by a Sub Name.
         :rtype: Dict[str, Dict[str, Any]]
         """
-        if not self._loaded or self._data_stores is None:
+        if not self._loaded or self.__data_store_data is None:
             self.load()
         return self.__data_store_data
-
-    @_data_store_data.setter
-    def _data_store_data(self, value: Dict[str, Dict[str, Any]]):
-        self.__data_store_data = value
 
     @property
     def _data_stores(self) -> Dict[str, CommonDataStore]:
@@ -157,10 +153,19 @@ class CommonDataManager(HasLog):
             self.log.error('Error occurred while saving data \'{}\'.'.format(self.__repr__()), exception=ex)
         return False
 
+    def clear(self) -> None:
+        """clear()
+
+        Clear all data from the data manager.
+        """
+        self.__data_store_data = dict()
+        self.__data_stores = dict()
+        self._loaded = False
+
     def remove_all_data(self, prevent_save: bool=False) -> bool:
         """remove_all_data(prevent_save=False)
 
-        Reset the data store to default values.
+        Reset the data store to default values and remove persisted files.
 
         :param prevent_save: If True, when the game is saved, the data will not be persisted.
         :type prevent_save: bool
@@ -205,6 +210,7 @@ class CommonDataManager(HasLog):
         if not self._can_be_saved:
             return False
         success = True
+        self.log.format_with_message('Save data.', save_data=self._data_store_data)
         for persistence_service in self.persistence_services:
             success = persistence_service.save(self.mod_identity, self._data_store_data, identifier=self._identifier)
             if not success:
