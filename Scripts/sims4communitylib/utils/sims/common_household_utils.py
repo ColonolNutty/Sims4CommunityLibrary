@@ -84,7 +84,7 @@ class CommonHouseholdUtils:
 
         :param household: An instance of a Household.
         :type household: Household
-        :return: The home zone identifier of the specified Household or -1 if a problem occurs..
+        :return: The home zone identifier of the specified Household or -1 if a problem occurs.
         :rtype: int
         """
         if household is None:
