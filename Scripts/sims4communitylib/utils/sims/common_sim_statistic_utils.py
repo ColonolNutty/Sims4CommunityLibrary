@@ -6,37 +6,20 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Union, Iterator
-from objects.components.statistic_component import StatisticComponent
 from server_commands.argument_helpers import TunableInstanceParam, OptionalTargetParam
 from sims.sim_info import SimInfo
 from sims4.commands import Command, CommandType, CheatOutput
 from sims4.resources import Types
 from sims4communitylib.enums.statistics_enum import CommonStatisticId
-from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.resources.common_statistic_utils import CommonStatisticUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from statistics.base_statistic import BaseStatistic
-from statistics.statistic import Statistic
-from statistics.statistic_tracker import StatisticTracker
+from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
-
-class CommonGetStatisticTrackerResponse:
-    """The response given when requesting a statistic tracker for a Sim.
-
-    """
-    def __init__(
-        self,
-        statistics_tracker: Union[StatisticTracker, None],
-        statistic_instance: Union[Statistic, None],
-        statistics_component: Union[StatisticComponent, None]
-    ):
-        self.statistics_tracker = statistics_tracker
-        self.statistic_instance = statistic_instance
-        self.statistics_component = statistics_component
+log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'common_sim_statistic_utils')
 
 
 class CommonSimStatisticUtils:
@@ -44,43 +27,41 @@ class CommonSimStatisticUtils:
 
     """
     @staticmethod
-    def has_statistic(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic]) -> bool:
+    def has_statistic(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic]) -> bool:
         """has_statistic(sim_info, statistic)
 
-        Determine if a sim has any of the specified Statistics.
+        Determine if a Sim has any of the specified Statistics.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param statistic: The identifier of the statistic to check.
-        :type statistic: Union[int, CommonStatisticId, Statistic]
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
         :return: True, if the Sim has any of the statistics. False, if not.
         :rtype: bool
         """
-        return CommonSimStatisticUtils.has_statistics(sim_info, (statistic,))
+        statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add=False)
+        return statistic is not None
 
     @staticmethod
-    def has_statistics(sim_info: SimInfo, statistics: Iterator[Union[int, CommonStatisticId, Statistic]]) -> bool:
+    def has_statistics(sim_info: SimInfo, statistics: Iterator[Union[int, CommonStatisticId, BaseStatistic]]) -> bool:
         """has_statistics(sim_info, statistics)
 
-        Determine if a sim has any of the specified Statistics.
+        Determine if a Sim has any of the specified Statistics.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param statistics: An iterator of identifiers for statistics to check.
-        :type statistics: Iterator[Union[int, CommonStatisticId, Statistic]]
+        :type statistics: Iterator[Union[int, CommonStatisticId, BaseStatistic]]
         :return: True, if the Sim has any of the statistics. False, if not.
         :rtype: bool
         """
         for statistic in statistics:
-            response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic)
-            if response.statistics_tracker is None or response.statistic_instance is None:
-                continue
-            if response.statistics_tracker.has_statistic(response.statistic_instance):
+            if CommonSimStatisticUtils.has_statistic(sim_info, statistic):
                 return True
         return False
 
     @staticmethod
-    def is_statistic_locked(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic], add_dynamic: bool=True, add: bool= False) -> bool:
+    def is_statistic_locked(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=True, add: bool= False) -> bool:
         """is_statistic_locked(sim_info, statistic, add_dynamic=True, add=False)
 
         Determine if a statistic is locked for the specified Sim.
@@ -88,26 +69,21 @@ class CommonSimStatisticUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param statistic: The identifier of the statistic to check.
-        :type statistic: Union[int, CommonStatisticId, Statistic]
-        :param add_dynamic: Add the statistic components to the Sim.
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
+        :param add_dynamic: Add the statistic components to the Sim. This argument is no longer used and will be ignored.
         :type add_dynamic: bool, optional
-        :param add: Add the statistic to the Sim.
+        :param add: Whether or not to add the statistic to the Sim.
         :type add: bool, optional
         :return: True, if the statistic is locked. False, if not.
         :rtype: bool
         """
-        response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic, add_dynamic=add_dynamic)
-        if response.statistic_instance is None:
-            return False
-        if response.statistics_tracker is None:
-            return False
-        statistic_instance = response.statistics_tracker.get_statistic(response.statistic_instance, add=add)
+        statistic_instance = CommonStatisticUtils.load_statistic_by_id(statistic)
         if statistic_instance is None:
             return False
-        return statistic_instance.get_decay_rate_modifier() == 0 or response.statistics_component.is_locked(statistic_instance)
+        return sim_info.is_locked(statistic_instance)
 
     @staticmethod
-    def get_statistic_level(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic]) -> float:
+    def get_statistic_level(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic]) -> float:
         """get_statistic_level(sim_info, statistic)
 
         Retrieve the User Value of a Statistic for the specified Sim.
@@ -115,17 +91,17 @@ class CommonSimStatisticUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param statistic: The identifier of the statistic to retrieve the user value of.
-        :type statistic: Union[int, CommonStatisticId, Statistic]
-        :return: The value of the statistic, `-1.0` if the statistic is not found, or `0.0` if a problem occurs.
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
+        :return: The value of the statistic, `-1.0` if the statistic is not found.
         :rtype: float
         """
         statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic)
         if statistic_instance is None:
-            return 0.0
+            return -1.0
         return statistic_instance.get_user_value()
 
     @staticmethod
-    def get_statistic(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic], add_dynamic: bool=True, add: bool=False) -> Union[BaseStatistic, None]:
+    def get_statistic(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=True, add: bool=False) -> Union[BaseStatistic, None]:
         """get_statistic(sim_info, statistic, statistic, add_dynamic=True, add=False)
 
         Retrieve a Statistic for the specified Sim.
@@ -133,23 +109,24 @@ class CommonSimStatisticUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param statistic: The identifier of the statistic to retrieve of.
-        :type statistic: Union[int, CommonStatisticId, Statistic]
-        :param add_dynamic: Add the statistic components to the Sim.
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
+        :param add_dynamic: Add the statistic components to the Sim. This argument is no longer used and will be ignored. This argument is no longer used and will be ignored.
         :type add_dynamic: bool, optional
-        :param add: Add the statistic to the Sim.
+        :param add: Whether or not to add the statistic to the Sim.
         :type add: bool, optional
         :return: An instance of the statistic or None if a problem occurs.
         :rtype: Union[BaseStatistic, None]
         """
         if sim_info is None:
             return None
-        response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic, add_dynamic=add_dynamic)
-        if response.statistics_tracker is None or response.statistic_instance is None:
+        statistic_instance = CommonStatisticUtils.load_statistic_by_id(statistic)
+        if statistic_instance is None:
+            log.format_with_message('No instance', tinstance=statistic)
             return None
-        return response.statistics_tracker.get_statistic(response.statistic_instance, add=add)
+        return sim_info.get_statistic(statistic_instance, add=add)
 
     @staticmethod
-    def get_statistic_value(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic], add_dynamic: bool=True, add: bool=False) -> float:
+    def get_statistic_value(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=True, add: bool=False) -> float:
         """get_statistic_value(sim_info, statistic, add_dynamic=True, add=False)
 
         Retrieve the Value of a Statistic for the specified Sim.
@@ -157,28 +134,22 @@ class CommonSimStatisticUtils:
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param statistic: The identifier of the statistic to retrieve the value of.
-        :type statistic: Union[int, CommonStatisticId, Statistic]
-        :param add_dynamic: Add the statistic components to the Sim.
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
+        :param add_dynamic: Add the statistic components to the Sim. This argument is no longer used and will be ignored.
         :type add_dynamic: bool, optional
-        :param add: Add the statistic to the Sim.
+        :param add: Whether or not to add the statistic to the Sim.
         :type add: bool, optional
-        :return: The value of the statistic, `-1.0` if the statistic is not found, or `0.0` if a problem occurs.
+        :return: The value of the statistic, `-1.0` if the statistic is not found.
         :rtype: float
         """
-        response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic, add_dynamic=add_dynamic)
-        statistic_instance = response.statistic_instance
+        statistic_instance = CommonStatisticUtils.load_statistic_by_id(statistic)
         if statistic_instance is None:
+            log.format_with_message('No statistic found on Sim.', statistic=statistic, sim=sim_info)
             return -1.0
-        if response.statistics_tracker is not None:
-            statistic_of_sim = response.statistics_tracker.get_statistic(statistic_instance, add=add)
-            if statistic_of_sim is not None:
-                return statistic_of_sim.get_value()
-        if hasattr(statistic_instance, 'get_initial_value'):
-            return statistic_instance.get_initial_value()
-        return statistic_instance.default_value
+        return sim_info.get_stat_value(statistic_instance)
 
     @staticmethod
-    def set_statistic_value(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
+    def set_statistic_value(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
         """set_statistic_value(sim_info, statistic, value, add_dynamic=True, add=True)
 
         Set the Value of a Statistic for the specified Sim.
@@ -186,28 +157,49 @@ class CommonSimStatisticUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param statistic: The identifier of the statistic to add a value to.
-        :type statistic: Union[int, CommonStatisticId, Statistic]
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
         :param value: The amount to add.
         :type value: float
-        :param add_dynamic: Add the statistic components to the Sim.
+        :param add_dynamic: Add the statistic components to the Sim. This argument is no longer used and will be ignored.
         :type add_dynamic: bool, optional
-        :param add: Add the statistic to the Sim.
+        :param add: Whether or not to add the statistic to the Sim.
         :type add: bool, optional
         :return: True, if successful. False, if not successful.
         :rtype: bool
         """
         if sim_info is None:
             return False
-        if CommonSimStatisticUtils.is_statistic_locked(sim_info, statistic):
+        statistic_instance = CommonStatisticUtils.load_statistic_by_id(statistic)
+        if statistic_instance is None:
+            log.format_with_message('No statistic found on Sim.', statistic=statistic, sim=sim_info)
             return False
-        response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic, add_dynamic=add_dynamic)
-        if response.statistics_tracker is None or response.statistic_instance is None:
+        if CommonSimStatisticUtils.is_statistic_locked(sim_info, statistic_instance):
+            log.format_with_message('Stat is locked.', statistic=statistic, statistic_instance=statistic_instance, sim=sim_info)
             return False
-        response.statistics_tracker.set_value(response.statistic_instance, value, add=add)
+        sim_info.set_stat_value(statistic_instance, value)
         return True
 
     @staticmethod
-    def set_statistic_user_value(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
+    def set_statistic_level(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add: bool=True) -> bool:
+        """set_statistic_level(sim_info, statistic, value, add_dynamic=True, add=True)
+
+        Set the Level of a Statistic for the specified Sim.
+
+        :param sim_info: The Sim to modify.
+        :type sim_info: SimInfo
+        :param statistic: The identifier of the statistic to add a user value to.
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
+        :param value: The level to set the statistic to.
+        :type value: float
+        :param add: Whether or not to add the statistic to the Sim.
+        :type add: bool, optional
+        :return: True, if successful. False, if not successful.
+        :rtype: bool
+        """
+        return CommonSimStatisticUtils.set_statistic_user_value(sim_info, statistic, value, add=add)
+
+    @staticmethod
+    def set_statistic_user_value(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
         """set_statistic_user_value(sim_info, statistic, value, add_dynamic=True, add=True)
 
         Set the User Value of a Statistic for the specified Sim.
@@ -215,25 +207,26 @@ class CommonSimStatisticUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param statistic: The identifier of the statistic to add a user value to.
-        :type statistic: Union[int, CommonStatisticId, Statistic]
-        :param value: The amount to add.
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
+        :param value: The user value to set the statistic to.
         :type value: float
-        :param add_dynamic: Add the statistic components to the Sim.
+        :param add_dynamic: Add the statistic components to the Sim. This argument is no longer used and will be ignored.
         :type add_dynamic: bool, optional
-        :param add: Add the statistic to the Sim.
+        :param add: Whether or not to add the statistic to the Sim.
         :type add: bool, optional
         :return: True, if successful. False, if not successful.
         :rtype: bool
         """
         if sim_info is None:
             return False
-        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add_dynamic=add_dynamic, add=add)
+        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add=add)
         if statistic_instance is None:
             return False
-        return statistic_instance.set_user_value(value)
+        statistic_instance.set_user_value(value)
+        return True
 
     @staticmethod
-    def add_statistic_value(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
+    def add_statistic_value(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
         """add_statistic_value(sim_info, statistic, value, add_dynamic=True, add=True)
 
         Change the Value of a Statistic for the specified Sim.
@@ -241,34 +234,20 @@ class CommonSimStatisticUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param statistic: The identifier of the statistic to add a value to.
-        :type statistic: Union[int, CommonStatisticId, Statistic]
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
         :param value: The amount to add.
         :type value: float
-        :param add_dynamic: Add the statistic components to the Sim.
+        :param add_dynamic: Add the statistic components to the Sim. This argument is no longer used and will be ignored.
         :type add_dynamic: bool, optional
-        :param add: Add the statistic to the Sim.
+        :param add: Whether or not to add the statistic to the Sim.
         :type add: bool, optional
         :return: True, if successful. False, if not successful.
         :rtype: bool
         """
-        if sim_info is None:
-            return False
-        if isinstance(statistic, int) or isinstance(statistic, CommonStatisticId):
-            statistic = CommonStatisticUtils.load_statistic_by_id(statistic)
-        if statistic is None:
-            return False
-        if not isinstance(statistic, Statistic):
-            return False
-        if CommonSimStatisticUtils.is_statistic_locked(sim_info, statistic):
-            return False
-        response = CommonSimStatisticUtils._get_statistics_tracker(sim_info, statistic, add_dynamic=add_dynamic)
-        if response.statistics_tracker is None or response.statistic_instance is None:
-            return False
-        response.statistics_tracker.add_value(response.statistic_instance, value, add=add)
-        return True
+        return CommonSimStatisticUtils.set_statistic_value(sim_info, statistic, CommonSimStatisticUtils.get_statistic_value(sim_info, statistic) + value, add=add)
 
     @staticmethod
-    def remove_statistic(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic]) -> bool:
+    def remove_statistic(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic]) -> bool:
         """remove_statistic(sim_info, statistic)
 
         Remove a Statistic from the specified Sim.
@@ -276,22 +255,18 @@ class CommonSimStatisticUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param statistic: The identifier of the statistic to remove.
-        :type statistic: Union[int, CommonStatisticId, Statistic]
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
         :return: True, if successful. False, if not successful.
         :rtype: bool
         """
-        if isinstance(statistic, int) or isinstance(statistic, CommonStatisticId):
-            statistic = CommonStatisticUtils.load_statistic_by_id(statistic)
+        statistic = CommonStatisticUtils.load_statistic_by_id(statistic)
         if statistic is None:
             return False
-        if not isinstance(statistic, Statistic):
-            return False
-        tracker = sim_info.get_tracker(statistic)
-        tracker.remove_statistic(statistic)
+        sim_info.remove_statistic(statistic)
         return True
 
     @staticmethod
-    def add_statistic_modifier(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
+    def add_statistic_modifier(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> Union[int, None]:
         """add_statistic_modifier(sim_info, statistic, value, add_dynamic=True, add=True)
 
         Add a Modifier to the specified Statistic for the specified Sim.
@@ -299,53 +274,69 @@ class CommonSimStatisticUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param statistic: The identifier of the statistic containing the modifier.
-        :type statistic: Union[int, CommonStatisticId, Statistic]
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
         :param value: The modifier to add.
         :type value: float
-        :param add_dynamic: Add the statistic components to the Sim.
+        :param add_dynamic: Add the statistic components to the Sim. This argument is no longer used and will be ignored.
         :type add_dynamic: bool, optional
-        :param add: Add the statistic to the Sim.
+        :param add: Whether or not to add the statistic to the Sim.
         :type add: bool, optional
-        :return: True, if successful. False, if not successful.
-        :rtype: bool
+        :return: The handle id for the statistic modifier or None if the modifier failed to apply.
+        :rtype: Union[int, None]
         """
         if sim_info is None:
+            return None
+        statistic = CommonStatisticUtils.load_statistic_by_id(statistic)
+        if statistic is None:
             return False
-        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add_dynamic=add_dynamic, add=add)
-        if statistic_instance is None:
-            return False
-        statistic_instance.add_statistic_modifier(value)
-        return True
+        return sim_info.add_statistic_modifier(statistic, value)
 
     @staticmethod
-    def remove_statistic_modifier(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
+    def remove_statistic_modifier(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
         """remove_statistic_modifier(sim_info, statistic, value, add_dynamic=True, add=True)
 
-        Remove a Modifier from the specified Statistic for the specified Sim.
+        Remove a Modifier from a Sim by value.
 
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param statistic: The identifier of the statistic to remove the modifier from.
-        :type statistic: Union[int, CommonStatisticId, Statistic]
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
         :param value: The modifier to remove.
         :type value: float
-        :param add_dynamic: Add the statistic components to the Sim.
+        :param add_dynamic: Add the statistic components to the Sim. This argument is no longer used and will be ignored.
         :type add_dynamic: bool, optional
-        :param add: Add the statistic to the Sim.
+        :param add: Whether or not to add the statistic to the Sim.
         :type add: bool, optional
         :return: True, if successful. False, if not successful.
         :rtype: bool
         """
         if sim_info is None:
             return False
-        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add_dynamic=add_dynamic, add=add)
+        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add=add)
         if statistic_instance is None:
             return False
         statistic_instance.remove_statistic_modifier(value)
         return True
 
     @staticmethod
-    def remove_all_statistic_modifiers_for_statistic(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic], add_dynamic: bool=True, add: bool=True) -> bool:
+    def remove_statistic_modifier_by_handle_id(sim_info: SimInfo, modifier_handle: int) -> bool:
+        """remove_statistic_modifier_by_handle_id(sim_info, modifier_handle)
+
+        Remove a Statistic Modifier from a Sim by a handle id.
+
+        :param sim_info: The Sim to modify.
+        :type sim_info: SimInfo
+        :param modifier_handle: The handle id for the statistic modifier being removed.
+        :type modifier_handle: int
+        :return: True, if the modifier was successfully removed successful. False, if not.
+        :rtype: bool
+        """
+        if sim_info is None:
+            return False
+        return sim_info.remove_statistic_modifier(modifier_handle)
+
+    @staticmethod
+    def remove_all_statistic_modifiers_for_statistic(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=True, add: bool=True) -> bool:
         """remove_all_statistic_modifiers_for_statistic(sim_info, statistic, add_dynamic=True, add=True)
 
         Remove all Modifiers from the specified Statistic for the specified Sim.
@@ -353,39 +344,24 @@ class CommonSimStatisticUtils:
         :param sim_info: The Sim to modify.
         :type sim_info: SimInfo
         :param statistic: The identifier of the statistic to remove modifiers from.
-        :type statistic: Union[int, CommonStatisticId, Statistic]
-        :param add_dynamic: Add the statistic components to the Sim.
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
+        :param add_dynamic: Add the statistic components to the Sim. This argument is no longer used and will be ignored.
         :type add_dynamic: bool, optional
-        :param add: Add the statistic to the Sim.
+        :param add: Whether or not to add the statistic to the Sim.
         :type add: bool, optional
         :return: True, if successful. False, if not successful.
         :rtype: bool
         """
         if sim_info is None:
             return False
-        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add_dynamic=add_dynamic, add=add)
+        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add=add)
         if statistic_instance is None:
             return False
-        if statistic_instance._statistic_modifiers is None:
+        if not hasattr(statistic_instance, '_statistic_modifiers') or statistic_instance._statistic_modifiers is None:
             return False
         for value in list(statistic_instance._statistic_modifiers):
             statistic_instance.remove_statistic_modifier(value)
         return True
-
-    @staticmethod
-    def _get_statistics_tracker(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, Statistic], add_dynamic: bool=True) -> CommonGetStatisticTrackerResponse:
-        if sim_info is None:
-            return CommonGetStatisticTrackerResponse(None, None, None)
-        if isinstance(statistic, int) or isinstance(statistic, CommonStatisticId):
-            statistic = CommonStatisticUtils.load_statistic_by_id(statistic)
-        if statistic is None:
-            return CommonGetStatisticTrackerResponse(None, None, None)
-        if not isinstance(statistic, Statistic):
-            return CommonGetStatisticTrackerResponse(None, None, None)
-        statistics_component: StatisticComponent = CommonComponentUtils.get_component(sim_info, CommonComponentType.STATISTIC, add_dynamic=add_dynamic)
-        if statistics_component is None:
-            return CommonGetStatisticTrackerResponse(None, statistic, None)
-        return CommonGetStatisticTrackerResponse(statistics_component.get_tracker(statistic), statistic, statistics_component)
 
 
 @Command('s4clib.set_statistic_value', command_type=CommandType.Live)
@@ -411,7 +387,7 @@ def _common_set_statistic_value(statistic: TunableInstanceParam(Types.STATISTIC)
         output('Failed to set statistic {} to Sim {}. {}'.format(str(statistic), sim_name, str(ex)))
 
 
-@Command('s4clib.set_statistic_user_value', command_type=CommandType.Live)
+@Command('s4clib.set_statistic_user_value', 's4clib.set_statistic_level', command_type=CommandType.Live)
 def _common_set_statistic_user_value(statistic: TunableInstanceParam(Types.STATISTIC), value: float, opt_sim: OptionalTargetParam=None, _connection: int=None):
     from server_commands.argument_helpers import get_optional_target
     output = CheatOutput(_connection)

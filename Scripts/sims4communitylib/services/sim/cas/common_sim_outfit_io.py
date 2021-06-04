@@ -318,7 +318,7 @@ class CommonSimOutfitIO(HasLog):
         self._original_outfit_data: FrozenSet[int] = frozenset(self._outfit_parts.items())
         if initial_outfit_parts is not None:
             for (key, value) in initial_outfit_parts.items():
-                if not isinstance(key, int) or not isinstance(value, int):
+                if (not isinstance(key, int) or not isinstance(value, int)) and not isinstance(key, BodyType):
                     self.log.error('\'{}\': outfit_body_parts contains non-integer variables key: {} value: {}.'.format(target_sim_name, key, value))
                     return False
 
