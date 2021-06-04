@@ -5,23 +5,26 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from pprint import pformat
-
-import sims4.commands
-from typing import Tuple, Union, Dict, Callable, Iterator, Set
-
 from buffs.appearance_modifier.appearance_modifier import AppearanceModifier
 from buffs.appearance_modifier.appearance_modifier_type import AppearanceModifierType
 from buffs.appearance_modifier.appearance_tracker import ModifierInfo
 from cas.cas import OutfitData
+from pprint import pformat
+from server_commands.argument_helpers import OptionalTargetParam
 from sims.outfits.outfit_enums import OutfitCategory, BodyType, OutfitFilterFlag, BodyTypeFlag
 from sims.sim_info import SimInfo
+from sims4.commands import Command, CheatOutput, CommandType
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.tags_enum import CommonGameTag
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegistry
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from singletons import DEFAULT
+from typing import Tuple, Union, Dict, Callable, Iterator, Set
+
+log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 's4cl_common_outfit_utils')
 
 
 class CommonOutfitUtils:
@@ -833,27 +836,73 @@ class CommonOutfitUtils:
         except:
             return dict()
 
+    @staticmethod
+    def _print_outfit(sim_info: SimInfo, outfit_category: OutfitCategory, outfit_index: int, _log: CommonLog, output: CheatOutput):
+        from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
+        from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+        sim_full_name = CommonSimNameUtils.get_full_name(sim_info)
+        try:
+            _log.enable()
+            if not isinstance(outfit_category, OutfitCategory):
+                # noinspection PyBroadException
+                try:
+                    outfit_category = CommonResourceUtils.get_enum_by_name(OutfitCategory.value_to_name[outfit_category], OutfitCategory, default_value=outfit_category)
+                except:
+                    outfit_category = outfit_category
+            # noinspection PyBroadException
+            try:
+                outfit_category_name = outfit_category.name
+            except:
+                outfit_category_name = outfit_category
 
-@sims4.commands.Command('s4clib_testing.show_all_outfit_categories', command_type=sims4.commands.CommandType.Live)
+            outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=(outfit_category, outfit_index))
+            output('------Outfit: ({}, {})------'.format(outfit_category_name, outfit_index))
+            _log.debug('------Outfit: ({}, {})------'.format(outfit_category_name, outfit_index))
+            for (body_type, cas_part_id) in zip(outfit_io.body_types, outfit_io.cas_part_ids):
+                # noinspection PyBroadException
+                try:
+                    body_type = CommonResourceUtils.get_enum_by_name(BodyType.value_to_name[body_type], BodyType, default_value=None)
+                except:
+                    output('No body type found {}'.format(body_type))
+                    continue
+                # noinspection PyBroadException
+                try:
+                    body_type_name = body_type.name
+                except:
+                    body_type_name = body_type
+                output('    {} ({}): {}'.format(body_type_name, int(body_type), cas_part_id))
+                _log.debug('{} ({}): {}'.format(body_type_name, int(body_type), cas_part_id))
+            output('----------------------------')
+            output('-')
+            _log.debug('----------------------------')
+            _log.debug('-')
+        except Exception as ex:
+            output('An error occurred while printing the outfit of Sim {}.'.format(sim_full_name))
+            _log.error('Failed to print current outfit of Sim {}.'.format(sim_full_name), exception=ex)
+        finally:
+            _log.disable()
+
+
+@Command('s4clib_testing.show_all_outfit_categories', command_type=CommandType.Live)
 def _s4clib_testing_show_all_outfit_categories(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+    output = CheatOutput(_connection)
     output('Showing all outfit categories.')
     categories = CommonOutfitUtils.get_all_outfit_categories()
     output('Outfit categories: {}'.format(pformat(categories)))
 
 
-@sims4.commands.Command('s4clib_testing.print_outfit_tags_of_active_sim', command_type=sims4.commands.CommandType.Live)
+@Command('s4clib_testing.print_outfit_tags_of_active_sim', command_type=CommandType.Live)
 def _s4clib_testing_print_outfit_tags_of_active_sim(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+    output = CheatOutput(_connection)
     output('Showing all game tags of the outfit of the current Sim.')
     tags = CommonOutfitUtils.get_all_outfit_tags(CommonSimUtils.get_active_sim_info())
     output('Tags: {}'.format(pformat(sorted([CommonGameTag.value_to_name[tag] for tag in tags if tag in CommonGameTag.value_to_name]))))
 
 
-@sims4.commands.Command('s4clib_testing.print_outfit_tags_by_cas_part_of_active_sim', command_type=sims4.commands.CommandType.Live)
+@Command('s4clib_testing.print_outfit_tags_by_cas_part_of_active_sim', command_type=CommandType.Live)
 def _s4clib_testing_print_outfit_tags_by_cas_part_of_active_sim(_connection: int=None):
     from sims4communitylib.utils.cas.common_cas_utils import CommonCASUtils
-    output = sims4.commands.CheatOutput(_connection)
+    output = CheatOutput(_connection)
     output('Showing game tags by cas part id of the outfit of the current Sim.')
     active_sim_info = CommonSimUtils.get_active_sim_info()
     tags_by_cas_part_id = CommonOutfitUtils.get_outfit_tags_by_cas_part_id(active_sim_info)
@@ -862,3 +911,99 @@ def _s4clib_testing_print_outfit_tags_by_cas_part_of_active_sim(_connection: int
         body_type = CommonCASUtils.get_body_type_cas_part_is_attached_to(active_sim_info, cas_part_id)
         output('Body Type: {}'.format(BodyType.value_to_name[body_type] if body_type in BodyType.value_to_name else body_type))
         output('Tags: {}'.format(pformat(sorted([CommonGameTag.value_to_name[tag] for tag in tags if tag in CommonGameTag.value_to_name]))))
+
+
+@Command('s4clib.print_previous_outfit', command_type=CommandType.Live)
+def _s4clib_print_previous_outfit(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_full_name = CommonSimNameUtils.get_full_name(sim_info)
+    previous_outfit = CommonOutfitUtils.get_previous_outfit(sim_info, default_outfit_category_and_index=tuple())
+    if not previous_outfit:
+        output('No previous outfit found for {}'.format(sim_full_name))
+        return
+    try:
+        log.enable()
+        output('Previous Outfit Info for {}'.format(sim_full_name))
+        log.debug('Previous Outfit Info for {}'.format(sim_full_name))
+        CommonOutfitUtils._print_outfit(sim_info, previous_outfit[0], previous_outfit[1], log, output)
+    finally:
+        log.disable()
+
+
+@Command('s4clib.print_current_outfit', command_type=CommandType.Live)
+def _s4clib_print_current_outfit(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_full_name = CommonSimNameUtils.get_full_name(sim_info)
+    current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
+    try:
+        log.enable()
+        output('Current Outfit Info for {}'.format(sim_full_name))
+        log.debug('Current Outfit Info for {}'.format(sim_full_name))
+        CommonOutfitUtils._print_outfit(sim_info, current_outfit[0], current_outfit[1], log, output)
+    finally:
+        log.disable()
+
+
+@Command('s4clib.print_outfits', command_type=CommandType.Live)
+def _s4clib_print_outfits(show_missing_outfit_info: bool=False, opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    from sims.outfits.outfit_utils import get_maximum_outfits_for_category
+    from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+    output = CheatOutput(_connection)
+    output('Printing outfit.')
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_full_name = CommonSimNameUtils.get_full_name(sim_info)
+    try:
+        log.enable()
+        current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
+        # noinspection PyBroadException
+        try:
+            current_outfit_category = CommonResourceUtils.get_enum_by_name(OutfitCategory.value_to_name[current_outfit[0]], OutfitCategory, default_value=current_outfit[0])
+        except:
+            current_outfit_category = current_outfit[0]
+        # noinspection PyBroadException
+        try:
+            current_outfit_category_name = current_outfit_category.name
+        except:
+            current_outfit_category_name = current_outfit_category
+
+        output('Outfit Info for {}, Current Outfit: ({}, {})'.format(sim_full_name, current_outfit_category_name, current_outfit[1]))
+        log.debug('Outfit Info for {}, Current Outfit: ({}, {})'.format(sim_full_name, current_outfit_category_name, current_outfit[1]))
+        output('------')
+        log.debug('------')
+        for outfit_category in CommonOutfitUtils.get_all_outfit_categories():
+            # noinspection PyBroadException
+            try:
+                outfit_category_name = outfit_category.name
+            except:
+                outfit_category_name = outfit_category
+
+            for outfit_index in range(get_maximum_outfits_for_category(outfit_category)):
+                if not CommonOutfitUtils.has_outfit(sim_info, (outfit_category, outfit_index)):
+                    if show_missing_outfit_info:
+                        output('Sim did not have outfit ({}, {})'.format(outfit_category_name, outfit_index))
+                        log.debug('Sim did not have outfit ({}, {})'.format(outfit_category_name, outfit_index))
+                    continue
+                CommonOutfitUtils._print_outfit(sim_info, outfit_category, outfit_index, log, output)
+    except Exception as ex:
+        log.error('Failed to print outfit of Sim {}.'.format(sim_full_name), exception=ex)
+    finally:
+        log.disable()
