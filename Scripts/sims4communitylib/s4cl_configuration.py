@@ -23,6 +23,7 @@ class S4CLConfiguration(HasLog, CommonService):
     _CONFIGURATION_FILE_NAME = 'sims4communitylib.config'
     _DEFAULT_CONFIG_DATA = {
         'enable_vanilla_logging': False,
+        'enable_extra_shift_click_menus': True,
         'enable_logs': {
             'example_log_that_is_enabled': [CommonMessageType.DEBUG.name, CommonMessageType.WARN.name]
         }
@@ -64,6 +65,13 @@ class S4CLConfiguration(HasLog, CommonService):
         if self._config_data is None or not self._config_data:
             return False
         return self._config_data.get('enable_vanilla_logging', False)
+
+    @property
+    def enable_extra_shift_click_menus(self) -> bool:
+        """ Whether or not to enable the SHIFT+CLICK menu in places that normally do not have a SHIFT+CLICK menu due to the ignorance of the SHIFT key. i.e. Relationship Panel, Phone, and Inventory. """
+        if self._config_data is None or not self._config_data:
+            return False
+        return self._config_data.get('enable_extra_shift_click_menus', False)
 
     @property
     def enable_logs(self) -> Dict[str, Tuple[CommonMessageType]]:

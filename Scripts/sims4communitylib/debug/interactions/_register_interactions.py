@@ -116,7 +116,8 @@ class _S4CLDebugSimPhoneInteractionHandler(CommonScriptObjectInteractionHandler)
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), InteractionContext, InteractionContext.__init__.__name__)
 def _common_ensure_shift_held_is_true_when_it_should_be(original, self: InteractionContext, *_, **__):
-    if 'shift_held' not in __ or not __['shift_held']:
+    from sims4communitylib.s4cl_configuration import S4CLConfiguration
+    if S4CLConfiguration().enable_extra_shift_click_menus and ('shift_held' not in __ or not __['shift_held']):
         __['shift_held'] = CommonKeyboardUtils.is_holding_key_down(CommonKey.SHIFT)
     return original(self, *_, **__)
 
