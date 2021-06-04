@@ -6,6 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Union, Iterator, Tuple, List
+from sims4communitylib.enums.skills_enum import CommonSkillId
 from statistics.skill import Skill
 
 
@@ -72,3 +73,19 @@ class CommonSkillUtils:
                 continue
             short_names.append(short_name)
         return tuple(short_names)
+
+    @staticmethod
+    def load_skill_by_id(skill_id: Union[int, CommonSkillId, Skill]) -> Union[Skill, None]:
+        """load_skill_by_id(skill_id)
+
+        Load an instance of a Skill by its decimal identifier.
+
+        :param skill_id: The decimal identifier of a Skill.
+        :type skill_id: Union[int, CommonSkillId, Skill]
+        :return: An instance of a Skill matching the decimal identifier or None if not found.
+        :rtype: Union[Skill, None]
+        """
+        if hasattr(skill_id, 'is_skill'):
+            return skill_id
+        from sims4communitylib.utils.resources.common_statistic_utils import CommonStatisticUtils
+        return CommonStatisticUtils.load_statistic_by_id(skill_id)

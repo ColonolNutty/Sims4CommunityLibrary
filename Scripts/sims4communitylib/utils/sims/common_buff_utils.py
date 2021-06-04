@@ -195,8 +195,7 @@ class CommonBuffUtils:
         has_any = False
         success = True
         for buff in buffs:
-            if isinstance(buff, int) or isinstance(buff, CommonBuffId):
-                buff = CommonBuffUtils.load_buff_by_id(buff)
+            buff = CommonBuffUtils.load_buff_by_id(buff)
             if buff is None:
                 continue
             if not sim_info.add_buff_from_op(buff, buff_reason=localized_buff_reason):
@@ -225,8 +224,7 @@ class CommonBuffUtils:
         has_any = False
         success = True
         for buff in buffs:
-            if isinstance(buff, int) or isinstance(buff, CommonBuffId):
-                buff = CommonBuffUtils.load_buff_by_id(buff)
+            buff = CommonBuffUtils.load_buff_by_id(buff)
             if buff is None:
                 continue
             sim_info.remove_buff_by_type(buff)

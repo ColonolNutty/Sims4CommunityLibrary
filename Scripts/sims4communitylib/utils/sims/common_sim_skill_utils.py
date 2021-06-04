@@ -14,7 +14,7 @@ from sims4.resources import Types
 from sims4communitylib.enums.skills_enum import CommonSkillId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.utils.resources.common_statistic_utils import CommonStatisticUtils
+from sims4communitylib.utils.resources.common_skill_utils import CommonSkillUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from statistics.skill import Skill
@@ -77,8 +77,7 @@ class CommonSimSkillUtils:
         :return: True, if successful. False, if not successful, the skill does not exist, or the skill is not valid for the Sim.
         :rtype: bool
         """
-        if isinstance(skill, int) or isinstance(skill, CommonSkillId):
-            skill: Skill = CommonStatisticUtils.load_statistic_by_id(int(skill))
+        skill: Skill = CommonSkillUtils.load_skill_by_id(skill)
         if skill is None:
             return False
         return CommonSimSkillUtils.set_current_skill_level(sim_info, skill, skill.max_level)
@@ -102,8 +101,7 @@ class CommonSimSkillUtils:
         :return: The current level the Sim is at for the specified Skill or 0.0 if the Skill is either not available or the Sim does not have it.
         :rtype: float
         """
-        if isinstance(skill, int) or isinstance(skill, CommonSkillId):
-            skill: Skill = CommonStatisticUtils.load_statistic_by_id(int(skill))
+        skill: Skill = CommonSkillUtils.load_skill_by_id(skill)
         if skill is None:
             return 0.0
         skill_or_skill_type = sim_info.get_statistic(skill, add=False) or skill
@@ -134,8 +132,7 @@ class CommonSimSkillUtils:
         :return: True, if the Sim has the skill at the maximum level. False, if the Sim does not.
         :rtype: bool
         """
-        if isinstance(skill, int) or isinstance(skill, CommonSkillId):
-            skill: Skill = CommonStatisticUtils.load_statistic_by_id(int(skill))
+        skill: Skill = CommonSkillUtils.load_skill_by_id(skill)
         if skill is None:
             return False
         sim_skill_level = CommonSimSkillUtils.get_current_skill_level(
@@ -158,8 +155,7 @@ class CommonSimSkillUtils:
         :return: True, if the skill was removed successfully. False, if not.
         :rtype: bool
         """
-        if isinstance(skill, int) or isinstance(skill, CommonSkillId):
-            skill: Skill = CommonStatisticUtils.load_statistic_by_id(int(skill))
+        skill: Skill = CommonSkillUtils.load_skill_by_id(skill)
         if skill is None:
             return False
         sim_info.remove_statistic(skill)
@@ -319,8 +315,7 @@ class CommonSimSkillUtils:
         :return: An instance of a Skill of the Sim or None if the Skill does not exist.
         :rtype: Union[Skill, None]
         """
-        if isinstance(skill, int) or isinstance(skill, CommonSkillId):
-            skill: Skill = CommonStatisticUtils.load_statistic_by_id(int(skill))
+        skill: Skill = CommonSkillUtils.load_skill_by_id(skill)
         if skill is None:
             return None
         return sim_info.get_statistic(skill, add=add)
