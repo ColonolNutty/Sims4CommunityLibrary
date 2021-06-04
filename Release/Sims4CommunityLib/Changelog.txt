@@ -6,6 +6,17 @@ v1.69:
 - Fixed an issue where persisted data from one save file would transfer and conflict with the persisted data of another save file if the player decides to change save files without restarting the entire game.
 - Fixed a couple errors within CommonSocialSuperInteraction.
 - Provided an override for get_name within CommonInteraction
+- Fix potential issue with CommonKey crashing the game on startup if an error were to occur.
+- Added a few functions to CommonInjectionUtils for more flexibility when injecting into functions as well as when debugging functions
+- Fix a few issues with CommonBuffUtils not properly loading buff instances
+- Fixed a few issues with CommonTraitUtils not properly loading Traits
+- Fixed issues when getting and setting Statistic values, this includes Skills, Motives, Static Commodities, and Statistics
+- CommonStatisticUtils.load_statistic_by_id will now properly handle Static Commodity statistics
+- Updated the `s4clib.attach_cas_part` and `s4clib.detach_cas_part` commands.
+- Renamed command `s4clib_testing.attach_cas_part` to `s4clib.attach_cas_part`
+- Renamed command `s4clib_testing.detach_cas_part` to `s4clib.detach_cas_part`
+- Added commands for printing outfit details `s4clib.print_previous_outfit`, `s4clib.print_current_outfit`, and `s4clib.print_outfits`
+- Added a configuration setting `enable_extra_shift_click_menus` to toggle the functionality that enables the SHIFT+CLICK menu when clicking on the Phone, Sims in the Relationship Panel, and in the Inventory. It is set to true (Enabled) by default. Set it to false to disable it.
 
 v1.68:
 - Fixed an error that could occur when running the game in Chinese.
