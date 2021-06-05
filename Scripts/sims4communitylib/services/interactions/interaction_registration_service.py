@@ -152,7 +152,7 @@ class CommonInteractionRegistry(CommonService):
 
     def _on_sim_phone_load(self, sim: Sim, *args, **kwargs):
         new_phone_affordances_affordances = []
-        for interaction_handler in self._interaction_handlers[CommonInteractionType.ADD_TO_SIM_RELATIONSHIP_PANEL_INTERACTIONS]:
+        for interaction_handler in self._interaction_handlers[CommonInteractionType.ADD_TO_SIM_PHONE_INTERACTIONS]:
             if hasattr(interaction_handler, 'should_add') and not interaction_handler.should_add(sim, *args, **kwargs):
                 continue
             if not hasattr(sim, '_phone_affordances'):
