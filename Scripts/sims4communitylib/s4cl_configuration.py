@@ -24,6 +24,7 @@ class S4CLConfiguration(HasLog, CommonService):
     _DEFAULT_CONFIG_DATA = {
         'enable_vanilla_logging': False,
         'enable_extra_shift_click_menus': True,
+        'persist_mod_data_per_save_slot': False,
         'enable_logs': {
             'example_log_that_is_enabled': [CommonMessageType.DEBUG.name, CommonMessageType.WARN.name]
         }
@@ -58,6 +59,13 @@ class S4CLConfiguration(HasLog, CommonService):
                         pass
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_identity, 'Failed to format the file path to the S4CL configuration file.', exception=ex)
+
+    @property
+    def persist_mod_data_per_save_slot(self) -> bool:
+        """Whether or not mod_data should include the save slot id within the persisted data file names. If False, only the Guid will be present in the file names. This value will also have an effect on loading files too!"""
+        if self._config_data is None or not self._config_data:
+            return False
+        return self._config_data.get('persist_mod_data_per_save_slot', False)
 
     @property
     def enable_vanilla_logging(self) -> bool:

@@ -37,11 +37,15 @@ class CommonFilePersistenceService(CommonPersistenceService):
         if self._custom_file_name is not None:
             return os.path.join(folder_path, self._custom_file_name)
         if self._per_save:
-            save_slot_id = CommonSaveUtils.get_save_slot_id()
-            if save_slot_id == 0:
-                return ''
             save_slot_guid = CommonSaveUtils.get_save_slot_guid()
-            return os.path.join(folder_path, f'{data_name}_id_{save_slot_id}_guid_{save_slot_guid}.json')
+            from sims4communitylib.s4cl_configuration import S4CLConfiguration
+            if S4CLConfiguration().persist_mod_data_per_save_slot:
+                save_slot_id = CommonSaveUtils.get_save_slot_id()
+                if save_slot_id == 0:
+                    return ''
+                return os.path.join(folder_path, f'{data_name}_id_{save_slot_id}_guid_{save_slot_guid}.json')
+            else:
+                return os.path.join(folder_path, f'{data_name}_guid_{save_slot_guid}.json')
         else:
             return os.path.join(folder_path, f'{data_name}.json')
 
