@@ -10,6 +10,7 @@ from typing import Any, Callable, Union, Iterator
 
 from pprint import pformat
 from protocolbuffers.Localization_pb2 import LocalizedString
+from sims.sim_info import SimInfo
 from sims4communitylib.dialogs._common_ui_dialog_text_input_ok_cancel import _CommonUiDialogTextInputOkCancel
 from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
 from sims4communitylib.dialogs.common_dialog import CommonDialog
@@ -46,7 +47,7 @@ class CommonInputFloatDialog(CommonDialog):
 
         def _common_testing_show_input_float_dialog():
 
-            def _on_chosen(choice: float, outcome: CommonChoiceOutcome):
+            def _on_submit(input_value: float, outcome: CommonChoiceOutcome):
                 pass
 
             # LocalizedStrings within other LocalizedStrings
@@ -60,7 +61,7 @@ class CommonInputFloatDialog(CommonDialog):
                 title_tokens=title_tokens,
                 description_tokens=description_tokens
             )
-            dialog.show(on_submit=_on_chosen)
+            dialog.show(on_submit=_on_submit)
 
     :param title_identifier: A decimal identifier of the title text.
     :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
@@ -108,19 +109,24 @@ class CommonInputFloatDialog(CommonDialog):
 
     def show(
         self,
+        sim_info: SimInfo=None,
         on_submit: Callable[[Union[float, None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop
     ):
         """show(\
+            sim_info=None,\
             on_submit=CommonFunctionUtils.noop\
         )
 
         Show the dialog and invoke the callbacks upon the player submitting a value.
 
+        :param sim_info: The Sim that owns the dialog. Set to None to use the Active Sim. Default is None.
+        :type sim_info: SimInfo, optional
         :param on_submit: A callback invoked upon the player submitting a value. Default is CommonFunctionUtils.noop.
         :type on_submit: Callable[[Union[float, None], CommonChoiceOutcome], Any], optional
         """
         try:
             return self._show(
+                sim_info=sim_info,
                 on_submit=on_submit
             )
         except Exception as ex:
@@ -128,6 +134,7 @@ class CommonInputFloatDialog(CommonDialog):
 
     def _show(
         self,
+        sim_info: SimInfo=None,
         on_submit: Callable[[Union[float, None], CommonChoiceOutcome], bool]=CommonFunctionUtils.noop
     ):
         self.log.debug('Attempting to display input float dialog.')
@@ -135,7 +142,7 @@ class CommonInputFloatDialog(CommonDialog):
         if on_submit is None:
             raise ValueError('\'on_submit\' was None.')
 
-        _dialog = self._create_dialog()
+        _dialog = self._create_dialog(sim_info=sim_info)
         if _dialog is None:
             self.log.error('_dialog was None for some reason.')
             return
@@ -172,10 +179,10 @@ class CommonInputFloatDialog(CommonDialog):
         else:
             _dialog.show_dialog()
 
-    def _create_dialog(self) -> Union[_CommonUiDialogTextInputOkCancel, None]:
+    def _create_dialog(self, sim_info: SimInfo=None) -> Union[_CommonUiDialogTextInputOkCancel, None]:
         try:
             return _CommonUiDialogTextInputOkCancel.TunableFactory().default(
-                CommonSimUtils.get_active_sim_info(),
+                sim_info or CommonSimUtils.get_active_sim_info(),
                 text=lambda *_, **__: self.description,
                 title=lambda *_, **__: self.title
             )
@@ -189,8 +196,8 @@ def _common_testing_show_input_float_dialog(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
     output('Showing test input float dialog.')
 
-    def _on_chosen(choice: float, outcome: CommonChoiceOutcome):
-        output('Chose {} with result: {}.'.format(pformat(choice), pformat(outcome)))
+    def _on_submit(input_value: float, outcome: CommonChoiceOutcome):
+        output('Input {} with result: {}.'.format(pformat(input_value), pformat(outcome)))
 
     try:
         # LocalizedStrings within other LocalizedStrings
@@ -204,7 +211,7 @@ def _common_testing_show_input_float_dialog(_connection: int=None):
             title_tokens=title_tokens,
             description_tokens=description_tokens
         )
-        dialog.show(on_submit=_on_chosen)
+        dialog.show(on_submit=_on_submit)
     except Exception as ex:
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
         output('Failed to show dialog, please locate your exception log file.')

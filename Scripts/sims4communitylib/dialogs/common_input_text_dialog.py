@@ -18,78 +18,70 @@ from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtil
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog_generic import UiDialogTextInput
-from sims4communitylib.modinfo import ModInfo
 
 
-class CommonInputIntegerDialog(CommonDialog):
-    """CommonInputIntegerDialog(\
+class CommonInputTextDialog(CommonDialog):
+    """CommonInputTextDialog(\
+        mod_identity,\
         title_identifier,\
         description_identifier,\
         initial_value,\
-        min_value=0,\
-        max_value=2147483647,\
         title_tokens=(),\
-        description_tokens=(),\
-        mod_identity=None\
+        description_tokens=()\
     )
 
-    Create a dialog that prompts the player to enter an integer value.
+    Create a dialog that prompts the player to enter a text value.
 
-    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_input_integer_dialog` in the in-game console.
+    .. note:: To see an example dialog, run the command :class:`s4clib_testing.show_input_text_dialog` in the in-game console.
 
     .. highlight:: python
     .. code-block:: python
 
-        def _common_testing_show_input_integer_dialog():
+        def _common_testing_show_input_text_dialog():
 
-            def _on_submit(input_value: integer, outcome: CommonChoiceOutcome):
+            def _on_submit(input_value: str, outcome: CommonChoiceOutcome):
                 pass
 
             # LocalizedStrings within other LocalizedStrings
             title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
             description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
             from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-            dialog = CommonInputFloatDialog(
+            dialog = CommonInputTextDialog(
                 CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
                 CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-                2,
+                'default_text',
                 title_tokens=title_tokens,
                 description_tokens=description_tokens
             )
             dialog.show(on_submit=_on_submit)
 
+    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
+    :type mod_identity: CommonModIdentity
     :param title_identifier: A decimal identifier of the title text.
     :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: A decimal identifier of the description text.
     :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param initial_value: The initial value that will appear in the input box.
-    :type initial_value: int
-    :param min_value: The minimum value allowed to be entered by the player. Default is 0.0
-    :type min_value: int, optional
-    :param max_value: The maximum value allowed to be entered by the player. Default is Max Int.
-    :type max_value: int, optional
+    :type initial_value: str
     :param title_tokens: Tokens to format into the title.
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: Tokens to format into the description.
     :type description_tokens: Iterator[Any], optional
-    :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
-    :type mod_identity: CommonModIdentity, optional
     """
     def __init__(
         self,
+        mod_identity: CommonModIdentity,
         title_identifier: Union[int, str, LocalizedString, CommonStringId],
         description_identifier: Union[int, str, LocalizedString, CommonStringId],
-        initial_value: int,
-        min_value: int=0,
-        max_value: int=2147483647,
+        initial_value: str,
         title_tokens: Iterator[Any]=(),
-        description_tokens: Iterator[Any]=(),
-        mod_identity: CommonModIdentity=None
+        description_tokens: Iterator[Any]=()
     ):
         super().__init__(
             title_identifier,
@@ -99,19 +91,17 @@ class CommonInputIntegerDialog(CommonDialog):
             mod_identity=mod_identity
         )
         self.initial_value = initial_value
-        self.min_value = min_value
-        self.max_value = max_value
 
     # noinspection PyMissingOrEmptyDocstring
     @property
     def log_identifier(self) -> str:
-        return 's4cl_input_integer_dialog'
+        return 's4cl_input_text_dialog'
 
     def show(
         self,
         sim_info: SimInfo=None,
-        on_submit: Callable[[Union[int, None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop
-    ):
+        on_submit: Callable[[Union[str, None], CommonChoiceOutcome], Any]=CommonFunctionUtils.noop
+    ) -> None:
         """show(\
             sim_info=None,\
             on_submit=CommonFunctionUtils.noop\
@@ -122,7 +112,7 @@ class CommonInputIntegerDialog(CommonDialog):
         :param sim_info: The Sim that owns the dialog. Set to None to use the Active Sim. Default is None.
         :type sim_info: SimInfo, optional
         :param on_submit: A callback invoked upon the player submitting a value. Default is CommonFunctionUtils.noop.
-        :type on_submit: Callable[[Union[int, None], CommonChoiceOutcome], Any], optional
+        :type on_submit: Callable[[Union[str, None], CommonChoiceOutcome], Any], optional
         """
         try:
             return self._show(
@@ -135,9 +125,9 @@ class CommonInputIntegerDialog(CommonDialog):
     def _show(
         self,
         sim_info: SimInfo=None,
-        on_submit: Callable[[Union[int, None], CommonChoiceOutcome], bool]=CommonFunctionUtils.noop
-    ):
-        self.log.debug('Attempting to display input integer dialog.')
+        on_submit: Callable[[Union[str, None], CommonChoiceOutcome], bool]=CommonFunctionUtils.noop
+    ) -> None:
+        self.log.debug('Attempting to display input text dialog.')
 
         if on_submit is None:
             raise ValueError('\'on_submit\' was None.')
@@ -148,30 +138,18 @@ class CommonInputIntegerDialog(CommonDialog):
             return
 
         # noinspection PyBroadException
-        def _on_submit(dialog: UiDialogTextInput) -> bool:
+        def _on_submit(dialog: UiDialogTextInput) -> None:
             try:
                 input_value = CommonDialogUtils.get_input_value(dialog)
                 if not input_value or not dialog.accepted:
                     self.log.debug('Dialog cancelled.')
-                    return on_submit(None, CommonChoiceOutcome.CANCEL)
-                self.log.format_with_message('Value entered, attempting to convert it to an integer.', value=input_value)
-
-                try:
-                    input_value = int(input_value)
-                    self.log.debug('Conversion successful.')
-                    input_value = max(self.min_value, input_value)
-                    input_value = min(self.max_value, input_value)
-                except:
-                    self.log.format_with_message('Failed to convert value', value=input_value)
-                    return on_submit(None, CommonChoiceOutcome.ERROR)
-
+                    on_submit(None, CommonChoiceOutcome.CANCEL)
+                    return
                 self.log.format_with_message('Value entered.', input_value=input_value)
                 result = on_submit(input_value, CommonChoiceOutcome.CHOICE_MADE)
                 self.log.format_with_message('Finished handling input.', result=result)
-                return result
             except Exception as ex:
                 self.log.error('Error occurred on submitting a value.', exception=ex)
-            return False
 
         _dialog.add_listener(_on_submit)
         if self.initial_value is not None:
@@ -191,12 +169,12 @@ class CommonInputIntegerDialog(CommonDialog):
         return None
 
 
-@sims4.commands.Command('s4clib_testing.show_input_integer_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_input_integer_dialog(_connection: int=None):
+@sims4.commands.Command('s4clib_testing.show_input_text_dialog', command_type=sims4.commands.CommandType.Live)
+def _common_testing_show_input_text_dialog(_connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
-    output('Showing test input integer dialog.')
+    output('Showing test input text dialog.')
 
-    def _on_submit(input_value: int, outcome: CommonChoiceOutcome):
+    def _on_chosen(input_value: str, outcome: CommonChoiceOutcome):
         output('Input {} with result: {}.'.format(pformat(input_value), pformat(outcome)))
 
     try:
@@ -204,14 +182,15 @@ def _common_testing_show_input_integer_dialog(_connection: int=None):
         title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
         description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
         from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-        dialog = CommonInputIntegerDialog(
+        dialog = CommonInputTextDialog(
+            ModInfo.get_identity(),
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
             CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            2,
+            'default_text',
             title_tokens=title_tokens,
             description_tokens=description_tokens
         )
-        dialog.show(on_submit=_on_submit)
+        dialog.show(on_submit=_on_chosen)
     except Exception as ex:
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
         output('Failed to show dialog, please locate your exception log file.')

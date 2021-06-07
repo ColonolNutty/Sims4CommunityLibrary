@@ -188,11 +188,11 @@ class CommonTimeUtils:
     def get_current_second(date_and_time: DateAndTime=None) -> int:
         """get_current_second(date_and_time)
 
-        Retrieve the current sim second.
+        Retrieve the current Sim second of the minute.
 
         :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
         :type date_and_time: DateAndTime, optional
-        :return: The current second of the minute.
+        :return: The current Sim second of the minute.
         :rtype: int
         """
         if date_and_time is None:
@@ -203,11 +203,11 @@ class CommonTimeUtils:
     def get_current_minute(date_and_time: DateAndTime=None) -> int:
         """get_current_minute(date_and_time)
 
-        Retrieve the current sim minute.
+        Retrieve the current Sim minute of the hour.
 
         :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
         :type date_and_time: DateAndTime, optional
-        :return: The current minute of the hour.
+        :return: The current Sim minute of the hour.
         :rtype: int
         """
         if date_and_time is None:
@@ -218,26 +218,56 @@ class CommonTimeUtils:
     def get_current_hour(date_and_time: DateAndTime=None) -> int:
         """get_current_hour(date_and_time)
 
-        Retrieve the current sim hour.
+        Retrieve the current Sim hour of the day in military time.
 
         :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
         :type date_and_time: DateAndTime, optional
-        :return: The current hour of the day.
+        :return: The current Sim hour of the day in military time.
         :rtype: int
         """
         if date_and_time is None:
             date_and_time = CommonTimeUtils.get_current_date_and_time()
         return int(date_and_time.hour())
+
+    @staticmethod
+    def get_current_day(date_and_time: DateAndTime=None) -> int:
+        """get_current_day(date_and_time)
+
+        Retrieve the current Sim day of the month.
+
+        :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
+        :type date_and_time: DateAndTime, optional
+        :return: The current Sim day of the month.
+        :rtype: int
+        """
+        if date_and_time is None:
+            date_and_time = CommonTimeUtils.get_current_date_and_time()
+        return int(date_and_time.day())
+
+    @staticmethod
+    def get_current_week(date_and_time: DateAndTime=None) -> int:
+        """get_current_week(date_and_time)
+
+        Retrieve the current Sim week of the month.
+
+        :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
+        :type date_and_time: DateAndTime, optional
+        :return: The current Sim week of the month.
+        :rtype: int
+        """
+        if date_and_time is None:
+            date_and_time = CommonTimeUtils.get_current_date_and_time()
+        return int(date_and_time.week())
     
     @staticmethod
     def get_total_ticks(date_and_time: DateAndTime=None) -> int:
         """get_total_ticks(date_and_time)
 
-        Retrieve the total sim ticks since the start of the game.
+        Retrieve the total Sim ticks since the start of the day.
 
         :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
         :type date_and_time: DateAndTime, optional
-        :return: The total number of ticks in milliseconds since the start of the game.
+        :return: The total number of Sim ticks in milliseconds since the start of the day.
         :rtype: int
         """
         if date_and_time is None:
@@ -245,14 +275,44 @@ class CommonTimeUtils:
         return int(date_and_time.absolute_ticks())
 
     @staticmethod
-    def get_total_hours(date_and_time: DateAndTime=None) -> int:
-        """get_total_hours(date_and_time)
+    def get_total_seconds(date_and_time: DateAndTime=None) -> float:
+        """get_total_seconds(date_and_time)
 
-        Retrieve the total sim hours since the start of the game.
+        Retrieve the total Sim seconds since the start of the day.
 
         :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
         :type date_and_time: DateAndTime, optional
-        :return: The total number of hours since the start of the game.
+        :return: The total number of Sim seconds since the start of the day.
+        :rtype: int
+        """
+        if date_and_time is None:
+            date_and_time = CommonTimeUtils.get_current_date_and_time()
+        return int(date_and_time.absolute_seconds())
+
+    @staticmethod
+    def get_total_minutes(date_and_time: DateAndTime=None) -> float:
+        """get_total_minutes(date_and_time)
+
+        Retrieve the total Sim minutes since the start of the day.
+
+        :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
+        :type date_and_time: DateAndTime, optional
+        :return: The total number of Sim minutes since the start of the day.
+        :rtype: int
+        """
+        if date_and_time is None:
+            date_and_time = CommonTimeUtils.get_current_date_and_time()
+        return int(date_and_time.absolute_minutes())
+
+    @staticmethod
+    def get_total_hours(date_and_time: DateAndTime=None) -> float:
+        """get_total_hours(date_and_time)
+
+        Retrieve the total Sim hours since the start of the day in military time.
+
+        :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
+        :type date_and_time: DateAndTime, optional
+        :return: The total number of Sim hours since the start of the day in military time.
         :rtype: int
         """
         if date_and_time is None:
@@ -260,14 +320,14 @@ class CommonTimeUtils:
         return int(date_and_time.absolute_hours())
 
     @staticmethod
-    def get_total_days(date_and_time: DateAndTime=None) -> int:
+    def get_total_days(date_and_time: DateAndTime=None) -> float:
         """get_total_days(date_and_time)
 
-        Retrieve the total sim days since the start of the game.
+        Retrieve the total Sim days since the start of the season.
 
         :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
         :type date_and_time: DateAndTime, optional
-        :return: The total number of days since the start of the game.
+        :return: The total number of Sim days since the start of the season.
         :rtype: int
         """
         if date_and_time is None:
@@ -275,14 +335,14 @@ class CommonTimeUtils:
         return int(date_and_time.absolute_days())
 
     @staticmethod
-    def get_total_weeks(date_and_time: DateAndTime=None) -> int:
+    def get_total_weeks(date_and_time: DateAndTime=None) -> float:
         """get_total_weeks(date_and_time)
 
-        Retrieve the total sim weeks since the start of the game.
+        Retrieve the total Sim weeks since the start of the season.
 
         :param date_and_time: The date and time to retrieve the value from. If not specified, the current date and time will be used. Default is None.
         :type date_and_time: DateAndTime, optional
-        :return: The total number of weeks since the start of the game.
+        :return: The total number of Sim weeks since the start of the season.
         :rtype: int
         """
         if date_and_time is None:
