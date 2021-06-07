@@ -52,6 +52,14 @@ Objects
    :undoc-members:
    :show-inheritance:
 
+`Input Text Option`
+""""""""""""""""""""""""""""""""""""
+
+.. autoclass:: sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_input_text_option.CommonDialogInputTextOption
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Object Option`
 """"""""""""""""""""""""""""""""""""
 
