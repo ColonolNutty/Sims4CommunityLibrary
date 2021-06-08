@@ -45,6 +45,51 @@ if not ON_RTD:
     from postures import posture_graph
     from postures.posture_specs import get_origin_spec, PostureSpecVariable
     from postures.posture_state import PostureState
+else:
+    class FinishingType:
+        pass
+
+    class Household:
+        pass
+
+    class SimInfo:
+        pass
+
+    class SimCreator:
+        pass
+
+    class SimSpawner:
+        pass
+
+    class Command:
+        pass
+
+    class CommandType:
+        pass
+
+    class CheatOutput:
+        pass
+
+    class Hand:
+        pass
+
+    class SIState:
+        pass
+
+    class ResetReason:
+        pass
+
+    def posture_graph(*_, **__):
+        pass
+
+    def get_origin_spec(*_, **__):
+        pass
+
+    class PostureSpecVariable:
+        pass
+
+    class PostureState:
+        pass
 
 
 class CommonSimSpawnUtils:
