@@ -17,6 +17,12 @@ v1.69:
 - Renamed command `s4clib_testing.detach_cas_part` to `s4clib.detach_cas_part`
 - Added commands for printing outfit details `s4clib.print_previous_outfit`, `s4clib.print_current_outfit`, and `s4clib.print_outfits`
 - Added a configuration setting `enable_extra_shift_click_menus` to toggle the functionality that enables the SHIFT+CLICK menu when clicking on the Phone, Sims in the Relationship Panel, and in the Inventory. It is set to true (Enabled) by default. Set it to false to disable it.
+- Fixed an error when registering interactions where Interactions meant for the relationship panel are also being registered to the Phone.
+- Added a dialog for prompting for text to be entered by the player.
+- Added some functions to CommonTimeUtils
+- mod_data json files can now be toggled to save with or without a save slot id, if the save slot id is causing persistence problems, toggle it off in the configuration file.
+- Set the default value for the extra shift click menus to be disabled. If it works for you when you enable it, great!
+
 
 v1.68:
 - Fixed an error that could occur when running the game in Chinese.
