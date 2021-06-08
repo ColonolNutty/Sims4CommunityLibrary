@@ -6,7 +6,7 @@ Resource Utilities
 
 .. note:: To manipulate clubs of Sims, take a look at :class:`.CommonSimClubUtils`
 
-.. autoclass:: sims4communitylib.utils.common_resource_utils.CommonClubUtils
+.. autoclass:: sims4communitylib.utils.common_club_utils.CommonClubUtils
    :members:
    :undoc-members:
    :show-inheritance:
