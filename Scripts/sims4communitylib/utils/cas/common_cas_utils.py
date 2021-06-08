@@ -232,112 +232,113 @@ class CommonCASUtils:
         return outfit_io.get_cas_part_at_body_type(body_type)
 
 
-@Command('s4clib.attach_cas_part', command_type=CommandType.Live)
-def _s4clib_attach_cas_part(cas_part_id: int, body_type_str: str='any', opt_sim: OptionalTargetParam=None, _connection: Any=None):
-    from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
-    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    if cas_part_id < 0:
-        output('ERROR: cas_part_id must be a positive number.')
-        return
-    if not CommonCASUtils.is_cas_part_loaded(cas_part_id):
-        output('ERROR: No cas part was found with id: {}'.format(cas_part_id))
-        return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
-    if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
-        return
-    if body_type_str is None:
-        output('No body_type specified.')
-        return
-    if body_type_str == 'any':
-        body_type_str = 'none'
-    if body_type_str.isnumeric():
+if not ON_RTD:
+    @Command('s4clib.attach_cas_part', command_type=CommandType.Live)
+    def _s4clib_attach_cas_part(cas_part_id: int, body_type_str: str='any', opt_sim: OptionalTargetParam=None, _connection: Any=None):
+        from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+        from server_commands.argument_helpers import get_optional_target
+        output = CheatOutput(_connection)
+        if cas_part_id < 0:
+            output('ERROR: cas_part_id must be a positive number.')
+            return
+        if not CommonCASUtils.is_cas_part_loaded(cas_part_id):
+            output('ERROR: No cas part was found with id: {}'.format(cas_part_id))
+            return
+        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+        if sim_info is None:
+            output('Failed, no Sim was specified or the specified Sim was not found!')
+            return
+        if body_type_str is None:
+            output('No body_type specified.')
+            return
+        if body_type_str == 'any':
+            body_type_str = 'none'
+        if body_type_str.isnumeric():
+            try:
+                body_type = int(body_type_str)
+            except ValueError:
+                output('Specified body type is neither a number nor a body type name {}'.format(body_type_str))
+                return
+        else:
+            body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
+            if body_type == BodyType.NONE:
+                output('Specified body type is not a body type {}'.format(body_type_str))
+                return
+
+        output('Attempting to attach CAS Part \'{}\' to Sim \'{}\''.format(cas_part_id, CommonSimNameUtils.get_full_name(sim_info)))
         try:
-            body_type = int(body_type_str)
-        except ValueError:
-            output('Specified body type is neither a number nor a body type name {}'.format(body_type_str))
+            if CommonCASUtils.attach_cas_part_to_sim(sim_info, cas_part_id, body_type=body_type):
+                output('CAS Part attached to Sim {} successfully.'.format(CommonSimNameUtils.get_full_name(sim_info)))
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to attach a CAS Part to a Sim.', exception=ex)
+        output('Done attaching CAS Pat to the Sim.')
+
+
+    @Command('s4clib.detach_cas_part', command_type=CommandType.Live)
+    def _s4clib_detach_cas_part(cas_part_id: int, body_type_str: str='all', opt_sim: OptionalTargetParam=None, _connection: Any=None):
+        from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+        from server_commands.argument_helpers import get_optional_target
+        output = CheatOutput(_connection)
+        if cas_part_id < 0:
+            output('ERROR: cas_part_id must be a positive number.')
             return
-    else:
-        body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
-        if body_type == BodyType.NONE:
-            output('Specified body type is not a body type {}'.format(body_type_str))
+        if not CommonCASUtils.is_cas_part_loaded(cas_part_id):
+            output('ERROR: No cas part was found with id: {}'.format(cas_part_id))
             return
-
-    output('Attempting to attach CAS Part \'{}\' to Sim \'{}\''.format(cas_part_id, CommonSimNameUtils.get_full_name(sim_info)))
-    try:
-        if CommonCASUtils.attach_cas_part_to_sim(sim_info, cas_part_id, body_type=body_type):
-            output('CAS Part attached to Sim {} successfully.'.format(CommonSimNameUtils.get_full_name(sim_info)))
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to attach a CAS Part to a Sim.', exception=ex)
-    output('Done attaching CAS Pat to the Sim.')
-
-
-@Command('s4clib.detach_cas_part', command_type=CommandType.Live)
-def _s4clib_detach_cas_part(cas_part_id: int, body_type_str: str='all', opt_sim: OptionalTargetParam=None, _connection: Any=None):
-    from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
-    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    if cas_part_id < 0:
-        output('ERROR: cas_part_id must be a positive number.')
-        return
-    if not CommonCASUtils.is_cas_part_loaded(cas_part_id):
-        output('ERROR: No cas part was found with id: {}'.format(cas_part_id))
-        return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
-    if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
-        return
-    if body_type_str is None:
-        output('ERROR: No body_type was specified.')
-        return
-    if body_type_str == 'all':
-        body_type = None
-    elif body_type_str.isnumeric():
+        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+        if sim_info is None:
+            output('Failed, no Sim was specified or the specified Sim was not found!')
+            return
+        if body_type_str is None:
+            output('ERROR: No body_type was specified.')
+            return
+        if body_type_str == 'all':
+            body_type = None
+        elif body_type_str.isnumeric():
+            try:
+                body_type = int(body_type_str)
+            except ValueError:
+                output('Specified body type is neither a number nor a body type name {}'.format(body_type_str))
+                return
+        else:
+            body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
+            if body_type == BodyType.NONE:
+                output('Specified body type is not a body type {}'.format(body_type_str))
+                return
+        output('Attempting to detach CAS Part \'{}\' from Sim \'{}\''.format(cas_part_id, CommonSimNameUtils.get_full_name(sim_info)))
         try:
-            body_type = int(body_type_str)
-        except ValueError:
-            output('Specified body type is neither a number nor a body type name {}'.format(body_type_str))
-            return
-    else:
-        body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
-        if body_type == BodyType.NONE:
-            output('Specified body type is not a body type {}'.format(body_type_str))
-            return
-    output('Attempting to detach CAS Part \'{}\' from Sim \'{}\''.format(cas_part_id, CommonSimNameUtils.get_full_name(sim_info)))
-    try:
-        if CommonCASUtils.detach_cas_part_from_sim(sim_info, cas_part_id, body_type=body_type):
-            output('CAS Part detached from Sim {} successfully.'.format(CommonSimNameUtils.get_full_name(sim_info)))
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to detach a CAS Part from a Sim.', exception=ex)
-    output('Done detaching CAS Pat to the Sim.')
+            if CommonCASUtils.detach_cas_part_from_sim(sim_info, cas_part_id, body_type=body_type):
+                output('CAS Part detached from Sim {} successfully.'.format(CommonSimNameUtils.get_full_name(sim_info)))
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to detach a CAS Part from a Sim.', exception=ex)
+        output('Done detaching CAS Pat to the Sim.')
 
 
-@Command('s4clib.print_cas_part_at_body_type', command_type=CommandType.Live)
-def _s4clib_print_cas_part_at_body_type(body_type_str: str, opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    output('Printing CAS Part at body type. ')
-    if body_type_str is None:
-        output('No body_type specified.')
-        return
-    if not body_type_str.isnumeric():
-        body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
-        if body_type == BodyType.NONE:
-            output('Specified body type is not a body type {}'.format(body_type_str))
+    @Command('s4clib.print_cas_part_at_body_type', command_type=CommandType.Live)
+    def _s4clib_print_cas_part_at_body_type(body_type_str: str, opt_sim: OptionalTargetParam=None, _connection: int=None):
+        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+        from server_commands.argument_helpers import get_optional_target
+        output = CheatOutput(_connection)
+        output('Printing CAS Part at body type. ')
+        if body_type_str is None:
+            output('No body_type specified.')
             return
-    else:
-        try:
-            body_type = int(body_type_str)
-        except ValueError:
-            output('Specified body type is neither a number nor a body type name {}'.format(body_type_str))
+        if not body_type_str.isnumeric():
+            body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
+            if body_type == BodyType.NONE:
+                output('Specified body type is not a body type {}'.format(body_type_str))
+                return
+        else:
+            try:
+                body_type = int(body_type_str)
+            except ValueError:
+                output('Specified body type is neither a number nor a body type name {}'.format(body_type_str))
+                return
+        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+        if sim_info is None:
+            output('Failed, no Sim was specified or the specified Sim was not found!')
             return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
-    if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
-        return
-    cas_part_id = CommonCASUtils.get_cas_part_id_at_body_type(sim_info, body_type)
-    output('Found cas part id at body type {}: {}'.format(body_type, cas_part_id))
+        cas_part_id = CommonCASUtils.get_cas_part_id_at_body_type(sim_info, body_type)
+        output('Found cas part id at body type {}: {}'.format(body_type, cas_part_id))
