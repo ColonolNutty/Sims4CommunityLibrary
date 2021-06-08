@@ -32,7 +32,33 @@ if not ON_RTD:
     from placement import FGLSearchFlagsDefault, FGLSearchFlag
     from world.lot import Lot
     from sims.sim_info import SimInfo
+else:
+    class AutonomyComponent:
+        pass
 
+    class EnqueueResult:
+        pass
+
+    class TestResult:
+        pass
+
+    class RoutingContext:
+        pass
+
+    class PickType:
+        pass
+
+    class FGLSearchFlagsDefault:
+        pass
+
+    class FGLSearchFlag:
+        pass
+
+    class Lot:
+        pass
+
+    class SimInfo:
+        pass
 
 class CommonSimLocationUtils:
     """Utilities for manipulating the locations of Sims.
