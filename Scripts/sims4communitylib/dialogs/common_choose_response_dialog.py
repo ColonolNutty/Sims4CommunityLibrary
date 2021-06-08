@@ -6,6 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import math
+import os
 
 import sims4.commands
 from typing import Tuple, Any, Callable, Union, Iterator
@@ -29,6 +30,9 @@ from sims4communitylib.utils.localization.common_localized_string_colors import 
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog import UiDialogOption, ButtonType
+
+# ReadTheDocs
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 
 class CommonChooseResponseDialog(CommonDialog):
@@ -110,8 +114,13 @@ class CommonChooseResponseDialog(CommonDialog):
     :param mod_identity: The identity of the mod creating the dialog. See :class:`.CommonModIdentity` for more information.
     :type mod_identity: CommonModIdentity, optional
     """
-    _NEXT_BUTTON_ID: int = int(ButtonType.DIALOG_RESPONSE_OK)
-    _PREVIOUS_BUTTON_ID: int = int(ButtonType.DIALOG_RESPONSE_CANCEL)
+    # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
+    if not ON_RTD:
+        _NEXT_BUTTON_ID: int = int(ButtonType.DIALOG_RESPONSE_OK)
+        _PREVIOUS_BUTTON_ID: int = int(ButtonType.DIALOG_RESPONSE_CANCEL)
+    else:
+        _NEXT_BUTTON_ID = 10001
+        _PREVIOUS_BUTTON_ID = 10002
 
     # noinspection PyMissingOrEmptyDocstring
     @property

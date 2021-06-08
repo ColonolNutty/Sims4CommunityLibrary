@@ -17,18 +17,24 @@ from sims4communitylib.utils.common_json_io_utils import CommonJSONIOUtils
 from sims4communitylib.utils.common_log_registry import CommonMessageType
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
+# ReadTheDocs
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
 
 class S4CLConfiguration(HasLog, CommonService):
     """ Manages configuration via the sims4communitylib.config file. """
     _CONFIGURATION_FILE_NAME = 'sims4communitylib.config'
-    _DEFAULT_CONFIG_DATA = {
-        'enable_vanilla_logging': False,
-        'enable_extra_shift_click_menus': True,
-        'persist_mod_data_per_save_slot': False,
-        'enable_logs': {
-            'example_log_that_is_enabled': [CommonMessageType.DEBUG.name, CommonMessageType.WARN.name]
+    if not ON_RTD:
+        _DEFAULT_CONFIG_DATA = {
+            'enable_vanilla_logging': False,
+            'enable_extra_shift_click_menus': True,
+            'persist_mod_data_per_save_slot': False,
+            'enable_logs': {
+                'example_log_that_is_enabled': [CommonMessageType.DEBUG.name, CommonMessageType.WARN.name]
+            }
         }
-    }
+    else:
+        _DEFAULT_CONFIG_DATA = dict()
 
     # noinspection PyMissingOrEmptyDocstring
     @property
