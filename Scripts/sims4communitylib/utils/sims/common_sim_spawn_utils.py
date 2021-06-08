@@ -5,10 +5,9 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import services
-import build_buy
-from interactions.interaction_finisher import FinishingType
-from sims4.commands import Command, CommandType, CheatOutput
+import os
+
+from typing import Union, Tuple, Callable, Any, Iterator
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.common_species import CommonSpecies
@@ -16,25 +15,36 @@ from sims4communitylib.exceptions.common_exceptions_handler import CommonExcepti
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
+from sims4communitylib.classes.math.common_location import CommonLocation
+from sims4communitylib.classes.math.common_vector3 import CommonVector3
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+
+# ReadTheDocs
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+if not ON_RTD:
+    import build_buy
 
 try:
     import _buildbuy
 except ImportError:
     # noinspection SpellCheckingInspection
     _buildbuy = build_buy
-from typing import Union, Tuple, Callable, Any, Iterator
-from sims.household import Household
-from sims.sim_info import SimInfo
-from sims.sim_spawner import SimCreator, SimSpawner
-from animation.posture_manifest import Hand
-from interactions.si_state import SIState
-from objects.object_enums import ResetReason
-from postures import posture_graph
-from postures.posture_specs import get_origin_spec, PostureSpecVariable
-from postures.posture_state import PostureState
-from sims4communitylib.classes.math.common_location import CommonLocation
-from sims4communitylib.classes.math.common_vector3 import CommonVector3
-from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+
+
+if not ON_RTD:
+    import services
+    from interactions.interaction_finisher import FinishingType
+    from sims.household import Household
+    from sims.sim_info import SimInfo
+    from sims.sim_spawner import SimCreator, SimSpawner
+    from sims4.commands import Command, CommandType, CheatOutput
+    from animation.posture_manifest import Hand
+    from interactions.si_state import SIState
+    from objects.object_enums import ResetReason
+    from postures import posture_graph
+    from postures.posture_specs import get_origin_spec, PostureSpecVariable
+    from postures.posture_state import PostureState
 
 
 class CommonSimSpawnUtils:

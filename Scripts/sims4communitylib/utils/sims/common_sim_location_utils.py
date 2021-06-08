@@ -5,15 +5,9 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from event_testing.results import EnqueueResult, TestResult
-import routing
-from placement import FGLSearchFlagsDefault, FGLSearchFlag
-from routing import RoutingContext
-from server.pick_info import PickType
-import objects.terrain
+import os
+
 from typing import Union
-from autonomy.autonomy_component import AutonomyComponent
-from sims.sim_info import SimInfo
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_quaternion import CommonQuaternion
 from sims4communitylib.classes.math.common_routing_location import CommonRoutingLocation
@@ -25,7 +19,19 @@ from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdU
 from sims4communitylib.utils.sims.common_sim_interaction_utils import CommonSimInteractionUtils
 from sims4communitylib.utils.sims.common_sim_type_utils import CommonSimTypeUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-from world.lot import Lot
+# ReadTheDocs
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+if not ON_RTD:
+    from autonomy.autonomy_component import AutonomyComponent
+    from event_testing.results import EnqueueResult, TestResult
+    import routing
+    from routing import RoutingContext
+    import objects.terrain
+    from server.pick_info import PickType
+    from placement import FGLSearchFlagsDefault, FGLSearchFlag
+    from world.lot import Lot
+    from sims.sim_info import SimInfo
 
 
 class CommonSimLocationUtils:
