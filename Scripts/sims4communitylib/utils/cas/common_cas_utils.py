@@ -30,7 +30,7 @@ else:
         pass
 
     class BodyType:
-        pass
+        NONE = 0
 
     class SimInfo:
         pass

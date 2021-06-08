@@ -52,7 +52,7 @@ else:
         pass
 
     class FGLSearchFlag:
-        pass
+        STAY_IN_CURRENT_BLOCK = 0
 
     class Lot:
         pass
