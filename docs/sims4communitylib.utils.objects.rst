@@ -110,7 +110,7 @@ Object Utilities
 `Ownership`
 *************************
 
-.. autoclass:: sims4communitylib.utils.objects.common_object_household_utils.CommonObjectOwnershipUtils
+.. autoclass:: sims4communitylib.utils.objects.common_object_ownership_utils.CommonObjectOwnershipUtils
    :members:
    :undoc-members:
    :show-inheritance:
