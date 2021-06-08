@@ -5,8 +5,8 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from game_services import GameServiceManager
-from services.persistence_service import PersistenceService, SaveGameData
+import os
+
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
 from sims4communitylib.events.save.events.save_loaded import S4CLSaveLoadedEvent
 from sims4communitylib.events.save.events.save_saved import S4CLSaveSavedEvent
@@ -14,6 +14,15 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+# ReadTheDocs
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+if not ON_RTD:
+    from services.persistence_service import SaveGameData
+else:
+    class SaveGameData:
+        pass
+
 
 log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'thing')
 log.enable()
@@ -43,15 +52,18 @@ class CommonSaveEventDispatcher(CommonService):
             CommonEventRegistry.get().dispatch(S4CLSaveLoadedEvent())
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), PersistenceService, PersistenceService.save_game_gen.__name__)
-def _common_save_game_gen(original, self: PersistenceService, timeline, save_game_data: SaveGameData, send_save_message: bool=True, **kwargs):
-    if send_save_message:
-        CommonSaveEventDispatcher.get()._on_game_save(save_game_data)
-    return original(self, timeline, save_game_data, send_save_message=send_save_message, **kwargs)
+if not ON_RTD:
+    from game_services import GameServiceManager
+    from services.persistence_service import PersistenceService, SaveGameData
 
+    @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), PersistenceService, PersistenceService.save_game_gen.__name__)
+    def _common_save_game_gen(original, self: PersistenceService, timeline, save_game_data: SaveGameData, send_save_message: bool=True, **kwargs):
+        if send_save_message:
+            CommonSaveEventDispatcher.get()._on_game_save(save_game_data)
+        return original(self, timeline, save_game_data, send_save_message=send_save_message, **kwargs)
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), GameServiceManager, GameServiceManager.on_all_households_and_sim_infos_loaded.__name__)
-def _common_save_game_loaded(original, self: GameServiceManager, *args, **kwargs):
-    result = original(self, *args, **kwargs)
-    CommonSaveEventDispatcher()._on_save_loaded()
-    return result
+    @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), GameServiceManager, GameServiceManager.on_all_households_and_sim_infos_loaded.__name__)
+    def _common_save_game_loaded(original, self: GameServiceManager, *args, **kwargs):
+        result = original(self, *args, **kwargs)
+        CommonSaveEventDispatcher()._on_save_loaded()
+        return result
