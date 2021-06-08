@@ -24,15 +24,11 @@ ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 if not ON_RTD:
     import build_buy
-
-try:
-    import _buildbuy
-except ImportError:
-    # noinspection SpellCheckingInspection
-    _buildbuy = build_buy
-
-
-if not ON_RTD:
+    try:
+        import _buildbuy
+    except ImportError:
+        # noinspection SpellCheckingInspection
+        _buildbuy = build_buy
     import services
     from interactions.interaction_finisher import FinishingType
     from sims.household import Household
