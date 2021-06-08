@@ -5,17 +5,44 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import os
 from typing import Tuple, Union, Any
 
-from server_commands.argument_helpers import OptionalTargetParam
-from sims.outfits.outfit_enums import OutfitCategory, BodyType
-from sims.sim_info import SimInfo
-from sims4.commands import Command, CheatOutput, CommandType
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+
+# ReadTheDocs
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+if not ON_RTD:
+    from server_commands.argument_helpers import OptionalTargetParam
+    from sims.outfits.outfit_enums import OutfitCategory, BodyType
+    from sims.sim_info import SimInfo
+    from sims4.commands import Command, CheatOutput, CommandType
+else:
+    class OptionalTargetParam:
+        pass
+
+    class OutfitCategory:
+        pass
+
+    class BodyType:
+        pass
+
+    class SimInfo:
+        pass
+
+    class Command:
+        pass
+
+    class CheatOutput:
+        pass
+
+    class CommandType:
+        pass
 
 log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 's4cl_common_cas_utils')
 
