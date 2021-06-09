@@ -24,13 +24,13 @@ try:
             key_code = _translate_to_key_code(key)
             if key_code == -1:
                 return False
-            return _user32.GetKeyState(key_code) > 1
+            return bool(_user32.GetKeyState(key_code) & 128)
 
         def _is_key_toggled_on(key: CommonKey):
             key_code = _translate_to_key_code(key)
             if key_code == -1:
                 return False
-            return _user32.GetKeyState(key_code) == 1
+            return bool(_user32.GetKeyState(key_code) & 1)
 
         def _translate_to_key_code(key: CommonKey) -> int:
             if isinstance(key, int):
