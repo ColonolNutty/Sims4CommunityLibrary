@@ -121,7 +121,7 @@ class CommonKey(CommonInt):
             BACKSPACE: 'CommonKey' = 51
             TAB: 'CommonKey' = 48
             ENTER: 'CommonKey' = 36
-            SHIFT = 56  # Left Shift since Mac does not have a common key code
+            SHIFT: 'CommonKey' = 56  # Left Shift since Mac does not have a common key code
             CTRL: 'CommonKey' = 55
             ALT: 'CommonKey' = 58  # Left Alt since Mac does not have a common key code
             CAPS_LOCK: 'CommonKey' = 57

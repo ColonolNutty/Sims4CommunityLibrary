@@ -721,6 +721,541 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_PLANT_SIM: CommonSimType.CHILD_CAT,
     }
 
+    _OCCULT_SIM_TYPE_TO_OCCULT_TYPE_MAPPING: Dict[CommonSimType, CommonOccultType] = {
+        # Human
+        # Elder
+        CommonSimType.ELDER_HUMAN: CommonOccultType.NON_OCCULT,
+        CommonSimType.ELDER_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.ELDER_HUMAN_GHOST: CommonOccultType.GHOST,
+        CommonSimType.ELDER_HUMAN_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.ELDER_HUMAN_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.ELDER_HUMAN_WITCH: CommonOccultType.WITCH,
+        CommonSimType.ELDER_HUMAN_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.ELDER_HUMAN_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.ELDER_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Adult
+        CommonSimType.ADULT_HUMAN: CommonOccultType.NON_OCCULT,
+        CommonSimType.ADULT_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.ADULT_HUMAN_GHOST: CommonOccultType.GHOST,
+        CommonSimType.ADULT_HUMAN_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.ADULT_HUMAN_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.ADULT_HUMAN_WITCH: CommonOccultType.WITCH,
+        CommonSimType.ADULT_HUMAN_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.ADULT_HUMAN_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.ADULT_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Young Adult
+        CommonSimType.YOUNG_ADULT_HUMAN: CommonOccultType.NON_OCCULT,
+        CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.YOUNG_ADULT_HUMAN_GHOST: CommonOccultType.GHOST,
+        CommonSimType.YOUNG_ADULT_HUMAN_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.YOUNG_ADULT_HUMAN_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.YOUNG_ADULT_HUMAN_WITCH: CommonOccultType.WITCH,
+        CommonSimType.YOUNG_ADULT_HUMAN_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.YOUNG_ADULT_HUMAN_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Teen
+        CommonSimType.TEEN_HUMAN: CommonOccultType.NON_OCCULT,
+        CommonSimType.TEEN_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.TEEN_HUMAN_GHOST: CommonOccultType.GHOST,
+        CommonSimType.TEEN_HUMAN_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.TEEN_HUMAN_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.TEEN_HUMAN_WITCH: CommonOccultType.WITCH,
+        CommonSimType.TEEN_HUMAN_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.TEEN_HUMAN_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.TEEN_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Child
+        CommonSimType.CHILD_HUMAN: CommonOccultType.NON_OCCULT,
+        CommonSimType.CHILD_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.CHILD_HUMAN_GHOST: CommonOccultType.GHOST,
+        CommonSimType.CHILD_HUMAN_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.CHILD_HUMAN_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.CHILD_HUMAN_WITCH: CommonOccultType.WITCH,
+        CommonSimType.CHILD_HUMAN_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.CHILD_HUMAN_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.CHILD_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Toddler
+        CommonSimType.TODDLER_HUMAN: CommonOccultType.NON_OCCULT,
+        CommonSimType.TODDLER_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.TODDLER_HUMAN_GHOST: CommonOccultType.GHOST,
+        CommonSimType.TODDLER_HUMAN_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.TODDLER_HUMAN_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.TODDLER_HUMAN_WITCH: CommonOccultType.WITCH,
+        CommonSimType.TODDLER_HUMAN_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.TODDLER_HUMAN_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.TODDLER_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Baby
+        CommonSimType.BABY_HUMAN: CommonOccultType.NON_OCCULT,
+        CommonSimType.BABY_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.BABY_HUMAN_GHOST: CommonOccultType.GHOST,
+        CommonSimType.BABY_HUMAN_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.BABY_HUMAN_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.BABY_HUMAN_WITCH: CommonOccultType.WITCH,
+        CommonSimType.BABY_HUMAN_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.BABY_HUMAN_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.BABY_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+
+        # Dog
+        # Child
+        CommonSimType.CHILD_DOG: CommonOccultType.NON_OCCULT,
+        CommonSimType.CHILD_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.CHILD_DOG_GHOST: CommonOccultType.GHOST,
+        CommonSimType.CHILD_DOG_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.CHILD_DOG_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.CHILD_DOG_WITCH: CommonOccultType.WITCH,
+        CommonSimType.CHILD_DOG_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.CHILD_DOG_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.CHILD_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+
+        # Small Dog
+        # Elder
+        CommonSimType.ELDER_SMALL_DOG: CommonOccultType.NON_OCCULT,
+        CommonSimType.ELDER_SMALL_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.ELDER_SMALL_DOG_GHOST: CommonOccultType.GHOST,
+        CommonSimType.ELDER_SMALL_DOG_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.ELDER_SMALL_DOG_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.ELDER_SMALL_DOG_WITCH: CommonOccultType.WITCH,
+        CommonSimType.ELDER_SMALL_DOG_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.ELDER_SMALL_DOG_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.ELDER_SMALL_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Adult
+        CommonSimType.ADULT_SMALL_DOG: CommonOccultType.NON_OCCULT,
+        CommonSimType.ADULT_SMALL_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.ADULT_SMALL_DOG_GHOST: CommonOccultType.GHOST,
+        CommonSimType.ADULT_SMALL_DOG_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.ADULT_SMALL_DOG_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.ADULT_SMALL_DOG_WITCH: CommonOccultType.WITCH,
+        CommonSimType.ADULT_SMALL_DOG_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.ADULT_SMALL_DOG_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.ADULT_SMALL_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Child
+        CommonSimType.CHILD_SMALL_DOG: CommonOccultType.NON_OCCULT,
+        CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.CHILD_SMALL_DOG_GHOST: CommonOccultType.GHOST,
+        CommonSimType.CHILD_SMALL_DOG_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.CHILD_SMALL_DOG_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.CHILD_SMALL_DOG_WITCH: CommonOccultType.WITCH,
+        CommonSimType.CHILD_SMALL_DOG_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.CHILD_SMALL_DOG_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+
+        # Large Dog
+        # Elder
+        CommonSimType.ELDER_LARGE_DOG: CommonOccultType.NON_OCCULT,
+        CommonSimType.ELDER_LARGE_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.ELDER_LARGE_DOG_GHOST: CommonOccultType.GHOST,
+        CommonSimType.ELDER_LARGE_DOG_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.ELDER_LARGE_DOG_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.ELDER_LARGE_DOG_WITCH: CommonOccultType.WITCH,
+        CommonSimType.ELDER_LARGE_DOG_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.ELDER_LARGE_DOG_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.ELDER_LARGE_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Adult
+        CommonSimType.ADULT_LARGE_DOG: CommonOccultType.NON_OCCULT,
+        CommonSimType.ADULT_LARGE_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.ADULT_LARGE_DOG_GHOST: CommonOccultType.GHOST,
+        CommonSimType.ADULT_LARGE_DOG_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.ADULT_LARGE_DOG_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.ADULT_LARGE_DOG_WITCH: CommonOccultType.WITCH,
+        CommonSimType.ADULT_LARGE_DOG_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.ADULT_LARGE_DOG_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.ADULT_LARGE_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Child
+        CommonSimType.CHILD_LARGE_DOG: CommonOccultType.NON_OCCULT,
+        CommonSimType.CHILD_LARGE_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.CHILD_LARGE_DOG_GHOST: CommonOccultType.GHOST,
+        CommonSimType.CHILD_LARGE_DOG_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.CHILD_LARGE_DOG_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.CHILD_LARGE_DOG_WITCH: CommonOccultType.WITCH,
+        CommonSimType.CHILD_LARGE_DOG_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.CHILD_LARGE_DOG_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+
+        # Cat
+        # Elder
+        CommonSimType.ELDER_CAT: CommonOccultType.NON_OCCULT,
+        CommonSimType.ELDER_CAT_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.ELDER_CAT_GHOST: CommonOccultType.GHOST,
+        CommonSimType.ELDER_CAT_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.ELDER_CAT_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.ELDER_CAT_WITCH: CommonOccultType.WITCH,
+        CommonSimType.ELDER_CAT_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.ELDER_CAT_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.ELDER_CAT_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Adult
+        CommonSimType.ADULT_CAT: CommonOccultType.NON_OCCULT,
+        CommonSimType.ADULT_CAT_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.ADULT_CAT_GHOST: CommonOccultType.GHOST,
+        CommonSimType.ADULT_CAT_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.ADULT_CAT_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.ADULT_CAT_WITCH: CommonOccultType.WITCH,
+        CommonSimType.ADULT_CAT_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.ADULT_CAT_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.ADULT_CAT_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Child
+        CommonSimType.CHILD_CAT: CommonOccultType.NON_OCCULT,
+        CommonSimType.CHILD_CAT_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.CHILD_CAT_GHOST: CommonOccultType.GHOST,
+        CommonSimType.CHILD_CAT_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.CHILD_CAT_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.CHILD_CAT_WITCH: CommonOccultType.WITCH,
+        CommonSimType.CHILD_CAT_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.CHILD_CAT_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.CHILD_CAT_PLANT_SIM: CommonOccultType.PLANT_SIM,
+    }
+
+    _OCCULT_SIM_TYPE_TO_AGE_MAPPING: Dict[CommonSimType, CommonAge] = {
+        # Human
+        # Elder
+        CommonSimType.ELDER_HUMAN: CommonAge.ELDER,
+        CommonSimType.ELDER_HUMAN_VAMPIRE: CommonAge.ELDER,
+        CommonSimType.ELDER_HUMAN_GHOST: CommonAge.ELDER,
+        CommonSimType.ELDER_HUMAN_ALIEN: CommonAge.ELDER,
+        CommonSimType.ELDER_HUMAN_MERMAID: CommonAge.ELDER,
+        CommonSimType.ELDER_HUMAN_WITCH: CommonAge.ELDER,
+        CommonSimType.ELDER_HUMAN_ROBOT: CommonAge.ELDER,
+        CommonSimType.ELDER_HUMAN_SKELETON: CommonAge.ELDER,
+        CommonSimType.ELDER_HUMAN_PLANT_SIM: CommonAge.ELDER,
+        # Adult
+        CommonSimType.ADULT_HUMAN: CommonAge.ADULT,
+        CommonSimType.ADULT_HUMAN_VAMPIRE: CommonAge.ADULT,
+        CommonSimType.ADULT_HUMAN_GHOST: CommonAge.ADULT,
+        CommonSimType.ADULT_HUMAN_ALIEN: CommonAge.ADULT,
+        CommonSimType.ADULT_HUMAN_MERMAID: CommonAge.ADULT,
+        CommonSimType.ADULT_HUMAN_WITCH: CommonAge.ADULT,
+        CommonSimType.ADULT_HUMAN_ROBOT: CommonAge.ADULT,
+        CommonSimType.ADULT_HUMAN_SKELETON: CommonAge.ADULT,
+        CommonSimType.ADULT_HUMAN_PLANT_SIM: CommonAge.ADULT,
+        # Young Adult
+        CommonSimType.YOUNG_ADULT_HUMAN: CommonAge.YOUNGADULT,
+        CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE: CommonAge.YOUNGADULT,
+        CommonSimType.YOUNG_ADULT_HUMAN_GHOST: CommonAge.YOUNGADULT,
+        CommonSimType.YOUNG_ADULT_HUMAN_ALIEN: CommonAge.YOUNGADULT,
+        CommonSimType.YOUNG_ADULT_HUMAN_MERMAID: CommonAge.YOUNGADULT,
+        CommonSimType.YOUNG_ADULT_HUMAN_WITCH: CommonAge.YOUNGADULT,
+        CommonSimType.YOUNG_ADULT_HUMAN_ROBOT: CommonAge.YOUNGADULT,
+        CommonSimType.YOUNG_ADULT_HUMAN_SKELETON: CommonAge.YOUNGADULT,
+        CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM: CommonAge.YOUNGADULT,
+        # Teen
+        CommonSimType.TEEN_HUMAN: CommonAge.TEEN,
+        CommonSimType.TEEN_HUMAN_VAMPIRE: CommonAge.TEEN,
+        CommonSimType.TEEN_HUMAN_GHOST: CommonAge.TEEN,
+        CommonSimType.TEEN_HUMAN_ALIEN: CommonAge.TEEN,
+        CommonSimType.TEEN_HUMAN_MERMAID: CommonAge.TEEN,
+        CommonSimType.TEEN_HUMAN_WITCH: CommonAge.TEEN,
+        CommonSimType.TEEN_HUMAN_ROBOT: CommonAge.TEEN,
+        CommonSimType.TEEN_HUMAN_SKELETON: CommonAge.TEEN,
+        CommonSimType.TEEN_HUMAN_PLANT_SIM: CommonAge.TEEN,
+        # Child
+        CommonSimType.CHILD_HUMAN: CommonAge.CHILD,
+        CommonSimType.CHILD_HUMAN_VAMPIRE: CommonAge.CHILD,
+        CommonSimType.CHILD_HUMAN_GHOST: CommonAge.CHILD,
+        CommonSimType.CHILD_HUMAN_ALIEN: CommonAge.CHILD,
+        CommonSimType.CHILD_HUMAN_MERMAID: CommonAge.CHILD,
+        CommonSimType.CHILD_HUMAN_WITCH: CommonAge.CHILD,
+        CommonSimType.CHILD_HUMAN_ROBOT: CommonAge.CHILD,
+        CommonSimType.CHILD_HUMAN_SKELETON: CommonAge.CHILD,
+        CommonSimType.CHILD_HUMAN_PLANT_SIM: CommonAge.CHILD,
+        # Toddler
+        CommonSimType.TODDLER_HUMAN: CommonAge.TODDLER,
+        CommonSimType.TODDLER_HUMAN_VAMPIRE: CommonAge.TODDLER,
+        CommonSimType.TODDLER_HUMAN_GHOST: CommonAge.TODDLER,
+        CommonSimType.TODDLER_HUMAN_ALIEN: CommonAge.TODDLER,
+        CommonSimType.TODDLER_HUMAN_MERMAID: CommonAge.TODDLER,
+        CommonSimType.TODDLER_HUMAN_WITCH: CommonAge.TODDLER,
+        CommonSimType.TODDLER_HUMAN_ROBOT: CommonAge.TODDLER,
+        CommonSimType.TODDLER_HUMAN_SKELETON: CommonAge.TODDLER,
+        CommonSimType.TODDLER_HUMAN_PLANT_SIM: CommonAge.TODDLER,
+        # Baby
+        CommonSimType.BABY_HUMAN: CommonAge.BABY,
+        CommonSimType.BABY_HUMAN_VAMPIRE: CommonAge.BABY,
+        CommonSimType.BABY_HUMAN_GHOST: CommonAge.BABY,
+        CommonSimType.BABY_HUMAN_ALIEN: CommonAge.BABY,
+        CommonSimType.BABY_HUMAN_MERMAID: CommonAge.BABY,
+        CommonSimType.BABY_HUMAN_WITCH: CommonAge.BABY,
+        CommonSimType.BABY_HUMAN_ROBOT: CommonAge.BABY,
+        CommonSimType.BABY_HUMAN_SKELETON: CommonAge.BABY,
+        CommonSimType.BABY_HUMAN_PLANT_SIM: CommonAge.BABY,
+
+        # Dog
+        # Child
+        CommonSimType.CHILD_DOG: CommonAge.CHILD,
+        CommonSimType.CHILD_DOG_VAMPIRE: CommonAge.CHILD,
+        CommonSimType.CHILD_DOG_GHOST: CommonAge.CHILD,
+        CommonSimType.CHILD_DOG_ALIEN: CommonAge.CHILD,
+        CommonSimType.CHILD_DOG_MERMAID: CommonAge.CHILD,
+        CommonSimType.CHILD_DOG_WITCH: CommonAge.CHILD,
+        CommonSimType.CHILD_DOG_ROBOT: CommonAge.CHILD,
+        CommonSimType.CHILD_DOG_SKELETON: CommonAge.CHILD,
+        CommonSimType.CHILD_DOG_PLANT_SIM: CommonAge.CHILD,
+
+        # Small Dog
+        # Elder
+        CommonSimType.ELDER_SMALL_DOG: CommonAge.ELDER,
+        CommonSimType.ELDER_SMALL_DOG_VAMPIRE: CommonAge.ELDER,
+        CommonSimType.ELDER_SMALL_DOG_GHOST: CommonAge.ELDER,
+        CommonSimType.ELDER_SMALL_DOG_ALIEN: CommonAge.ELDER,
+        CommonSimType.ELDER_SMALL_DOG_MERMAID: CommonAge.ELDER,
+        CommonSimType.ELDER_SMALL_DOG_WITCH: CommonAge.ELDER,
+        CommonSimType.ELDER_SMALL_DOG_ROBOT: CommonAge.ELDER,
+        CommonSimType.ELDER_SMALL_DOG_SKELETON: CommonAge.ELDER,
+        CommonSimType.ELDER_SMALL_DOG_PLANT_SIM: CommonAge.ELDER,
+        # Adult
+        CommonSimType.ADULT_SMALL_DOG: CommonAge.ADULT,
+        CommonSimType.ADULT_SMALL_DOG_VAMPIRE: CommonAge.ADULT,
+        CommonSimType.ADULT_SMALL_DOG_GHOST: CommonAge.ADULT,
+        CommonSimType.ADULT_SMALL_DOG_ALIEN: CommonAge.ADULT,
+        CommonSimType.ADULT_SMALL_DOG_MERMAID: CommonAge.ADULT,
+        CommonSimType.ADULT_SMALL_DOG_WITCH: CommonAge.ADULT,
+        CommonSimType.ADULT_SMALL_DOG_ROBOT: CommonAge.ADULT,
+        CommonSimType.ADULT_SMALL_DOG_SKELETON: CommonAge.ADULT,
+        CommonSimType.ADULT_SMALL_DOG_PLANT_SIM: CommonAge.ADULT,
+        # Child
+        CommonSimType.CHILD_SMALL_DOG: CommonAge.CHILD,
+        CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonAge.CHILD,
+        CommonSimType.CHILD_SMALL_DOG_GHOST: CommonAge.CHILD,
+        CommonSimType.CHILD_SMALL_DOG_ALIEN: CommonAge.CHILD,
+        CommonSimType.CHILD_SMALL_DOG_MERMAID: CommonAge.CHILD,
+        CommonSimType.CHILD_SMALL_DOG_WITCH: CommonAge.CHILD,
+        CommonSimType.CHILD_SMALL_DOG_ROBOT: CommonAge.CHILD,
+        CommonSimType.CHILD_SMALL_DOG_SKELETON: CommonAge.CHILD,
+        CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: CommonAge.CHILD,
+
+        # Large Dog
+        # Elder
+        CommonSimType.ELDER_LARGE_DOG: CommonAge.ELDER,
+        CommonSimType.ELDER_LARGE_DOG_VAMPIRE: CommonAge.ELDER,
+        CommonSimType.ELDER_LARGE_DOG_GHOST: CommonAge.ELDER,
+        CommonSimType.ELDER_LARGE_DOG_ALIEN: CommonAge.ELDER,
+        CommonSimType.ELDER_LARGE_DOG_MERMAID: CommonAge.ELDER,
+        CommonSimType.ELDER_LARGE_DOG_WITCH: CommonAge.ELDER,
+        CommonSimType.ELDER_LARGE_DOG_ROBOT: CommonAge.ELDER,
+        CommonSimType.ELDER_LARGE_DOG_SKELETON: CommonAge.ELDER,
+        CommonSimType.ELDER_LARGE_DOG_PLANT_SIM: CommonAge.ELDER,
+        # Adult
+        CommonSimType.ADULT_LARGE_DOG: CommonAge.ADULT,
+        CommonSimType.ADULT_LARGE_DOG_VAMPIRE: CommonAge.ADULT,
+        CommonSimType.ADULT_LARGE_DOG_GHOST: CommonAge.ADULT,
+        CommonSimType.ADULT_LARGE_DOG_ALIEN: CommonAge.ADULT,
+        CommonSimType.ADULT_LARGE_DOG_MERMAID: CommonAge.ADULT,
+        CommonSimType.ADULT_LARGE_DOG_WITCH: CommonAge.ADULT,
+        CommonSimType.ADULT_LARGE_DOG_ROBOT: CommonAge.ADULT,
+        CommonSimType.ADULT_LARGE_DOG_SKELETON: CommonAge.ADULT,
+        CommonSimType.ADULT_LARGE_DOG_PLANT_SIM: CommonAge.ADULT,
+        # Child
+        CommonSimType.CHILD_LARGE_DOG: CommonAge.CHILD,
+        CommonSimType.CHILD_LARGE_DOG_VAMPIRE: CommonAge.CHILD,
+        CommonSimType.CHILD_LARGE_DOG_GHOST: CommonAge.CHILD,
+        CommonSimType.CHILD_LARGE_DOG_ALIEN: CommonAge.CHILD,
+        CommonSimType.CHILD_LARGE_DOG_MERMAID: CommonAge.CHILD,
+        CommonSimType.CHILD_LARGE_DOG_WITCH: CommonAge.CHILD,
+        CommonSimType.CHILD_LARGE_DOG_ROBOT: CommonAge.CHILD,
+        CommonSimType.CHILD_LARGE_DOG_SKELETON: CommonAge.CHILD,
+        CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: CommonAge.CHILD,
+
+        # Cat
+        # Elder
+        CommonSimType.ELDER_CAT: CommonAge.ELDER,
+        CommonSimType.ELDER_CAT_VAMPIRE: CommonAge.ELDER,
+        CommonSimType.ELDER_CAT_GHOST: CommonAge.ELDER,
+        CommonSimType.ELDER_CAT_ALIEN: CommonAge.ELDER,
+        CommonSimType.ELDER_CAT_MERMAID: CommonAge.ELDER,
+        CommonSimType.ELDER_CAT_WITCH: CommonAge.ELDER,
+        CommonSimType.ELDER_CAT_ROBOT: CommonAge.ELDER,
+        CommonSimType.ELDER_CAT_SKELETON: CommonAge.ELDER,
+        CommonSimType.ELDER_CAT_PLANT_SIM: CommonAge.ELDER,
+        # Adult
+        CommonSimType.ADULT_CAT: CommonAge.ADULT,
+        CommonSimType.ADULT_CAT_VAMPIRE: CommonAge.ADULT,
+        CommonSimType.ADULT_CAT_GHOST: CommonAge.ADULT,
+        CommonSimType.ADULT_CAT_ALIEN: CommonAge.ADULT,
+        CommonSimType.ADULT_CAT_MERMAID: CommonAge.ADULT,
+        CommonSimType.ADULT_CAT_WITCH: CommonAge.ADULT,
+        CommonSimType.ADULT_CAT_ROBOT: CommonAge.ADULT,
+        CommonSimType.ADULT_CAT_SKELETON: CommonAge.ADULT,
+        CommonSimType.ADULT_CAT_PLANT_SIM: CommonAge.ADULT,
+        # Child
+        CommonSimType.CHILD_CAT: CommonAge.CHILD,
+        CommonSimType.CHILD_CAT_VAMPIRE: CommonAge.CHILD,
+        CommonSimType.CHILD_CAT_GHOST: CommonAge.CHILD,
+        CommonSimType.CHILD_CAT_ALIEN: CommonAge.CHILD,
+        CommonSimType.CHILD_CAT_MERMAID: CommonAge.CHILD,
+        CommonSimType.CHILD_CAT_WITCH: CommonAge.CHILD,
+        CommonSimType.CHILD_CAT_ROBOT: CommonAge.CHILD,
+        CommonSimType.CHILD_CAT_SKELETON: CommonAge.CHILD,
+        CommonSimType.CHILD_CAT_PLANT_SIM: CommonAge.CHILD,
+    }
+
+    _OCCULT_SIM_TYPE_TO_SPECIES_MAPPING: Dict[CommonSimType, CommonSpecies] = {
+        # Human
+        # Elder
+        CommonSimType.ELDER_HUMAN: CommonSpecies.HUMAN,
+        CommonSimType.ELDER_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
+        CommonSimType.ELDER_HUMAN_GHOST: CommonSpecies.HUMAN,
+        CommonSimType.ELDER_HUMAN_ALIEN: CommonSpecies.HUMAN,
+        CommonSimType.ELDER_HUMAN_MERMAID: CommonSpecies.HUMAN,
+        CommonSimType.ELDER_HUMAN_WITCH: CommonSpecies.HUMAN,
+        CommonSimType.ELDER_HUMAN_ROBOT: CommonSpecies.HUMAN,
+        CommonSimType.ELDER_HUMAN_SKELETON: CommonSpecies.HUMAN,
+        CommonSimType.ELDER_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+        # Adult
+        CommonSimType.ADULT_HUMAN: CommonSpecies.HUMAN,
+        CommonSimType.ADULT_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
+        CommonSimType.ADULT_HUMAN_GHOST: CommonSpecies.HUMAN,
+        CommonSimType.ADULT_HUMAN_ALIEN: CommonSpecies.HUMAN,
+        CommonSimType.ADULT_HUMAN_MERMAID: CommonSpecies.HUMAN,
+        CommonSimType.ADULT_HUMAN_WITCH: CommonSpecies.HUMAN,
+        CommonSimType.ADULT_HUMAN_ROBOT: CommonSpecies.HUMAN,
+        CommonSimType.ADULT_HUMAN_SKELETON: CommonSpecies.HUMAN,
+        CommonSimType.ADULT_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+        # Young Adult
+        CommonSimType.YOUNG_ADULT_HUMAN: CommonSpecies.HUMAN,
+        CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
+        CommonSimType.YOUNG_ADULT_HUMAN_GHOST: CommonSpecies.HUMAN,
+        CommonSimType.YOUNG_ADULT_HUMAN_ALIEN: CommonSpecies.HUMAN,
+        CommonSimType.YOUNG_ADULT_HUMAN_MERMAID: CommonSpecies.HUMAN,
+        CommonSimType.YOUNG_ADULT_HUMAN_WITCH: CommonSpecies.HUMAN,
+        CommonSimType.YOUNG_ADULT_HUMAN_ROBOT: CommonSpecies.HUMAN,
+        CommonSimType.YOUNG_ADULT_HUMAN_SKELETON: CommonSpecies.HUMAN,
+        CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+        # Teen
+        CommonSimType.TEEN_HUMAN: CommonSpecies.HUMAN,
+        CommonSimType.TEEN_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
+        CommonSimType.TEEN_HUMAN_GHOST: CommonSpecies.HUMAN,
+        CommonSimType.TEEN_HUMAN_ALIEN: CommonSpecies.HUMAN,
+        CommonSimType.TEEN_HUMAN_MERMAID: CommonSpecies.HUMAN,
+        CommonSimType.TEEN_HUMAN_WITCH: CommonSpecies.HUMAN,
+        CommonSimType.TEEN_HUMAN_ROBOT: CommonSpecies.HUMAN,
+        CommonSimType.TEEN_HUMAN_SKELETON: CommonSpecies.HUMAN,
+        CommonSimType.TEEN_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+        # Child
+        CommonSimType.CHILD_HUMAN: CommonSpecies.HUMAN,
+        CommonSimType.CHILD_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
+        CommonSimType.CHILD_HUMAN_GHOST: CommonSpecies.HUMAN,
+        CommonSimType.CHILD_HUMAN_ALIEN: CommonSpecies.HUMAN,
+        CommonSimType.CHILD_HUMAN_MERMAID: CommonSpecies.HUMAN,
+        CommonSimType.CHILD_HUMAN_WITCH: CommonSpecies.HUMAN,
+        CommonSimType.CHILD_HUMAN_ROBOT: CommonSpecies.HUMAN,
+        CommonSimType.CHILD_HUMAN_SKELETON: CommonSpecies.HUMAN,
+        CommonSimType.CHILD_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+        # Toddler
+        CommonSimType.TODDLER_HUMAN: CommonSpecies.HUMAN,
+        CommonSimType.TODDLER_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
+        CommonSimType.TODDLER_HUMAN_GHOST: CommonSpecies.HUMAN,
+        CommonSimType.TODDLER_HUMAN_ALIEN: CommonSpecies.HUMAN,
+        CommonSimType.TODDLER_HUMAN_MERMAID: CommonSpecies.HUMAN,
+        CommonSimType.TODDLER_HUMAN_WITCH: CommonSpecies.HUMAN,
+        CommonSimType.TODDLER_HUMAN_ROBOT: CommonSpecies.HUMAN,
+        CommonSimType.TODDLER_HUMAN_SKELETON: CommonSpecies.HUMAN,
+        CommonSimType.TODDLER_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+        # Baby
+        CommonSimType.BABY_HUMAN: CommonSpecies.HUMAN,
+        CommonSimType.BABY_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
+        CommonSimType.BABY_HUMAN_GHOST: CommonSpecies.HUMAN,
+        CommonSimType.BABY_HUMAN_ALIEN: CommonSpecies.HUMAN,
+        CommonSimType.BABY_HUMAN_MERMAID: CommonSpecies.HUMAN,
+        CommonSimType.BABY_HUMAN_WITCH: CommonSpecies.HUMAN,
+        CommonSimType.BABY_HUMAN_ROBOT: CommonSpecies.HUMAN,
+        CommonSimType.BABY_HUMAN_SKELETON: CommonSpecies.HUMAN,
+        CommonSimType.BABY_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+
+        # Dog
+        # Small Dog
+        # Elder
+        CommonSimType.ELDER_SMALL_DOG: CommonSpecies.SMALL_DOG,
+        CommonSimType.ELDER_SMALL_DOG_VAMPIRE: CommonSpecies.SMALL_DOG,
+        CommonSimType.ELDER_SMALL_DOG_GHOST: CommonSpecies.SMALL_DOG,
+        CommonSimType.ELDER_SMALL_DOG_ALIEN: CommonSpecies.SMALL_DOG,
+        CommonSimType.ELDER_SMALL_DOG_MERMAID: CommonSpecies.SMALL_DOG,
+        CommonSimType.ELDER_SMALL_DOG_WITCH: CommonSpecies.SMALL_DOG,
+        CommonSimType.ELDER_SMALL_DOG_ROBOT: CommonSpecies.SMALL_DOG,
+        CommonSimType.ELDER_SMALL_DOG_SKELETON: CommonSpecies.SMALL_DOG,
+        CommonSimType.ELDER_SMALL_DOG_PLANT_SIM: CommonSpecies.SMALL_DOG,
+        # Adult
+        CommonSimType.ADULT_SMALL_DOG: CommonSpecies.SMALL_DOG,
+        CommonSimType.ADULT_SMALL_DOG_VAMPIRE: CommonSpecies.SMALL_DOG,
+        CommonSimType.ADULT_SMALL_DOG_GHOST: CommonSpecies.SMALL_DOG,
+        CommonSimType.ADULT_SMALL_DOG_ALIEN: CommonSpecies.SMALL_DOG,
+        CommonSimType.ADULT_SMALL_DOG_MERMAID: CommonSpecies.SMALL_DOG,
+        CommonSimType.ADULT_SMALL_DOG_WITCH: CommonSpecies.SMALL_DOG,
+        CommonSimType.ADULT_SMALL_DOG_ROBOT: CommonSpecies.SMALL_DOG,
+        CommonSimType.ADULT_SMALL_DOG_SKELETON: CommonSpecies.SMALL_DOG,
+        CommonSimType.ADULT_SMALL_DOG_PLANT_SIM: CommonSpecies.SMALL_DOG,
+        # Child
+        CommonSimType.CHILD_SMALL_DOG: CommonSpecies.SMALL_DOG,
+        CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonSpecies.SMALL_DOG,
+        CommonSimType.CHILD_SMALL_DOG_GHOST: CommonSpecies.SMALL_DOG,
+        CommonSimType.CHILD_SMALL_DOG_ALIEN: CommonSpecies.SMALL_DOG,
+        CommonSimType.CHILD_SMALL_DOG_MERMAID: CommonSpecies.SMALL_DOG,
+        CommonSimType.CHILD_SMALL_DOG_WITCH: CommonSpecies.SMALL_DOG,
+        CommonSimType.CHILD_SMALL_DOG_ROBOT: CommonSpecies.SMALL_DOG,
+        CommonSimType.CHILD_SMALL_DOG_SKELETON: CommonSpecies.SMALL_DOG,
+        CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: CommonSpecies.SMALL_DOG,
+
+        # Large Dog
+        # Elder
+        CommonSimType.ELDER_LARGE_DOG: CommonSpecies.LARGE_DOG,
+        CommonSimType.ELDER_LARGE_DOG_VAMPIRE: CommonSpecies.LARGE_DOG,
+        CommonSimType.ELDER_LARGE_DOG_GHOST: CommonSpecies.LARGE_DOG,
+        CommonSimType.ELDER_LARGE_DOG_ALIEN: CommonSpecies.LARGE_DOG,
+        CommonSimType.ELDER_LARGE_DOG_MERMAID: CommonSpecies.LARGE_DOG,
+        CommonSimType.ELDER_LARGE_DOG_WITCH: CommonSpecies.LARGE_DOG,
+        CommonSimType.ELDER_LARGE_DOG_ROBOT: CommonSpecies.LARGE_DOG,
+        CommonSimType.ELDER_LARGE_DOG_SKELETON: CommonSpecies.LARGE_DOG,
+        CommonSimType.ELDER_LARGE_DOG_PLANT_SIM: CommonSpecies.LARGE_DOG,
+        # Adult
+        CommonSimType.ADULT_LARGE_DOG: CommonSpecies.LARGE_DOG,
+        CommonSimType.ADULT_LARGE_DOG_VAMPIRE: CommonSpecies.LARGE_DOG,
+        CommonSimType.ADULT_LARGE_DOG_GHOST: CommonSpecies.LARGE_DOG,
+        CommonSimType.ADULT_LARGE_DOG_ALIEN: CommonSpecies.LARGE_DOG,
+        CommonSimType.ADULT_LARGE_DOG_MERMAID: CommonSpecies.LARGE_DOG,
+        CommonSimType.ADULT_LARGE_DOG_WITCH: CommonSpecies.LARGE_DOG,
+        CommonSimType.ADULT_LARGE_DOG_ROBOT: CommonSpecies.LARGE_DOG,
+        CommonSimType.ADULT_LARGE_DOG_SKELETON: CommonSpecies.LARGE_DOG,
+        CommonSimType.ADULT_LARGE_DOG_PLANT_SIM: CommonSpecies.LARGE_DOG,
+        # Child
+        CommonSimType.CHILD_LARGE_DOG: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_LARGE_DOG_VAMPIRE: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_LARGE_DOG_GHOST: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_LARGE_DOG_ALIEN: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_LARGE_DOG_MERMAID: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_LARGE_DOG_WITCH: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_LARGE_DOG_ROBOT: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_LARGE_DOG_SKELETON: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: CommonSpecies.LARGE_DOG,
+
+        # Cat
+        # Elder
+        CommonSimType.ELDER_CAT: CommonSpecies.CAT,
+        CommonSimType.ELDER_CAT_VAMPIRE: CommonSpecies.CAT,
+        CommonSimType.ELDER_CAT_GHOST: CommonSpecies.CAT,
+        CommonSimType.ELDER_CAT_ALIEN: CommonSpecies.CAT,
+        CommonSimType.ELDER_CAT_MERMAID: CommonSpecies.CAT,
+        CommonSimType.ELDER_CAT_WITCH: CommonSpecies.CAT,
+        CommonSimType.ELDER_CAT_ROBOT: CommonSpecies.CAT,
+        CommonSimType.ELDER_CAT_SKELETON: CommonSpecies.CAT,
+        CommonSimType.ELDER_CAT_PLANT_SIM: CommonSpecies.CAT,
+        # Adult
+        CommonSimType.ADULT_CAT: CommonSpecies.CAT,
+        CommonSimType.ADULT_CAT_VAMPIRE: CommonSpecies.CAT,
+        CommonSimType.ADULT_CAT_GHOST: CommonSpecies.CAT,
+        CommonSimType.ADULT_CAT_ALIEN: CommonSpecies.CAT,
+        CommonSimType.ADULT_CAT_MERMAID: CommonSpecies.CAT,
+        CommonSimType.ADULT_CAT_WITCH: CommonSpecies.CAT,
+        CommonSimType.ADULT_CAT_ROBOT: CommonSpecies.CAT,
+        CommonSimType.ADULT_CAT_SKELETON: CommonSpecies.CAT,
+        CommonSimType.ADULT_CAT_PLANT_SIM: CommonSpecies.CAT,
+        # Child
+        CommonSimType.CHILD_CAT: CommonSpecies.CAT,
+        CommonSimType.CHILD_CAT_VAMPIRE: CommonSpecies.CAT,
+        CommonSimType.CHILD_CAT_GHOST: CommonSpecies.CAT,
+        CommonSimType.CHILD_CAT_ALIEN: CommonSpecies.CAT,
+        CommonSimType.CHILD_CAT_MERMAID: CommonSpecies.CAT,
+        CommonSimType.CHILD_CAT_WITCH: CommonSpecies.CAT,
+        CommonSimType.CHILD_CAT_ROBOT: CommonSpecies.CAT,
+        CommonSimType.CHILD_CAT_SKELETON: CommonSpecies.CAT,
+        CommonSimType.CHILD_CAT_PLANT_SIM: CommonSpecies.CAT,
+    }
+
     @staticmethod
     def is_non_player_sim(sim_info: SimInfo) -> bool:
         """is_non_player_sim(sim_info)
@@ -858,8 +1393,8 @@ class CommonSimTypeUtils:
         return CommonSimTypeUtils.convert_to_non_occult_variant(sim_type) != sim_type
 
     @staticmethod
-    def determine_sim_type(sim_info: SimInfo, combine_teen_young_adult_and_elder_age: bool=True, combine_child_dog_types: bool=True) -> CommonSimType:
-        """determine_sim_type(sim_info, combine_teen_young_adult_and_elder_age=True, combine_child_dog_types=True)
+    def determine_sim_type(sim_info: SimInfo, combine_teen_young_adult_and_elder_age: bool=True, combine_child_dog_types: bool=True, use_current_occult_type: bool=False) -> CommonSimType:
+        """determine_sim_type(sim_info, combine_teen_young_adult_and_elder_age=True, combine_child_dog_types=True, use_current_occult_type=False)
 
         Determine the type of Sim a Sim is based on their Age, Species, and Occult Type.
 
@@ -870,6 +1405,7 @@ class CommonSimTypeUtils:
         :type combine_teen_young_adult_and_elder_age: bool, optional
         :param combine_child_dog_types: If set to True, the Child Dog Sim Types will be combined into a single Sim Type, i.e. CHILD_DOG. If set to False, the Child Dog Sim Types will be returned as their more specific values. i.e. CHILD_LARGE_DOG, CHILD_SMALL_DOG, etc. Default is True.
         :type combine_child_dog_types: bool, optional
+        :param use_current_occult_type: If set to True, the Sims current occult type will be used, for example an Adult Human Mermaid with no tail would return ADULT_HUMAN instead of ADULT_HUMAN_MERMAID. If set to False, the Sims occult type will be used (whether current or not), for example an Adult Human Mermaid wearing or not wearing their tail would return ADULT_HUMAN_MERMAID.
         :return: The type of Sim the Sim is or CommonSimType.NONE if no type was found for the Sim.
         :rtype: CommonSimType
         """
@@ -877,7 +1413,10 @@ class CommonSimTypeUtils:
         age = CommonAge.get_age(sim_info)
         if combine_teen_young_adult_and_elder_age and age in (CommonAge.TEEN, CommonAge.YOUNGADULT, CommonAge.ADULT, CommonAge.ELDER):
             age = CommonAge.ADULT
-        occult_type = CommonOccultType.determine_occult_type(sim_info)
+        if use_current_occult_type:
+            occult_type = CommonOccultType.determine_current_occult_type(sim_info)
+        else:
+            occult_type = CommonOccultType.determine_occult_type(sim_info)
         sim_type = CommonSimTypeUtils._determine_sim_type(species, age, occult_type)
         if combine_child_dog_types and sim_type in CommonSimTypeUtils._COMBINE_SIM_TYPE_MAPPING:
             return CommonSimTypeUtils._COMBINE_SIM_TYPE_MAPPING[sim_type]
@@ -890,6 +1429,45 @@ class CommonSimTypeUtils:
                 or occult_type not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species][age]:
             return CommonSimType.NONE
         return CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species][age][occult_type]
+
+    @staticmethod
+    def convert_sim_type_to_occult_type(sim_type: CommonSimType) -> CommonOccultType:
+        """convert_sim_type_to_occult_type(sim_type)
+
+        Break down a Sim Type and return the resulting Occult Type associated with it.
+
+        :param sim_type: A Sim Type.
+        :type sim_type: CommonSimType
+        :return: The occult type associated with the Sim Type.
+        :rtype: CommonOccultType
+        """
+        return CommonSimTypeUtils._OCCULT_SIM_TYPE_TO_OCCULT_TYPE_MAPPING.get(sim_type, CommonOccultType.NONE)
+
+    @staticmethod
+    def convert_sim_type_to_age(sim_type: CommonSimType) -> CommonAge:
+        """convert_sim_type_to_age(sim_type)
+
+        Break down a Sim Type and return the resulting Age associated with it.
+
+        :param sim_type: A Sim Type.
+        :type sim_type: CommonSimType
+        :return: The age associated with the Sim Type.
+        :rtype: CommonAge
+        """
+        return CommonSimTypeUtils._OCCULT_SIM_TYPE_TO_AGE_MAPPING.get(sim_type, CommonAge.INVALID)
+
+    @staticmethod
+    def convert_sim_type_to_species(sim_type: CommonSimType) -> CommonSpecies:
+        """convert_sim_type_to_species(sim_type)
+
+        Break down a Sim Type and return the resulting Species associated with it.
+
+        :param sim_type: A Sim Type.
+        :type sim_type: CommonSimType
+        :return: The species associated with the Sim Type.
+        :rtype: CommonSpecies
+        """
+        return CommonSimTypeUtils._OCCULT_SIM_TYPE_TO_SPECIES_MAPPING.get(sim_type, CommonSpecies.INVALID)
 
     @staticmethod
     def are_same_age_and_species(sim_type_one: CommonSimType, sim_type_two: CommonSimType) -> bool:
