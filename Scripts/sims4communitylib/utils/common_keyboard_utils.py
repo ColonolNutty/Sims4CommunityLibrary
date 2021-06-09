@@ -10,12 +10,16 @@ import os
 from sims4communitylib.enums.common_key import CommonKey
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
+log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'common_keyboard_utils')
 # noinspection PyBroadException
 try:
     if os.name == 'nt':
         import _s4cl_ctypes_module
         _user32 = _s4cl_ctypes_module.WinDLL('user32', use_last_error=True)
+        if _user32 is not None:
+            _user32.GetKeyState.restype = _s4cl_ctypes_module.c_uint16
 
         def _can_detect_key_state_for_current_os() -> bool:
             return _user32 is not None
@@ -23,14 +27,24 @@ try:
         def _is_holding_key_down(key: CommonKey) -> bool:
             key_code = _translate_to_key_code(key)
             if key_code == -1:
+                log.format_with_message('No Key Code found to check for Pressed (Windows)', key=key)
                 return False
-            return bool(_user32.GetKeyState(key_code) & 128)
+            key_state = _user32.GetKeyState(key_code)
+            key_state_has_value = key_state & 0x8000
+            result = bool(key_state_has_value)
+            log.format_with_message('Is Key Pressed (Windows)', key=key, key_code=key_code, key_state=key_state, key_state_has_value=key_state_has_value, result=result)
+            return result
 
         def _is_key_toggled_on(key: CommonKey):
             key_code = _translate_to_key_code(key)
             if key_code == -1:
+                log.format_with_message('No Key Code found to check for Toggled On (Windows)', key=key)
                 return False
-            return bool(_user32.GetKeyState(key_code) & 1)
+            key_state = _user32.GetKeyState(key_code)
+            key_state_has_value = key_state & 0x0001
+            result = bool(key_state_has_value)
+            log.format_with_message('Is Key Toggled On (Windows)', key=key, key_code=key_code, key_state=key_state, key_state_has_value=key_state_has_value, result=result)
+            return result
 
         def _translate_to_key_code(key: CommonKey) -> int:
             if isinstance(key, int):
@@ -65,8 +79,11 @@ try:
         def _is_holding_key_down(key: CommonKey) -> bool:
             key_code = _translate_to_key_code(key)
             if key_code == -1:
+                log.format_with_message('No Key Code found to check for Pressed or Toggled On (Mac)', key=key)
                 return False
-            return bool(_Quartz.CGEventSourceKeyState(_Quartz.kCGEventSourceStateHIDSystemState, key_code))
+            result = bool(_Quartz.CGEventSourceKeyState(_Quartz.kCGEventSourceStateHIDSystemState, key_code))
+            log.format_with_message('Is Key Pressed or Toggled On (Mac)', key=key, key_code=key_code, result=result)
+            return result
 
         def _is_key_toggled_on(key: CommonKey):
             return _is_holding_key_down(key)
