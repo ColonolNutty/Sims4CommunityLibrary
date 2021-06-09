@@ -36,7 +36,9 @@ class CommonOccultType(CommonInt):
         :rtype: CommonOccultType
         """
         from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
-        if CommonOccultUtils.is_alien(sim_info):
+        if CommonOccultUtils.is_robot(sim_info):
+            return CommonOccultType.ROBOT
+        elif CommonOccultUtils.is_alien(sim_info):
             return CommonOccultType.ALIEN
         elif CommonOccultUtils.is_ghost(sim_info):
             return CommonOccultType.GHOST
@@ -44,8 +46,6 @@ class CommonOccultType(CommonInt):
             return CommonOccultType.MERMAID
         elif CommonOccultUtils.is_plant_sim(sim_info):
             return CommonOccultType.PLANT_SIM
-        elif CommonOccultUtils.is_robot(sim_info):
-            return CommonOccultType.ROBOT
         elif CommonOccultUtils.is_skeleton(sim_info):
             return CommonOccultType.SKELETON
         elif CommonOccultUtils.is_vampire(sim_info):
@@ -69,6 +69,8 @@ class CommonOccultType(CommonInt):
         from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
         if CommonOccultUtils.is_currently_a_mermaid(sim_info) or CommonOccultUtils.is_mermaid_in_mermaid_form(sim_info):
             return CommonOccultType.MERMAID
+        elif CommonOccultUtils.is_robot(sim_info):
+            return CommonOccultType.ROBOT
         elif CommonOccultUtils.is_currently_a_vampire(sim_info):
             return CommonOccultType.VAMPIRE
         elif CommonOccultUtils.is_currently_a_witch(sim_info):
@@ -79,8 +81,6 @@ class CommonOccultType(CommonInt):
             return CommonOccultType.PLANT_SIM
         elif CommonOccultUtils.is_ghost(sim_info):
             return CommonOccultType.GHOST
-        elif CommonOccultUtils.is_robot(sim_info):
-            return CommonOccultType.ROBOT
         elif CommonOccultUtils.is_skeleton(sim_info):
             return CommonOccultType.SKELETON
-        return CommonOccultType.NONE
+        return CommonOccultType.NON_OCCULT

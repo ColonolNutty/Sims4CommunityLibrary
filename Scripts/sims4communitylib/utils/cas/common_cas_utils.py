@@ -23,24 +23,31 @@ if not ON_RTD:
     from sims.sim_info import SimInfo
     from sims4.commands import Command, CheatOutput, CommandType
 else:
+    # noinspection PyMissingOrEmptyDocstring
     class OptionalTargetParam:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class OutfitCategory:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class BodyType:
         NONE = 0
 
+    # noinspection PyMissingOrEmptyDocstring
     class SimInfo:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class Command:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class CheatOutput:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class CommandType:
         pass
 
@@ -253,8 +260,8 @@ if not ON_RTD:
             output('No body_type specified.')
             return
         if body_type_str == 'any':
-            body_type_str = 'none'
-        if body_type_str.isnumeric():
+            body_type = BodyType.NONE
+        elif body_type_str.isnumeric():
             try:
                 body_type = int(body_type_str)
             except ValueError:
@@ -263,7 +270,7 @@ if not ON_RTD:
         else:
             body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
             if body_type == BodyType.NONE:
-                output('Specified body type is not a body type {}'.format(body_type_str))
+                output('Specified body type is not a body type, it was "{}"'.format(body_type_str))
                 return
 
         output('Attempting to attach CAS Part \'{}\' to Sim \'{}\''.format(cas_part_id, CommonSimNameUtils.get_full_name(sim_info)))
@@ -342,3 +349,15 @@ if not ON_RTD:
             return
         cas_part_id = CommonCASUtils.get_cas_part_id_at_body_type(sim_info, body_type)
         output('Found cas part id at body type {}: {}'.format(body_type, cas_part_id))
+
+    @Command('s4clib.is_cas_part_available', command_type=CommandType.Live)
+    def _s4clib_is_cas_part_available(part_id: int=None, _connection: int=None):
+        output = CheatOutput(_connection)
+        if part_id is None:
+            output('No CAS Part specified!')
+            return
+        output('Checking if CAS Part {} is available.'.format(part_id))
+        if CommonCASUtils.is_cas_part_loaded(part_id):
+            output('CAS Part is available.')
+        else:
+            output('CAS Part is not available.')
