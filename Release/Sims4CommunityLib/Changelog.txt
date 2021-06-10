@@ -21,8 +21,10 @@ v1.69:
 - Fixed an error when registering interactions where Interactions meant for the relationship panel are also being registered to the Phone.
 - Added a dialog for prompting for text to be entered by the player.
 - Added some functions to CommonTimeUtils
-- mod_data json files can now be toggled to save with or without a save slot id, if the save slot id is causing persistence problems, toggle it off in the configuration file.
-
+- mod_data json files can now be toggled to save with or without a save slot id, if the save slot id is causing persistence problems (Problems where saved Mod data is not loading/saving when it should), toggle it off in the configuration file.
+- Changed how the configuration file works.
+  - If you have a configuration file already in your Mods folder, S4CL will add any new properties to it, without modifying old properties.
+  - If you do not have a configuration file in your Mods folder, S4CL will create one with default properties.
 
 v1.68:
 - Fixed an error that could occur when running the game in Chinese.
