@@ -28,9 +28,9 @@ class S4CLConfiguration(HasLog, CommonService):
         _DEFAULT_CONFIG_DATA = {
             'enable_vanilla_logging': False,
             'enable_extra_shift_click_menus': True,
-            'persist_mod_data_per_save_slot': False,
+            'persist_mod_data_per_save_slot': True,
             'enable_logs': {
-                'example_log_that_is_enabled': [CommonMessageType.DEBUG.name, CommonMessageType.WARN.name]
+                'example_log_that_is_enabled': ['DEBUG', 'WARN']
             }
         }
     else:
@@ -50,9 +50,11 @@ class S4CLConfiguration(HasLog, CommonService):
             full_file_path = os.path.join(file_path, S4CLConfiguration._CONFIGURATION_FILE_NAME)
             try:
                 if os.path.exists(full_file_path):
-                    self._config_data = CommonJSONIOUtils.load_from_file(full_file_path) or dict()
-                    if 'enable_logs_result' in self._config_data:
-                        del self._config_data['enable_logs_result']
+                    existing_config_data = CommonJSONIOUtils.load_from_file(full_file_path) or dict()
+                    if 'enable_logs_result' in existing_config_data:
+                        del existing_config_data['enable_logs_result']
+                    self._config_data.update(existing_config_data)
+                    CommonJSONIOUtils.write_to_file(full_file_path, self._config_data)
                 else:
                     CommonJSONIOUtils.write_to_file(full_file_path, self._config_data)
             except Exception as ex:
