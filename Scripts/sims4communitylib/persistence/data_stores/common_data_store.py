@@ -102,7 +102,7 @@ class CommonDataStore:
         :rtype: Any
         """
         if key not in self._storage:
-            default_val = self.get_default_value_by_key(key, encode=encode)
+            default_val = self.get_default_value_by_key(key)
             if default_val is not None:
                 if encode is not None:
                     self._storage[key] = encode(default_val)
@@ -115,24 +115,19 @@ class CommonDataStore:
             return self._storage[key]
         return data
 
-    def get_default_value_by_key(self, key: str, encode: Callable[[Any], Any]=None) -> Any:
-        """get_default_value_by_key(key, encode=None)
+    def get_default_value_by_key(self, key: str) -> Any:
+        """get_default_value_by_key(key)
 
         Get the default value
 
         :param key: An identifier.
         :type key: str
-        :param encode: If specified, the default data will be encoded using this function and the result will be the new data stored. Default is None.
-        :type encode: Callable[[Any], Any], optional
         :return: The default value associated with the specified key or None if no default value has been provided for the specified key.
         :rtype: Any
         """
         if key not in self._default_data:
             return None
-        default_val = self._default_data[key]
-        if encode is not None:
-            return encode(default_val)
-        return default_val
+        return self._default_data[key]
 
     def remove_data_by_key(self, key: str) -> bool:
         """remove_data_by_key(key)

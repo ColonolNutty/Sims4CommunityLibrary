@@ -26,5 +26,5 @@ class CommonGameObjectDataStore(CommonDataStore):
         return dict()
 
     # noinspection PyMissingOrEmptyDocstring
-    def get_default_value_by_key(self, key: str, encode: Callable[[Any], Any]=None) -> Any:
+    def get_default_value_by_key(self, key: str) -> Any:
         return dict()
