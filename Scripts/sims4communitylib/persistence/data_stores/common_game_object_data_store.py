@@ -5,8 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Dict, Any
-
+from typing import Dict, Any, Callable
 from sims4communitylib.persistence.data_stores.common_data_store import CommonDataStore
 
 
@@ -27,5 +26,5 @@ class CommonGameObjectDataStore(CommonDataStore):
         return dict()
 
     # noinspection PyMissingOrEmptyDocstring
-    def get_default_value_by_key(self, key: str) -> Any:
+    def get_default_value_by_key(self, key: str, encode: Callable[[Any], Any]=None) -> Any:
         return dict()

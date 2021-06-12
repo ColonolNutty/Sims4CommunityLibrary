@@ -99,10 +99,11 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         key = key or str(sys._getframe(1).f_code.co_name)
         if key not in self._data:
             self.log.format_with_message('Key not found in data.', key=key, data=self._data)
-            if encode is not None:
-                self._data[key] = encode(default)
-            else:
-                self._data[key] = default
+            if default is not None:
+                if encode is not None:
+                    self._data[key] = encode(default)
+                else:
+                    self._data[key] = default
             return default
         data = self._data.get(key)
         if decode is not None and not isinstance(data, CommonSerializable):

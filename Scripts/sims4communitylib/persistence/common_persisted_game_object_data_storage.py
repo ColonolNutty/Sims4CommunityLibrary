@@ -137,10 +137,10 @@ class CommonPersistedGameObjectDataStorage(CommonGameObjectDataStorage):
             if self._persist_empty_values:
                 data_to_save[data_property_name] = data.serialize() if isinstance(data, CommonSerializable) else data
             else:
-                if data is None or (data != 0 and not data):
+                if data is None or (data != 0 and not isinstance(data, bool) and not data):
                     continue
                 serialized_data = data.serialize() if isinstance(data, CommonSerializable) else data
-                if data is None or (serialized_data != 0 and not serialized_data):
+                if data is None or (serialized_data != 0 and not isinstance(data, bool) and not serialized_data):
                     continue
                 data_to_save[data_property_name] = serialized_data
         data_to_save = self.customize_data_pre_save(data_to_save)

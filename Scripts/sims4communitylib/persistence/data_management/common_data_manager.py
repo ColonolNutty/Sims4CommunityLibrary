@@ -106,7 +106,7 @@ class CommonDataManager(HasLog):
 
         default_data_store.update_data(self._data_store_data[name])
         self.log.format_with_message('Created data store', name=default_data_store.get_identifier())
-        self._data_store_data[name] = default_data_store._storage
+        self._data_store_data[name] = default_data_store.get_store_data_for_persistence()
         self._data_stores[name] = default_data_store
         return self._data_stores[name]
 
@@ -147,7 +147,7 @@ class CommonDataManager(HasLog):
             # Update global data with data from the data stores.
             for (name, data_store) in self._data_stores.items():
                 data_store: CommonDataStore = data_store
-                self._data_store_data[name] = data_store._storage
+                self._data_store_data[name] = data_store.get_store_data_for_persistence()
             return self._save()
         except Exception as ex:
             self.log.error('Error occurred while saving data \'{}\'.'.format(self.__repr__()), exception=ex)
