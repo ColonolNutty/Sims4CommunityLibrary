@@ -8,7 +8,7 @@ Copyright (c) COLONOLNUTTY
 import services
 from io import BytesIO
 from typing import ItemsView, Any, Union, Tuple, Type
-from sims4.resources import ResourceLoader, get_resource_key, Types
+from sims4.resources import ResourceLoader, Types
 from sims4.tuning.instance_manager import InstanceManager
 from sims4.tuning.merged_tuning_manager import get_manager
 from sims4.tuning.serialization import ETreeTuningLoader
@@ -95,8 +95,8 @@ class CommonResourceUtils:
         return services.get_instance_manager(instance_manager_type)
 
     @staticmethod
-    def get_resource_key(resource_type: Types, instance_id: int) -> CommonResourceKey:
-        """get_resource_key(resource_type, instance_id)
+    def get_resource_key(resource_type: Types, resource_key: Union[int, str]) -> CommonResourceKey:
+        """get_resource_key(resource_type, resource_key)
 
         Retrieve the resource key of a resource in the format: 00000000(Type):00000000(Group):00000000000000000(Instance Guid)
 
@@ -113,16 +113,26 @@ class CommonResourceUtils:
         .. code-block:: python
 
             # This will retrieve the key for the image with identifier 1234
-            icon_key = CommonResourceUtils.get_resource_key(Types.PNG, 1234)
+            icon_resource_key = CommonResourceUtils.get_resource_key(Types.PNG, 1234)
 
         :param resource_type: The type of resource being loaded.
         :type resource_type: Types
-        :param instance_id: The decimal identifier of the resource.
-        :type instance_id: int
+        :param resource_key: The decimal identifier or string resource key of the resource.
+        :type resource_key: Union[int, str]
         :return: The resource key of an instance or None if no instance was found.
         :rtype: CommonResourceKey
         """
-        return get_resource_key(instance_id, resource_type)
+        from sims4.resources import get_resource_key, ResourceKeyWrapper
+        key = get_resource_key(resource_key, resource_type)
+        if isinstance(key, str) and ':' in key:
+            # noinspection PyBroadException
+            try:
+                key = CommonResourceKey.from_resource_key(ResourceKeyWrapper(key))
+                return key
+            except:
+                return key
+        result = CommonResourceKey.from_resource_key(key)
+        return result
 
     @staticmethod
     def load_instances_with_any_tags(resource_type: Types, tags: Tuple[str]) -> Tuple[Any]:

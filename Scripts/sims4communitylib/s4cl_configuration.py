@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-from typing import Tuple, Dict, List
+from typing import Tuple, Dict, List, Any
 
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.logging.has_log import HasLog
@@ -44,7 +44,7 @@ class S4CLConfiguration(HasLog, CommonService):
     def __init__(self) -> None:
         self._config_data = dict()
         super().__init__()
-        self._config_data = S4CLConfiguration._DEFAULT_CONFIG_DATA.copy()
+        self._config_data: Dict[str, Any] = S4CLConfiguration._DEFAULT_CONFIG_DATA.copy()
         try:
             file_path = os.path.dirname(os.path.dirname(os.path.dirname(self.mod_identity.file_path.rstrip('/').rstrip('\\'))))
             full_file_path = os.path.join(file_path, S4CLConfiguration._CONFIGURATION_FILE_NAME)

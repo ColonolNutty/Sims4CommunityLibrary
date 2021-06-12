@@ -33,32 +33,42 @@ if not ON_RTD:
     from world.lot import Lot
     from sims.sim_info import SimInfo
 else:
+    # noinspection PyMissingOrEmptyDocstring
     class AutonomyComponent:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class EnqueueResult:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class TestResult:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class RoutingContext:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class PickType:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class FGLSearchFlagsDefault:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class FGLSearchFlag:
         STAY_IN_CURRENT_BLOCK = 0
 
+    # noinspection PyMissingOrEmptyDocstring
     class Lot:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class SimInfo:
         pass
+
 
 class CommonSimLocationUtils:
     """Utilities for manipulating the locations of Sims.
