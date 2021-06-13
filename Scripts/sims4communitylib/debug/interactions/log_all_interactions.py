@@ -6,8 +6,9 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from pprint import pformat
-from typing import Any, List
+from typing import Any, List, Tuple
 from event_testing.results import TestResult
+from interactions import ParticipantType
 from interactions.base.interaction import Interaction
 from interactions.context import InteractionContext
 from objects.game_object import GameObject
@@ -18,6 +19,7 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
 from sims4communitylib.utils.common_log_utils import CommonLogUtils
+from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.objects.common_object_interaction_utils import CommonObjectInteractionUtils
 from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
 from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
@@ -39,21 +41,43 @@ class S4CLDebugLogAllInteractionsInteraction(CommonImmediateSuperInteraction):
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
-    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
-        if interaction_target is None:
+    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, picked_item_ids: Tuple[int]=(), **kwargs) -> TestResult:
+        if interaction_target is None and not picked_item_ids:
             cls.get_log().debug('Failed, No Target was found.')
             return TestResult.NONE
-        cls.get_log().debug('Success, can show Log All Interactions interaction.')
+        cls.get_log().format_with_message(
+            'Success, can show Log All Interactions interaction.',
+            interaction_sim=interaction_sim,
+            interaction_target=interaction_target,
+            picked_item_ids=picked_item_ids
+        )
         return TestResult.TRUE
 
     # noinspection PyMissingOrEmptyDocstring
     def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
         self.log.enable()
+        # noinspection PyUnresolvedReferences
+        picked_item_id = self.get_participant(ParticipantType.PickedItemId)
+        self.log.format_with_message('Got picked item ids', picked_item_id=picked_item_id)
+        if picked_item_id is not None:
+            new_target = CommonSimUtils.get_sim_info(picked_item_id)
+            if new_target is None:
+                self.log.format_with_message('No Sim with the identifier found.', picked_item_id=picked_item_id)
+                new_target = CommonObjectUtils.get_game_object(picked_item_id)
+                if new_target is None:
+                    self.log.format_with_message('No object with the identifier found.', picked_item_id=picked_item_id)
+                    return False
+                else:
+                    self.log.format_with_message('Found object target using picked item id.', new_target=new_target)
+                    interaction_target = new_target
+            else:
+                self.log.format_with_message('Found Sim target using picked item id.', new_target=new_target)
+                interaction_target = new_target
         object_id = CommonObjectUtils.get_object_id(interaction_target) if interaction_target is not None else -1
         definition_id = -1
-        if isinstance(interaction_target, Sim):
+        if CommonTypeUtils.is_sim_or_sim_info(interaction_target):
             object_id = CommonSimUtils.get_sim_id(interaction_target)
-        elif isinstance(interaction_target, GameObject):
+        elif CommonTypeUtils.is_game_object(interaction_target):
             definition = CommonObjectUtils.get_game_object_definition(interaction_target)
             if definition is not None:
                 definition_id = definition.id

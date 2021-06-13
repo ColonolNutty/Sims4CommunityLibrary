@@ -124,23 +124,31 @@ def _common_ensure_shift_held_is_true_when_it_should_be(original, self: Interact
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Sim, Sim.potential_relation_panel_interactions.__name__)
 def _common_ensure_proper_interactions_appear_in_relationship_panel(original, self: Sim, context: InteractionContext, **kwargs):
-    # noinspection PyBroadException
-    try:
-        for aop in original(self, context, **kwargs):
-            if not self._can_show_affordance(context.shift_held, aop.affordance):
-                continue
-            yield aop
-    except:
+    from sims4communitylib.s4cl_configuration import S4CLConfiguration
+    if not S4CLConfiguration().enable_extra_shift_click_menus:
         yield from original(self, context, **kwargs)
+    else:
+        # noinspection PyBroadException
+        try:
+            for aop in original(self, context, **kwargs):
+                if not self._can_show_affordance(context.shift_held, aop.affordance):
+                    continue
+                yield aop
+        except:
+            yield from original(self, context, **kwargs)
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Sim, Sim.potential_phone_interactions.__name__)
 def _common_ensure_proper_interactions_appear_in_phone_panel(original, self: Sim, context: InteractionContext, **kwargs):
-    # noinspection PyBroadException
-    try:
-        for aop in original(self, context, **kwargs):
-            if not self._can_show_affordance(context.shift_held, aop.affordance):
-                continue
-            yield aop
-    except:
+    from sims4communitylib.s4cl_configuration import S4CLConfiguration
+    if not S4CLConfiguration().enable_extra_shift_click_menus:
         yield from original(self, context, **kwargs)
+    else:
+        # noinspection PyBroadException
+        try:
+            for aop in original(self, context, **kwargs):
+                if not self._can_show_affordance(context.shift_held, aop.affordance):
+                    continue
+                yield aop
+        except:
+            yield from original(self, context, **kwargs)

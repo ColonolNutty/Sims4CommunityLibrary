@@ -30,7 +30,20 @@ class CommonObjectInteractionUtils:
         """
         if script_object is None or not hasattr(script_object, '_super_affordances') or not script_object._super_affordances:
             return tuple()
-        for interaction in script_object._super_affordances:
+        interactions = (
+            *script_object._super_affordances,
+        )
+        if hasattr(script_object, '_phone_affordances'):
+            interactions = (
+                *interactions,
+                *script_object._phone_affordances
+            )
+        if hasattr(script_object, '_relation_panel_affordances'):
+            interactions = (
+                *interactions,
+                *script_object._relation_panel_affordances
+            )
+        for interaction in interactions:
             interaction: Interaction = interaction
             if include_interaction_callback is not None and not include_interaction_callback(interaction):
                 continue

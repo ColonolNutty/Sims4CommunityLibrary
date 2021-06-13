@@ -5,6 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
 
 
@@ -42,3 +43,19 @@ class CommonPhoneUtils:
     def _set_phone_is_silenced(is_silenced: bool):
         # noinspection PyUnresolvedReferences
         CommonLocationUtils.get_current_zone().ui_dialog_service._set_is_phone_silenced(is_silenced)
+
+
+@Command('s4clib.silence_phone', command_type=CommandType.Live)
+def _common_silence_phone(_connection: int=None):
+    output = CheatOutput(_connection)
+    output('Silencing Phone')
+    CommonPhoneUtils.silence_phone()
+    output('Done')
+
+
+@Command('s4clib.unsilence_phone', command_type=CommandType.Live)
+def _common_unsilence_phone(_connection: int=None):
+    output = CheatOutput(_connection)
+    output('Unsilencing Phone')
+    CommonPhoneUtils.unsilence_phone()
+    output('Done')

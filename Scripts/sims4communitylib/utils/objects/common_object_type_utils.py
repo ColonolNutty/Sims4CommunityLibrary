@@ -233,10 +233,16 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Door. False, if not.
         :rtype: bool
         """
-        return CommonObjectTagUtils.has_game_tags(game_object, (
+        from sims4communitylib.utils.common_type_utils import CommonTypeUtils
+        return CommonTypeUtils.is_door(game_object) or CommonObjectTagUtils.has_game_tags(game_object, (
             CommonGameTag.BUILD_DOOR,
             CommonGameTag.BUILD_DOOR_SINGLE,
             CommonGameTag.BUILD_DOOR_DOUBLE,
+            CommonGameTag.FUNC_GATE,
+            CommonGameTag.BUILD_GATE,
+            CommonGameTag.BUILD_GATE_SINGLE,
+            CommonGameTag.BUILD_GATE_DOUBLE,
+            CommonGameTag.FUNC_TEMPLE_GATE,
             CommonGameTag.FUNC_ACTOR_CAREER_CELL_DOOR,
             CommonGameTag.FUNC_LAB_DOOR,
             CommonGameTag.FUNC_VAULT_DOOR,
