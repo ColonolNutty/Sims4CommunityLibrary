@@ -3,7 +3,6 @@ v1.70:
 - CommonResourceUtils.get_resource_key is more likely to give a Key object now.
 - Added the ability to store objects within the CommonDataStore that also have custom serialize/deserialize functions for the data.
 - When grabbing the default key, it will not be encoded when returned from CommonDataStore
-- Log All Interactions now properly logs the interactions of a Target within the relationship panel
 - Fences are now considered to be doors when checking if an Object is a door within CommonObjectTypeUtils.is_door
 - Added commands `s4clib.silence_phone` and `s4clib.unsilence_phone`
 - CommonObjectInteractionUtils.get_all_interactions_registered_to_object_gen will now return all interactions from the phone or relationship panel when clicking on Sims.
