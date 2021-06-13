@@ -9,7 +9,12 @@ from typing import Union
 
 from objects.components.ownable_component import OwnableComponent
 from objects.game_object import GameObject
+from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
+from sims4.commands import Command, CommandType, CheatOutput
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -108,3 +113,38 @@ class CommonObjectOwnershipUtils:
         if not hasattr(game_object, 'ownable_component'):
             return None
         return game_object.ownable_component
+
+
+@Command('s4clib.change_ownership', command_type=CommandType.Live)
+def _common_change_ownership(object_id: str='20359', opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    # noinspection PyBroadException
+    try:
+        object_id = int(object_id)
+    except Exception:
+        output('ERROR: object_id must be a number.')
+        return
+    if object_id < 0:
+        output('ERROR: object_id must be a positive number.')
+        return
+    output('Attempting to change the ownership of object with id \'{}\'.'.format(object_id))
+    from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
+    game_object = CommonObjectUtils.get_game_object(object_id)
+    if game_object is None:
+        output('ERROR: No object was found with id \'{}\''.format(object_id))
+        return
+    output('Object found, attempting to change the ownership of it to {}. {}'.format(CommonSimNameUtils.get_full_name(sim_info), game_object))
+    try:
+        if CommonObjectOwnershipUtils.set_owning_sim(game_object, sim_info, make_sim_sole_owner=True):
+            output('Successfully changed the ownership of the object.')
+        else:
+            output('ERROR: Failed to change the ownership of the object.')
+    except Exception as ex:
+        output('ERROR: A problem occurred while attempting to change the ownership of the object. {}'.format(object_id))
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred attempting to change the ownership of object. {}'.format(object_id), exception=ex)
+    output('Done changing the ownership of the object.')

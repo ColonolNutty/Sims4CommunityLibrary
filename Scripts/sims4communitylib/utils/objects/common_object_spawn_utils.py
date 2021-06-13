@@ -282,7 +282,37 @@ class CommonObjectSpawnUtils:
 
 
 @Command('s4clib.spawn_object', command_type=CommandType.Live)
-def _common_spawn_object(object_id: str='20359', _connection: Any=None):
+def _common_spawn_object(object_definition_id: str='20359', _connection: int=None):
+    output = CheatOutput(_connection)
+    # noinspection PyBroadException
+    try:
+        object_definition_id = int(object_definition_id)
+    except Exception:
+        output('ERROR: object_definition_id must be a number.')
+        return
+    if object_definition_id < 0:
+        output('ERROR: object_definition_id must be a positive number.')
+        return
+    output('Attempting to spawn object on the current lot with id \'{}\'.'.format(object_definition_id))
+    from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
+    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+    from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
+    active_sim_info = CommonSimUtils.get_active_sim_info()
+    location = CommonSimLocationUtils.get_location(active_sim_info)
+    try:
+        game_object = CommonObjectSpawnUtils.spawn_object_on_lot(object_definition_id, location)
+        if game_object is None:
+            output('ERROR: Failed to spawn object.')
+        else:
+            output('Object spawned successfully. Can you see it? Object Id: {}'.format(CommonObjectUtils.get_object_id(game_object)))
+    except Exception as ex:
+        output('ERROR: A problem occurred while attempting to spawn the object. {}'.format(object_definition_id))
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to spawn object. {}'.format(object_definition_id), exception=ex)
+    output('Done spawning object.')
+
+
+@Command('s4clib.destroy_object', command_type=CommandType.Live)
+def _common_destroy_object(object_id: str='20359', _connection: int=None):
     output = CheatOutput(_connection)
     # noinspection PyBroadException
     try:
@@ -293,19 +323,22 @@ def _common_spawn_object(object_id: str='20359', _connection: Any=None):
     if object_id < 0:
         output('ERROR: object_id must be a positive number.')
         return
-    output('Attempting to spawn object on the current lot with id \'{}\'.'.format(object_id))
-    from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
-    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+    output('Attempting to destroy object with id \'{}\'.'.format(object_id))
     from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
-    active_sim_info = CommonSimUtils.get_active_sim_info()
-    location = CommonSimLocationUtils.get_location(active_sim_info)
+    game_object = CommonObjectUtils.get_game_object(object_id)
+    if game_object is None:
+        output('ERROR: No object was found with id \'{}\''.format(object_id))
+        return
+    output('Object found, attempting to destroy it. {}'.format(game_object))
     try:
-        game_object = CommonObjectSpawnUtils.spawn_object_on_lot(object_id, location)
-        if game_object is None:
-            output('ERROR: Failed to spawn object.')
+        def _on_destroyed() -> None:
+            output('Object successfully destroyed.')
+
+        if CommonObjectSpawnUtils.schedule_object_for_destroy(game_object, source='S4CL Command', cause='S4CL Command', on_destroyed=_on_destroyed):
+            output('Successfully scheduled the object for destruction. Please wait.')
         else:
-            output('Object spawned successfully. Can you see it? Object Id: {}'.format(CommonObjectUtils.get_object_id(game_object)))
+            output('ERROR: Failed to schedule the object for destruction.')
     except Exception as ex:
-        output('ERROR: A problem occurred while attempting to spawn the object.')
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to spawn object.', exception=ex)
-    output('Done spawning object.')
+        output('ERROR: A problem occurred while attempting to destroy the object. {}'.format(object_id))
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to destroy object. {}'.format(object_id), exception=ex)
+    output('Done destroying object.')
