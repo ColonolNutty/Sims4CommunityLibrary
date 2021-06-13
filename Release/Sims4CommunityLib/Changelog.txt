@@ -10,6 +10,7 @@ v1.70:
 - Fences are now considered to be doors when checking if an Object is a door within `CommonObjectTypeUtils.is_door`
 - `CommonObjectInteractionUtils.get_all_interactions_registered_to_object_gen` will now return all interactions from the phone or relationship panel when the object is a Sim.
 - Removed spaces in a few places where it was weird to have them in the code.
+- Added commands `s4clib.change_ownership` and `s4clib.destroy_object`
 
 v1.69:
 - Added functions to lock or unlock a door for Sims.
