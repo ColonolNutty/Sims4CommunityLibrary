@@ -1,15 +1,15 @@
 v1.70:
-- Fleshed out the CommonResourceKey as a wrapper for Key from _resourceman
-- CommonResourceUtils.get_resource_key is more likely to give a Key object now.
-- Added the ability to store objects within the CommonDataStore that also have custom serialize/deserialize functions for the data.
-- When grabbing the default key, it will not be encoded when returned from CommonDataStore
-- Fences are now considered to be doors when checking if an Object is a door within CommonObjectTypeUtils.is_door
-- Added commands `s4clib.silence_phone` and `s4clib.unsilence_phone`
-- CommonObjectInteractionUtils.get_all_interactions_registered_to_object_gen will now return all interactions from the phone or relationship panel when clicking on Sims.
-- Fixed the Ringer icon not properly appearing
-- Removed spaces in a few places where it was weird to have them
+- Fixed the Ringer icon not appearing properly in the phone menu.
 - Renamed the `s4clib_testing.spawn_object_on_lot` command to `s4clib.spawn_object`
+- Added commands `s4clib.silence_phone` and `s4clib.unsilence_phone`
+- Fleshed out the `CommonResourceKey` as a wrapper for `Key` from the `_resourceman` module
+- `CommonResourceUtils.get_resource_key` is more likely to give a Key object now.
+- Added the ability to store objects within the CommonDataStore that also have custom serialize/deserialize functions for the data.
+- When grabbing the default key, it will not be encoded when returned from `CommonDataStore`
 - Log All Interactions should log interactions properly when using the interaction on a Sim in the Relationship Panel.
+- Fences are now considered to be doors when checking if an Object is a door within `CommonObjectTypeUtils.is_door`
+- `CommonObjectInteractionUtils.get_all_interactions_registered_to_object_gen` will now return all interactions from the phone or relationship panel when the object is a Sim.
+- Removed spaces in a few places where it was weird to have them in the code.
 
 v1.69:
 - Added functions to lock or unlock a door for Sims.
