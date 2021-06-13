@@ -42,8 +42,8 @@ class CommonFolderPersistenceService(CommonPersistenceService):
 
     def __init__(
         self,
-        main_file_name: str= 'main.json',
-        combined_file_name: str= 'combined.json',
+        main_file_name: str='main.json',
+        combined_file_name: str='combined.json',
         allow_duplicates_in_collections: bool=False
     ) -> None:
         super().__init__()

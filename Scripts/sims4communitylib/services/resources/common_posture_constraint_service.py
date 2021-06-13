@@ -52,7 +52,7 @@ class CommonPostureConstraintService(CommonService):
         return self._stand_or_swim
 
     @staticmethod
-    def combine_constraints(constraints: Iterator[Constraint], fallback_constraints: Iterator[Constraint]=(), debug_name: str= 'Combined') -> Union[_ConstraintSet, Constraint, Nowhere]:
+    def combine_constraints(constraints: Iterator[Constraint], fallback_constraints: Iterator[Constraint]=(), debug_name: str='Combined') -> Union[_ConstraintSet, Constraint, Nowhere]:
         """combine_constraints(constraints, fallback_constraints=(), debug_name='Combined')
 
         Attempt to combine similar constraints into a constraint set.

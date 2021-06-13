@@ -18,7 +18,7 @@ from sims4communitylib.utils.common_io_utils import CommonIOUtils
 class CommonJSONIOUtils:
     """Utilities for reading/writing JSON data to and from files."""
     @staticmethod
-    def write_to_file(file_path: str, obj: Any, buffering: int=1, encoding: str= 'utf-8', encoder_class: Type[JSONEncoder]=None) -> bool:
+    def write_to_file(file_path: str, obj: Any, buffering: int=1, encoding: str='utf-8', encoder_class: Type[JSONEncoder]=None) -> bool:
         """write_to_file(file_path, obj, buffering=1, encoding='utf-8', encoder_class=None)
 
         Serialize an object to a file as JSON.
@@ -48,7 +48,7 @@ class CommonJSONIOUtils:
         return True
 
     @staticmethod
-    def load_from_file(file_path: str, buffering: int=1, encoding: str= 'utf-8', decoder_class: Type[JSONDecoder]=None, object_hook: Callable[[Dict[str, Any]], Any]=None) -> Union[Any, None]:
+    def load_from_file(file_path: str, buffering: int=1, encoding: str='utf-8', decoder_class: Type[JSONDecoder]=None, object_hook: Callable[[Dict[str, Any]], Any]=None) -> Union[Any, None]:
         """load_from_file(file_path, buffering=1, encoding='utf-8', decoder_class=None, object_hook=None)
 
         Deserialize an object from a JSON file.
@@ -76,7 +76,7 @@ class CommonJSONIOUtils:
         folder_path: str,
         skip_file_names: Iterator[str]=(),
         buffering: int=1,
-        encoding: str= 'utf-8',
+        encoding: str='utf-8',
         decoder_class: Type[JSONDecoder]=None,
         object_hook: Callable[[Dict[str, Any]], Any]=None,
         on_file_read_failure: Callable[[str, Exception], bool]=lambda *_, **__: True

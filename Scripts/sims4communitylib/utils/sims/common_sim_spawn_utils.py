@@ -588,7 +588,7 @@ class CommonSimSpawnUtils:
 
 
 @Command('s4clib.spawn_human_sims', command_type=CommandType.Live)
-def _spawn_human_sims(count: int=100, gender_str: str= 'male', age_str: str= 'adult', _connection: int=None):
+def _spawn_human_sims(count: int=100, gender_str: str='male', age_str: str='adult', _connection: int=None):
     output = CheatOutput(_connection)
     gender: CommonGender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), CommonGender, default_value=None)
     if gender is None:

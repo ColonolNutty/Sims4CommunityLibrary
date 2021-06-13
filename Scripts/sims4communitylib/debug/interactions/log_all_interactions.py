@@ -72,7 +72,12 @@ class S4CLDebugLogAllInteractionsInteraction(CommonImmediateSuperInteraction):
                     interaction_target = new_target
             else:
                 self.log.format_with_message('Found Sim target using picked item id.', new_target=new_target)
-                interaction_target = new_target
+                new_target = CommonSimUtils.get_sim_instance(new_target)
+                if new_target is None:
+                    self.log.format_with_message('Had Sim Info, but did not have Sim instance.', new_target=new_target)
+                else:
+                    self.log.format_with_message('Had Sim Instance.', new_target=new_target)
+                    interaction_target = new_target
         object_id = CommonObjectUtils.get_object_id(interaction_target) if interaction_target is not None else -1
         definition_id = -1
         if CommonTypeUtils.is_sim_or_sim_info(interaction_target):

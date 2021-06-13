@@ -131,8 +131,13 @@ def _common_ensure_proper_interactions_appear_in_relationship_panel(original, se
         # noinspection PyBroadException
         try:
             for aop in original(self, context, **kwargs):
-                if not self._can_show_affordance(context.shift_held, aop.affordance):
-                    continue
+                affordance = aop.affordance
+                if context.shift_held:
+                    if not affordance.cheat:
+                        continue
+                else:
+                    if affordance.cheat:
+                        continue
                 yield aop
         except:
             yield from original(self, context, **kwargs)
@@ -147,8 +152,13 @@ def _common_ensure_proper_interactions_appear_in_phone_panel(original, self: Sim
         # noinspection PyBroadException
         try:
             for aop in original(self, context, **kwargs):
-                if not self._can_show_affordance(context.shift_held, aop.affordance):
-                    continue
+                affordance = aop.affordance
+                if context.shift_held:
+                    if not affordance.cheat:
+                        continue
+                else:
+                    if affordance.cheat:
+                        continue
                 yield aop
         except:
             yield from original(self, context, **kwargs)

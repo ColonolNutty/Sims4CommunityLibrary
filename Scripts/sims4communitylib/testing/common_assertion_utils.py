@@ -15,7 +15,7 @@ class CommonAssertionUtils:
 
     """
     @staticmethod
-    def are_equal(value_one: Any, value_two: Any, message: str= '') -> bool:
+    def are_equal(value_one: Any, value_two: Any, message: str='') -> bool:
         """are_equal(value_one, value_two, message='')
 
         Assert two values are equal to each other.
