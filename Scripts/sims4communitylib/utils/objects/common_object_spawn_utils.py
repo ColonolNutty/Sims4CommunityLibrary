@@ -281,8 +281,8 @@ class CommonObjectSpawnUtils:
         game_object.fade_out(fade_duration=fade_duration, immediate=immediate, additional_channels=additional_channels)
 
 
-@Command('s4clib_testing.spawn_object_on_lot', command_type=CommandType.Live)
-def _common_testing_spawn_object_on_lot(object_id: str='20359', _connection: Any=None):
+@Command('s4clib.spawn_object', command_type=CommandType.Live)
+def _common_spawn_object(object_id: str='20359', _connection: Any=None):
     output = CheatOutput(_connection)
     # noinspection PyBroadException
     try:
