@@ -8,14 +8,19 @@ Copyright (c) COLONOLNUTTY
 from objects.game_object import GameObject
 from typing import Union
 from objects.components.live_drag_component import LiveDragComponent
+from server_commands.argument_helpers import OptionalTargetParam
+from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_quaternion import CommonQuaternion
 from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
 from sims4communitylib.enums.types.component_types import CommonComponentType
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
 from sims4communitylib.utils.objects.common_object_type_utils import CommonObjectTypeUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from world.lot import Lot
 
 
@@ -326,3 +331,40 @@ class CommonObjectLocationUtils:
         position = CommonObjectLocationUtils.get_position(game_object) + CommonObjectLocationUtils.get_forward_vector(game_object)
         routing_surface = CommonObjectLocationUtils.get_routing_surface(game_object)
         return CommonLocationUtils.can_position_be_routed_to(position, routing_surface)
+
+
+@Command('s4clib.move_object_to_sim', command_type=CommandType.Live)
+def _common_move_object_to_sim(object_id: str='20359', opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    # noinspection PyBroadException
+    try:
+        object_id = int(object_id)
+    except Exception:
+        output('ERROR: object_id must be a number.')
+        return
+    if object_id < 0:
+        output('ERROR: object_id must be a positive number.')
+        return
+    from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+    output('Attempting to move object with id \'{}\' to Sim \'{}\'.'.format(object_id, CommonSimNameUtils.get_full_name(sim_info)))
+    from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
+    game_object = CommonObjectUtils.get_game_object(object_id)
+    if game_object is None:
+        output('ERROR: No object was found with id \'{}\''.format(object_id))
+        return
+    output('Object found, attempting to move the object to {}. {}'.format(CommonSimNameUtils.get_full_name(sim_info), game_object))
+    try:
+        from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
+        if CommonObjectLocationUtils.set_location(game_object, CommonSimLocationUtils.get_location(sim_info)):
+            output('Successfully moved the object.')
+        else:
+            output('ERROR: Failed to move the object.')
+    except Exception as ex:
+        output('ERROR: A problem occurred while attempting to move the object. {}'.format(object_id))
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred attempting to move the object. {}'.format(object_id), exception=ex)
+    output('Done moving the object.')
