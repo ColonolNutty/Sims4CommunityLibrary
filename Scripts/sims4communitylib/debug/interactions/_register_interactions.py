@@ -84,6 +84,17 @@ class _S4CLDebugEverywhereTerrainInteractionHandler(CommonInteractionHandler):
         return result
 
 
+@CommonInteractionRegistry.register_interaction_handler(CommonInteractionType.ON_OCEAN_LOAD)
+class _S4CLDebugEverywhereOceanInteractionHandler(CommonInteractionHandler):
+    # noinspection PyMissingOrEmptyDocstring
+    @property
+    def interactions_to_add(self) -> Tuple[int]:
+        result: Tuple[int] = (
+            CommonInteractionId.S4CL_DEBUG_LOG_ALL_INTERACTIONS,
+        )
+        return result
+
+
 @CommonInteractionRegistry.register_interaction_handler(CommonInteractionType.ADD_TO_SIM_RELATIONSHIP_PANEL_INTERACTIONS)
 class _S4CLDebugSimRelationshipPanelInteractionHandler(CommonScriptObjectInteractionHandler):
     # noinspection PyMissingOrEmptyDocstring
@@ -96,7 +107,7 @@ class _S4CLDebugSimRelationshipPanelInteractionHandler(CommonScriptObjectInterac
 
     # noinspection PyMissingOrEmptyDocstring
     def should_add(self, script_object: Sim, *args, **kwargs) -> bool:
-        return CommonTypeUtils.is_sim_instance(script_object)
+        return CommonTypeUtils.is_sim_or_sim_info(script_object)
 
 
 @CommonInteractionRegistry.register_interaction_handler(CommonInteractionType.ADD_TO_SIM_PHONE_INTERACTIONS)
@@ -111,7 +122,7 @@ class _S4CLDebugSimPhoneInteractionHandler(CommonScriptObjectInteractionHandler)
 
     # noinspection PyMissingOrEmptyDocstring
     def should_add(self, script_object: ScriptObject, *args, **kwargs) -> bool:
-        return CommonTypeUtils.is_sim_instance(script_object)
+        return CommonTypeUtils.is_sim_or_sim_info(script_object)
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), InteractionContext, InteractionContext.__init__.__name__)

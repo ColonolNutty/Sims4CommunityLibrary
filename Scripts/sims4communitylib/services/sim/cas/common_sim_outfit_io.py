@@ -15,6 +15,7 @@ from sims.sim_info import SimInfo
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
+from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 
 
@@ -318,11 +319,21 @@ class CommonSimOutfitIO(HasLog):
         self._original_outfit_data: FrozenSet[int] = frozenset(self._outfit_parts.items())
         if initial_outfit_parts is not None:
             for (key, value) in initial_outfit_parts.items():
-                if not isinstance(key, int) or not isinstance(value, int):
+                if (not isinstance(key, int) and not isinstance(key, BodyType)) or not isinstance(value, int):
                     self.log.error('\'{}\': outfit_body_parts contains non-integer variables key: {} value: {}.'.format(target_sim_name, key, value))
                     return False
 
-            self._outfit_body_types = list(initial_outfit_parts.keys())
+            initial_outfit_part_body_types = list()
+            for body_type_val in initial_outfit_parts.keys():
+                if isinstance(body_type_val, int) and body_type_val in BodyType.value_to_name:
+                    body_type = CommonResourceUtils.get_enum_by_name(BodyType.value_to_name[body_type_val], BodyType, default_value=-1)
+                    if body_type == -1:
+                        body_type = body_type_val
+                else:
+                    body_type = body_type_val
+                initial_outfit_part_body_types.append(body_type)
+
+            self._outfit_body_types = list(initial_outfit_part_body_types)
             self._outfit_part_ids = list(initial_outfit_parts.values())
         else:
             if self._outfit_parts is None:
@@ -333,7 +344,17 @@ class CommonSimOutfitIO(HasLog):
             if not part_ids or not body_types:
                 self.log.error('\'{}\' is missing outfit parts or body types for Outfit Category and Index {}.'.format(target_sim_name, self._outfit_category_and_index))
                 return False
-            self._outfit_body_types: List[Union[BodyType, int]] = body_types
+
+            initial_outfit_part_body_types = list()
+            for body_type_val in body_types:
+                if isinstance(body_type_val, int) and body_type_val in BodyType.value_to_name:
+                    body_type = CommonResourceUtils.get_enum_by_name(BodyType.value_to_name[body_type_val], BodyType, default_value=-1)
+                    if body_type == -1:
+                        body_type = body_type_val
+                else:
+                    body_type = body_type_val
+                initial_outfit_part_body_types.append(body_type)
+            self._outfit_body_types: List[Union[BodyType, int]] = initial_outfit_part_body_types
             self._outfit_part_ids: List[int] = part_ids
             if len(self._outfit_body_types) != len(self._outfit_part_ids):
                 self.log.error('\'{}\': The number of outfit parts did not match the number of body types for Outfit Category and Index {}.'.format(target_sim_name, self._outfit_category_and_index))

@@ -605,7 +605,7 @@ class CommonOutfitUtils:
         :param outfit_category_and_index: The OutfitCategory and index to change to.
         :type outfit_category_and_index: Tuple[OutfitCategory, int]
         """
-        sim_info.set_current_outfit(outfit_category_and_index)
+        sim_info.try_set_current_outfit(outfit_category_and_index)
 
     @staticmethod
     def set_outfit_dirty(sim_info: SimInfo, outfit_category: OutfitCategory):

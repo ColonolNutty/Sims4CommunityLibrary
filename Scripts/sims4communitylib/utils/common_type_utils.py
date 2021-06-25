@@ -6,8 +6,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Any
-
-from objects.pools.pool_seat import PoolSeat
 from sims.sim import Sim
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
@@ -18,11 +16,9 @@ try:
 except ModuleNotFoundError:
     # Those without the Island Paradise expansion pack won't have an Ocean object
     Ocean = None
-from objects.doors.door import Door
 from objects.game_object import GameObject
-from objects.pools.pool import SwimmingPool
 from objects.script_object import ScriptObject
-from objects.terrain import Terrain
+from objects.terrain import Terrain, _LocationPoint
 
 
 class CommonTypeUtils:
@@ -40,7 +36,7 @@ class CommonTypeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return CommonTypeUtils.is_sim_info(obj) or CommonTypeUtils.is_sim_instance(obj)
+        return CommonTypeUtils.is_sim_instance(obj) or CommonTypeUtils.is_sim_info(obj)
 
     @staticmethod
     def is_sim_instance(obj: Any) -> bool:
@@ -148,7 +144,8 @@ class CommonTypeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return isinstance(obj, SwimmingPool)
+        from sims4communitylib.utils.objects.common_object_type_utils import CommonObjectTypeUtils
+        return CommonObjectTypeUtils.is_swimming_pool(obj)
 
     @staticmethod
     def is_door(obj: Any) -> bool:
@@ -161,7 +158,8 @@ class CommonTypeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return isinstance(obj, Door)
+        from sims4communitylib.utils.objects.common_object_type_utils import CommonObjectTypeUtils
+        return CommonObjectTypeUtils.is_door(obj)
 
     @staticmethod
     def is_location(obj: Any) -> bool:
@@ -178,6 +176,19 @@ class CommonTypeUtils:
         return isinstance(obj, Location) or isinstance(obj, CommonLocation)
 
     @staticmethod
+    def is_location_point(obj: Any) -> bool:
+        """is_location_point(obj)
+
+        Determine if an object is of type _LocationPoint.
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
+        """
+        return isinstance(obj, _LocationPoint)
+
+    @staticmethod
     def is_pool_seat(obj: Any) -> bool:
         """is_pool_seat(obj)
 
@@ -188,4 +199,5 @@ class CommonTypeUtils:
         :return: True, if the Object is a Pool Seat. False, if not.
         :rtype: bool
         """
-        return isinstance(obj, PoolSeat)
+        from sims4communitylib.utils.objects.common_object_type_utils import CommonObjectTypeUtils
+        return CommonObjectTypeUtils.is_swimming_pool_seat(obj)

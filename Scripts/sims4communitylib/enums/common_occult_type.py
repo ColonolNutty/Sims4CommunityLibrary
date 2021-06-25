@@ -35,24 +35,8 @@ class CommonOccultType(CommonInt):
         :return: The CommonOccultType that represents what a Sim is.
         :rtype: CommonOccultType
         """
-        from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
-        if CommonOccultUtils.is_robot(sim_info):
-            return CommonOccultType.ROBOT
-        elif CommonOccultUtils.is_alien(sim_info):
-            return CommonOccultType.ALIEN
-        elif CommonOccultUtils.is_ghost(sim_info):
-            return CommonOccultType.GHOST
-        elif CommonOccultUtils.is_mermaid(sim_info):
-            return CommonOccultType.MERMAID
-        elif CommonOccultUtils.is_plant_sim(sim_info):
-            return CommonOccultType.PLANT_SIM
-        elif CommonOccultUtils.is_skeleton(sim_info):
-            return CommonOccultType.SKELETON
-        elif CommonOccultUtils.is_vampire(sim_info):
-            return CommonOccultType.VAMPIRE
-        elif CommonOccultUtils.is_witch(sim_info):
-            return CommonOccultType.WITCH
-        return CommonOccultType.NON_OCCULT
+        from sims4communitylib.utils.sims.common_sim_occult_type_utils import CommonSimOccultTypeUtils
+        return CommonSimOccultTypeUtils.determine_occult_type(sim_info)
 
     @staticmethod
     def determine_current_occult_type(sim_info: SimInfo) -> 'CommonOccultType':
@@ -66,21 +50,5 @@ class CommonOccultType(CommonInt):
         :return: The CommonOccultType the Sim is currently appearing as, or CommonOccultType.NONE if they are not appearing as any Occult or are appearing as their HUMAN disguise/occult.
         :rtype: CommonOccultType
         """
-        from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
-        if CommonOccultUtils.is_currently_a_mermaid(sim_info) or CommonOccultUtils.is_mermaid_in_mermaid_form(sim_info):
-            return CommonOccultType.MERMAID
-        elif CommonOccultUtils.is_robot(sim_info):
-            return CommonOccultType.ROBOT
-        elif CommonOccultUtils.is_currently_a_vampire(sim_info):
-            return CommonOccultType.VAMPIRE
-        elif CommonOccultUtils.is_currently_a_witch(sim_info):
-            return CommonOccultType.WITCH
-        elif CommonOccultUtils.is_currently_an_alien(sim_info):
-            return CommonOccultType.ALIEN
-        elif CommonOccultUtils.is_plant_sim(sim_info):
-            return CommonOccultType.PLANT_SIM
-        elif CommonOccultUtils.is_ghost(sim_info):
-            return CommonOccultType.GHOST
-        elif CommonOccultUtils.is_skeleton(sim_info):
-            return CommonOccultType.SKELETON
-        return CommonOccultType.NON_OCCULT
+        from sims4communitylib.utils.sims.common_sim_occult_type_utils import CommonSimOccultTypeUtils
+        return CommonSimOccultTypeUtils.determine_current_occult_type(sim_info)

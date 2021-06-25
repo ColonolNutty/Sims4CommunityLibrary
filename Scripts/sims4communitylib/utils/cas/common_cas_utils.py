@@ -94,13 +94,11 @@ class CommonCASUtils:
         """
         from cas.cas import get_caspart_bodytype
         body_type = get_caspart_bodytype(cas_part_id)
-        if body_type not in BodyType:
-            return body_type
-        # noinspection PyBroadException
-        try:
-            return BodyType(body_type)
-        except:
-            return body_type
+        if isinstance(body_type, int) and body_type in BodyType.value_to_name:
+            new_body_type = CommonResourceUtils.get_enum_by_name(BodyType.value_to_name[body_type], BodyType, default_value=None)
+            if new_body_type is not None:
+                body_type = new_body_type
+        return body_type
 
     @staticmethod
     def attach_cas_part_to_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:

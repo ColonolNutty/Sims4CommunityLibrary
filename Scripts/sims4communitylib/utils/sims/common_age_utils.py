@@ -152,6 +152,8 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
+        if age is None:
+            return False
         return int(age) == int(Age.BABY)
 
     @staticmethod
@@ -165,6 +167,8 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
+        if age is None:
+            return False
         return int(age) == int(Age.TODDLER)
 
     @staticmethod
@@ -178,6 +182,8 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
+        if age is None:
+            return False
         return int(age) == int(Age.CHILD)
 
     @staticmethod
@@ -191,6 +197,8 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
+        if age is None:
+            return False
         return int(age) == int(Age.TEEN)
 
     @staticmethod
@@ -217,6 +225,8 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
+        if age is None:
+            return False
         return int(age) == int(Age.YOUNGADULT)
 
     @staticmethod
@@ -230,6 +240,8 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
+        if age is None:
+            return False
         return int(age) == int(Age.ADULT)
 
     @staticmethod
@@ -243,6 +255,8 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
+        if age is None:
+            return False
         return int(age) == int(Age.ELDER)
 
     @staticmethod

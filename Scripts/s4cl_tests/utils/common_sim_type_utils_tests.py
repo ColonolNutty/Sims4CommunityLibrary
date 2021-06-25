@@ -123,8 +123,8 @@ class _CommonSimTypeUtilsTests:
     @CommonTestService.test(CommonSimType.ADULT_CAT, CommonSimType.ADULT_CAT_MERMAID, True)
     @CommonTestService.test(CommonSimType.ADULT_CAT, CommonSimType.ADULT_CAT_WITCH, True)
     @CommonTestService.test(CommonSimType.ADULT_CAT, CommonSimType.ADULT_CAT_ROBOT, True)
-    def _s4cl_sim_types_are_close_enough(sim_type_one: CommonSimType, sim_type_two: CommonSimType, expected_result: bool) -> None:
-        result = CommonSimTypeUtils().are_same_age_and_species(sim_type_one, sim_type_two)
+    def _s4cl_sim_types_are_same_age_and_species(sim_type_one: CommonSimType, sim_type_two: CommonSimType, expected_result: bool) -> None:
+        result = CommonSimTypeUtils.are_same_age_and_species(sim_type_one, sim_type_two)
         CommonAssertionUtils.are_equal(result, expected_result, 'Sim Types were not considered similar when they should be. {} and {}'.format(sim_type_one.name, sim_type_two.name) if expected_result else 'Sim Types were considered similar when they should not be. {} and {}'.format(sim_type_one.name, sim_type_two.name))
 
     @staticmethod
@@ -157,5 +157,5 @@ class _CommonSimTypeUtilsTests:
     @CommonTestService.test(CommonSpecies.CAT, CommonAge.ADULT, CommonOccultType.WITCH, CommonSimType.ADULT_CAT_WITCH)
     @CommonTestService.test(CommonSpecies.CAT, CommonAge.ADULT, CommonOccultType.ROBOT, CommonSimType.ADULT_CAT_ROBOT)
     def _s4cl_determine_sim_type(species: CommonSpecies, age: CommonAge, occult_type: CommonOccultType, expected_sim_type: CommonSimType):
-        result = CommonSimTypeUtils()._determine_sim_type(species, age, occult_type)
+        result = CommonSimTypeUtils._determine_sim_type(species, age, occult_type)
         CommonAssertionUtils.are_equal(result, expected_sim_type)

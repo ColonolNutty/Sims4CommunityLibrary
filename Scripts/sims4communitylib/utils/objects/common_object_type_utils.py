@@ -6,6 +6,8 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from objects.game_object import GameObject
+from objects.pools.pool import SwimmingPool
+from objects.pools.pool_seat import PoolSeat
 from sims4communitylib.enums.tags_enum import CommonGameTag
 from sims4communitylib.utils.objects.common_object_tag_utils import CommonObjectTagUtils
 
@@ -23,6 +25,8 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Window. False, if not.
         :rtype: bool
         """
+        if not isinstance(game_object, GameObject):
+            return False
         from sims4communitylib.enums.tags_enum import CommonGameTag
         from sims4communitylib.utils.objects.common_object_tag_utils import CommonObjectTagUtils
         return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.BUILD_WINDOW, ))
@@ -38,6 +42,8 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Toilet. False, if not.
         :rtype: bool
         """
+        if not isinstance(game_object, GameObject):
+            return False
         return CommonObjectTagUtils.has_game_tags(game_object, (
             CommonGameTag.FUNC_TOILET,
             CommonGameTag.FUNC_PUBLIC_BATHROOM,
@@ -55,6 +61,8 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Loveseat. False, if not.
         :rtype: bool
         """
+        if not isinstance(game_object, GameObject):
+            return False
         return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.BUY_CAT_SS_LOVE_SEAT, ))
 
     @staticmethod
@@ -68,6 +76,8 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Bed. False, if not.
         :rtype: bool
         """
+        if not isinstance(game_object, GameObject):
+            return False
         return CommonObjectTagUtils.has_game_tags(game_object, (
             CommonGameTag.FUNC_BED,
             CommonGameTag.FUNC_DOUBLE_BED,
@@ -94,12 +104,35 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Bed for Human Sims. False, if not.
         :rtype: bool
         """
+        if not isinstance(game_object, GameObject):
+            return False
         return CommonObjectTagUtils.has_game_tags(game_object, (
             CommonGameTag.FUNC_BED,
             CommonGameTag.FUNC_DOUBLE_BED,
             CommonGameTag.FUNC_SINGLE_BED,
             CommonGameTag.FUNC_TODDLER_BED,
             CommonGameTag.FUNC_BED_KID
+        ))
+
+    @staticmethod
+    def is_pet_sim_bed(game_object: GameObject) -> bool:
+        """is_pet_sim_bed(game_object)
+
+        Determine if an Object is a Bed for Pet Sims.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object is a Bed for Pet Sims. False, if not.
+        :rtype: bool
+        """
+        if not isinstance(game_object, GameObject):
+            return False
+        return CommonObjectTagUtils.has_game_tags(game_object, (
+            CommonGameTag.FUNC_BED,
+            CommonGameTag.FUNC_PET_BED,
+            CommonGameTag.BUY_CAT_SS_BED_SINGLE,
+            CommonGameTag.BUY_CAT_SS_BED_DOUBLE,
+            CommonGameTag.BUY_CAT_SS_PET_BED,
         ))
 
     @staticmethod
@@ -113,6 +146,8 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Bed for Adult Sims. False, if not.
         :rtype: bool
         """
+        if not isinstance(game_object, GameObject):
+            return False
         return CommonObjectTagUtils.has_game_tags(game_object, (
             CommonGameTag.FUNC_BED,
             CommonGameTag.FUNC_DOUBLE_BED,
@@ -130,7 +165,10 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Bed for Child Sims. False, if not.
         :rtype: bool
         """
+        if not isinstance(game_object, GameObject):
+            return False
         return CommonObjectTagUtils.has_game_tags(game_object, (
+            CommonGameTag.FUNC_BED,
             CommonGameTag.FUNC_BED_KID,
         ))
 
@@ -145,6 +183,8 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Bed for Toddler Sims. False, if not.
         :rtype: bool
         """
+        if not isinstance(game_object, GameObject):
+            return False
         return CommonObjectTagUtils.has_game_tags(game_object, (
             CommonGameTag.FUNC_TODDLER_BED,
         ))
@@ -160,6 +200,8 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Single Bed. False, if not.
         :rtype: bool
         """
+        if not isinstance(game_object, GameObject):
+            return False
         return CommonObjectTagUtils.has_game_tags(game_object, (
             CommonGameTag.FUNC_SINGLE_BED,
             CommonGameTag.BUY_CAT_SS_BED_SINGLE
@@ -176,6 +218,8 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Double Bed. False, if not.
         :rtype: bool
         """
+        if not isinstance(game_object, GameObject):
+            return False
         return CommonObjectTagUtils.has_game_tags(game_object, (
             CommonGameTag.FUNC_DOUBLE_BED,
             CommonGameTag.BUY_CAT_SS_BED_DOUBLE
@@ -192,6 +236,8 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Light. False, if not.
         :rtype: bool
         """
+        if not isinstance(game_object, GameObject):
+            return False
         return CommonObjectTagUtils.has_game_tags(game_object, (
             CommonGameTag.BUY_CAT_LD_WALL_LIGHT,
             CommonGameTag.BUY_CAT_LD_OUTDOOR_LIGHT,
@@ -218,6 +264,8 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Stair. False, if not.
         :rtype: bool
         """
+        if not isinstance(game_object, GameObject):
+            return False
         return CommonObjectTagUtils.has_game_tags(game_object, (
             CommonGameTag.BUILD_STAIR,
         ))
@@ -233,8 +281,10 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Door. False, if not.
         :rtype: bool
         """
-        from sims4communitylib.utils.common_type_utils import CommonTypeUtils
-        return CommonTypeUtils.is_door(game_object) or CommonObjectTagUtils.has_game_tags(game_object, (
+        if not isinstance(game_object, GameObject):
+            return False
+        from objects.doors.door import Door
+        return isinstance(game_object, Door) or CommonObjectTagUtils.has_game_tags(game_object, (
             CommonGameTag.BUILD_DOOR,
             CommonGameTag.BUILD_DOOR_SINGLE,
             CommonGameTag.BUILD_DOOR_DOUBLE,
@@ -250,3 +300,51 @@ class CommonObjectTypeUtils:
             CommonGameTag.FUNC_INVESTIGATION_SEALED_DOOR_HALLWAY,
             CommonGameTag.FUNC_INVESTIGATION_SEALED_DOOR_MOTHER_PLANT
         ))
+
+    @staticmethod
+    def is_fence(game_object: GameObject) -> bool:
+        """is_fence(game_object)
+
+        Determine if an Object is a Fence.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object is a Door. False, if not.
+        :rtype: bool
+        """
+        if not isinstance(game_object, GameObject):
+            return False
+        return CommonObjectTypeUtils.is_door(game_object) and CommonObjectTagUtils.has_game_tags(game_object, (
+            CommonGameTag.BUILD_FENCE,
+        ))
+
+    @staticmethod
+    def is_swimming_pool(game_object: GameObject) -> bool:
+        """is_swimming_pool(game_object)
+
+        Determine if an Object is a Swimming Pool.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object is a Swimming Pool. False, if not.
+        :rtype: bool
+        """
+        if not isinstance(game_object, GameObject):
+            return False
+        from sims4communitylib.utils.objects.common_object_tag_utils import CommonObjectTagUtils
+        return isinstance(game_object, SwimmingPool) or CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_SWIMMING_POOL,))
+
+    @staticmethod
+    def is_swimming_pool_seat(game_object: GameObject) -> bool:
+        """is_swimming_pool_seat(game_object)
+
+        Determine if an Object is a Swimming Pool Seat.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object is a Swimming Pool Seat. False, if not.
+        :rtype: bool
+        """
+        if not isinstance(game_object, GameObject):
+            return False
+        return isinstance(game_object, PoolSeat)

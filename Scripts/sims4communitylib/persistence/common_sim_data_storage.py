@@ -26,16 +26,22 @@ class _CommonSimDataStorageMetaclass(type):
         mod_name = mod_identity.name
         if mod_name is None:
             return None
-        if mod_name not in cls._sim_storage_instances:
-            cls._sim_storage_instances[mod_name] = dict()
-        if sim_id not in cls._sim_storage_instances[mod_name]:
-            cls._sim_storage_instances[mod_name][sim_id] = super(_CommonSimDataStorageMetaclass, cls).__call__(sim_info)
-        return cls._sim_storage_instances[mod_name][sim_id]
+        identifier = f'{mod_name}_{cls.get_sub_identifier()}'
+        if identifier not in cls._sim_storage_instances:
+            cls._sim_storage_instances[identifier] = dict()
+        if sim_id not in cls._sim_storage_instances[identifier]:
+            cls._sim_storage_instances[identifier][sim_id] = super(_CommonSimDataStorageMetaclass, cls).__call__(sim_info)
+        return cls._sim_storage_instances[identifier][sim_id]
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(mcs) -> CommonModIdentity:
         raise NotImplementedError()
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_sub_identifier(mcs) -> str:
+        return 'default'
 
 
 class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclass):
