@@ -149,12 +149,12 @@ class CommonInteractionRegistry(CommonService, HasLog):
         """
         script_object_type = type(script_object)
         self.log.format_with_message('Adding interactions for type', script_object_type=script_object_type)
+        if not hasattr(script_object_type, '_super_affordances'):
+            self.verbose_log.format_with_message('Object did not have super affordances.', script_object=script_object_type)
+            return
         new_super_affordances = list()
         for interaction_handler in self._interaction_handlers[CommonInteractionType.ON_SCRIPT_OBJECT_LOAD]:
             if hasattr(interaction_handler, 'should_add') and not interaction_handler.should_add(script_object, *args, **kwargs):
-                continue
-            if not hasattr(script_object_type, '_super_affordances'):
-                self.verbose_log.format_with_message('Object did not have super affordances.', script_object=script_object)
                 continue
             for interaction_instance in interaction_handler._interactions_to_add_gen():
                 if interaction_instance in new_super_affordances or interaction_instance in script_object_type._super_affordances:
@@ -166,11 +166,11 @@ class CommonInteractionRegistry(CommonService, HasLog):
 
     def _on_sim_relationship_panel_load(self, sim: Sim, *args, **kwargs):
         sim_class = type(sim)
+        if not hasattr(sim_class, '_relation_panel_affordances'):
+            return
         new_relationship_panel_affordances = list()
         for interaction_handler in self._interaction_handlers[CommonInteractionType.ADD_TO_SIM_RELATIONSHIP_PANEL_INTERACTIONS]:
             if hasattr(interaction_handler, 'should_add') and not interaction_handler.should_add(sim, *args, **kwargs):
-                continue
-            if not hasattr(sim_class, '_relation_panel_affordances'):
                 continue
             for interaction_instance in interaction_handler._interactions_to_add_gen():
                 if interaction_instance in new_relationship_panel_affordances or interaction_instance in sim_class._relation_panel_affordances:
@@ -180,11 +180,11 @@ class CommonInteractionRegistry(CommonService, HasLog):
 
     def _on_sim_phone_load(self, sim: Sim, *args, **kwargs):
         sim_class = type(sim)
+        if not hasattr(sim_class, '_phone_affordances'):
+            return
         new_phone_affordances_affordances = list()
         for interaction_handler in self._interaction_handlers[CommonInteractionType.ADD_TO_SIM_PHONE_INTERACTIONS]:
             if hasattr(interaction_handler, 'should_add') and not interaction_handler.should_add(sim, *args, **kwargs):
-                continue
-            if not hasattr(sim_class, '_phone_affordances'):
                 continue
             for interaction_instance in interaction_handler._interactions_to_add_gen():
                 if interaction_instance in new_phone_affordances_affordances or interaction_instance in sim_class._phone_affordances:

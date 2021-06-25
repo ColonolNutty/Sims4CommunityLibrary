@@ -47,7 +47,7 @@ class _CommonSimDataStorageMetaclass(type):
 class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclass):
     def __init__(self, sim_info: SimInfo):
         super().__init__()
-        if not CommonTypeUtils.is_sim_info(sim_info):
+        if not CommonTypeUtils.is_sim_info(sim_info) and not CommonTypeUtils.is_sim_info_base_wrapper(sim_info):
             raise AssertionError('sim_info was not of type SimInfo! {}'.format(sim_info))
         self._sim_id = CommonSimUtils.get_sim_id(sim_info)
         self._sim_info = sim_info

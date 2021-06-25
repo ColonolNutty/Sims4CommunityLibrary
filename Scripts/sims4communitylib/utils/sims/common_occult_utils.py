@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from typing import Iterator, Tuple, Union
 from sims.occult.occult_enums import OccultType
 from sims.sim_info import SimInfo
+from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.utils.sims.common_sim_loot_action_utils import CommonSimLootActionUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
@@ -88,7 +89,21 @@ class CommonOccultUtils:
         return sim_info.occult_tracker.has_occult_type(occult_type)
 
     @staticmethod
-    def get_occult_sim_info(sim_info: SimInfo, occult_type: OccultType) -> Union[SimInfo, None]:
+    def get_current_occult_sim_info(sim_info: SimInfo) -> Union[SimInfo, SimInfoBaseWrapper, None]:
+        """get_current_occult_sim_info(sim_info)
+
+        Retrieve the SimInfo for the Occult the Sim is currently.
+
+        :param sim_info: The Sim to locate the Occults of.
+        :type sim_info: SimInfo
+        :return: The SimInfo of the Sim or the SimInfoBaseWrapper for the Occult they are (If they are currently an occult).
+        :rtype: Union[SimInfo, SimInfoBaseWrapper, None]
+        """
+        current_occult_type = CommonOccultUtils.get_current_occult_type(sim_info)
+        return CommonOccultUtils.get_occult_sim_info(sim_info, current_occult_type)
+
+    @staticmethod
+    def get_occult_sim_info(sim_info: SimInfo, occult_type: OccultType) -> Union[SimInfo, SimInfoBaseWrapper, None]:
         """get_occult_sim_info(sim_info, occult_type)
 
         Retrieve the SimInfo for an Occult of a Sim.
@@ -97,8 +112,8 @@ class CommonOccultUtils:
         :type sim_info: SimInfo
         :param occult_type: The Occult Type to retrieve the SimInfo of.
         :type occult_type: OccultType
-        :return: An iterable of Sims for all occult types of the Sim.
-        :rtype: Union[SimInfo, None]
+        :return: The SimInfo of the Sim or the SimInfoBaseWrapper for the specified Occult.
+        :rtype: Union[SimInfo, SimInfoBaseWrapper, None]
         """
         if not CommonOccultUtils.has_occult_sim_info(sim_info, occult_type):
             return None
