@@ -975,7 +975,16 @@ class PyComp(PyExpr):
 
     def __str__(self):
         suite = self.code.get_suite()
-        return self.pattern.format(suite.gen_display())
+        if len(suite) != 1:
+            text = ''
+            for suite_sub in suite:
+                text += self.pattern.format(suite_sub.gen_display())
+            return text
+        try:
+            return self.pattern.format(suite.gen_display())
+        except Exception as ex:
+            print(f'Ifdsfdss 1 line {suite.__class__} len: {len(suite)} duh: {suite[0]}')
+            raise ex
 
 
 class PyListComp(PyComp):
@@ -1239,7 +1248,8 @@ class IfStatement(PyStatement):
         self.false_suite.display(indent + 1)
 
     def gen_display(self, seq=()):
-        assert not self.false_suite
+        if not self.false_suite:
+            return ''
         s = "if {}".format(self.cond)
         return self.true_suite.gen_display(seq + (s,))
 
@@ -1456,9 +1466,14 @@ class Suite:
             indent.write("pass")
 
     def gen_display(self, seq=()):
-        if len(self) != 1:
-            raise Exception('There should only be one statement in a generator.')
-        return self[0].gen_display(seq)
+        if len(self) < 1:
+            return ''
+        if len(self) == 1:
+            return self[0].gen_display(seq)
+        full_text = ''
+        for statement in self.statements:
+            full_text += statement.gen_display(seq)
+        return full_text
 
     def add_statement(self, stmt):
         self.statements.append(stmt)

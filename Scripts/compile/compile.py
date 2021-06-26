@@ -6,9 +6,18 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-from Utilities.compiler import compile_module
+from Utilities.unpyc3_compiler import Unpyc3PythonCompiler
 
-release_dir = os.path.join('../', 'Release', 'Sims4CommunityLib')
+release_dir = os.path.join('..', '..', 'Release', 'Sims4CommunityLib')
 
-compile_module(root=release_dir, mod_scripts_folder='.', include_folders=('_s4cl_ctypes_module', 'sims4communitylib',), mod_name='sims4communitylib')
-compile_module(root=f'{release_dir}Tests', mod_scripts_folder='.', include_folders=('s4cl_tests',), mod_name='sims4communitylib_tests')
+Unpyc3PythonCompiler.compile_mod(
+    folder_path_to_output_ts4script_to=release_dir,
+    names_of_modules_include=('_s4cl_ctypes_module', 'sims4communitylib',),
+    output_ts4script_name='sims4communitylib'
+)
+
+Unpyc3PythonCompiler.compile_mod(
+    folder_path_to_output_ts4script_to=f'{release_dir}Tests',
+    names_of_modules_include=('s4cl_tests',),
+    output_ts4script_name='sims4communitylib_tests'
+)

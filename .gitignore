@@ -1,28 +1,53 @@
-compiled
-decompiled
-compilelog.txt
-decompilelog.txt
-EA
-__pycache__
-*/__pycache__
+# Docs
+docs/build
+
+# Idea Project
 .idea/workspace.xml
 .idea/tasks.xml
+.idea/dictionaries
+.idea/inspectionProfiles
+
+# EA Scripts
+EA/base
+EA/core
+EA/generated
+EA/simulation
+EA/base.zip
+EA/core.zip
+EA/generated.zip
+EA/simulation.zip
+
+# Logs
+compilelog.txt
+decompilelog.txt
+
+# Temp Compiled Files
+__pycache__
+*/__pycache__
+Utilities/*.pyc
+
+# Compiled Files
 *.pyo
 *.pyc
 **/*.pyo
 **/*.pyc
 */*.pyc
 */*.pyo
-Utilities/*.pyc
-.idea/dictionaries
+custom_scripts_for_decompile/*.py
+custom_scripts_for_decompile/*.pyc
+custom_scripts_for_decompile/*.pyo
+custom_scripts_for_decompile/**/*.pyc
+custom_scripts_for_decompile/**/*.pyo
+custom_scripts_for_decompile/**/*.py
+
+# Release
 **/*.7z
 **/*.zip
 **/Release/*.7z
 **/Release/*.zip
 **/*.ts4script
+
+# Misc
 **/*.lnk
 **/*.xml___jb_old___
-docs/build
 Tunings/Temp
-Libraries/**/*
-EA_Tuning/**/*
