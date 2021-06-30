@@ -15,6 +15,21 @@ class CommonSimNameUtils:
 
     """
     @staticmethod
+    def has_name(sim_info: SimInfo) -> bool:
+        """has_name(sim_info)
+
+        Determine if a Sim has a name.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the specified Sim has a name. False, if not.
+        :rtype: bool
+        """
+        if sim_info is None:
+            return False
+        return CommonSimNameUtils.get_full_name(sim_info) != ''
+
+    @staticmethod
     def get_first_name(sim_info: SimInfo) -> str:
         """get_first_name(sim_info)
 
@@ -57,7 +72,10 @@ class CommonSimNameUtils:
         :return: The full name of the specified Sim.
         :rtype: str
         """
-        return '{} {}'.format(CommonSimNameUtils.get_first_name(sim_info), CommonSimNameUtils.get_last_name(sim_info))
+        full_name = '{} {}'.format(CommonSimNameUtils.get_first_name(sim_info), CommonSimNameUtils.get_last_name(sim_info)).strip()
+        if full_name == '':
+            full_name = 'No Name'
+        return full_name
 
     @staticmethod
     def get_full_names(sim_info_list: Tuple[SimInfo]) -> Tuple[str]:

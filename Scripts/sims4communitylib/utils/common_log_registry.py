@@ -406,12 +406,8 @@ class CommonLog:
         from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
         new_args: List[Any] = list()
         for arg in args:
-            if CommonTypeUtils.is_sim_or_sim_info(arg):
-                sim_info = CommonSimUtils.get_sim_info(arg)
-                if sim_info is None:
-                    new_args.append(arg)
-                else:
-                    new_args.append('{} ({})'.format(CommonSimNameUtils.get_full_name(sim_info), str(CommonSimUtils.get_sim_id(sim_info))))
+            if CommonTypeUtils.is_sim_or_sim_info(arg) or CommonTypeUtils.is_sim_info_base_wrapper(arg):
+                new_args.append('{} ({})'.format(CommonSimNameUtils.get_full_name(arg), str(CommonSimUtils.get_sim_id(arg))))
             else:
                 new_args.append(arg)
         return tuple(new_args)
@@ -424,12 +420,8 @@ class CommonLog:
         from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
         from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
         for (key, val) in kwargs.items():
-            if CommonTypeUtils.is_sim_or_sim_info(val):
-                sim_info = CommonSimUtils.get_sim_info(val)
-                if sim_info is None:
-                    new_kwargs[key] = val
-                else:
-                    new_kwargs[key] = '{} ({})'.format(CommonSimNameUtils.get_full_name(sim_info), str(CommonSimUtils.get_sim_id(sim_info)))
+            if CommonTypeUtils.is_sim_or_sim_info(val) or CommonTypeUtils.is_sim_info_base_wrapper(val):
+                new_kwargs[key] = '{} ({})'.format(CommonSimNameUtils.get_full_name(val), str(CommonSimUtils.get_sim_id(val)))
             else:
                 new_kwargs[key] = val
         return new_kwargs

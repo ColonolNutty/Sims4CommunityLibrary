@@ -22,6 +22,26 @@ class CommonOccultUtils:
     """Utilities for manipulating the Occults of Sims.
 
     """
+    @staticmethod
+    def get_types_for_all_occults_gen(sim_info: SimInfo) -> Iterator[OccultType]:
+        """get_types_for_all_occults_gen(sim_info)
+
+        Retrieve a generator of OccultType for all Occults of a Sim.
+
+        .. note:: Results include the occult type of the sim_info specified.\
+            If they are Human by default, the Human occult type will be included.
+
+        :param sim_info: The Sim to locate the Occults of.
+        :type sim_info: SimInfo
+        :return: An iterable of Occult Types for all occults of the Sim. (Results will not include Occult Types not within the OccultTypes enum, such as Skeleton, Robot, and Ghost! Use :class:`.CommonSimOccultTypeUtils` for more accurate results.)
+        :rtype: Iterator[OccultType]
+        """
+        if sim_info is None:
+            return tuple()
+        for occult_type in OccultType.values:
+            if not CommonOccultUtils.has_occult_sim_info(sim_info, occult_type):
+                continue
+            yield occult_type
 
     @staticmethod
     def get_sim_info_for_all_occults_gen(sim_info: SimInfo, exclude_occult_types: Iterator[OccultType]) -> Iterator[SimInfo]:
