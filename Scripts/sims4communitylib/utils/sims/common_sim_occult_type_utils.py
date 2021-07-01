@@ -16,8 +16,8 @@ class CommonSimOccultTypeUtils:
 
     """
     @staticmethod
-    def get_types_for_all_occults_gen(sim_info: SimInfo) -> Iterator[CommonOccultType]:
-        """get_types_for_all_occults_gen(sim_info)
+    def get_occult_types_for_all_occults_gen(sim_info: SimInfo) -> Iterator[CommonOccultType]:
+        """get_occult_types_for_all_occults_gen(sim_info)
 
         Retrieve a generator of CommonOccultType for all Occults of a Sim.
 
@@ -46,7 +46,7 @@ class CommonSimOccultTypeUtils:
         :return: True, if the specified Sim has any Non-Human Occult Types. False, if not.
         :rtype: bool
         """
-        for occult_type in CommonSimOccultTypeUtils.get_types_for_all_occults_gen(sim_info):
+        for occult_type in CommonSimOccultTypeUtils.get_occult_types_for_all_occults_gen(sim_info):
             if occult_type in (CommonOccultType.NON_OCCULT, CommonOccultType.NONE):
                 continue
             return True

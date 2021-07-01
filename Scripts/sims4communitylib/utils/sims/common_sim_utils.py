@@ -11,7 +11,6 @@ from typing import Iterator, Callable, Union
 from sims.sim import Sim
 from sims.sim_info import SimInfo
 from objects import ALL_HIDDEN_REASONS
-from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
@@ -177,7 +176,7 @@ class CommonSimUtils:
             yield sim_info
 
     @staticmethod
-    def get_sim_id(sim_identifier: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> int:
+    def get_sim_id(sim_identifier: Union[int, Sim, SimInfo]) -> int:
         """get_sim_id(sim_identifier)
 
         Retrieve a SimId (int) from a Sim identifier.
@@ -195,12 +194,10 @@ class CommonSimUtils:
             return sim_identifier.sim_id
         if isinstance(sim_identifier, SimInfo):
             return sim_identifier.id
-        if isinstance(sim_identifier, SimInfoBaseWrapper):
-            return sim_identifier.id
         return sim_identifier
 
     @staticmethod
-    def get_sim_info(sim_identifier: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> Union[SimInfo, SimInfoBaseWrapper, None]:
+    def get_sim_info(sim_identifier: Union[int, Sim, SimInfo]) -> Union[SimInfo, None]:
         """get_sim_info(sim_identifier)
 
         Retrieve a SimInfo instance from a sim identifier.
@@ -216,12 +213,10 @@ class CommonSimUtils:
             return sim_identifier.sim_info
         if isinstance(sim_identifier, int):
             return services.sim_info_manager().get(sim_identifier)
-        if isinstance(sim_identifier, SimInfoBaseWrapper):
-            return CommonSimUtils.get_sim_info(CommonSimUtils.get_sim_id(sim_identifier))
         return sim_identifier
 
     @staticmethod
-    def get_sim_instance(sim_identifier: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> Union[Sim, None]:
+    def get_sim_instance(sim_identifier: Union[int, Sim, SimInfo]) -> Union[Sim, None]:
         """get_sim_instance(sim_identifier)
 
         Retrieve a Sim instance from a sim identifier.
@@ -240,8 +235,6 @@ class CommonSimUtils:
             if sim_info is None:
                 return None
             return CommonSimUtils.get_sim_instance(sim_info)
-        if isinstance(sim_identifier, SimInfoBaseWrapper):
-            return CommonSimUtils.get_sim_instance(CommonSimUtils.get_sim_id(sim_identifier))
         return sim_identifier
 
 

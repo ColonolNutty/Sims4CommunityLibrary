@@ -157,5 +157,5 @@ class _CommonSimTypeUtilsTests:
     @CommonTestService.test(CommonSpecies.CAT, CommonAge.ADULT, CommonOccultType.WITCH, CommonSimType.ADULT_CAT_WITCH)
     @CommonTestService.test(CommonSpecies.CAT, CommonAge.ADULT, CommonOccultType.ROBOT, CommonSimType.ADULT_CAT_ROBOT)
     def _s4cl_determine_sim_type(species: CommonSpecies, age: CommonAge, occult_type: CommonOccultType, expected_sim_type: CommonSimType):
-        result = CommonSimTypeUtils._determine_sim_type(species, age, occult_type)
+        result = CommonSimTypeUtils.determine_sim_type_for_species_age_occult(species, age, occult_type)
         CommonAssertionUtils.are_equal(result, expected_sim_type)

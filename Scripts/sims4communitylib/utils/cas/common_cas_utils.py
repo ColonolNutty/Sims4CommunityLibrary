@@ -15,6 +15,9 @@ from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
 # ReadTheDocs
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 if not ON_RTD:
@@ -236,6 +239,32 @@ class CommonCASUtils:
         outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=outfit_category_and_index)
         return outfit_io.get_cas_part_at_body_type(body_type)
 
+    @staticmethod
+    def get_skin_tone(sim_info: SimInfo) -> int:
+        """get_skin_tone(sim_info)
+
+        Retrieve the id for the Skin Tone of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The decimal identifier of the skin tone of the specified Sim.
+        :rtype: int
+        """
+        return sim_info.skin_tone
+
+    @staticmethod
+    def set_skin_tone(sim_info: SimInfo, skin_tone: int):
+        """get_skin_tone(sim_info, skin_tone_id)
+
+        Set the skin tone of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param skin_tone: The decimal identifier of the skin tone to set the Sim to.
+        :type skin_tone: int
+        """
+        sim_info.skin_tone = skin_tone
+
 
 if not ON_RTD:
     @Command('s4clib.attach_cas_part', command_type=CommandType.Live)
@@ -348,6 +377,7 @@ if not ON_RTD:
         cas_part_id = CommonCASUtils.get_cas_part_id_at_body_type(sim_info, body_type)
         output('Found cas part id at body type {}: {}'.format(body_type, cas_part_id))
 
+
     @Command('s4clib.is_cas_part_available', command_type=CommandType.Live)
     def _s4clib_is_cas_part_available(part_id: int=None, _connection: int=None):
         output = CheatOutput(_connection)
@@ -359,3 +389,29 @@ if not ON_RTD:
             output('CAS Part is available.')
         else:
             output('CAS Part is not available.')
+
+
+    @Command('s4clib.print_skin_tone', command_type=CommandType.Live)
+    def _common_print_skin_tone(opt_sim: OptionalTargetParam=None, _connection: int=None):
+        from server_commands.argument_helpers import get_optional_target
+        output = CheatOutput(_connection)
+        output('Attempting to get skin tone.')
+        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+        if sim_info is None:
+            output('Failed, no Sim was specified or the specified Sim was not found!')
+            return
+        output('Sim: {}'.format(CommonSimNameUtils.get_full_name(sim_info)))
+        output('Skin Tone: {}'.format(CommonCASUtils.get_skin_tone(sim_info)))
+
+
+    @Command('s4clib.set_skin_tone', command_type=CommandType.Live)
+    def _common_set_skin_tone(skin_tone_id: int, opt_sim: OptionalTargetParam=None, _connection: int=None):
+        from server_commands.argument_helpers import get_optional_target
+        output = CheatOutput(_connection)
+        output('Attempting to set the skin tone of Sim.')
+        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+        if sim_info is None:
+            output('Failed, no Sim was specified or the specified Sim was not found!')
+            return
+        output('Sim: {}'.format(CommonSimNameUtils.get_full_name(sim_info)))
+        CommonCASUtils.set_skin_tone(sim_info, skin_tone_id)

@@ -18,7 +18,7 @@ class CommonSimTypeUtils:
     """Utilities for determining the type of a Sim. i.e. Player, NPC, Service, etc.
 
     """
-    _COMBINE_SIM_TYPE_MAPPING: Dict[CommonSimType, CommonSimType] = {
+    _CHILD_DOG_SIM_TYPE_MAPPING: Dict[CommonSimType, CommonSimType] = {
         CommonSimType.CHILD_SMALL_DOG: CommonSimType.CHILD_DOG,
         CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonSimType.CHILD_DOG_VAMPIRE,
         CommonSimType.CHILD_SMALL_DOG_GHOST: CommonSimType.CHILD_DOG_GHOST,
@@ -1405,7 +1405,8 @@ class CommonSimTypeUtils:
         :type combine_teen_young_adult_and_elder_age: bool, optional
         :param combine_child_dog_types: If set to True, the Child Dog Sim Types will be combined into a single Sim Type, i.e. CHILD_DOG. If set to False, the Child Dog Sim Types will be returned as their more specific values. i.e. CHILD_LARGE_DOG, CHILD_SMALL_DOG, etc. Default is True.
         :type combine_child_dog_types: bool, optional
-        :param use_current_occult_type: If set to True, the Sims current occult type will be used, for example an Adult Human Mermaid with no tail would return ADULT_HUMAN instead of ADULT_HUMAN_MERMAID. If set to False, the Sims occult type will be used (whether current or not), for example an Adult Human Mermaid wearing or not wearing their tail would return ADULT_HUMAN_MERMAID.
+        :param use_current_occult_type: If set to True, the Sims current occult type will be used, for example an Adult Human Mermaid with no tail would return ADULT_HUMAN instead of ADULT_HUMAN_MERMAID. If set to False, the Sims occult type will be used (whether current or not), for example an Adult Human Mermaid wearing or not wearing their tail would return ADULT_HUMAN_MERMAID. Default is False.
+        :param use_current_occult_type: bool, optional
         :return: The type of Sim the Sim is or CommonSimType.NONE if no type was found for the Sim.
         :rtype: CommonSimType
         """
@@ -1417,18 +1418,44 @@ class CommonSimTypeUtils:
             occult_type = CommonOccultType.determine_current_occult_type(sim_info)
         else:
             occult_type = CommonOccultType.determine_occult_type(sim_info)
-        sim_type = CommonSimTypeUtils._determine_sim_type(species, age, occult_type)
-        if combine_child_dog_types and sim_type in CommonSimTypeUtils._COMBINE_SIM_TYPE_MAPPING:
-            return CommonSimTypeUtils._COMBINE_SIM_TYPE_MAPPING[sim_type]
+        sim_type = CommonSimTypeUtils.determine_sim_type_for_species_age_occult(species, age, occult_type, combine_teen_young_adult_and_elder_age=combine_teen_young_adult_and_elder_age, combine_child_dog_types=combine_child_dog_types)
         return sim_type
 
     @staticmethod
-    def _determine_sim_type(species: CommonSpecies, age: CommonAge, occult_type: CommonOccultType) -> CommonSimType:
+    def determine_sim_type_for_species_age_occult(species: CommonSpecies, age: CommonAge, occult_type: CommonOccultType, combine_teen_young_adult_and_elder_age: bool=True, combine_child_dog_types: bool=True) -> CommonSimType:
+        """determine_sim_type_for_species_age_occult(species, age, occult_type, combine_teen_young_adult_and_elder_age=True, combine_child_dog_types=True, use_current_occult_type=False)
+
+        Determine the type of Sim a Sim is based on their Age, Species, and Occult Type.
+
+        :param species: A CommonSpecies.
+        :type species: CommonSpecies
+        :param age: An Age.
+        :type age: CommonAge
+        :param occult_type: An Occult Type.
+        :type occult_type: CommonOccultType
+        :param combine_teen_young_adult_and_elder_age: If set to True, Teen, Young Adult, Adult, and Elder, will all receive an ADULT denoted Sim Type instead of TEEN, YOUNG_ADULT, ADULT, and ELDER respectively. i.e. If True, a Human Teen Sim would be denoted as ADULT_HUMAN.
+        If set to False, they will receive their own Sim Types. i.e. If False, a Human Teen Sim would be denoted as TEEN_HUMAN. Default is True.
+        :type combine_teen_young_adult_and_elder_age: bool, optional
+        :param combine_child_dog_types: If set to True, the Child Dog Sim Types will be combined into a single Sim Type, i.e. CHILD_DOG. If set to False, the Child Dog Sim Types will be returned as their more specific values. i.e. CHILD_LARGE_DOG, CHILD_SMALL_DOG, etc. Default is True.
+        :type combine_child_dog_types: bool, optional
+        :return: The type of Sim the Sim is or CommonSimType.NONE if no type was found for the Sim.
+        :rtype: CommonSimType
+        """
+        if age is None or species is None or occult_type is None:
+            return CommonSimType.NONE
+
+        if combine_teen_young_adult_and_elder_age and age in (CommonAge.TEEN, CommonAge.YOUNGADULT, CommonAge.ADULT, CommonAge.ELDER):
+            age = CommonAge.ADULT
+
         if species not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING\
                 or age not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species]\
                 or occult_type not in CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species][age]:
             return CommonSimType.NONE
-        return CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species][age][occult_type]
+
+        sim_type = CommonSimTypeUtils._SIM_TO_SIM_TYPE_MAPPING[species][age][occult_type]
+        if combine_child_dog_types and sim_type in CommonSimTypeUtils._CHILD_DOG_SIM_TYPE_MAPPING:
+            return CommonSimTypeUtils._CHILD_DOG_SIM_TYPE_MAPPING[sim_type]
+        return sim_type
 
     @staticmethod
     def convert_sim_type_to_occult_type(sim_type: CommonSimType) -> CommonOccultType:
