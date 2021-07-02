@@ -13,7 +13,6 @@ from sims4communitylib.events.save.events.save_saved import S4CLSaveSavedEvent
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
-from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 # ReadTheDocs
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
@@ -22,10 +21,6 @@ if not ON_RTD:
 else:
     class SaveGameData:
         pass
-
-
-log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'thing')
-log.enable()
 
 
 class CommonSaveEventDispatcher(CommonService):

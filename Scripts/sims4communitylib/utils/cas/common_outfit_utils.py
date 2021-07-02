@@ -869,7 +869,8 @@ class CommonOutfitUtils:
                 try:
                     body_type = CommonResourceUtils.get_enum_by_name(BodyType.value_to_name[body_type], BodyType, default_value=None)
                 except:
-                    output('No body type found {}'.format(body_type))
+                    output('    {} ({}): {}'.format(str(body_type), int(body_type), cas_part_id))
+                    _log.debug('{} ({}): {}'.format(str(body_type), int(body_type), cas_part_id))
                     continue
                 # noinspection PyBroadException
                 try:

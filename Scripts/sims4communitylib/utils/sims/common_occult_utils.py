@@ -16,6 +16,7 @@ from sims4communitylib.enums.common_occult_type import CommonOccultType
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_sim_loot_action_utils import CommonSimLootActionUtils
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 try:
@@ -29,8 +30,8 @@ class CommonOccultUtils:
 
     """
     @staticmethod
-    def get_occult_types_for_all_occults_gen(sim_info: SimInfo) -> Iterator[OccultType]:
-        """get_occult_types_for_all_occults_gen(sim_info)
+    def get_all_occult_types_for_sim_gen(sim_info: SimInfo) -> Iterator[OccultType]:
+        """get_all_occult_types_for_sim_gen(sim_info)
 
         Retrieve a generator of OccultType for all Occults of a Sim.
 
@@ -39,15 +40,18 @@ class CommonOccultUtils:
 
         :param sim_info: The Sim to locate the Occults of.
         :type sim_info: SimInfo
-        :return: An iterable of Occult Types for all occults of the Sim. (Results will not include Occult Types not within the OccultTypes enum, such as Skeleton, Robot, and Ghost! Use :class:`.CommonSimOccultTypeUtils` for more accurate results.)
+        :return: An iterable of OccultType for all occults of the Sim. (Results will not include Occult Types not within the OccultTypes enum, such as Skeleton, Robot, and Ghost! Use :class:`.CommonSimOccultTypeUtils` for more accurate results.)
         :rtype: Iterator[OccultType]
         """
         if sim_info is None:
             return tuple()
+        yield OccultType.HUMAN
+        sim_occult_types = CommonOccultUtils._get_occult_types(sim_info)
         for occult_type in OccultType.values:
-            if not CommonOccultUtils.has_occult_sim_info(sim_info, occult_type):
+            if occult_type == OccultType.HUMAN:
                 continue
-            yield occult_type
+            if sim_occult_types & occult_type:
+                yield occult_type
 
     @staticmethod
     def get_sim_info_for_all_occults_gen(sim_info: SimInfo, exclude_occult_types: Iterator[OccultType]) -> Iterator[SimInfo]:
@@ -69,15 +73,13 @@ class CommonOccultUtils:
             return tuple()
         exclude_occult_types: Tuple[OccultType] = tuple(exclude_occult_types)
         yield sim_info
-        for occult in OccultType.values:
-            if occult in exclude_occult_types:
+        current_occult_type = CommonOccultUtils.get_current_occult_type(sim_info)
+        for occult_type in OccultType.values:
+            if occult_type in exclude_occult_types:
                 continue
-            # noinspection PyPropertyAccess
-            if occult == sim_info.current_occult_types:
+            if occult_type == current_occult_type:
                 continue
-            if not CommonOccultUtils.has_occult_sim_info(sim_info, occult):
-                continue
-            occult_sim_info: SimInfo = sim_info.occult_tracker.get_occult_sim_info(occult)
+            occult_sim_info: SimInfo = CommonOccultUtils.get_occult_sim_info(sim_info, occult_type)
             if occult_sim_info is None:
                 continue
             yield occult_sim_info
@@ -93,9 +95,24 @@ class CommonOccultUtils:
         :return: True, if the specified Sim has any Non-Human Occult Types. False, if not.
         :rtype: bool
         """
-        if not hasattr(sim_info, 'occult_tracker') or sim_info.occult_tracker is None:
-            return False
-        return sim_info.occult_tracker.has_any_occult_or_part_occult_trait()
+        from sims4communitylib.utils.sims.common_sim_occult_type_utils import CommonSimOccultTypeUtils
+        occult_type = CommonSimOccultTypeUtils.determine_occult_type(sim_info)
+        return occult_type not in (CommonOccultType.NON_OCCULT, CommonOccultType.NONE)
+
+    @staticmethod
+    def has_occult_type(sim_info: SimInfo, occult_type: OccultType) -> bool:
+        """has_occult_type(sim_info, occult_type)
+
+        Determine if a Sim has an Occult Type.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param occult_type: The Occult Type to check.
+        :type occult_type: OccultType
+        :return: True, if the Sim has the specified Occult Type. False, if not.
+        :rtype: bool
+        """
+        return bool(CommonOccultUtils._get_occult_types(sim_info) & occult_type)
 
     @staticmethod
     def has_occult_sim_info(sim_info: SimInfo, occult_type: OccultType) -> bool:
@@ -141,7 +158,7 @@ class CommonOccultUtils:
         :return: The SimInfo of the Sim or the SimInfoBaseWrapper for the specified Occult.
         :rtype: Union[SimInfo, SimInfoBaseWrapper, None]
         """
-        if not CommonOccultUtils.has_occult_sim_info(sim_info, occult_type):
+        if not CommonOccultUtils.has_occult_sim_info(sim_info, occult_type) or not hasattr(sim_info, 'occult_tracker') or sim_info.occult_tracker is None:
             return None
         return sim_info.occult_tracker.get_occult_sim_info(occult_type)
 
@@ -328,7 +345,6 @@ class CommonOccultUtils:
         """
         if CommonOccultUtils.is_robot(sim_info):
             return True
-
         return CommonTraitUtils.add_trait(sim_info, CommonTraitId.OCCULT_ROBOT)
 
     @staticmethod
@@ -506,17 +522,8 @@ class CommonOccultUtils:
         :rtype: bool
         """
         if isinstance(occult_type, CommonOccultType):
-            if occult_type == CommonOccultType.ALIEN:
-                occult_type = OccultType.ALIEN
-            elif occult_type == CommonOccultType.MERMAID:
-                occult_type = OccultType.MERMAID
-            elif occult_type == CommonOccultType.VAMPIRE:
-                occult_type = OccultType.VAMPIRE
-            elif occult_type == CommonOccultType.WITCH:
-                occult_type = OccultType.WITCH
-            elif occult_type == CommonOccultType.NON_OCCULT:
-                occult_type = OccultType.HUMAN
-            else:
+            occult_type = CommonOccultType.convert_to_vanilla(occult_type)
+            if occult_type is None:
                 return False
         if not CommonOccultUtils.has_occult_sim_info(sim_info, occult_type):
             return False
@@ -534,7 +541,7 @@ class CommonOccultUtils:
         :return: True, if the Sim is a Vampire. False, if not.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_VAMPIRE)
+        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_VAMPIRE) or CommonOccultUtils.has_occult_type(sim_info, OccultType.VAMPIRE)
 
     @staticmethod
     def is_alien(sim_info: SimInfo) -> bool:
@@ -547,7 +554,7 @@ class CommonOccultUtils:
         :return: True, if the Sim is an Alien. False, if not.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_ALIEN)
+        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_ALIEN) or CommonOccultUtils.has_occult_type(sim_info, OccultType.ALIEN)
 
     @staticmethod
     def is_plant_sim(sim_info: SimInfo) -> bool:
@@ -634,7 +641,9 @@ class CommonOccultUtils:
         :return: True, if the Sim is a Witch. False, if not.
         :rtype: bool
         """
-        return CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_WITCH)
+        if sim_info is None or not hasattr(OccultType, 'WITCH'):
+            return False
+        return CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_WITCH) or CommonOccultUtils.has_occult_type(sim_info, OccultType.WITCH)
 
     @staticmethod
     def is_mermaid(sim_info: SimInfo) -> bool:
@@ -647,7 +656,9 @@ class CommonOccultUtils:
         :return: True, if the Sim is a Mermaid. False, if not.
         :rtype: bool
         """
-        return CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_MERMAID)
+        if sim_info is None or not hasattr(OccultType, 'MERMAID'):
+            return False
+        return CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_MERMAID) or CommonOccultUtils.has_occult_type(sim_info, OccultType.MERMAID)
 
     @staticmethod
     def is_in_mermaid_form(sim_info: SimInfo) -> bool:
@@ -681,9 +692,24 @@ class CommonOccultUtils:
 
         Determine if a Sim is currently in their Human form (regardless of their Occult type).
 
+        .. note:: The Human Occult is not the same as the Human Species! This means that Pets can have a "Human" Occult as their Non-Occult.
+
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :return: True, if the Sim is currently a Human. False, if not.
+        :rtype: bool
+        """
+        return CommonOccultUtils.is_currently_a_non_occult(sim_info)
+
+    @staticmethod
+    def is_currently_a_non_occult(sim_info: SimInfo) -> bool:
+        """is_currently_a_non_occult(sim_info)
+
+        Determine if a Sim is currently in a Non-Occult form (regardless of their Occult type).
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is currently in their Non-Occult form. False, if not.
         :rtype: bool
         """
         if sim_info is None or not hasattr(OccultType, 'HUMAN'):
@@ -694,10 +720,7 @@ class CommonOccultUtils:
     def is_currently_a_mermaid(sim_info: SimInfo) -> bool:
         """is_currently_a_mermaid(sim_info)
 
-        Determine if a Sim is currently in their Mermaid form. (Not disguised)
-
-        .. note:: This only checks their current occult status, it does not check for a visible Tail.\
-            Use :func:`~is_in_mermaid_form` to check for a visible Tail.
+        Determine if a Sim is currently in a Mermaid form. (Not disguised)
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
@@ -706,7 +729,67 @@ class CommonOccultUtils:
         """
         if sim_info is None or not hasattr(OccultType, 'MERMAID'):
             return False
-        return CommonOccultUtils.get_current_occult_type(sim_info) == OccultType.MERMAID
+        return CommonOccultUtils.get_current_occult_type(sim_info) == OccultType.MERMAID or CommonOccultUtils.is_in_mermaid_form(sim_info)
+
+    @staticmethod
+    def is_currently_a_robot(sim_info: SimInfo) -> bool:
+        """is_currently_a_robot(sim_info)
+
+        Determine if a Sim is currently in their Robot form.
+
+        .. note:: In base game, if a Sim is a Robot then they are automatically in their Robot Form, since Robots do not have an alternative form.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is currently in their Robot form. False, if not.
+        :rtype: bool
+        """
+        return CommonOccultUtils.is_robot(sim_info)
+
+    @staticmethod
+    def is_currently_a_skeleton(sim_info: SimInfo) -> bool:
+        """is_currently_a_skeleton(sim_info)
+
+        Determine if a Sim is currently in their Skeleton form.
+
+        .. note:: In base game, if a Sim is a Skeleton then they are automatically in their Skeleton Form, since Skeletons do not have an alternative form.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is currently in their Skeleton form. False, if not.
+        :rtype: bool
+        """
+        return CommonOccultUtils.is_skeleton(sim_info)
+
+    @staticmethod
+    def is_currently_a_plant_sim(sim_info: SimInfo) -> bool:
+        """is_currently_a_plant_sim(sim_info)
+
+        Determine if a Sim is currently in their Plant Sim form.
+
+        .. note:: In base game, if a Sim is a Plant Sim then they are automatically in their Plant Sim Form, since Plant Sims do not have an alternative form.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is currently in their Plant Sim form. False, if not.
+        :rtype: bool
+        """
+        return CommonOccultUtils.is_plant_sim(sim_info)
+
+    @staticmethod
+    def is_currently_a_ghost(sim_info: SimInfo) -> bool:
+        """is_currently_a_ghost(sim_info)
+
+        Determine if a Sim is currently in their Ghost form.
+
+        .. note:: In base game, if a Sim is a Ghost then they are automatically in their Ghost Form, since Ghosts do not have an alternative form.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is currently in their Ghost form. False, if not.
+        :rtype: bool
+        """
+        return CommonOccultUtils.is_ghost(sim_info)
 
     @staticmethod
     def is_currently_a_vampire(sim_info: SimInfo) -> bool:
@@ -786,73 +869,131 @@ class CommonOccultUtils:
         return False
 
     @staticmethod
-    def get_current_occult_type(sim_info: SimInfo) -> OccultType:
+    def get_current_occult_type(sim_info: SimInfo) -> Union[OccultType, None]:
         """get_current_occult_type(sim_info)
 
         Retrieve the current occult type of the Sim.
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :return: The current occult type of the Sim.
-        :rtype: OccultType
+        :return: The current occult type of the Sim or None if the Sim does not have a current occult type.
+        :rtype: Union[OccultType, None]
         """
         if sim_info is None:
             return OccultType.HUMAN
+        if not hasattr(sim_info, 'current_occult_types'):
+            if not hasattr(sim_info, '_base') or not hasattr(sim_info._base, 'current_occult_types'):
+                return None
+            return OccultType(sim_info._base.current_occult_types)
         # noinspection PyPropertyAccess
-        return sim_info.current_occult_types
+        return OccultType(sim_info.current_occult_types)
+
+    @staticmethod
+    def _get_occult_types(sim_info: SimInfo) -> OccultType:
+        if not hasattr(sim_info, 'occult_types'):
+            if not hasattr(sim_info, '_base') or not hasattr(sim_info._base, 'occult_types'):
+                return OccultType.HUMAN
+            return sim_info._base.occult_types
+        # noinspection PyPropertyAccess
+        return sim_info.occult_types
 
 
-@Command('s4clib.switch_to_occult', command_type=CommandType.Live)
-def _common_switch_to_occult(occult_type_str: str, opt_sim: OptionalTargetParam=None, _connection: int=None):
+@Command('s4clib.switch_sim_to_occult', command_type=CommandType.Live)
+def _common_switch_sim_to_occult(occult_type_str: str, opt_sim: OptionalTargetParam=None, _connection: int=None):
     from server_commands.argument_helpers import get_optional_target
     output = CheatOutput(_connection)
+    output('Attempting to switch Sim to the specified occult.')
     sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
+        output('FAILED: No Sim was specified or the specified Sim was not found!')
         return
     occult_type = CommonResourceUtils.get_enum_by_name(occult_type_str.upper(), OccultType, default_value=-1)
     if occult_type == -1:
-        output('Specified occult type is not a valid occult type, it was "{}"'.format(occult_type_str))
+        output('FAILED: The specified occult type is not a valid occult type, it was "{}"'.format(occult_type_str))
         return
     if CommonOccultUtils.switch_to_occult_form(sim_info, occult_type):
-        output('Successfully switched occult types.')
+        output('SUCCESS: Switched the Sim to the specified occult.')
     else:
-        output('Failed to switch occult types.')
+        output('FAILED: Failed to switch Sim to the specified occult.')
 
 
-@Command('s4clib.add_occult', command_type=CommandType.Live)
-def _common_add_occult(occult_type_str: str, opt_sim: OptionalTargetParam=None, _connection: int=None):
+@Command('s4clib.add_occult_to_sim', command_type=CommandType.Live)
+def _common_add_occult_to_sim(occult_type_str: str, opt_sim: OptionalTargetParam=None, _connection: int=None):
     from server_commands.argument_helpers import get_optional_target
     output = CheatOutput(_connection)
-    output('Attempting to add occult to Sim.')
+    output('Attempting to add the specified occult to Sim.')
     sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
+        output('FAILED: no Sim was specified or the specified Sim was not found!')
         return
     occult_type = CommonResourceUtils.get_enum_by_name(occult_type_str.upper(), CommonOccultType, default_value=CommonOccultType.NONE)
     if occult_type == CommonOccultType.NONE:
-        output('Specified occult type is not a valid occult type, it was "{}"'.format(occult_type_str))
+        output('FAILED: The specified occult type is not a valid occult type, it was "{}"'.format(occult_type_str))
         return
     if CommonOccultUtils.add_occult(sim_info, occult_type):
-        output('Successfully added occult.')
+        output('SUCCESS: Successfully added occult to Sim.')
     else:
-        output('Failed to add occult.')
+        output('FAILED: Failed to add occult to Sim.')
 
 
-@Command('s4clib.remove_occult', command_type=CommandType.Live)
-def _common_remove_occult(occult_type_str: str, opt_sim: OptionalTargetParam=None, _connection: int=None):
+@Command('s4clib.remove_occult_from_sim', command_type=CommandType.Live)
+def _common_remove_occult_from_sim(occult_type_str: str, opt_sim: OptionalTargetParam=None, _connection: int=None):
     from server_commands.argument_helpers import get_optional_target
     output = CheatOutput(_connection)
-    output('Attempting to remove occult from Sim.')
+    output('Attempting to remove the specified occult from Sim.')
     sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
+        output('FAILED: No Sim was specified or the specified Sim was not found!')
         return
     occult_type = CommonResourceUtils.get_enum_by_name(occult_type_str.upper(), CommonOccultType, default_value=CommonOccultType.NONE)
     if occult_type == CommonOccultType.NONE:
-        output('Specified occult type is not a valid occult type, it was "{}"'.format(occult_type_str))
+        output('FAILED: The specified occult type is not a valid occult type, it was "{}"'.format(occult_type_str))
         return
     if CommonOccultUtils.remove_occult(sim_info, occult_type):
-        output('Successfully removed occult.')
+        output('SUCCESS: Successfully removed occult type.')
     else:
-        output('Failed to removed occult.')
+        output('FAILED: Failed to remove occult type.')
+
+
+@Command('s4clib.remove_all_occults_from_sim', command_type=CommandType.Live)
+def _common_remove_all_occults_from_sim(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    output('Attempting to remove all occults from Sim.')
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('FAILED: no Sim was specified or the specified Sim was not found!')
+        return
+    if CommonOccultUtils.remove_all_occults(sim_info):
+        output('SUCCESS: Successfully removed all occults from the Sim.')
+    else:
+        output('FAILED: Failed to remove all occults from the Sim.')
+
+
+@Command('s4clib.print_vanilla_occult_types', command_type=CommandType.Live)
+def _common_print_vanilla_occult_types_for_sim(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('FAILED: no Sim was specified or the specified Sim was not found!')
+        return
+    output('Occult Types: {}'.format(CommonOccultUtils._get_occult_types(sim_info)))
+    output('Current Occult Types: {}'.format(CommonOccultUtils.get_current_occult_type(sim_info)))
+
+
+@Command('s4clib.print_occult_sim_infos', command_type=CommandType.Live)
+def _common_print_occult_sim_info(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('FAILED: no Sim was specified or the specified Sim was not found!')
+        return
+    for occult_type in OccultType.values:
+        if not CommonOccultUtils.has_occult_type(sim_info, occult_type):
+            output('Occult Sim Info[{}]: None'.format(occult_type.name))
+            continue
+        occult_sim_info = CommonOccultUtils.get_occult_sim_info(sim_info, occult_type)
+        output('Occult Sim Info [{}]: {}'.format(occult_type.name, CommonSimNameUtils.get_full_name(occult_sim_info) if occult_sim_info is not None else 'None'))
+    output('Done')

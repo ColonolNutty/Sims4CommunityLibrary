@@ -466,8 +466,8 @@ class CommonSimGenderOptionUtils:
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :param uses_toilet_standing: If True, the Sim will use toilets while standing.\
-        If False, the Sim will use toilets while sitting.
+        :param uses_toilet_standing: If True, the Sim will use toilets while standing and will not use toilets while sitting.\
+        If False, the Sim will use toilets while sitting and will not use toilets while standing.
         :type uses_toilet_standing: bool
         :return: True, if successful. False, if not.
         :rtype: bool
@@ -482,6 +482,60 @@ class CommonSimGenderOptionUtils:
         else:
             CommonTraitUtils.remove_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_STANDING)
             CommonTraitUtils.add_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING)
+        from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
+        CommonSimEventDispatcherService()._on_sim_change_gender_options_toilet_usage(sim_info)
+        return True
+
+    @staticmethod
+    def set_can_use_toilet_standing(sim_info: SimInfo, can_use_toilet_standing: bool) -> bool:
+        """set_can_use_toilet_standing(sim_info, can_use_toilet_standing)
+
+        Set whether a Sim can use a toilet while standing or not.
+
+        .. note:: Will only update Human Sims.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param can_use_toilet_standing: Whether or not the Sim will be able to use a toilet while standing.
+        :type can_use_toilet_standing: bool
+        :return: True, if successful set. False, if not.
+        :rtype: bool
+        """
+        if sim_info is None:
+            return False
+        if not CommonSpeciesUtils.is_human(sim_info):
+            return False
+        if can_use_toilet_standing and not CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_STANDING):
+            CommonTraitUtils.add_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_STANDING)
+        elif CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_STANDING):
+            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_STANDING)
+        from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
+        CommonSimEventDispatcherService()._on_sim_change_gender_options_toilet_usage(sim_info)
+        return True
+
+    @staticmethod
+    def set_can_use_toilet_sitting(sim_info: SimInfo, can_use_toilet_sitting: bool) -> bool:
+        """set_can_use_toilet_sitting(sim_info, can_use_toilet_sitting)
+
+        Set whether a Sim can use a toilet while sitting or not.
+
+        .. note:: Will only update Human Sims.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param can_use_toilet_sitting: Whether or not the Sim will be able to use a toilet while sitting.
+        :type can_use_toilet_sitting: bool
+        :return: True, if successful set. False, if not.
+        :rtype: bool
+        """
+        if sim_info is None:
+            return False
+        if not CommonSpeciesUtils.is_human(sim_info):
+            return False
+        if can_use_toilet_sitting and not CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING):
+            CommonTraitUtils.add_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING)
+        elif CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING):
+            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING)
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender_options_toilet_usage(sim_info)
         return True

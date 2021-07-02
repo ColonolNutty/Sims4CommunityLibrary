@@ -184,8 +184,8 @@ def _common_on_sim_add_occult_type(original, self, *args, **kwargs) -> Any:
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), OccultTracker, OccultTracker.switch_to_occult_type.__name__)
 def _common_on_sim_change_occult_type(original, self, *args, **kwargs) -> Any:
-    result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_change_occult_type(self, *args, **kwargs)
+    result = original(self, *args, **kwargs)
     return result
 
 

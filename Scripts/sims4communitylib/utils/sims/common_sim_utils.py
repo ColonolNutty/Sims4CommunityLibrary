@@ -10,7 +10,7 @@ import sims4.commands
 from typing import Iterator, Callable, Union
 from sims.sim import Sim
 from sims.sim_info import SimInfo
-from objects import ALL_HIDDEN_REASONS
+from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
@@ -130,6 +130,7 @@ class CommonSimUtils:
         :return: An iterable of all Sims matching the `include_sim_callback` filter.
         :rtype: Iterator[Sim]
         """
+        from objects import ALL_HIDDEN_REASONS
         for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
             sim_instance = sim_info.get_sim_instance(allow_hidden_flags=ALL_HIDDEN_REASONS)
             if sim_instance is None:
@@ -168,6 +169,8 @@ class CommonSimUtils:
         :return: An iterable of all Sims matching the `include_sim_callback` filter.
         :rtype: Iterator[SimInfo]
         """
+        from objects import ALL_HIDDEN_REASONS
+
         def _is_instanced(_sim_info: SimInfo) -> bool:
             return _sim_info.get_sim_instance(allow_hidden_flags=ALL_HIDDEN_REASONS) is not None
 
@@ -176,14 +179,14 @@ class CommonSimUtils:
             yield sim_info
 
     @staticmethod
-    def get_sim_id(sim_identifier: Union[int, Sim, SimInfo]) -> int:
+    def get_sim_id(sim_identifier: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> int:
         """get_sim_id(sim_identifier)
 
         Retrieve a SimId (int) from a Sim identifier.
 
         :param sim_identifier: The identifier or instance of a Sim.
-        :type sim_identifier: Union[int, Sim, SimInfo]
-        :return: An identifier for the Sim instance.
+        :type sim_identifier: Union[int, Sim, SimInfo, SimInfoBaseWrapper]
+        :return: The decimal identifier for the Sim instance or 0 if a problem occurs.
         :rtype: int
         """
         if sim_identifier is None:
@@ -194,18 +197,20 @@ class CommonSimUtils:
             return sim_identifier.sim_id
         if isinstance(sim_identifier, SimInfo):
             return sim_identifier.id
-        return sim_identifier
+        if isinstance(sim_identifier, SimInfoBaseWrapper):
+            return sim_identifier.id
+        return 0
 
     @staticmethod
-    def get_sim_info(sim_identifier: Union[int, Sim, SimInfo]) -> Union[SimInfo, None]:
+    def get_sim_info(sim_identifier: Union[int, Sim, SimInfo, SimInfoBaseWrapper]) -> Union[SimInfo, SimInfoBaseWrapper, None]:
         """get_sim_info(sim_identifier)
 
         Retrieve a SimInfo instance from a sim identifier.
 
         :param sim_identifier: The identifier or instance of a Sim to use.
-        :type sim_identifier: Union[int, Sim, SimInfo]
+        :type sim_identifier: Union[int, Sim, SimInfo, SimInfoBaseWrapper]
         :return: The SimInfo of the specified Sim instance or None if SimInfo is not found.
-        :rtype: Union[SimInfo, None]
+        :rtype: Union[SimInfo, SimInfoBaseWrapper, None]
         """
         if sim_identifier is None or isinstance(sim_identifier, SimInfo):
             return sim_identifier
@@ -213,6 +218,8 @@ class CommonSimUtils:
             return sim_identifier.sim_info
         if isinstance(sim_identifier, int):
             return services.sim_info_manager().get(sim_identifier)
+        if isinstance(sim_identifier, SimInfoBaseWrapper):
+            return sim_identifier.get_sim_info()
         return sim_identifier
 
     @staticmethod
@@ -226,6 +233,7 @@ class CommonSimUtils:
         :return: The instance of the specified Sim or None if no instance was found.
         :rtype: Union[Sim, None]
         """
+        from objects import ALL_HIDDEN_REASONS
         if sim_identifier is None or isinstance(sim_identifier, Sim):
             return sim_identifier
         if isinstance(sim_identifier, SimInfo):
@@ -235,6 +243,8 @@ class CommonSimUtils:
             if sim_info is None:
                 return None
             return CommonSimUtils.get_sim_instance(sim_info)
+        if isinstance(sim_identifier, SimInfoBaseWrapper):
+            return sim_identifier.get_sim_instance(allow_hidden_flags=ALL_HIDDEN_REASONS)
         return sim_identifier
 
 

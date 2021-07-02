@@ -5,13 +5,16 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Dict
+from typing import Dict, Iterator
 
+from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
+from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_occult_type import CommonOccultType
 from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.enums.sim_type import CommonSimType
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonSimTypeUtils:
@@ -1393,6 +1396,28 @@ class CommonSimTypeUtils:
         return CommonSimTypeUtils.convert_to_non_occult_variant(sim_type) != sim_type
 
     @staticmethod
+    def get_all_sim_types_gen(sim_info: SimInfo, combine_teen_young_adult_and_elder_age: bool=True, combine_child_dog_types: bool=True) -> Iterator[CommonSimType]:
+        """get_all_sim_types_gen(sim_info, combine_teen_young_adult_and_elder_age=True, combine_child_dog_types=True)
+
+        Determine all types a Sim is based on their Age, Species, and Occult Types.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param combine_teen_young_adult_and_elder_age: If set to True, Teen, Young Adult, Adult, and Elder, will all receive an ADULT denoted Sim Type instead of TEEN, YOUNG_ADULT, ADULT, and ELDER respectively. i.e. A Human Teen Sim would be denoted as ADULT_HUMAN.
+        If set to False, they will receive their own Sim Types. i.e. A Human Teen Sim would be denoted as TEEN_HUMAN. Default is True.
+        :type combine_teen_young_adult_and_elder_age: bool, optional
+        :param combine_child_dog_types: If set to True, the Child Dog Sim Types will be combined into a single Sim Type, i.e. CHILD_DOG. If set to False, the Child Dog Sim Types will be returned as their more specific values. i.e. CHILD_LARGE_DOG, CHILD_SMALL_DOG, etc. Default is True.
+        :type combine_child_dog_types: bool, optional
+        :return: An iterable of all types the Sim is.
+        :rtype: Iterator[CommonSimType]
+        """
+        species = CommonSpecies.get_species(sim_info)
+        age = CommonAge.get_age(sim_info)
+        from sims4communitylib.utils.sims.common_sim_occult_type_utils import CommonSimOccultTypeUtils
+        for occult_type in CommonSimOccultTypeUtils.get_all_occult_types_for_sim_gen(sim_info):
+            yield CommonSimTypeUtils.determine_sim_type_for_species_age_occult(species, age, occult_type, combine_teen_young_adult_and_elder_age=combine_teen_young_adult_and_elder_age, combine_child_dog_types=combine_child_dog_types)
+
+    @staticmethod
     def determine_sim_type(sim_info: SimInfo, combine_teen_young_adult_and_elder_age: bool=True, combine_child_dog_types: bool=True, use_current_occult_type: bool=False) -> CommonSimType:
         """determine_sim_type(sim_info, combine_teen_young_adult_and_elder_age=True, combine_child_dog_types=True, use_current_occult_type=False)
 
@@ -1412,8 +1437,6 @@ class CommonSimTypeUtils:
         """
         species = CommonSpecies.get_species(sim_info)
         age = CommonAge.get_age(sim_info)
-        if combine_teen_young_adult_and_elder_age and age in (CommonAge.TEEN, CommonAge.YOUNGADULT, CommonAge.ADULT, CommonAge.ELDER):
-            age = CommonAge.ADULT
         if use_current_occult_type:
             occult_type = CommonOccultType.determine_current_occult_type(sim_info)
         else:
@@ -1542,3 +1565,18 @@ class CommonSimTypeUtils:
         if sim_type not in CommonSimTypeUtils._OCCULT_SIM_TYPE_TO_NON_OCCULT_SIM_TYPE_MAPPING:
             return sim_type
         return CommonSimTypeUtils._OCCULT_SIM_TYPE_TO_NON_OCCULT_SIM_TYPE_MAPPING[sim_type]
+
+
+@Command('s4clib.print_sim_types', command_type=CommandType.Live)
+def _common_print_sim_types_for_sim(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('FAILED: no Sim was specified or the specified Sim was not found!')
+        return
+    output('Printing all available Sim types.')
+    for sim_type in CommonSimTypeUtils.get_all_sim_types_gen(sim_info, combine_teen_young_adult_and_elder_age=False, combine_child_dog_types=False):
+        output('Sim Type: {}'.format(sim_type.name))
+    output('Done')
+

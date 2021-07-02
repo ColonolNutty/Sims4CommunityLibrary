@@ -61,8 +61,8 @@ class CommonSpecies(CommonInt):
             return species
         conversion_mapping: Dict[CommonSpecies, Species] = {
             CommonSpecies.HUMAN: Species.HUMAN,
-            CommonSpecies.SMALL_DOG: SpeciesExtended.SMALLDOG,
-            CommonSpecies.LARGE_DOG: Species.DOG,
-            CommonSpecies.CAT: Species.CAT
+            CommonSpecies.SMALL_DOG: SpeciesExtended.SMALLDOG if hasattr(SpeciesExtended, 'SMALLDOG') else None,
+            CommonSpecies.LARGE_DOG: Species.DOG if hasattr(Species, 'DOG') else None,
+            CommonSpecies.CAT: Species.CAT if hasattr(Species, 'CAT') else None
         }
         return conversion_mapping.get(species, None)

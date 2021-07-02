@@ -81,8 +81,21 @@ class CommonAgeUtils:
         age = CommonAge.convert_to_vanilla(age)
         if age is None:
             return False
-        sim_info.apply_age(age)
-        return True
+        current_age = CommonAgeUtils.get_age(sim_info)
+        if current_age is None:
+            return False
+        if current_age == age:
+            return True
+        if age < current_age:
+            while CommonAgeUtils.get_age(sim_info) != age and sim_info.can_reverse_age():
+                sim_info.reverse_age()
+            if sim_info.can_reverse_age():
+                sim_info.reverse_age()
+                sim_info.advance_age()
+        else:
+            while CommonAgeUtils.get_age(sim_info) != age and not CommonAgeUtils.is_elder(sim_info):
+                sim_info.advance_age()
+        return CommonAgeUtils.get_age(sim_info) == age
 
     @staticmethod
     def are_same_age(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:

@@ -46,6 +46,7 @@ class CommonLog:
         self._mod_name = mod_identifier.name if isinstance(mod_identifier, CommonModIdentity) else mod_identifier
         self._custom_file_path = custom_file_path
         self._enabled_message_types = tuple()
+        self._should_log_extra_sim_details = False
 
     def debug(self, message: str):
         """debug(message)
@@ -290,15 +291,33 @@ class CommonLog:
         calling_frame = inspect.getouterframes(current_frame, 2)
         self.format(calling_frame)
 
-    def enable(self, message_types: Tuple[CommonMessageType]=(CommonMessageType.WARN, CommonMessageType.DEBUG, CommonMessageType.INFO)) -> None:
-        """enable(message_types=(CommonMessageType.WARN, CommonMessageType.DEBUG, CommonMessageType.INFO))
+    def enable(self, message_types: Tuple[CommonMessageType]=(CommonMessageType.WARN, CommonMessageType.DEBUG, CommonMessageType.INFO), enable_logging_extra_sim_details: bool=False) -> None:
+        """enable(message_types=(CommonMessageType.WARN, CommonMessageType.DEBUG, CommonMessageType.INFO), enable_extra_sim_details=False)
 
         Enable the log or specific types of logs.
 
         :param message_types: The types of messages to enable for logging. Default message types are Info, Debug, and Warn.
         :rtype message_types: Tuple[CommonMessageTypes], optional
+        :param enable_logging_extra_sim_details: If True, when a Sim is being logged, extra Sim details, such as Sim Type and Current Sim Type, will be logged in addition to their name and id. If False, only their name and id will be logged. Default is False.
+        :type enable_logging_extra_sim_details: bool, optional
         """
         self._enabled_message_types = message_types or tuple()
+        if enable_logging_extra_sim_details:
+            self.enable_logging_extra_sim_details()
+
+    def enable_logging_extra_sim_details(self) -> None:
+        """enable_logging_extra_sim_details()
+
+        Enable the logging of extra Sim details, when logging a Sim, such as Sim Type and Sim Current Type.
+        """
+        self._should_log_extra_sim_details = True
+
+    def disable_logging_extra_sim_details(self) -> None:
+        """disable_logging_extra_sim_details()
+
+        Disable the logging of extra Sim details when logging a Sim, such as Sim Type and Sim Current Type.
+        """
+        self._should_log_extra_sim_details = False
 
     def disable(self) -> None:
         """disable()
@@ -307,6 +326,7 @@ class CommonLog:
 
         """
         self._enabled_message_types = tuple()
+        self.disable_logging_extra_sim_details()
     
     @property
     def enabled(self) -> bool:
@@ -407,7 +427,21 @@ class CommonLog:
         new_args: List[Any] = list()
         for arg in args:
             if CommonTypeUtils.is_sim_or_sim_info(arg) or CommonTypeUtils.is_sim_info_base_wrapper(arg):
-                new_args.append('{} ({})'.format(CommonSimNameUtils.get_full_name(arg), str(CommonSimUtils.get_sim_id(arg))))
+                obj_type_acronym = 'Unknown'
+                if CommonTypeUtils.is_sim_info(arg):
+                    obj_type_acronym = 'SI'
+                elif CommonTypeUtils.is_sim_instance(arg):
+                    obj_type_acronym = 'S'
+                elif CommonTypeUtils.is_sim_info_base_wrapper(arg):
+                    obj_type_acronym = 'SIBW'
+                if self._should_log_extra_sim_details:
+                    from sims4communitylib.utils.sims.common_sim_type_utils import CommonSimTypeUtils
+                    sim_info = CommonSimUtils.get_sim_info(arg)
+                    sim_types = tuple(CommonSimTypeUtils.get_all_sim_types_gen(sim_info, combine_teen_young_adult_and_elder_age=False, combine_child_dog_types=False))
+                    current_sim_type = CommonSimTypeUtils.determine_sim_type(sim_info, combine_teen_young_adult_and_elder_age=False, combine_child_dog_types=False, use_current_occult_type=True)
+                    new_args.append('{} ({}, ({}), C:{}) [{}]'.format(CommonSimNameUtils.get_full_name(arg), str(CommonSimUtils.get_sim_id(arg)), ', '.join([sim_type.name for sim_type in sim_types]), current_sim_type.name, obj_type_acronym))
+                else:
+                    new_args.append('{} ({}) [{}]'.format(CommonSimNameUtils.get_full_name(arg), str(CommonSimUtils.get_sim_id(arg)), obj_type_acronym))
             else:
                 new_args.append(arg)
         return tuple(new_args)
@@ -421,7 +455,22 @@ class CommonLog:
         from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
         for (key, val) in kwargs.items():
             if CommonTypeUtils.is_sim_or_sim_info(val) or CommonTypeUtils.is_sim_info_base_wrapper(val):
-                new_kwargs[key] = '{} ({})'.format(CommonSimNameUtils.get_full_name(val), str(CommonSimUtils.get_sim_id(val)))
+                obj_type_acronym = 'UnknownType'
+                if CommonTypeUtils.is_sim_info(val):
+                    obj_type_acronym = 'SI'
+                elif CommonTypeUtils.is_sim_instance(val):
+                    obj_type_acronym = 'S'
+                elif CommonTypeUtils.is_sim_info_base_wrapper(val):
+                    obj_type_acronym = 'SIBW'
+
+                if self._should_log_extra_sim_details:
+                    from sims4communitylib.utils.sims.common_sim_type_utils import CommonSimTypeUtils
+                    sim_info = CommonSimUtils.get_sim_info(val)
+                    sim_types = tuple(CommonSimTypeUtils.get_all_sim_types_gen(sim_info, combine_teen_young_adult_and_elder_age=False, combine_child_dog_types=False))
+                    current_sim_type = CommonSimTypeUtils.determine_sim_type(sim_info, combine_teen_young_adult_and_elder_age=False, combine_child_dog_types=False, use_current_occult_type=True)
+                    new_kwargs[key] = '{} ({}, ({}), C:{}) [{}]'.format(CommonSimNameUtils.get_full_name(val), str(CommonSimUtils.get_sim_id(val)), ', '.join([sim_type.name for sim_type in sim_types]), current_sim_type.name, obj_type_acronym)
+                else:
+                    new_kwargs[key] = '{} ({}) [{}]'.format(CommonSimNameUtils.get_full_name(val), str(CommonSimUtils.get_sim_id(val)), obj_type_acronym)
             else:
                 new_kwargs[key] = val
         return new_kwargs
