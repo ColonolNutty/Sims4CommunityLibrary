@@ -5,13 +5,14 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any
+from typing import Any, Tuple
 
 from buffs.buff import Buff
 from objects.components.buff_component import BuffComponent
 from sims.aging.aging_mixin import AgingMixin
 from sims.occult.occult_enums import OccultType
 from sims.occult.occult_tracker import OccultTracker
+from sims.outfits.outfit_enums import OutfitCategory
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Age
 from sims.sim_spawner import SimSpawner
@@ -38,6 +39,7 @@ from sims4communitylib.events.sim.events.sim_changed_gender_options_toilet_usage
 from sims4communitylib.events.sim.events.sim_initialized import S4CLSimInitializedEvent
 from sims4communitylib.events.sim.events.sim_loaded import S4CLSimLoadedEvent
 from sims4communitylib.events.sim.events.sim_removed_occult_type import S4CLSimRemovedOccultTypeEvent
+from sims4communitylib.events.sim.events.sim_set_current_outfit import S4CLSimSetCurrentOutfitEvent
 from sims4communitylib.events.sim.events.sim_skill_leveled_up import S4CLSimSkillLeveledUpEvent
 from sims4communitylib.events.sim.events.sim_spawned import S4CLSimSpawnedEvent
 from sims4communitylib.modinfo import ModInfo
@@ -123,6 +125,10 @@ class CommonSimEventDispatcherService(CommonService):
             return
         CommonEventRegistry.get().dispatch(S4CLSimBuffAddedEvent(sim_info, buff))
 
+    def _on_sim_set_current_outfit(self, sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]) -> None:
+        from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
+        CommonEventRegistry.get().dispatch(S4CLSimSetCurrentOutfitEvent(sim_info, CommonOutfitUtils.get_current_outfit(sim_info), outfit_category_and_index))
+
     def _on_sim_buff_removed(self, buff: Buff, sim_id: int) -> None:
         sim_info = CommonSimUtils.get_sim_info(sim_id)
         if sim_info is None:
@@ -194,6 +200,12 @@ def _common_on_sim_remove_occult_type(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_remove_occult_type(self, *args, **kwargs)
     return result
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.set_current_outfit.__name__)
+def _common_on_sim_set_current_outfit(original, self, *args, **kwargs) -> Any:
+    CommonSimEventDispatcherService.get()._on_sim_set_current_outfit(self, *args, **kwargs)
+    return original(self, *args, **kwargs)
 
 
 @CommonEventRegistry.handle_events(ModInfo.get_identity())

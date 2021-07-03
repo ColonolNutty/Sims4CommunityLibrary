@@ -5,11 +5,15 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import random
 from typing import Union
 
+import services
+from event_testing.test_events import TestEvent
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Age
 from sims4.commands import Command, CommandType, CheatOutput
+from sims4.resources import Types
 from sims4communitylib.enums.common_age import CommonAge
 
 
@@ -32,7 +36,7 @@ class CommonAgeUtils:
         """
         if sim_info is None:
             return None
-        age = None
+        age: Age = None
         if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age') and exact_age:
             age = sim_info.sim_info._base.age
         elif hasattr(sim_info, '_base') and hasattr(sim_info._base, 'age'):
@@ -46,11 +50,26 @@ class CommonAgeUtils:
             age = sim_info.sim_info.age
         if age is None:
             return None
-        if isinstance(age, Age):
-            return age
         if exact_age:
             return age
-        age: int = age
+        return CommonAgeUtils.convert_to_approximate_age(age)
+
+    @staticmethod
+    def convert_to_approximate_age(age: Union[CommonAge, Age, int]) -> Age:
+        """convert_to_approximate_age(age)
+
+        Convert an age to an approximate Age value.
+
+        :param age: An Age.
+        :type age: Union[CommonAge, Age, int]
+        :return: The specified Age converted into an approximate Age value.
+        :rtype: Age
+        """
+        if isinstance(age, CommonAge):
+            return CommonAge.convert_to_vanilla(age)
+        if isinstance(age, Age):
+            return age
+        age: int = int(age)
         if int(Age.BABY) <= age < int(Age.TODDLER):
             return Age.BABY
         if int(Age.TODDLER) <= age < int(Age.CHILD):
@@ -78,23 +97,46 @@ class CommonAgeUtils:
         :return: True, if the Age was set successfully. False, if not.
         :rtype: bool
         """
-        age = CommonAge.convert_to_vanilla(age)
+        age = CommonAgeUtils.convert_to_approximate_age(age)
         if age is None:
             return False
-        current_age = CommonAgeUtils.get_age(sim_info)
+        current_age = CommonAgeUtils.get_age(sim_info, exact_age=False)
+        approximate_age = CommonAgeUtils.convert_to_approximate_age(age)
         if current_age is None:
             return False
-        if current_age == age:
+        if current_age == approximate_age:
             return True
-        if age < current_age:
-            while CommonAgeUtils.get_age(sim_info) != age and sim_info.can_reverse_age():
-                sim_info.reverse_age()
-            if sim_info.can_reverse_age():
-                sim_info.reverse_age()
-                sim_info.advance_age()
-        else:
-            while CommonAgeUtils.get_age(sim_info) != age and not CommonAgeUtils.is_elder(sim_info):
-                sim_info.advance_age()
+        sim_info._relationship_tracker.update_bits_on_age_up(current_age)
+        sim_info.change_age(age, current_age)
+        services.get_event_manager().process_event(TestEvent.AgedUp, sim_info=sim_info)
+        school_data = sim_info.get_school_data()
+        if school_data is not None:
+            school_data.update_school_data(sim_info, create_homework=True)
+        if sim_info.is_npc:
+            if sim_info.is_child or sim_info.is_teen:
+                available_aspirations = []
+                aspiration_track_manager = services.get_instance_manager(Types.ASPIRATION_TRACK)
+                for aspiration_track in aspiration_track_manager.types.values():
+                    if not sim_info.aspiration_tracker.is_aspiration_track_visible(aspiration_track):
+                        continue
+                    if sim_info.is_child and aspiration_track.is_child_aspiration_track:
+                        available_aspirations.append(aspiration_track)
+                    elif sim_info.is_teen:
+                        available_aspirations.append(aspiration_track)
+                sim_info.primary_aspiration = random.choice(available_aspirations)
+            number_of_empty_trait_slots = sim_info.trait_tracker.empty_slot_number
+            if number_of_empty_trait_slots:
+                # noinspection PyUnresolvedReferences
+                available_traits = [trait for trait in services.trait_manager().types.values() if trait.is_personality_trait]
+                while number_of_empty_trait_slots > 0 and available_traits:
+                    trait = random.choice(available_traits)
+                    available_traits.remove(trait)
+                    if sim_info.trait_tracker.can_add_trait(trait) and sim_info.add_trait(trait):
+                        number_of_empty_trait_slots -= 1
+        age_transition = sim_info.get_age_transition_data(age)
+        age_transition.apply_aging_transition_loot(sim_info)
+        sim_info._create_additional_statistics()
+        sim_info._apply_life_skill_traits()
         return CommonAgeUtils.get_age(sim_info) == age
 
     @staticmethod
