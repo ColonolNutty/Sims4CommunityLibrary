@@ -658,6 +658,7 @@ class CommonTraitId(CommonInt):
     SURPRISE_HOLIDAY_DISCOUNT_DAY: 'CommonTraitId' = 181915
     SURPRISE_HOLIDAY_PIRATE_DAY: 'CommonTraitId' = 184130
     SURVIVALIST: 'CommonTraitId' = 108876
+    SURVIVAL_INSTINCT: 'CommonTraitId' = 249731
     TAIL_STYLE_DOWN: 'CommonTraitId' = 128513
     TAIL_STYLE_UP: 'CommonTraitId' = 128514
     TEEN: 'CommonTraitId' = 34317
