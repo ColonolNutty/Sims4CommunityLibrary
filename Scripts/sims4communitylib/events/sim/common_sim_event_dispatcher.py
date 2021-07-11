@@ -36,6 +36,7 @@ from sims4communitylib.events.sim.events.sim_changed_gender import S4CLSimChange
 from sims4communitylib.events.sim.events.sim_changed_occult_type import S4CLSimChangedOccultTypeEvent
 from sims4communitylib.events.sim.events.sim_changed_gender_options_can_be_impregnated import S4CLSimChangedGenderOptionsCanBeImpregnatedEvent
 from sims4communitylib.events.sim.events.sim_changed_gender_options_toilet_usage import S4CLSimChangedGenderOptionsToiletUsageEvent
+from sims4communitylib.events.sim.events.sim_changing_occult_type import S4CLSimChangingOccultTypeEvent
 from sims4communitylib.events.sim.events.sim_initialized import S4CLSimInitializedEvent
 from sims4communitylib.events.sim.events.sim_loaded import S4CLSimLoadedEvent
 from sims4communitylib.events.sim.events.sim_removed_occult_type import S4CLSimRemovedOccultTypeEvent
@@ -111,7 +112,11 @@ class CommonSimEventDispatcherService(CommonService):
         sim_info = occult_tracker._sim_info
         return CommonEventRegistry.get().dispatch(S4CLSimAddedOccultTypeEvent(sim_info, occult_type, occult_tracker))
 
-    def _on_sim_change_occult_type(self, occult_tracker: OccultTracker, occult_type: OccultType, *_, **__) -> bool:
+    def _on_sim_changing_occult_type(self, occult_tracker: OccultTracker, occult_type: OccultType, *_, **__) -> bool:
+        sim_info = occult_tracker._sim_info
+        return CommonEventRegistry.get().dispatch(S4CLSimChangingOccultTypeEvent(sim_info, occult_type, occult_tracker))
+
+    def _on_sim_changed_occult_type(self, occult_tracker: OccultTracker, occult_type: OccultType, *_, **__) -> bool:
         sim_info = occult_tracker._sim_info
         return CommonEventRegistry.get().dispatch(S4CLSimChangedOccultTypeEvent(sim_info, occult_type, occult_tracker))
 
@@ -190,8 +195,9 @@ def _common_on_sim_add_occult_type(original, self, *args, **kwargs) -> Any:
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), OccultTracker, OccultTracker.switch_to_occult_type.__name__)
 def _common_on_sim_change_occult_type(original, self, *args, **kwargs) -> Any:
-    CommonSimEventDispatcherService.get()._on_sim_change_occult_type(self, *args, **kwargs)
+    CommonSimEventDispatcherService.get()._on_sim_changing_occult_type(self, *args, **kwargs)
     result = original(self, *args, **kwargs)
+    CommonSimEventDispatcherService.get()._on_sim_changed_occult_type(self, *args, **kwargs)
     return result
 
 

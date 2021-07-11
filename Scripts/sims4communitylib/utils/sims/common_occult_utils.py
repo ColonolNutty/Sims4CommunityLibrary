@@ -146,7 +146,7 @@ class CommonOccultUtils:
         return CommonOccultUtils.get_occult_sim_info(sim_info, current_occult_type)
 
     @staticmethod
-    def get_occult_sim_info(sim_info: SimInfo, occult_type: OccultType) -> Union[SimInfo, SimInfoBaseWrapper, None]:
+    def get_occult_sim_info(sim_info: SimInfo, occult_type: OccultType) -> Union[SimInfo, SimInfoBaseWrapper]:
         """get_occult_sim_info(sim_info, occult_type)
 
         Retrieve the SimInfo for an Occult of a Sim.
@@ -155,12 +155,12 @@ class CommonOccultUtils:
         :type sim_info: SimInfo
         :param occult_type: The Occult Type to retrieve the SimInfo of.
         :type occult_type: OccultType
-        :return: The SimInfo of the Sim or the SimInfoBaseWrapper for the specified Occult.
-        :rtype: Union[SimInfo, SimInfoBaseWrapper, None]
+        :return: The SimInfo of the Sim or the SimInfoBaseWrapper for the specified Occult or the original Sim Info, if the Sim did not have the occult type.
+        :rtype: Union[SimInfo, SimInfoBaseWrapper]
         """
         if not CommonOccultUtils.has_occult_sim_info(sim_info, occult_type) or not hasattr(sim_info, 'occult_tracker') or sim_info.occult_tracker is None:
-            return None
-        return sim_info.occult_tracker.get_occult_sim_info(occult_type)
+            return sim_info
+        return sim_info.occult_tracker.get_occult_sim_info(occult_type) or sim_info
 
     @staticmethod
     def add_occult(sim_info: SimInfo, occult_type: CommonOccultType) -> bool:

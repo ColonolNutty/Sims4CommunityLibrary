@@ -363,3 +363,9 @@ class CommonSimOutfitIO(HasLog):
 
     def _to_outfit_data(self, body_types: Tuple[BodyType], part_ids: Tuple[int]) -> FrozenSet[int]:
         return frozenset(dict(zip(list(body_types), list(part_ids))).items())
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+    def __str__(self) -> str:
+        return f'<{self.__class__.__name__}: OCI: {self.outfit_category_and_index}, Parts: {self._outfit_parts}>'

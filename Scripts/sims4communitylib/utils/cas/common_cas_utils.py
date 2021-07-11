@@ -104,7 +104,7 @@ class CommonCASUtils:
         return body_type
 
     @staticmethod
-    def attach_cas_part_to_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+    def attach_cas_part_to_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None, **__) -> bool:
         """attach_cas_part_to_sim(sim_info, cas_part_id, body_type=BodyType.NONE, outfit_category_and_index=None)
 
         Add a CAS part at the specified BodyType to the Sims outfit.
@@ -126,10 +126,10 @@ class CommonCASUtils:
         log.format_with_message('Attempting to attach CAS part to Sim', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
         outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=outfit_category_and_index)
         outfit_io.attach_cas_part(cas_part_id, body_type=body_type)
-        return outfit_io.apply()
+        return outfit_io.apply(**__)
 
     @staticmethod
-    def detach_cas_part_from_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+    def detach_cas_part_from_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None, **__) -> bool:
         """detach_cas_part_from_sim(sim_info, cas_part_id, body_type=BodyType.NONE, outfit_category_and_index=None)
 
         Remove a CAS part at the specified BodyType from the Sims outfit.
@@ -157,7 +157,7 @@ class CommonCASUtils:
             if outfit_io.get_cas_part_at_body_type(body_type) != cas_part_id:
                 return False
             outfit_io.detach_body_type(body_type)
-        return outfit_io.apply()
+        return outfit_io.apply(**__)
 
     @staticmethod
     def has_cas_part_attached(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None]=BodyType.NONE, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:

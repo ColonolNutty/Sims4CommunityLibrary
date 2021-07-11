@@ -116,13 +116,16 @@ class CommonAgeUtils:
             if sim_info.is_child or sim_info.is_teen:
                 available_aspirations = []
                 aspiration_track_manager = services.get_instance_manager(Types.ASPIRATION_TRACK)
+                aspiration_tracker = sim_info.aspiration_tracker
                 for aspiration_track in aspiration_track_manager.types.values():
-                    if not sim_info.aspiration_tracker.is_aspiration_track_visible(aspiration_track):
-                        continue
-                    if sim_info.is_child and aspiration_track.is_child_aspiration_track:
-                        available_aspirations.append(aspiration_track)
-                    elif sim_info.is_teen:
-                        available_aspirations.append(aspiration_track)
+                    track_available = not aspiration_track.is_hidden_unlockable
+                    if aspiration_tracker is not None:
+                        track_available = aspiration_tracker.is_aspiration_track_visible(aspiration_track)
+                    if track_available:
+                        if sim_info.is_child and aspiration_track.is_child_aspiration_track:
+                            available_aspirations.append(aspiration_track)
+                        elif sim_info.is_teen:
+                            available_aspirations.append(aspiration_track)
                 sim_info.primary_aspiration = random.choice(available_aspirations)
             number_of_empty_trait_slots = sim_info.trait_tracker.empty_slot_number
             if number_of_empty_trait_slots:
