@@ -1028,7 +1028,12 @@ class CommonTraitUtils:
         """
         if not hasattr(sim_info, 'get_traits'):
             return list()
-        return list(sim_info.get_traits())
+        traits = list(sim_info.get_traits())
+        if traits:
+            return traits
+        if not hasattr(sim_info, '_base'):
+            return traits
+        return list([CommonTraitUtils.load_trait_by_id(trait_id) for trait_id in (*sim_info._base.trait_ids, *sim_info._base.base_trait_ids) if CommonTraitUtils.load_trait_by_id(trait_id) is not None])
 
     @staticmethod
     def get_trait_name(trait: Trait) -> Union[str, None]:
@@ -1088,6 +1093,8 @@ class CommonTraitUtils:
         :rtype: List[int]
         """
         if not hasattr(sim_info, 'trait_tracker') or not hasattr(sim_info.trait_tracker, 'equipped_traits'):
+            if hasattr(sim_info, '_base'):
+                return list([CommonTraitUtils.load_trait_by_id(trait_id) for trait_id in (*sim_info._base.trait_ids, *sim_info._base.base_trait_ids) if CommonTraitUtils.load_trait_by_id(trait_id) is not None])
             return list()
         return list(sim_info.trait_tracker.equipped_traits)
 

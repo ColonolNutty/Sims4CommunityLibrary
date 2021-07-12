@@ -245,7 +245,7 @@ class CommonSimSkillUtils:
         :return: True, if successful. False, if not.
         :rtype: bool
         """
-        return CommonSimSkillUtils.set_progress_toward_max_skill_level(sim_info, skill, value, add=add)
+        return CommonSimSkillUtils.change_progress_toward_max_skill_level(sim_info, skill, value, add=add)
 
     @staticmethod
     def get_progress_toward_next_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], add: bool=False) -> float:

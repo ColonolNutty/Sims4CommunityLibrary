@@ -43,12 +43,16 @@ from sims4communitylib.events.sim.events.sim_removed_occult_type import S4CLSimR
 from sims4communitylib.events.sim.events.sim_set_current_outfit import S4CLSimSetCurrentOutfitEvent
 from sims4communitylib.events.sim.events.sim_skill_leveled_up import S4CLSimSkillLeveledUpEvent
 from sims4communitylib.events.sim.events.sim_spawned import S4CLSimSpawnedEvent
+from sims4communitylib.events.sim.events.sim_trait_added import S4CLSimTraitAddedEvent
+from sims4communitylib.events.sim.events.sim_trait_removed import S4CLSimTraitRemovedEvent
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from statistics.skill import Skill
+from traits.trait_tracker import TraitTracker
+from traits.traits import Trait
 
 
 class CommonSimEventDispatcherService(CommonService):
@@ -123,6 +127,18 @@ class CommonSimEventDispatcherService(CommonService):
     def _on_sim_remove_occult_type(self, occult_tracker: OccultTracker, occult_type: OccultType) -> bool:
         sim_info = occult_tracker._sim_info
         return CommonEventRegistry.get().dispatch(S4CLSimRemovedOccultTypeEvent(sim_info, occult_type, occult_tracker))
+
+    def _on_sim_trait_added(self, trait_tracker: TraitTracker, trait: Trait, *_, **__) -> None:
+        sim_info = trait_tracker.get_sim_info_from_provider()
+        if sim_info is None:
+            return
+        CommonEventRegistry.get().dispatch(S4CLSimTraitAddedEvent(sim_info, trait, trait_tracker))
+
+    def _on_sim_trait_removed(self, trait_tracker: TraitTracker, trait: Trait, *_, **__) -> None:
+        sim_info = trait_tracker.get_sim_info_from_provider()
+        if sim_info is None:
+            return
+        CommonEventRegistry.get().dispatch(S4CLSimTraitRemovedEvent(sim_info, trait, trait_tracker))
 
     def _on_sim_buff_added(self, buff: Buff, sim_id: int) -> None:
         sim_info = CommonSimUtils.get_sim_info(sim_id)
@@ -212,6 +228,20 @@ def _common_on_sim_remove_occult_type(original, self, *args, **kwargs) -> Any:
 def _common_on_sim_set_current_outfit(original, self, *args, **kwargs) -> Any:
     CommonSimEventDispatcherService.get()._on_sim_set_current_outfit(self, *args, **kwargs)
     return original(self, *args, **kwargs)
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TraitTracker, TraitTracker._add_trait.__name__)
+def _common_on_sim_trait_added(original, self: TraitTracker, *args, **kwargs):
+    result = original(self, *args, **kwargs)
+    CommonSimEventDispatcherService.get()._on_sim_trait_added(self, *args, **kwargs)
+    return result
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TraitTracker, TraitTracker._remove_trait.__name__)
+def _common_on_sim_trait_removed(original, self: TraitTracker, *args, **kwargs):
+    result = original(self, *args, **kwargs)
+    CommonSimEventDispatcherService.get()._on_sim_trait_removed(self, *args, **kwargs)
+    return result
 
 
 @CommonEventRegistry.handle_events(ModInfo.get_identity())

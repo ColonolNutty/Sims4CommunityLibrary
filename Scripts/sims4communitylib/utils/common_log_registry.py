@@ -119,11 +119,11 @@ class CommonLog:
                 args = self._update_args(*args)
                 kwargs = self._update_kwargs(**kwargs)
             if args and kwargs:
-                self._log_message(message_type, '{}, {}\n'.format(pformat(args), pformat(kwargs)))
+                self._log_message(message_type, '{}, {}'.format(pformat(args), pformat(kwargs)))
             elif args:
-                self._log_message(message_type, '{}\n'.format(pformat(args)))
+                self._log_message(message_type, '{}'.format(pformat(args)))
             else:
-                self._log_message(message_type, '{}\n'.format(pformat(kwargs)))
+                self._log_message(message_type, '{}'.format(pformat(kwargs)))
 
     def format_with_message(self, message: str, *args, message_type: CommonMessageType=CommonMessageType.DEBUG, update_tokens: bool=True, **kwargs):
         """format_with_message(message, *args, message_type=CommonMessageType.DEBUG, update_tokens=True, **kwargs)
@@ -146,11 +146,11 @@ class CommonLog:
                 args = self._update_args(*args)
                 kwargs = self._update_kwargs(**kwargs)
             if args and kwargs:
-                self._log_message(message_type, '{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)))
+                self._log_message(message_type, '{} {}, {}'.format(message, pformat(args), pformat(kwargs)))
             elif args:
-                self._log_message(message_type, '{} {}\n'.format(message, pformat(args)))
+                self._log_message(message_type, '{} {}'.format(message, pformat(args)))
             else:
-                self._log_message(message_type, '{} {}\n'.format(message, pformat(kwargs)))
+                self._log_message(message_type, '{} {}'.format(message, pformat(kwargs)))
 
     def warn(self, message: str):
         """warn(message)
@@ -239,11 +239,11 @@ class CommonLog:
             kwargs = self._update_kwargs(**kwargs)
         stack_trace = stack_trace or CommonStacktraceUtil.get_full_stack_trace()
         if args and kwargs:
-            self.error('{}, {}\n'.format(pformat(args), pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
+            self.error('{}, {}'.format(pformat(args), pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
         elif args:
-            self.error('{}\n'.format(pformat(args)), exception=exception, throw=throw, stack_trace=stack_trace)
+            self.error('{}'.format(pformat(args)), exception=exception, throw=throw, stack_trace=stack_trace)
         else:
-            self.error('{}\n'.format(pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
+            self.error('{}'.format(pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
 
     def format_error_with_message(self, message: str, *args, exception: Exception=None, throw: bool=True, update_tokens: bool=True, stack_trace: List[str]=None, **kwargs):
         """format_error_with_message(message, *args, exception=None, throw=True, update_tokens=True, stack_trace=None, **kwargs)
@@ -270,11 +270,11 @@ class CommonLog:
             kwargs = self._update_kwargs(**kwargs)
         stack_trace = stack_trace or CommonStacktraceUtil.get_full_stack_trace()
         if args and kwargs:
-            self.error('{} {}, {}\n'.format(message, pformat(args), pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
+            self.error('{} {}, {}'.format(message, pformat(args), pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
         elif args:
-            self.error('{} {}\n'.format(message, pformat(args)), exception=exception, throw=throw, stack_trace=stack_trace)
+            self.error('{} {}'.format(message, pformat(args)), exception=exception, throw=throw, stack_trace=stack_trace)
         else:
-            self.error('{} {}\n'.format(message, pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
+            self.error('{} {}'.format(message, pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
 
     def log_stack(self) -> None:
         """log_stack()
