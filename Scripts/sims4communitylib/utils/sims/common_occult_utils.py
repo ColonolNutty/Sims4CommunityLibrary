@@ -15,8 +15,10 @@ from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.common_occult_type import CommonOccultType
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.sims.common_sim_loot_action_utils import CommonSimLootActionUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+from sims4communitylib.utils.sims.common_sim_type_utils import CommonSimTypeUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 try:
@@ -146,7 +148,7 @@ class CommonOccultUtils:
         return CommonOccultUtils.get_occult_sim_info(sim_info, current_occult_type)
 
     @staticmethod
-    def get_occult_sim_info(sim_info: SimInfo, occult_type: OccultType) -> Union[SimInfo, SimInfoBaseWrapper]:
+    def get_occult_sim_info(sim_info: SimInfo, occult_type: OccultType) -> Union[SimInfo, SimInfoBaseWrapper, None]:
         """get_occult_sim_info(sim_info, occult_type)
 
         Retrieve the SimInfo for an Occult of a Sim.
@@ -156,11 +158,12 @@ class CommonOccultUtils:
         :param occult_type: The Occult Type to retrieve the SimInfo of.
         :type occult_type: OccultType
         :return: The SimInfo of the Sim or the SimInfoBaseWrapper for the specified Occult or the original Sim Info, if the Sim did not have the occult type.
-        :rtype: Union[SimInfo, SimInfoBaseWrapper]
+        :rtype: Union[SimInfo, SimInfoBaseWrapper, None]
         """
-        if not CommonOccultUtils.has_occult_sim_info(sim_info, occult_type) or not hasattr(sim_info, 'occult_tracker') or sim_info.occult_tracker is None:
-            return sim_info
-        return sim_info.occult_tracker.get_occult_sim_info(occult_type) or sim_info
+        if not hasattr(sim_info, 'occult_tracker') or sim_info.occult_tracker is None:
+            return None
+        occult_sim_info = sim_info.occult_tracker.get_occult_sim_info(occult_type)
+        return occult_sim_info
 
     @staticmethod
     def add_occult(sim_info: SimInfo, occult_type: CommonOccultType) -> bool:
@@ -525,8 +528,6 @@ class CommonOccultUtils:
             occult_type = CommonOccultType.convert_to_vanilla(occult_type)
             if occult_type is None:
                 return False
-        if not CommonOccultUtils.has_occult_sim_info(sim_info, occult_type):
-            return False
         sim_info.occult_tracker.switch_to_occult_type(occult_type)
         return True
 
@@ -671,7 +672,9 @@ class CommonOccultUtils:
         :return: True, if the Sim has their Mermaid tail out. False, if not.
         :rtype: bool
         """
-        return CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_MERMAID_MERMAID_FORM)
+        if sim_info is None or not hasattr(OccultType, 'MERMAID'):
+            return False
+        return CommonOccultUtils.get_current_occult_type(sim_info) == OccultType.MERMAID
 
     @staticmethod
     def is_mermaid_in_mermaid_form(sim_info: SimInfo) -> bool:
@@ -714,7 +717,8 @@ class CommonOccultUtils:
         """
         if sim_info is None or not hasattr(OccultType, 'HUMAN'):
             return False
-        return CommonOccultUtils.get_current_occult_type(sim_info) == OccultType.HUMAN
+        current_occult = CommonOccultUtils.get_current_occult_type(sim_info)
+        return current_occult == OccultType.HUMAN
 
     @staticmethod
     def is_currently_a_mermaid(sim_info: SimInfo) -> bool:
@@ -727,9 +731,7 @@ class CommonOccultUtils:
         :return: True, if the Sim is currently in their Mermaid form. False, if not.
         :rtype: bool
         """
-        if sim_info is None or not hasattr(OccultType, 'MERMAID'):
-            return False
-        return CommonOccultUtils.get_current_occult_type(sim_info) == OccultType.MERMAID or CommonOccultUtils.is_in_mermaid_form(sim_info)
+        return CommonOccultUtils.is_in_mermaid_form(sim_info)
 
     @staticmethod
     def is_currently_a_robot(sim_info: SimInfo) -> bool:
@@ -892,7 +894,7 @@ class CommonOccultUtils:
     def _get_occult_types(sim_info: SimInfo) -> OccultType:
         if not hasattr(sim_info, 'occult_types'):
             if not hasattr(sim_info, '_base') or not hasattr(sim_info._base, 'occult_types'):
-                return OccultType.HUMAN
+                return CommonOccultUtils.get_current_occult_type(sim_info)
             return sim_info._base.occult_types
         # noinspection PyPropertyAccess
         return sim_info.occult_types
@@ -991,9 +993,18 @@ def _common_print_occult_sim_info(opt_sim: OptionalTargetParam=None, _connection
         output('FAILED: no Sim was specified or the specified Sim was not found!')
         return
     for occult_type in OccultType.values:
-        if not CommonOccultUtils.has_occult_type(sim_info, occult_type):
+        occult_sim_info = CommonOccultUtils.get_occult_sim_info(sim_info, occult_type)
+        if occult_sim_info is None:
             output('Occult Sim Info[{}]: None'.format(occult_type.name))
             continue
-        occult_sim_info = CommonOccultUtils.get_occult_sim_info(sim_info, occult_type)
-        output('Occult Sim Info [{}]: {}'.format(occult_type.name, CommonSimNameUtils.get_full_name(occult_sim_info) if occult_sim_info is not None else 'None'))
+        obj_type_acronym = 'UnknownType'
+        if CommonTypeUtils.is_sim_info(occult_sim_info):
+            obj_type_acronym = 'SI'
+        elif CommonTypeUtils.is_sim_instance(occult_sim_info):
+            obj_type_acronym = 'S'
+        elif CommonTypeUtils.is_sim_info_base_wrapper(occult_sim_info):
+            obj_type_acronym = 'SIBW'
+        sim_types = tuple(CommonSimTypeUtils.get_all_sim_types_gen(occult_sim_info, combine_teen_young_adult_and_elder_age=False, combine_child_dog_types=False))
+        current_sim_type = CommonSimTypeUtils.determine_sim_type(occult_sim_info, combine_teen_young_adult_and_elder_age=False, combine_child_dog_types=False, use_current_occult_type=True)
+        output('Occult Sim Info [{}]: {} ({}, ({}), C:{}) [{}]'.format(occult_type.name, CommonSimNameUtils.get_full_name(occult_sim_info), str(CommonSimUtils.get_sim_id(occult_sim_info)), ', '.join([sim_type.name for sim_type in sim_types]), current_sim_type.name, obj_type_acronym))
     output('Done')

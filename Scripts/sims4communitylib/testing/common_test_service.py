@@ -151,11 +151,14 @@ class CommonTestService(CommonService):
                         # noinspection PyBroadException
                         try:
                             test_method(*(_ + args), **kwargs, **__)
+                            cls.test_log('')
                             cls.test_log(CommonTestService._format_test_result(CommonTestResultType.SUCCESS, new_test_name))
                         except AssertionError:
+                            cls.test_log('')
                             cls.test_log(CommonTestService._format_test_result(CommonTestResultType.FAILED, new_test_name, stacktrace=format_exc()))
                             return CommonTestResultType.FAILED
                         except Exception:
+                            cls.test_log('')
                             cls.test_log(CommonTestService._format_test_result(CommonTestResultType.FAILED, new_test_name, stacktrace=format_exc()))
                             return CommonTestResultType.FAILED
                         return CommonTestResultType.SUCCESS
