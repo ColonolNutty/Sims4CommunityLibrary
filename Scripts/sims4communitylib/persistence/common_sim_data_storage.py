@@ -104,7 +104,7 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         """
         key = key or str(sys._getframe(1).f_code.co_name)
         if key not in self._data:
-            self.log.format_with_message('Key not found in data.', key=key, data=self._data)
+            self.log.format_with_message('Key not found in data. Setting to default value.', sim=self.sim_info, key=key, data=self._data, default=default)
             if default is not None:
                 if encode is not None:
                     self._data[key] = encode(default)
@@ -144,7 +144,7 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         """
         key = key or str(sys._getframe(1).f_code.co_name)
         if key not in self._data:
-            self.log.format_with_message('Key not found in data.', key=key, data=self._data)
+            self.log.format_with_message('Key not found in data. Not removing it.', sim=self.sim_info, key=key, data=self._data)
             return
         del self._data[key]
 

@@ -894,7 +894,7 @@ class CommonOccultUtils:
     def _get_occult_types(sim_info: SimInfo) -> OccultType:
         if not hasattr(sim_info, 'occult_types'):
             if not hasattr(sim_info, '_base') or not hasattr(sim_info._base, 'occult_types'):
-                return CommonOccultUtils.get_current_occult_type(sim_info)
+                return CommonOccultUtils.get_current_occult_type(sim_info) or OccultType.HUMAN
             return sim_info._base.occult_types
         # noinspection PyPropertyAccess
         return sim_info.occult_types
