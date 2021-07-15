@@ -11,6 +11,67 @@ v1.70:
 - `CommonObjectInteractionUtils.get_all_interactions_registered_to_object_gen` will now return all interactions from the phone or relationship panel when the object is a Sim.
 - Removed spaces in a few places where it was weird to have them in the code.
 - Added commands `s4clib.change_ownership` and `s4clib.destroy_object`
+- Added command `s4clib.move_object_to_sim`
+- Added the ability to specify a sub identifier for Som Data Storage and Game Object Data Storage
+- Fixed an issue where interactions would not properly register to some objects, especially proxied objects such as pool squares and ocean locations.
+- CommonSimOutfitIO will now always properly have BodyType values set within itself (If a value has an associated BodyType)
+- CommonCASUtils.get_body_type_of_cas_part will now always properly return BodyType (If a value has an associated BodyType)
+- Changed how CommonOutfitUtils.set_current_outfit sets the outfit of a Sim.
+- Added a few functions to CommonObjectTypeUtils
+  - is_pet_sim_bed
+  - is_fence
+  - is_swimming_pool
+  - is_swimming_pool_seat
+- Added a few functions to CommonLootActionUtils and CommonSimLootActionUtils to apply loot actions by their identifiers
+  - Fixed issues with the age value being None within CommonAgeUtils
+- Added a few functions to CommonOccultUtils
+  - has_any_occult
+  - has_occult_sim_info
+  - get_occult_sim_info
+  - add_*_occult (alien, vampire, witch, servo, skeleton, mermaid)
+  - remove_*_occult (alien, vampire, witch, servo, skeleton, mermaid)
+  - add_all_occults
+  - remove_all_occults
+  - switch_to_occult_form
+  - get_current_occult_type
+- Created CommonSimOccultTypeUtils that should be used in place of the functions on CommonOccultType
+- Improved the performance when registering interactions
+- Added get_current_occult_sim_info to CommonOccultUtils
+- Added a gitattributes file
+- Updated the gitignore
+- Updated the compile and decompile scripts
+- Mark Utilities as a Sources root
+- Added a way to retrieve all Occult Types for a Sim as well as all Common Occult Types of a Sim to `CommonOccultUtils` and `CommonSimOccultTypeUtils`
+- Added a function to check if a Sim has a name to `CommonSimNameUtils`
+- Updated `CommonLog` to handle SimInfoBaseWrapper objects when logging them. It will convert them to a name and sim id instead of the usual Object base class.
+- Updated `CommonSimUtils` to be able to handle `SimInfoBaseWrapper` objects
+- Added a function to CommonSimTypeUtils to specify a specific species, age, and occult type.
+- Added functions to CommonCASUtils to set or retrieve the skin tone of a Sim.
+- Added functions to add or remove occult types.
+- Added a way to log additional details about a Sim. (Optional and disabled for every log by default)
+- Fixed a potential error within CommonSpecies if the player does not have the Cats & Dogs DLC (Thus not having the SmallDog, LargeDog, or Cat Species values)
+- The S4CLSimChangedOccultTypeEvent will now occur before the Sim actually switches to the occult.
+- s4clib.print_*_outfit will now print integer body types that are not within the BodyType enum
+- Added functions to set the toilet standing/sitting traits of a Sim separately.
+- Added convert_custom_type_to_vanilla, is_occult_type, and is_currently_occult_type to CommonSimOccultTypeUtils
+- set_age of CommonAgeUtils will now properly advance/reverse the age of a Sim while applying all of the things that entails. (Homerwork, vampirism manifestation)
+- Added a function to retrieve all of the Sim Types a Sim has (One for each of their occult types) to CommonSimTypeUtils
+- Added functions to CommonOccultUtils for checking if a Sim is currently a Skeleton, Robot, and Plant Sim (Even though they would always be those, it is more for completeness sake)
+- Added a function to CommonOccultUtils to check if a Sim has an occult type.
+- Added a few commands to print occult types, sim types, and sim info for the occult types of Sims
+- Added an event that triggers when set_current_outfit on a SimInfo is set.
+- Updated the `set_age` function of CommonAgeUtils to properly transition Sims to the new age with the correct career, aspirations, etc.
+- Add the survival instincts trait id.
+- Added S4CLSimChangingOccultTypeEvent. It triggers before a Sim changes to a new occult type.
+- The S4CLSimChangedOccultTypeEvent now triggers after a Sim changes to a new occult type instead of before.
+- Added the ability to specify keyword arguments to attach_cas_part_to_sim and detach_cas_part_from_sim
+- Fixed an error when setting a Sim to age Child from Teen or above using set_age
+- If an occult Sim Info is not found when retrieving it via get_occult_sim_info, the original sim_info will be returned instead.
+- Added new events for when a trait is added and when a trait is removed
+- Fixed an error when changing progress toward the next level where it was setting the progress toward max level instead.
+- Removed many new lines at the end formatted messages being logged
+- Fix a few issues when checking whether a Sim is currently a mermaid or not.
+- Fixed an error when determining if a Sim has an occult type
 
 v1.69:
 - Added functions to lock or unlock a door for Sims.
