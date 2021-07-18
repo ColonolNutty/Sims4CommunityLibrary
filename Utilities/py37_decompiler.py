@@ -145,6 +145,7 @@ class Py37PythonDecompiler:
 
         # Create our "thread" pool
         results = []
+        from py37_decompiler_old import decompile
 
         print('Decompiling all files in {} using {}, please wait'.format(src_folder, DEFAULT_DECOMPILER))
 
@@ -183,13 +184,14 @@ class Py37PythonDecompiler:
                 continue
             files = [f for f in files if os.path.splitext(f)[1].lower() == '.pyc']
             for pycFile in files:
+                total += 1
                 sub_folder = os.path.relpath(root, source_folder)
                 file_name = os.path.splitext(pycFile)[0]
                 py_file_name = file_name + '.py'
                 py_full_file_path = os.path.join(source_folder, sub_folder, py_file_name)
+                py_full_destination_file_path = os.path.join(destination_folder, sub_folder, py_file_name)
                 copied_file_path = os.path.join(source_folder, sub_folder, f'{pycFile}_copied')
                 pyc_full_file_path = os.path.join(source_folder, sub_folder, pycFile)
-                total += 1
                 copyfile(pyc_full_file_path, copied_file_path)
                 the_file = os.path.join(src_folder, sub_folder, pycFile)
                 # print(f'Attempting to decompile file: {os.path.join(src_folder, sub_folder, pycFile)}')
@@ -207,14 +209,16 @@ class Py37PythonDecompiler:
                     split_result_folders
                 )
                 if not is_success(result):
-                    # print('Failed to decompile file, attempting to use alternative decompiler.')
+                    print('Failed to decompile file, attempting to use alternative decompiler.')
                     copyfile(copied_file_path, pyc_full_file_path)
                     os.remove(copied_file_path)
+                    print(pyc_full_file_path)
                     if not Unpyc3PyDecompiler.decompile_file(pyc_full_file_path, throw_on_error=False):
                         print(f'FAILED: {the_file}')
                     else:
                         print(f'SUCCESS: {the_file}')
                         # print(f'Removing {py_full_file_path}')
+                        copyfile(py_full_file_path, py_full_destination_file_path)
                         os.remove(py_full_file_path)
                         result = _DecompileResultData(os.path.realpath(pyc_full_file_path))
                         result.result = 1
@@ -255,7 +259,8 @@ class Py37PythonDecompiler:
 
     # Decompile a .pyc file to produce a .py file
     # Returns a _DecompileResultData encapsulation of the result information.
-    def _decompile(self, srcFolder: str, destination_folder: str, subFolder: str, pycFile: str, file_compilation_result, prefix_filenames, large_codeobjects_threshold, comment_style, decompiler, py37dec_timeout, split_result_folders):
+    def _decompile(self, srcFolder: str, destination_folder: str, subFolder: str, pycFile: str, python_file_to_decompile, prefix_filenames, large_codeobjects_threshold, comment_style, decompiler, py37dec_timeout, split_result_folders):
+        global PY37DEC_EXECUTABLE_LOCATION
         decompile_results = _DecompileResultData(os.path.realpath(os.path.join(srcFolder, subFolder, pycFile)))
         timer = _StopWatch()
         remove_pyc = True if srcFolder == destination_folder else False
@@ -272,19 +277,27 @@ class Py37PythonDecompiler:
             else:
                 # For py37dec, run the executable (py37_execute_decompile.exe) in a subprocess.  At least one file from TS4 still takes
                 # too long (and too much virtual memory) to process, so a timeout is specified.
-                subprocess_result = subprocess.run([PY37DEC_EXECUTABLE_LOCATION, pyc_full_file_path.replace('\\', '/')], capture_output=True, encoding='utf-8', timeout=py37dec_timeout)
+                subprocess_result = subprocess.run(
+                    [
+                        PY37DEC_EXECUTABLE_LOCATION,
+                        pyc_full_file_path.replace('\\', '/')
+                    ],
+                    capture_output=True,
+                    encoding='utf-8',
+                    timeout=py37dec_timeout
+                )
                 decompile_results.decompile_time = timer.elapsed_time
                 if subprocess_result.returncode != 0:
                     # Non-zero return code from the py37dec executable (py37_execute_decompile.exe) indicates a crash failure
                     # in the executable.  Summarize and build an empty .py file.
                     if prefix_filenames:
-                        file_compilation_result = f'[FAILED] {file_compilation_result}'
+                        python_file_to_decompile = f'[FAILED] {python_file_to_decompile}'
                     if split_result_folders:
-                        folder_compilation_result = os.path.join(destination_folder, 'decompile_failure', subFolder)
+                        python_folder_to_decompile = os.path.join(destination_folder, 'decompile_failure', subFolder)
                     else:
-                        folder_compilation_result = os.path.join(destination_folder, subFolder)
-                    os.makedirs(folder_compilation_result, exist_ok=True)
-                    decompile_results.py_file_name = os.path.realpath(os.path.join(folder_compilation_result, file_compilation_result))
+                        python_folder_to_decompile = os.path.join(destination_folder, subFolder)
+                    os.makedirs(python_folder_to_decompile, exist_ok=True)
+                    decompile_results.py_file_name = os.path.realpath(os.path.join(python_folder_to_decompile, python_file_to_decompile))
                     with open(decompile_results.py_file_name, 'w', encoding='UTF-8') as fp:
                         if comment_style == 1:
                             fp.write(f'# {decompiler}: Decompile failed\n')
@@ -302,13 +315,13 @@ class Py37PythonDecompiler:
             # This exception will only occur if a py37dec subprocess is killed off due to a timeout.
             decompile_results.decompile_time = timer.elapsed_time
             if prefix_filenames:
-                file_compilation_result = f'[TIMEOUT] {file_compilation_result}'
+                python_file_to_decompile = f'[TIMEOUT] {python_file_to_decompile}'
             if split_result_folders:
-                folder_compilation_result = os.path.join(destination_folder, 'timeout', subFolder)
+                python_folder_to_decompile = os.path.join(destination_folder, 'timeout', subFolder)
             else:
-                folder_compilation_result = os.path.join(destination_folder, subFolder)
-            os.makedirs(folder_compilation_result, exist_ok=True)
-            decompile_results.py_file_name = os.path.realpath(os.path.join(folder_compilation_result, file_compilation_result))
+                python_folder_to_decompile = os.path.join(destination_folder, subFolder)
+            os.makedirs(python_folder_to_decompile, exist_ok=True)
+            decompile_results.py_file_name = os.path.realpath(os.path.join(python_folder_to_decompile, python_file_to_decompile))
             decompile_results.result = 4
             with open(decompile_results.py_file_name, 'w', encoding='UTF-8') as fp:
                 if comment_style == 1:
@@ -322,13 +335,13 @@ class Py37PythonDecompiler:
             # A normal exception will occur if unpyc3 fails and throws an exception during the
             # decompilation process.
             if prefix_filenames:
-                file_compilation_result = f'[FAILED] {file_compilation_result}: {ex}'
+                python_file_to_decompile = f'[FAILED] {python_file_to_decompile}: {ex}'
             if split_result_folders:
-                folder_compilation_result = os.path.join(destination_folder, 'decompile_failure', subFolder)
+                python_folder_to_decompile = os.path.join(destination_folder, 'decompile_failure', subFolder)
             else:
-                folder_compilation_result = os.path.join(destination_folder, subFolder)
-            os.makedirs(folder_compilation_result, exist_ok=True)
-            decompile_results.py_file_name = os.path.realpath(os.path.join(folder_compilation_result, file_compilation_result))
+                python_folder_to_decompile = os.path.join(destination_folder, subFolder)
+            os.makedirs(python_folder_to_decompile, exist_ok=True)
+            decompile_results.py_file_name = os.path.realpath(os.path.join(python_folder_to_decompile, python_file_to_decompile))
             with open(decompile_results.py_file_name, 'w', encoding='UTF-8') as fp:
                 if comment_style == 1:
                     fp.write(f'# {decompiler}: Decompile failed\n')
@@ -348,7 +361,7 @@ class Py37PythonDecompiler:
         try:
             # Try compiling the generated source, a syntax error in the source code
             # will throw an exception.
-            py_compiled_obj = compile(src_code, file_compilation_result, 'exec')
+            py_compiled_obj = compile(src_code, python_file_to_decompile, 'exec')
 
             # Get the code object from the .pyc file
             pyc_compiled_obj = self._get_code_obj_from_pyc(decompile_results.pyc_file_name)
@@ -361,41 +374,41 @@ class Py37PythonDecompiler:
                 # There were no issues returned from the code object comparison, so this code
                 # is identical to the original sources.
                 if prefix_filenames:
-                    file_compilation_result = '[PERFECT] ' + file_compilation_result
+                    python_file_to_decompile = '[PERFECT] ' + python_file_to_decompile
                 if split_result_folders:
-                    folder_compilation_result = os.path.join(destination_folder, 'perfect', subFolder)
+                    python_folder_to_decompile = os.path.join(destination_folder, 'perfect', subFolder)
                 else:
-                    folder_compilation_result = os.path.join(destination_folder, subFolder)
-                decompile_results.py_file_name = os.path.realpath(os.path.join(folder_compilation_result, file_compilation_result))
+                    python_folder_to_decompile = os.path.join(destination_folder, subFolder)
+                decompile_results.py_file_name = os.path.realpath(os.path.join(python_folder_to_decompile, python_file_to_decompile))
                 decompile_results.result = 0
             else:
                 # There were comparison issues with the code objects, this source code differs
                 # from the original.  It may function identically or improperly (or not at all) but
                 # only human inspection of the resulting code can determine how good the results are.
                 if prefix_filenames:
-                    file_compilation_result = '[GOOD] ' + file_compilation_result
+                    python_file_to_decompile = '[GOOD] ' + python_file_to_decompile
                 if split_result_folders:
-                    folder_compilation_result = os.path.join(destination_folder, 'good', subFolder)
+                    python_folder_to_decompile = os.path.join(destination_folder, 'good', subFolder)
                 else:
-                    folder_compilation_result = os.path.join(destination_folder, subFolder)
-                decompile_results.py_file_name = os.path.realpath(os.path.join(folder_compilation_result, file_compilation_result))
+                    python_folder_to_decompile = os.path.join(destination_folder, subFolder)
+                decompile_results.py_file_name = os.path.realpath(os.path.join(python_folder_to_decompile, python_file_to_decompile))
                 decompile_results.result = 1
         except Exception as ex:
             # An exception from the compile or comparison will end up here, this is generally
             # due to a syntax error in the decompilation results.
             if prefix_filenames:
-                file_compilation_result = f'[SYNTAX] {file_compilation_result}: {ex}'
+                python_file_to_decompile = f'[SYNTAX] {python_file_to_decompile}: {ex}'
             if split_result_folders:
-                folder_compilation_result = os.path.join(destination_folder, 'syntax', subFolder)
+                python_folder_to_decompile = os.path.join(destination_folder, 'syntax', subFolder)
             else:
-                folder_compilation_result = os.path.join(destination_folder, subFolder)
-            decompile_results.py_file_name = os.path.realpath(os.path.join(folder_compilation_result, file_compilation_result))
+                python_folder_to_decompile = os.path.join(destination_folder, subFolder)
+            decompile_results.py_file_name = os.path.realpath(os.path.join(python_folder_to_decompile, python_file_to_decompile))
             decompile_results.result = 2
             syntax_error = traceback.format_exc(1)
 
         # Create the destination folder for this .py file and write it, adding comments
         # if requested (1 = brief, 2 = detailed).
-        os.makedirs(folder_compilation_result, exist_ok=True)
+        os.makedirs(python_folder_to_decompile, exist_ok=True)
         with open(decompile_results.py_file_name, 'w', encoding='UTF-8') as fp:
             if comment_style == 1:
                 if syntax_error:
@@ -592,6 +605,7 @@ def completed_callback(result) -> bool:
 
 
 def is_success(result) -> bool:
+    print('The result: ' + str(result.result))
     if result.result == 0:
         return True
     elif result.result == 1:
