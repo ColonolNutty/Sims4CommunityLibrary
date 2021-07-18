@@ -28,7 +28,7 @@ class S4CLConfiguration(HasLog, CommonService):
         _DEFAULT_CONFIG_DATA = {
             'enable_vanilla_logging': False,
             'enable_extra_shift_click_menus': True,
-            'persist_mod_data_per_save_slot': True,
+            'persist_mod_data_per_save_slot': False,
             'enable_logs': {
                 'example_log_that_is_enabled': ['DEBUG', 'WARN']
             }
