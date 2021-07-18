@@ -26,7 +26,7 @@ class _CommonGameObjectDataStorageMetaclass(type):
         mod_name = mod_identity.name
         if mod_name is None:
             return None
-        identifier = f'{mod_name}_{cls.get_sub_identifier()}'
+        identifier = f'{mod_name}_{cls.__name__}'
         if identifier not in cls._game_object_storage_instances:
             cls._game_object_storage_instances[identifier] = dict()
         if game_object_id not in cls._game_object_storage_instances[identifier]:
@@ -37,11 +37,6 @@ class _CommonGameObjectDataStorageMetaclass(type):
     @classmethod
     def get_mod_identity(mcs) -> CommonModIdentity:
         raise NotImplementedError()
-
-    # noinspection PyMissingOrEmptyDocstring
-    @classmethod
-    def get_sub_identifier(mcs) -> str:
-        return 'default'
 
 
 class _CommonGameObjectDataStorage(HasClassLog, metaclass=_CommonGameObjectDataStorageMetaclass):
