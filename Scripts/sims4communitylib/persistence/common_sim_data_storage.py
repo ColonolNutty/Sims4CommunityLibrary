@@ -31,6 +31,9 @@ class _CommonSimDataStorageMetaclass(type):
             cls._sim_storage_instances[identifier] = dict()
         if sim_id not in cls._sim_storage_instances[identifier]:
             cls._sim_storage_instances[identifier][sim_id] = super(_CommonSimDataStorageMetaclass, cls).__call__(sim_info)
+        stored_obj = cls._sim_storage_instances[identifier][sim_id]
+        if stored_obj.__class__.__name__ != cls.__name__:
+            cls._sim_storage_instances[identifier][sim_id] = super(_CommonSimDataStorageMetaclass, cls).__call__(sim_info)
         return cls._sim_storage_instances[identifier][sim_id]
 
     # noinspection PyMissingOrEmptyDocstring

@@ -31,6 +31,9 @@ class _CommonGameObjectDataStorageMetaclass(type):
             cls._game_object_storage_instances[identifier] = dict()
         if game_object_id not in cls._game_object_storage_instances[identifier]:
             cls._game_object_storage_instances[identifier][game_object_id] = super(_CommonGameObjectDataStorageMetaclass, cls).__call__(game_object)
+        stored_obj = cls._game_object_storage_instances[identifier][game_object_id]
+        if stored_obj.__class__.__name__ != cls.__name__:
+            cls._game_object_storage_instances[identifier][game_object_id] = super(_CommonGameObjectDataStorageMetaclass, cls).__call__(game_object)
         return cls._game_object_storage_instances[identifier][game_object_id]
 
     # noinspection PyMissingOrEmptyDocstring

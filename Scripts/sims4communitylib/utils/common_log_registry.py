@@ -149,8 +149,10 @@ class CommonLog:
                 self._log_message(message_type, '{} {}, {}'.format(message, pformat(args), pformat(kwargs)))
             elif args:
                 self._log_message(message_type, '{} {}'.format(message, pformat(args)))
-            else:
+            elif kwargs:
                 self._log_message(message_type, '{} {}'.format(message, pformat(kwargs)))
+            else:
+                self._log_message(message_type, message)
 
     def warn(self, message: str):
         """warn(message)
@@ -273,8 +275,10 @@ class CommonLog:
             self.error('{} {}, {}'.format(message, pformat(args), pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
         elif args:
             self.error('{} {}'.format(message, pformat(args)), exception=exception, throw=throw, stack_trace=stack_trace)
-        else:
+        elif kwargs:
             self.error('{} {}'.format(message, pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
+        else:
+            self.error(message, exception=exception, throw=throw, stack_trace=stack_trace)
 
     def log_stack(self) -> None:
         """log_stack()
