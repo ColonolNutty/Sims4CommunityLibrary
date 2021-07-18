@@ -28,20 +28,15 @@ class CommonObjectUtils:
 
         :param game_object: An instance of an Object.
         :type game_object: GameObject
-        :return: An identifier that uniquely identifies a specific Object.
+        :return: An identifier that uniquely identifies a specific type of Object.
         :rtype: int
         """
         guid64 = CommonObjectUtils.get_object_guid(game_object)
         catalog_name = CommonObjectUtils.get_catalog_name(game_object)
-        if guid64 > catalog_name:
-            identifier_data = [int(catalog_name), int(guid64)]
-        else:
-            identifier_data = [int(guid64), int(catalog_name)]
-        hash_value = 3430008
-        for item in identifier_data:
-            hash_value = eval(hex(1000003 * hash_value & 4294967295)[:-1]) ^ item
-        hash_value ^= len(identifier_data)
-        return abs(hash_value)
+        hash_value = 0x09D05916 ^ min(guid64, catalog_name)
+        hash_value = (((0x000F4243 * hash_value) >> 4) & 0x0FFFFFFF) ^ max(guid64, catalog_name)
+        hash_value = abs(hash_value ^ 2)
+        return hash_value
 
     @staticmethod
     def get_object_id(object_instance: BaseObject) -> int:
