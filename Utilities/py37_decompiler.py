@@ -145,7 +145,6 @@ class Py37PythonDecompiler:
 
         # Create our "thread" pool
         results = []
-        from py37_decompiler_old import decompile
 
         print('Decompiling all files in {} using {}, please wait'.format(src_folder, DEFAULT_DECOMPILER))
 

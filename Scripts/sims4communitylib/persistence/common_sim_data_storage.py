@@ -41,6 +41,16 @@ class _CommonSimDataStorageMetaclass(type):
     def get_mod_identity(mcs) -> CommonModIdentity:
         raise NotImplementedError()
 
+    @classmethod
+    def clear_instances(mcs, mod_identity: CommonModIdentity) -> None:
+        """Clear the cached instances of this type of Sim Storage."""
+        mod_name = mod_identity.name
+        if mod_name is None:
+            return
+        identifier = f'{mod_name}_{mcs.__name__}'
+        if identifier in _CommonSimDataStorageMetaclass._sim_storage_instances:
+            del _CommonSimDataStorageMetaclass._sim_storage_instances[identifier]
+
 
 class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclass):
     def __init__(self, sim_info: SimInfo):

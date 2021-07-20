@@ -305,8 +305,9 @@ if not ON_RTD:
             if CommonCASUtils.attach_cas_part_to_sim(sim_info, cas_part_id, body_type=body_type):
                 output('CAS Part attached to Sim {} successfully.'.format(CommonSimNameUtils.get_full_name(sim_info)))
         except Exception as ex:
+            output('An error occurred while trying to attach the CAS Part!')
             CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to attach a CAS Part to a Sim.', exception=ex)
-        output('Done attaching CAS Pat to the Sim.')
+        output('Done attaching CAS Part to the Sim.')
 
 
     @Command('s4clib.detach_cas_part', command_type=CommandType.Live)
@@ -408,10 +409,10 @@ if not ON_RTD:
     def _common_set_skin_tone(skin_tone_id: int, opt_sim: OptionalTargetParam=None, _connection: int=None):
         from server_commands.argument_helpers import get_optional_target
         output = CheatOutput(_connection)
-        output('Attempting to set the skin tone of Sim.')
         sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
         if sim_info is None:
             output('Failed, no Sim was specified or the specified Sim was not found!')
             return
-        output('Sim: {}'.format(CommonSimNameUtils.get_full_name(sim_info)))
+        output('Attempting to set the skin tone \'{}\' of Sim \'{}\''.format(skin_tone_id, CommonSimNameUtils.get_full_name(sim_info)))
         CommonCASUtils.set_skin_tone(sim_info, skin_tone_id)
+        output('Done setting the skin overlay of the Sim.')

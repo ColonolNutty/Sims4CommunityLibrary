@@ -41,6 +41,16 @@ class _CommonGameObjectDataStorageMetaclass(type):
     def get_mod_identity(mcs) -> CommonModIdentity:
         raise NotImplementedError()
 
+    @classmethod
+    def clear_instances(mcs, mod_identity: CommonModIdentity) -> None:
+        """Clear the cached instances of this type of Object Storage."""
+        mod_name = mod_identity.name
+        if mod_name is None:
+            return
+        identifier = f'{mod_name}_{mcs.__name__}'
+        if identifier in _CommonGameObjectDataStorageMetaclass._game_object_storage_instances:
+            del _CommonGameObjectDataStorageMetaclass._game_object_storage_instances[identifier]
+
 
 class _CommonGameObjectDataStorage(HasClassLog, metaclass=_CommonGameObjectDataStorageMetaclass):
     def __init__(self, game_object: GameObject):
