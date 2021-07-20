@@ -75,8 +75,10 @@ v1.70:
 - Changed the default value for persist_mod_data_per_save_slot to False, since save slots are way too buggy.
   - This will not solve the issue for those that have the value set to True, but it should solve issues with it for any new users.
 - Updated create_unique_identifier to not use an eval call.
+- Added assertions to prevent adding negative or None CAS Parts to CommonSimOutfitIO
 - The Sim and Object Data Storage classes use a different method of storing Sim and Object data, which should lead to potentially solving the issue of some people getting the wrong instance for a class returned when a Mod has two types of Sim Data or Game Object Data classes
   - Added a check to ensure the returned object is of the correct class as what is expected.
+  - Added a function to clear cached data from these data storages
 
 v1.69:
 - Added functions to lock or unlock a door for Sims.
