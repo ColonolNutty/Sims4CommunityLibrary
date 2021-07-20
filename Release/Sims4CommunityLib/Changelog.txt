@@ -79,6 +79,13 @@ v1.70:
 - The Sim and Object Data Storage classes use a different method of storing Sim and Object data, which should lead to potentially solving the issue of some people getting the wrong instance for a class returned when a Mod has two types of Sim Data or Game Object Data classes
   - Added a check to ensure the returned object is of the correct class as what is expected.
   - Added a function to clear cached data from these data storages
+- Added a function to convert a value to an OutfitCategory
+- Added a function to convert a value to a BodyType
+- Added a function to retrieve a BodyType by name
+- Minor clean up of CommonSimOutfitIO
+- Added a new line after every test log
+- Added a function to retrieve the Skin Tone Value Shift of a Sim.
+- The Print Skin Tone command now prints the Skin Tone Value Shift as well
 
 v1.69:
 - Added functions to lock or unlock a door for Sims.
