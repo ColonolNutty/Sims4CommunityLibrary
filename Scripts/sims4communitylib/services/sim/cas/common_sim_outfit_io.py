@@ -191,8 +191,6 @@ class CommonSimOutfitIO(HasLog):
         from sims4communitylib.utils.cas.common_cas_utils import CommonCASUtils
         if cas_part_id == -1:
             raise AssertionError('Attempted to attach a negative CAS Part to outfit! Sim: {} Body Type: {}'.format(CommonSimNameUtils.get_full_name(self.sim_info), body_type))
-        if not CommonCASUtils.is_cas_part_loaded(cas_part_id):
-            raise AssertionError('Attempted to attach a CAS Part that is not currently loaded by the game. Sim: {} CAS Part Id: {} Body Type: {}'.format(CommonSimNameUtils.get_full_name(self.sim_info), cas_part_id, body_type))
         if body_type == BodyType.NONE:
             body_type = CommonCASUtils.get_body_type_of_cas_part(cas_part_id)
         self.log.format_with_message('Attempting to add cas part to body type.', cas_part=cas_part_id, body_type=body_type)
