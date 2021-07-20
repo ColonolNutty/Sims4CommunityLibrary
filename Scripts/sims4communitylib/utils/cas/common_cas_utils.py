@@ -297,6 +297,19 @@ class CommonCASUtils:
         return sim_info.skin_tone
 
     @staticmethod
+    def get_skin_tone_value_shift(sim_info: SimInfo) -> int:
+        """get_skin_tone_value_shift(sim_info)
+
+        Retrieve the value shift for the Skin Tone of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The value shift for the Skin Tone of a Sim.
+        :rtype: int
+        """
+        return sim_info.skin_tone_val_shift
+
+    @staticmethod
     def set_skin_tone(sim_info: SimInfo, skin_tone: int):
         """set_skin_tone(sim_info, skin_tone)
 
@@ -447,6 +460,7 @@ if not ON_RTD:
             return
         output('Sim: {}'.format(CommonSimNameUtils.get_full_name(sim_info)))
         output('Skin Tone: {}'.format(CommonCASUtils.get_skin_tone(sim_info)))
+        output('Skin Tone Val Shift: {}'.format(CommonCASUtils.get_skin_tone_value_shift(sim_info)))
 
 
     @Command('s4clib.set_skin_tone', command_type=CommandType.Live)

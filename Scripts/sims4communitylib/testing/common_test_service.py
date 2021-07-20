@@ -116,7 +116,7 @@ class CommonTestService(CommonService):
 
     @classmethod
     def _format_test_result(cls, test_result: str, test_name: str, stacktrace: str=None):
-        return 'TEST {}: {} {}'.format(test_result, test_name, stacktrace or '')
+        return 'TEST {}: {} {}\n'.format(test_result, test_name, stacktrace or '')
 
     @staticmethod
     def test_class(mod_identifier: Union[str, CommonModIdentity]) -> Any:
@@ -151,14 +151,11 @@ class CommonTestService(CommonService):
                         # noinspection PyBroadException
                         try:
                             test_method(*(_ + args), **kwargs, **__)
-                            cls.test_log('')
                             cls.test_log(CommonTestService._format_test_result(CommonTestResultType.SUCCESS, new_test_name))
                         except AssertionError:
-                            cls.test_log('')
                             cls.test_log(CommonTestService._format_test_result(CommonTestResultType.FAILED, new_test_name, stacktrace=format_exc()))
                             return CommonTestResultType.FAILED
                         except Exception:
-                            cls.test_log('')
                             cls.test_log(CommonTestService._format_test_result(CommonTestResultType.FAILED, new_test_name, stacktrace=format_exc()))
                             return CommonTestResultType.FAILED
                         return CommonTestResultType.SUCCESS

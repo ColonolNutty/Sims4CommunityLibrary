@@ -490,7 +490,7 @@ class CommonOutfitUtils:
         current_outfit = sim_info.get_current_outfit()
         # noinspection PyBroadException
         try:
-            current_outfit_category = CommonOutfitUtils.get_outfit_category_by_name(OutfitCategory.value_to_name[current_outfit[0]], default_category=None)
+            current_outfit_category = CommonOutfitUtils.convert_value_to_outfit_category(current_outfit[0])
         except:
             current_outfit_category = current_outfit[0]
         if current_outfit_category is None:

@@ -5,7 +5,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from pprint import pformat
 from typing import Tuple, FrozenSet, Dict, List, Union
 
 from cas.cas import OutfitData
@@ -30,6 +29,8 @@ class CommonSimOutfitIO(HasLog):
     :type outfit_category_and_index: Tuple[OutfitCategory, int], optional
     :param initial_outfit_parts: A library of body types and cas parts to use in place of the normal parts of their outfit. If set to None, OutfitParts will be loaded from the specified OutfitCategory and Index. Default is None.
     :type initial_outfit_parts: Dict[BodyType, int], optional
+    :param mod_identity: The identity of the mod making changes. Default is None. Optional, but highly recommended!
+    :type mod_identity: CommonModIdentity, optional
     """
     # noinspection PyMissingOrEmptyDocstring
     @property
@@ -44,14 +45,17 @@ class CommonSimOutfitIO(HasLog):
     def __init__(self, sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]=None, initial_outfit_parts: Dict[BodyType, int]=None, mod_identity: CommonModIdentity=None):
         super().__init__()
         self._mod_identity = mod_identity
+        self.log.enable_logging_extra_sim_details()
         self._sim_info: SimInfo = sim_info
         self._current_outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
-        self._outfit_category_and_index: Tuple[OutfitCategory, int] = outfit_category_and_index or self._current_outfit_category_and_index
+        self._outfit_category_and_index: Tuple[OutfitCategory, int] = (CommonOutfitUtils.convert_value_to_outfit_category(outfit_category_and_index[0]), outfit_category_and_index[1]) if outfit_category_and_index is not None else self._current_outfit_category_and_index
         self._outfit_data: OutfitData = None
         self._outfit_parts: Dict[BodyType, int] = None
         self._original_outfit_data: FrozenSet[int] = None
         self._outfit_body_types: List[Union[BodyType, int]] = list()
         self._outfit_part_ids: List[int] = list()
+        if not CommonOutfitUtils.has_outfit(self._sim_info, self._outfit_category_and_index):
+            self.log.format_warn_with_message('Sim did not have the specified outfit category and index!', sim=self._sim_info, outfit_category_and_index=self._outfit_category_and_index)
         self._load(initial_outfit_parts=initial_outfit_parts)
 
     @property
@@ -71,6 +75,11 @@ class CommonSimOutfitIO(HasLog):
         :rtype: Tuple[OutfitCategory, int]
         """
         return self._outfit_category_and_index
+
+    @property
+    def outfit_parts(self) -> Dict[Union[BodyType, int], int]:
+        """A library of Body Types to CAS Part Ids"""
+        return self._to_outfit_dictionary(self.body_types, self.cas_part_ids)
 
     @property
     def cas_part_ids(self) -> Tuple[int]:
@@ -189,15 +198,16 @@ class CommonSimOutfitIO(HasLog):
         :rtype: bool
         """
         from sims4communitylib.utils.cas.common_cas_utils import CommonCASUtils
-        if cas_part_id == -1:
-            raise AssertionError('Attempted to attach a negative CAS Part to outfit! Sim: {} Body Type: {}'.format(CommonSimNameUtils.get_full_name(self.sim_info), body_type))
+        if cas_part_id == -1 or cas_part_id is None:
+            self.log.format_error_with_message('Attempted to attach a negative or None CAS Part to the outfit of a Sim!', sim=self.sim_info, body_type=body_type, cas_part_id=cas_part_id, outfit_category_and_index=self._outfit_category_and_index)
+            return False
         if body_type == BodyType.NONE:
             body_type = CommonCASUtils.get_body_type_of_cas_part(cas_part_id)
-        self.log.format_with_message('Attempting to add cas part to body type.', cas_part=cas_part_id, body_type=body_type)
+        self.log.format_with_message('Attempting to attach cas part to body type.', cas_part=cas_part_id, body_type=body_type)
         if self.is_body_type_attached(body_type):
             self.detach_body_type(body_type)
         self.log.format_with_message('Attaching CAS Part.', cas_part=cas_part_id, body_type=body_type)
-        self._outfit_body_types.append(int(body_type))
+        self._outfit_body_types.append(body_type)
         self._outfit_part_ids.append(cas_part_id)
         self.log.format_with_message('Finished adding cas part to body type.', cas_part=cas_part_id, body_type=body_type)
         return True
@@ -212,14 +222,14 @@ class CommonSimOutfitIO(HasLog):
         :return: True, if the CAS Part was erased from all body types successfully. False, if not.
         :rtype: bool
         """
-        self.log.format_with_message('Attempting to remove cas part', cas_part=cas_part_id, current_body_types=pformat(self._outfit_body_types), current_cas_parts=pformat(self._outfit_body_types))
+        self.log.format_with_message('Attempting to detach cas part', cas_part=cas_part_id, current_body_types=self._outfit_body_types, current_cas_parts=self._outfit_body_types)
         new_body_types = list()
         new_part_ids = list()
         for (_body_type, _cas_part_id) in zip(self.body_types, self.cas_part_ids):
             if int(_cas_part_id) == int(cas_part_id):
                 self.log.format_with_message('Detaching CAS Part.', cas_part=cas_part_id)
                 continue
-            self.log.format_with_message('Keeping CAS Part.', cas_part=int(cas_part_id), other_cas_part=int(_cas_part_id))
+            self.log.format_with_message('Keeping CAS Part.', cas_part=cas_part_id, other_cas_part=_cas_part_id)
             new_body_types.append(_body_type)
             new_part_ids.append(_cas_part_id)
         self._outfit_body_types = new_body_types
@@ -236,22 +246,28 @@ class CommonSimOutfitIO(HasLog):
         :return: True, if the Body Type was detached from the outfit successfully. False, if not.
         :rtype: bool
         """
-        self.log.format_with_message('Attempting to remove body type', body_type=body_type)
-        self.log.format(current_body_types=pformat(self._outfit_body_types))
+        self.log.format_with_message('Attempting to detach body type', body_type=body_type)
+        self.log.format(current_body_types=self._outfit_body_types)
         new_body_types = list()
         new_part_ids = list()
         for (_body_type, _cas_part_id) in zip(self.body_types, self.cas_part_ids):
             if int(_body_type) == int(body_type):
                 self.log.format_with_message('Detaching body type', body_type=body_type)
                 continue
-            self.log.format_with_message('Keeping body type.', body_type=int(body_type), other_body_type=int(_body_type))
+            self.log.format_with_message('Keeping body type.', body_type=body_type, other_body_type=_body_type)
             new_body_types.append(_body_type)
             new_part_ids.append(_cas_part_id)
         self._outfit_body_types = new_body_types
         self._outfit_part_ids = new_part_ids
         return True
 
-    def apply(self, resend_outfits_after_apply: bool=True, change_sim_to_outfit_after_apply: bool=True, apply_to_all_outfits_in_same_category: bool=False, apply_to_outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    def apply(
+        self,
+        resend_outfits_after_apply: bool=True,
+        change_sim_to_outfit_after_apply: bool=True,
+        apply_to_all_outfits_in_same_category: bool=False,
+        apply_to_outfit_category_and_index: Tuple[OutfitCategory, int]=None
+    ) -> bool:
         """apply(resend_outfits_after_apply=True, change_sim_to_outfit_after_apply=True, apply_to_all_outfits_in_same_category=False, apply_to_outfit_category_and_index=None)
 
         Apply all changes made to the Outfit.
@@ -273,6 +289,7 @@ class CommonSimOutfitIO(HasLog):
             sim=sim_name,
             resend_outfits=resend_outfits_after_apply,
             change_to_outfit=change_sim_to_outfit_after_apply,
+            initial_outfit_category_and_index=self.outfit_category_and_index,
             apply_to_all_outfits_in_same_category=apply_to_all_outfits_in_same_category,
             apply_to_outfit_category_and_index=apply_to_outfit_category_and_index
         )
@@ -281,12 +298,14 @@ class CommonSimOutfitIO(HasLog):
         outfit_to_apply_to_parts = CommonOutfitUtils.get_outfit_parts(self.sim_info, outfit_category_and_index=apply_to_outfit_category_and_index)
         outfit_to_apply_to_original_data: FrozenSet[int] = frozenset(outfit_to_apply_to_parts.items())
         saved_outfits = self.sim_info.save_outfits()
-        self.log.format_with_message('Updating outfits', outfits=saved_outfits.outfits)
+        self.log.format_with_message('Applying Outfit IO Changes to outfits', sim=self.sim_info, outfits=saved_outfits.outfits)
         for saved_outfit in saved_outfits.outfits:
             if int(saved_outfit.category) != int(apply_to_outfit_category_and_index[0]):
+                self.log.format_with_message('Ignoring saved outfit due to wrong category.', sim=self.sim_info, outfit_category=saved_outfit.category, expected_category=apply_to_outfit_category_and_index[0])
                 continue
 
             if not apply_to_all_outfits_in_same_category:
+                self.log.format_with_message('Changes are not being applied to all outfits in the same category.', sim=self.sim_info, outfit_category_and_index=apply_to_outfit_category_and_index)
                 # noinspection PyUnresolvedReferences
                 saved_outfit_data = self._to_outfit_data(saved_outfit.body_types_list.body_types, saved_outfit.parts.ids)
                 self.log.format_with_message('Checking if sub outfit data matches', saved_outfit_data=saved_outfit_data)
@@ -301,8 +320,9 @@ class CommonSimOutfitIO(HasLog):
             saved_outfit.parts.ids.extend(self._outfit_part_ids)
             saved_outfit.body_types_list = Outfits_pb2.BodyTypesList()
             # noinspection PyUnresolvedReferences
-            saved_outfit.body_types_list.body_types.extend(self._outfit_body_types)
+            saved_outfit.body_types_list.body_types.extend([int(body_type) for body_type in self._outfit_body_types])
             if not apply_to_all_outfits_in_same_category:
+                self.log.format_with_message('Skipping the other outfit indexes, since we do not want to apply to all outfits in the same category.', sim=self.sim_info, outfit_category_and_index_applid_to=apply_to_outfit_category_and_index)
                 break
 
         self.sim_info._base.outfits = saved_outfits.SerializeToString()
@@ -310,60 +330,55 @@ class CommonSimOutfitIO(HasLog):
             self.sim_info._base.outfit_type_and_index = apply_to_outfit_category_and_index
         else:
             self.sim_info._base.outfit_type_and_index = self._current_outfit_category_and_index
-        self.log.format_with_message('Finished flushing outfit changes.', sim=sim_name)
+        self.log.format_with_message('Finished applying outfit changes.', sim=self.sim_info, outfit_category_and_index_applid_to=apply_to_outfit_category_and_index)
         if resend_outfits_after_apply:
             return CommonOutfitUtils.resend_outfits(self.sim_info)
         return True
 
     def _load(self, initial_outfit_parts: Dict[BodyType, int]=None) -> bool:
         target_sim_name = CommonSimNameUtils.get_full_name(self.sim_info)
-        self._outfit_parts = CommonOutfitUtils.get_outfit_parts(self.sim_info, outfit_category_and_index=self._outfit_category_and_index)
+        self._outfit_parts = CommonOutfitUtils.get_outfit_parts(self.sim_info, outfit_category_and_index=self._outfit_category_and_index) or dict()
         self._original_outfit_data: FrozenSet[int] = frozenset(self._outfit_parts.items())
         if initial_outfit_parts is not None:
-            for (key, value) in initial_outfit_parts.items():
-                if (not isinstance(key, int) and not isinstance(key, BodyType)) or not isinstance(value, int):
-                    self.log.error('\'{}\': outfit_body_parts contains non-integer variables key: {} value: {}.'.format(target_sim_name, key, value))
-                    return False
+            cleaned_initial_outfit_parts = self._clean_outfit_parts(initial_outfit_parts)
 
-            initial_outfit_part_body_types = list()
-            for body_type_val in initial_outfit_parts.keys():
-                if isinstance(body_type_val, int) and body_type_val in BodyType.value_to_name:
-                    body_type = CommonResourceUtils.get_enum_by_name(BodyType.value_to_name[body_type_val], BodyType, default_value=-1)
-                    if body_type == -1:
-                        body_type = body_type_val
-                else:
-                    body_type = body_type_val
-                initial_outfit_part_body_types.append(body_type)
-
-            self._outfit_body_types = list(initial_outfit_part_body_types)
+            self._outfit_body_types = list(cleaned_initial_outfit_parts.keys())
             self._outfit_part_ids = list(initial_outfit_parts.values())
         else:
             if self._outfit_parts is None:
-                self.log.error('Missing outfit parts for Sim \'{}\' and Outfit Category and Index {}'.format(target_sim_name, self._outfit_category_and_index), throw=True)
+                self.log.format_error_with_message('No outfit parts for available Sim \'{}\' and Outfit Category and Index {}'.format(target_sim_name, self._outfit_category_and_index), initial_outfit_parts=initial_outfit_parts, throw=True)
                 return False
-            body_types = list(self._outfit_parts.keys())
-            part_ids = list(self._outfit_parts.values())
-            if not part_ids or not body_types:
-                self.log.error('\'{}\' is missing outfit parts or body types for Outfit Category and Index {}.'.format(target_sim_name, self._outfit_category_and_index))
-                return False
+            self._outfit_parts = self._clean_outfit_parts(self._outfit_parts)
 
-            initial_outfit_part_body_types = list()
-            for body_type_val in body_types:
-                if isinstance(body_type_val, int) and body_type_val in BodyType.value_to_name:
-                    body_type = CommonResourceUtils.get_enum_by_name(BodyType.value_to_name[body_type_val], BodyType, default_value=-1)
-                    if body_type == -1:
-                        body_type = body_type_val
-                else:
-                    body_type = body_type_val
-                initial_outfit_part_body_types.append(body_type)
-            self._outfit_body_types: List[Union[BodyType, int]] = initial_outfit_part_body_types
-            self._outfit_part_ids: List[int] = part_ids
+            self._outfit_body_types: List[Union[BodyType, int]] = list(self._outfit_parts.keys())
+            self._outfit_part_ids: List[int] = list(self._outfit_parts.values())
             if len(self._outfit_body_types) != len(self._outfit_part_ids):
-                self.log.error('\'{}\': The number of outfit parts did not match the number of body types for Outfit Category and Index {}.'.format(target_sim_name, self._outfit_category_and_index))
+                self.log.format_error_with_message('\'{}\': The number of cas parts did not match the number of body types for Outfit Category and Index {}.'.format(target_sim_name, self._outfit_category_and_index), outfit_category_and_index=self.outfit_category_and_index, outfit_parts=self._outfit_parts, throw=True)
                 return False
         return True
 
-    def _to_outfit_data(self, body_types: Tuple[BodyType], part_ids: Tuple[int]) -> FrozenSet[int]:
+    def _clean_outfit_parts(self, outfit_parts: Dict[Union[BodyType, int], int]) -> Dict[Union[BodyType, int], int]:
+        cleaned_outfit_parts = dict()
+        for (body_type, cas_part_id) in outfit_parts.items():
+            if (not isinstance(body_type, int) and not isinstance(body_type, BodyType)) or not isinstance(cas_part_id, int):
+                self.log.format_error_with_message('outfit_body_parts contains non-integer variables body_type: {} cas_part_id: {}.'.format(body_type, cas_part_id), sim=self.sim_info, body_type=body_type, cas_part_id=cas_part_id, outfit_parts=outfit_parts)
+                continue
+            if cas_part_id == -1 or cas_part_id is None:
+                self.log.format_with_message('Ignoring body_type with negative or None cas_part_id.', sim=self.sim_info, outfit_category_and_index=self.outfit_category_and_index, body_type=body_type, cas_part_id=cas_part_id)
+                continue
+            if isinstance(body_type, int) and body_type in BodyType.value_to_name:
+                new_body_type = CommonResourceUtils.get_enum_by_name(BodyType.value_to_name[body_type], BodyType, default_value=-1)
+                if new_body_type == -1:
+                    new_body_type = body_type
+            else:
+                new_body_type = body_type
+            cleaned_outfit_parts[new_body_type] = cas_part_id
+        return cleaned_outfit_parts
+
+    def _to_outfit_dictionary(self, body_types: Tuple[Union[BodyType, int]], part_ids: Tuple[int]) -> Dict[Union[BodyType, int], int]:
+        return dict(zip(list(body_types), list(part_ids)))
+
+    def _to_outfit_data(self, body_types: Tuple[Union[BodyType, int]], part_ids: Tuple[int]) -> FrozenSet[Union[BodyType, int]]:
         return frozenset(dict(zip(list(body_types), list(part_ids))).items())
 
     def __repr__(self) -> str:
