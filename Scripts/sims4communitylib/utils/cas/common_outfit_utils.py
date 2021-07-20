@@ -415,7 +415,7 @@ class CommonOutfitUtils:
     def get_outfit_category_by_name(name: str, default_category: Union[OutfitCategory, None]=OutfitCategory.CURRENT_OUTFIT) -> OutfitCategory:
         """get_outfit_category_by_name(name, default_value=OutfitCategory.CURRENT_OUTFIT)
 
-        Retrieve an OutfitCategory by its a name.
+        Retrieve an OutfitCategory by name.
 
         :param name: The name of an outfit category.
         :type name: str
@@ -426,6 +426,23 @@ class CommonOutfitUtils:
         """
         upper_case_name = str(name).upper().strip()
         return CommonResourceUtils.get_enum_by_name(upper_case_name, OutfitCategory, default_value=default_category)
+
+    @staticmethod
+    def convert_value_to_outfit_category(value: Union[OutfitCategory, int]) -> Union[OutfitCategory, int]:
+        """convert_value_to_outfit_category(value)
+
+        Retrieve an OutfitCategory by value.
+
+        :param value: The value of an outfit category.
+        :type value: Union[OutfitCategory, int]
+        :return: The OutfitCategory with the specified value or the specified value if no OutfitCategory was found.
+        :rtype: Union[OutfitCategory, int]
+        """
+        if isinstance(value, OutfitCategory):
+            return value
+        if value in OutfitCategory.value_to_name:
+            return CommonResourceUtils.get_enum_by_name(OutfitCategory.value_to_name[value], OutfitCategory, default_value=value)
+        return value
 
     @staticmethod
     def get_current_outfit_category(sim_info: SimInfo) -> OutfitCategory:
@@ -575,7 +592,7 @@ class CommonOutfitUtils:
         return False
 
     @staticmethod
-    def get_outfit_parts(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[BodyType, int]:
+    def get_outfit_parts(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[Union[BodyType, int], int]:
         """get_outfit_parts(sim_info, outfit_category_and_index=None)
 
         Retrieve Outfit Parts for the specified OutfitCategory and Index of a Sim.
@@ -585,7 +602,7 @@ class CommonOutfitUtils:
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
         :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
         :return: A dictionary of body types and cas parts in those body types for the outfit of a Sim.
-        :rtype: Dict[BodyType, int]
+        :rtype: Dict[Union[BodyType, int], int]
         """
         if outfit_category_and_index is None:
             outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
