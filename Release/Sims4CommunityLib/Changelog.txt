@@ -12,7 +12,6 @@ v1.70:
 - Removed spaces in a few places where it was weird to have them in the code.
 - Added commands `s4clib.change_ownership` and `s4clib.destroy_object`
 - Added command `s4clib.move_object_to_sim`
-- Added the ability to specify a sub identifier for Som Data Storage and Game Object Data Storage
 - Fixed an issue where interactions would not properly register to some objects, especially proxied objects such as pool squares and ocean locations.
 - CommonSimOutfitIO will now always properly have BodyType values set within itself (If a value has an associated BodyType)
 - CommonCASUtils.get_body_type_of_cas_part will now always properly return BodyType (If a value has an associated BodyType)
@@ -86,6 +85,9 @@ v1.70:
 - Added a new line after every test log
 - Added a function to retrieve the Skin Tone Value Shift of a Sim.
 - The Print Skin Tone command now prints the Skin Tone Value Shift as well
+- Fixed an error when clicking on Sims in the relationship panel.
+- Fixed an error that would occur when opening a CommonPurchasePickerDialog
+- Sims 4 Community Library now requires Sims 4 to be at least version 1.77.131.1030 (The Cottage Living Patch (Not DLC) of July 20th, 2021)
 
 v1.69:
 - Added functions to lock or unlock a door for Sims.
