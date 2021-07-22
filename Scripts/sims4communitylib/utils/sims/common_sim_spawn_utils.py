@@ -42,48 +42,63 @@ if not ON_RTD:
     from postures.posture_specs import get_origin_spec, PostureSpecVariable
     from postures.posture_state import PostureState
 else:
+    # noinspection PyMissingOrEmptyDocstring
     class FinishingType:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class Household:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class SimInfo:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class SimCreator:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class SimSpawner:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class Command:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class CommandType:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class CheatOutput:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class Hand:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class SIState:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class ResetReason:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints
     def posture_graph(*_, **__):
         pass
 
+    # noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints
     def get_origin_spec(*_, **__):
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class PostureSpecVariable:
         pass
 
+    # noinspection PyMissingOrEmptyDocstring
     class PostureState:
         pass
 

@@ -76,16 +76,25 @@ class CommonSituationUtils:
         return tuple(names)
 
     @staticmethod
-    def load_situation_by_id(situation_id: Union[int, CommonSituationId]) -> Union[Situation, None]:
+    def load_situation_by_id(situation_id: Union[int, CommonSituationId, Situation]) -> Union[Situation, None]:
         """load_situation_by_id(situation_id)
 
         Load an instance of a Situation by its decimal identifier.
 
         :param situation_id: The decimal identifier of a Situation.
-        :type situation_id: Union[int, CommonSituationId]
+        :type situation_id: Union[int, CommonSituationId, Situation]
         :return: An instance of a Situation matching the decimal identifier or None if not found.
         :rtype: Union[Situation, None]
         """
+        if isinstance(situation_id, Situation):
+            return situation_id
+        # noinspection PyBroadException
+        try:
+            situation_id: int = int(situation_id)
+        except:
+            situation_id: Situation = situation_id
+            return situation_id
+
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.load_instance(Types.SITUATION, situation_id)

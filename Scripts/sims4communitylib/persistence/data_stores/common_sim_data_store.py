@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Dict, Any, Callable
+from typing import Dict, Any
 from sims4communitylib.persistence.data_stores.common_data_store import CommonDataStore
 
 

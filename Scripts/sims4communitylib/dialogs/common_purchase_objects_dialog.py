@@ -71,14 +71,15 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
         options = [
             PurchasePickerRow(
                 def_id=obj_definition.id,
-                is_enable=True,
                 num_owned=CommonSimInventoryUtils.get_count_of_object_in_inventory(active_sim_info, obj_id),
-                num_available=None,
                 tags=obj_definition.build_buy_tags,
+                num_available=2000,
+                custom_price=50,
                 objects=tuple(),
-                row_tooltip=None,
                 show_discount=show_discount,
-                icon_override=None,
+                icon_info_data_override=None,  # Should be an instance of IconInfoData
+                is_enable=True,
+                row_tooltip=None,
                 row_description=None
             ),
         ]
@@ -348,14 +349,15 @@ def _common_testing_show_purchase_objects_dialog(_connection: int=None):
         options = [
             PurchasePickerRow(
                 def_id=obj_definition.id,
-                is_enable=True,
                 num_owned=CommonSimInventoryUtils.get_count_of_object_in_inventory(active_sim_info, obj_id),
-                num_available=2000,
                 tags=obj_definition.build_buy_tags,
+                num_available=2000,
+                custom_price=50,
                 objects=tuple(),
-                row_tooltip=None,
                 show_discount=show_discount,
-                icon_override=None,
+                icon_info_data_override=None,  # Should be an instance of IconInfoData
+                is_enable=True,
+                row_tooltip=None,
                 row_description=None
             ),
         ]

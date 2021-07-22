@@ -127,14 +127,21 @@ class CommonDataManagerRegistry(CommonService, HasClassLog):
         self.log.debug('Done saving data managers.')
 
     def clear_data(self) -> None:
+        """clear_data()
+
+        Clear all data managers in the registry.
+        """
         self.log.debug('Clearing data managers.')
         from sims4communitylib.persistence.common_game_object_data_storage import _CommonGameObjectDataStorageMetaclass
         _CommonGameObjectDataStorageMetaclass._game_object_storage_instances = dict()
         from sims4communitylib.persistence.common_sim_data_storage import _CommonSimDataStorageMetaclass
         _CommonSimDataStorageMetaclass._sim_storage_instances = dict()
         for data_manager in self._data_managers.values():
-            self.log.format_with_message('Saving data manager', data_manager=data_manager)
-            data_manager.clear()
+            try:
+                self.log.format_with_message('Saving data manager', data_manager=data_manager)
+                data_manager.clear()
+            except Exception as ex:
+                self.log.format_error_with_message('Failed to clear data manager. An error occurred.', data_manager=data_manager, exception=ex)
         self.log.debug('Done clearing data managers.')
 
     def locate_data_manager(self, mod_identity: CommonModIdentity, identifier: str=None) -> Union[CommonDataManager, None]:

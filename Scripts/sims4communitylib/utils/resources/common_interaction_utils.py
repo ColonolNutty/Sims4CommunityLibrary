@@ -10,9 +10,7 @@ from typing import Union, Iterator, Any, Tuple, List
 from interactions.base.interaction import Interaction
 from interactions.interaction_instance_manager import InteractionInstanceManager
 from protocolbuffers.Localization_pb2 import LocalizedString
-from sims4.resources import Types
 from sims4communitylib.enums.interactions_enum import CommonInteractionId
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
 
 class CommonInteractionUtils:
@@ -126,16 +124,27 @@ class CommonInteractionUtils:
         return tuple(short_names)
 
     @staticmethod
-    def load_interaction_by_id(interaction_id: Union[int, CommonInteractionId]) -> Union[Interaction, None]:
+    def load_interaction_by_id(interaction_id: Union[int, CommonInteractionId, Interaction]) -> Union[Interaction, None]:
         """load_interaction_by_id(interaction_id)
 
         Load an instance of an Interaction by its decimal identifier.
 
         :param interaction_id: The decimal identifier of an Interaction.
-        :type interaction_id: Union[int, CommonInteractionId]
+        :type interaction_id: Union[int, CommonInteractionId, Interaction]
         :return: An instance of an Interaction matching the decimal identifier or None if not found.
         :rtype: Union[Interaction, None]
         """
+        if isinstance(interaction_id, Interaction):
+            return interaction_id
+        # noinspection PyBroadException
+        try:
+            interaction_id: int = int(interaction_id)
+        except:
+            interaction_id: Interaction = interaction_id
+            return interaction_id
+
+        from sims4.resources import Types
+        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.load_instance(Types.INTERACTION, interaction_id)
 
     @staticmethod
@@ -147,4 +156,5 @@ class CommonInteractionUtils:
         :return: The instance manager for interactions.
         :rtype: InteractionInstanceManager
         """
+        from sims4.resources import Types
         return services.get_instance_manager(Types.INTERACTION)

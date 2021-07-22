@@ -19,6 +19,7 @@ ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 if not ON_RTD:
     from services.persistence_service import SaveGameData
 else:
+    # noinspection PyMissingOrEmptyDocstring
     class SaveGameData:
         pass
 

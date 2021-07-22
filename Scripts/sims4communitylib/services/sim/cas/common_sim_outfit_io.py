@@ -13,7 +13,9 @@ from sims.outfits.outfit_enums import OutfitCategory, BodyType
 from sims.sim_info import SimInfo
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
+from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 

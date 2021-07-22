@@ -32,6 +32,7 @@ class CommonUiObjectCategoryPicker(UiObjectPicker):
     }
 
     def _build_customize_picker(self, picker_data) -> None:
+        # noinspection PyBroadException
         try:
             with ProtocolBufferRollback(picker_data.filter_data) as filter_data_list:
                 for category in self.object_categories:

@@ -73,16 +73,25 @@ class CommonLootActionUtils:
         return has_applied_at_least_one
 
     @staticmethod
-    def load_loot_actions_by_id(loot_actions_id: int) -> Union[LootActions, None]:
+    def load_loot_actions_by_id(loot_actions_id: Union[int, LootActions]) -> Union[LootActions, None]:
         """load_loot_actions_by_id(loot_actions_id)
 
         Load a Loot Actions instance by its decimal identifier.
 
         :param loot_actions_id: The decimal identifier of a LootActions instance.
-        :type loot_actions_id: int
+        :type loot_actions_id: Union[int, LootActions]
         :return: An instance of a Loot Actions matching the decimal identifier or None if not found.
         :rtype: Union[LootActions, None]
         """
+        if isinstance(loot_actions_id, LootActions):
+            return loot_actions_id
+        # noinspection PyBroadException
+        try:
+            loot_actions_id: int = int(loot_actions_id)
+        except:
+            loot_actions_id: LootActions = loot_actions_id
+            return loot_actions_id
+
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.load_instance(Types.ACTION, loot_actions_id)

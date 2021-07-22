@@ -1236,6 +1236,13 @@ class CommonTraitUtils:
         """
         if isinstance(trait, Trait):
             return trait
+        # noinspection PyBroadException
+        try:
+            trait: int = int(trait)
+        except:
+            trait: Trait = trait
+            return trait
+
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.load_instance(Types.TRAIT, trait)

@@ -85,7 +85,14 @@ class CommonSkillUtils:
         :return: An instance of a Skill matching the decimal identifier or None if not found.
         :rtype: Union[Skill, None]
         """
-        if hasattr(skill_id, 'is_skill'):
+        if isinstance(skill_id, Skill) or hasattr(skill_id, 'is_skill'):
             return skill_id
+        # noinspection PyBroadException
+        try:
+            skill_id: int = int(skill_id)
+        except:
+            skill_id: Skill = skill_id
+            return skill_id
+
         from sims4communitylib.utils.resources.common_statistic_utils import CommonStatisticUtils
         return CommonStatisticUtils.load_statistic_by_id(skill_id)

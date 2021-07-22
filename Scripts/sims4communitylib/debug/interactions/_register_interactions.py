@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Tuple
+from typing import Tuple, Any
 from interactions.context import InteractionContext
 from objects.game_object import GameObject
 from objects.script_object import ScriptObject
@@ -134,10 +134,10 @@ def _common_ensure_shift_held_is_true_when_it_should_be(original, self: Interact
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Sim, Sim.potential_relation_panel_interactions.__name__)
-def _common_ensure_proper_interactions_appear_in_relationship_panel(original, self: Sim, context: InteractionContext, **kwargs):
+def _common_ensure_proper_interactions_appear_in_relationship_panel(original, self: Sim, target: Any, context: InteractionContext, **kwargs):
     from sims4communitylib.s4cl_configuration import S4CLConfiguration
     if not S4CLConfiguration().enable_extra_shift_click_menus:
-        yield from original(self, context, **kwargs)
+        yield from original(self, target, context, **kwargs)
     else:
         # noinspection PyBroadException
         try:

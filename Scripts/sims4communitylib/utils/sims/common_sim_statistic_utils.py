@@ -60,6 +60,7 @@ class CommonSimStatisticUtils:
                 return True
         return False
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def is_statistic_locked(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=True, add: bool= False) -> bool:
         """is_statistic_locked(sim_info, statistic, add_dynamic=True, add=False)
@@ -100,6 +101,7 @@ class CommonSimStatisticUtils:
             return -1.0
         return statistic_instance.get_user_value()
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def get_statistic(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=True, add: bool=False) -> Union[BaseStatistic, None]:
         """get_statistic(sim_info, statistic, statistic, add_dynamic=True, add=False)
@@ -125,6 +127,7 @@ class CommonSimStatisticUtils:
             return None
         return sim_info.get_statistic(statistic_instance, add=add)
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def get_statistic_value(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=True, add: bool=False) -> float:
         """get_statistic_value(sim_info, statistic, add_dynamic=True, add=False)
@@ -137,7 +140,7 @@ class CommonSimStatisticUtils:
         :type statistic: Union[int, CommonStatisticId, BaseStatistic]
         :param add_dynamic: Add the statistic components to the Sim. This argument is no longer used and will be ignored.
         :type add_dynamic: bool, optional
-        :param add: Whether or not to add the statistic to the Sim.
+        :param add: Whether or not to add the statistic to the Sim. This argument is no longer used and will be ignored.
         :type add: bool, optional
         :return: The value of the statistic, `-1.0` if the statistic is not found.
         :rtype: float
@@ -148,6 +151,7 @@ class CommonSimStatisticUtils:
             return -1.0
         return sim_info.get_stat_value(statistic_instance)
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def set_statistic_value(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
         """set_statistic_value(sim_info, statistic, value, add_dynamic=True, add=True)
@@ -179,6 +183,7 @@ class CommonSimStatisticUtils:
         sim_info.set_stat_value(statistic_instance, value)
         return True
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def set_statistic_level(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add: bool=True) -> bool:
         """set_statistic_level(sim_info, statistic, value, add_dynamic=True, add=True)
@@ -198,6 +203,7 @@ class CommonSimStatisticUtils:
         """
         return CommonSimStatisticUtils.set_statistic_user_value(sim_info, statistic, value, add=add)
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def set_statistic_user_value(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
         """set_statistic_user_value(sim_info, statistic, value, add_dynamic=True, add=True)
@@ -225,6 +231,7 @@ class CommonSimStatisticUtils:
         statistic_instance.set_user_value(value)
         return True
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def add_statistic_value(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
         """add_statistic_value(sim_info, statistic, value, add_dynamic=True, add=True)
@@ -265,6 +272,7 @@ class CommonSimStatisticUtils:
         sim_info.remove_statistic(statistic)
         return True
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def add_statistic_modifier(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> Union[int, None]:
         """add_statistic_modifier(sim_info, statistic, value, add_dynamic=True, add=True)
@@ -291,6 +299,7 @@ class CommonSimStatisticUtils:
             return False
         return sim_info.add_statistic_modifier(statistic, value)
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def remove_statistic_modifier(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
         """remove_statistic_modifier(sim_info, statistic, value, add_dynamic=True, add=True)
@@ -335,6 +344,7 @@ class CommonSimStatisticUtils:
             return False
         return sim_info.remove_statistic_modifier(modifier_handle)
 
+    # noinspection PyUnusedLocal
     @staticmethod
     def remove_all_statistic_modifiers_for_statistic(sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=True, add: bool=True) -> bool:
         """remove_all_statistic_modifiers_for_statistic(sim_info, statistic, add_dynamic=True, add=True)
@@ -402,7 +412,7 @@ def _common_set_statistic_user_value(statistic: TunableInstanceParam(Types.STATI
         sim_name = CommonSimNameUtils.get_full_name(sim_info)
         output('Setting statistic {} to Sim {}'.format(str(statistic), sim_name))
     except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set statistic {} to Sim {}.'.format(str(statistic), sim_name), exception=ex)
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set statistic {} to Sim.'.format(str(statistic)), exception=ex)
         output('Failed to set statistic {}. {}'.format(statistic, str(ex)))
         return
     try:

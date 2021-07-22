@@ -9,8 +9,6 @@ from typing import Union
 
 from sims4communitylib.enums.statistics_enum import CommonStatisticId
 from statistics.base_statistic import BaseStatistic
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-from sims4.resources import Types
 
 
 class CommonStatisticUtils:
@@ -78,6 +76,15 @@ class CommonStatisticUtils:
         :return: An instance of a Statistic matching the decimal identifier or None if not found.
         :rtype: Union[BaseStatistic, None]
         """
-        if isinstance(statistic_id, BaseStatistic) or (not isinstance(statistic_id, int) and not isinstance(statistic_id, CommonStatisticId)):
+        if isinstance(statistic_id, BaseStatistic):
             return statistic_id
+        # noinspection PyBroadException
+        try:
+            statistic_id: int = int(statistic_id)
+        except:
+            statistic_id: BaseStatistic = statistic_id
+            return statistic_id
+
+        from sims4.resources import Types
+        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.load_instance(Types.STATISTIC, statistic_id) or CommonResourceUtils.load_instance(Types.STATIC_COMMODITY, statistic_id)

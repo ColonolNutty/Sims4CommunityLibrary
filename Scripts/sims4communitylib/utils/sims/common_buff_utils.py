@@ -321,8 +321,15 @@ class CommonBuffUtils(HasClassLog):
         :return: An instance of a Buff matching the decimal identifier or None if not found.
         :rtype: Union[Buff, None]
         """
-        if isinstance(buff, Buff) or (not isinstance(buff, int) and not isinstance(buff, CommonBuffId)):
+        if isinstance(buff, Buff):
             return buff
+        # noinspection PyBroadException
+        try:
+            buff: int = int(buff)
+        except:
+            buff: Buff = buff
+            return buff
+
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.load_instance(Types.BUFF, buff)
