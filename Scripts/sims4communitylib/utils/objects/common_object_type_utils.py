@@ -348,3 +348,105 @@ class CommonObjectTypeUtils:
         if not isinstance(game_object, GameObject):
             return False
         return isinstance(game_object, PoolSeat)
+
+    @staticmethod
+    def is_cow(game_object: GameObject) -> bool:
+        """is_cow(game_object)
+
+        Determine if an Object is a Cow.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object is a Cow. False, if not.
+        :rtype: bool
+        """
+        return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_COW, ))
+
+    @staticmethod
+    def is_llama(game_object: GameObject) -> bool:
+        """is_llama(game_object)
+
+        Determine if an Object is a Llama.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object is a Llama. False, if not.
+        :rtype: bool
+        """
+        return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_LLAMA, ))
+
+    @staticmethod
+    def is_livestock(game_object: GameObject) -> bool:
+        """is_livestock(game_object)
+
+        Determine if an Object is considered to be Livestock.
+
+        .. note:: Objects considered to be Livestock are Llamas and Cows.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object is Livestock. False, if not.
+        :rtype: bool
+        """
+        return CommonObjectTypeUtils.is_cow(game_object) or CommonObjectTypeUtils.is_llama(game_object)
+
+    @staticmethod
+    def is_hen(game_object: GameObject) -> bool:
+        """is_hen(game_object)
+
+        Determine if an Object is a Hen.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object is a Hen. False, if not.
+        :rtype: bool
+        """
+        return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_HEN, ))
+
+    @staticmethod
+    def is_rooster(game_object: GameObject) -> bool:
+        """is_rooster(game_object)
+
+        Determine if an Object is a Rooster.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object is a Rooster. False, if not.
+        :rtype: bool
+        """
+        return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_ROOSTER, ))
+
+    @staticmethod
+    def is_chicken(game_object: GameObject) -> bool:
+        """is_chicken(game_object)
+
+        Determine if an Object is a Chicken.
+
+        .. note:: A Chicken is either a Hen or Rooster.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object is a Chicken. False, if not.
+        :rtype: bool
+        """
+        return CommonObjectTypeUtils.is_hen(game_object) or CommonObjectTypeUtils.is_rooster(game_object)
+
+    @staticmethod
+    def is_vacuum_cleaner(game_object: GameObject) -> bool:
+        """is_vacuum_cleaner(game_object)
+
+        Determine if an Object is a Vacuum Cleaner.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object is a Vacuum Cleaner. False, if not.
+        :rtype: bool
+        """
+        return CommonObjectTagUtils.has_game_tags(game_object, (
+            CommonGameTag.FUNC_VACUUM_CLEANER,
+            CommonGameTag.FUNC_VACUUM_CLEANER_HANDHELD,
+            CommonGameTag.FUNC_VACUUM_CLEANER_HIGH,
+            CommonGameTag.FUNC_VACUUM_CLEANER_LOW,
+            CommonGameTag.FUNC_VACUUM_CLEANER_MED,
+            CommonGameTag.FUNC_VACUUM_CLEANER_UPRIGHT
+        ))
