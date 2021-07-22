@@ -17,6 +17,8 @@ from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.logging.has_class_log import HasClassLog
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
@@ -24,10 +26,21 @@ from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtil
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
-class CommonBuffUtils:
+class CommonBuffUtils(HasClassLog):
     """Utilities for manipulating Buffs on Sims.
 
     """
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
+        return ModInfo.get_identity()
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_log_identifier(cls) -> str:
+        return 'common_buff_utils'
+
     @staticmethod
     def has_fertility_boosting_buff(sim_info: SimInfo) -> bool:
         """has_fertility_boosting_buff(sim_info)
@@ -170,8 +183,8 @@ class CommonBuffUtils:
             buff_ids.append(buff_id)
         return buff_ids
 
-    @staticmethod
-    def add_buff(sim_info: SimInfo, *buffs: Union[int, CommonBuffId], buff_reason: Union[int, str, LocalizedString, CommonStringId]=None) -> bool:
+    @classmethod
+    def add_buff(cls, sim_info: SimInfo, *buffs: Union[int, CommonBuffId], buff_reason: Union[int, str, LocalizedString, CommonStringId]=None) -> bool:
         """add_buff(sim_info, *buffs, buff_reason=None)
 
         Add the specified buffs to a sim.
@@ -188,20 +201,25 @@ class CommonBuffUtils:
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
+            cls.get_log().format_with_message('Failed to add Buff to Sim. They did not have a Buff component!', buffs=buffs, sim=sim_info, buff_reason=buff_reason)
             return False
         localized_buff_reason = None
         if buff_reason is not None:
             localized_buff_reason = CommonLocalizationUtils.create_localized_string(buff_reason)
         has_any = False
         success = True
-        for buff in buffs:
-            buff = CommonBuffUtils.load_buff_by_id(buff)
+        for buff_id in buffs:
+            buff = CommonBuffUtils.load_buff_by_id(buff_id)
             if buff is None:
+                cls.get_log().format_with_message('No buff found using identifier.', buffs=buffs, sim=sim_info, buff_reason=buff_reason, buff_id=buff_id)
                 continue
             if not sim_info.add_buff_from_op(buff, buff_reason=localized_buff_reason):
+                cls.get_log().format_with_message('Failed to add buff for unknown reasons.', buff=buff, sim=sim_info, buff_reason=buff_reason)
                 success = False
             else:
+                cls.get_log().format_with_message('Successfully added buff.', buff=buff, sim=sim_info, buff_reason=buff_reason)
                 has_any = True
+        cls.get_log().format_with_message('Finished adding buffs to Sim.', buffs=buffs, sim=sim_info, buff_reason=buff_reason, success=success, has_any=has_any)
         return success and has_any
 
     @staticmethod
@@ -303,7 +321,7 @@ class CommonBuffUtils:
         :return: An instance of a Buff matching the decimal identifier or None if not found.
         :rtype: Union[Buff, None]
         """
-        if isinstance(buff, Buff):
+        if isinstance(buff, Buff) or (not isinstance(buff, int) and not isinstance(buff, CommonBuffId)):
             return buff
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
@@ -311,7 +329,7 @@ class CommonBuffUtils:
 
 
 @Command('s4clib.add_buff', command_type=CommandType.Live)
-def _common_add_buff(buff: TunableInstanceParam(Types.BUFF), opt_sim: OptionalTargetParam=None, buff_reason: str='(From Command)', _connection: int=None):
+def _common_add_buff(buff: TunableInstanceParam(Types.BUFF), opt_sim: OptionalTargetParam=None, buff_reason: str=None, _connection: int=None):
     from server_commands.argument_helpers import get_optional_target
     output = CheatOutput(_connection)
     if buff is None:

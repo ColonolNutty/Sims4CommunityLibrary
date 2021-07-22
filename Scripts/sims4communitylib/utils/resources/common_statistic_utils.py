@@ -78,6 +78,6 @@ class CommonStatisticUtils:
         :return: An instance of a Statistic matching the decimal identifier or None if not found.
         :rtype: Union[BaseStatistic, None]
         """
-        if isinstance(statistic_id, BaseStatistic):
+        if isinstance(statistic_id, BaseStatistic) or (not isinstance(statistic_id, int) and not isinstance(statistic_id, CommonStatisticId)):
             return statistic_id
         return CommonResourceUtils.load_instance(Types.STATISTIC, statistic_id) or CommonResourceUtils.load_instance(Types.STATIC_COMMODITY, statistic_id)

@@ -391,15 +391,20 @@ def _common_set_statistic_value(statistic: TunableInstanceParam(Types.STATISTIC)
 def _common_set_statistic_user_value(statistic: TunableInstanceParam(Types.STATISTIC), value: float, opt_sim: OptionalTargetParam=None, _connection: int=None):
     from server_commands.argument_helpers import get_optional_target
     output = CheatOutput(_connection)
-    if statistic is None:
-        output('Failed, Statistic not specified or Statistic did not exist! s4clib.set_statistic_value <statistic_name_or_id> <value> [opt_sim=None]')
+    try:
+        if statistic is None:
+            output('Failed, Statistic not specified or Statistic did not exist! s4clib.set_statistic_value <statistic_name_or_id> <value> [opt_sim=None]')
+            return
+        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+        if sim_info is None:
+            output('Failed, no Sim was specified or the specified Sim was not found!')
+            return
+        sim_name = CommonSimNameUtils.get_full_name(sim_info)
+        output('Setting statistic {} to Sim {}'.format(str(statistic), sim_name))
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set statistic {} to Sim {}.'.format(str(statistic), sim_name), exception=ex)
+        output('Failed to set statistic {}. {}'.format(statistic, str(ex)))
         return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
-    if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
-        return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Setting statistic {} to Sim {}'.format(str(statistic), sim_name))
     try:
         if CommonSimStatisticUtils.set_statistic_user_value(sim_info, statistic, value):
             output('Successfully set statistic value.')
