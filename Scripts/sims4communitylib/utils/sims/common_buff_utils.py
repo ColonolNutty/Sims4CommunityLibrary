@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from typing import Union, List, Tuple, Iterator
 
 from buffs.buff import Buff
+from distributor.shared_messages import IconInfoData
 from protocolbuffers.Localization_pb2 import LocalizedString
 from server_commands.argument_helpers import TunableInstanceParam, OptionalTargetParam
 from sims.sim_info import SimInfo
@@ -20,6 +21,7 @@ from sims4communitylib.exceptions.common_exceptions_handler import CommonExcepti
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
@@ -379,3 +381,35 @@ def _common_remove_buff(buff: TunableInstanceParam(Types.BUFF), opt_sim: Optiona
     except Exception as ex:
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to remove buff {} from Sim {}.'.format(str(buff), sim_name), exception=ex)
         output('Failed to remove buff {} from Sim {}. {}'.format(str(buff), sim_name, str(ex)))
+
+
+@Command('s4clib.show_active_buffs', command_type=CommandType.Live)
+def _common_show_active_buffs(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim = get_optional_target(opt_sim, _connection)
+    sim_info = CommonSimUtils.get_sim_info(sim)
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Showing active buffs of Sim {}'.format(sim_name))
+    try:
+        sim_buff_strings: List[str] = list()
+        for buff in CommonBuffUtils.get_buffs(sim_info):
+            buff_name = CommonBuffUtils.get_buff_name(buff)
+            buff_id = CommonBuffUtils.get_buff_id(buff)
+            sim_buff_strings.append('{} ({})'.format(buff_name, buff_id))
+        sim_buff_strings = sorted(sim_buff_strings, key=lambda x: x)
+        sim_buffs = ', '.join(sim_buff_strings)
+        text = ''
+        text += 'Active Buffs:\n{}\n\n'.format(sim_buffs)
+        CommonBasicNotification(
+            CommonLocalizationUtils.create_localized_string('{} Active Buffs ({})'.format(sim_name, CommonSimUtils.get_sim_id(sim_info))),
+            CommonLocalizationUtils.create_localized_string(text)
+        ).show(
+            icon=IconInfoData(obj_instance=CommonSimUtils.get_sim_instance(sim_info))
+        )
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show active buffs of Sim {}.'.format(sim_name), exception=ex)
+        output('Failed to show active buffs of Sim {}. {}'.format(sim_name, str(ex)))

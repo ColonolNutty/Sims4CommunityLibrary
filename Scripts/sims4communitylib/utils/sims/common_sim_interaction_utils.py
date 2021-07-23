@@ -5,20 +5,27 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Iterator, Union, Any, Callable
+from typing import Iterator, Union, Any, Callable, List
 
+from distributor.shared_messages import IconInfoData
 from event_testing.results import EnqueueResult, TestResult
 from interactions.aop import AffordanceObjectPair
 from interactions.base.interaction import Interaction
 from interactions.context import InteractionSource, InteractionContext, QueueInsertStrategy
 from interactions.interaction_finisher import FinishingType
 from interactions.priority import Priority
+from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
+from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.interactions_enum import CommonInteractionId
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
+from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 
@@ -1150,3 +1157,45 @@ class CommonSimInteractionUtils:
             must_run_next=must_run_next,
             **kwargs
         )
+
+
+@Command('s4clib.show_running_interactions', command_type=CommandType.Live)
+def _common_show_running_interactions(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim = get_optional_target(opt_sim, _connection)
+    sim_info = CommonSimUtils.get_sim_info(sim)
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Showing running and queued interactions of Sim {}'.format(sim_name))
+    try:
+        from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
+        running_interaction_strings: List[str] = list()
+        for interaction in CommonSimInteractionUtils.get_running_interactions_gen(sim_info):
+            interaction_name = CommonInteractionUtils.get_interaction_short_name(interaction)
+            interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
+            running_interaction_strings.append('{} ({})'.format(interaction_name, interaction_id))
+        running_interaction_strings = sorted(running_interaction_strings, key=lambda x: x)
+        running_interaction_names = ', '.join(running_interaction_strings)
+
+        queued_interaction_strings: List[str] = list()
+        for interaction in CommonSimInteractionUtils.get_queued_interactions_gen(sim_info):
+            interaction_name = CommonInteractionUtils.get_interaction_short_name(interaction)
+            interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
+            queued_interaction_strings.append('{} ({})'.format(interaction_name, interaction_id))
+        queued_interaction_strings = sorted(queued_interaction_strings, key=lambda x: x)
+        queued_interaction_names = ', '.join(queued_interaction_strings)
+        text = ''
+        text += 'Running Interactions:\n{}\n\n'.format(running_interaction_names)
+        text += 'Queued Interactions:\n{}\n\n'.format(queued_interaction_names)
+        CommonBasicNotification(
+            CommonLocalizationUtils.create_localized_string('{} Running and Queued Interactions ({})'.format(sim_name, CommonSimUtils.get_sim_id(sim_info))),
+            CommonLocalizationUtils.create_localized_string(text)
+        ).show(
+            icon=IconInfoData(obj_instance=CommonSimUtils.get_sim_instance(sim_info))
+        )
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show running or queued interactions of Sim {}.'.format(sim_name), exception=ex)
+        output('Failed to show running or queued interactions of Sim {}. {}'.format(sim_name, str(ex)))

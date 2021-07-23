@@ -7,10 +7,19 @@ Copyright (c) COLONOLNUTTY
 """
 import services
 from typing import Callable, Iterator, Union, List, Tuple
+
+from distributor.shared_messages import IconInfoData
+from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
+from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.situations_enum import CommonSituationId
 from sims4communitylib.enums.tags_enum import CommonGameTag
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
+from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.resources.common_situation_utils import CommonSituationUtils
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from situations.dynamic_situation_goal_tracker import DynamicSituationGoalTracker
 from situations.situation import Situation
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -282,3 +291,36 @@ class CommonSimSituationUtils:
             elif isinstance(goal_tracker, DynamicSituationGoalTracker):
                 goal_instances.extend(goal_tracker.goals)
         return tuple(goal_instances)
+
+
+@Command('s4clib.show_running_situations', command_type=CommandType.Live)
+def _common_show_running_situations(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim = get_optional_target(opt_sim, _connection)
+    sim_info = CommonSimUtils.get_sim_info(sim)
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Showing active situations of Sim {}'.format(sim_name))
+    try:
+        situation_strings: List[str] = list()
+        for situation in CommonSimSituationUtils.get_situations(sim_info):
+            situation_name = CommonSituationUtils.get_situation_name(situation)
+            situation_id = CommonSituationUtils.get_situation_id(situation)
+            situation_strings.append('{} ({})'.format(situation_name, situation_id))
+
+        situation_strings = sorted(situation_strings, key=lambda x: x)
+        sim_situations = ', '.join(situation_strings)
+        text = ''
+        text += 'Running Situations:\n{}\n\n'.format(sim_situations)
+        CommonBasicNotification(
+            CommonLocalizationUtils.create_localized_string('{} Running Situations ({})'.format(sim_name, CommonSimUtils.get_sim_id(sim_info))),
+            CommonLocalizationUtils.create_localized_string(text)
+        ).show(
+            icon=IconInfoData(obj_instance=CommonSimUtils.get_sim_instance(sim_info))
+        )
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show active situations of Sim {}.'.format(sim_name), exception=ex)
+        output('Failed to show active situations of Sim {}. {}'.format(sim_name, str(ex)))

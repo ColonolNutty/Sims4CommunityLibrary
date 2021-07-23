@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from pprint import pformat
 from typing import List, Union, Callable, Iterator, Tuple
 
+from distributor.shared_messages import IconInfoData
 from relationships.relationship_tracker import RelationshipTracker
 from relationships.sim_knowledge import SimKnowledge
 from server_commands.argument_helpers import TunableInstanceParam, OptionalTargetParam
@@ -17,6 +18,8 @@ from sims4.resources import Types
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
+from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from traits.traits import Trait
@@ -1323,3 +1326,36 @@ def _common_remove_trait(trait: TunableInstanceParam(Types.TRAIT), opt_sim: Opti
     except Exception as ex:
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to remove trait {} from Sim {}.'.format(str(trait), sim_name), exception=ex)
         output('Failed to remove trait {} from Sim {}. {}'.format(str(trait), sim_name, str(ex)))
+
+
+@Command('s4clib.show_traits', command_type=CommandType.Live)
+def _common_show_traits(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim = get_optional_target(opt_sim, _connection)
+    sim_info = CommonSimUtils.get_sim_info(sim)
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Showing traits of Sim {}'.format(sim_name))
+    try:
+        trait_strings: List[str] = list()
+        for trait in CommonTraitUtils.get_traits(sim_info):
+            trait_name = CommonTraitUtils.get_trait_name(trait)
+            trait_id = CommonTraitUtils.get_trait_id(trait)
+            trait_strings.append('{} ({})'.format(trait_name, trait_id))
+
+        trait_strings = sorted(trait_strings, key=lambda x: x)
+        sim_traits = ', '.join(trait_strings)
+        text = ''
+        text += 'Traits:\n{}\n\n'.format(sim_traits)
+        CommonBasicNotification(
+            CommonLocalizationUtils.create_localized_string('{} Traits ({})'.format(sim_name, CommonSimUtils.get_sim_id(sim_info))),
+            CommonLocalizationUtils.create_localized_string(text)
+        ).show(
+            icon=IconInfoData(obj_instance=sim)
+        )
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show traits of Sim {}.'.format(sim_name), exception=ex)
+        output('Failed to show traits of Sim {}. {}'.format(sim_name, str(ex)))

@@ -388,7 +388,7 @@ def _common_set_statistic_value(statistic: TunableInstanceParam(Types.STATISTIC)
     sim_name = CommonSimNameUtils.get_full_name(sim_info)
     output('Setting statistic {} to Sim {}'.format(str(statistic), sim_name))
     try:
-        if CommonSimStatisticUtils.set_statistic_value(sim_info, statistic, value):
+        if CommonSimStatisticUtils.set_statistic_value(sim_info, statistic.id, value):
             output('Successfully set statistic value.')
         else:
             output('Failed to set statistic.')
@@ -403,7 +403,7 @@ def _common_set_statistic_user_value(statistic: TunableInstanceParam(Types.STATI
     output = CheatOutput(_connection)
     try:
         if statistic is None:
-            output('Failed, Statistic not specified or Statistic did not exist! s4clib.set_statistic_value <statistic_name_or_id> <value> [opt_sim=None]')
+            output('Failed, Statistic not specified or Statistic did not exist! s4clib.set_statistic_level <statistic_name_or_id> <value> [opt_sim=None]')
             return
         sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
         if sim_info is None:
@@ -439,7 +439,7 @@ def _common_remove_statistic(statistic: TunableInstanceParam(Types.STATISTIC), o
     sim_name = CommonSimNameUtils.get_full_name(sim_info)
     output('Removing statistic {} from Sim {}'.format(str(statistic), sim_name))
     try:
-        if CommonSimStatisticUtils.remove_statistic(sim_info, statistic):
+        if CommonSimStatisticUtils.remove_statistic(sim_info, statistic.id):
             output('Successfully removed statistic.')
         else:
             output('Failed to remove statistic.')
