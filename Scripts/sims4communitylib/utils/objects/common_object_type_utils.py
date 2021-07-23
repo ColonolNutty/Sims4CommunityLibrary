@@ -363,6 +363,24 @@ class CommonObjectTypeUtils:
         return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_COW, ))
 
     @staticmethod
+    def is_dolphin(game_object: GameObject) -> bool:
+        """is_dolphin(game_object)
+
+        Determine if an Object is a Dolphin.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object is a Dolphin. False, if not.
+        :rtype: bool
+        """
+        return CommonObjectTagUtils.has_game_tags(game_object, (
+            CommonGameTag.FUNC_DOLPHIN_ALBINO,
+            CommonGameTag.FUNC_DOLPHIN_MERFOLK,
+            CommonGameTag.FUNC_DOLPHIN_SPAWNER,
+            CommonGameTag.FUNC_DOLPHIN_STANDARD
+        ))
+
+    @staticmethod
     def is_llama(game_object: GameObject) -> bool:
         """is_llama(game_object)
 
@@ -430,6 +448,19 @@ class CommonObjectTypeUtils:
         :rtype: bool
         """
         return CommonObjectTypeUtils.is_hen(game_object) or CommonObjectTypeUtils.is_rooster(game_object)
+
+    @staticmethod
+    def is_rabbit(game_object: GameObject) -> bool:
+        """is_rabbit(game_object)
+
+        Determine if an Object is a Rabbit.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :return: True, if the Object is a Rabbit. False, if not.
+        :rtype: bool
+        """
+        return False
 
     @staticmethod
     def is_vacuum_cleaner(game_object: GameObject) -> bool:
