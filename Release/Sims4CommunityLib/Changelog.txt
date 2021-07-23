@@ -4,6 +4,7 @@ v1.71:
 - Added utilities for checking if a Sim is an Animal (Pet or Fox) to CommonSpeciesUtils and CommonAgeSpeciesUtils
 - Added utilities for checking if a Sim is a Fox to CommonSpeciesUtils
 - Added a command to spawn foxes `s4clib.spawn_fox_sims`
+- Added is_dolphin to `CommonObjectTypeUtils`
 
 v1.70:
 - Fixed the Ringer icon not appearing properly in the phone menu.
