@@ -17,6 +17,39 @@ class _CommonSimSpawnUtilsTests:
     @CommonTestService.test()
     def _should_spawn_and_despawn_human_sim_properly() -> None:
         sim_info = CommonSimSpawnUtils.create_human_sim_info(first_name='Tester', last_name='McTest', source='testing')
-        CommonAssertionUtils.is_true(sim_info is not None)
-        CommonAssertionUtils.is_true(CommonSimSpawnUtils.despawn_sim(sim_info, cause='Was just a test.'))
+        try:
+            CommonAssertionUtils.is_true(sim_info is not None)
+            CommonAssertionUtils.is_true(CommonSimSpawnUtils.despawn_sim(sim_info, cause='S4CL Testing Despawn.'))
+        finally:
+            CommonSimSpawnUtils.delete_sim(sim_info, source='S4CL Test Clean Up')
+
+    @staticmethod
+    @CommonTestService.test()
+    def _should_spawn_and_despawn_large_dog_sim_properly() -> None:
+        sim_info = CommonSimSpawnUtils.create_large_dog_sim_info(first_name='Tester', last_name='McTest', source='testing')
+        try:
+            CommonAssertionUtils.is_true(sim_info is not None)
+            CommonAssertionUtils.is_true(CommonSimSpawnUtils.despawn_sim(sim_info, cause='S4CL Testing Despawn.'))
+        finally:
+            CommonSimSpawnUtils.delete_sim(sim_info, source='S4CL Test Clean Up')
+
+    @staticmethod
+    @CommonTestService.test()
+    def _should_spawn_and_despawn_small_dog_sim_properly() -> None:
+        sim_info = CommonSimSpawnUtils.create_small_dog_sim_info(first_name='Tester', last_name='McTest', source='testing')
+        try:
+            CommonAssertionUtils.is_true(sim_info is not None)
+            CommonAssertionUtils.is_true(CommonSimSpawnUtils.despawn_sim(sim_info, cause='S4CL Testing Despawn.'))
+        finally:
+            CommonSimSpawnUtils.delete_sim(sim_info, source='S4CL Test Clean Up')
+
+    @staticmethod
+    @CommonTestService.test()
+    def _should_spawn_and_despawn_fox_sim_properly() -> None:
+        sim_info = CommonSimSpawnUtils.create_fox_sim_info(first_name='Tester', last_name='McTest', source='testing')
+        try:
+            CommonAssertionUtils.is_true(sim_info is not None)
+            CommonAssertionUtils.is_true(CommonSimSpawnUtils.despawn_sim(sim_info, cause='S4CL Testing Despawn.'))
+        finally:
+            CommonSimSpawnUtils.delete_sim(sim_info, source='S4CL Test Clean Up')
 

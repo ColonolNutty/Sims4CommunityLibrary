@@ -18,6 +18,7 @@ class CommonTraitId(CommonInt):
     S4CL_MAIN_TRAIT_LARGE_DOG: 'CommonTraitId' = 16449767532803985357
     S4CL_MAIN_TRAIT_SMALL_DOG: 'CommonTraitId' = 5284118362600111737
     S4CL_MAIN_TRAIT_CAT: 'CommonTraitId' = 4108675957767251387
+    S4CL_MAIN_TRAIT_FOX: 'CommonTraitId' = 0x38F9F903CFDDA804
 
     # Vanilla
     ACTIVE: 'CommonTraitId' = 27419
@@ -645,6 +646,7 @@ class CommonTraitId(CommonInt):
     SPECIES_DOG: 'CommonTraitId' = 131194
     SPECIES_EXTENDED_LARGE_DOGS: 'CommonTraitId' = 173557
     SPECIES_EXTENDED_SMALL_DOGS: 'CommonTraitId' = 173556
+    SPECIES_FOX: 'CommonTraitId' = 259921
     SPECIES_HUMAN: 'CommonTraitId' = 151039
     SPEED_CLEANER: 'CommonTraitId' = 26639
     SPEED_READER: 'CommonTraitId' = 32621

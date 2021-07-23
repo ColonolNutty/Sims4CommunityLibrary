@@ -23,7 +23,8 @@ class _S4CLAutoApplyTraits:
                 sim_info,
                 CommonTraitId.S4CL_MAIN_TRAIT_LARGE_DOG,
                 CommonTraitId.S4CL_MAIN_TRAIT_SMALL_DOG,
-                CommonTraitId.S4CL_MAIN_TRAIT_CAT
+                CommonTraitId.S4CL_MAIN_TRAIT_CAT,
+                CommonTraitId.S4CL_MAIN_TRAIT_FOX
             )
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.S4CL_MAIN_TRAIT_HUMAN):
                 return
@@ -33,7 +34,8 @@ class _S4CLAutoApplyTraits:
                 sim_info,
                 CommonTraitId.S4CL_MAIN_TRAIT_HUMAN,
                 CommonTraitId.S4CL_MAIN_TRAIT_SMALL_DOG,
-                CommonTraitId.S4CL_MAIN_TRAIT_CAT
+                CommonTraitId.S4CL_MAIN_TRAIT_CAT,
+                CommonTraitId.S4CL_MAIN_TRAIT_FOX
             )
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.S4CL_MAIN_TRAIT_LARGE_DOG):
                 return
@@ -43,7 +45,8 @@ class _S4CLAutoApplyTraits:
                 sim_info,
                 CommonTraitId.S4CL_MAIN_TRAIT_HUMAN,
                 CommonTraitId.S4CL_MAIN_TRAIT_LARGE_DOG,
-                CommonTraitId.S4CL_MAIN_TRAIT_CAT
+                CommonTraitId.S4CL_MAIN_TRAIT_CAT,
+                CommonTraitId.S4CL_MAIN_TRAIT_FOX
             )
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.S4CL_MAIN_TRAIT_SMALL_DOG):
                 return
@@ -53,11 +56,23 @@ class _S4CLAutoApplyTraits:
                 sim_info,
                 CommonTraitId.S4CL_MAIN_TRAIT_HUMAN,
                 CommonTraitId.S4CL_MAIN_TRAIT_LARGE_DOG,
-                CommonTraitId.S4CL_MAIN_TRAIT_SMALL_DOG
+                CommonTraitId.S4CL_MAIN_TRAIT_SMALL_DOG,
+                CommonTraitId.S4CL_MAIN_TRAIT_FOX
             )
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.S4CL_MAIN_TRAIT_CAT):
                 return
             CommonTraitUtils.add_trait(sim_info, CommonTraitId.S4CL_MAIN_TRAIT_CAT)
+        elif CommonSpeciesUtils.is_fox(sim_info):
+            CommonTraitUtils.remove_trait(
+                sim_info,
+                CommonTraitId.S4CL_MAIN_TRAIT_HUMAN,
+                CommonTraitId.S4CL_MAIN_TRAIT_LARGE_DOG,
+                CommonTraitId.S4CL_MAIN_TRAIT_SMALL_DOG,
+                CommonTraitId.S4CL_MAIN_TRAIT_CAT
+            )
+            if CommonTraitUtils.has_trait(sim_info, CommonTraitId.S4CL_MAIN_TRAIT_FOX):
+                return
+            CommonTraitUtils.add_trait(sim_info, CommonTraitId.S4CL_MAIN_TRAIT_FOX)
 
 
 @CommonEventRegistry.handle_events(ModInfo.get_identity())

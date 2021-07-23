@@ -359,6 +359,85 @@ class CommonSimTypeUtils:
                 CommonOccultType.SKELETON: CommonSimType.CHILD_CAT_SKELETON,
                 CommonOccultType.PLANT_SIM: CommonSimType.CHILD_CAT_PLANT_SIM
             }
+        },
+        CommonSpecies.FOX: {
+            CommonAge.ELDER: {
+                CommonOccultType.NON_OCCULT: CommonSimType.ELDER_FOX,
+                CommonOccultType.VAMPIRE: CommonSimType.ELDER_FOX_VAMPIRE,
+                CommonOccultType.GHOST: CommonSimType.ELDER_FOX_GHOST,
+                CommonOccultType.ALIEN: CommonSimType.ELDER_FOX_ALIEN,
+                CommonOccultType.MERMAID: CommonSimType.ELDER_FOX_MERMAID,
+                CommonOccultType.WITCH: CommonSimType.ELDER_FOX_WITCH,
+                CommonOccultType.ROBOT: CommonSimType.ELDER_FOX_ROBOT,
+                CommonOccultType.SKELETON: CommonSimType.ELDER_FOX_SKELETON,
+                CommonOccultType.PLANT_SIM: CommonSimType.ELDER_FOX_PLANT_SIM
+            },
+            CommonAge.ADULT: {
+                CommonOccultType.NON_OCCULT: CommonSimType.ADULT_FOX,
+                CommonOccultType.VAMPIRE: CommonSimType.ADULT_FOX_VAMPIRE,
+                CommonOccultType.GHOST: CommonSimType.ADULT_FOX_GHOST,
+                CommonOccultType.ALIEN: CommonSimType.ADULT_FOX_ALIEN,
+                CommonOccultType.MERMAID: CommonSimType.ADULT_FOX_MERMAID,
+                CommonOccultType.WITCH: CommonSimType.ADULT_FOX_WITCH,
+                CommonOccultType.ROBOT: CommonSimType.ADULT_FOX_ROBOT,
+                CommonOccultType.SKELETON: CommonSimType.ADULT_FOX_SKELETON,
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_FOX_PLANT_SIM
+            },
+            CommonAge.YOUNGADULT: {
+                CommonOccultType.NON_OCCULT: CommonSimType.ADULT_FOX,
+                CommonOccultType.VAMPIRE: CommonSimType.ADULT_FOX_VAMPIRE,
+                CommonOccultType.GHOST: CommonSimType.ADULT_FOX_GHOST,
+                CommonOccultType.ALIEN: CommonSimType.ADULT_FOX_ALIEN,
+                CommonOccultType.MERMAID: CommonSimType.ADULT_FOX_MERMAID,
+                CommonOccultType.WITCH: CommonSimType.ADULT_FOX_WITCH,
+                CommonOccultType.ROBOT: CommonSimType.ADULT_FOX_ROBOT,
+                CommonOccultType.SKELETON: CommonSimType.ADULT_FOX_SKELETON,
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_FOX_PLANT_SIM
+            },
+            CommonAge.TEEN: {
+                CommonOccultType.NON_OCCULT: CommonSimType.ADULT_FOX,
+                CommonOccultType.VAMPIRE: CommonSimType.ADULT_FOX_VAMPIRE,
+                CommonOccultType.GHOST: CommonSimType.ADULT_FOX_GHOST,
+                CommonOccultType.ALIEN: CommonSimType.ADULT_FOX_ALIEN,
+                CommonOccultType.MERMAID: CommonSimType.ADULT_FOX_MERMAID,
+                CommonOccultType.WITCH: CommonSimType.ADULT_FOX_WITCH,
+                CommonOccultType.ROBOT: CommonSimType.ADULT_FOX_ROBOT,
+                CommonOccultType.SKELETON: CommonSimType.ADULT_FOX_SKELETON,
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_FOX_PLANT_SIM
+            },
+            CommonAge.CHILD: {
+                CommonOccultType.NON_OCCULT: CommonSimType.CHILD_FOX,
+                CommonOccultType.VAMPIRE: CommonSimType.CHILD_FOX_VAMPIRE,
+                CommonOccultType.GHOST: CommonSimType.CHILD_FOX_GHOST,
+                CommonOccultType.ALIEN: CommonSimType.CHILD_FOX_ALIEN,
+                CommonOccultType.MERMAID: CommonSimType.CHILD_FOX_MERMAID,
+                CommonOccultType.WITCH: CommonSimType.CHILD_FOX_WITCH,
+                CommonOccultType.ROBOT: CommonSimType.CHILD_FOX_ROBOT,
+                CommonOccultType.SKELETON: CommonSimType.CHILD_FOX_SKELETON,
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_FOX_PLANT_SIM
+            },
+            CommonAge.TODDLER: {
+                CommonOccultType.NON_OCCULT: CommonSimType.CHILD_FOX,
+                CommonOccultType.VAMPIRE: CommonSimType.CHILD_FOX_VAMPIRE,
+                CommonOccultType.GHOST: CommonSimType.CHILD_FOX_GHOST,
+                CommonOccultType.ALIEN: CommonSimType.CHILD_FOX_ALIEN,
+                CommonOccultType.MERMAID: CommonSimType.CHILD_FOX_MERMAID,
+                CommonOccultType.WITCH: CommonSimType.CHILD_FOX_WITCH,
+                CommonOccultType.ROBOT: CommonSimType.CHILD_FOX_ROBOT,
+                CommonOccultType.SKELETON: CommonSimType.CHILD_FOX_SKELETON,
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_FOX_PLANT_SIM
+            },
+            CommonAge.BABY: {
+                CommonOccultType.NON_OCCULT: CommonSimType.CHILD_FOX,
+                CommonOccultType.VAMPIRE: CommonSimType.CHILD_FOX_VAMPIRE,
+                CommonOccultType.GHOST: CommonSimType.CHILD_FOX_GHOST,
+                CommonOccultType.ALIEN: CommonSimType.CHILD_FOX_ALIEN,
+                CommonOccultType.MERMAID: CommonSimType.CHILD_FOX_MERMAID,
+                CommonOccultType.WITCH: CommonSimType.CHILD_FOX_WITCH,
+                CommonOccultType.ROBOT: CommonSimType.CHILD_FOX_ROBOT,
+                CommonOccultType.SKELETON: CommonSimType.CHILD_FOX_SKELETON,
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_FOX_PLANT_SIM
+            }
         }
     }
     _SIM_TYPE_TO_SIGNATURE_MAPPING: Dict[CommonSimType, str] = {
@@ -509,37 +588,37 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_LARGE_DOG_SKELETON: 'ChldLdSk',
         CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: 'ChldLdPls',
 
-        # Cat
+        # Fox
         # Elder
-        CommonSimType.ELDER_CAT: 'ElCat',
-        CommonSimType.ELDER_CAT_VAMPIRE: 'ElCatVa',
-        CommonSimType.ELDER_CAT_GHOST: 'ElCatGh',
-        CommonSimType.ELDER_CAT_ALIEN: 'ElCatAl',
-        CommonSimType.ELDER_CAT_MERMAID: 'ElCatMer',
-        CommonSimType.ELDER_CAT_WITCH: 'ElCatWi',
-        CommonSimType.ELDER_CAT_ROBOT: 'ElCatRo',
-        CommonSimType.ELDER_CAT_SKELETON: 'ElCatSk',
-        CommonSimType.ELDER_CAT_PLANT_SIM: 'ElCatPls',
+        CommonSimType.ELDER_FOX: 'ElFox',
+        CommonSimType.ELDER_FOX_VAMPIRE: 'ElFoxVa',
+        CommonSimType.ELDER_FOX_GHOST: 'ElFoxGh',
+        CommonSimType.ELDER_FOX_ALIEN: 'ElFoxAl',
+        CommonSimType.ELDER_FOX_MERMAID: 'ElFoxMer',
+        CommonSimType.ELDER_FOX_WITCH: 'ElFoxWi',
+        CommonSimType.ELDER_FOX_ROBOT: 'ElFoxRo',
+        CommonSimType.ELDER_FOX_SKELETON: 'ElFoxSk',
+        CommonSimType.ELDER_FOX_PLANT_SIM: 'ElFoxPls',
         # Adult
-        CommonSimType.ADULT_CAT: 'AdCat',
-        CommonSimType.ADULT_CAT_VAMPIRE: 'AdCatVa',
-        CommonSimType.ADULT_CAT_GHOST: 'AdCatGh',
-        CommonSimType.ADULT_CAT_ALIEN: 'AdCatAl',
-        CommonSimType.ADULT_CAT_MERMAID: 'AdCatMer',
-        CommonSimType.ADULT_CAT_WITCH: 'AdCatWi',
-        CommonSimType.ADULT_CAT_ROBOT: 'AdCatRo',
-        CommonSimType.ADULT_CAT_SKELETON: 'AdCatSk',
-        CommonSimType.ADULT_CAT_PLANT_SIM: 'AdCatPls',
+        CommonSimType.ADULT_FOX: 'AdFox',
+        CommonSimType.ADULT_FOX_VAMPIRE: 'AdFoxVa',
+        CommonSimType.ADULT_FOX_GHOST: 'AdFoxGh',
+        CommonSimType.ADULT_FOX_ALIEN: 'AdFoxAl',
+        CommonSimType.ADULT_FOX_MERMAID: 'AdFoxMer',
+        CommonSimType.ADULT_FOX_WITCH: 'AdFoxWi',
+        CommonSimType.ADULT_FOX_ROBOT: 'AdFoxRo',
+        CommonSimType.ADULT_FOX_SKELETON: 'AdFoxSk',
+        CommonSimType.ADULT_FOX_PLANT_SIM: 'AdFoxPls',
         # Child
-        CommonSimType.CHILD_CAT: 'ChldCat',
-        CommonSimType.CHILD_CAT_VAMPIRE: 'ChldCatVa',
-        CommonSimType.CHILD_CAT_GHOST: 'ChldCatGh',
-        CommonSimType.CHILD_CAT_ALIEN: 'ChldCatAl',
-        CommonSimType.CHILD_CAT_MERMAID: 'ChldCatMer',
-        CommonSimType.CHILD_CAT_WITCH: 'ChldCatWi',
-        CommonSimType.CHILD_CAT_ROBOT: 'ChldCatRo',
-        CommonSimType.CHILD_CAT_SKELETON: 'ChldCatSk',
-        CommonSimType.CHILD_CAT_PLANT_SIM: 'ChldCatPls'
+        CommonSimType.CHILD_FOX: 'ChldFox',
+        CommonSimType.CHILD_FOX_VAMPIRE: 'ChldFoxVa',
+        CommonSimType.CHILD_FOX_GHOST: 'ChldFoxGh',
+        CommonSimType.CHILD_FOX_ALIEN: 'ChldFoxAl',
+        CommonSimType.CHILD_FOX_MERMAID: 'ChldFoxMer',
+        CommonSimType.CHILD_FOX_WITCH: 'ChldFoxWi',
+        CommonSimType.CHILD_FOX_ROBOT: 'ChldFoxRo',
+        CommonSimType.CHILD_FOX_SKELETON: 'ChldFoxSk',
+        CommonSimType.CHILD_FOX_PLANT_SIM: 'ChldFoxPls'
     }
 
     _OCCULT_SIM_TYPE_TO_NON_OCCULT_SIM_TYPE_MAPPING: Dict[CommonSimType, CommonSimType] = {
@@ -722,6 +801,38 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_ROBOT: CommonSimType.CHILD_CAT,
         CommonSimType.CHILD_CAT_SKELETON: CommonSimType.CHILD_CAT,
         CommonSimType.CHILD_CAT_PLANT_SIM: CommonSimType.CHILD_CAT,
+
+        # Fox
+        # Elder
+        CommonSimType.ELDER_FOX: CommonSimType.ELDER_FOX,
+        CommonSimType.ELDER_FOX_VAMPIRE: CommonSimType.ELDER_FOX,
+        CommonSimType.ELDER_FOX_GHOST: CommonSimType.ELDER_FOX,
+        CommonSimType.ELDER_FOX_ALIEN: CommonSimType.ELDER_FOX,
+        CommonSimType.ELDER_FOX_MERMAID: CommonSimType.ELDER_FOX,
+        CommonSimType.ELDER_FOX_WITCH: CommonSimType.ELDER_FOX,
+        CommonSimType.ELDER_FOX_ROBOT: CommonSimType.ELDER_FOX,
+        CommonSimType.ELDER_FOX_SKELETON: CommonSimType.ELDER_FOX,
+        CommonSimType.ELDER_FOX_PLANT_SIM: CommonSimType.ELDER_FOX,
+        # Adult
+        CommonSimType.ADULT_FOX: CommonSimType.ADULT_FOX,
+        CommonSimType.ADULT_FOX_VAMPIRE: CommonSimType.ADULT_FOX,
+        CommonSimType.ADULT_FOX_GHOST: CommonSimType.ADULT_FOX,
+        CommonSimType.ADULT_FOX_ALIEN: CommonSimType.ADULT_FOX,
+        CommonSimType.ADULT_FOX_MERMAID: CommonSimType.ADULT_FOX,
+        CommonSimType.ADULT_FOX_WITCH: CommonSimType.ADULT_FOX,
+        CommonSimType.ADULT_FOX_ROBOT: CommonSimType.ADULT_FOX,
+        CommonSimType.ADULT_FOX_SKELETON: CommonSimType.ADULT_FOX,
+        CommonSimType.ADULT_FOX_PLANT_SIM: CommonSimType.ADULT_FOX,
+        # Child
+        CommonSimType.CHILD_FOX: CommonSimType.CHILD_FOX,
+        CommonSimType.CHILD_FOX_VAMPIRE: CommonSimType.CHILD_FOX,
+        CommonSimType.CHILD_FOX_GHOST: CommonSimType.CHILD_FOX,
+        CommonSimType.CHILD_FOX_ALIEN: CommonSimType.CHILD_FOX,
+        CommonSimType.CHILD_FOX_MERMAID: CommonSimType.CHILD_FOX,
+        CommonSimType.CHILD_FOX_WITCH: CommonSimType.CHILD_FOX,
+        CommonSimType.CHILD_FOX_ROBOT: CommonSimType.CHILD_FOX,
+        CommonSimType.CHILD_FOX_SKELETON: CommonSimType.CHILD_FOX,
+        CommonSimType.CHILD_FOX_PLANT_SIM: CommonSimType.CHILD_FOX,
     }
 
     _OCCULT_SIM_TYPE_TO_OCCULT_TYPE_MAPPING: Dict[CommonSimType, CommonOccultType] = {
@@ -904,6 +1015,38 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.CHILD_CAT_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_CAT_PLANT_SIM: CommonOccultType.PLANT_SIM,
+
+        # Fox
+        # Elder
+        CommonSimType.ELDER_FOX: CommonOccultType.NON_OCCULT,
+        CommonSimType.ELDER_FOX_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.ELDER_FOX_GHOST: CommonOccultType.GHOST,
+        CommonSimType.ELDER_FOX_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.ELDER_FOX_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.ELDER_FOX_WITCH: CommonOccultType.WITCH,
+        CommonSimType.ELDER_FOX_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.ELDER_FOX_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.ELDER_FOX_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Adult
+        CommonSimType.ADULT_FOX: CommonOccultType.NON_OCCULT,
+        CommonSimType.ADULT_FOX_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.ADULT_FOX_GHOST: CommonOccultType.GHOST,
+        CommonSimType.ADULT_FOX_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.ADULT_FOX_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.ADULT_FOX_WITCH: CommonOccultType.WITCH,
+        CommonSimType.ADULT_FOX_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.ADULT_FOX_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.ADULT_FOX_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        # Child
+        CommonSimType.CHILD_FOX: CommonOccultType.NON_OCCULT,
+        CommonSimType.CHILD_FOX_VAMPIRE: CommonOccultType.VAMPIRE,
+        CommonSimType.CHILD_FOX_GHOST: CommonOccultType.GHOST,
+        CommonSimType.CHILD_FOX_ALIEN: CommonOccultType.ALIEN,
+        CommonSimType.CHILD_FOX_MERMAID: CommonOccultType.MERMAID,
+        CommonSimType.CHILD_FOX_WITCH: CommonOccultType.WITCH,
+        CommonSimType.CHILD_FOX_ROBOT: CommonOccultType.ROBOT,
+        CommonSimType.CHILD_FOX_SKELETON: CommonOccultType.SKELETON,
+        CommonSimType.CHILD_FOX_PLANT_SIM: CommonOccultType.PLANT_SIM,
     }
 
     _OCCULT_SIM_TYPE_TO_AGE_MAPPING: Dict[CommonSimType, CommonAge] = {
@@ -1086,6 +1229,38 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_ROBOT: CommonAge.CHILD,
         CommonSimType.CHILD_CAT_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_CAT_PLANT_SIM: CommonAge.CHILD,
+
+        # Fox
+        # Elder
+        CommonSimType.ELDER_FOX: CommonAge.ELDER,
+        CommonSimType.ELDER_FOX_VAMPIRE: CommonAge.ELDER,
+        CommonSimType.ELDER_FOX_GHOST: CommonAge.ELDER,
+        CommonSimType.ELDER_FOX_ALIEN: CommonAge.ELDER,
+        CommonSimType.ELDER_FOX_MERMAID: CommonAge.ELDER,
+        CommonSimType.ELDER_FOX_WITCH: CommonAge.ELDER,
+        CommonSimType.ELDER_FOX_ROBOT: CommonAge.ELDER,
+        CommonSimType.ELDER_FOX_SKELETON: CommonAge.ELDER,
+        CommonSimType.ELDER_FOX_PLANT_SIM: CommonAge.ELDER,
+        # Adult
+        CommonSimType.ADULT_FOX: CommonAge.ADULT,
+        CommonSimType.ADULT_FOX_VAMPIRE: CommonAge.ADULT,
+        CommonSimType.ADULT_FOX_GHOST: CommonAge.ADULT,
+        CommonSimType.ADULT_FOX_ALIEN: CommonAge.ADULT,
+        CommonSimType.ADULT_FOX_MERMAID: CommonAge.ADULT,
+        CommonSimType.ADULT_FOX_WITCH: CommonAge.ADULT,
+        CommonSimType.ADULT_FOX_ROBOT: CommonAge.ADULT,
+        CommonSimType.ADULT_FOX_SKELETON: CommonAge.ADULT,
+        CommonSimType.ADULT_FOX_PLANT_SIM: CommonAge.ADULT,
+        # Child
+        CommonSimType.CHILD_FOX: CommonAge.CHILD,
+        CommonSimType.CHILD_FOX_VAMPIRE: CommonAge.CHILD,
+        CommonSimType.CHILD_FOX_GHOST: CommonAge.CHILD,
+        CommonSimType.CHILD_FOX_ALIEN: CommonAge.CHILD,
+        CommonSimType.CHILD_FOX_MERMAID: CommonAge.CHILD,
+        CommonSimType.CHILD_FOX_WITCH: CommonAge.CHILD,
+        CommonSimType.CHILD_FOX_ROBOT: CommonAge.CHILD,
+        CommonSimType.CHILD_FOX_SKELETON: CommonAge.CHILD,
+        CommonSimType.CHILD_FOX_PLANT_SIM: CommonAge.CHILD,
     }
 
     _OCCULT_SIM_TYPE_TO_SPECIES_MAPPING: Dict[CommonSimType, CommonSpecies] = {
@@ -1257,6 +1432,38 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_ROBOT: CommonSpecies.CAT,
         CommonSimType.CHILD_CAT_SKELETON: CommonSpecies.CAT,
         CommonSimType.CHILD_CAT_PLANT_SIM: CommonSpecies.CAT,
+
+        # Fox
+        # Elder
+        CommonSimType.ELDER_FOX: CommonSpecies.FOX,
+        CommonSimType.ELDER_FOX_VAMPIRE: CommonSpecies.FOX,
+        CommonSimType.ELDER_FOX_GHOST: CommonSpecies.FOX,
+        CommonSimType.ELDER_FOX_ALIEN: CommonSpecies.FOX,
+        CommonSimType.ELDER_FOX_MERMAID: CommonSpecies.FOX,
+        CommonSimType.ELDER_FOX_WITCH: CommonSpecies.FOX,
+        CommonSimType.ELDER_FOX_ROBOT: CommonSpecies.FOX,
+        CommonSimType.ELDER_FOX_SKELETON: CommonSpecies.FOX,
+        CommonSimType.ELDER_FOX_PLANT_SIM: CommonSpecies.FOX,
+        # Adult
+        CommonSimType.ADULT_FOX: CommonSpecies.FOX,
+        CommonSimType.ADULT_FOX_VAMPIRE: CommonSpecies.FOX,
+        CommonSimType.ADULT_FOX_GHOST: CommonSpecies.FOX,
+        CommonSimType.ADULT_FOX_ALIEN: CommonSpecies.FOX,
+        CommonSimType.ADULT_FOX_MERMAID: CommonSpecies.FOX,
+        CommonSimType.ADULT_FOX_WITCH: CommonSpecies.FOX,
+        CommonSimType.ADULT_FOX_ROBOT: CommonSpecies.FOX,
+        CommonSimType.ADULT_FOX_SKELETON: CommonSpecies.FOX,
+        CommonSimType.ADULT_FOX_PLANT_SIM: CommonSpecies.FOX,
+        # Child
+        CommonSimType.CHILD_FOX: CommonSpecies.FOX,
+        CommonSimType.CHILD_FOX_VAMPIRE: CommonSpecies.FOX,
+        CommonSimType.CHILD_FOX_GHOST: CommonSpecies.FOX,
+        CommonSimType.CHILD_FOX_ALIEN: CommonSpecies.FOX,
+        CommonSimType.CHILD_FOX_MERMAID: CommonSpecies.FOX,
+        CommonSimType.CHILD_FOX_WITCH: CommonSpecies.FOX,
+        CommonSimType.CHILD_FOX_ROBOT: CommonSpecies.FOX,
+        CommonSimType.CHILD_FOX_SKELETON: CommonSpecies.FOX,
+        CommonSimType.CHILD_FOX_PLANT_SIM: CommonSpecies.FOX,
     }
 
     @staticmethod
@@ -1579,4 +1786,3 @@ def _common_print_sim_types_for_sim(opt_sim: OptionalTargetParam=None, _connecti
     for sim_type in CommonSimTypeUtils.get_all_sim_types_gen(sim_info, combine_teen_young_adult_and_elder_age=False, combine_child_dog_types=False):
         output('Sim Type: {}'.format(sim_type.name))
     output('Done')
-

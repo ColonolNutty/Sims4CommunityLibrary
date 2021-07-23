@@ -275,6 +275,58 @@ class CommonAgeSpeciesUtils:
         return CommonAgeUtils.is_adult_or_elder(sim_info) and CommonSpeciesUtils.is_pet(sim_info)
 
     @staticmethod
+    def is_child_animal(sim_info: SimInfo) -> bool:
+        """is_child_animal(sim_info)
+
+        Determine if a sim is a Child Animal (Cat, Small Dog, Large Dog, Fox).
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Child Animal (Cat, Small Dog, Large Dog, Fox). False, if the Sim is not.
+        :rtype: bool
+        """
+        return CommonAgeUtils.is_child(sim_info) and CommonSpeciesUtils.is_animal(sim_info)
+
+    @staticmethod
+    def is_adult_animal(sim_info: SimInfo) -> bool:
+        """is_adult_animal(sim_info)
+
+        Determine if a sim is an Adult Animal (Cat, Small Dog, Large Dog, Fox).
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is an Adult Pet (Cat, Small Dog, Large Dog, Fox). False, if the Sim is not.
+        :rtype: bool
+        """
+        return CommonAgeUtils.is_adult(sim_info) and CommonSpeciesUtils.is_animal(sim_info)
+
+    @staticmethod
+    def is_elder_animal(sim_info: SimInfo) -> bool:
+        """is_elder_animal(sim_info)
+
+        Determine if a sim is an Elder Pet (Cat, Small Dog, Large Dog, Fox).
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is an Elder Pet (Cat, Small Dog, Large Dog, Fox). False, if the Sim is not.
+        :rtype: bool
+        """
+        return CommonAgeUtils.is_elder(sim_info) and CommonSpeciesUtils.is_animal(sim_info)
+
+    @staticmethod
+    def is_old_animal(sim_info: SimInfo) -> bool:
+        """is_old_animal(sim_info)
+
+        Determine if a Sim is an Adult or Elder Animal (Cat, Small Dog, Large Dog, Fox).
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is an Adult or Elder Animal (Cat, Small Dog, Large Dog, Fox). False, if the Sim is not.
+        :rtype: bool
+        """
+        return CommonAgeUtils.is_adult_or_elder(sim_info) and CommonSpeciesUtils.is_animal(sim_info)
+
+    @staticmethod
     def is_adult_human_or_pet(sim_info: SimInfo) -> bool:
         """is_adult_human_or_pet(sim_info)
 
@@ -325,6 +377,58 @@ class CommonAgeSpeciesUtils:
         :rtype: bool
         """
         return CommonAgeSpeciesUtils.is_teen_adult_or_elder_human(sim_info) or CommonAgeSpeciesUtils.is_old_pet(sim_info)
+
+    @staticmethod
+    def is_adult_human_or_animal(sim_info: SimInfo) -> bool:
+        """is_adult_human_or_animal(sim_info)
+
+        Determine if a sim is a Young Adult, Adult, or Elder Human or an Adult Animal (Cat, Small Dog, Large Dog, Fox).
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Young Adult, Adult, or Elder Human or an Adult Animal (Cat, Small Dog, Large Dog, Fox). False, if the Sim is not.
+        :rtype: bool
+        """
+        return CommonAgeSpeciesUtils.is_adult_human(sim_info) or CommonAgeSpeciesUtils.is_adult_animal(sim_info)
+
+    @staticmethod
+    def is_elder_human_or_animal(sim_info: SimInfo) -> bool:
+        """is_elder_human_or_animal(sim_info)
+
+        Determine if a sim is an Elder Human or Animal (Cat, Small Dog, Large Dog, Fox).
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is an Elder Human or Animal (Cat, Small Dog, Large Dog, Fox). False, if the Sim is not.
+        :rtype: bool
+        """
+        return CommonAgeSpeciesUtils.is_elder_human(sim_info) or CommonAgeSpeciesUtils.is_elder_animal(sim_info)
+
+    @staticmethod
+    def is_young_human_or_animal(sim_info: SimInfo) -> bool:
+        """is_young_human_or_animal(sim_info)
+
+        Determine if a sim is a Baby, Toddler, or Child Human or a Child Animal (Cat, Small Dog, Large Dog, Fox).
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Baby, Toddler, or Child Human or a Child Animal (Cat, Small Dog, Large Dog, Fox). False, if the Sim is not.
+        :rtype: bool
+        """
+        return CommonAgeSpeciesUtils.is_baby_toddler_or_child_human(sim_info) or CommonAgeSpeciesUtils.is_child_animal(sim_info)
+
+    @staticmethod
+    def is_old_human_or_animal(sim_info: SimInfo) -> bool:
+        """is_old_human_or_animal(sim_info)
+
+        Determine if a sim is a Teen, Young Adult, Adult, or Elder Human or an Adult or Elder Animal (Cat, Small Dog, Large Dog, Fox).
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Teen, Young Adult, Adult, or Elder Human or an Adult or Elder Animal (Cat, Small Dog, Large Dog, Fox). False, if the Sim is not.
+        :rtype: bool
+        """
+        return CommonAgeSpeciesUtils.is_teen_adult_or_elder_human(sim_info) or CommonAgeSpeciesUtils.is_old_animal(sim_info)
 
     @staticmethod
     def are_same_age_and_species(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:

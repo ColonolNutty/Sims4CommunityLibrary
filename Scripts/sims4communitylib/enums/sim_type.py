@@ -184,6 +184,36 @@ class CommonSimType(CommonInt):
     CHILD_CAT_SKELETON: 'CommonSimType' = 434
     CHILD_CAT_PLANT_SIM: 'CommonSimType' = 435
 
+    ELDER_FOX: 'CommonSimType' = 500
+    ELDER_FOX_VAMPIRE: 'CommonSimType' = 501
+    ELDER_FOX_GHOST: 'CommonSimType' = 502
+    ELDER_FOX_ALIEN: 'CommonSimType' = 503
+    ELDER_FOX_MERMAID: 'CommonSimType' = 504
+    ELDER_FOX_WITCH: 'CommonSimType' = 505
+    ELDER_FOX_ROBOT: 'CommonSimType' = 506
+    ELDER_FOX_SKELETON: 'CommonSimType' = 507
+    ELDER_FOX_PLANT_SIM: 'CommonSimType' = 508
+
+    ADULT_FOX: 'CommonSimType' = 515
+    ADULT_FOX_VAMPIRE: 'CommonSimType' = 516
+    ADULT_FOX_GHOST: 'CommonSimType' = 517
+    ADULT_FOX_ALIEN: 'CommonSimType' = 518
+    ADULT_FOX_MERMAID: 'CommonSimType' = 519
+    ADULT_FOX_WITCH: 'CommonSimType' = 520
+    ADULT_FOX_ROBOT: 'CommonSimType' = 521
+    ADULT_FOX_SKELETON: 'CommonSimType' = 522
+    ADULT_FOX_PLANT_SIM: 'CommonSimType' = 523
+
+    CHILD_FOX: 'CommonSimType' = 527
+    CHILD_FOX_VAMPIRE: 'CommonSimType' = 528
+    CHILD_FOX_GHOST: 'CommonSimType' = 529
+    CHILD_FOX_ALIEN: 'CommonSimType' = 530
+    CHILD_FOX_MERMAID: 'CommonSimType' = 531
+    CHILD_FOX_WITCH: 'CommonSimType' = 532
+    CHILD_FOX_ROBOT: 'CommonSimType' = 533
+    CHILD_FOX_SKELETON: 'CommonSimType' = 534
+    CHILD_FOX_PLANT_SIM: 'CommonSimType' = 535
+
     @staticmethod
     def get_all(include_teen_young_adult_and_elder: bool=False, include_baby: bool=False, include_separate_child_dog_types: bool=False) -> Tuple['CommonSimType']:
         """get_all(include_teen_young_adult_and_elder=False, include_baby=False, include_separate_child_dog_types=False)
@@ -270,6 +300,26 @@ class CommonSimType(CommonInt):
             CommonSimType.CHILD_CAT_SKELETON,
             CommonSimType.CHILD_CAT_PLANT_SIM,
 
+            CommonSimType.ADULT_FOX,
+            CommonSimType.ADULT_FOX_VAMPIRE,
+            CommonSimType.ADULT_FOX_GHOST,
+            CommonSimType.ADULT_FOX_ALIEN,
+            CommonSimType.ADULT_FOX_MERMAID,
+            CommonSimType.ADULT_FOX_WITCH,
+            CommonSimType.ADULT_FOX_ROBOT,
+            CommonSimType.ADULT_FOX_SKELETON,
+            CommonSimType.ADULT_FOX_PLANT_SIM,
+
+            CommonSimType.CHILD_FOX,
+            CommonSimType.CHILD_FOX_VAMPIRE,
+            CommonSimType.CHILD_FOX_GHOST,
+            CommonSimType.CHILD_FOX_ALIEN,
+            CommonSimType.CHILD_FOX_MERMAID,
+            CommonSimType.CHILD_FOX_WITCH,
+            CommonSimType.CHILD_FOX_ROBOT,
+            CommonSimType.CHILD_FOX_SKELETON,
+            CommonSimType.CHILD_FOX_PLANT_SIM,
+
             CommonSimType.CHILD_DOG,
             CommonSimType.CHILD_DOG_VAMPIRE,
             CommonSimType.CHILD_DOG_GHOST,
@@ -342,6 +392,16 @@ class CommonSimType(CommonInt):
                 CommonSimType.ELDER_CAT_ROBOT,
                 CommonSimType.ELDER_CAT_SKELETON,
                 CommonSimType.ELDER_CAT_PLANT_SIM,
+
+                CommonSimType.ELDER_FOX,
+                CommonSimType.ELDER_FOX_VAMPIRE,
+                CommonSimType.ELDER_FOX_GHOST,
+                CommonSimType.ELDER_FOX_ALIEN,
+                CommonSimType.ELDER_FOX_MERMAID,
+                CommonSimType.ELDER_FOX_WITCH,
+                CommonSimType.ELDER_FOX_ROBOT,
+                CommonSimType.ELDER_FOX_SKELETON,
+                CommonSimType.ELDER_FOX_PLANT_SIM,
             )
         if include_baby:
             sim_types: Tuple[CommonSimType] = (

@@ -21,6 +21,7 @@ class CommonSpecies(CommonInt):
     SMALL_DOG: 'CommonSpecies' = 2
     LARGE_DOG: 'CommonSpecies' = 3
     CAT: 'CommonSpecies' = 4
+    FOX: 'CommonSpecies' = 5
 
     @staticmethod
     def get_species(sim_info: SimInfo) -> 'CommonSpecies':
@@ -36,6 +37,8 @@ class CommonSpecies(CommonInt):
         from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
         if CommonSpeciesUtils.is_human(sim_info):
             return CommonSpecies.HUMAN
+        elif CommonSpeciesUtils.is_fox(sim_info):
+            return CommonSpecies.FOX
         elif CommonSpeciesUtils.is_small_dog(sim_info):
             return CommonSpecies.SMALL_DOG
         elif CommonSpeciesUtils.is_large_dog(sim_info):
@@ -63,6 +66,7 @@ class CommonSpecies(CommonInt):
             CommonSpecies.HUMAN: Species.HUMAN,
             CommonSpecies.SMALL_DOG: SpeciesExtended.SMALLDOG if hasattr(SpeciesExtended, 'SMALLDOG') else None,
             CommonSpecies.LARGE_DOG: Species.DOG if hasattr(Species, 'DOG') else None,
-            CommonSpecies.CAT: Species.CAT if hasattr(Species, 'CAT') else None
+            CommonSpecies.CAT: Species.CAT if hasattr(Species, 'CAT') else None,
+            CommonSpecies.FOX: Species.FOX if hasattr(Species, 'FOX') else None
         }
         return conversion_mapping.get(species, None)
