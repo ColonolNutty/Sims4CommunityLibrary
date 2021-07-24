@@ -31,7 +31,7 @@ class CommonFilePersistenceService(CommonPersistenceService):
     def _file_path(self, mod_identity: CommonModIdentity, identifier: str=None) -> str:
         from sims4communitylib.utils.common_log_utils import CommonLogUtils
         data_name = self._format_data_name(mod_identity, identifier=identifier)
-        folder_path = os.path.join(CommonLogUtils.get_sims_documents_location_path(), 'Mods', 'mod_data', mod_identity.base_namespace.lower())
+        folder_path = os.path.join(CommonLogUtils.get_mod_data_location_path(), mod_identity.base_namespace.lower())
         if self._folder_name is not None:
             folder_path = os.path.join(folder_path, self._folder_name)
         if self._custom_file_name is not None:

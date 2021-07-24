@@ -100,18 +100,67 @@ class CommonLogUtils:
         return file_path
 
     @staticmethod
+    def get_mods_location_path() -> str:
+        """get_sims_mods_location_path()
+
+        Retrieve the full path of the folder 'Documents\Electronic Arts\The Sims 4\Mods'
+
+        :return: The file path to 'Documents\Electronic Arts\The Sims 4\Mods' folder.
+        :rtype: str
+        """
+        sims_documents_location = CommonLogUtils.get_sims_documents_location_path()
+        if sims_documents_location == '':
+            return ''
+        return os.path.join(sims_documents_location, 'Mods')
+
+    @staticmethod
+    def get_mod_logs_location_path() -> str:
+        """get_mod_logs_location_path()
+
+        Retrieve the full path of the folder 'Documents\Electronic Arts\The Sims 4\mod_logs'
+
+        :return: The file path to 'Documents\Electronic Arts\The Sims 4\mod_logs' folder.
+        :rtype: str
+        """
+        sims_documents_location = CommonLogUtils.get_sims_documents_location_path()
+        if sims_documents_location == '':
+            return ''
+        return os.path.join(sims_documents_location, 'mod_logs')
+
+    @staticmethod
+    def get_mod_data_location_path() -> str:
+        """get_mod_data_location_path()
+
+        Retrieve the full path of the folder 'Documents\Electronic Arts\The Sims 4\Mods\mod_data'
+
+        :return: The file path to 'Documents\Electronic Arts\The Sims 4\Mods\mod_data' folder.
+        :rtype: str
+        """
+        mods_location = CommonLogUtils.get_mods_location_path()
+        if mods_location == '':
+            return ''
+        return os.path.join(mods_location, 'mod_data')
+
+    @staticmethod
     def _get_file_name(mod_identifier: Union[str, CommonModIdentity], file_name: str, custom_file_path: str=None) -> str:
-        mod_identifier = CommonModIdentity._get_mod_name(mod_identifier)
-        root_path = CommonLogUtils.get_sims_documents_location_path()
+        from sims4communitylib.utils.misc.common_mod_identity_utils import CommonModIdentityUtils
+        mod_identifier = CommonModIdentityUtils.determine_mod_name_from_identifier(mod_identifier)
+        file_path = CommonLogUtils.get_mod_logs_location_path()
         file_name = '{}_{}.txt'.format(mod_identifier, file_name)
-        file_path = os.path.join(root_path, 'mod_logs')
         if not os.path.exists(file_path):
             os.mkdir(file_path)
         if custom_file_path is not None:
             file_path = os.path.join(file_path, custom_file_path)
         current_file = os.path.join(file_path, file_name)
         if os.path.exists(current_file) and CommonLogUtils._file_is_too_big(current_file):
-            old_file_name = 'Old_{}'.format(file_name)
+            new_file_name = file_name.replace('.txt', '')
+            old_file_name = None
+            for x in range(20):
+                old_file_name = 'Old_{}_{}.txt'.format(new_file_name, x)
+                if not os.path.exists(os.path.join(file_path, old_file_name)):
+                    break
+            if old_file_name is None:
+                return current_file
             old_file_path = os.path.join(file_path, old_file_name)
             if os.path.exists(old_file_path):
                 os.remove(old_file_path)
@@ -120,10 +169,10 @@ class CommonLogUtils:
 
     @staticmethod
     def _get_old_file_path_name(mod_identifier: Union[str, CommonModIdentity], file_name: str, custom_file_path: str=None) -> str:
-        mod_identifier = CommonModIdentity._get_mod_name(mod_identifier)
-        root_path = CommonLogUtils.get_sims_documents_location_path()
+        from sims4communitylib.utils.misc.common_mod_identity_utils import CommonModIdentityUtils
+        mod_identifier = CommonModIdentityUtils.determine_mod_name_from_identifier(mod_identifier)
+        file_path = CommonLogUtils.get_mod_logs_location_path()
         old_file_name = 'Old_{}_{}.txt'.format(mod_identifier, file_name)
-        file_path = os.path.join(root_path, 'mod_logs')
         if not os.path.exists(file_path):
             os.mkdir(file_path)
         if custom_file_path is not None:
