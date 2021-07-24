@@ -1,3 +1,16 @@
+v1.72:
+- Added commands for display Buffs, Traits, Situations, and Interactions for Sims
+- Added `get_all` and `get_all_names` functions to `CommonAge`, `CommonBodyFrame`, `CommonGender`, `CommonOccultType`, and `CommonSpecies`
+- Added `is_age_available_for_sim` to `CommonAgeUtils`
+- Updated the `s4clib.print_sim_age` command to allow specifying a Sim id.
+- Added a `_version` property to CommonModInfo
+- Added a `version` property to CommonModIdentity
+- Created the `CommonModInfoUtils`
+- Foxes may now do the Sim_To_Pet Social Super interaction provided by S4CL
+- When a log becomes too big, it gets put into an Old file, up to 20 old files may now be created instead of just 1.
+- Updated `CommonExceptionHandler` to use `CommonModIdentityUtils`
+- Remove duplicate calls to get mod name within `HasClassLog` and `HasLog`
+
 v1.71:
 - Added CommonSimType for Foxes
 - Added FOX to CommonSpecies
