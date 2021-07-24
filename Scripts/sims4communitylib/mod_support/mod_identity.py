@@ -25,11 +25,12 @@ class CommonModIdentity:
     :param file_path: The path to the ts4script file of a mod.
     :type file_path: str
     """
-    def __init__(self, name: str, author: str, base_namespace: str, file_path: str):
+    def __init__(self, name: str, author: str, base_namespace: str, file_path: str, version: str):
         self._name = name.replace(' ', '_')
         self._author = author
         self._base_namespace = base_namespace
         self._script_file_path = file_path
+        self._version = version
 
     @property
     def name(self) -> str:
@@ -76,6 +77,15 @@ class CommonModIdentity:
         """
         return str(self._script_file_path)
 
+    @property
+    def version(self) -> str:
+        """The version a mod is currently at.
+
+        :return: The version of a mod. The Default value is '1.0'.
+        :rtype: str
+        """
+        return str(self._version)
+
     @staticmethod
     def _get_mod_name(mod_identifier: Union[str, 'CommonModIdentity']) -> Union[str, None]:
         if mod_identifier is None:
@@ -87,7 +97,7 @@ class CommonModIdentity:
         return str(mod_identifier).replace(' ', '_')
 
     def __repr__(self) -> str:
-        return 'mod_{}_author_{}_namespace_{}'.format(self.name, self.author, self.base_namespace)
+        return 'mod_{}_version_{}_author_{}_namespace_{}'.format(self.name, self.version.replace('.', '_').replace('/', '_').replace('\\', '_'), self.author, self.base_namespace)
 
     def __str__(self) -> str:
-        return 'Identity:\n Mod Name: {}\n Mod Author: {}\n Base Namespace: {}\n Path To Mod: {}'.format(self.name, self.author, self.base_namespace, self.file_path)
+        return 'Identity:\n Mod Name: {}\n Version: {}\n Mod Author: {}\n Base Namespace: {}\n Path To Mod: {}'.format(self.name, self.version, self.author, self.base_namespace, self.file_path)

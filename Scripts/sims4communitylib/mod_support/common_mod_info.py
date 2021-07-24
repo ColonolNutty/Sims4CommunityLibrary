@@ -41,6 +41,10 @@ class CommonModInfo(CommonService):
             def _file_path(self) -> str:
                 return ModInfo._FILE_PATH
 
+            @property
+            def _version(self) -> str:
+                return '3.5.6'
+
     """
     @classmethod
     def get_identity(cls) -> CommonModIdentity:
@@ -55,7 +59,7 @@ class CommonModInfo(CommonService):
         identity_property_name = '_MOD_IDENTITY'
         if getattr(cls, identity_property_name, None) is None:
             mod_info: CommonModInfo = cls.get()
-            setattr(cls, identity_property_name, CommonModIdentity(mod_info._name, mod_info._author, mod_info._base_namespace, mod_info._file_path))
+            setattr(cls, identity_property_name, CommonModIdentity(mod_info._name, mod_info._author, mod_info._base_namespace, mod_info._file_path, mod_info._version))
         return getattr(cls, identity_property_name)
 
     @property
@@ -73,3 +77,7 @@ class CommonModInfo(CommonService):
     @property
     def _file_path(self) -> str:
         raise NotImplementedError('Missing \'{}._file_path\'.'.format(self.__class__.__name__))
+
+    @property
+    def _version(self) -> str:
+        return '1.0'
