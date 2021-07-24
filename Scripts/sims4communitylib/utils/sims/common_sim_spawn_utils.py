@@ -643,131 +643,58 @@ class CommonSimSpawnUtils:
         sim.fade_out(fade_duration=fade_duration, immediate=immediate, additional_channels=additional_channels)
 
 
-@Command('s4clib.spawn_human_sims', command_type=CommandType.Live)
-def _s4cl_spawn_human_sims(count: int=100, gender_str: str='male', age_str: str='adult', _connection: int=None):
+@Command('s4clib.spawn_sims', command_type=CommandType.Live)
+def _s4cl_spawn_sims(species_str: str, count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
     output = CheatOutput(_connection)
+    species: CommonSpecies = CommonResourceUtils.get_enum_by_name(species_str.upper(), CommonSpecies, default_value=None)
+    if species is None:
+        output('{} is not a valid species. Valid Species: ({})'.format(gender_str, ', '.join(CommonSpecies.get_all_names())))
+        return
     gender: CommonGender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), CommonGender, default_value=None)
     if gender is None:
-        output('{} is not a valid gender. Valid Genders: ({})'.format(gender_str, ', '.join([common_gender.name for common_gender in CommonGender.values if common_gender != CommonGender.INVALID])))
+        output('{} is not a valid gender. Valid Genders: ({})'.format(gender_str, ', '.join(CommonGender.get_all_names())))
         return
     age: CommonAge = CommonResourceUtils.get_enum_by_name(age_str.upper(), CommonAge, default_value=None)
     if age is None:
-        output('{} is not a valid age. Valid Ages: ({})'.format(age_str, ', '.join([common_age.name for common_age in CommonAge.values if common_age != CommonAge.INVALID])))
+        output('{} is not a valid age. Valid Ages: ({})'.format(age_str, ', '.join(CommonAge.get_all_names())))
         return
     if count <= 0:
         output('Please enter a count above zero.')
         return
-    output('Spawning {} Sims of Gender: {} and Age: {}.'.format(count, gender.name, age.name))
+    output('Spawning {} {} Sim(s) of Gender: {} and Age: {}.'.format(count, species.name, gender.name, age.name))
     try:
         active_sim_info = CommonSimUtils.get_active_sim_info()
         active_sim_location = CommonSimLocationUtils.get_location(active_sim_info)
         for x in range(count):
-            created_sim_info = CommonSimSpawnUtils.create_human_sim_info(gender=gender, age=age, first_name=str(x), last_name=str(x))
+            created_sim_info = CommonSimSpawnUtils.create_sim_info(species, gender=gender, age=age, first_name=str(x), last_name=str(x))
             CommonSimSpawnUtils.spawn_sim(created_sim_info, location=active_sim_location)
     except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error spawning Sims.', exception=ex)
-    output('Done spawning Sims.')
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error spawning Sims {} Sim(s) of Species: {}, Gender: {}, and Age: {}.'.format(count, species.name, gender.name, age.name), exception=ex)
+        output('An error occurred while spawning Sim(s).')
+    output('Done Spawning {} {} Sim(s) of Gender: {} and Age: {}.'.format(count, species.name, gender.name, age.name))
+    output('If the space around your Sim was too crowded for a new Sim to spawn, you may locate the spawned Sim(s) in front of the lot.')
 
 
-@Command('s4clib.spawn_fox_sims', command_type=CommandType.Live)
-def _s4cl_spawn_fox_sims(count: int=100, gender_str: str='male', age_str: str='adult', _connection: int=None):
-    output = CheatOutput(_connection)
-    gender: CommonGender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), CommonGender, default_value=None)
-    if gender is None:
-        output('{} is not a valid gender. Valid Genders: ({})'.format(gender_str, ', '.join([common_gender.name for common_gender in CommonGender.values if common_gender != CommonGender.INVALID])))
-        return
-    age: CommonAge = CommonResourceUtils.get_enum_by_name(age_str.upper(), CommonAge, default_value=None)
-    if age is None or age in (CommonAge.BABY, CommonAge.TODDLER, CommonAge.CHILD, CommonAge.TEEN, CommonAge.YOUNGADULT):
-        output('{} is not a valid age for Foxes. Valid Ages: (ADULT, ELDER)'.format(age_str))
-        return
-    if count <= 0:
-        output('Please enter a count above zero.')
-        return
-    output('Spawning {} Sims of Gender: {} and Age: {}.'.format(count, gender.name, age.name))
-    try:
-        active_sim_info = CommonSimUtils.get_active_sim_info()
-        active_sim_location = CommonSimLocationUtils.get_location(active_sim_info)
-        for x in range(count):
-            created_sim_info = CommonSimSpawnUtils.create_fox_sim_info(gender=gender, age=age, first_name=str(x), last_name=str(x))
-            CommonSimSpawnUtils.spawn_sim(created_sim_info, location=active_sim_location)
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error spawning Sims.', exception=ex)
-    output('Done spawning Sims.')
+@Command('s4clib.spawn_human_sims', command_type=CommandType.Live)
+def _s4cl_spawn_human_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
+    return _s4cl_spawn_sims(species_str=CommonSpecies.HUMAN.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)
 
 
 @Command('s4clib.spawn_large_dog_sims', command_type=CommandType.Live)
-def _s4cl_spawn_large_dog_sims(count: int=100, gender_str: str='male', age_str: str='adult', _connection: int=None):
-    output = CheatOutput(_connection)
-    gender: CommonGender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), CommonGender, default_value=None)
-    if gender is None:
-        output('{} is not a valid gender. Valid Genders: ({})'.format(gender_str, ', '.join([common_gender.name for common_gender in CommonGender.values if common_gender != CommonGender.INVALID])))
-        return
-    age: CommonAge = CommonResourceUtils.get_enum_by_name(age_str.upper(), CommonAge, default_value=None)
-    if age is None or age in (CommonAge.BABY, CommonAge.TODDLER, CommonAge.TEEN, CommonAge.YOUNGADULT):
-        output('{} is not a valid age for Large Dogs. Valid Ages: (CHILD, ADULT, ELDER)'.format(age_str))
-        return
-    if count <= 0:
-        output('Please enter a count above zero.')
-        return
-    output('Spawning {} Sims of Gender: {} and Age: {}.'.format(count, gender.name, age.name))
-    try:
-        active_sim_info = CommonSimUtils.get_active_sim_info()
-        active_sim_location = CommonSimLocationUtils.get_location(active_sim_info)
-        for x in range(count):
-            created_sim_info = CommonSimSpawnUtils.create_large_dog_sim_info(gender=gender, age=age, first_name=str(x), last_name=str(x))
-            CommonSimSpawnUtils.spawn_sim(created_sim_info, location=active_sim_location)
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error spawning Sims.', exception=ex)
-    output('Done spawning Sims.')
+def _s4cl_spawn_large_dog_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
+    return _s4cl_spawn_sims(species_str=CommonSpecies.LARGE_DOG.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)
 
 
 @Command('s4clib.spawn_small_dog_sims', command_type=CommandType.Live)
-def _s4cl_spawn_small_dog_sims(count: int=100, gender_str: str='male', age_str: str='adult', _connection: int=None):
-    output = CheatOutput(_connection)
-    gender: CommonGender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), CommonGender, default_value=None)
-    if gender is None:
-        output('{} is not a valid gender. Valid Genders: ({})'.format(gender_str, ', '.join([common_gender.name for common_gender in CommonGender.values if common_gender != CommonGender.INVALID])))
-        return
-    age: CommonAge = CommonResourceUtils.get_enum_by_name(age_str.upper(), CommonAge, default_value=None)
-    if age is None or age in (CommonAge.BABY, CommonAge.TODDLER, CommonAge.TEEN, CommonAge.YOUNGADULT):
-        output('{} is not a valid age for Small Dogs. Valid Ages: (CHILD, ADULT, ELDER)'.format(age_str))
-        return
-    if count <= 0:
-        output('Please enter a count above zero.')
-        return
-    output('Spawning {} Sims of Gender: {} and Age: {}.'.format(count, gender.name, age.name))
-    try:
-        active_sim_info = CommonSimUtils.get_active_sim_info()
-        active_sim_location = CommonSimLocationUtils.get_location(active_sim_info)
-        for x in range(count):
-            created_sim_info = CommonSimSpawnUtils.create_small_dog_sim_info(gender=gender, age=age, first_name=str(x), last_name=str(x))
-            CommonSimSpawnUtils.spawn_sim(created_sim_info, location=active_sim_location)
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error spawning Sims.', exception=ex)
-    output('Done spawning Sims.')
+def _s4cl_spawn_small_dog_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
+    return _s4cl_spawn_sims(species_str=CommonSpecies.SMALL_DOG.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)
 
 
 @Command('s4clib.spawn_cat_sims', command_type=CommandType.Live)
-def _s4cl_spawn_cat_sims(count: int=100, gender_str: str='male', age_str: str='adult', _connection: int=None):
-    output = CheatOutput(_connection)
-    gender: CommonGender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), CommonGender, default_value=None)
-    if gender is None:
-        output('{} is not a valid gender. Valid Genders: ({})'.format(gender_str, ', '.join([common_gender.name for common_gender in CommonGender.values if common_gender != CommonGender.INVALID])))
-        return
-    age: CommonAge = CommonResourceUtils.get_enum_by_name(age_str.upper(), CommonAge, default_value=None)
-    if age is None or age in (CommonAge.BABY, CommonAge.TODDLER, CommonAge.TEEN, CommonAge.YOUNGADULT):
-        output('{} is not a valid age for Cats. Valid Ages: (CHILD, ADULT, ELDER)'.format(age_str))
-        return
-    if count <= 0:
-        output('Please enter a count above zero.')
-        return
-    output('Spawning {} Sims of Gender: {} and Age: {}.'.format(count, gender.name, age.name))
-    try:
-        active_sim_info = CommonSimUtils.get_active_sim_info()
-        active_sim_location = CommonSimLocationUtils.get_location(active_sim_info)
-        for x in range(count):
-            created_sim_info = CommonSimSpawnUtils.create_cat_sim_info(gender=gender, age=age, first_name=str(x), last_name=str(x))
-            CommonSimSpawnUtils.spawn_sim(created_sim_info, location=active_sim_location)
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error spawning Sims.', exception=ex)
-    output('Done spawning Sims.')
+def _s4cl_spawn_cat_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
+    return _s4cl_spawn_sims(species_str=CommonSpecies.CAT.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)
+
+
+@Command('s4clib.spawn_fox_sims', command_type=CommandType.Live)
+def _s4cl_spawn_fox_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
+    return _s4cl_spawn_sims(species_str=CommonSpecies.FOX.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)

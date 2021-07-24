@@ -29,3 +29,7 @@ class ModInfo(CommonModInfo):
     @property
     def _file_path(self) -> str:
         return ModInfo._FILE_PATH
+
+    @property
+    def _version(self) -> str:
+        return '1.72'

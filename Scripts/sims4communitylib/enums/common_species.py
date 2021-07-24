@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, Dict
+from typing import Union, Dict, Tuple
 
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Species, SpeciesExtended
@@ -22,6 +22,30 @@ class CommonSpecies(CommonInt):
     LARGE_DOG: 'CommonSpecies' = 3
     CAT: 'CommonSpecies' = 4
     FOX: 'CommonSpecies' = 5
+
+    @classmethod
+    def get_all(cls) -> Tuple['CommonSpecies']:
+        """get_all()
+
+        Retrieve a collection of all CommonSpecies, excluding CommonSpecies.INVALID.
+
+        :return: A collection of all CommonSpecies, without CommonSpecies.INVALID.
+        :rtype: Tuple[CommonSpecies]
+        """
+        value_list: Tuple[CommonSpecies] = tuple([value for value in cls.values if value != cls.INVALID])
+        return value_list
+
+    @classmethod
+    def get_all_names(cls) -> Tuple[str]:
+        """get_all_names()
+
+        Retrieve a collection of the names of all CommonSpecies, excluding CommonSpecies.INVALID.
+
+        :return: A collection of the names of all CommonSpecies, without CommonSpecies.INVALID.
+        :rtype: Tuple[str]
+        """
+        name_list: Tuple[str] = tuple([value.name for value in cls.get_all()])
+        return name_list
 
     @staticmethod
     def get_species(sim_info: SimInfo) -> 'CommonSpecies':

@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Dict, Union
+from typing import Dict, Union, Tuple
 
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Gender
@@ -19,6 +19,30 @@ class CommonGender(CommonInt):
     INVALID: 'CommonGender' = 0
     MALE: 'CommonGender' = 4096
     FEMALE: 'CommonGender' = 8192
+
+    @classmethod
+    def get_all(cls) -> Tuple['CommonGender']:
+        """get_all()
+
+        Retrieve a collection of all CommonGender, excluding CommonGender.INVALID.
+
+        :return: A collection of all CommonGender, without CommonGender.INVALID.
+        :rtype: Tuple[CommonGender]
+        """
+        value_list: Tuple[CommonGender] = tuple([value for value in cls.values if value != cls.INVALID])
+        return value_list
+
+    @classmethod
+    def get_all_names(cls) -> Tuple[str]:
+        """get_all_names()
+
+        Retrieve a collection of the names of all CommonGender, excluding CommonGender.INVALID.
+
+        :return: A collection of the names of all CommonGender, without CommonGender.INVALID.
+        :rtype: Tuple[str]
+        """
+        name_list: Tuple[str] = tuple([value.name for value in cls.get_all()])
+        return name_list
 
     @staticmethod
     def get_gender(sim_info: SimInfo) -> 'CommonGender':

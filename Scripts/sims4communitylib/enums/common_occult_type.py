@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union
+from typing import Union, Tuple
 
 from sims.occult.occult_enums import OccultType
 from sims.sim_info import SimInfo
@@ -26,6 +26,30 @@ class CommonOccultType(CommonInt):
     SKELETON: 'CommonOccultType' = 7
     VAMPIRE: 'CommonOccultType' = 8
     WITCH: 'CommonOccultType' = 9
+
+    @classmethod
+    def get_all(cls) -> Tuple['CommonOccultType']:
+        """get_all()
+
+        Retrieve a collection of all CommonOccultType, excluding CommonOccultType.NONE.
+
+        :return: A collection of all CommonOccultType, without CommonOccultType.NONE.
+        :rtype: Tuple[CommonOccultType]
+        """
+        value_list: Tuple[CommonOccultType] = tuple([value for value in cls.values if value != cls.NONE])
+        return value_list
+
+    @classmethod
+    def get_all_names(cls) -> Tuple[str]:
+        """get_all_names()
+
+        Retrieve a collection of the names of all CommonOccultType, excluding CommonOccultType.NONE.
+
+        :return: A collection of the names of all CommonOccultType, without CommonOccultType.NONE.
+        :rtype: Tuple[str]
+        """
+        name_list: Tuple[str] = tuple([value.name for value in cls.get_all()])
+        return name_list
 
     @staticmethod
     def determine_occult_type(sim_info: SimInfo) -> 'CommonOccultType':

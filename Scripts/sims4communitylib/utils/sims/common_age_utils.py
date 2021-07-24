@@ -10,11 +10,14 @@ from typing import Union
 
 import services
 from event_testing.test_events import TestEvent
+from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Age
 from sims4.commands import Command, CommandType, CheatOutput
 from sims4.resources import Types
 from sims4communitylib.enums.common_age import CommonAge
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 
 
 class CommonAgeUtils:
@@ -670,24 +673,66 @@ class CommonAgeUtils:
         """
         return CommonAgeUtils.is_baby_toddler_or_child(sim_info)
 
+    @staticmethod
+    def is_age_available_for_sim(sim_info: SimInfo, age: CommonAge) -> bool:
+        """is_age_available_for_sim(sim_info, age)
 
-@Command('s4clib.show_sim_age', command_type=CommandType.Live)
-def _s4clib_show_sim_age(_connection: int=None):
+        Determine if an Age is available for a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param age: The age to check.
+        :type age: CommonAge
+        :return: True, if the specified Age is available for the specified Sim. False, if not.
+        :rtype: bool
+        """
+        if sim_info is None or age == CommonAge.INVALID:
+            return False
+        from sims.aging.aging_data import AgingData
+        aging_data: AgingData = sim_info.get_aging_data()
+        if aging_data is None:
+            return False
+        vanilla_age = CommonAge.convert_to_vanilla(age)
+        if vanilla_age is None:
+            return False
+        # noinspection PyBroadException
+        try:
+            # noinspection PyUnresolvedReferences
+            aging_data_ages = aging_data.ages
+            return vanilla_age in aging_data_ages
+        except:
+            return False
+
+
+@Command('s4clib.print_sim_age', command_type=CommandType.Live)
+def _common_print_sim_age(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+    from server_commands.argument_helpers import get_optional_target
     output = CheatOutput(_connection)
-    output('Showing Sim age.')
+    output('Printing Sim Age.')
     from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-    sim_info = CommonSimUtils.get_active_sim_info()
-    if hasattr(sim_info, '_base') and hasattr(sim_info._base, 'age'):
-        output('_base.age {}'.format(sim_info._base.age))
-    if hasattr(sim_info, 'age'):
-        # noinspection PyPropertyAccess
-        output('age {}'.format(sim_info.age))
-    if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age'):
-        output('sim_info._base.age {}'.format(sim_info.sim_info._base.age))
-    if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, 'age'):
-        output('sim_info.age {}'.format(sim_info.sim_info.age))
-    get_age_result = CommonAgeUtils.get_age(sim_info)
-    output('Get Age Result: {}'.format(get_age_result))
-    get_age_exact_result = CommonAgeUtils.get_age(sim_info, exact_age=True)
-    output('Get Age Exact Result: {}'.format(get_age_exact_result))
-    output('Done showing Sim age.')
+    sim = get_optional_target(opt_sim, _connection)
+    sim_info = CommonSimUtils.get_sim_info(sim)
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Showing Age of Sim {}'.format(sim_name))
+    try:
+        if hasattr(sim_info, '_base') and hasattr(sim_info._base, 'age'):
+            output('_base.age {}'.format(sim_info._base.age))
+        if hasattr(sim_info, 'age'):
+            # noinspection PyPropertyAccess
+            output('age {}'.format(sim_info.age))
+        if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age'):
+            output('sim_info._base.age {}'.format(sim_info.sim_info._base.age))
+        if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, 'age'):
+            output('sim_info.age {}'.format(sim_info.sim_info.age))
+        get_age_result = CommonAgeUtils.get_age(sim_info)
+        output('Approximate Age: {}'.format(get_age_result))
+        get_age_exact_result = CommonAgeUtils.get_age(sim_info, exact_age=True)
+        output('Exact Age: {}'.format(get_age_exact_result))
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'An error occurred while printing Sim Age.', exception=ex)
+        output('An error occurred while printing Sim Age.')
+    output('Done printing Sim Age.')

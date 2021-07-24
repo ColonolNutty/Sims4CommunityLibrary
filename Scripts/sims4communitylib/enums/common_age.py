@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Dict, Union
+from typing import Dict, Union, Tuple
 
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Age
@@ -24,6 +24,30 @@ class CommonAge(CommonInt):
     YOUNGADULT: 'CommonAge' = 16
     ADULT: 'CommonAge' = 32
     ELDER: 'CommonAge' = 64
+
+    @classmethod
+    def get_all(cls) -> Tuple['CommonAge']:
+        """get_all()
+
+        Retrieve a collection of all CommonAge, excluding CommonAge.INVALID.
+
+        :return: A collection of all CommonAge, without CommonAge.INVALID.
+        :rtype: Tuple[CommonAge]
+        """
+        value_list: Tuple[CommonAge] = tuple([value for value in cls.values if value != cls.INVALID])
+        return value_list
+
+    @classmethod
+    def get_all_names(cls) -> Tuple[str]:
+        """get_all_names()
+
+        Retrieve a collection of the names of all CommonAge, excluding CommonAge.INVALID.
+
+        :return: A collection of the names of all CommonAge, without CommonAge.INVALID.
+        :rtype: Tuple[str]
+        """
+        name_list: Tuple[str] = tuple([value.name for value in cls.get_all()])
+        return name_list
 
     @staticmethod
     def get_age(sim_info: SimInfo) -> 'CommonAge':
