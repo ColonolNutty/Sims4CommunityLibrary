@@ -459,7 +459,7 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Rabbit. False, if not.
         :rtype: bool
         """
-        return False
+        return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_ANIMAL_OBJECT_WILD_RABBIT,))
 
     @staticmethod
     def is_vacuum_cleaner(game_object: GameObject) -> bool:
