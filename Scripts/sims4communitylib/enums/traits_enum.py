@@ -29,6 +29,7 @@ class CommonTraitId(CommonInt):
     ACTOR_CAREER_HIDDEN_CHECKPOINTS_AUDITION_SUCCESS_LOW_BUDGET_TV: 'CommonTraitId' = 198582
     ACTOR_CAREER_HIDDEN_CHECKPOINTS_NEW_TO_ACTOR_CAREER: 'CommonTraitId' = 198763
     ADULT: 'CommonTraitId' = 34319
+    ADVENTUROUS: 'CommonTraitId' = 252085
     ALLURING: 'CommonTraitId' = 26200
     ALWAYS_WELCOME: 'CommonTraitId' = 35504
     AMBITIOUS: 'CommonTraitId' = 16823
@@ -600,6 +601,7 @@ class CommonTraitId(CommonInt):
     PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE: 'CommonTraitId' = 162564
     PREGNANCY_OPTIONS_PET_CAN_REPRODUCE: 'CommonTraitId' = 162563
     PROFESSIONAL_SLACKER: 'CommonTraitId' = 32442
+    PROPER: 'CommonTraitId' = 251970
     QUICK_LEARNER: 'CommonTraitId' = 27086
     RECYCLE_DISCIPLE: 'CommonTraitId' = 232692
     REGAINED_HUMANITY: 'CommonTraitId' = 154825
