@@ -10,6 +10,12 @@ v1.72:
 - When a log becomes too big, it gets put into an Old file, up to 20 old files may now be created instead of just 1.
 - Updated `CommonExceptionHandler` to use `CommonModIdentityUtils`
 - Remove duplicate calls to get mod name within `HasClassLog` and `HasLog`
+- Created a Tag Reader to make updating tags simpler and take an extremely less amount of time to update the CommonGameTag enum
+- Added the `Adventurous` and `Proper` traits
+- When checking if an object is a swimming pool, the check for gametag has been removed, since many of the pool Objects are tagged as swimming pool, which is incorrect.
+- Added the `s4clib.show_game_tags` command to display the tags of an object in a notification.
+- Removed unused imports from `CommonSimOutfitIO`
+- Added an `is_rabbit` function to `CommonObjectTypeUtils`
 
 v1.71:
 - Added CommonSimType for Foxes
