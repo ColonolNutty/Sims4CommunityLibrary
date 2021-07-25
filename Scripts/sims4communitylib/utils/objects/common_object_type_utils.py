@@ -331,8 +331,7 @@ class CommonObjectTypeUtils:
         """
         if not isinstance(game_object, GameObject):
             return False
-        from sims4communitylib.utils.objects.common_object_tag_utils import CommonObjectTagUtils
-        return isinstance(game_object, SwimmingPool) or CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_SWIMMING_POOL,))
+        return isinstance(game_object, SwimmingPool)
 
     @staticmethod
     def is_swimming_pool_seat(game_object: GameObject) -> bool:
