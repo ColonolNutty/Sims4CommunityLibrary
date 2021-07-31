@@ -176,6 +176,27 @@ class CommonIntervalEventRegistry(CommonService):
             return listening_func
         return _wrapper
 
+    def register_dispatcher(self, mod_identity: CommonModIdentity, milliseconds: int, listening_func: Callable[..., Any], run_once: bool=False) -> Union[CommonIntervalDispatcher, None]:
+        """register_dispatcher(mod_identity, milliseconds, listening_func, run_once=False)
+
+        Manually register a new dispatcher to the registry.
+
+        :param mod_identity: The identity of the mod that owns the interval dispatcher.
+        :type mod_identity: CommonModIdentity
+        :param milliseconds: How much time before the dispatcher runs the first time as well as how much time before it runs again.
+        :type milliseconds: int
+        :param listening_func: The function to invoke after the set amount of time.
+        :type listening_func: Callable[..., Any]
+        :param run_once: If True, the dispatcher will run a single time, then be removed from the registry. If False, the dispatcher will continue running after the specified milliseconds and will repeat. Default is False.
+        :type run_once: bool, optional
+        :return: A dispatcher that will trigger after a set amount of time or None if an error occurs while registering a dispatcher.
+        :rtype: Union[CommonIntervalDispatcher, None]
+        """
+        if milliseconds <= 0:
+            CommonExceptionHandler.log_exception(mod_identity, 'Failed to registry an interval dispatcher. The specified milliseconds must be above zero.')
+            return None
+        return self._add_tracker(mod_identity, milliseconds, listening_func, run_once=run_once)
+
     def _add_tracker(self, mod_identifier: Union[str, CommonModIdentity], milliseconds: int, listening_func: Callable[..., Any], run_once: bool=False) -> CommonIntervalDispatcher:
         dispatcher = CommonIntervalDispatcher(mod_identifier, milliseconds, listening_func, run_once=run_once)
         self._registered_interval_trackers.append(dispatcher)
@@ -185,11 +206,14 @@ class CommonIntervalEventRegistry(CommonService):
         interval_trackers = list(self._registered_interval_trackers)
         for interval_tracker in interval_trackers:
             try:
-                if interval_tracker.try_dispatch(milliseconds_since_last_update):
-                    if interval_tracker.run_once:
-                        self._registered_interval_trackers.remove(interval_tracker)
+                interval_tracker.try_dispatch(milliseconds_since_last_update)
             except Exception as ex:
                 CommonExceptionHandler.log_exception(interval_tracker.mod_name, 'Error occurred when attempting to dispatch listener \'{}\''.format(interval_tracker.listening_func_name), exception=ex)
+            try:
+                if interval_tracker.run_once:
+                    self._registered_interval_trackers.remove(interval_tracker)
+            except Exception as ex:
+                CommonExceptionHandler.log_exception(interval_tracker.mod_name, 'Error occurred when attempting to unregister listener \'{}\''.format(interval_tracker.listening_func_name), exception=ex)
 
     @staticmethod
     @CommonEventRegistry.handle_events(ModInfo.get_identity())

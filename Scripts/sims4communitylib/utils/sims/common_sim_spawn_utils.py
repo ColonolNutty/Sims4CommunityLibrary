@@ -555,7 +555,12 @@ class CommonSimSpawnUtils:
             # noinspection PyPropertyAccess
             if sim.posture_state is not None:
                 # noinspection PyPropertyAccess
-                sim.posture_state.on_reset(reset_reason)
+                posture_state = sim.posture_state
+                if posture_state._primitive is not None:
+                    # noinspection PyPropertyAccess
+                    posture_state._primitive._prev_posture = None
+                # noinspection PyPropertyAccess
+                posture_state.on_reset(reset_reason)
 
             sim._stop_animation_interaction()
             sim.asm_auto_exit.clear()
