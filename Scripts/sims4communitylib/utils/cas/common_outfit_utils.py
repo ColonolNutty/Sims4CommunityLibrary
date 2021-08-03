@@ -18,10 +18,12 @@ from sims.sim_info import SimInfo
 from sims4.commands import Command, CheatOutput, CommandType
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.tags_enum import CommonGameTag
+from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegistry
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from singletons import DEFAULT
 from typing import Tuple, Union, Dict, Callable, Iterator, Set
@@ -1032,3 +1034,33 @@ if not ON_RTD:
             log.error('Failed to print outfit of Sim {}.'.format(sim_full_name), exception=ex)
         finally:
             log.disable()
+
+    @Command('s4clib.generate_outfit', 's4clib.generateoutfit', command_type=CommandType.Live)
+    def _s4clib_generate_outfit(outfit_category_str: str=None, index: int=0, opt_sim: OptionalTargetParam=None, _connection: int=None):
+        from server_commands.argument_helpers import get_optional_target
+        output = CheatOutput(_connection)
+        if outfit_category_str is None:
+            output('Please specify an OutfitCategory. Valid OutfitCategory: ({})'.format(', '.join(OutfitCategory.name_to_value.keys())))
+            return
+        outfit_category: OutfitCategory = CommonOutfitUtils.get_outfit_category_by_name(outfit_category_str.upper())
+        if outfit_category is None:
+            output('{} is not a valid Outfit Category. Valid OutfitCategory: ({})'.format(outfit_category_str, ', '.join(OutfitCategory.name_to_value.keys())))
+            return
+        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+        if sim_info is None:
+            output('Failed, no Sim was specified or the specified Sim was not found!')
+            return
+        sim_name = CommonSimNameUtils.get_full_name(sim_info)
+        output('Attempting to generate outfit {} at index {} for Sim {}'.format(outfit_category.name, index, sim_name))
+        try:
+            if CommonOutfitUtils.has_outfit(sim_info, (outfit_category, index)):
+                output('Sim {} already has an outfit of category {} at index {}'.format(sim_name, outfit_category.name, index))
+                return
+            generated = CommonOutfitUtils.generate_outfit(sim_info, (outfit_category, index))
+            if generated:
+                output('Outfit {} at index {} has been successfully generated for Sim {}.'.format(outfit_category.name, index, sim_name))
+            else:
+                output('Outfit {} at index {} failed to generate for Sim {}.'.format(outfit_category.name, index, sim_name))
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to generate outfit {} for Sim {}.'.format(outfit_category.name, sim_name), exception=ex)
+            output('Failed to generate outfit {} for Sim {}.'.format(outfit_category.name, sim_name))
