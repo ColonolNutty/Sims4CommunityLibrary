@@ -107,7 +107,9 @@ class CommonInteraction(Interaction, HasClassLog):
                 cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
                 return TestResult.NONE
             if test_result is None:
-                return super()._test(target, context, **kwargs)
+                super_test_result = super()._test(target, context, **kwargs)
+                cls.get_verbose_log().format_with_message('Super Test Result', super_test_result=super_test_result)
+                return super_test_result
             if not isinstance(test_result, TestResult):
                 raise RuntimeError('Interaction on_test did not result in a TestResult, instead got {}. {}'.format(pformat(test_result), cls.__name__))
             if test_result.result is False:
@@ -136,7 +138,8 @@ class CommonInteraction(Interaction, HasClassLog):
             interaction_target = target or context_inst_or_cls.target
 
             cls.get_verbose_log().format_with_message(
-                'Creating display name.',
+                'Running get_name.',
+                class_name=cls.__name__,
                 interaction_sim=interaction_sim,
                 interaction_target=interaction_target,
                 interaction=inst,

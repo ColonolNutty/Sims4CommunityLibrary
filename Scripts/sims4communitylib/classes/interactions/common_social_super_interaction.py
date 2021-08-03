@@ -221,12 +221,15 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                     kwargles=kwargs
                 )
                 test_result = cls.on_test(context.sim, target, context, *args, **kwargs)
+                cls.get_verbose_log().format_with_message('Test Result', test_result=test_result)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
                 return TestResult.NONE
 
             if test_result is None:
-                return super(CommonSocialSuperInteraction, inst_or_cls)._test(target, context, *args, **kwargs)
+                super_test_result = super(CommonSocialSuperInteraction, inst_or_cls)._test(target, context, *args, **kwargs)
+                cls.get_verbose_log().format_with_message('Super Test Result', super_test_result=super_test_result)
+                return super_test_result
             if not isinstance(test_result, TestResult):
                 raise RuntimeError('SocialSuperInteraction on_test did not result in a TestResult, instead got {}. {}'.format(pformat(test_result), cls.__name__))
             if test_result.result is False:
@@ -237,7 +240,9 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                 else:
                     tooltip = None
                 return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
-            return super(CommonSocialSuperInteraction, inst_or_cls)._test(target, context, *args, **kwargs)
+            super_test_result = super(CommonSocialSuperInteraction, inst_or_cls)._test(target, context, *args, **kwargs)
+            cls.get_verbose_log().format_with_message('Super Test Result', super_test_result=super_test_result)
+            return super_test_result
         except Exception as ex:
             cls.get_log().error('Error occurred while running _test of interaction \'{}\''.format(cls.__name__), exception=ex)
         return TestResult(False)

@@ -44,6 +44,7 @@ class CommonInteractionOverrideName(HasClassLog):
 
             cls.get_verbose_log().format_with_message(
                 'Creating display name.',
+                class_name=cls.__name__,
                 interaction_sim=interaction_sim,
                 interaction_target=interaction_target,
                 interaction=inst,

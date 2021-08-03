@@ -126,37 +126,46 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, CommonInteraction):
     @classmethod
     def _test(cls, target: Any, context: InteractionContext, *args, **kwargs) -> TestResult:
         try:
-            if context.sim is target:
-                return TestResult(False, 'Social Mixer Interactions cannot target self!')
-            if context.pick is not None:
-                pick_target = context.pick.target if context.source == context.SOURCE_PIE_MENU else None
-                if context.sim is pick_target:
+            try:
+                if context.sim is target:
                     return TestResult(False, 'Social Mixer Interactions cannot target self!')
-            cls.get_verbose_log().format_with_message(
-                'Running \'{}\' on_test.'.format(cls.__name__),
-                interaction_sim=context.sim,
-                interaction_target=target,
-                interaction_context=context,
-                argles=args,
-                kwargles=kwargs
-            )
-            test_result = cls.on_test(context.sim, target, context, *args, **kwargs)
+                if context.pick is not None:
+                    pick_target = context.pick.target if context.source == context.SOURCE_PIE_MENU else None
+                    if context.sim is pick_target:
+                        return TestResult(False, 'Social Mixer Interactions cannot target self!')
+                cls.get_verbose_log().format_with_message(
+                    'Running \'{}\' on_test.'.format(cls.__name__),
+                    interaction_sim=context.sim,
+                    interaction_target=target,
+                    interaction_context=context,
+                    argles=args,
+                    kwargles=kwargs
+                )
+                test_result = cls.on_test(context.sim, target, context, *args, **kwargs)
+                cls.get_verbose_log().format_with_message('Test Result', test_result=test_result)
+            except Exception as ex:
+                cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
+                return TestResult.NONE
+            if test_result is None:
+                super_test_result = super()._test(target, context, *args, **kwargs)
+                cls.get_verbose_log().format_with_message('Super Test Result', super_test_result=super_test_result)
+                return super_test_result
+            if not isinstance(test_result, TestResult):
+                raise RuntimeError('Interaction on_test did not result in a TestResult, instead got {}. {}'.format(pformat(test_result), cls.__name__))
+            if test_result.result is False:
+                if test_result.tooltip is not None:
+                    tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.tooltip)
+                elif test_result.reason is not None:
+                    tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.reason)
+                else:
+                    tooltip = None
+                return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
+            super_test_result = super()._test(target, context, *args, **kwargs)
+            cls.get_verbose_log().format_with_message('Super Test Result', super_test_result=super_test_result)
+            return super_test_result
         except Exception as ex:
-            cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
-            return TestResult.NONE
-        if test_result is None:
-            return super()._test(target, context, *args, **kwargs)
-        if not isinstance(test_result, TestResult):
-            raise RuntimeError('Interaction on_test did not result in a TestResult, instead got {}. {}'.format(pformat(test_result), cls.__name__))
-        if test_result.result is False:
-            if test_result.tooltip is not None:
-                tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.tooltip)
-            elif test_result.reason is not None:
-                tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.reason)
-            else:
-                tooltip = None
-            return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
-        return super()._test(target, context, *args, **kwargs)
+            cls.get_log().error('Error occurred while running _test of interaction \'{}\''.format(cls.__name__), exception=ex)
+        return TestResult(False)
 
     @classmethod
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, *args, **kwargs) -> TestResult:
