@@ -1,3 +1,19 @@
+v1.73:
+- Added FOX_STAND and FOX_STAND_PASSIVE to CommonInteractionId
+- Fixed an issue when soft resetting Sims
+- If a run_once function throws an exception, it will now be properly removed after running.
+- Added `CommonIntervalEventRegistry().register_dispatcher` to register dispatchers without needing to use the decorators
+- Added a vanilla fix for 5 star celebrities not properly getting currency that did not support float values
+- Added more logging within Social Super and Social Mixer interactions to print the test result of running the super _on_test
+- Added commands to set gender preference, get gender preference, and generate outfits if they don't exist on a Sim
+- Setting friendship levels between a Human Sim and Fox Sim works properly now when using CommonRelationshipUtils
+- can_impregnate and can_be_impregnated now properly work for Foxes
+- When a row is flagged as Enabled or Selected, the CommonChooseObjectOptionDialog and CommonChooseObjectsOptionDialog should now properly represent this.
+- Added the ability to make the game sort rows within a dialog for CommonChooseObjectOptionDialog and CommonChooseObjectsOptionDialog
+  - They will sort by display name and the selected rows will appear at the top.
+- CommonChooseOutfitDialog will now auto select the equipped outfit.
+- Added the ability to allow choosing no options within the CommonObjectsOptionDialog
+
 v1.72:
 - Added commands for display Buffs, Traits, Situations, and Interactions for Sims
 - Added `get_all` and `get_all_names` functions to `CommonAge`, `CommonBodyFrame`, `CommonGender`, `CommonOccultType`, and `CommonSpecies`
