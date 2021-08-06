@@ -50,6 +50,7 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
         on_submit: Callable[[Tuple[DialogOptionValueType]], Any]=CommonFunctionUtils.noop,
         min_selectable: int=1,
         max_selectable: int=1,
+        allow_no_selection: bool=False,
         **__
     ):
         """show(\
@@ -57,6 +58,7 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
             on_submit=CommonFunctionUtils.noop,\
             min_selectable=1,\
             max_selectable=1,\
+            allow_no_selection=False,\
             **__\
         )
 
@@ -70,11 +72,13 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
         :type min_selectable: int, optional
         :param max_selectable: The maximum number of options that can be chosen.
         :type max_selectable: int, optional
+        :param allow_no_selection: If True, the player may select no options. If False, the dialog will close with no options selected. Default is False.
+        :type allow_no_selection: bool, optional
         """
         try:
             return self._internal_dialog.show(
                 *_,
-                on_chosen=self._on_submit(on_submit),
+                on_chosen=self._on_submit(on_submit, allow_no_selection=allow_no_selection),
                 min_selectable=min_selectable,
                 max_selectable=max_selectable,
                 **__
@@ -88,6 +92,7 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
         on_submit: Callable[[Tuple[DialogOptionValueType]], Any]=CommonFunctionUtils.noop,
         min_selectable: int=1,
         max_selectable: int=1,
+        allow_no_selection: bool=False,
         **__: Any
     ) -> Union[UiDialogBase, None]:
         """build_dialog(\
@@ -95,6 +100,7 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
             on_submit=CommonFunctionUtils.noop,\
             min_selectable=1,\
             max_selectable=1,\
+            allow_no_selection=False,\
             **__\
         )
 
@@ -108,6 +114,8 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
         :type min_selectable: int, optional
         :param max_selectable: The maximum number of options that can be chosen.
         :type max_selectable: int, optional
+        :param allow_no_selection: If True, the player may select no options. If False, the dialog will close with no options selected. Default is False.
+        :type allow_no_selection: bool, optional
         :return: The built dialog or None if a problem occurs.
         :rtype: Union[UiDialogBase, None]
         """
@@ -115,7 +123,7 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
 
             return self._internal_dialog.build_dialog(
                 *_,
-                on_chosen=self._on_submit(on_submit),
+                on_chosen=self._on_submit(on_submit, allow_no_selection=allow_no_selection),
                 min_selectable=min_selectable,
                 max_selectable=max_selectable,
                 **__
@@ -129,13 +137,18 @@ class CommonChooseOptionsDialog(CommonChooseOptionDialog):
 
     def _on_submit(
         self,
-        on_submit: Callable[[Tuple[DialogOptionValueType]], Any]=CommonFunctionUtils.noop
+        on_submit: Callable[[Tuple[DialogOptionValueType]], Any]=CommonFunctionUtils.noop,
+        allow_no_selection: bool=False
     ) -> Callable[[Union[Tuple[CommonDialogOption], None], CommonChoiceOutcome], bool]:
         def _on_submit(chosen_options: Union[Tuple[CommonDialogOption], None], outcome: CommonChoiceOutcome) -> bool:
             try:
-                if chosen_options is None or len(chosen_options) == 0 or CommonChoiceOutcome.is_error_or_cancel(outcome):
+                if chosen_options is None or CommonChoiceOutcome.is_error_or_cancel(outcome):
                     self.close()
                     return True
+                if not allow_no_selection:
+                    if len(chosen_options) == 0:
+                        self.close()
+                        return True
                 chosen_values: List[DialogOptionValueType] = list()
                 for chosen_option in chosen_options:
                     chosen_values.append(chosen_option.value)

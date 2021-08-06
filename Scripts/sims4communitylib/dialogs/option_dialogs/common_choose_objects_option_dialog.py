@@ -221,7 +221,8 @@ class CommonChooseObjectsOptionDialog(CommonChooseOptionsDialog):
         categories: Iterator[CommonDialogObjectOptionCategory]=(),
         min_selectable: int=1,
         max_selectable: int=1,
-        sort_options: bool=False
+        sort_options: bool=False,
+        allow_no_selection: bool=False
     ):
         """show(\
             on_submit=CommonFunctionUtils.noop,\
@@ -230,7 +231,8 @@ class CommonChooseObjectsOptionDialog(CommonChooseOptionsDialog):
             sim_info=None,\
             categories=(),\
             min_selectable=1,\
-            max_selectable=1\
+            max_selectable=1,\
+            allow_no_selection=False\
         )
 
         Show the dialog and invoke the callbacks upon the player submitting their selection.
@@ -251,6 +253,8 @@ class CommonChooseObjectsOptionDialog(CommonChooseOptionsDialog):
         :type max_selectable: int, optional
         :param sort_options: If True, options will be sorted by display name, with the selected options on top. If False, options will not be sorted. Default is False.
         :type sort_options: bool, optional
+        :param allow_no_selection: If True, the player may select no options. If False, the dialog will close with no options selected. Default is False.
+        :type allow_no_selection: bool, optional
         """
         return super().show(
             picker_type=picker_type,
@@ -260,7 +264,8 @@ class CommonChooseObjectsOptionDialog(CommonChooseOptionsDialog):
             on_submit=on_submit,
             min_selectable=min_selectable,
             max_selectable=max_selectable,
-            sort_rows=sort_options
+            sort_rows=sort_options,
+            allow_no_selection=allow_no_selection
         )
 
     def build_dialog(
@@ -272,7 +277,8 @@ class CommonChooseObjectsOptionDialog(CommonChooseOptionsDialog):
         categories: Iterator[CommonDialogObjectOptionCategory]=(),
         min_selectable: int=1,
         max_selectable: int=1,
-        sort_options: bool=False
+        sort_options: bool=False,
+        allow_no_selection: bool=False
     ) -> Union[UiDialogBase, None]:
         """build_dialog(\
             on_submit=CommonFunctionUtils.noop,\
@@ -282,7 +288,8 @@ class CommonChooseObjectsOptionDialog(CommonChooseOptionsDialog):
             categories=(),\
             min_selectable=1,\
             max_selectable=1,\
-            sort_options=False\
+            sort_options=False,\
+            allow_no_selection=False\
         )
 
         Build the dialog and invoke the callbacks upon the player submitting their selection.
@@ -303,6 +310,8 @@ class CommonChooseObjectsOptionDialog(CommonChooseOptionsDialog):
         :type max_selectable: int, optional
         :param sort_options: If True, options will be sorted by display name, with the selected options on top. If False, options will not be sorted. Default is False.
         :type sort_options: bool, optional
+        :param allow_no_selection: If True, the player may select no options. If False, the dialog will close with no options selected. Default is False.
+        :type allow_no_selection: bool, optional
         :return: The built dialog or None if a problem occurs.
         :rtype: Union[UiDialogBase, None]
         """
@@ -314,7 +323,8 @@ class CommonChooseObjectsOptionDialog(CommonChooseOptionsDialog):
             on_submit=on_submit,
             min_selectable=min_selectable,
             max_selectable=max_selectable,
-            sort_rows=sort_options
+            sort_rows=sort_options,
+            allow_no_selection=allow_no_selection
         )
 
 
