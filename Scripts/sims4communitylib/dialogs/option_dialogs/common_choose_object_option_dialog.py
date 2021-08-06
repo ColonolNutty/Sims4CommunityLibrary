@@ -206,7 +206,8 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
         sim_info: SimInfo=None,
-        categories: Iterator[CommonDialogObjectOptionCategory]=()
+        categories: Iterator[CommonDialogObjectOptionCategory]=(),
+        sort_options: bool=False
     ):
         """show(\
             picker_type=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,\
@@ -225,12 +226,15 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         :type sim_info: SimInfo, optional
         :param categories: A collection of categories do display in the dialog. Default is an empty collection.
         :type categories: Iterator[CommonDialogObjectOptionCategory], optional
+        :param sort_options: If True, options will be sorted by display name, with the selected options on top. If False, options will not be sorted. Default is False.
+        :type sort_options: bool, optional
         """
         return super().show(
             picker_type=picker_type,
             page=page,
             sim_info=sim_info,
-            categories=categories
+            categories=categories,
+            sort_rows=sort_options
         )
 
     def build_dialog(
@@ -238,13 +242,15 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
         page: int=1,
         sim_info: SimInfo=None,
-        categories: Iterator[CommonDialogObjectOptionCategory]=()
+        categories: Iterator[CommonDialogObjectOptionCategory]=(),
+        sort_options: bool=False
     ) -> Union[UiDialogBase, None]:
         """build_dialog(\
             picker_type=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,\
             page=1,\
             sim_info=None,\
-            categories=()\
+            categories=(),\
+            sort_options=False\
         )
 
         Build the dialog and invoke the callbacks upon the player making a choice.
@@ -257,6 +263,8 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         :type sim_info: SimInfo, optional
         :param categories: A collection of categories do display in the dialog. Default is an empty collection.
         :type categories: Iterator[CommonDialogObjectOptionCategory], optional
+        :param sort_options: If True, options will be sorted by display name, with the selected options on top. If False, options will not be sorted. Default is False.
+        :type sort_options: bool, optional
         :return: The built dialog or None if a problem occurs.
         :rtype: Union[UiDialogBase, None]
         """
@@ -264,7 +272,8 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
             picker_type=picker_type,
             page=page,
             sim_info=sim_info,
-            categories=categories
+            categories=categories,
+            sort_rows=sort_options
         )
 
 

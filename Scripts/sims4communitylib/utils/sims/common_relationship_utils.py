@@ -512,12 +512,12 @@ class CommonRelationshipUtils:
     @staticmethod
     def _determine_friendship_track(sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, int]:
         if CommonSpeciesUtils.is_human(sim_info_a):
-            if CommonSpeciesUtils.is_pet(sim_info_b):
+            if CommonSpeciesUtils.is_animal(sim_info_b):
                 return CommonRelationshipTrackId.SIM_TO_PET_FRIENDSHIP
             elif CommonSpeciesUtils.is_human(sim_info_b):
                 return CommonRelationshipTrackId.FRIENDSHIP
-        elif CommonSpeciesUtils.is_pet(sim_info_a):
-            if CommonSpeciesUtils.is_pet(sim_info_b):
+        elif CommonSpeciesUtils.is_animal(sim_info_a):
+            if CommonSpeciesUtils.is_animal(sim_info_b):
                 return -1
             elif CommonSpeciesUtils.is_human(sim_info_b):
                 return CommonRelationshipTrackId.SIM_TO_PET_FRIENDSHIP

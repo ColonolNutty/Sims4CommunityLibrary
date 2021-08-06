@@ -95,6 +95,8 @@ class CommonDialogObjectOption(CommonDialogOption):
             row_description=self.description,
             row_tooltip=self.tooltip,
             icon=self.icon,
+            is_enable=self.context.is_enabled,
+            is_selected=self.context.is_selected,
             tag_list=self.hashed_tag_list,
             tag=self
         )

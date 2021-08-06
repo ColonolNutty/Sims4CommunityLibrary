@@ -295,8 +295,8 @@ class CommonChooseOutfitDialog(CommonChooseDialog):
                     sim_id,
                     outfit_category,
                     outfit_index,
-                    is_enable=True,
-                    is_selected=(outfit_category, outfit_index) == current_outfit,
+                    # For some reason the Outfit Picker uses "is_enable" to determine which outfit is currently selected, instead of the expected "is_selected".
+                    is_enable=(outfit_category, outfit_index) != current_outfit,
                     tag=(outfit_category, outfit_index)
                 )
             )

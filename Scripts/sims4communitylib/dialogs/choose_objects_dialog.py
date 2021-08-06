@@ -199,7 +199,8 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
         categories: Iterator[CommonDialogObjectOptionCategory]=(),
         include_pagination: bool=True,
         min_selectable: int=1,
-        max_selectable: int=1
+        max_selectable: int=1,
+        sort_rows: bool=False
     ):
         """show(\
             on_chosen=CommonFunctionUtils.noop,\
@@ -209,6 +210,7 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
             categories=(),\
             min_selectable=1,\
             max_selectable=1,\
+            sort_rows=True\
         )
 
         Show the dialog and invoke the callbacks upon the player choosing objects.
@@ -229,6 +231,8 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
         :type min_selectable: int, optional
         :param max_selectable: The maximum number of items allowed to be selected. Default is 1.
         :type max_selectable: int, optional
+        :param sort_rows: If True, rows will be sorted by display name, with the selected rows on top. If False, rows will not be sorted. Default is False.
+        :type sort_rows: bool, optional
         """
         self._current_page = page
         try:
@@ -240,7 +244,8 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
                 categories=categories,
                 include_pagination=include_pagination,
                 min_selectable=min_selectable,
-                max_selectable=max_selectable
+                max_selectable=max_selectable,
+                sort_rows=sort_rows
             )
         except Exception as ex:
             self.log.error('An error occurred while running \'{}\''.format(CommonChooseObjectsDialog.show.__name__), exception=ex)
@@ -254,7 +259,8 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
         categories: Iterator[CommonDialogObjectOptionCategory]=(),
         include_pagination: bool=True,
         min_selectable: int=1,
-        max_selectable: int=1
+        max_selectable: int=1,
+        sort_rows: bool=False
     ):
         def _on_chosen(choices: Tuple[Any], outcome: CommonChoiceOutcome) -> bool:
             try:
@@ -298,7 +304,8 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
             sim_info=sim_info,
             categories=categories,
             min_selectable=min_selectable,
-            max_selectable=max_selectable
+            max_selectable=max_selectable,
+            sort_rows=sort_rows
         )
         self.log.debug('Showing dialog.')
         _dialog.show_dialog()
@@ -313,7 +320,8 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
         categories: Iterator[CommonDialogObjectOptionCategory]=(),
         include_pagination: bool=True,
         min_selectable: int=1,
-        max_selectable: int=1
+        max_selectable: int=1,
+        sort_rows: bool=False
     ) -> Union[UiObjectPicker, None]:
         self.log.format_with_message('Attempting to build dialog.', page=page, categories=categories)
 
@@ -322,7 +330,8 @@ class CommonChooseObjectsDialog(CommonChooseObjectDialog):
             categories=categories,
             sim_info=sim_info,
             min_selectable=min_selectable,
-            max_selectable=max_selectable
+            max_selectable=max_selectable,
+            sort_rows=sort_rows
         )
         if _dialog is None:
             self.log.error('_dialog was None for some reason.')

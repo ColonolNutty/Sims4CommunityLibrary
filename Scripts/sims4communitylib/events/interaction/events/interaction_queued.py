@@ -5,9 +5,14 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from typing import Union
+
 from interactions.base.interaction import Interaction
 from interactions.interaction_queue import InteractionQueue
+from sims.sim import Sim
+from sims.sim_info import SimInfo
 from sims4communitylib.events.event_handling.common_event import CommonEvent
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class S4CLInteractionQueuedEvent(CommonEvent):
@@ -47,6 +52,18 @@ class S4CLInteractionQueuedEvent(CommonEvent):
     def __init__(self, interaction: Interaction, interaction_queue: InteractionQueue):
         self._interaction = interaction
         self._interaction_queue = interaction_queue
+
+    @property
+    def queuing_sim(self) -> Union[Sim, None]:
+        """The Sim that is putting the interaction into their queue."""
+        if self._interaction is None:
+            return None
+        return self._interaction.context.sim
+
+    @property
+    def queuing_sim_info(self) -> Union[SimInfo, None]:
+        """The SimInfo of the Sim that is putting the interaction into their queue."""
+        return CommonSimUtils.get_sim_info(self.queuing_sim)
 
     @property
     def interaction(self) -> Interaction:
