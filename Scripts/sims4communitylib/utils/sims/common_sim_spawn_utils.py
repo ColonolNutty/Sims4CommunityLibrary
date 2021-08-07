@@ -8,6 +8,8 @@ Copyright (c) COLONOLNUTTY
 import os
 
 from typing import Union, Tuple, Callable, Any, Iterator
+
+from server_commands.argument_helpers import OptionalTargetParam
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.common_species import CommonSpecies
@@ -17,6 +19,7 @@ from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 # ReadTheDocs
@@ -444,7 +447,8 @@ class CommonSimSpawnUtils:
         if sim is None:
             return True
         cause = cause or 'Sim despawned.'
-        sim.destroy(source=source, cause=cause, **kwargs)
+        if CommonSimSpawnUtils.hard_reset(sim_info, reset_reason=ResetReason.BEING_DESTROYED, source='S4CL', cause='S4CL Despawn'):
+            sim.destroy(source=source, cause=cause, **kwargs)
         return True
 
     @staticmethod
@@ -493,6 +497,9 @@ class CommonSimSpawnUtils:
         """
         if not CommonSimSpawnUtils.despawn_sim(sim_info, source=source, cause=cause, **kwargs):
             return False
+        client = services.client_manager().get_first_client()
+        if sim_info.household is not None:
+            client.remove_selectable_sim_info(sim_info)
         sim_info.remove_permanently()
         return True
 
@@ -703,3 +710,63 @@ def _s4cl_spawn_cat_sims(count: int=1, gender_str: str='male', age_str: str='adu
 @Command('s4clib.spawn_fox_sims', command_type=CommandType.Live)
 def _s4cl_spawn_fox_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
     return _s4cl_spawn_sims(species_str=CommonSpecies.FOX.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)
+
+
+@Command('s4clib.spawn_human_sims', command_type=CommandType.Live)
+def _s4cl_spawn_human_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
+    return _s4cl_spawn_sims(species_str=CommonSpecies.HUMAN.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)
+
+
+@Command('s4clib.purge_self', command_type=CommandType.Live)
+def _s4cl_purge_self(_connection: int=None):
+    output = CheatOutput(_connection)
+    output('Purging the active Sim from existence.')
+    active_sim_info = CommonSimUtils.get_active_sim_info()
+    return CommonSimSpawnUtils.delete_sim(active_sim_info)
+
+
+@Command('s4clib.purge_sim', command_type=CommandType.Live)
+def _s4cl_purge_self(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    output('Purging Sim from existence {}'.format(CommonSimNameUtils.get_full_name(sim_info)))
+    CommonSimSpawnUtils.delete_sim(sim_info, source='Player', cause='Command Purged')
+
+
+@Command('s4clib.be_alone', command_type=CommandType.Live)
+def _s4cl_be_alone(_connection: int=None):
+    output = CheatOutput(_connection)
+    try:
+        active_sim_info = CommonSimUtils.get_active_sim_info()
+        output('Purging everyone but your active Sim.')
+        sim_count = 0
+        sim_info_list = tuple(CommonSimUtils.get_sim_info_for_all_sims_generator())
+        for sim_info in sim_info_list:
+            if sim_info is active_sim_info:
+                continue
+            CommonSimSpawnUtils.delete_sim(sim_info, source='Player', cause='Command Purged')
+            sim_count += 1
+        output('Purged {} Sims'.format(sim_count))
+    except Exception as ex:
+        output('Failed, an exception occurred')
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'An error occurred while running command.', exception=ex)
+
+
+@Command('s4clib.purge_neighborhood', command_type=CommandType.Live)
+def _s4cl_purge_neighborhood(_connection: int=None):
+    output = CheatOutput(_connection)
+    try:
+        output('Purging all Sims')
+        sim_count = 0
+        sim_info_list = tuple(CommonSimUtils.get_sim_info_for_all_sims_generator())
+        for sim_info in sim_info_list:
+            CommonSimSpawnUtils.delete_sim(sim_info, source='Player', cause='Command Purged')
+            sim_count += 1
+        output('Purged {} Sims'.format(sim_count))
+    except Exception as ex:
+        output('Failed, an exception occurred')
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'An error occurred while running command.', exception=ex)

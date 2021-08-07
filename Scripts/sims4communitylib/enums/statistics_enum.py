@@ -733,6 +733,8 @@ class CommonStatisticId(CommonInt):
     MOTIVE_MOURN_LOVED_ONE: 'CommonStatisticId' = 99667
     MOTIVE_MOURN_NEMESIS: 'CommonStatisticId' = 99669
     MOTIVE_NAUSEA: 'CommonStatisticId' = 16618
+    MOTIVE_ANIMAL_FOX_BLADDER: 'CommonStatisticId' = 270467
+    MOTIVE_ANIMAL_FOX_HYGIENE: 'CommonStatisticId' = 270701
     MOTIVE_PET_CAT_AFFECTION: 'CommonStatisticId' = 151038
     MOTIVE_PET_CAT_BLADDER: 'CommonStatisticId' = 151036
     MOTIVE_PET_CAT_BOWEL: 'CommonStatisticId' = 157949

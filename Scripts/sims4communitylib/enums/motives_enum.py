@@ -14,6 +14,7 @@ class CommonMotiveId(CommonInt):
     """
     INVALID: 'CommonMotiveId' = 0
     BLADDER: 'CommonMotiveId' = 16652
+    ANIMAL_FOX_BLADDER: 'CommonMotiveId' = 270467
     PET_CAT_BLADDER: 'CommonMotiveId' = 151036
     PET_DOG_BLADDER: 'CommonMotiveId' = 151032
     # This motive doesn't actually exist, it is used when mapping motives. The value is arbitrary.
@@ -31,6 +32,7 @@ class CommonMotiveId(CommonInt):
     PET_CAT_HUNGER: 'CommonMotiveId' = 151035
     PET_DOG_HUNGER: 'CommonMotiveId' = 151031
     HYGIENE: 'CommonMotiveId' = 16657
+    ANIMAL_FOX_HYGIENE: 'CommonMotiveId' = 270701
     PET_CAT_HYGIENE: 'CommonMotiveId' = 157055
     PET_DOG_HYGIENE: 'CommonMotiveId' = 157056
     SOCIAL: 'CommonMotiveId' = 16658

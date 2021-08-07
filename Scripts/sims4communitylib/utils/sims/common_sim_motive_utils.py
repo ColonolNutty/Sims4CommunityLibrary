@@ -381,42 +381,50 @@ class CommonSimMotiveUtils:
                 CommonMotiveId.HUNGER: {
                     Species.HUMAN: CommonMotiveId.HUNGER,
                     Species.CAT: CommonMotiveId.PET_CAT_HUNGER,
-                    Species.DOG: CommonMotiveId.PET_DOG_HUNGER
+                    Species.DOG: CommonMotiveId.PET_DOG_HUNGER,
+                    Species.FOX: CommonMotiveId.HUNGER
                 },
                 CommonMotiveId.HYGIENE: {
                     Species.HUMAN: CommonMotiveId.HYGIENE,
                     Species.CAT: CommonMotiveId.PET_CAT_HYGIENE,
-                    Species.DOG: CommonMotiveId.PET_DOG_HYGIENE
+                    Species.DOG: CommonMotiveId.PET_DOG_HYGIENE,
+                    Species.FOX: CommonMotiveId.ANIMAL_FOX_HYGIENE
                 },
                 CommonMotiveId.MERMAID_HYDRATION: {
                     Species.HUMAN: CommonMotiveId.HYGIENE,
                     Species.CAT: CommonMotiveId.PET_CAT_HYGIENE,
-                    Species.DOG: CommonMotiveId.PET_DOG_HYGIENE
+                    Species.DOG: CommonMotiveId.PET_DOG_HYGIENE,
+                    Species.FOX: CommonMotiveId.HYGIENE
                 },
                 CommonMotiveId.ENERGY: {
                     Species.HUMAN: CommonMotiveId.ENERGY,
                     Species.CAT: CommonMotiveId.PET_CAT_ENERGY,
-                    Species.DOG: CommonMotiveId.PET_DOG_ENERGY
+                    Species.DOG: CommonMotiveId.PET_DOG_ENERGY,
+                    Species.FOX: CommonMotiveId.ENERGY
                 },
                 CommonMotiveId.BLADDER: {
                     Species.HUMAN: CommonMotiveId.BLADDER,
                     Species.CAT: CommonMotiveId.PET_CAT_BLADDER,
-                    Species.DOG: CommonMotiveId.PET_DOG_BLADDER
+                    Species.DOG: CommonMotiveId.PET_DOG_BLADDER,
+                    Species.FOX: CommonMotiveId.ANIMAL_FOX_BLADDER
                 },
                 CommonMotiveId.BOWEL: {
                     Species.HUMAN: CommonMotiveId.BOWEL,
                     Species.CAT: CommonMotiveId.PET_CAT_BOWEL,
-                    Species.DOG: CommonMotiveId.PET_DOG_BOWEL
+                    Species.DOG: CommonMotiveId.PET_DOG_BOWEL,
+                    Species.FOX: CommonMotiveId.BOWEL
                 },
                 CommonMotiveId.SOCIAL: {
                     Species.HUMAN: CommonMotiveId.SOCIAL,
                     Species.CAT: CommonMotiveId.PET_CAT_AFFECTION,
-                    Species.DOG: CommonMotiveId.PET_DOG_AFFECTION
+                    Species.DOG: CommonMotiveId.PET_DOG_AFFECTION,
+                    Species.FOX: CommonMotiveId.SOCIAL
                 },
                 CommonMotiveId.FUN: {
                     Species.HUMAN: CommonMotiveId.FUN,
                     Species.CAT: CommonMotiveId.PET_CAT_PLAY,
-                    Species.DOG: CommonMotiveId.PET_DOG_PLAY
+                    Species.DOG: CommonMotiveId.PET_DOG_PLAY,
+                    Species.FOX: CommonMotiveId.FUN
                 }
             }
         return CommonSimMotiveUtils._MOTIVE_MAPPINGS
