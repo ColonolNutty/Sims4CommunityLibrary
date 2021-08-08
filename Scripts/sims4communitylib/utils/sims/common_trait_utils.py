@@ -17,6 +17,8 @@ from sims4.commands import Command, CommandType, CheatOutput
 from sims4.resources import Types
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.logging.has_class_log import HasClassLog
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
@@ -25,12 +27,23 @@ from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from traits.traits import Trait
 
 
-class CommonTraitUtils:
+class CommonTraitUtils(HasClassLog):
     """Utilities for manipulating Traits on Sims.
 
     """
-    @staticmethod
-    def is_special_npc(sim_info: SimInfo) -> bool:
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
+        return ModInfo.get_identity()
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_log_identifier(cls) -> str:
+        return 'common_trait_utils'
+
+    @classmethod
+    def is_special_npc(cls, sim_info: SimInfo) -> bool:
         """is_special_npc(sim_info)
 
         Determine if a sim is a Special NPC.
@@ -57,8 +70,8 @@ class CommonTraitUtils:
         )
         return CommonTraitUtils.has_trait(sim_info, *traits)
 
-    @staticmethod
-    def is_active(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_active(cls, sim_info: SimInfo) -> bool:
         """is_active(sim_info)
 
         Determine if a Sim is active.
@@ -70,8 +83,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.ACTIVE)
 
-    @staticmethod
-    def is_aggressive_pet(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_aggressive_pet(cls, sim_info: SimInfo) -> bool:
         """is_aggressive_pet(sim_info)
 
         Determine if a pet sim is Aggressive.
@@ -87,8 +100,8 @@ class CommonTraitUtils:
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
-    @staticmethod
-    def is_alluring(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_alluring(cls, sim_info: SimInfo) -> bool:
         """is_alluring(sim_info)
 
         Determine if a sim is Alluring.
@@ -100,8 +113,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.ALLURING)
 
-    @staticmethod
-    def is_antiseptic(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_antiseptic(cls, sim_info: SimInfo) -> bool:
         """is_antiseptic(sim_info)
 
         Determine if a sim is Antiseptic.
@@ -113,8 +126,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.ANTISEPTIC)
 
-    @staticmethod
-    def is_bro(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_bro(cls, sim_info: SimInfo) -> bool:
         """is_bro(sim_info)
 
         Determine if a sim is a Bro.
@@ -126,8 +139,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.BRO)
 
-    @staticmethod
-    def is_carefree(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_carefree(cls, sim_info: SimInfo) -> bool:
         """is_carefree(sim_info)
 
         Determine if a sim is Care Free.
@@ -139,8 +152,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.CAREFREE)
 
-    @staticmethod
-    def is_cat_lover(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_cat_lover(cls, sim_info: SimInfo) -> bool:
         """is_cat_lover(sim_info)
 
         Determine if a sim is a Cat Lover.
@@ -152,8 +165,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.CAT_LOVER)
 
-    @staticmethod
-    def is_dog_lover(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_dog_lover(cls, sim_info: SimInfo) -> bool:
         """is_dog_lover(sim_info)
 
         Determine if a sim is a Dog Lover.
@@ -165,8 +178,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.DOG_LOVER)
 
-    @staticmethod
-    def is_clumsy(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_clumsy(cls, sim_info: SimInfo) -> bool:
         """is_clumsy(sim_info)
 
         Determine if a sim is Clumsy.
@@ -178,8 +191,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.CLUMSY)
 
-    @staticmethod
-    def is_dastardly(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_dastardly(cls, sim_info: SimInfo) -> bool:
         """is_dastardly(sim_info)
 
         Determine if a sim is Dastardly.
@@ -191,8 +204,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.DASTARDLY)
 
-    @staticmethod
-    def is_criminal(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_criminal(cls, sim_info: SimInfo) -> bool:
         """is_criminal(sim_info)
 
         Determine if a sim is a Criminal.
@@ -208,8 +221,8 @@ class CommonTraitUtils:
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
-    @staticmethod
-    def is_evil(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_evil(cls, sim_info: SimInfo) -> bool:
         """is_evil(sim_info)
 
         Determine if a sim is Evil.
@@ -225,8 +238,8 @@ class CommonTraitUtils:
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
-    @staticmethod
-    def is_fertile(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_fertile(cls, sim_info: SimInfo) -> bool:
         """is_fertile(sim_info)
 
         Determine if a sim is Fertile.
@@ -238,8 +251,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.FERTILE)
 
-    @staticmethod
-    def is_friendly_pet(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_friendly_pet(cls, sim_info: SimInfo) -> bool:
         """is_friendly_pet(sim_info)
 
         Determine if a pet sim is Friendly.
@@ -255,8 +268,8 @@ class CommonTraitUtils:
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
-    @staticmethod
-    def is_geek(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_geek(cls, sim_info: SimInfo) -> bool:
         """is_geek(sim_info)
 
         Determine if a Sim is a geek.
@@ -268,8 +281,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GEEK)
 
-    @staticmethod
-    def is_genius(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_genius(cls, sim_info: SimInfo) -> bool:
         """is_genius(sim_info)
 
         Determine if a sim is a Genius.
@@ -281,8 +294,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENIUS)
 
-    @staticmethod
-    def is_good(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_good(cls, sim_info: SimInfo) -> bool:
         """is_good(sim_info)
 
         Determine if a sim is Good.
@@ -294,8 +307,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GOOD)
 
-    @staticmethod
-    def is_glutton(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_glutton(cls, sim_info: SimInfo) -> bool:
         """is_glutton(sim_info)
 
         Determine if a sim is a Glutton.
@@ -307,8 +320,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.is_glutton_human(sim_info) or CommonTraitUtils.is_glutton_pet(sim_info)
 
-    @staticmethod
-    def is_glutton_human(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_glutton_human(cls, sim_info: SimInfo) -> bool:
         """is_glutton_human(sim_info)
 
         Determine if a non pet sim is a Glutton
@@ -320,8 +333,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GLUTTON)
 
-    @staticmethod
-    def is_glutton_pet(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_glutton_pet(cls, sim_info: SimInfo) -> bool:
         """is_glutton_pet(sim_info)
 
         Determine if a pet sim is a Glutton.
@@ -337,8 +350,8 @@ class CommonTraitUtils:
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
-    @staticmethod
-    def is_gregarious(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_gregarious(cls, sim_info: SimInfo) -> bool:
         """is_gregarious(sim_info)
 
         Determine if a sim is Gregarious.
@@ -350,8 +363,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GREGARIOUS)
 
-    @staticmethod
-    def is_hot_headed(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_hot_headed(cls, sim_info: SimInfo) -> bool:
         """is_hot_headed(sim_info)
 
         Determine if a sim is Hot Headed.
@@ -363,8 +376,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.HOT_HEADED)
 
-    @staticmethod
-    def is_hunter_pet(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_hunter_pet(cls, sim_info: SimInfo) -> bool:
         """is_hunter_pet(sim_info)
 
         Determine if a pet sim is a Hunter.
@@ -380,8 +393,8 @@ class CommonTraitUtils:
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
-    @staticmethod
-    def is_incredibly_friendly(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_incredibly_friendly(cls, sim_info: SimInfo) -> bool:
         """is_incredibly_friendly(sim_info)
 
         Determine if a sim is Incredibly Friendly.
@@ -393,8 +406,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.INCREDIBLY_FRIENDLY)
 
-    @staticmethod
-    def is_insane(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_insane(cls, sim_info: SimInfo) -> bool:
         """is_insane(sim_info)
 
         Determine if a sim is Insane.
@@ -406,8 +419,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.INSANE)
 
-    @staticmethod
-    def is_insider(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_insider(cls, sim_info: SimInfo) -> bool:
         """is_insider(sim_info)
 
         Determine if a sim is an Insider.
@@ -419,8 +432,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.INSIDER)
 
-    @staticmethod
-    def is_loyal_pet(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_loyal_pet(cls, sim_info: SimInfo) -> bool:
         """is_loyal_pet(sim_info)
 
         Determine if a pet sim is Loyal.
@@ -436,8 +449,8 @@ class CommonTraitUtils:
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
-    @staticmethod
-    def is_mean(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_mean(cls, sim_info: SimInfo) -> bool:
         """is_mean(sim_info)
 
         Determine if a sim is Mean.
@@ -449,8 +462,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.MEAN)
 
-    @staticmethod
-    def is_mentor(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_mentor(cls, sim_info: SimInfo) -> bool:
         """is_mentor(sim_info)
 
         Determine if a sim is a Mentor.
@@ -462,8 +475,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.MENTOR)
 
-    @staticmethod
-    def is_morning_person(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_morning_person(cls, sim_info: SimInfo) -> bool:
         """is_morning_person(sim_info)
 
         Determine if a sim is a Morning Person.
@@ -475,8 +488,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.MORNING_PERSON)
 
-    @staticmethod
-    def is_naughty_pet(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_naughty_pet(cls, sim_info: SimInfo) -> bool:
         """is_naughty_pet(sim_info)
 
         Determine if a pet sim is Naughty.
@@ -492,8 +505,8 @@ class CommonTraitUtils:
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
-    @staticmethod
-    def is_neat(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_neat(cls, sim_info: SimInfo) -> bool:
         """is_neat(sim_info)
 
         Determine if a Sim is neat.
@@ -505,8 +518,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.NEAT)
 
-    @staticmethod
-    def is_night_owl(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_night_owl(cls, sim_info: SimInfo) -> bool:
         """is_night_owl(sim_info)
 
         Determine if a sim is a Night Owl.
@@ -522,8 +535,8 @@ class CommonTraitUtils:
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
-    @staticmethod
-    def is_lazy(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_lazy(cls, sim_info: SimInfo) -> bool:
         """is_lazy(sim_info)
 
         Determine if a sim is Lazy.
@@ -535,8 +548,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.LAZY)
 
-    @staticmethod
-    def is_loner(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_loner(cls, sim_info: SimInfo) -> bool:
         """is_loner(sim_info)
 
         Determine if a sim is a Loner.
@@ -548,8 +561,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.LONER)
 
-    @staticmethod
-    def is_love_guru(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_love_guru(cls, sim_info: SimInfo) -> bool:
         """is_love_guru(sim_info)
 
         Determine if a sim is a Love Guru.
@@ -561,8 +574,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.LOVE_GURU)
 
-    @staticmethod
-    def is_self_absorbed(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_self_absorbed(cls, sim_info: SimInfo) -> bool:
         """is_self_absorbed(sim_info)
 
         Determine if a sim is Self Absorbed.
@@ -574,8 +587,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SELF_ABSORBED)
 
-    @staticmethod
-    def is_self_assured(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_self_assured(cls, sim_info: SimInfo) -> bool:
         """is_self_assured(sim_info)
 
         Determine if a sim is Self Assured.
@@ -587,8 +600,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SELF_ASSURED)
 
-    @staticmethod
-    def is_service_sim(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_service_sim(cls, sim_info: SimInfo) -> bool:
         """is_service_sim(sim_info)
 
         Determine if a sim is a service sim.
@@ -599,8 +612,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_type_utils import CommonSimTypeUtils
         return CommonSimTypeUtils.is_service_sim(sim_info)
 
-    @staticmethod
-    def is_shameless(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_shameless(cls, sim_info: SimInfo) -> bool:
         """is_shameless(sim_info)
 
         Determine if a sim is Shameless.
@@ -612,8 +625,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SHAMELESS)
 
-    @staticmethod
-    def is_sincere(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_sincere(cls, sim_info: SimInfo) -> bool:
         """is_sincere(sim_info)
 
         Determine if a sim is Sincere.
@@ -625,8 +638,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SINCERE)
 
-    @staticmethod
-    def is_skittish_pet(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_skittish_pet(cls, sim_info: SimInfo) -> bool:
         """is_skittish_pet(sim_info)
 
         Determine if a pet sim is Skittish.
@@ -642,8 +655,8 @@ class CommonTraitUtils:
         )
         return CommonTraitUtils.has_trait(sim_info, *trait_ids)
 
-    @staticmethod
-    def is_slob(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_slob(cls, sim_info: SimInfo) -> bool:
         """is_slob(sim_info)
 
         Determine if a sim is a Slob.
@@ -655,8 +668,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SLOB)
 
-    @staticmethod
-    def is_snob(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_snob(cls, sim_info: SimInfo) -> bool:
         """is_snob(sim_info)
 
         Determine if a sim is a Snob.
@@ -668,8 +681,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SNOB)
 
-    @staticmethod
-    def is_squeamish(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_squeamish(cls, sim_info: SimInfo) -> bool:
         """is_squeamish(sim_info)
 
         Determine if a sim is Squeamish.
@@ -681,8 +694,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SQUEAMISH)
 
-    @staticmethod
-    def is_survivalist(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_survivalist(cls, sim_info: SimInfo) -> bool:
         """is_survivalist(sim_info)
 
         Determine if a sim is a Survivalist.
@@ -694,8 +707,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SURVIVALIST)
 
-    @staticmethod
-    def is_unflirty(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_unflirty(cls, sim_info: SimInfo) -> bool:
         """is_unflirty(sim_info)
 
         Determine if a sim is Unflirty.
@@ -707,8 +720,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.UNFLIRTY)
 
-    @staticmethod
-    def hates_children(sim_info: SimInfo) -> bool:
+    @classmethod
+    def hates_children(cls, sim_info: SimInfo) -> bool:
         """hates_children(sim_info)
 
         Determine if a sim Hates Children.
@@ -720,8 +733,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.HATES_CHILDREN)
 
-    @staticmethod
-    def has_animal_attraction(sim_info: SimInfo) -> bool:
+    @classmethod
+    def has_animal_attraction(cls, sim_info: SimInfo) -> bool:
         """has_animal_attraction(sim_info)
 
         Determine if a sim has an Animal Attraction.
@@ -733,8 +746,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.ANIMAL_ATTRACTION)
 
-    @staticmethod
-    def has_animal_whisperer(sim_info: SimInfo) -> bool:
+    @classmethod
+    def has_animal_whisperer(cls, sim_info: SimInfo) -> bool:
         """has_animal_whisperer(sim_info)
 
         Determine if a sim is an Animal Whisperer.
@@ -746,8 +759,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.ANIMAL_WHISPERER)
 
-    @staticmethod
-    def has_challenge_kindness_ambassador(sim_info: SimInfo) -> bool:
+    @classmethod
+    def has_challenge_kindness_ambassador(cls, sim_info: SimInfo) -> bool:
         """has_challenge_kindness_ambassador(sim_info)
 
         Determine if a sim has Challenged the Kindness Ambassador.
@@ -759,8 +772,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.CHALLENGE_KINDNESS_AMBASSADOR)
 
-    @staticmethod
-    def has_commitment_issues(sim_info: SimInfo) -> bool:
+    @classmethod
+    def has_commitment_issues(cls, sim_info: SimInfo) -> bool:
         """has_commitment_issues(sim_info)
 
         Determine if a sim has Commitment Issues.
@@ -772,8 +785,8 @@ class CommonTraitUtils:
         """
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.COMMITMENT_ISSUES)
 
-    @staticmethod
-    def has_masculine_frame(sim_info: SimInfo) -> bool:
+    @classmethod
+    def has_masculine_frame(cls, sim_info: SimInfo) -> bool:
         """has_masculine_frame(sim_info)
 
         Determine if a sim has a Masculine Body Frame.
@@ -786,8 +799,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.has_masculine_frame(sim_info)
 
-    @staticmethod
-    def has_feminine_frame(sim_info: SimInfo) -> bool:
+    @classmethod
+    def has_feminine_frame(cls, sim_info: SimInfo) -> bool:
         """has_feminine_frame(sim_info)
 
         Determine if a sim has a Feminine Body Frame.
@@ -800,8 +813,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.has_feminine_frame(sim_info)
 
-    @staticmethod
-    def prefers_menswear(sim_info: SimInfo) -> bool:
+    @classmethod
+    def prefers_menswear(cls, sim_info: SimInfo) -> bool:
         """prefers_menswear(sim_info)
 
         Determine if a sim prefers Mens Clothing.
@@ -814,8 +827,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.prefers_menswear(sim_info)
 
-    @staticmethod
-    def prefers_womenswear(sim_info: SimInfo) -> bool:
+    @classmethod
+    def prefers_womenswear(cls, sim_info: SimInfo) -> bool:
         """prefers_womenswear(sim_info)
 
         Determine if a sim prefers Womens Clothing.
@@ -828,8 +841,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.prefers_womenswear(sim_info)
 
-    @staticmethod
-    def can_impregnate(sim_info: SimInfo) -> bool:
+    @classmethod
+    def can_impregnate(cls, sim_info: SimInfo) -> bool:
         """can_impregnate(sim_info)
 
         Determine if a sim Can Impregnate.
@@ -845,8 +858,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_impregnate(sim_info)
 
-    @staticmethod
-    def can_not_impregnate(sim_info: SimInfo) -> bool:
+    @classmethod
+    def can_not_impregnate(cls, sim_info: SimInfo) -> bool:
         """can_not_impregnate(sim_info)
 
         Determine if a sim Can Not Impregnate.
@@ -862,8 +875,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_not_impregnate(sim_info)
 
-    @staticmethod
-    def can_be_impregnated(sim_info: SimInfo) -> bool:
+    @classmethod
+    def can_be_impregnated(cls, sim_info: SimInfo) -> bool:
         """can_be_impregnated(sim_info)
 
         Determine if a sim Can Be Impregnated.
@@ -879,8 +892,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_be_impregnated(sim_info)
 
-    @staticmethod
-    def can_not_be_impregnated(sim_info: SimInfo) -> bool:
+    @classmethod
+    def can_not_be_impregnated(cls, sim_info: SimInfo) -> bool:
         """can_not_be_impregnated(sim_info)
 
         Determine if a sim Can Not Be Impregnated.
@@ -896,8 +909,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_not_be_impregnated(sim_info)
 
-    @staticmethod
-    def can_create_pregnancy(sim_info: SimInfo) -> bool:
+    @classmethod
+    def can_create_pregnancy(cls, sim_info: SimInfo) -> bool:
         """can_create_pregnancy(sim_info)
 
         Determine if a Sim can either impregnate, be impregnated, or can reproduce.
@@ -916,8 +929,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_create_pregnancy(sim_info)
 
-    @staticmethod
-    def can_reproduce(sim_info: SimInfo) -> bool:
+    @classmethod
+    def can_reproduce(cls, sim_info: SimInfo) -> bool:
         """can_reproduce(sim_info)
 
         Determine if a pet sim can reproduce.
@@ -933,8 +946,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_reproduce(sim_info)
 
-    @staticmethod
-    def can_not_reproduce(sim_info: SimInfo) -> bool:
+    @classmethod
+    def can_not_reproduce(cls, sim_info: SimInfo) -> bool:
         """can_not_reproduce(sim_info)
 
         Determine if a pet sim can reproduce.
@@ -950,8 +963,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_not_reproduce(sim_info)
 
-    @staticmethod
-    def uses_toilet_standing(sim_info: SimInfo) -> bool:
+    @classmethod
+    def uses_toilet_standing(cls, sim_info: SimInfo) -> bool:
         """uses_toilet_standing(sim_info)
 
         Determine if a sim uses the toilet while standing.
@@ -964,8 +977,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.uses_toilet_standing(sim_info)
 
-    @staticmethod
-    def uses_toilet_sitting(sim_info: SimInfo) -> bool:
+    @classmethod
+    def uses_toilet_sitting(cls, sim_info: SimInfo) -> bool:
         """uses_toilet_sitting(sim_info)
 
         Determine if a sim uses the toilet while sitting.
@@ -978,8 +991,8 @@ class CommonTraitUtils:
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.uses_toilet_sitting(sim_info)
 
-    @staticmethod
-    def has_trait(sim_info: SimInfo, *trait_ids: Union[int, CommonTraitId]) -> bool:
+    @classmethod
+    def has_trait(cls, sim_info: SimInfo, *trait_ids: Union[int, CommonTraitId]) -> bool:
         """has_trait(sim_info, *trait_ids)
 
         Determine if a sim has any of the specified traits.
@@ -999,8 +1012,8 @@ class CommonTraitUtils:
                 return True
         return False
 
-    @staticmethod
-    def get_trait_ids(sim_info: SimInfo) -> List[int]:
+    @classmethod
+    def get_trait_ids(cls, sim_info: SimInfo) -> List[int]:
         """get_trait_ids(sim_info)
 
         Retrieve decimal identifiers for all Traits of a sim.
@@ -1018,8 +1031,8 @@ class CommonTraitUtils:
             trait_ids.append(trait_id)
         return trait_ids
 
-    @staticmethod
-    def get_traits(sim_info: SimInfo) -> List[Trait]:
+    @classmethod
+    def get_traits(cls, sim_info: SimInfo) -> List[Trait]:
         """get_traits(sim_info)
 
         Retrieve all Traits of a sim.
@@ -1038,8 +1051,8 @@ class CommonTraitUtils:
             return traits
         return list([CommonTraitUtils.load_trait_by_id(trait_id) for trait_id in (*sim_info._base.trait_ids, *sim_info._base.base_trait_ids) if CommonTraitUtils.load_trait_by_id(trait_id) is not None])
 
-    @staticmethod
-    def get_trait_name(trait: Trait) -> Union[str, None]:
+    @classmethod
+    def get_trait_name(cls, trait: Trait) -> Union[str, None]:
         """get_trait_name(trait)
 
         Retrieve the Name of a Trait.
@@ -1057,8 +1070,8 @@ class CommonTraitUtils:
         except:
             return ''
 
-    @staticmethod
-    def get_trait_names(traits: Iterator[Trait]) -> Tuple[str]:
+    @classmethod
+    def get_trait_names(cls, traits: Iterator[Trait]) -> Tuple[str]:
         """get_trait_names(traits)
 
         Retrieve the Names of a collection of Trait.
@@ -1082,8 +1095,8 @@ class CommonTraitUtils:
             names.append(name)
         return tuple(names)
 
-    @staticmethod
-    def get_equipped_traits(sim_info: SimInfo) -> List[Trait]:
+    @classmethod
+    def get_equipped_traits(cls, sim_info: SimInfo) -> List[Trait]:
         """get_equipped_traits(sim_info)
 
         Retrieve Sims currently equipped traits.
@@ -1101,8 +1114,8 @@ class CommonTraitUtils:
             return list()
         return list(sim_info.trait_tracker.equipped_traits)
 
-    @staticmethod
-    def add_trait(sim_info: SimInfo, *traits: Union[int, CommonTraitId, Trait]) -> bool:
+    @classmethod
+    def add_trait(cls, sim_info: SimInfo, *traits: Union[int, CommonTraitId, Trait]) -> bool:
         """add_trait(sim_info, *traits)
 
         Add the specified traits to a Sim.
@@ -1114,18 +1127,22 @@ class CommonTraitUtils:
         :return: True, if all specified traits were successfully added to the Sim. False, if not.
         :rtype: bool
         """
-        success = True
-        for trait in traits:
-            if isinstance(trait, int) or isinstance(trait, CommonTraitId):
-                trait = CommonTraitUtils.load_trait_by_id(trait)
+        success = False
+        for trait_id in traits:
+            trait = cls.load_trait_by_id(trait_id)
             if trait is None:
+                cls.get_log().format_with_message('Failed to load trait by its id.', trait_id=trait_id)
                 continue
-            if not sim_info.add_trait(trait):
-                success = False
+            cls.get_log().format_with_message('Attempting to add trait', trait=trait, trait_id=trait_id)
+            if sim_info.add_trait(trait):
+                cls.get_log().format_with_message('Successfully added trait.', trait=trait, trait_id=trait_id)
+                success = True
+            else:
+                cls.get_log().format_with_message('Failed to add trait.', trait=trait, trait_id=trait_id)
         return success
 
-    @staticmethod
-    def remove_trait(sim_info: SimInfo, *traits: Union[int, CommonTraitId, Trait]) -> bool:
+    @classmethod
+    def remove_trait(cls, sim_info: SimInfo, *traits: Union[int, CommonTraitId, Trait]) -> bool:
         """remove_trait(sim_info, *trait)
 
         Remove the specified traits from a Sim.
@@ -1137,18 +1154,18 @@ class CommonTraitUtils:
         :return: True, if all specified traits were successfully removed from the Sim. False, if not.
         :rtype: bool
         """
-        success = True
+        success = False
         for trait in traits:
             if isinstance(trait, int) or isinstance(trait, CommonTraitId):
                 trait = CommonTraitUtils.load_trait_by_id(trait)
             if trait is None:
                 continue
-            if not sim_info.remove_trait(trait):
-                success = False
+            if sim_info.remove_trait(trait):
+                success = True
         return success
 
-    @staticmethod
-    def swap_traits(sim_info: SimInfo, trait_id_one: Union[int, CommonTraitId], trait_id_two: Union[int, CommonTraitId]) -> bool:
+    @classmethod
+    def swap_traits(cls, sim_info: SimInfo, trait_id_one: Union[int, CommonTraitId], trait_id_two: Union[int, CommonTraitId]) -> bool:
         """swap_traits(sim_info, trait_id_one, trait_id_two)
 
         Remove one trait and add another to a Sim.
@@ -1179,8 +1196,8 @@ class CommonTraitUtils:
             return True
         return False
 
-    @staticmethod
-    def add_trait_to_all_sims(trait_id: Union[int, CommonTraitId], include_sim_callback: Callable[[SimInfo], bool]=None):
+    @classmethod
+    def add_trait_to_all_sims(cls, trait_id: Union[int, CommonTraitId], include_sim_callback: Callable[[SimInfo], bool]=None):
         """add_trait_to_all_sims(trait_id, include_sim_callback=None)
 
         Add a trait to all Sims that match the specified include filter.
@@ -1195,8 +1212,8 @@ class CommonTraitUtils:
                 continue
             CommonTraitUtils.add_trait(sim_info, trait_id)
 
-    @staticmethod
-    def remove_trait_from_all_sims(trait_id: Union[int, CommonTraitId], include_sim_callback: Callable[[SimInfo], bool]=None):
+    @classmethod
+    def remove_trait_from_all_sims(cls, trait_id: Union[int, CommonTraitId], include_sim_callback: Callable[[SimInfo], bool]=None):
         """remove_trait_from_all_sims(trait_id, include_sim_callback=None)
 
         Remove a trait from all Sims that match the specified include filter.
@@ -1211,8 +1228,8 @@ class CommonTraitUtils:
                 continue
             CommonTraitUtils.remove_trait(sim_info, trait_id)
 
-    @staticmethod
-    def get_trait_id(trait_identifier: Union[int, Trait]) -> Union[int, None]:
+    @classmethod
+    def get_trait_id(cls, trait_identifier: Union[int, Trait]) -> Union[int, None]:
         """get_trait_id(trait_identifier)
 
         Retrieve the decimal identifier of a Trait.
@@ -1226,8 +1243,8 @@ class CommonTraitUtils:
             return trait_identifier
         return getattr(trait_identifier, 'guid64', None)
 
-    @staticmethod
-    def load_trait_by_id(trait: Union[int, CommonTraitId, Trait]) -> Union[Trait, None]:
+    @classmethod
+    def load_trait_by_id(cls, trait: Union[int, CommonTraitId, Trait]) -> Union[Trait, None]:
         """load_trait_by_id(trait)
 
         Load an instance of a Trait by its identifier.

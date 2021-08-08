@@ -132,7 +132,21 @@
     </V>
   </V>
   <E n="target_type">TARGET</E>
-  <L n="test_globals" />
+  <L n="test_globals">
+    <V t="sim_info">
+      <U n="sim_info">
+        <V n="species" t="specified">
+          <U n="specified">
+            <L n="species">
+              <E>CAT</E>
+              <E>DOG</E>
+            </L>
+          </U>
+        </V>
+        <E n="who">Actor</E>
+      </U>
+    </V>
+  </L>
   <T n="time_overhead">30</T>
   <T n="use_best_scoring_aop">False</T>
   <T n="visible">True</T>

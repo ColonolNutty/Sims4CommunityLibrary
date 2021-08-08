@@ -13,6 +13,7 @@ from sims.sim_info import SimInfo
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 from sims4communitylib.enums.statistics_enum import CommonStatisticId
@@ -102,7 +103,7 @@ class CommonSimPregnancyUtils:
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED):
                 return False
             return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED)
-        elif CommonSpeciesUtils.is_animal(sim_info):
+        elif CommonSpeciesUtils.is_animal(sim_info) and CommonGenderUtils.is_female(sim_info):
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
                 return False
             return CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
@@ -125,7 +126,7 @@ class CommonSimPregnancyUtils:
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE):
                 return False
             return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE)
-        elif CommonSpeciesUtils.is_animal(sim_info):
+        elif CommonSpeciesUtils.is_animal(sim_info) and CommonGenderUtils.is_male(sim_info):
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
                 return False
             return CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)

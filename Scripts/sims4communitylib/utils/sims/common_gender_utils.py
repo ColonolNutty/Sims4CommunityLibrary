@@ -10,7 +10,9 @@ from typing import Union
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Gender
 from sims4communitylib.enums.common_gender import CommonGender
+from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
+from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 
 
 class CommonGenderUtils:
@@ -54,6 +56,13 @@ class CommonGenderUtils:
         if gender is None:
             return False
         sim_info.gender = gender
+        if gender == Gender.MALE:
+            new_trait_id = CommonTraitId.GENDER_MALE
+            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.GENDER_FEMALE)
+        else:
+            new_trait_id = CommonTraitId.GENDER_FEMALE
+            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.GENDER_MALE)
+        CommonTraitUtils.add_trait(sim_info, new_trait_id)
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender(sim_info)
         return True
