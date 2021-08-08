@@ -5,9 +5,18 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from typing import Any, Union
+
+from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
+from sims4.commands import Command, CommandType, CheatOutput
+from sims4communitylib.enums.common_voice_actor import CommonVoiceActor
 from sims4communitylib.enums.traits_enum import CommonTraitId
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 
@@ -535,3 +544,103 @@ class CommonSimGenderOptionUtils:
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender_options_toilet_usage(sim_info)
         return True
+
+    @staticmethod
+    def _get_voice_pitch(sim_info: SimInfo) -> Any:
+        # noinspection PyPropertyAccess
+        return sim_info.voice_pitch
+
+    @staticmethod
+    def _set_voice_pitch(sim_info: SimInfo, voice_pitch: float) -> None:
+        sim_info.voice_actor = voice_pitch
+
+    @staticmethod
+    def _get_voice_actor(sim_info: SimInfo) -> Any:
+        # noinspection PyPropertyAccess
+        return sim_info.voice_actor
+
+    @staticmethod
+    def _set_voice_actor(sim_info: SimInfo, voice_actor: Union[int, CommonVoiceActor]) -> None:
+        sim_info.voice_actor = int(voice_actor)
+
+
+log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'what')
+log.enable()
+
+
+@Command('s4clib.get_voice_pitch', command_type=CommandType.Live)
+def _common_get_voice_pitch(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    voice_pitch = CommonSimGenderOptionUtils._get_voice_pitch(sim_info)
+    log.format_with_message('Got voice pitch', sim=sim_info, voice_pitch=voice_pitch)
+    output('Voice pitch {}'.format(voice_pitch))
+
+
+@Command('s4clib.set_voice_pitch', command_type=CommandType.Live)
+def _common_set_voice_pitch(voice_pitch: float=None, opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    if voice_pitch is None:
+        output('Failed, no voice_pitch was specified! Please specify a voice pitch.')
+        return
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    CommonSimGenderOptionUtils._set_voice_pitch(sim_info, voice_pitch)
+    log.format_with_message('Set voice pitch', sim=sim_info, voice_pitch=voice_pitch)
+    output('Set Voice pitch')
+
+
+@Command('s4clib.get_voice_actor', command_type=CommandType.Live)
+def _common_get_voice_actor(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    voice_actor = CommonSimGenderOptionUtils._get_voice_actor(sim_info)
+    log.format_with_message('Got voice pitch', sim=sim_info, voice_actor=voice_actor)
+    output('Voice actor {}'.format(voice_actor))
+
+
+@Command('s4clib.set_voice_actor', command_type=CommandType.Live)
+def _common_set_voice_actor(voice_actor_str: str='MUTE', opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    if voice_actor_str is None:
+        output('Please specify a voice actor. Valid Voice Actors: ({})'.format(', '.join(CommonVoiceActor.get_all_names())))
+        return
+    voice_actor: CommonVoiceActor = CommonResourceUtils.get_enum_by_name(voice_actor_str.upper(), CommonVoiceActor, default_value=None)
+    if voice_actor is None:
+        output('{} is not a valid voice actor. Valid Voice Actors: ({})'.format(voice_actor_str, ', '.join(CommonVoiceActor.get_all_names())))
+        return
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    CommonSimGenderOptionUtils._set_voice_actor(sim_info, voice_actor)
+    log.format_with_message('Set voice actor', sim=sim_info, voice_pitch=voice_actor)
+    output('Set Voice actor to {}'.format(voice_actor.name))
+
+
+@Command('s4clib.set_voice_actor_custom', command_type=CommandType.Live)
+def _common_set_voice_actor_custom(voice_actor: int=None, opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    if voice_actor is None:
+        output('Please specify a voice actor.')
+        return
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    CommonSimGenderOptionUtils._set_voice_actor(sim_info, voice_actor)
+    log.format_with_message('Set voice actor', sim=sim_info, voice_pitch=voice_actor)
+    output('Set Voice actor to {}'.format(voice_actor))
