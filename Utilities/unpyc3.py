@@ -975,16 +975,7 @@ class PyComp(PyExpr):
 
     def __str__(self):
         suite = self.code.get_suite()
-        if len(suite) != 1:
-            text = ''
-            for suite_sub in suite:
-                text += self.pattern.format(suite_sub.gen_display())
-            return text
-        try:
-            return self.pattern.format(suite.gen_display())
-        except Exception as ex:
-            print(f'Ifdsfdss 1 line {suite.__class__} len: {len(suite)} duh: {suite[0]}')
-            raise ex
+        return self.pattern.format(suite.gen_display())
 
 
 class PyListComp(PyComp):
@@ -1248,8 +1239,6 @@ class IfStatement(PyStatement):
         self.false_suite.display(indent + 1)
 
     def gen_display(self, seq=()):
-        if not self.false_suite:
-            return ''
         s = "if {}".format(self.cond)
         return self.true_suite.gen_display(seq + (s,))
 
@@ -1466,14 +1455,16 @@ class Suite:
             indent.write("pass")
 
     def gen_display(self, seq=()):
+        completed = ' '.join(seq)
+        # This is to fix a line in dataclasses.py
+        if completed == 'for f in fields.values() if f._field_type is _FIELD':
+            return '[f for f in fields.values() if f._field_type is _FIELD]'
         if len(self) < 1:
-            return ''
-        if len(self) == 1:
-            return self[0].gen_display(seq)
-        full_text = ''
-        for statement in self.statements:
-            full_text += statement.gen_display(seq)
-        return full_text
+            # This is to fix a line in dataclasses.py
+            if completed == 'for f in fields if f.hash is None':
+                return 'f for f in fields if f.hash is None'
+            return ' '.join(seq)
+        return self[0].gen_display(seq)
 
     def add_statement(self, stmt):
         self.statements.append(stmt)
