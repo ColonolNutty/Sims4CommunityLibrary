@@ -13,6 +13,20 @@ v1.73:
   - They will sort by display name and the selected rows will appear at the top.
 - CommonChooseOutfitDialog will now auto select the equipped outfit.
 - Added the ability to allow choosing no options within the CommonObjectsOptionDialog
+- Updated the delete_sim function to properly delete Sims
+- Added a few commands for purging self, a sim, everyone else, or everyone
+- Added some fixes for more vanilla errors. Particularly when the game attempts to check the Jig Group of a terrain object.
+- Added logging to provide more details when the KeyError 5 error occurs.
+- Added fox motives to CommonMotiveId, CommonStatisticId, and CommonSimMotiveUtils
+ - Setting the gender of a Sim will now also set the proper gender trait on the Sim too within CommonGenderUtils
+- CommonSimPregnancyUtils.can_impregnate and CommonSimPregnancyUtils.can_be_impregnated now properly check the gender of an animal Sim for whether they may impregnate or be impregnated.
+- Added a class log to CommonTraitUtils (Each function was updated to a classmethod from a static method to reflect this!)
+- Removed the FOX species from being allowed to perform the social super pet socials provided by S4CL, custom ones for Foxes will be provided in the future.
+- Added CommonSimVoiceUtils
+- Added commands for changing voice pitch and voice actor of Sims
+- Added CommonVoiceActorType enum for different voice actors.
+- Added CommonAlarmUtils for scheduling alarms
+
 
 v1.72:
 - Added commands for display Buffs, Traits, Situations, and Interactions for Sims
