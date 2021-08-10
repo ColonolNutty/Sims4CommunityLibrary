@@ -750,6 +750,29 @@ class CommonOutfitUtils:
         return True
 
     @staticmethod
+    def regenerate_all_outfits(sim_info: SimInfo):
+        """regenerate_all_outfits(sim_info)
+
+        Delete and regenerate all outfits for a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        """
+        from sims.outfits.outfit_tracker import OutfitTrackerMixin
+        outfits: OutfitTrackerMixin = sim_info.get_outfits()
+        current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
+        from sims.outfits.outfit_utils import get_maximum_outfits_for_category
+        for outfit_category in CommonOutfitUtils.get_all_outfit_categories():
+            for outfit_index in range(get_maximum_outfits_for_category(outfit_category)):
+                outfit = (outfit_category, outfit_index)
+                if not CommonOutfitUtils.has_outfit(sim_info, outfit):
+                    continue
+                outfits.remove_outfit(outfit_category, outfit_index=outfit_index)
+        sim_info.appearance_tracker.evaluate_appearance_modifiers()
+        CommonOutfitUtils.resend_outfits(sim_info)
+        CommonOutfitUtils.set_current_outfit(sim_info, current_outfit)
+
+    @staticmethod
     def has_tag_on_outfit(sim_info: SimInfo, tag: Union[int, CommonGameTag], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """has_tag_on_outfit(sim_info, tag, outfit_category_and_index=None)
 

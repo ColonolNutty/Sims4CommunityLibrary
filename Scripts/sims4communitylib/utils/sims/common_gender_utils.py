@@ -12,6 +12,7 @@ from sims.sim_info_types import Gender
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
+from sims4communitylib.utils.sims.common_sim_voice_utils import CommonSimVoiceUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 
 
@@ -68,8 +69,8 @@ class CommonGenderUtils:
         return True
 
     @staticmethod
-    def swap_gender(sim_info: SimInfo, update_gender_options: bool=True) -> bool:
-        """swap_gender(sim_info, update_gender_options=True)
+    def swap_gender(sim_info: SimInfo, update_gender_options: bool=True, update_voice: bool=True, update_outfits: bool=True) -> bool:
+        """swap_gender(sim_info, update_gender_options=True, update_voice=True, update_outfits=True)
 
         Swap the Gender of a Sim to it's opposite. i.e. Change a Sim from Male to Female or from Female to Male.
 
@@ -80,6 +81,10 @@ class CommonGenderUtils:
         If False, gender option traits will not be updated.\
         Default is True.
         :type update_gender_options: bool, optional
+        :param update_voice: If True, the voice of the Sim will be updated to a default voice for the gender being swapped to. If False, the voice of the Sim will remain unchanged. Default is True.
+        :type update_voice: bool, optional
+        :param update_outfits: If True, the outfits of the Sim will be regenerated to match the gender options of the Sim. If False, the outfits of the Sim will not be regenerated. Default is True.
+        :param update_outfits: bool, optional
         :return: True, if the Gender of the Sim was swapped successfully. False, if not.
         :rtype: bool
         """
@@ -90,18 +95,33 @@ class CommonGenderUtils:
         can_impregnate = CommonSimGenderOptionUtils.can_impregnate(sim_info)
         can_be_impregnated = CommonSimGenderOptionUtils.can_be_impregnated(sim_info)
         can_reproduce = CommonSimGenderOptionUtils.can_reproduce(sim_info)
+        voice_pitch = CommonSimVoiceUtils.get_voice_pitch(sim_info)
+        voice_actor = CommonSimVoiceUtils.get_voice_actor(sim_info)
         uses_toilet_standing = CommonSimGenderOptionUtils.uses_toilet_standing(sim_info)
         has_breasts = CommonSimGenderOptionUtils.has_breasts(sim_info)
         saved_outfits = sim_info.save_outfits()
         current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
         if CommonGenderUtils.is_male(sim_info):
             result = CommonGenderUtils.set_gender(sim_info, CommonGender.FEMALE)
+            if update_voice:
+                CommonSimVoiceUtils.set_to_default_female_voice(sim_info)
             if update_gender_options:
                 CommonSimGenderOptionUtils.update_gender_options_to_vanilla_female(sim_info)
+            if update_outfits:
+                CommonOutfitUtils.regenerate_all_outfits(sim_info)
         elif CommonGenderUtils.is_female(sim_info):
             result = CommonGenderUtils.set_gender(sim_info, CommonGender.MALE)
+            if update_voice:
+                CommonSimVoiceUtils.set_to_default_male_voice(sim_info)
             if update_gender_options:
                 CommonSimGenderOptionUtils.update_gender_options_to_vanilla_male(sim_info)
+            if update_outfits:
+                CommonOutfitUtils.regenerate_all_outfits(sim_info)
+
+        if not update_voice:
+            CommonSimVoiceUtils.set_voice_pitch(sim_info, voice_pitch)
+            CommonSimVoiceUtils.set_voice_actor(sim_info, voice_actor)
+
         if not update_gender_options:
             CommonSimGenderOptionUtils.update_body_frame(sim_info, frame)
             CommonSimGenderOptionUtils.update_clothing_preference(sim_info, prefers_menswear)
@@ -110,6 +130,8 @@ class CommonGenderUtils:
             CommonSimGenderOptionUtils.update_can_reproduce(sim_info, can_reproduce)
             CommonSimGenderOptionUtils.update_toilet_usage(sim_info, uses_toilet_standing)
             CommonSimGenderOptionUtils.update_has_breasts(sim_info, has_breasts)
+
+        if not update_outfits:
             sim_info.load_outfits(saved_outfits)
             CommonOutfitUtils.resend_outfits(sim_info)
             CommonOutfitUtils.set_current_outfit(sim_info, current_outfit)

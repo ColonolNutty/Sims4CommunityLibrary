@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, Dict, List
+from typing import Union, Dict, List, Tuple
 
 from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
@@ -84,6 +84,176 @@ class CommonSimVoiceUtils:
         :type voice_actor: Union[int, CommonVoiceActorType]
         """
         sim_info.voice_actor = int(voice_actor)
+
+    @staticmethod
+    def set_to_default_voice(sim_info: SimInfo) -> None:
+        """set_to_default_voice(sim_info)
+
+        Set the voice of a Sim to the default for their Age, Gender, and Species.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        """
+        from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
+        if CommonGenderUtils.is_male(sim_info):
+            CommonSimVoiceUtils.set_to_default_male_voice(sim_info)
+        else:
+            CommonSimVoiceUtils.set_to_default_female_voice(sim_info)
+
+    @staticmethod
+    def set_to_default_male_voice(sim_info: SimInfo) -> None:
+        """set_to_default_male_voice(sim_info)
+
+        Set the voice of a Sim to the default male voice for their Age and Species.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        """
+        from sims4communitylib.utils.sims.common_age_species_utils import CommonAgeSpeciesUtils
+        from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
+        from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
+        if CommonAgeSpeciesUtils.is_teen_adult_or_elder_human(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_HUMAN_MASCULINE_1)
+        elif CommonAgeSpeciesUtils.is_child_human(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_HUMAN_AMBIGUOUS_1)
+        elif CommonAgeSpeciesUtils.is_toddler_human(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.TODDLER_HUMAN_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_large_dog(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_large_dog(sim_info) and CommonAgeUtils.is_child(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_DOG_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_small_dog(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_small_dog(sim_info) and CommonAgeUtils.is_child(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_DOG_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_cat(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_CAT_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_cat(sim_info) and CommonAgeUtils.is_child(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_CAT_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_fox(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_FOX_AMBIGUOUS_1)
+
+    @staticmethod
+    def set_to_default_female_voice(sim_info: SimInfo) -> None:
+        """set_to_default_female_voice(sim_info)
+
+        Set the voice of a Sim to the default female voice for their Age and Species.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        """
+        from sims4communitylib.utils.sims.common_age_species_utils import CommonAgeSpeciesUtils
+        from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
+        from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
+        if CommonAgeSpeciesUtils.is_teen_adult_or_elder_human(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_HUMAN_FEMININE_1)
+        elif CommonAgeSpeciesUtils.is_child_human(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_HUMAN_AMBIGUOUS_1)
+        elif CommonAgeSpeciesUtils.is_toddler_human(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.TODDLER_HUMAN_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_large_dog(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_large_dog(sim_info) and CommonAgeUtils.is_child(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_DOG_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_small_dog(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_small_dog(sim_info) and CommonAgeUtils.is_child(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_DOG_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_cat(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_CAT_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_cat(sim_info) and CommonAgeUtils.is_child(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_CAT_AMBIGUOUS_1)
+        elif CommonSpeciesUtils.is_fox(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_FOX_AMBIGUOUS_1)
+
+    @staticmethod
+    def determine_available_voice_types(sim_info: SimInfo) -> Tuple[CommonVoiceActorType]:
+        """determine_available_voice_types(sim_info)
+
+        Retrieve a collection of Voice Actor Types that are available for a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: A collection of voice actor types available for the Sim.
+        :rtype: Tuple[CommonVoiceActorType]
+        """
+        from sims4communitylib.utils.sims.common_age_species_utils import CommonAgeSpeciesUtils
+        from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
+        from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
+        if CommonAgeSpeciesUtils.is_teen_adult_or_elder_human(sim_info):
+            result: Tuple[CommonVoiceActorType] = (
+                CommonVoiceActorType.MUTE,
+                CommonVoiceActorType.ADULT_HUMAN_AMBIGUOUS_1,
+                CommonVoiceActorType.ADULT_HUMAN_FEMININE_1,
+                CommonVoiceActorType.ADULT_HUMAN_FEMININE_2,
+                CommonVoiceActorType.ADULT_HUMAN_MASCULINE_1,
+                CommonVoiceActorType.ADULT_HUMAN_MASCULINE_2,
+                CommonVoiceActorType.ADULT_HUMAN_MASCULINE_3,
+                CommonVoiceActorType.KYLO_REN_1,
+                CommonVoiceActorType.REY_1,
+                CommonVoiceActorType.HONDO_OHNAKA_1,
+            )
+        elif CommonAgeSpeciesUtils.is_child_human(sim_info):
+            result: Tuple[CommonVoiceActorType] = (
+                CommonVoiceActorType.MUTE,
+                CommonVoiceActorType.CHILD_HUMAN_AMBIGUOUS_1,
+                CommonVoiceActorType.CHILD_HUMAN_AMBIGUOUS_2,
+                CommonVoiceActorType.KYLO_REN_1,
+                CommonVoiceActorType.REY_1,
+                CommonVoiceActorType.HONDO_OHNAKA_1,
+            )
+        elif CommonAgeSpeciesUtils.is_toddler_human(sim_info):
+            result: Tuple[CommonVoiceActorType] = (
+                CommonVoiceActorType.MUTE,
+                CommonVoiceActorType.TODDLER_HUMAN_AMBIGUOUS_1,
+            )
+        elif CommonSpeciesUtils.is_large_dog(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            result: Tuple[CommonVoiceActorType] = (
+                CommonVoiceActorType.MUTE,
+                CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_1,
+                CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_2,
+                CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_3,
+                CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_4
+            )
+        elif CommonSpeciesUtils.is_large_dog(sim_info) and CommonAgeUtils.is_child(sim_info):
+            result: Tuple[CommonVoiceActorType] = (
+                CommonVoiceActorType.MUTE,
+                CommonVoiceActorType.CHILD_DOG_AMBIGUOUS_1,
+            )
+        elif CommonSpeciesUtils.is_small_dog(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            result: Tuple[CommonVoiceActorType] = (
+                CommonVoiceActorType.MUTE,
+                CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_1,
+                CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_2,
+                CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_3,
+                CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_4
+            )
+        elif CommonSpeciesUtils.is_small_dog(sim_info) and CommonAgeUtils.is_child(sim_info):
+            result: Tuple[CommonVoiceActorType] = (
+                CommonVoiceActorType.MUTE,
+                CommonVoiceActorType.CHILD_DOG_AMBIGUOUS_1,
+            )
+        elif CommonSpeciesUtils.is_cat(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            result: Tuple[CommonVoiceActorType] = (
+                CommonVoiceActorType.MUTE,
+                CommonVoiceActorType.ADULT_CAT_AMBIGUOUS_1,
+                CommonVoiceActorType.ADULT_CAT_AMBIGUOUS_2,
+            )
+        elif CommonSpeciesUtils.is_cat(sim_info) and CommonAgeUtils.is_child(sim_info):
+            result: Tuple[CommonVoiceActorType] = (
+                CommonVoiceActorType.MUTE,
+                CommonVoiceActorType.CHILD_CAT_AMBIGUOUS_1,
+            )
+        elif CommonSpeciesUtils.is_fox(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            result: Tuple[CommonVoiceActorType] = (
+                CommonVoiceActorType.MUTE,
+                CommonVoiceActorType.ADULT_FOX_AMBIGUOUS_1,
+            )
+        else:
+            result: Tuple[CommonVoiceActorType] = (
+                CommonVoiceActorType.MUTE,
+            )
+        return result
 
 
 log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'common_voice_actor_log')
