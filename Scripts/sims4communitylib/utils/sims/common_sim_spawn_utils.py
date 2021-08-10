@@ -498,7 +498,7 @@ class CommonSimSpawnUtils:
         if not CommonSimSpawnUtils.despawn_sim(sim_info, source=source, cause=cause, **kwargs):
             return False
         client = services.client_manager().get_first_client()
-        if sim_info.household is not None:
+        if sim_info.household is not None and hasattr(sim_info.household, 'refresh_aging_updates'):
             client.remove_selectable_sim_info(sim_info)
         sim_info.remove_permanently()
         return True
@@ -715,6 +715,39 @@ def _s4cl_spawn_fox_sims(count: int=1, gender_str: str='male', age_str: str='adu
 @Command('s4clib.spawn_human_sims', command_type=CommandType.Live)
 def _s4cl_spawn_human_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
     return _s4cl_spawn_sims(species_str=CommonSpecies.HUMAN.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)
+
+
+@Command('s4clib.spawn_random_sims', command_type=CommandType.Live)
+def _s4clib_spawn_random_sims(count: int=5, _connection: int=None):
+    _s4cl_spawn_human_sims(count=count, gender_str='male', age_str='toddler', _connection=_connection)
+    _s4cl_spawn_human_sims(count=count, gender_str='male', age_str='child', _connection=_connection)
+    _s4cl_spawn_human_sims(count=count, gender_str='male', age_str='adult', _connection=_connection)
+
+    _s4cl_spawn_human_sims(count=count, gender_str='female', age_str='toddler', _connection=_connection)
+    _s4cl_spawn_human_sims(count=count, gender_str='female', age_str='child', _connection=_connection)
+    _s4cl_spawn_human_sims(count=count, gender_str='female', age_str='adult', _connection=_connection)
+
+    _s4cl_spawn_large_dog_sims(count=count, gender_str='male', age_str='child', _connection=_connection)
+    _s4cl_spawn_large_dog_sims(count=count, gender_str='male', age_str='adult', _connection=_connection)
+
+    _s4cl_spawn_large_dog_sims(count=count, gender_str='female', age_str='child', _connection=_connection)
+    _s4cl_spawn_large_dog_sims(count=count, gender_str='female', age_str='adult', _connection=_connection)
+
+    _s4cl_spawn_small_dog_sims(count=count, gender_str='male', age_str='child', _connection=_connection)
+    _s4cl_spawn_small_dog_sims(count=count, gender_str='male', age_str='adult', _connection=_connection)
+
+    _s4cl_spawn_small_dog_sims(count=count, gender_str='female', age_str='child', _connection=_connection)
+    _s4cl_spawn_small_dog_sims(count=count, gender_str='female', age_str='adult', _connection=_connection)
+
+    _s4cl_spawn_cat_sims(count=count, gender_str='male', age_str='child', _connection=_connection)
+    _s4cl_spawn_cat_sims(count=count, gender_str='male', age_str='adult', _connection=_connection)
+
+    _s4cl_spawn_cat_sims(count=count, gender_str='female', age_str='child', _connection=_connection)
+    _s4cl_spawn_cat_sims(count=count, gender_str='female', age_str='adult', _connection=_connection)
+
+    _s4cl_spawn_fox_sims(count=count, gender_str='male', age_str='adult', _connection=_connection)
+
+    _s4cl_spawn_fox_sims(count=count, gender_str='female', age_str='adult', _connection=_connection)
 
 
 @Command('s4clib.purge_self', command_type=CommandType.Live)

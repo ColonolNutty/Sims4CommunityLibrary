@@ -8,9 +8,11 @@ Copyright (c) COLONOLNUTTY
 from typing import Union, Iterator
 
 import services
+from server_commands.argument_helpers import OptionalTargetParam
 from sims.household import Household
 from sims.sim_info import SimInfo
 from sims.sim_spawner import SimSpawner
+from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.modinfo import ModInfo
 from world.lot import Lot
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
@@ -380,6 +382,7 @@ class CommonHouseholdUtils:
         :return: True, if the Sim was added to the Household successfully. False, if not.
         :rtype: bool
         """
+        active_sim_info = CommonSimUtils.get_active_sim_info()
         active_household = services.active_household()
         starting_household = sim_info.household
         log.format_info('Moving a Sim to a new household.', sim=CommonSimNameUtils.get_full_name(sim_info), household_id=household_id, starting_household=starting_household)
@@ -397,8 +400,6 @@ class CommonHouseholdUtils:
             services.hidden_sim_service().unhide(sim_info.id)
         if starting_household is destination_household:
             raise AssertionError('The Sim being moved is already in the destination household.')
-        if not destination_household.can_add_sim_info(sim_info):
-            raise AssertionError('The destination household has no room for additions.')
         log.info('Removing Sim from the starting household.')
         starting_household.remove_sim_info(sim_info, destroy_if_empty_household=destroy_if_empty_household)
         log.info('Adding Sim to the destination household.')
@@ -409,6 +410,8 @@ class CommonHouseholdUtils:
             client.add_selectable_sim_info(sim_info)
         else:
             log.info('The destination household is different from the active household. Removing the selectability of the sim.')
+            if active_sim_info is sim_info:
+                client.set_next_sim()
             client.remove_selectable_sim_info(sim_info)
         if sim_info.career_tracker is not None:
             log.info('Removing invalid careers.')
@@ -640,3 +643,46 @@ class CommonHouseholdUtils:
             if not result:
                 all_completed = False
         return all_completed
+
+
+@Command('s4clib.add_to_my_household', command_type=CommandType.Live)
+def _common_command_add_to_my_household(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    output = CheatOutput(_connection)
+    from server_commands.argument_helpers import get_optional_target
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('ERROR: No Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Attempting to move {} to the active household.'.format(sim_name))
+    try:
+        result = CommonHouseholdUtils.add_sim_to_active_household(sim_info)
+        if result:
+            output('Successfully moved {}.'.format(sim_name))
+        else:
+            output('Failed to move {}.'.format(sim_name))
+    except Exception as ex:
+        log.error('An error occurred while moving Sim to active household.', exception=ex, throw=False)
+        output('ERROR: {}'.format(ex))
+
+
+@Command('s4clib.remove_from_my_household', command_type=CommandType.Live)
+def _common_command_remove_from_my_household(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    output = CheatOutput(_connection)
+    from server_commands.argument_helpers import get_optional_target
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('ERROR: No Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Attempting to move {} out of the active household.'.format(sim_name))
+    try:
+        empty_household = CommonHouseholdUtils.create_empty_household()
+        result = CommonHouseholdUtils.move_sim_to_household(sim_info, household_id=empty_household.id, destroy_if_empty_household=True)
+        if result:
+            output('Successfully moved {}.'.format(sim_name))
+        else:
+            output('Failed to move {}.'.format(sim_name))
+    except Exception as ex:
+        log.error('An error occurred while moving Sim out of the active household.', exception=ex, throw=False)
+        output('ERROR: {}'.format(ex))

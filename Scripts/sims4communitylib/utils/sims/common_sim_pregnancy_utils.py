@@ -7,14 +7,17 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Union
 
+from server_commands.argument_helpers import OptionalTargetParam
 from sims.pregnancy.pregnancy_enums import PregnancyOrigin
 from sims.pregnancy.pregnancy_tracker import PregnancyTracker
 from sims.sim_info import SimInfo
+from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 from sims4communitylib.enums.statistics_enum import CommonStatisticId
 from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
@@ -31,11 +34,11 @@ class CommonSimPregnancyUtils:
     def is_pregnant(sim_info: SimInfo) -> bool:
         """is_pregnant(sim_info)
 
-        Determine if the specified Sim is pregnant.
+        Determine if the a Sim is pregnant.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim is pregnant. False, if not.
+        :return: True, if the specified Sim is pregnant. False, if not.
         :rtype: bool
         """
         pregnancy_tracker = CommonSimPregnancyUtils._get_pregnancy_tracker(sim_info)
@@ -226,3 +229,33 @@ class CommonSimPregnancyUtils:
         if sim_info is None:
             return None
         return sim_info.pregnancy_tracker
+
+
+@Command('s4clib.stop_pregnancy', command_type=CommandType.Live)
+def _common_command_stop_pregnancy(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    output = CheatOutput(_connection)
+    from server_commands.argument_helpers import get_optional_target
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('ERROR: No Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Attempting to stop the pregnancy of {}.'.format(sim_name))
+    result = CommonSimPregnancyUtils.clear_pregnancy(sim_info)
+    if result:
+        output('Successfully stopped the pregnancy of {}.'.format(sim_name))
+    else:
+        output('Failed to stop the pregnancy of {}.'.format(sim_name))
+
+
+@Command('s4clib.stop_all_pregnancies', command_type=CommandType.Live)
+def _common_command_stop_all_pregnancies(_connection: int=None):
+    output = CheatOutput(_connection)
+    output('Attempting to stop the pregnancies of all available Sims. This may take awhile.')
+    for sim_info in CommonSimUtils.get_instanced_sim_info_for_all_sims_generator(include_sim_callback=CommonSimPregnancyUtils.is_pregnant):
+        sim_name = CommonSimNameUtils.get_full_name(sim_info)
+        if not CommonSimPregnancyUtils.clear_pregnancy(sim_info):
+            output('Failed to stop pregnancy of {}'.format(sim_name))
+            continue
+        output('Successfully stopped pregnancy of {}'.format(sim_name))
+    output('Stopped all pregnancies of all Sims')

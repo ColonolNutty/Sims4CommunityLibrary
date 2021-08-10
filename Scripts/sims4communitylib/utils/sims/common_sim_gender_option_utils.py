@@ -6,8 +6,12 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from sims.sim_info import SimInfo
+from sims4communitylib.enums.common_voice_actor_type import CommonVoiceActorType
 from sims4communitylib.enums.traits_enum import CommonTraitId
+from sims4communitylib.utils.sims.common_age_species_utils import CommonAgeSpeciesUtils
+from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
 from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
+from sims4communitylib.utils.sims.common_sim_voice_utils import CommonSimVoiceUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 
@@ -237,6 +241,8 @@ class CommonSimGenderOptionUtils:
 
         Update a Sim to the vanilla Sims 4 default gender options for Male Sims. (Masculine, Menswear Preference, etc.)
 
+        .. note:: This will change the following things: Body Frame (Masculine), Clothing Preference (Masculine), Can Be Impregnated (False), Can Impregnate (True), Can Reproduce (True), Toilet Usage Posture (Standing), Voice Actor (MALE).
+
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :return: True, if successful. False, if not.
@@ -248,6 +254,26 @@ class CommonSimGenderOptionUtils:
         CommonSimGenderOptionUtils.update_can_impregnate(sim_info, True)
         CommonSimGenderOptionUtils.update_can_reproduce(sim_info, True)
         CommonSimGenderOptionUtils.update_toilet_usage(sim_info, True)
+        if CommonAgeSpeciesUtils.is_teen_adult_or_elder_human(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_HUMAN_MALE_1)
+        elif CommonAgeSpeciesUtils.is_child_human(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_HUMAN_MALE_1)
+        elif CommonAgeSpeciesUtils.is_toddler_human(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.TODDLER_HUMAN_MALE_1)
+        elif CommonSpeciesUtils.is_large_dog(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_LARGE_DOG_MALE_1)
+        elif CommonSpeciesUtils.is_large_dog(sim_info) and CommonAgeUtils.is_child(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_LARGE_DOG_MALE_1)
+        elif CommonSpeciesUtils.is_small_dog(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_SMALL_DOG_MALE_1)
+        elif CommonSpeciesUtils.is_small_dog(sim_info) and CommonAgeUtils.is_child(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_SMALL_DOG_MALE_1)
+        elif CommonSpeciesUtils.is_cat(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_CAT_MALE_1)
+        elif CommonSpeciesUtils.is_cat(sim_info) and CommonAgeUtils.is_child(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_CAT_MALE_1)
+        elif CommonSpeciesUtils.is_fox(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_FOX_MALE_1)
         return True
 
     @staticmethod
@@ -255,6 +281,8 @@ class CommonSimGenderOptionUtils:
         """update_gender_options_to_vanilla_female(sim_info)
 
         Update a Sim to the vanilla Sims 4 default gender options for Female Sims. (Feminine, Womenswear Preference, etc.)
+
+        .. note:: This will change the following things: Body Frame (Feminine), Clothing Preference (Feminine), Can Be Impregnated (True), Can Impregnate (False), Can Reproduce (True), Toilet Usage Posture (Sitting), Voice Actor (FEMALE).
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
@@ -267,6 +295,26 @@ class CommonSimGenderOptionUtils:
         CommonSimGenderOptionUtils.update_can_impregnate(sim_info, False)
         CommonSimGenderOptionUtils.update_can_reproduce(sim_info, True)
         CommonSimGenderOptionUtils.update_toilet_usage(sim_info, False)
+        if CommonAgeSpeciesUtils.is_teen_adult_or_elder_human(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_HUMAN_FEMALE_1)
+        elif CommonAgeSpeciesUtils.is_child_human(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_HUMAN_FEMALE_1)
+        elif CommonAgeSpeciesUtils.is_toddler_human(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.TODDLER_HUMAN_FEMALE_1)
+        elif CommonSpeciesUtils.is_large_dog(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_LARGE_DOG_FEMALE_1)
+        elif CommonSpeciesUtils.is_large_dog(sim_info) and CommonAgeUtils.is_child(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_LARGE_DOG_FEMALE_1)
+        elif CommonSpeciesUtils.is_small_dog(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_SMALL_DOG_FEMALE_1)
+        elif CommonSpeciesUtils.is_small_dog(sim_info) and CommonAgeUtils.is_child(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_SMALL_DOG_FEMALE_1)
+        elif CommonSpeciesUtils.is_cat(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_CAT_FEMALE_1)
+        elif CommonSpeciesUtils.is_cat(sim_info) and CommonAgeUtils.is_child(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_CAT_FEMALE_1)
+        elif CommonSpeciesUtils.is_fox(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_FOX_FEMALE_1)
         return True
 
     @staticmethod
