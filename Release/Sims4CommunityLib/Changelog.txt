@@ -23,9 +23,22 @@ v1.73:
 - Added a class log to CommonTraitUtils (Each function was updated to a classmethod from a static method to reflect this!)
 - Removed the FOX species from being allowed to perform the social super pet socials provided by S4CL, custom ones for Foxes will be provided in the future.
 - Added CommonSimVoiceUtils
+- Reduced the number of CommonVoiceActorTypes to make it simpler
+- Renamed voice actor types from Male to Masculine and Female to Feminine
+- Added a function to regenerate all outfits of a Sim to CommonOutfitUtils.
+- When a Sim swaps genders, there are now options to regenerate their outfits and update their voice.
+- Added a function to CommonSimVoiceUtils to determine voice actors available to a Sim.
+- Added functions to set the voice of a Sim to the default values for their gender, species, and age.
 - Added commands for changing voice pitch and voice actor of Sims
 - Added CommonVoiceActorType enum for different voice actors.
 - Added CommonAlarmUtils for scheduling alarms
+- Added more details to the assertion within CommonSimDataStorage
+- When moving a Sim to another household, they will now be unselected if they are the currently active Sim within CommonSimHouseholdUtils
+- Added commands to add and remove Sims to/from the active household.
+- When setting a Sim to the vanilla gender options, their voice will be properly changed as well.
+- Added commands to stop the pregnancy of a Sim or to stop all active pregnancies.
+- Added a check to `delete_sim` to ensure the Sim is selectable before trying to remove the selectability of them.
+- Added a command that will retrieve and print all available voice actors
 
 
 v1.72:
