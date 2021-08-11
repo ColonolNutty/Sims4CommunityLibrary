@@ -21,7 +21,7 @@ v1.73:
  - Setting the gender of a Sim will now also set the proper gender trait on the Sim too within CommonGenderUtils
 - CommonSimPregnancyUtils.can_impregnate and CommonSimPregnancyUtils.can_be_impregnated now properly check the gender of an animal Sim for whether they may impregnate or be impregnated.
 - Added a class log to CommonTraitUtils (Each function was updated to a classmethod from a static method to reflect this!)
-- Removed the FOX species from being allowed to perform the social super pet socials provided by S4CL, custom ones for Foxes will be provided in the future.
+- Removed the FOX species from being allowed to perform the social super pet socials provided by S4CL
 - Added CommonSimVoiceUtils
 - Reduced the number of CommonVoiceActorTypes to make it simpler
 - Renamed voice actor types from Male to Masculine and Female to Feminine
@@ -39,7 +39,9 @@ v1.73:
 - Added commands to stop the pregnancy of a Sim or to stop all active pregnancies.
 - Added a check to `delete_sim` to ensure the Sim is selectable before trying to remove the selectability of them.
 - Added a command that will retrieve and print all available voice actors
-
+- Prevent purging the active Sim when using s4clib.purge_sim
+- Added social super interactions for Sim To Fox
+- Added extra gender option traits for Animals, Can Impregnate, Can Not Impregnate, Can Be Impregnated, Can Not Be Impregnated, Toilet Standing, and Toilet Sitting
 
 v1.72:
 - Added commands for display Buffs, Traits, Situations, and Interactions for Sims
