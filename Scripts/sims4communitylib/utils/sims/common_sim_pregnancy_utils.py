@@ -104,6 +104,8 @@ class CommonSimPregnancyUtils:
         from sims4communitylib.enums.traits_enum import CommonTraitId
         can_be_impregnated_trait = CommonSimPregnancyUtils.determine_can_be_impregnated_trait(sim_info)
         can_not_be_impregnated_trait = CommonSimPregnancyUtils.determine_can_not_be_impregnated_trait(sim_info)
+        if can_be_impregnated_trait is None or can_not_be_impregnated_trait is None:
+            return False
         if CommonSpeciesUtils.is_pet(sim_info):
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
                 return False

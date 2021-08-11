@@ -57,7 +57,7 @@ class CommonBodyFrame(CommonInt):
         :rtype: CommonBodyFrame
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
-        if CommonSpeciesUtils.is_pet(sim_info):
+        if CommonSpeciesUtils.is_animal(sim_info):
             if CommonGenderUtils.is_male(sim_info):
                 return CommonBodyFrame.MASCULINE
             if CommonGenderUtils.is_female(sim_info):
