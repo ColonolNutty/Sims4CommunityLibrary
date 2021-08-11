@@ -5,8 +5,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import os
-
 from buffs.appearance_modifier.appearance_modifier import AppearanceModifier
 from buffs.appearance_modifier.appearance_modifier_type import AppearanceModifierType
 from buffs.appearance_modifier.appearance_tracker import ModifierInfo
@@ -19,8 +17,10 @@ from sims4.commands import Command, CheatOutput, CommandType
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.tags_enum import CommonGameTag
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.logging.has_class_log import HasClassLog
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegistry
+from sims4communitylib.utils.common_log_registry import CommonLog
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
@@ -28,19 +28,24 @@ from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from singletons import DEFAULT
 from typing import Tuple, Union, Dict, Callable, Iterator, Set
 
-# ReadTheDocs
-ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-
-log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 's4cl_common_outfit_utils')
-
-
-class CommonOutfitUtils:
+class CommonOutfitUtils(HasClassLog):
     """Utilities for handling Sim outfits.
 
     """
-    @staticmethod
-    def is_every_day_category(outfit_category: OutfitCategory) -> bool:
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
+        return ModInfo.get_identity()
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_log_identifier(cls) -> str:
+        return 'common_outfit_utils'
+
+    @classmethod
+    def is_every_day_category(cls, outfit_category: OutfitCategory) -> bool:
         """is_every_day_category(outfit_category)
 
         Determine if an OutfitCategory is EVERYDAY
@@ -52,8 +57,8 @@ class CommonOutfitUtils:
         """
         return int(outfit_category) == int(OutfitCategory.EVERYDAY)
 
-    @staticmethod
-    def is_formal_category(outfit_category: OutfitCategory) -> bool:
+    @classmethod
+    def is_formal_category(cls, outfit_category: OutfitCategory) -> bool:
         """is_formal_category(outfit_category)
 
         Determine if an OutfitCategory is FORMAL
@@ -65,8 +70,8 @@ class CommonOutfitUtils:
         """
         return int(outfit_category) == int(OutfitCategory.FORMAL)
 
-    @staticmethod
-    def is_athletic_category(outfit_category: OutfitCategory) -> bool:
+    @classmethod
+    def is_athletic_category(cls, outfit_category: OutfitCategory) -> bool:
         """is_athletic_category(outfit_category)
 
         Determine if an OutfitCategory is ATHLETIC
@@ -78,8 +83,8 @@ class CommonOutfitUtils:
         """
         return int(outfit_category) == int(OutfitCategory.ATHLETIC)
 
-    @staticmethod
-    def is_sleep_category(outfit_category: OutfitCategory) -> bool:
+    @classmethod
+    def is_sleep_category(cls, outfit_category: OutfitCategory) -> bool:
         """is_sleep_category(outfit_category)
 
         Determine if an OutfitCategory is SLEEP
@@ -91,8 +96,8 @@ class CommonOutfitUtils:
         """
         return int(outfit_category) == int(OutfitCategory.SLEEP)
 
-    @staticmethod
-    def is_party_category(outfit_category: OutfitCategory) -> bool:
+    @classmethod
+    def is_party_category(cls, outfit_category: OutfitCategory) -> bool:
         """is_party_category(outfit_category)
 
         Determine if an OutfitCategory is PARTY
@@ -104,8 +109,8 @@ class CommonOutfitUtils:
         """
         return int(outfit_category) == int(OutfitCategory.PARTY)
 
-    @staticmethod
-    def is_bathing_category(outfit_category: OutfitCategory) -> bool:
+    @classmethod
+    def is_bathing_category(cls, outfit_category: OutfitCategory) -> bool:
         """is_bathing_category(outfit_category)
 
         Determine if an OutfitCategory is BATHING
@@ -117,8 +122,8 @@ class CommonOutfitUtils:
         """
         return int(outfit_category) == int(OutfitCategory.BATHING)
 
-    @staticmethod
-    def is_career_category(outfit_category: OutfitCategory) -> bool:
+    @classmethod
+    def is_career_category(cls, outfit_category: OutfitCategory) -> bool:
         """is_career_category(outfit_category)
 
         Determine if an OutfitCategory is CAREER
@@ -130,8 +135,8 @@ class CommonOutfitUtils:
         """
         return int(outfit_category) == int(OutfitCategory.CAREER)
 
-    @staticmethod
-    def is_situation_category(outfit_category: OutfitCategory) -> bool:
+    @classmethod
+    def is_situation_category(cls, outfit_category: OutfitCategory) -> bool:
         """is_situation_category(outfit_category)
 
         Determine if an OutfitCategory is SITUATION
@@ -143,8 +148,8 @@ class CommonOutfitUtils:
         """
         return int(outfit_category) == int(OutfitCategory.SITUATION)
 
-    @staticmethod
-    def is_special_category(outfit_category: OutfitCategory) -> bool:
+    @classmethod
+    def is_special_category(cls, outfit_category: OutfitCategory) -> bool:
         """is_special_category(outfit_category)
 
         Determine if an OutfitCategory is SPECIAL
@@ -156,8 +161,8 @@ class CommonOutfitUtils:
         """
         return int(outfit_category) == int(OutfitCategory.SPECIAL)
 
-    @staticmethod
-    def is_swimwear_category(outfit_category: OutfitCategory) -> bool:
+    @classmethod
+    def is_swimwear_category(cls, outfit_category: OutfitCategory) -> bool:
         """is_swimwear_category(outfit_category)
 
         Determine if an OutfitCategory is SWIMWEAR
@@ -169,8 +174,8 @@ class CommonOutfitUtils:
         """
         return int(outfit_category) == int(OutfitCategory.SWIMWEAR)
 
-    @staticmethod
-    def is_hot_weather_category(outfit_category: OutfitCategory) -> bool:
+    @classmethod
+    def is_hot_weather_category(cls, outfit_category: OutfitCategory) -> bool:
         """is_hot_weather_category(outfit_category)
 
         Determine if an OutfitCategory is HOTWEATHER
@@ -186,8 +191,8 @@ class CommonOutfitUtils:
         except:
             return False
 
-    @staticmethod
-    def is_cold_weather_category(outfit_category: OutfitCategory) -> bool:
+    @classmethod
+    def is_cold_weather_category(cls, outfit_category: OutfitCategory) -> bool:
         """is_cold_weather_category(outfit_category)
 
         Determine if an OutfitCategory is COLDWEATHER
@@ -203,8 +208,8 @@ class CommonOutfitUtils:
         except:
             return False
 
-    @staticmethod
-    def is_batuu_category(outfit_category: OutfitCategory) -> bool:
+    @classmethod
+    def is_batuu_category(cls, outfit_category: OutfitCategory) -> bool:
         """is_batuu_category(outfit_category)
 
         Determine if an OutfitCategory is BATUU
@@ -220,8 +225,8 @@ class CommonOutfitUtils:
         except:
             return False
 
-    @staticmethod
-    def get_all_outfit_categories() -> Tuple[OutfitCategory]:
+    @classmethod
+    def get_all_outfit_categories(cls) -> Tuple[OutfitCategory]:
         """get_all_outfit_categories()
 
         Retrieve a collection of all OutfitCategory types.
@@ -231,8 +236,8 @@ class CommonOutfitUtils:
         """
         return tuple(OutfitCategory.values)
 
-    @staticmethod
-    def is_wearing_everyday_outfit(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_everyday_outfit(cls, sim_info: SimInfo) -> bool:
         """is_wearing_everyday_outfit(sim_info)
 
         Determine if a Sim is wearing an Everyday outfit.
@@ -244,8 +249,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.is_every_day_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
-    @staticmethod
-    def is_wearing_formal_outfit(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_formal_outfit(cls, sim_info: SimInfo) -> bool:
         """is_wearing_formal_outfit(sim_info)
 
         Determine if a Sim is wearing a Formal outfit.
@@ -257,8 +262,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.is_formal_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
-    @staticmethod
-    def is_wearing_athletic_outfit(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_athletic_outfit(cls, sim_info: SimInfo) -> bool:
         """is_wearing_athletic_outfit(sim_info)
 
         Determine if a Sim is wearing an Athletic outfit.
@@ -270,8 +275,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.is_athletic_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
-    @staticmethod
-    def is_wearing_sleep_outfit(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_sleep_outfit(cls, sim_info: SimInfo) -> bool:
         """is_wearing_sleep_outfit(sim_info)
 
         Determine if a Sim is wearing a Sleep outfit.
@@ -283,8 +288,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.is_sleep_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
-    @staticmethod
-    def is_wearing_party_outfit(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_party_outfit(cls, sim_info: SimInfo) -> bool:
         """is_wearing_party_outfit(sim_info)
 
         Determine if a Sim is wearing a Party outfit.
@@ -296,8 +301,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.is_party_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
-    @staticmethod
-    def is_wearing_bathing_outfit(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_bathing_outfit(cls, sim_info: SimInfo) -> bool:
         """is_wearing_bathing_outfit(sim_info)
 
         Determine if a Sim is wearing a Bathing outfit.
@@ -309,8 +314,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.is_bathing_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
-    @staticmethod
-    def is_wearing_career_outfit(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_career_outfit(cls, sim_info: SimInfo) -> bool:
         """is_wearing_career_outfit(sim_info)
 
         Determine if a Sim is wearing a Career outfit.
@@ -322,8 +327,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.is_career_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
-    @staticmethod
-    def is_wearing_situation_outfit(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_situation_outfit(cls, sim_info: SimInfo) -> bool:
         """is_wearing_situation_outfit(sim_info)
 
         Determine if a Sim is wearing a Situation outfit.
@@ -335,8 +340,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.is_situation_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
-    @staticmethod
-    def is_wearing_special_outfit(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_special_outfit(cls, sim_info: SimInfo) -> bool:
         """is_wearing_special_outfit(sim_info)
 
         Determine if a Sim is wearing a Special outfit.
@@ -348,8 +353,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.is_special_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
-    @staticmethod
-    def is_wearing_swimwear_outfit(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_swimwear_outfit(cls, sim_info: SimInfo) -> bool:
         """is_wearing_swimwear_outfit(sim_info)
 
         Determine if a Sim is wearing a Swimwear outfit.
@@ -361,8 +366,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.is_swimwear_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
-    @staticmethod
-    def is_wearing_hot_weather_outfit(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_hot_weather_outfit(cls, sim_info: SimInfo) -> bool:
         """is_wearing_hot_weather_outfit(sim_info)
 
         Determine if a Sim is wearing a Hot Weather outfit.
@@ -374,8 +379,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.is_hot_weather_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
-    @staticmethod
-    def is_wearing_cold_weather_outfit(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_cold_weather_outfit(cls, sim_info: SimInfo) -> bool:
         """is_wearing_cold_weather_outfit(sim_info)
 
         Determine if a Sim is wearing a Cold Weather outfit.
@@ -387,8 +392,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.is_cold_weather_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
-    @staticmethod
-    def is_wearing_batuu_outfit(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_batuu_outfit(cls, sim_info: SimInfo) -> bool:
         """is_wearing_batuu_outfit(sim_info)
 
         Determine if a Sim is wearing a Batuu outfit.
@@ -400,8 +405,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.is_batuu_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
-    @staticmethod
-    def is_wearing_towel(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_wearing_towel(cls, sim_info: SimInfo) -> bool:
         """is_wearing_towel(sim_info)
 
         Determine if a Sim is currently wearing a towel.
@@ -413,8 +418,8 @@ class CommonOutfitUtils:
         """
         return CommonBuffUtils.has_buff(sim_info, CommonBuffId.IS_WEARING_TOWEL)
 
-    @staticmethod
-    def get_outfit_category_by_name(name: str, default_category: Union[OutfitCategory, None]=OutfitCategory.CURRENT_OUTFIT) -> OutfitCategory:
+    @classmethod
+    def get_outfit_category_by_name(cls, name: str, default_category: Union[OutfitCategory, None]=OutfitCategory.CURRENT_OUTFIT) -> OutfitCategory:
         """get_outfit_category_by_name(name, default_value=OutfitCategory.CURRENT_OUTFIT)
 
         Retrieve an OutfitCategory by name.
@@ -429,8 +434,8 @@ class CommonOutfitUtils:
         upper_case_name = str(name).upper().strip()
         return CommonResourceUtils.get_enum_by_name(upper_case_name, OutfitCategory, default_value=default_category)
 
-    @staticmethod
-    def convert_value_to_outfit_category(value: Union[OutfitCategory, int]) -> Union[OutfitCategory, int]:
+    @classmethod
+    def convert_value_to_outfit_category(cls, value: Union[OutfitCategory, int]) -> Union[OutfitCategory, int]:
         """convert_value_to_outfit_category(value)
 
         Retrieve an OutfitCategory by value.
@@ -446,8 +451,8 @@ class CommonOutfitUtils:
             return CommonResourceUtils.get_enum_by_name(OutfitCategory.value_to_name[value], OutfitCategory, default_value=value)
         return value
 
-    @staticmethod
-    def get_current_outfit_category(sim_info: SimInfo) -> OutfitCategory:
+    @classmethod
+    def get_current_outfit_category(cls, sim_info: SimInfo) -> OutfitCategory:
         """get_current_outfit_category(sim_info)
 
         Retrieve the current OutfitCategory and Index of a Sim.
@@ -459,8 +464,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.get_current_outfit(sim_info)[0]
 
-    @staticmethod
-    def get_current_outfit_index(sim_info: SimInfo) -> int:
+    @classmethod
+    def get_current_outfit_index(cls, sim_info: SimInfo) -> int:
         """get_current_outfit_index(sim_info)
 
         Retrieve the current OutfitCategory and Index of a Sim.
@@ -474,8 +479,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.get_current_outfit(sim_info)[1]
 
-    @staticmethod
-    def get_current_outfit(sim_info: SimInfo) -> Tuple[OutfitCategory, int]:
+    @classmethod
+    def get_current_outfit(cls, sim_info: SimInfo) -> Tuple[OutfitCategory, int]:
         """get_current_outfit(sim_info)
 
         Retrieve the current OutfitCategory and Index of the current sim.
@@ -492,15 +497,15 @@ class CommonOutfitUtils:
         current_outfit = sim_info.get_current_outfit()
         # noinspection PyBroadException
         try:
-            current_outfit_category = CommonOutfitUtils.convert_value_to_outfit_category(current_outfit[0])
+            current_outfit_category = cls.convert_value_to_outfit_category(current_outfit[0])
         except:
             current_outfit_category = current_outfit[0]
         if current_outfit_category is None:
             current_outfit_category = current_outfit[0]
         return current_outfit_category, current_outfit[1]
 
-    @staticmethod
-    def get_appearance_modifiers_gen(sim_info: SimInfo, appearance_modifier_type: AppearanceModifierType, include_appearance_modifier_callback: Callable[[ModifierInfo], bool]=None) -> Iterator[AppearanceModifier]:
+    @classmethod
+    def get_appearance_modifiers_gen(cls, sim_info: SimInfo, appearance_modifier_type: AppearanceModifierType, include_appearance_modifier_callback: Callable[[ModifierInfo], bool]=None) -> Iterator[AppearanceModifier]:
         """get_appearance_modifiers_gen(sim_info, appearance_modifier_type, include_appearance_modifier_callback=None)
 
         Retrieve the appearance modifiers of a Sim.
@@ -535,8 +540,8 @@ class CommonOutfitUtils:
                 continue
             yield modifier_info.modifier
 
-    @staticmethod
-    def get_outfit_data(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> OutfitData:
+    @classmethod
+    def get_outfit_data(cls, sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> OutfitData:
         """get_outfit_data(sim_info, outfit_category_and_index=None)
 
         Retrieve OutfitData for the specified OutfitCategory and Index of a Sim.
@@ -552,8 +557,8 @@ class CommonOutfitUtils:
             outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
         return sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
 
-    @staticmethod
-    def has_cas_part_attached(sim_info: SimInfo, cas_part_id: int, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    @classmethod
+    def has_cas_part_attached(cls, sim_info: SimInfo, cas_part_id: int, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
         """has_any_cas_parts_attached(sim_info, cas_part_id, outfit_category_and_index=None)
 
         Determine if any of the specified CAS Parts are attached to the Sim.
@@ -569,8 +574,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.has_any_cas_parts_attached(sim_info, (cas_part_id, ), outfit_category_and_index=outfit_category_and_index)
 
-    @staticmethod
-    def has_any_cas_parts_attached(sim_info: SimInfo, cas_part_ids: Tuple[int], outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    @classmethod
+    def has_any_cas_parts_attached(cls, sim_info: SimInfo, cas_part_ids: Tuple[int], outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
         """has_any_cas_parts_attached(sim_info, cas_part_ids, outfit_category_and_index=None)
 
         Determine if any of the specified CAS Parts are attached to the Sim.
@@ -593,8 +598,8 @@ class CommonOutfitUtils:
                 return True
         return False
 
-    @staticmethod
-    def get_outfit_parts(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[Union[BodyType, int], int]:
+    @classmethod
+    def get_outfit_parts(cls, sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[Union[BodyType, int], int]:
         """get_outfit_parts(sim_info, outfit_category_and_index=None)
 
         Retrieve Outfit Parts for the specified OutfitCategory and Index of a Sim.
@@ -613,8 +618,8 @@ class CommonOutfitUtils:
             return dict()
         return dict(zip(list(outfit_data.body_types), list(outfit_data.part_ids)))
 
-    @staticmethod
-    def set_current_outfit(sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]):
+    @classmethod
+    def set_current_outfit(cls, sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]):
         """set_current_outfit(sim_info, outfit_category_and_index)
 
         Set the current outfit of a Sim to the specified OutfitCategory and Index.
@@ -626,8 +631,8 @@ class CommonOutfitUtils:
         """
         sim_info.try_set_current_outfit(outfit_category_and_index)
 
-    @staticmethod
-    def set_outfit_dirty(sim_info: SimInfo, outfit_category: OutfitCategory):
+    @classmethod
+    def set_outfit_dirty(cls, sim_info: SimInfo, outfit_category: OutfitCategory):
         """set_outfit_dirty(sim_info, outfit_category)
 
         Flag the specified OutfitCategory of a Sim as dirty.
@@ -640,8 +645,8 @@ class CommonOutfitUtils:
         """
         sim_info.set_outfit_dirty(outfit_category)
 
-    @staticmethod
-    def set_outfit_clean(sim_info: SimInfo, outfit_category: OutfitCategory):
+    @classmethod
+    def set_outfit_clean(cls, sim_info: SimInfo, outfit_category: OutfitCategory):
         """set_outfit_clean(sim_info, outfit_category)
 
         Flag the specified OutfitCategory of a Sim as clean.
@@ -653,8 +658,8 @@ class CommonOutfitUtils:
         """
         sim_info.clear_outfit_dirty(outfit_category)
 
-    @staticmethod
-    def generate_outfit(sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int], tag_list: Tuple[CommonGameTag]=(), outfit_filter_flag: OutfitFilterFlag=DEFAULT, body_type_flags: BodyTypeFlag=DEFAULT, **kwargs) -> bool:
+    @classmethod
+    def generate_outfit(cls, sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int], tag_list: Tuple[CommonGameTag]=(), outfit_filter_flag: OutfitFilterFlag=DEFAULT, body_type_flags: BodyTypeFlag=DEFAULT, **kwargs) -> bool:
         """generate_outfit(sim_info, outfit_category_and_index, tag_list=(), outfit_filter_flag=DEFAULT, body_type_flags=DEFAULT, **kwargs)
 
         Generate an outfit for a Sim for the specified OutfitCategory and Index.
@@ -678,8 +683,8 @@ class CommonOutfitUtils:
         outfit_index = outfit_category_and_index[1]
         return sim_info.generate_outfit(outfit_category, outfit_index=outfit_index, tag_list=tag_list, filter_flag=outfit_filter_flag, body_type_flags=body_type_flags, **kwargs)
 
-    @staticmethod
-    def resend_outfits(sim_info: SimInfo) -> bool:
+    @classmethod
+    def resend_outfits(cls, sim_info: SimInfo) -> bool:
         """resend_outfits(sim_info)
 
         Resend outfit data to a Sim to refresh their outfits.
@@ -692,8 +697,8 @@ class CommonOutfitUtils:
         sim_info.resend_outfits()
         return True
 
-    @staticmethod
-    def get_previous_outfit(sim_info: SimInfo, default_outfit_category_and_index: Tuple[OutfitCategory, int]=(OutfitCategory.EVERYDAY, 0)) -> Tuple[OutfitCategory, int]:
+    @classmethod
+    def get_previous_outfit(cls, sim_info: SimInfo, default_outfit_category_and_index: Tuple[OutfitCategory, int]=(OutfitCategory.EVERYDAY, 0)) -> Tuple[OutfitCategory, int]:
         """get_previous_outfit(sim_info, default_outfit_category_and_index=(OutfitCategory.EVERYDAY, 0))
 
         Retrieve the previous outfit a Sim was wearing before their current outfit.
@@ -707,8 +712,8 @@ class CommonOutfitUtils:
         """
         return sim_info.get_previous_outfit() or default_outfit_category_and_index
 
-    @staticmethod
-    def remove_previous_outfit(sim_info: SimInfo):
+    @classmethod
+    def remove_previous_outfit(cls, sim_info: SimInfo):
         """remove_previous_outfit(sim_info)
 
         Remove the outfit a Sim was wearing before their current outfit, from the cache.
@@ -718,8 +723,8 @@ class CommonOutfitUtils:
         """
         sim_info.set_previous_outfit(None, force=True)
 
-    @staticmethod
-    def has_outfit(sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]) -> bool:
+    @classmethod
+    def has_outfit(cls, sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]) -> bool:
         """has_outfit(sim_info, outfit_category_and_index)
 
         Determine if a Sim has an existing outfit in the specified OutfitCategory and Index.
@@ -733,8 +738,8 @@ class CommonOutfitUtils:
         """
         return sim_info.has_outfit(outfit_category_and_index)
 
-    @staticmethod
-    def update_outfits(sim_info: SimInfo) -> bool:
+    @classmethod
+    def update_outfits(cls, sim_info: SimInfo) -> bool:
         """update_outfits(sim_info)
 
         Update all outfits of a Sim.
@@ -749,8 +754,8 @@ class CommonOutfitUtils:
         sim_info.appearance_tracker.evaluate_appearance_modifiers()
         return True
 
-    @staticmethod
-    def regenerate_all_outfits(sim_info: SimInfo):
+    @classmethod
+    def regenerate_all_outfits(cls, sim_info: SimInfo):
         """regenerate_all_outfits(sim_info)
 
         Delete and regenerate all outfits for a Sim.
@@ -773,8 +778,8 @@ class CommonOutfitUtils:
         CommonOutfitUtils.resend_outfits(sim_info)
         CommonOutfitUtils.set_current_outfit(sim_info, current_outfit)
 
-    @staticmethod
-    def has_tag_on_outfit(sim_info: SimInfo, tag: Union[int, CommonGameTag], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+    @classmethod
+    def has_tag_on_outfit(cls, sim_info: SimInfo, tag: Union[int, CommonGameTag], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """has_tag_on_outfit(sim_info, tag, outfit_category_and_index=None)
 
         Determine if the Outfit of a Sim has the specified tag.
@@ -790,8 +795,8 @@ class CommonOutfitUtils:
         """
         return CommonOutfitUtils.has_any_tags_on_outfit(sim_info, (tag, ), outfit_category_and_index=outfit_category_and_index)
 
-    @staticmethod
-    def has_any_tags_on_outfit(sim_info: SimInfo, tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+    @classmethod
+    def has_any_tags_on_outfit(cls, sim_info: SimInfo, tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """has_any_tags_on_outfit(sim_info, tags, outfit_category_and_index=None)
 
         Determine if the Outfit of a Sim has any of the specified tags.
@@ -815,8 +820,8 @@ class CommonOutfitUtils:
                 return True
         return False
 
-    @staticmethod
-    def has_all_tags_on_outfit(sim_info: SimInfo, tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+    @classmethod
+    def has_all_tags_on_outfit(cls, sim_info: SimInfo, tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """has_all_tags_on_outfit(sim_info, tags, outfit_category_and_index=None)
 
         Determine if the Outfit of a Sim has all of the specified tags.
@@ -840,8 +845,8 @@ class CommonOutfitUtils:
                 return False
         return True
 
-    @staticmethod
-    def get_all_outfit_tags(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Tuple[CommonGameTag]:
+    @classmethod
+    def get_all_outfit_tags(cls, sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Tuple[CommonGameTag]:
         """get_all_outfit_tags(sim_info, outfit_category_and_index=None)
 
         Retrieve a collection of game tags that apply to the outfit of a Sim.
@@ -862,8 +867,8 @@ class CommonOutfitUtils:
                     combined_game_tags.append(game_tag)
         return tuple(combined_game_tags)
 
-    @staticmethod
-    def get_outfit_tags_by_cas_part_id(sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[int, Set[CommonGameTag]]:
+    @classmethod
+    def get_outfit_tags_by_cas_part_id(cls, sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[int, Set[CommonGameTag]]:
         """get_outfit_tags_by_cas_part_id(sim_info, outfit_category_and_index=None)
 
         Retrieve the game tags of the outfit of a Sim grouped by CAS Part Id.
@@ -885,8 +890,8 @@ class CommonOutfitUtils:
         except:
             return dict()
 
-    @staticmethod
-    def _print_outfit(sim_info: SimInfo, outfit_category: OutfitCategory, outfit_index: int, _log: CommonLog, output: CheatOutput):
+    @classmethod
+    def _print_outfit(cls, sim_info: SimInfo, outfit_category: OutfitCategory, outfit_index: int, _log: CommonLog, output: CheatOutput):
         from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
         from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
         sim_full_name = CommonSimNameUtils.get_full_name(sim_info)
@@ -933,158 +938,161 @@ class CommonOutfitUtils:
             _log.disable()
 
 
-if not ON_RTD:
-    @Command('s4clib_testing.show_all_outfit_categories', command_type=CommandType.Live)
-    def _s4clib_testing_show_all_outfit_categories(_connection: int=None):
-        output = CheatOutput(_connection)
-        output('Showing all outfit categories.')
-        categories = CommonOutfitUtils.get_all_outfit_categories()
-        output('Outfit categories: {}'.format(pformat(categories)))
+@Command('s4clib_testing.show_all_outfit_categories', command_type=CommandType.Live)
+def _s4clib_testing_show_all_outfit_categories(_connection: int=None):
+    output = CheatOutput(_connection)
+    output('Showing all outfit categories.')
+    categories = CommonOutfitUtils.get_all_outfit_categories()
+    output('Outfit categories: {}'.format(pformat(categories)))
 
 
-    @Command('s4clib_testing.print_outfit_tags_of_active_sim', command_type=CommandType.Live)
-    def _s4clib_testing_print_outfit_tags_of_active_sim(_connection: int=None):
-        output = CheatOutput(_connection)
-        output('Showing all game tags of the outfit of the current Sim.')
-        tags = CommonOutfitUtils.get_all_outfit_tags(CommonSimUtils.get_active_sim_info())
+@Command('s4clib_testing.print_outfit_tags_of_active_sim', command_type=CommandType.Live)
+def _s4clib_testing_print_outfit_tags_of_active_sim(_connection: int=None):
+    output = CheatOutput(_connection)
+    output('Showing all game tags of the outfit of the current Sim.')
+    tags = CommonOutfitUtils.get_all_outfit_tags(CommonSimUtils.get_active_sim_info())
+    output('Tags: {}'.format(pformat(sorted([CommonGameTag.value_to_name[tag] for tag in tags if tag in CommonGameTag.value_to_name]))))
+
+
+@Command('s4clib_testing.print_outfit_tags_by_cas_part_of_active_sim', command_type=CommandType.Live)
+def _s4clib_testing_print_outfit_tags_by_cas_part_of_active_sim(_connection: int=None):
+    from sims4communitylib.utils.cas.common_cas_utils import CommonCASUtils
+    output = CheatOutput(_connection)
+    output('Showing game tags by cas part id of the outfit of the current Sim.')
+    active_sim_info = CommonSimUtils.get_active_sim_info()
+    tags_by_cas_part_id = CommonOutfitUtils.get_outfit_tags_by_cas_part_id(active_sim_info)
+    for (cas_part_id, tags) in tags_by_cas_part_id.items():
+        output('CAS Part Id: {}'.format(cas_part_id))
+        body_type = CommonCASUtils.get_body_type_cas_part_is_attached_to(active_sim_info, cas_part_id)
+        output('Body Type: {}'.format(BodyType.value_to_name[body_type] if body_type in BodyType.value_to_name else body_type))
         output('Tags: {}'.format(pformat(sorted([CommonGameTag.value_to_name[tag] for tag in tags if tag in CommonGameTag.value_to_name]))))
 
 
-    @Command('s4clib_testing.print_outfit_tags_by_cas_part_of_active_sim', command_type=CommandType.Live)
-    def _s4clib_testing_print_outfit_tags_by_cas_part_of_active_sim(_connection: int=None):
-        from sims4communitylib.utils.cas.common_cas_utils import CommonCASUtils
-        output = CheatOutput(_connection)
-        output('Showing game tags by cas part id of the outfit of the current Sim.')
-        active_sim_info = CommonSimUtils.get_active_sim_info()
-        tags_by_cas_part_id = CommonOutfitUtils.get_outfit_tags_by_cas_part_id(active_sim_info)
-        for (cas_part_id, tags) in tags_by_cas_part_id.items():
-            output('CAS Part Id: {}'.format(cas_part_id))
-            body_type = CommonCASUtils.get_body_type_cas_part_is_attached_to(active_sim_info, cas_part_id)
-            output('Body Type: {}'.format(BodyType.value_to_name[body_type] if body_type in BodyType.value_to_name else body_type))
-            output('Tags: {}'.format(pformat(sorted([CommonGameTag.value_to_name[tag] for tag in tags if tag in CommonGameTag.value_to_name]))))
+@Command('s4clib.print_previous_outfit', command_type=CommandType.Live)
+def _s4clib_print_previous_outfit(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_full_name = CommonSimNameUtils.get_full_name(sim_info)
+    previous_outfit = CommonOutfitUtils.get_previous_outfit(sim_info, default_outfit_category_and_index=tuple())
+    if not previous_outfit:
+        output('No previous outfit found for {}'.format(sim_full_name))
+        return
+    log = CommonOutfitUtils.get_log()
+    try:
+        log.enable()
+        output('Previous Outfit Info for {}'.format(sim_full_name))
+        log.debug('Previous Outfit Info for {}'.format(sim_full_name))
+        CommonOutfitUtils._print_outfit(sim_info, previous_outfit[0], previous_outfit[1], log, output)
+    finally:
+        log.disable()
 
 
-    @Command('s4clib.print_previous_outfit', command_type=CommandType.Live)
-    def _s4clib_print_previous_outfit(opt_sim: OptionalTargetParam=None, _connection: int=None):
-        from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
-        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-        from server_commands.argument_helpers import get_optional_target
-        output = CheatOutput(_connection)
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
-        if sim_info is None:
-            output('Failed, no Sim was specified or the specified Sim was not found!')
-            return
-        sim_full_name = CommonSimNameUtils.get_full_name(sim_info)
-        previous_outfit = CommonOutfitUtils.get_previous_outfit(sim_info, default_outfit_category_and_index=tuple())
-        if not previous_outfit:
-            output('No previous outfit found for {}'.format(sim_full_name))
-            return
-        try:
-            log.enable()
-            output('Previous Outfit Info for {}'.format(sim_full_name))
-            log.debug('Previous Outfit Info for {}'.format(sim_full_name))
-            CommonOutfitUtils._print_outfit(sim_info, previous_outfit[0], previous_outfit[1], log, output)
-        finally:
-            log.disable()
+@Command('s4clib.print_current_outfit', command_type=CommandType.Live)
+def _s4clib_print_current_outfit(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_full_name = CommonSimNameUtils.get_full_name(sim_info)
+    current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
+    log = CommonOutfitUtils.get_log()
+    try:
+        log.enable()
+        output('Current Outfit Info for {}'.format(sim_full_name))
+        log.debug('Current Outfit Info for {}'.format(sim_full_name))
+        CommonOutfitUtils._print_outfit(sim_info, current_outfit[0], current_outfit[1], log, output)
+    finally:
+        log.disable()
 
 
-    @Command('s4clib.print_current_outfit', command_type=CommandType.Live)
-    def _s4clib_print_current_outfit(opt_sim: OptionalTargetParam=None, _connection: int=None):
-        from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
-        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-        from server_commands.argument_helpers import get_optional_target
-        output = CheatOutput(_connection)
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
-        if sim_info is None:
-            output('Failed, no Sim was specified or the specified Sim was not found!')
-            return
-        sim_full_name = CommonSimNameUtils.get_full_name(sim_info)
+@Command('s4clib.print_outfits', command_type=CommandType.Live)
+def _s4clib_print_outfits(show_missing_outfit_info: bool=False, opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    from sims.outfits.outfit_utils import get_maximum_outfits_for_category
+    from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+    output = CheatOutput(_connection)
+    output('Printing outfit.')
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_full_name = CommonSimNameUtils.get_full_name(sim_info)
+    log = CommonOutfitUtils.get_log()
+    try:
+        log.enable()
         current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
+        # noinspection PyBroadException
         try:
-            log.enable()
-            output('Current Outfit Info for {}'.format(sim_full_name))
-            log.debug('Current Outfit Info for {}'.format(sim_full_name))
-            CommonOutfitUtils._print_outfit(sim_info, current_outfit[0], current_outfit[1], log, output)
-        finally:
-            log.disable()
-
-
-    @Command('s4clib.print_outfits', command_type=CommandType.Live)
-    def _s4clib_print_outfits(show_missing_outfit_info: bool=False, opt_sim: OptionalTargetParam=None, _connection: int=None):
-        from server_commands.argument_helpers import get_optional_target
-        from sims.outfits.outfit_utils import get_maximum_outfits_for_category
-        from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
-        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-        output = CheatOutput(_connection)
-        output('Printing outfit.')
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
-        if sim_info is None:
-            output('Failed, no Sim was specified or the specified Sim was not found!')
-            return
-        sim_full_name = CommonSimNameUtils.get_full_name(sim_info)
+            current_outfit_category = CommonResourceUtils.get_enum_by_name(OutfitCategory.value_to_name[current_outfit[0]], OutfitCategory, default_value=current_outfit[0])
+        except:
+            current_outfit_category = current_outfit[0]
+        # noinspection PyBroadException
         try:
-            log.enable()
-            current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
+            current_outfit_category_name = current_outfit_category.name
+        except:
+            current_outfit_category_name = current_outfit_category
+
+        output('Outfit Info for {}, Current Outfit: ({}, {})'.format(sim_full_name, current_outfit_category_name, current_outfit[1]))
+        log.debug('Outfit Info for {}, Current Outfit: ({}, {})'.format(sim_full_name, current_outfit_category_name, current_outfit[1]))
+        output('------')
+        log.debug('------')
+        for outfit_category in CommonOutfitUtils.get_all_outfit_categories():
             # noinspection PyBroadException
             try:
-                current_outfit_category = CommonResourceUtils.get_enum_by_name(OutfitCategory.value_to_name[current_outfit[0]], OutfitCategory, default_value=current_outfit[0])
+                outfit_category_name = outfit_category.name
             except:
-                current_outfit_category = current_outfit[0]
-            # noinspection PyBroadException
-            try:
-                current_outfit_category_name = current_outfit_category.name
-            except:
-                current_outfit_category_name = current_outfit_category
+                outfit_category_name = outfit_category
 
-            output('Outfit Info for {}, Current Outfit: ({}, {})'.format(sim_full_name, current_outfit_category_name, current_outfit[1]))
-            log.debug('Outfit Info for {}, Current Outfit: ({}, {})'.format(sim_full_name, current_outfit_category_name, current_outfit[1]))
-            output('------')
-            log.debug('------')
-            for outfit_category in CommonOutfitUtils.get_all_outfit_categories():
-                # noinspection PyBroadException
-                try:
-                    outfit_category_name = outfit_category.name
-                except:
-                    outfit_category_name = outfit_category
+            for outfit_index in range(get_maximum_outfits_for_category(outfit_category)):
+                if not CommonOutfitUtils.has_outfit(sim_info, (outfit_category, outfit_index)):
+                    if show_missing_outfit_info:
+                        output('Sim did not have outfit ({}, {})'.format(outfit_category_name, outfit_index))
+                        log.debug('Sim did not have outfit ({}, {})'.format(outfit_category_name, outfit_index))
+                    continue
+                CommonOutfitUtils._print_outfit(sim_info, outfit_category, outfit_index, log, output)
+    except Exception as ex:
+        log.error('Failed to print outfit of Sim {}.'.format(sim_full_name), exception=ex)
+    finally:
+        log.disable()
 
-                for outfit_index in range(get_maximum_outfits_for_category(outfit_category)):
-                    if not CommonOutfitUtils.has_outfit(sim_info, (outfit_category, outfit_index)):
-                        if show_missing_outfit_info:
-                            output('Sim did not have outfit ({}, {})'.format(outfit_category_name, outfit_index))
-                            log.debug('Sim did not have outfit ({}, {})'.format(outfit_category_name, outfit_index))
-                        continue
-                    CommonOutfitUtils._print_outfit(sim_info, outfit_category, outfit_index, log, output)
-        except Exception as ex:
-            log.error('Failed to print outfit of Sim {}.'.format(sim_full_name), exception=ex)
-        finally:
-            log.disable()
 
-    @Command('s4clib.generate_outfit', 's4clib.generateoutfit', command_type=CommandType.Live)
-    def _s4clib_generate_outfit(outfit_category_str: str=None, index: int=0, opt_sim: OptionalTargetParam=None, _connection: int=None):
-        from server_commands.argument_helpers import get_optional_target
-        output = CheatOutput(_connection)
-        if outfit_category_str is None:
-            output('Please specify an OutfitCategory. Valid OutfitCategory: ({})'.format(', '.join(OutfitCategory.name_to_value.keys())))
+@Command('s4clib.generate_outfit', 's4clib.generateoutfit', command_type=CommandType.Live)
+def _s4clib_generate_outfit(outfit_category_str: str=None, index: int=0, opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    if outfit_category_str is None:
+        output('Please specify an OutfitCategory. Valid OutfitCategory: ({})'.format(', '.join(OutfitCategory.name_to_value.keys())))
+        return
+    outfit_category: OutfitCategory = CommonOutfitUtils.get_outfit_category_by_name(outfit_category_str.upper())
+    if outfit_category is None:
+        output('{} is not a valid Outfit Category. Valid OutfitCategory: ({})'.format(outfit_category_str, ', '.join(OutfitCategory.name_to_value.keys())))
+        return
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Attempting to generate outfit {} at index {} for Sim {}'.format(outfit_category.name, index, sim_name))
+    try:
+        if CommonOutfitUtils.has_outfit(sim_info, (outfit_category, index)):
+            output('Sim {} already has an outfit of category {} at index {}'.format(sim_name, outfit_category.name, index))
             return
-        outfit_category: OutfitCategory = CommonOutfitUtils.get_outfit_category_by_name(outfit_category_str.upper())
-        if outfit_category is None:
-            output('{} is not a valid Outfit Category. Valid OutfitCategory: ({})'.format(outfit_category_str, ', '.join(OutfitCategory.name_to_value.keys())))
-            return
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
-        if sim_info is None:
-            output('Failed, no Sim was specified or the specified Sim was not found!')
-            return
-        sim_name = CommonSimNameUtils.get_full_name(sim_info)
-        output('Attempting to generate outfit {} at index {} for Sim {}'.format(outfit_category.name, index, sim_name))
-        try:
-            if CommonOutfitUtils.has_outfit(sim_info, (outfit_category, index)):
-                output('Sim {} already has an outfit of category {} at index {}'.format(sim_name, outfit_category.name, index))
-                return
-            generated = CommonOutfitUtils.generate_outfit(sim_info, (outfit_category, index))
-            if generated:
-                output('Outfit {} at index {} has been successfully generated for Sim {}.'.format(outfit_category.name, index, sim_name))
-            else:
-                output('Outfit {} at index {} failed to generate for Sim {}.'.format(outfit_category.name, index, sim_name))
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to generate outfit {} for Sim {}.'.format(outfit_category.name, sim_name), exception=ex)
-            output('Failed to generate outfit {} for Sim {}.'.format(outfit_category.name, sim_name))
+        generated = CommonOutfitUtils.generate_outfit(sim_info, (outfit_category, index))
+        if generated:
+            output('Outfit {} at index {} has been successfully generated for Sim {}.'.format(outfit_category.name, index, sim_name))
+        else:
+            output('Outfit {} at index {} failed to generate for Sim {}.'.format(outfit_category.name, index, sim_name))
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to generate outfit {} for Sim {}.'.format(outfit_category.name, sim_name), exception=ex)
+        output('Failed to generate outfit {} for Sim {}.'.format(outfit_category.name, sim_name))

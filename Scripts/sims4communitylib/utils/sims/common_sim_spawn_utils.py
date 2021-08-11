@@ -766,6 +766,9 @@ def _s4cl_purge_self(opt_sim: OptionalTargetParam=None, _connection: int=None):
     if sim_info is None:
         output('Failed, no Sim was specified or the specified Sim was not found!')
         return
+    if sim_info is CommonSimUtils.get_active_sim_info():
+        output('Failed, to purge the active Sim, use s4clib.purge_self instead.')
+        return
     output('Purging Sim from existence {}'.format(CommonSimNameUtils.get_full_name(sim_info)))
     CommonSimSpawnUtils.delete_sim(sim_info, source='Player', cause='Command Purged')
 
