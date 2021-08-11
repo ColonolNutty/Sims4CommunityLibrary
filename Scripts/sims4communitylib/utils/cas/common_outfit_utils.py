@@ -768,6 +768,7 @@ class CommonOutfitUtils:
                 if not CommonOutfitUtils.has_outfit(sim_info, outfit):
                     continue
                 outfits.remove_outfit(outfit_category, outfit_index=outfit_index)
+                CommonOutfitUtils.generate_outfit(sim_info, (outfit_category, outfit_index))
         sim_info.appearance_tracker.evaluate_appearance_modifiers()
         CommonOutfitUtils.resend_outfits(sim_info)
         CommonOutfitUtils.set_current_outfit(sim_info, current_outfit)
