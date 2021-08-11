@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SimData version="0x00000101" u="0x00000000">
+  <Instances>
+    <I name="S4CL_Trait_GenderOptions_Pregnancy_CanBeImpregnated_Large_Dog" schema="Trait" type="Object">
+      <L name="ages">
+        <T type="Int64">4</T>
+        <T type="Int64">32</T>
+        <T type="Int64">64</T>
+      </L>
+      <L name="species">
+        <T type="Int64">2</T>
+      </L>
+      <L name="genders" />
+      <L name="bb_filter_styles" />
+      <L name="bb_filter_tags" />
+      <T name="cas_idle_asm_key">00000000-00000000-0000000000000000</T>
+      <T name="cas_idle_asm_state"></T>
+      <T name="cas_selected_icon">00000000-00000000-0000000000000000</T>
+      <T name="cas_trait_asm_param">None</T>
+      <L name="conflicting_traits">
+        <T type="TableSetReference">2988733918836163600</T>
+      </L>
+      <T name="display_name">0x6A1925B5</T>
+      <T name="icon">00B2D882-00000000-30F0846C783606F9</T>
+      <L name="tags" />
+      <T name="trait_description">0x00000000</T>
+      <T name="trait_origin_description">0x00000000</T>
+      <T name="trait_type">8</T>
+      <V name="ui_category" variant="0xC1A03855" />
+    </I>
+  </Instances>
+  <Schemas>
+    <Schema name="Trait" schema_hash="0xDE2EAF66">
+      <Columns>
+        <Column name="ages" type="Vector" flags="0x00000000" />
+        <Column name="bb_filter_styles" type="Vector" flags="0x00000000" />
+        <Column name="bb_filter_tags" type="Vector" flags="0x00000000" />
+        <Column name="cas_idle_asm_key" type="ResourceKey" flags="0x00000000" />
+        <Column name="cas_idle_asm_state" type="String" flags="0x00000000" />
+        <Column name="cas_selected_icon" type="ResourceKey" flags="0x00000000" />
+        <Column name="cas_trait_asm_param" type="String" flags="0x00000000" />
+        <Column name="conflicting_traits" type="Vector" flags="0x00000000" />
+        <Column name="display_name" type="LocalizationKey" flags="0x00000000" />
+        <Column name="genders" type="Vector" flags="0x00000000" />
+        <Column name="icon" type="ResourceKey" flags="0x00000000" />
+        <Column name="species" type="Vector" flags="0x00000000" />
+        <Column name="tags" type="Vector" flags="0x00000000" />
+        <Column name="trait_description" type="LocalizationKey" flags="0x00000000" />
+        <Column name="trait_origin_description" type="LocalizationKey" flags="0x00000000" />
+        <Column name="trait_type" type="Int64" flags="0x00000000" />
+        <Column name="ui_category" type="Variant" flags="0x00000000" />
+      </Columns>
+    </Schema>
+  </Schemas>
+</SimData>

@@ -5,6 +5,8 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from typing import Union
+
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
@@ -169,7 +171,9 @@ class CommonSimGenderOptionUtils:
         :return: True, if the Sim can reproduce. False, if the Sim can not reproduce.
         :rtype: bool
         """
-        return CommonSimGenderOptionUtils.can_impregnate(sim_info) or CommonSimGenderOptionUtils.can_be_impregnated(sim_info)
+        if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE) or (CommonSimGenderOptionUtils.can_not_impregnate(sim_info) and CommonSimGenderOptionUtils.can_not_be_impregnated(sim_info)):
+            return False
+        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE) or CommonSimGenderOptionUtils.can_impregnate(sim_info) or CommonSimGenderOptionUtils.can_be_impregnated(sim_info)
 
     @staticmethod
     def can_not_reproduce(sim_info: SimInfo) -> bool:
@@ -198,7 +202,10 @@ class CommonSimGenderOptionUtils:
         :return: True, if the Sim uses toilets while standing. False, if the Sim does not use toilets while standing.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_STANDING)
+        toilet_standing_trait = CommonSimGenderOptionUtils.determine_toilet_standing_trait(sim_info)
+        if toilet_standing_trait is None:
+            return False
+        return CommonTraitUtils.has_trait(sim_info, toilet_standing_trait)
 
     @staticmethod
     def uses_toilet_sitting(sim_info: SimInfo) -> bool:
@@ -211,7 +218,10 @@ class CommonSimGenderOptionUtils:
         :return: True, if the Sim uses toilets while sitting. False, if the Sim does not use toilets while sitting.
         :rtype: bool
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING)
+        toilet_sitting_trait = CommonSimGenderOptionUtils.determine_toilet_sitting_trait(sim_info)
+        if toilet_sitting_trait is None:
+            return False
+        return CommonTraitUtils.has_trait(sim_info, toilet_sitting_trait)
 
     @staticmethod
     def has_breasts(sim_info: SimInfo) -> bool:
@@ -387,14 +397,22 @@ class CommonSimGenderOptionUtils:
         """
         if sim_info is None:
             return False
-        if not CommonSpeciesUtils.is_human(sim_info):
+        from sims4communitylib.utils.sims.common_sim_pregnancy_utils import CommonSimPregnancyUtils
+        can_be_impregnated_trait = CommonSimPregnancyUtils.determine_can_be_impregnated_trait(sim_info)
+        can_not_be_impregnated_trait = CommonSimPregnancyUtils.determine_can_not_be_impregnated_trait(sim_info)
+        if can_be_impregnated_trait is None or can_not_be_impregnated_trait is None:
             return False
         if can_be_impregnated:
-            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED)
-            CommonTraitUtils.add_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED)
+            CommonTraitUtils.remove_trait(sim_info, can_not_be_impregnated_trait)
+            CommonTraitUtils.add_trait(sim_info, can_be_impregnated_trait)
+            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
+            CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
         else:
-            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED)
-            CommonTraitUtils.add_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED)
+            CommonTraitUtils.remove_trait(sim_info, can_be_impregnated_trait)
+            CommonTraitUtils.add_trait(sim_info, can_not_be_impregnated_trait)
+            if not CommonSimPregnancyUtils.can_impregnate(sim_info):
+                CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
+                CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender_options_can_be_impregnated(sim_info)
         return True
@@ -417,14 +435,22 @@ class CommonSimGenderOptionUtils:
         """
         if sim_info is None:
             return False
-        if not CommonSpeciesUtils.is_human(sim_info):
+        from sims4communitylib.utils.sims.common_sim_pregnancy_utils import CommonSimPregnancyUtils
+        can_impregnate_trait = CommonSimPregnancyUtils.determine_can_impregnate_trait(sim_info)
+        can_not_impregnate_trait = CommonSimPregnancyUtils.determine_can_not_impregnate_trait(sim_info)
+        if can_impregnate_trait is None or can_not_impregnate_trait is None:
             return False
         if can_impregnate:
-            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE)
-            CommonTraitUtils.add_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE)
+            CommonTraitUtils.remove_trait(sim_info, can_not_impregnate_trait)
+            CommonTraitUtils.add_trait(sim_info, can_impregnate_trait)
+            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
+            CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
         else:
-            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE)
-            CommonTraitUtils.add_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE)
+            CommonTraitUtils.remove_trait(sim_info, can_impregnate_trait)
+            CommonTraitUtils.add_trait(sim_info, can_not_impregnate_trait)
+            if not CommonSimPregnancyUtils.can_be_impregnated(sim_info):
+                CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
+                CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender_options_can_impregnate(sim_info)
         return True
@@ -452,9 +478,21 @@ class CommonSimGenderOptionUtils:
         if can_reproduce:
             CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
             CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
+            if CommonGenderUtils.is_male(sim_info):
+                CommonSimGenderOptionUtils.update_can_impregnate(sim_info, True)
+                CommonSimGenderOptionUtils.update_can_be_impregnated(sim_info, False)
+            else:
+                CommonSimGenderOptionUtils.update_can_impregnate(sim_info, False)
+                CommonSimGenderOptionUtils.update_can_be_impregnated(sim_info, True)
         else:
             CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
             CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
+            if CommonGenderUtils.is_male(sim_info):
+                CommonSimGenderOptionUtils.update_can_impregnate(sim_info, False)
+                CommonSimGenderOptionUtils.update_can_be_impregnated(sim_info, False)
+            else:
+                CommonSimGenderOptionUtils.update_can_impregnate(sim_info, False)
+                CommonSimGenderOptionUtils.update_can_be_impregnated(sim_info, False)
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender_options_can_reproduce(sim_info)
         return True
@@ -464,8 +502,6 @@ class CommonSimGenderOptionUtils:
         """update_toilet_usage(sim_info, uses_toilet_standing)
 
         Update how a Sim uses the toilet. i.e. Toilet Standing or Toilet Sitting.
-
-        .. note:: Will only update Human Sims.
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
@@ -477,14 +513,19 @@ class CommonSimGenderOptionUtils:
         """
         if sim_info is None:
             return False
-        if not CommonSpeciesUtils.is_human(sim_info):
+        toilet_standing = CommonSimGenderOptionUtils.determine_toilet_standing_trait(sim_info)
+        toilet_sitting = CommonSimGenderOptionUtils.determine_toilet_sitting_trait(sim_info)
+
+        if toilet_standing is None or toilet_sitting is None:
             return False
+
+        CommonTraitUtils.remove_trait(sim_info, CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_UNKNOWN)
         if uses_toilet_standing:
-            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING)
-            CommonTraitUtils.add_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_STANDING)
+            CommonTraitUtils.remove_trait(sim_info, toilet_sitting)
+            CommonTraitUtils.add_trait(sim_info, toilet_standing)
         else:
-            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_STANDING)
-            CommonTraitUtils.add_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING)
+            CommonTraitUtils.remove_trait(sim_info, toilet_standing)
+            CommonTraitUtils.add_trait(sim_info, toilet_sitting)
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender_options_toilet_usage(sim_info)
         return True
@@ -495,8 +536,6 @@ class CommonSimGenderOptionUtils:
 
         Set whether a Sim can use a toilet while standing or not.
 
-        .. note:: Will only update Human Sims.
-
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param can_use_toilet_standing: Whether or not the Sim will be able to use a toilet while standing.
@@ -506,12 +545,18 @@ class CommonSimGenderOptionUtils:
         """
         if sim_info is None:
             return False
-        if not CommonSpeciesUtils.is_human(sim_info):
+        toilet_standing = CommonSimGenderOptionUtils.determine_toilet_standing_trait(sim_info)
+
+        if toilet_standing is None:
             return False
-        if can_use_toilet_standing and not CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_STANDING):
-            CommonTraitUtils.add_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_STANDING)
-        elif CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_STANDING):
-            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_STANDING)
+
+        if can_use_toilet_standing and not CommonTraitUtils.has_trait(sim_info, toilet_standing):
+            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_UNKNOWN)
+            CommonTraitUtils.add_trait(sim_info, toilet_standing)
+        elif CommonTraitUtils.has_trait(sim_info, toilet_standing):
+            CommonTraitUtils.remove_trait(sim_info, toilet_standing)
+            if not CommonSimGenderOptionUtils.uses_toilet_sitting(sim_info):
+                CommonTraitUtils.add_trait(sim_info, CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_UNKNOWN)
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender_options_toilet_usage(sim_info)
         return True
@@ -522,8 +567,6 @@ class CommonSimGenderOptionUtils:
 
         Set whether a Sim can use a toilet while sitting or not.
 
-        .. note:: Will only update Human Sims.
-
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param can_use_toilet_sitting: Whether or not the Sim will be able to use a toilet while sitting.
@@ -533,12 +576,63 @@ class CommonSimGenderOptionUtils:
         """
         if sim_info is None:
             return False
-        if not CommonSpeciesUtils.is_human(sim_info):
+        toilet_sitting = CommonSimGenderOptionUtils.determine_toilet_sitting_trait(sim_info)
+
+        if toilet_sitting is None:
             return False
-        if can_use_toilet_sitting and not CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING):
-            CommonTraitUtils.add_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING)
-        elif CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING):
-            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.GENDER_OPTIONS_TOILET_SITTING)
+        if can_use_toilet_sitting and not CommonTraitUtils.has_trait(sim_info, toilet_sitting):
+            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_UNKNOWN)
+            CommonTraitUtils.add_trait(sim_info, toilet_sitting)
+        elif CommonTraitUtils.has_trait(sim_info, toilet_sitting):
+            CommonTraitUtils.remove_trait(sim_info, toilet_sitting)
+            if not CommonSimGenderOptionUtils.uses_toilet_standing(sim_info):
+                CommonTraitUtils.add_trait(sim_info, CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_UNKNOWN)
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender_options_toilet_usage(sim_info)
         return True
+
+    @staticmethod
+    def determine_toilet_standing_trait(sim_info: SimInfo) -> Union[CommonTraitId, None]:
+        """determine_toilet_standing_trait(sim_info)
+
+        Determine the trait that would indicate a Sim uses the toilet while standing.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The trait that would indicate the Sim uses the toilet while standing or None if no trait is found.
+        :rtype: Union[CommonTraitId, None]
+        """
+        if CommonSpeciesUtils.is_human(sim_info):
+            return CommonTraitId.GENDER_OPTIONS_TOILET_STANDING
+        elif CommonSpeciesUtils.is_large_dog(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_LARGE_DOG
+        elif CommonSpeciesUtils.is_small_dog(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_SMALL_DOG
+        elif CommonSpeciesUtils.is_cat(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_CAT
+        elif CommonSpeciesUtils.is_fox(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_FOX
+        return None
+
+    @staticmethod
+    def determine_toilet_sitting_trait(sim_info: SimInfo) -> Union[CommonTraitId, None]:
+        """determine_toilet_sitting_trait(sim_info)
+
+        Determine the trait that would indicate a Sim uses the toilet while sitting.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The trait that would indicate the Sim uses the toilet while sitting or None if no trait is found.
+        :rtype: Union[CommonTraitId, None]
+        """
+        if CommonSpeciesUtils.is_human(sim_info):
+            return CommonTraitId.GENDER_OPTIONS_TOILET_SITTING
+        elif CommonSpeciesUtils.is_large_dog(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_LARGE_DOG
+        elif CommonSpeciesUtils.is_small_dog(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_SMALL_DOG
+        elif CommonSpeciesUtils.is_cat(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_CAT
+        elif CommonSpeciesUtils.is_fox(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_FOX
+        return None

@@ -684,6 +684,37 @@ class CommonOutfitUtils(HasClassLog):
         return sim_info.generate_outfit(outfit_category, outfit_index=outfit_index, tag_list=tag_list, filter_flag=outfit_filter_flag, body_type_flags=body_type_flags, **kwargs)
 
     @classmethod
+    def regenerate_all_outfits(cls, sim_info: SimInfo):
+        """regenerate_all_outfits(sim_info)
+
+        Delete and regenerate all outfits for a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        """
+        from sims.outfits.outfit_tracker import OutfitTrackerMixin
+        outfits: OutfitTrackerMixin = sim_info.get_outfits()
+        current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
+        outfits_removed = list()
+        from sims.outfits.outfit_utils import get_maximum_outfits_for_category
+        for outfit_category in CommonOutfitUtils.get_all_outfit_categories():
+            for outfit_index in range(get_maximum_outfits_for_category(outfit_category)):
+                outfit = (outfit_category, outfit_index)
+                if not CommonOutfitUtils.has_outfit(sim_info, outfit):
+                    cls.get_log().format_with_message('Sim did not have outfit.', sim=sim_info, outfit=outfit)
+                    continue
+                outfits_removed.append(outfit)
+                outfits.remove_outfit(outfit_category, outfit_index=outfit_index)
+                cls.get_log().format_with_message('Removed outfit.', sim=sim_info, outfit=outfit)
+        for outfit_removed in outfits_removed:
+            cls.get_log().format_with_message('Generating outfit', outfit=outfits_removed)
+            generate_result = CommonOutfitUtils.generate_outfit(sim_info, outfit_removed)
+            cls.get_log().format_with_message('Finished generating outfit', outfit=outfits_removed, generate_result=generate_result)
+        sim_info.appearance_tracker.evaluate_appearance_modifiers()
+        CommonOutfitUtils.resend_outfits(sim_info)
+        CommonOutfitUtils.set_current_outfit(sim_info, current_outfit)
+
+    @classmethod
     def resend_outfits(cls, sim_info: SimInfo) -> bool:
         """resend_outfits(sim_info)
 
@@ -753,30 +784,6 @@ class CommonOutfitUtils(HasClassLog):
         CommonOutfitUtils.resend_outfits(sim_info)
         sim_info.appearance_tracker.evaluate_appearance_modifiers()
         return True
-
-    @classmethod
-    def regenerate_all_outfits(cls, sim_info: SimInfo):
-        """regenerate_all_outfits(sim_info)
-
-        Delete and regenerate all outfits for a Sim.
-
-        :param sim_info: An instance of a Sim.
-        :type sim_info: SimInfo
-        """
-        from sims.outfits.outfit_tracker import OutfitTrackerMixin
-        outfits: OutfitTrackerMixin = sim_info.get_outfits()
-        current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
-        from sims.outfits.outfit_utils import get_maximum_outfits_for_category
-        for outfit_category in CommonOutfitUtils.get_all_outfit_categories():
-            for outfit_index in range(get_maximum_outfits_for_category(outfit_category)):
-                outfit = (outfit_category, outfit_index)
-                if not CommonOutfitUtils.has_outfit(sim_info, outfit):
-                    continue
-                outfits.remove_outfit(outfit_category, outfit_index=outfit_index)
-                CommonOutfitUtils.generate_outfit(sim_info, (outfit_category, outfit_index))
-        sim_info.appearance_tracker.evaluate_appearance_modifiers()
-        CommonOutfitUtils.resend_outfits(sim_info)
-        CommonOutfitUtils.set_current_outfit(sim_info, current_outfit)
 
     @classmethod
     def has_tag_on_outfit(cls, sim_info: SimInfo, tag: Union[int, CommonGameTag], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
@@ -989,6 +996,9 @@ def _s4clib_print_previous_outfit(opt_sim: OptionalTargetParam=None, _connection
         output('Previous Outfit Info for {}'.format(sim_full_name))
         log.debug('Previous Outfit Info for {}'.format(sim_full_name))
         CommonOutfitUtils._print_outfit(sim_info, previous_outfit[0], previous_outfit[1], log, output)
+    except Exception as ex:
+        log.error('Failed to print previous outfit of Sim {}.'.format(sim_full_name), exception=ex)
+        output('An error occurred while printing the previous outfit of {}: {}'.format(sim_full_name, str(ex)))
     finally:
         log.disable()
 
@@ -1011,6 +1021,9 @@ def _s4clib_print_current_outfit(opt_sim: OptionalTargetParam=None, _connection:
         output('Current Outfit Info for {}'.format(sim_full_name))
         log.debug('Current Outfit Info for {}'.format(sim_full_name))
         CommonOutfitUtils._print_outfit(sim_info, current_outfit[0], current_outfit[1], log, output)
+    except Exception as ex:
+        log.error('Failed to print current outfit of Sim {}.'.format(sim_full_name), exception=ex)
+        output('An error occurred while printing the current outfit of {}: {}'.format(sim_full_name, str(ex)))
     finally:
         log.disable()
 
@@ -1063,6 +1076,7 @@ def _s4clib_print_outfits(show_missing_outfit_info: bool=False, opt_sim: Optiona
                 CommonOutfitUtils._print_outfit(sim_info, outfit_category, outfit_index, log, output)
     except Exception as ex:
         log.error('Failed to print outfit of Sim {}.'.format(sim_full_name), exception=ex)
+        output('An error occurred while printing the outfits of {}: {}'.format(sim_full_name, str(ex)))
     finally:
         log.disable()
 
@@ -1096,3 +1110,21 @@ def _s4clib_generate_outfit(outfit_category_str: str=None, index: int=0, opt_sim
     except Exception as ex:
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to generate outfit {} for Sim {}.'.format(outfit_category.name, sim_name), exception=ex)
         output('Failed to generate outfit {} for Sim {}.'.format(outfit_category.name, sim_name))
+
+
+@Command('s4clib.regenerate_all_outfits', command_type=CommandType.Live)
+def _common_regenerate_all_outfits(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    sim_name = CommonSimNameUtils.get_full_name(sim_info)
+    output('Attempting to regenerate all outfits for Sim {}'.format(sim_name))
+    try:
+        CommonOutfitUtils.regenerate_all_outfits(sim_info)
+        output('Done regenerating all outfits for Sim.')
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to regenerate all outfits for Sim {}.'.format(sim_name), exception=ex)
+        output('Failed to regenerate all outfits for Sim {}. An error occurred {}'.format(sim_name, str(ex)))

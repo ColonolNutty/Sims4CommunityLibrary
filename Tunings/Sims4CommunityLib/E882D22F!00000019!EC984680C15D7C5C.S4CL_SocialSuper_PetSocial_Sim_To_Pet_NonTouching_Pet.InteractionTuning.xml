@@ -146,6 +146,18 @@
         <E n="who">Actor</E>
       </U>
     </V>
+    <V t="sim_info">
+      <U n="sim_info">
+        <V n="species" t="specified">
+          <U n="specified">
+            <L n="species">
+              <E>HUMAN</E>
+            </L>
+          </U>
+        </V>
+        <E n="who">TargetSim</E>
+      </U>
+    </V>
   </L>
   <T n="time_overhead">30</T>
   <T n="use_best_scoring_aop">False</T>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<I c="Trait" i="trait" m="traits.traits" n="S4CL_Trait_GenderOptions_Toilet_Unknown" s="14831872599934203601">
+  <L n="ages">
+    <E>BABY</E>
+    <E>TODDLER</E>
+    <E>CHILD</E>
+    <E>TEEN</E>
+    <E>YOUNGADULT</E>
+    <E>ADULT</E>
+    <E>ELDER</E>
+  </L>
+  <L n="species">
+    <E>HUMAN</E>
+    <E>DOG</E>
+    <E>CAT</E>
+    <E>FOX</E>
+  </L>
+  <T n="display_name">0x5B7E7761<!--Toilet Use Unknown Posture--></T>
+  <T n="display_name_gender_neutral">0x5B7E7761<!--Toilet Use Unknown Posture--></T>
+  <T n="icon" p="InGame\UI\Icons\Debug\missing_image.png">2f7d0004:00000000:30f0846c783606f9</T>
+  <E n="min_lod_value">MINIMUM</E>
+  <E n="trait_type">GENDER_OPTIONS</E>
+</I>

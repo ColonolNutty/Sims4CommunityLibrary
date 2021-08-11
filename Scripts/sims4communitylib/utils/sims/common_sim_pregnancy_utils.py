@@ -13,9 +13,9 @@ from sims.pregnancy.pregnancy_tracker import PregnancyTracker
 from sims.sim_info import SimInfo
 from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.buffs_enum import CommonBuffId
+from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
-from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
@@ -102,15 +102,17 @@ class CommonSimPregnancyUtils:
         """
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId
-        if CommonSpeciesUtils.is_human(sim_info):
-            if CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED):
-                return False
-            return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED)
-        elif CommonSpeciesUtils.is_animal(sim_info) and CommonGenderUtils.is_female(sim_info):
+        can_be_impregnated_trait = CommonSimPregnancyUtils.determine_can_be_impregnated_trait(sim_info)
+        can_not_be_impregnated_trait = CommonSimPregnancyUtils.determine_can_not_be_impregnated_trait(sim_info)
+        if CommonSpeciesUtils.is_pet(sim_info):
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
                 return False
-            return CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
-        return False
+            if not CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
+                return False
+
+        if CommonTraitUtils.has_trait(sim_info, can_not_be_impregnated_trait):
+            return False
+        return CommonTraitUtils.has_trait(sim_info, can_be_impregnated_trait)
 
     @staticmethod
     def can_impregnate(sim_info: SimInfo) -> bool:
@@ -125,15 +127,19 @@ class CommonSimPregnancyUtils:
         """
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         from sims4communitylib.enums.traits_enum import CommonTraitId
-        if CommonSpeciesUtils.is_human(sim_info):
-            if CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE):
-                return False
-            return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE)
-        elif CommonSpeciesUtils.is_animal(sim_info) and CommonGenderUtils.is_male(sim_info):
+        can_impregnate_trait = CommonSimPregnancyUtils.determine_can_impregnate_trait(sim_info)
+        can_not_impregnate_trait = CommonSimPregnancyUtils.determine_can_not_impregnate_trait(sim_info)
+        if can_impregnate_trait is None or can_not_impregnate_trait is None:
+            return False
+        if CommonSpeciesUtils.is_pet(sim_info):
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
                 return False
-            return CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
-        return False
+            if not CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
+                return False
+
+        if CommonTraitUtils.has_trait(sim_info, can_not_impregnate_trait):
+            return False
+        return CommonTraitUtils.has_trait(sim_info, can_impregnate_trait)
 
     @staticmethod
     def get_partner_of_pregnant_sim(sim_info: SimInfo) -> Union[SimInfo, None]:
@@ -229,6 +235,98 @@ class CommonSimPregnancyUtils:
         if sim_info is None:
             return None
         return sim_info.pregnancy_tracker
+
+    @staticmethod
+    def determine_can_impregnate_trait(sim_info: SimInfo) -> Union[CommonTraitId, None]:
+        """determine_can_impregnate_trait(sim_info)
+
+        Determine the trait that would indicate a Sim can impregnate other Sims.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The trait that would indicate the Sim can impregnate other Sims or None if no trait is found.
+        :rtype: Union[CommonTraitId, None]
+        """
+        if CommonSpeciesUtils.is_human(sim_info):
+            return CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE
+        elif CommonSpeciesUtils.is_large_dog(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_LARGE_DOG
+        elif CommonSpeciesUtils.is_small_dog(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_SMALL_DOG
+        elif CommonSpeciesUtils.is_cat(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_CAT
+        elif CommonSpeciesUtils.is_fox(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_FOX
+        return None
+
+    @staticmethod
+    def determine_can_not_impregnate_trait(sim_info: SimInfo) -> Union[CommonTraitId, None]:
+        """determine_can_not_impregnate_trait(sim_info)
+
+        Determine the trait that would indicate a Sim can not impregnate other Sims.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The trait that would indicate the Sim can not impregnate other Sims or None if no trait is found.
+        :rtype: Union[CommonTraitId, None]
+        """
+        if CommonSpeciesUtils.is_human(sim_info):
+            return CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE
+        elif CommonSpeciesUtils.is_large_dog(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_LARGE_DOG
+        elif CommonSpeciesUtils.is_small_dog(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_SMALL_DOG
+        elif CommonSpeciesUtils.is_cat(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_CAT
+        elif CommonSpeciesUtils.is_fox(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_FOX
+        return None
+
+    @staticmethod
+    def determine_can_be_impregnated_trait(sim_info: SimInfo) -> Union[CommonTraitId, None]:
+        """determine_can_be_impregnated_trait(sim_info)
+
+        Determine the trait that would indicate a Sim can be impregnated by other Sims.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The trait that would indicate the Sim can be impregnated by other Sims or None if no trait is found.
+        :rtype: Union[CommonTraitId, None]
+        """
+        if CommonSpeciesUtils.is_human(sim_info):
+            return CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED
+        elif CommonSpeciesUtils.is_large_dog(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_LARGE_DOG
+        elif CommonSpeciesUtils.is_small_dog(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_SMALL_DOG
+        elif CommonSpeciesUtils.is_cat(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_CAT
+        elif CommonSpeciesUtils.is_fox(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_FOX
+        return None
+
+    @staticmethod
+    def determine_can_not_be_impregnated_trait(sim_info: SimInfo) -> Union[CommonTraitId, None]:
+        """determine_can_not_be_impregnated_trait(sim_info)
+
+        Determine the trait that would indicate a Sim can not be impregnated by other Sims.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The trait that would indicate the Sim can not be impregnated by other Sims or None if no trait is found.
+        :rtype: Union[CommonTraitId, None]
+        """
+        if CommonSpeciesUtils.is_human(sim_info):
+            return CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED
+        elif CommonSpeciesUtils.is_large_dog(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_LARGE_DOG
+        elif CommonSpeciesUtils.is_small_dog(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_SMALL_DOG
+        elif CommonSpeciesUtils.is_cat(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_CAT
+        elif CommonSpeciesUtils.is_fox(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_FOX
+        return None
 
 
 @Command('s4clib.stop_pregnancy', command_type=CommandType.Live)
