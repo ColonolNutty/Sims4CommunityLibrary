@@ -5,6 +5,14 @@ Time Classes
 
     These classes handle time
 
+`Alarm Handle`
+-----------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.classes.time.common_alarm_handle.CommonAlarmHandle
+   :members:
+   :private-members:
+   :show-inheritance:
+
 `Stop Watch`
 -----------------------------------------------------------------
 

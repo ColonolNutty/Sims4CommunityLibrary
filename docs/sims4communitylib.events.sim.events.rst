@@ -9,6 +9,22 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
+`Buff Added`
+---------------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_buff_added.S4CLSimBuffAddedEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Buff Removed`
+---------------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_buff_removed.S4CLSimBuffRemovedEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Changed Age`
 ------------------------------------------------------------
 
@@ -21,6 +37,14 @@ Sim Event Types
 ---------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_changed_occult_type.S4CLSimChangedOccultTypeEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Changing Occult Type`
+---------------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_changing_occult_type.S4CLSimChangingOccultTypeEvent
    :members:
    :undoc-members:
    :show-inheritance:
@@ -57,10 +81,34 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
+`Set Outfit`
+------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_set_current_outfit.S4CLSimSetCurrentOutfitEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Spawned Event`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_spawned.S4CLSimSpawnedEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Trait Added`
+------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_trait_added.S4CLSimTraitAddedEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Trait Removed`
+------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_trait_removed.S4CLSimTraitRemovedEvent
    :members:
    :undoc-members:
    :show-inheritance:

@@ -278,6 +278,14 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Voice Actor Types`
+-------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_voice_actor_type.CommonVoiceActorType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Whim Sets`
 ------------------------------------------
 

@@ -76,6 +76,15 @@ Sim Utilities
    :undoc-members:
    :show-inheritance:
 
+*********************
+`Voice`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_voice_utils.CommonSimVoiceUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Outfits`
 ------------------------------------------------------
 

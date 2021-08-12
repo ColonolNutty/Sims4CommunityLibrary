@@ -76,6 +76,18 @@ The main use for this class is to create interactions that occur when clicking o
    :undoc-members:
    :show-inheritance:
 
+`Object Interaction`
+--------------------------------------------------------------------------
+
+An inheritable class that provides a way to create custom Object Interactions.
+
+The main use for this class is to create interactions that occur when clicking on objects.
+
+.. autoclass:: sims4communitylib.classes.interactions.common_object_interaction.CommonObjectInteraction
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Interaction Overrides`
 --------------------------------------------------------------------------
 

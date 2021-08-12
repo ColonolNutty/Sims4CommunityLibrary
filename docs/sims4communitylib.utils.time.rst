@@ -1,6 +1,14 @@
 Time
 ===============================
 
+`Alarm Utils`
+--------------------------------------------------
+
+.. autoclass:: sims4communitylib.utils.time.common_alarm_utils.CommonAlarmUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Real Date Utils`
 --------------------------------------------------
 
