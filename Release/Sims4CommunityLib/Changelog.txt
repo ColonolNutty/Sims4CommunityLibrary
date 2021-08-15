@@ -1,3 +1,7 @@
+v1.74:
+- Added the ability to specify where data is persisted to within `CommonFilePersistenceService` and `CommonFolderPersistenceService` instead of being forced to use `Mods/mod_data`, which is the default.
+- Added the ability to override the per_save_slot functionality within `CommonFilePersistenceService` if you yourself trust it to work properly and want to ignore the global setting.
+
 v1.73:
 - Added FOX_STAND and FOX_STAND_PASSIVE to CommonInteractionId
 - Fixed an issue when soft resetting Sims
