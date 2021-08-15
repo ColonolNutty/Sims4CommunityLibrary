@@ -16,7 +16,7 @@ from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
 
 class CommonFolderPersistenceService(CommonPersistenceService):
-    """CommonFolderPersistenceService(main_file_name='main.json', combined_file_name='combined.json', allow_duplicates_in_collections=False)
+    """CommonFolderPersistenceService(main_file_name='main.json', combined_file_name='combined.json', allow_duplicates_in_collections=False, data_folder_path=None)
 
     A service that persists data to a file within a folder on the system. It also loads all data from a folder on the system while loading the main file last.
 
@@ -26,6 +26,8 @@ class CommonFolderPersistenceService(CommonPersistenceService):
     :type combined_file_name: str, optional
     :param allow_duplicates_in_collections: When loading the dictionary data and merging it, if set to True, duplicate values will be allowed to exist within collections within those dictionaries. Default is False.
     :type allow_duplicates_in_collections: bool, optional
+    :param data_folder_path: Use to specify a custom folder path at the top level for which to save/load data to/from. Default is "Mods/mod_data".
+    :type data_folder_path: str, optional
     """
 
     # noinspection PyMissingOrEmptyDocstring
@@ -33,23 +35,19 @@ class CommonFolderPersistenceService(CommonPersistenceService):
     def log_identifier(self) -> str:
         return 'common_folder_persistence_service'
 
-    def _folder_path(self, mod_identity: CommonModIdentity, identifier: str=None) -> str:
-        from sims4communitylib.utils.common_log_utils import CommonLogUtils
-        folder_path = os.path.join(CommonLogUtils.get_mod_data_location_path(), mod_identity.base_namespace.lower())
-        if identifier is not None:
-            folder_path = os.path.join(folder_path, identifier)
-        return folder_path
-
     def __init__(
         self,
         main_file_name: str='main.json',
         combined_file_name: str='combined.json',
-        allow_duplicates_in_collections: bool=False
+        allow_duplicates_in_collections: bool=False,
+        data_folder_path: str=None
     ) -> None:
         super().__init__()
         self._main_file_name = main_file_name
         self._combined_file_name = combined_file_name
         self._allow_duplicates_in_collections = allow_duplicates_in_collections
+        from sims4communitylib.utils.common_log_utils import CommonLogUtils
+        self._data_folder_path = data_folder_path or CommonLogUtils.get_mod_data_location_path()
 
     # noinspection PyMissingOrEmptyDocstring
     def load(self, mod_identity: CommonModIdentity, identifier: str=None) -> Dict[str, Any]:
@@ -133,3 +131,9 @@ class CommonFolderPersistenceService(CommonPersistenceService):
 
         log.format_with_message('Data deleted successfully.', file_path=file_path)
         return not os.path.exists(file_path)
+
+    def _folder_path(self, mod_identity: CommonModIdentity, identifier: str=None) -> str:
+        folder_path = os.path.join(self._data_folder_path, mod_identity.base_namespace.lower())
+        if identifier is not None:
+            folder_path = os.path.join(folder_path, identifier)
+        return folder_path
