@@ -163,6 +163,12 @@ class CommonInteractionRegistry(CommonService, HasLog):
                 new_super_affordances.append(interaction_instance)
         self.log.format_with_message('Adding super affordances to object.', script_object=script_object, script_object_type=script_object_type, new_super_affordances=new_super_affordances)
         script_object_type._super_affordances += tuple(new_super_affordances)
+        new_script_object_super_affordances = list()
+        for new_super_affordance in new_super_affordances:
+            if new_super_affordance in script_object._super_affordances:
+                continue
+            new_script_object_super_affordances.append(new_super_affordance)
+        script_object._super_affordances += tuple(new_script_object_super_affordances)
 
     def _on_sim_relationship_panel_load(self, sim: Sim, *args, **kwargs):
         sim_class = type(sim)
