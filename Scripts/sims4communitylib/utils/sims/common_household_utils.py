@@ -397,7 +397,7 @@ class CommonHouseholdUtils:
         log.format_info('Destination household acquired', destination_household=destination_household)
         if CommonSimStateUtils.is_hidden(sim_info):
             log.info('Making hidden Sim visible.')
-            services.hidden_sim_service().unhide(sim_info.id)
+            services.hidden_sim_service().unhide_sim(sim_info.id)
         if starting_household is destination_household:
             raise AssertionError('The Sim being moved is already in the destination household.')
         log.info('Removing Sim from the starting household.')
