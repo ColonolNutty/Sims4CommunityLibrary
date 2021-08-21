@@ -4,6 +4,8 @@ v1.74:
 - Mod interactions that were not registering to some objects should now register properly (Such as to the DJ Booth, Stereo and likely a bunch of others)
 - Fixed an error that could occur when moving a Hidden Sim to another household
 - Fixed an error when creating Sim Info with trait ids instead of Trait objects
+- Fixed an error when detecting whether an object is a Cow, Chicken, or Llama, within CommonObjectTypeUtils.
+- Added str conversions for CAT Sim Types to CommonSimTypeUtils (Since they were apparently missing)
 
 v1.73:
 - Added FOX_STAND and FOX_STAND_PASSIVE to CommonInteractionId
