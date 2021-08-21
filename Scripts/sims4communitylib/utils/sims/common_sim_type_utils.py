@@ -588,6 +588,38 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_LARGE_DOG_SKELETON: 'ChldLdSk',
         CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: 'ChldLdPls',
 
+        # Cat
+        # Elder
+        CommonSimType.ELDER_CAT: 'ElCat',
+        CommonSimType.ELDER_CAT_VAMPIRE: 'ElCatVa',
+        CommonSimType.ELDER_CAT_GHOST: 'ElCatGh',
+        CommonSimType.ELDER_CAT_ALIEN: 'ElCatAl',
+        CommonSimType.ELDER_CAT_MERMAID: 'ElCatMer',
+        CommonSimType.ELDER_CAT_WITCH: 'ElCatWi',
+        CommonSimType.ELDER_CAT_ROBOT: 'ElCatRo',
+        CommonSimType.ELDER_CAT_SKELETON: 'ElCatSk',
+        CommonSimType.ELDER_CAT_PLANT_SIM: 'ElCatPls',
+        # Adult
+        CommonSimType.ADULT_CAT: 'AdCat',
+        CommonSimType.ADULT_CAT_VAMPIRE: 'AdCatVa',
+        CommonSimType.ADULT_CAT_GHOST: 'AdCatGh',
+        CommonSimType.ADULT_CAT_ALIEN: 'AdCatAl',
+        CommonSimType.ADULT_CAT_MERMAID: 'AdCatMer',
+        CommonSimType.ADULT_CAT_WITCH: 'AdCatWi',
+        CommonSimType.ADULT_CAT_ROBOT: 'AdCatRo',
+        CommonSimType.ADULT_CAT_SKELETON: 'AdCatSk',
+        CommonSimType.ADULT_CAT_PLANT_SIM: 'AdCatPls',
+        # Child
+        CommonSimType.CHILD_CAT: 'ChldCat',
+        CommonSimType.CHILD_CAT_VAMPIRE: 'ChldCatVa',
+        CommonSimType.CHILD_CAT_GHOST: 'ChldCatGh',
+        CommonSimType.CHILD_CAT_ALIEN: 'ChldCatAl',
+        CommonSimType.CHILD_CAT_MERMAID: 'ChldCatMer',
+        CommonSimType.CHILD_CAT_WITCH: 'ChldCatWi',
+        CommonSimType.CHILD_CAT_ROBOT: 'ChldCatRo',
+        CommonSimType.CHILD_CAT_SKELETON: 'ChldCatSk',
+        CommonSimType.CHILD_CAT_PLANT_SIM: 'ChldCatPls',
+
         # Fox
         # Elder
         CommonSimType.ELDER_FOX: 'ElFox',

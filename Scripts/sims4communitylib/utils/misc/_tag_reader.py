@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4communitylib.events.interval.common_interval_event_service import CommonIntervalEventRegistry
+from sims4.commands import Command, CommandType, CheatOutput
 from tag import Tag
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
@@ -4307,7 +4307,10 @@ log.enable()
 
 
 # @CommonIntervalEventRegistry.run_once(ModInfo.get_identity(), milliseconds=10)
-def _common_print_game_tags_ready_for_update() -> None:
+@Command('s4clib.print_game_tags', command_type=CommandType.Live)
+def _common_print_game_tags_ready_for_update(_connection: int=None) -> None:
+    output = CheatOutput(_connection)
+    output('Printing Game Tags')
     tags = list()
     not_found_tags = list()
     for (tag_name, tag_value) in Tag.name_to_value.items():
@@ -4321,3 +4324,4 @@ def _common_print_game_tags_ready_for_update() -> None:
     for (tag, value) in sorted_tags:
         log.debug('{}: \'CommonGameTag\' = {}'.format(tag, int(value)))
     log.format_with_message('Finished logging tags. These tags were missing.', not_found_tags=not_found_tags)
+    output('Finished printing game tags')

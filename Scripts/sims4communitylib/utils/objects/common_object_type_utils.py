@@ -359,7 +359,7 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Cow. False, if not.
         :rtype: bool
         """
-        return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_COW, ))
+        return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_COW, CommonGameTag.FUNC_ANIMAL_OBJECT_LIVESTOCK_COW))
 
     @staticmethod
     def is_dolphin(game_object: GameObject) -> bool:
@@ -390,7 +390,7 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Llama. False, if not.
         :rtype: bool
         """
-        return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_LLAMA, ))
+        return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_LLAMA, CommonGameTag.FUNC_ANIMAL_OBJECT_LIVESTOCK_LLAMA))
 
     @staticmethod
     def is_livestock(game_object: GameObject) -> bool:
@@ -405,7 +405,7 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is Livestock. False, if not.
         :rtype: bool
         """
-        return CommonObjectTypeUtils.is_cow(game_object) or CommonObjectTypeUtils.is_llama(game_object)
+        return CommonObjectTypeUtils.is_cow(game_object) or CommonObjectTypeUtils.is_llama(game_object) or CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_ANIMAL_OBJECT_LIVESTOCK,))
 
     @staticmethod
     def is_hen(game_object: GameObject) -> bool:
@@ -418,7 +418,7 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Hen. False, if not.
         :rtype: bool
         """
-        return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_HEN, ))
+        return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_HEN, CommonGameTag.FUNC_ANIMAL_OBJECT_LIVESTOCK_CHICKEN_HEN))
 
     @staticmethod
     def is_rooster(game_object: GameObject) -> bool:
@@ -431,7 +431,7 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Rooster. False, if not.
         :rtype: bool
         """
-        return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_ROOSTER, ))
+        return CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_ROOSTER, CommonGameTag.FUNC_ANIMAL_OBJECT_LIVESTOCK_CHICKEN_ROOSTER))
 
     @staticmethod
     def is_chicken(game_object: GameObject) -> bool:
@@ -446,7 +446,7 @@ class CommonObjectTypeUtils:
         :return: True, if the Object is a Chicken. False, if not.
         :rtype: bool
         """
-        return CommonObjectTypeUtils.is_hen(game_object) or CommonObjectTypeUtils.is_rooster(game_object)
+        return CommonObjectTypeUtils.is_hen(game_object) or CommonObjectTypeUtils.is_rooster(game_object) or CommonObjectTagUtils.has_game_tags(game_object, (CommonGameTag.FUNC_ANIMAL_OBJECT_LIVESTOCK_CHICKEN, ))
 
     @staticmethod
     def is_rabbit(game_object: GameObject) -> bool:
