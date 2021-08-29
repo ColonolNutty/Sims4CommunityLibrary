@@ -1,3 +1,12 @@
+v1.75:
+- Added functions to convert CommonSpecies, CommonAge, and CommonGender into localized string ids
+- Added FOX to CommonStringId
+- The CommonIntervalEventService will no longer trigger zone update events if the game is loading.
+- When decoding data from CommonGameObjectDataStorage, CommonSimDataStorage, and CommonDataStore, the data will
+  only be stored back into the data dictionary if the result of the decode call is a CommonSerializable object.
+- Added a function to retrieve the stand passive interaction for Sims.
+- The stand_or_swim_at_none property will now properly combine STAND_AT_NONE_CONSTRAINT rather than STAND_CONSTRAINT as expected
+
 v1.74:
 - Added the ability to specify where data is persisted to within `CommonFilePersistenceService` and `CommonFolderPersistenceService` instead of being forced to use `Mods/mod_data`, which is the default.
 - Added the ability to override the per_save_slot functionality within `CommonFilePersistenceService` if you yourself trust it to work properly and want to ignore the global setting.
