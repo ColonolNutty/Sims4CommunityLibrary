@@ -87,7 +87,7 @@ class CommonDataStore:
             value = encode(value)
         self._storage[key] = value
 
-    def get_value_by_key(self, key: str, encode: Callable[[Any], Any]=None, decode: Callable[[Any], CommonSerializable]=None) -> Any:
+    def get_value_by_key(self, key: str, encode: Callable[[Any], Any]=None, decode: Callable[[Any], Any]=None) -> Any:
         """get_value_by_key(key, encode=None, decode=None)
 
         Get data from storage by its key.
@@ -97,7 +97,7 @@ class CommonDataStore:
         :param encode: If specified, the data will be encoded using this function and the result will be the new data stored. Default is None.
         :type encode: Callable[[Any], Any], optional
         :param decode: If specified, the data will be decoded using this function and the result will be the new result of "get_data". Default is None.
-        :type decode: Callable[[Any], CommonSerializable], optional
+        :type decode: Callable[[Any], Any], optional
         :return: The value assigned to the key or the default value if not found.
         :rtype: Any
         """
@@ -111,8 +111,10 @@ class CommonDataStore:
             return default_val
         data = self._storage.get(key)
         if decode is not None and not isinstance(data, CommonSerializable):
-            self._storage[key] = decode(data)
-            return self._storage[key]
+            decoded = decode(data)
+            if isinstance(data, CommonSerializable):
+                self._storage[key] = decoded
+            return decoded
         return data
 
     def get_default_value_by_key(self, key: str) -> Any:

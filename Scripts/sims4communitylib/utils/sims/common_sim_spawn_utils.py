@@ -538,13 +538,13 @@ class CommonSimSpawnUtils:
 
             if sim.queue is not None:
                 for interaction in sim.queue:
-                    interaction.cancel(FinishingType.KILLED, 'S4CL soft_reset sim.queue')
+                    interaction.cancel(FinishingType.KILLED, '{} sim.queue'.format(cause))
                 sim.queue.on_reset()
                 sim.queue.unlock()
 
             if sim.si_state is not None:
                 for interaction in sim.si_state:
-                    interaction.cancel(FinishingType.KILLED, 'S4CL soft_reset sim.si_state')
+                    interaction.cancel(FinishingType.KILLED, '{} sim.si_state'.format(cause))
                 # noinspection PyBroadException
                 try:
                     sim.si_state.on_reset()

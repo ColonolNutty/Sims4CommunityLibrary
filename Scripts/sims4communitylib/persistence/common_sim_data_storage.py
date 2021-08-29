@@ -94,7 +94,7 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         """
         return self._sim_id
 
-    def get_data(self, default: Any=None, key: str=None, encode: Callable[[Any], Any]=None, decode: Callable[[Any], CommonSerializable]=None) -> Union[Any, None]:
+    def get_data(self, default: Any=None, key: str=None, encode: Callable[[Any], Any]=None, decode: Callable[[Any], Any]=None) -> Union[Any, None]:
         """get_data(default=None, key=None, encode=None, decode=None)
 
         Retrieve stored data.
@@ -106,7 +106,7 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         :param encode: If specified, the data will be encoded using this function and the result will be the new data stored. Default is None.
         :type encode: Callable[[Any], Any], optional
         :param decode: If specified, the data will be decoded using this function and the result will be the new result of "get_data". Default is None.
-        :type decode: Callable[[Any], CommonSerializable], optional
+        :type decode: Callable[[Any], Any], optional
         :return: The stored data.
         :rtype: Union[Any, None]
         """
@@ -121,8 +121,10 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
             return default
         data = self._data.get(key)
         if decode is not None and not isinstance(data, CommonSerializable):
-            self._data[key] = decode(data)
-            return self._data[key]
+            decoded = decode(data)
+            if isinstance(data, CommonSerializable):
+                self._data[key] = decoded
+            return decoded
         return data
 
     def set_data(self, value: Any, key: str=None, encode: Callable[[Any], Any]=None):

@@ -106,3 +106,21 @@ class CommonGender(CommonInt):
         if gender not in conversion_mapping:
             return CommonGender.INVALID
         return conversion_mapping[gender]
+
+    @staticmethod
+    def convert_to_localized_string_id(gender: 'CommonGender') -> Union[int, str]:
+        """convert_to_localized_string_id(gender)
+
+        Convert a CommonGender into a Localized String identifier.
+
+        :param gender: An instance of a CommonGender
+        :type gender: CommonGender
+        :return: The specified CommonGender translated to a localized string identifier or the name property of the value, if no localized string id is found.
+        :rtype: Union[int, str]
+        """
+        from sims4communitylib.enums.strings_enum import CommonStringId
+        display_name_mapping = {
+            CommonGender.MALE: CommonStringId.MALE,
+            CommonGender.FEMALE: CommonStringId.FEMALE
+        }
+        return display_name_mapping.get(gender, gender.name)

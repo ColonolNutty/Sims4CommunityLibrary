@@ -218,7 +218,8 @@ class CommonIntervalEventRegistry(CommonService):
     @staticmethod
     @CommonEventRegistry.handle_events(ModInfo.get_identity())
     def _update_game_tick_on_zone_update(event_data: S4CLZoneUpdateEvent) -> bool:
-        if event_data.is_paused:
+        from sims4communitylib.events.zone_spin.common_zone_spin_event_dispatcher import CommonZoneSpinEventDispatcher
+        if event_data.is_paused or CommonZoneSpinEventDispatcher().game_loading:
             return False
         CommonIntervalEventRegistry.get()._attempt_to_dispatch(event_data.ticks_since_last_update)
         return True

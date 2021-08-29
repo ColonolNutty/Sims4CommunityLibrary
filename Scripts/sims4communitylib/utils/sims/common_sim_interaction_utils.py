@@ -140,6 +140,30 @@ class CommonSimInteractionUtils:
             return CommonInteractionId.DOG_STAND
         elif CommonSpeciesUtils.is_cat(sim_info):
             return CommonInteractionId.CAT_STAND
+        elif CommonSpeciesUtils.is_fox(sim_info):
+            return CommonInteractionId.FOX_STAND
+        return -1
+
+    @staticmethod
+    def get_stand_passive_interaction(sim_info: SimInfo) -> Union[int, CommonInteractionId]:
+        """get_stand_passive_interaction(sim_info)
+
+        Retrieve a Stand Passive interaction appropriate for a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The decimal identifier of a Stand Passive interaction appropriate for the Sim or -1 if no Stand interaction was found to be appropriate.
+        :rtype: Union[int, CommonInteractionId]
+        """
+        from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
+        if CommonSpeciesUtils.is_human(sim_info):
+            return CommonInteractionId.STAND_PASSIVE
+        elif CommonSpeciesUtils.is_dog(sim_info):
+            return CommonInteractionId.DOG_STAND_PASSIVE
+        elif CommonSpeciesUtils.is_cat(sim_info):
+            return CommonInteractionId.CAT_STAND_PASSIVE
+        elif CommonSpeciesUtils.is_fox(sim_info):
+            return CommonInteractionId.FOX_STAND_PASSIVE
         return -1
 
     @staticmethod

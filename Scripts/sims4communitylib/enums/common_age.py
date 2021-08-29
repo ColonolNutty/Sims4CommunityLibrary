@@ -131,3 +131,27 @@ class CommonAge(CommonInt):
         if age not in age_conversion_mapping:
             return CommonAge.INVALID
         return age_conversion_mapping[age]
+
+    @staticmethod
+    def convert_to_localized_string_id(age: 'CommonAge') -> Union[int, str]:
+        """convert_to_localized_string_id(age)
+
+        Convert a CommonAge into a Localized String identifier.
+
+        :param age: An instance of a CommonAge
+        :type age: CommonAge
+        :return: The specified CommonAge translated to a localized string identifier or the name property of the value, if no localized string id is found.
+        :rtype: Union[int, str]
+        """
+        from sims4communitylib.enums.strings_enum import CommonStringId
+        display_name_mapping = {
+            CommonAge.BABY: CommonStringId.BABY,
+            CommonAge.TODDLER: CommonStringId.TODDLER,
+            CommonAge.CHILD: CommonStringId.CHILD,
+            CommonAge.TEEN: CommonStringId.TEEN,
+            CommonAge.YOUNGADULT: CommonStringId.YOUNG_ADULT,
+            CommonAge.ADULT: CommonStringId.ADULT,
+            CommonAge.ELDER: CommonStringId.ELDER
+        }
+        return display_name_mapping.get(age, age.name)
+

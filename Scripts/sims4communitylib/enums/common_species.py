@@ -94,3 +94,24 @@ class CommonSpecies(CommonInt):
             CommonSpecies.FOX: Species.FOX if hasattr(Species, 'FOX') else None
         }
         return conversion_mapping.get(species, None)
+
+    @staticmethod
+    def convert_to_localized_string_id(species: 'CommonSpecies') -> Union[int, str]:
+        """convert_to_localized_string_id(species)
+
+        Convert a CommonSpecies into a Localized String identifier.
+
+        :param species: An instance of a CommonSpecies
+        :type species: CommonSpecies
+        :return: The specified CommonSpecies translated to a localized string identifier or the name property of the value, if no localized string id is found.
+        :rtype: Union[int, str]
+        """
+        from sims4communitylib.enums.strings_enum import CommonStringId
+        display_name_mapping = {
+            CommonSpecies.HUMAN: CommonStringId.HUMAN,
+            CommonSpecies.LARGE_DOG: CommonStringId.LARGE_DOG,
+            CommonSpecies.SMALL_DOG: CommonStringId.SMALL_DOG,
+            CommonSpecies.CAT: CommonStringId.CAT,
+            CommonSpecies.FOX: CommonStringId.FOX
+        }
+        return display_name_mapping.get(species, species.name)

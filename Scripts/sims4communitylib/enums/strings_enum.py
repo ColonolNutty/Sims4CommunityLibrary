@@ -59,6 +59,7 @@ class CommonStringId(CommonInt):
     SMALL_DOG: 'CommonStringId' = 698804483
     LARGE_DOG: 'CommonStringId' = 1545624565
     CAT: 'CommonStringId' = 1720023562
+    FOX: 'CommonStringId' = 0xCE739947
 
     # Pregnancy
     GET_PREGNANT: 'CommonStringId' = 3694037554

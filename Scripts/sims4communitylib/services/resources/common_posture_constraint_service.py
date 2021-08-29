@@ -27,8 +27,8 @@ class CommonPostureConstraintService(CommonService):
         :return: An instance of a Constraint.
         :rtype: Constraint
         """
-        from animation.posture_manifest_constants import STAND_CONSTRAINT
-        return STAND_CONSTRAINT
+        from animation.posture_manifest_constants import STAND_AT_NONE_CONSTRAINT
+        return STAND_AT_NONE_CONSTRAINT
 
     @property
     def swim_at_none(self) -> Constraint:
