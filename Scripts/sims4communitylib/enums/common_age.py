@@ -154,4 +154,3 @@ class CommonAge(CommonInt):
             CommonAge.ELDER: CommonStringId.ELDER
         }
         return display_name_mapping.get(age, age.name)
-
