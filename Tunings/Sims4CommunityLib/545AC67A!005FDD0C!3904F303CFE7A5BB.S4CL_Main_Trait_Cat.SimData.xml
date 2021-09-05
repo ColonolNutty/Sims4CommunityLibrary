@@ -7,10 +7,6 @@
         <T type="Int64">32</T>
         <T type="Int64">64</T>
       </L>
-      <L name="species">
-        <T type="Int64">3</T>
-      </L>
-      <L name="genders" />
       <T name="cas_idle_asm_key">00000000-00000000-0000000000000000</T>
       <T name="cas_idle_asm_state"></T>
       <T name="cas_selected_icon">00000000-00000000-0000000000000000</T>
@@ -22,6 +18,7 @@
         <T type="TableSetReference">4105586330092546052</T>
       </L>
       <T name="display_name">0x857FAADC</T>
+      <L name="genders" />
       <T name="icon">2F7D0004-00000000-5D28F4E5021590F3</T>
       <L name="tags" />
       <T name="trait_description">0xF3BE1E0A</T>

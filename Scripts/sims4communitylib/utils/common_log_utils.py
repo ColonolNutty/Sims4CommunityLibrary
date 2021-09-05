@@ -152,19 +152,22 @@ class CommonLogUtils:
         if custom_file_path is not None:
             file_path = os.path.join(file_path, custom_file_path)
         current_file = os.path.join(file_path, file_name)
-        if os.path.exists(current_file) and CommonLogUtils._file_is_too_big(current_file):
-            new_file_name = file_name.replace('.txt', '')
-            old_file_name = None
-            for x in range(20):
-                old_file_name = 'Old_{}_{}.txt'.format(new_file_name, x)
-                if not os.path.exists(os.path.join(file_path, old_file_name)):
-                    break
-            if old_file_name is None:
-                return current_file
-            old_file_path = os.path.join(file_path, old_file_name)
-            if os.path.exists(old_file_path):
-                os.remove(old_file_path)
-            os.rename(current_file, old_file_path)
+        try:
+            if os.path.exists(current_file) and CommonLogUtils._file_is_too_big(current_file):
+                new_file_name = file_name.replace('.txt', '')
+                old_file_name = None
+                for x in range(20):
+                    old_file_name = 'Old_{}_{}.txt'.format(new_file_name, x)
+                    if not os.path.exists(os.path.join(file_path, old_file_name)):
+                        break
+                if old_file_name is None:
+                    return current_file
+                old_file_path = os.path.join(file_path, old_file_name)
+                if os.path.exists(old_file_path):
+                    os.remove(old_file_path)
+                os.rename(current_file, old_file_path)
+        except PermissionError:
+            pass
         return current_file
 
     @staticmethod

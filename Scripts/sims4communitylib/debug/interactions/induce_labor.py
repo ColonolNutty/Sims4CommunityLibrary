@@ -38,22 +38,20 @@ class S4CLDebugInduceLaborInteraction(CommonImmediateSuperInteraction):
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
-        cls.get_log().format_with_message('Running \'{}\' on_test.'.format(cls.__name__), interaction_sim=interaction_sim, interaction_target=interaction_target, interaction_context=interaction_context, kwargles=kwargs)
         if interaction_target is None or not CommonTypeUtils.is_sim_or_sim_info(interaction_target):
             cls.get_log().debug('Target is not a Sim.')
             return TestResult.NONE
         target_sim_info = CommonSimUtils.get_sim_info(interaction_target)
-        target_sim_name = CommonSimNameUtils.get_full_name(target_sim_info)
         if not CommonSimPregnancyUtils.can_be_impregnated(target_sim_info):
-            cls.get_log().debug('\'{}\' cannot be impregnated and thus cannot be pregnant.')
+            cls.get_log().format_with_message('Sim cannot be impregnated and thus cannot be pregnant.', target_sim=target_sim_info)
             return TestResult.NONE
         if not hasattr(target_sim_info, 'pregnancy_tracker'):
-            cls.get_log().debug('Target does not have a pregnancy tracker.')
+            cls.get_log().format_with_message('Target does not have a pregnancy tracker.', target_sim=target_sim_info)
             return TestResult.NONE
-        cls.get_log().debug('Checking if \'{}\' is pregnant.'.format(target_sim_name))
+        cls.get_log().format_with_message('Checking if Sim is pregnant.', target_sim=target_sim_info)
         if not CommonSimPregnancyUtils.is_pregnant(target_sim_info):
-            cls.get_log().format_with_message('\'{}\' is not pregnant.'.format(target_sim_name))
-            return cls.create_test_result(False, reason='\'{}\' is not pregnant.'.format(target_sim_name), tooltip=CommonLocalizationUtils.create_localized_tooltip(CommonStringId.S4CL_SIM_IS_NOT_PREGNANT, tooltip_tokens=(target_sim_info, )))
+            cls.get_log().format_with_message('Sim is not pregnant.', sim=target_sim_info)
+            return cls.create_test_result(False, reason='\'{}\' is not pregnant.'.format(CommonSimNameUtils.get_full_name(target_sim_info)), tooltip=CommonLocalizationUtils.create_localized_tooltip(CommonStringId.S4CL_SIM_IS_NOT_PREGNANT, tooltip_tokens=(target_sim_info, )))
         cls.get_log().debug('Success.')
         return TestResult.TRUE
 

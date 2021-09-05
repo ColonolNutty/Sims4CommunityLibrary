@@ -66,6 +66,23 @@ class CommonStatisticUtils:
         return statistic_instance.max_value
 
     @staticmethod
+    def get_statistic_id(statistic_identifier: Union[int, BaseStatistic]) -> Union[int, None]:
+        """get_statistic_id(statistic_identifier)
+
+        Retrieve the decimal identifier of a Statistic.
+
+        :param statistic_identifier: The identifier or instance of a Statistic.
+        :type statistic_identifier: Union[int, BaseStatistic]
+        :return: The decimal identifier of the Statistic or None if the Statistic does not have an id.
+        :rtype: Union[int, None]
+        """
+        if isinstance(statistic_identifier, int):
+            return statistic_identifier
+        if hasattr(statistic_identifier, 'id'):
+            return statistic_identifier.id
+        return getattr(statistic_identifier, 'guid64', None)
+
+    @staticmethod
     def load_statistic_by_id(statistic_id: Union[int, CommonStatisticId, BaseStatistic]) -> Union[BaseStatistic, None]:
         """load_statistic(statistic_id)
 

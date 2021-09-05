@@ -11,6 +11,7 @@ from typing import Any, Union
 from interactions import ParticipantType
 from interactions.base.interaction import Interaction
 from interactions.constraints import Constraint
+from interactions.interaction_finisher import FinishingType
 from sims4communitylib.classes.interactions.common_interaction import CommonInteraction
 
 # ReadTheDocs
@@ -148,6 +149,22 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
             self.log.error('Error occurred while running interaction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
         return False
 
+    def _cancel(self, finishing_type: FinishingType, cancel_reason_msg: str, *args, **kwargs) -> bool:
+        try:
+            self.verbose_log.format_with_message(
+                'Running on_cancelled.',
+                class_name=self.__class__.__name__,
+                sim=self.sim,
+                target=self.target,
+                finishing_type=finishing_type,
+                cancel_reason_msg=cancel_reason_msg,
+                kwargles=kwargs
+            )
+            self.on_cancelled(self.sim, self.target, finishing_type, cancel_reason_msg, *args, **kwargs)
+        except Exception as ex:
+            self.log.error('Error occurred while running interaction \'{}\' cancel.'.format(self.__class__.__name__), exception=ex)
+        return super()._cancel(finishing_type, cancel_reason_msg, **kwargs)
+
     # noinspection PyUnusedLocal
     def on_run(self, interaction_sim: Sim, interaction_target: Any, timeline: Timeline) -> bool:
         """on_run(interaction_sim, interaction_target, timeline)
@@ -164,6 +181,22 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
         :rtype: bool
         """
         return True
+
+    def on_cancelled(self, interaction_sim: Sim, interaction_target: Any, finishing_type: FinishingType, cancel_reason_msg: str, *args, **kwargs) -> None:
+        """on_cancelled(interaction_sim, interaction_target, finishing_type, cancel_reason_msg, *args, **kwargs)
+
+        A hook that occurs upon the interaction being cancelled.
+
+        :param interaction_sim: The source Sim of the interaction.
+        :type interaction_sim: Sim
+        :param interaction_target: The target Object of the interaction.
+        :type interaction_target: Any
+        :param finishing_type: The type of cancellation of the interaction.
+        :type finishing_type: FinishingType
+        :param cancel_reason_msg: The reason the interaction was cancelled.
+        :type cancel_reason_msg: str
+        """
+        pass
 
 
 class CommonConstrainedSuperInteraction(SuperInteraction):

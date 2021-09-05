@@ -6,11 +6,17 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Iterator, Union
+
+from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
+from sims4.commands import Command, CommandType, CheatOutput
 from sims4.resources import Types
 from sims4communitylib.enums.relationship_bits_enum import CommonRelationshipBitId
 from sims4communitylib.enums.relationship_tracks_enum import CommonRelationshipTrackId
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 
@@ -528,3 +534,56 @@ class CommonRelationshipUtils:
         if CommonSpeciesUtils.is_human(sim_info_a) and CommonSpeciesUtils.is_human(sim_info_b):
             return CommonRelationshipTrackId.ROMANCE
         return -1
+
+
+log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'common_relationship_commands')
+log.enable()
+
+
+@Command('s4clib.print_relationship_bits', command_type=CommandType.Live)
+def _common_print_relationship_bits(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    from server_commands.argument_helpers import get_optional_target
+    output = CheatOutput(_connection)
+    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
+        return
+    output('Printing relationships of Sim {}'.format(CommonSimNameUtils.get_full_name(sim_info)))
+    sim_id_a = CommonSimUtils.get_sim_id(sim_info)
+    text = ''
+    for relationship in sim_info.relationship_tracker:
+        sim_info_b = relationship.get_other_sim_info(sim_id_a)
+        try:
+            sim_a_name = CommonSimNameUtils.get_full_name(sim_info)
+            sim_b_name = CommonSimNameUtils.get_full_name(sim_info_b)
+            bi_direction_bits = relationship._bi_directional_relationship_data._bits
+            inner_text = '\n---------------------Relationship ({} to {})---------------------'.format(sim_a_name, sim_b_name)
+            if bi_direction_bits:
+                inner_text += '\n Bi-Directional Bits:'
+                for (key, value) in bi_direction_bits.items():
+                    bit_type = type(value)
+                    inner_text += '\n  - {} ({})'.format(key.__name__, bit_type.__mro__[1].__name__)
+                inner_text += '\n'
+
+            sim_a_relationship_bits = relationship._sim_a_relationship_data._bits
+            if sim_a_relationship_bits:
+                inner_text += '\n Unidirectional Bits Sim A (What {} is to {}):'.format(sim_b_name, sim_a_name)
+                for (key, value) in sim_a_relationship_bits.items():
+                    bit_type = type(value)
+                    inner_text += '\n  - {} ({})'.format(key.__name__, bit_type.__mro__[1].__name__)
+                inner_text += '\n'
+
+            sim_b_relationship_bits = relationship._sim_b_relationship_data._bits
+            if sim_b_relationship_bits:
+                inner_text += '\n Unidirectional Bits Sim B (What {} is to {}):'.format(sim_a_name, sim_b_name)
+                for (key, value) in sim_b_relationship_bits.items():
+                    bit_type = type(value)
+                    inner_text += '\n  - {} ({})'.format(key.__name__, bit_type.__mro__[1].__name__)
+                inner_text += '\n'
+            output(inner_text)
+            text += inner_text
+        except Exception as ex:
+            output('An error occurred {}'.format(ex))
+            log.format_error_with_message('Failed to print relationships', sim_info_b=sim_info_b, exception=ex)
+    log.debug(text)
+    output('Done')

@@ -388,7 +388,7 @@ def _common_set_statistic_value(statistic: TunableInstanceParam(Types.STATISTIC)
     sim_name = CommonSimNameUtils.get_full_name(sim_info)
     output('Setting statistic {} to Sim {}'.format(str(statistic), sim_name))
     try:
-        if CommonSimStatisticUtils.set_statistic_value(sim_info, statistic.id, value):
+        if CommonSimStatisticUtils.set_statistic_value(sim_info, CommonStatisticUtils.get_statistic_id(statistic), value):
             output('Successfully set statistic value.')
         else:
             output('Failed to set statistic.')
@@ -439,7 +439,7 @@ def _common_remove_statistic(statistic: TunableInstanceParam(Types.STATISTIC), o
     sim_name = CommonSimNameUtils.get_full_name(sim_info)
     output('Removing statistic {} from Sim {}'.format(str(statistic), sim_name))
     try:
-        if CommonSimStatisticUtils.remove_statistic(sim_info, statistic.id):
+        if CommonSimStatisticUtils.remove_statistic(sim_info, CommonStatisticUtils.get_statistic_id(statistic)):
             output('Successfully removed statistic.')
         else:
             output('Failed to remove statistic.')

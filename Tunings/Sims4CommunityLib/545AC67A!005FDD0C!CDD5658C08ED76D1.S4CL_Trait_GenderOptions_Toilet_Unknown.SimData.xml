@@ -11,13 +11,6 @@
         <T type="Int64">32</T>
         <T type="Int64">64</T>
       </L>
-      <L name="species">
-        <T type="Int64">1</T>
-        <T type="Int64">2</T>
-        <T type="Int64">3</T>
-        <T type="Int64">5</T>
-      </L>
-      <L name="genders" />
       <L name="bb_filter_styles" />
       <L name="bb_filter_tags" />
       <T name="cas_idle_asm_key">00000000-00000000-0000000000000000</T>
@@ -26,7 +19,14 @@
       <T name="cas_trait_asm_param">None</T>
       <L name="conflicting_traits" />
       <T name="display_name">0x5B7E7761</T>
+      <L name="genders" />
       <T name="icon">00B2D882-00000000-30F0846C783606F9</T>
+      <L name="species">
+        <T type="Int64">1</T>
+        <T type="Int64">2</T>
+        <T type="Int64">3</T>
+        <T type="Int64">5</T>
+      </L>
       <L name="tags" />
       <T name="trait_description">0x00000000</T>
       <T name="trait_origin_description">0x00000000</T>

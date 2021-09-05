@@ -6,7 +6,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-from pprint import pformat
 from typing import Any
 
 from event_testing.results import TestResult
@@ -125,13 +124,18 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, CommonInteraction):
     # SocialMixerInteraction has a different signature for its _test function, so we override it in here.
     @classmethod
     def _test(cls, target: Any, context: InteractionContext, *args, **kwargs) -> TestResult:
+        from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
+        stop_watch = CommonStopWatch()
+        stop_watch.start()
         try:
             try:
                 if context.sim is target:
+                    cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                     return TestResult(False, 'Social Mixer Interactions cannot target self!')
                 if context.pick is not None:
                     pick_target = context.pick.target if context.source == context.SOURCE_PIE_MENU else None
                     if context.sim is pick_target:
+                        cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                         return TestResult(False, 'Social Mixer Interactions cannot target self!')
                 cls.get_verbose_log().format_with_message(
                     'Running \'{}\' on_test.'.format(cls.__name__),
@@ -145,26 +149,68 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, CommonInteraction):
                 cls.get_verbose_log().format_with_message('Test Result', test_result=test_result)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
+                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                 return TestResult.NONE
-            if test_result is None:
-                super_test_result = super()._test(target, context, *args, **kwargs)
-                cls.get_verbose_log().format_with_message('Super Test Result', super_test_result=super_test_result)
-                return super_test_result
-            if not isinstance(test_result, TestResult):
-                raise RuntimeError('Interaction on_test did not result in a TestResult, instead got {}. {}'.format(pformat(test_result), cls.__name__))
-            if test_result.result is False:
+
+            if test_result is not None and isinstance(test_result, TestResult) and test_result.result is False:
                 if test_result.tooltip is not None:
                     tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.tooltip)
                 elif test_result.reason is not None:
                     tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.reason)
                 else:
                     tooltip = None
-                return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip)
-            super_test_result = super()._test(target, context, *args, **kwargs)
-            cls.get_verbose_log().format_with_message('Super Test Result', super_test_result=super_test_result)
-            return super_test_result
+                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip, icon=test_result.icon, influence_by_active_mood=test_result.influence_by_active_mood)
+
+            try:
+                cls.get_verbose_log().format_with_message(
+                    'Running \'{}\' super()._test.'.format(cls.__name__),
+                    interaction_sim=context.sim,
+                    interaction_target=target,
+                    interaction_context=context,
+                    kwargles=kwargs
+                )
+                super_test_result = super()._test(target, context, *args, **kwargs)
+                cls.get_verbose_log().format_with_message('Super Test Result', super_test_result=super_test_result)
+            except Exception as ex:
+                cls.get_log().error('Error occurred while running interaction \'{}\' super()._test.'.format(cls.__name__), exception=ex)
+                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                return TestResult.NONE
+
+            if super_test_result is not None and not super_test_result.result:
+                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                return super_test_result
+
+            try:
+                cls.get_verbose_log().format_with_message(
+                    'Running \'{}\' on_post_super_test.'.format(cls.__name__),
+                    interaction_sim=context.sim,
+                    interaction_target=target,
+                    interaction_context=context,
+                    kwargles=kwargs
+                )
+                post_super_test_result = cls.on_post_super_test(context.sim, target, context, *args, **kwargs)
+                cls.get_verbose_log().format_with_message('Post Test Result', post_super_test_result=post_super_test_result)
+            except Exception as ex:
+                cls.get_log().error('Error occurred while running interaction \'{}\' on_post_super_test.'.format(cls.__name__), exception=ex)
+                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                return TestResult.NONE
+
+            if post_super_test_result is not None and isinstance(test_result, TestResult) and post_super_test_result.result is False:
+                if post_super_test_result.tooltip is not None:
+                    post_super_test_result_tooltip = CommonLocalizationUtils.create_localized_tooltip(post_super_test_result.tooltip)
+                elif post_super_test_result.reason is not None:
+                    post_super_test_result_tooltip = CommonLocalizationUtils.create_localized_tooltip(post_super_test_result.reason)
+                else:
+                    post_super_test_result_tooltip = None
+                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                return cls.create_test_result(post_super_test_result.result, post_super_test_result.reason, tooltip=post_super_test_result_tooltip, icon=post_super_test_result.icon, influence_by_active_mood=post_super_test_result.influence_by_active_mood)
+
+            cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+            return TestResult.TRUE
         except Exception as ex:
             cls.get_log().error('Error occurred while running _test of interaction \'{}\''.format(cls.__name__), exception=ex)
+        cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
         return TestResult(False)
 
     @classmethod
@@ -183,3 +229,23 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, CommonInteraction):
         :rtype: TestResult
         """
         return TestResult.TRUE
+
+    @classmethod
+    def on_post_super_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, *args, **kwargs) -> TestResult:
+        """on_post_super_test(interaction_sim, interaction_target, interaction_context, *args, **kwargs)
+
+        A hook that occurs after the interaction being tested for availability by on_test and the super _test functions.
+
+        .. note:: This will only run if both on_test and _test returns TestResult.TRUE or similar.
+
+        :param interaction_sim: The source Sim of the interaction.
+        :type interaction_sim: Sim
+        :param interaction_target: The target Object of the interaction.
+        :type interaction_target: Any
+        :param interaction_context: The context of the interaction.
+        :type interaction_context: InteractionContext
+        :return: The outcome of testing the availability of the interaction
+        :rtype: TestResult
+        """
+        return TestResult.TRUE
+
