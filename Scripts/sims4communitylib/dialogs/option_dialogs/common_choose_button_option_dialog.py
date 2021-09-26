@@ -259,7 +259,7 @@ class CommonChooseButtonOptionDialog(CommonChooseResponseOptionDialog):
 
 
 @sims4.commands.Command('s4clib_testing.show_choose_button_option_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_choose_button_option_dialog(_connection: int=None):
+def _common_testing_show_choose_button_option_dialog(with_target: bool=False, _connection: int=None):
     output = sims4.commands.CheatOutput(_connection)
     output('Showing test choose button option dialog.')
 
@@ -335,7 +335,8 @@ def _common_testing_show_choose_button_option_dialog(_connection: int=None):
         )
 
         option_dialog.show(
-            sim_info=CommonSimUtils.get_active_sim_info()
+            sim_info=CommonSimUtils.get_active_sim_info(),
+            target_sim_info=CommonSimUtils.get_active_sim_info() if with_target else None
         )
     except Exception as ex:
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)

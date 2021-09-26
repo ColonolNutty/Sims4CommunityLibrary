@@ -46,7 +46,7 @@ class CommonTraitUtils(HasClassLog):
     def is_special_npc(cls, sim_info: SimInfo) -> bool:
         """is_special_npc(sim_info)
 
-        Determine if a sim is a Special NPC.
+        Determine if a Sim is a Special NPC.
 
         .. note::
 
@@ -87,7 +87,7 @@ class CommonTraitUtils(HasClassLog):
     def is_aggressive_pet(cls, sim_info: SimInfo) -> bool:
         """is_aggressive_pet(sim_info)
 
-        Determine if a pet sim is Aggressive.
+        Determine if a pet Sim is Aggressive.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -104,7 +104,7 @@ class CommonTraitUtils(HasClassLog):
     def is_alluring(cls, sim_info: SimInfo) -> bool:
         """is_alluring(sim_info)
 
-        Determine if a sim is Alluring.
+        Determine if a Sim is Alluring.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -117,7 +117,7 @@ class CommonTraitUtils(HasClassLog):
     def is_antiseptic(cls, sim_info: SimInfo) -> bool:
         """is_antiseptic(sim_info)
 
-        Determine if a sim is Antiseptic.
+        Determine if a Sim is Antiseptic.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -130,7 +130,7 @@ class CommonTraitUtils(HasClassLog):
     def is_bro(cls, sim_info: SimInfo) -> bool:
         """is_bro(sim_info)
 
-        Determine if a sim is a Bro.
+        Determine if a Sim is a Bro.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -143,7 +143,7 @@ class CommonTraitUtils(HasClassLog):
     def is_carefree(cls, sim_info: SimInfo) -> bool:
         """is_carefree(sim_info)
 
-        Determine if a sim is Care Free.
+        Determine if a Sim is Care Free.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -156,7 +156,7 @@ class CommonTraitUtils(HasClassLog):
     def is_cat_lover(cls, sim_info: SimInfo) -> bool:
         """is_cat_lover(sim_info)
 
-        Determine if a sim is a Cat Lover.
+        Determine if a Sim is a Cat Lover.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -169,7 +169,7 @@ class CommonTraitUtils(HasClassLog):
     def is_dog_lover(cls, sim_info: SimInfo) -> bool:
         """is_dog_lover(sim_info)
 
-        Determine if a sim is a Dog Lover.
+        Determine if a Sim is a Dog Lover.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -182,7 +182,7 @@ class CommonTraitUtils(HasClassLog):
     def is_clumsy(cls, sim_info: SimInfo) -> bool:
         """is_clumsy(sim_info)
 
-        Determine if a sim is Clumsy.
+        Determine if a Sim is Clumsy.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -195,7 +195,7 @@ class CommonTraitUtils(HasClassLog):
     def is_dastardly(cls, sim_info: SimInfo) -> bool:
         """is_dastardly(sim_info)
 
-        Determine if a sim is Dastardly.
+        Determine if a Sim is Dastardly.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -208,7 +208,7 @@ class CommonTraitUtils(HasClassLog):
     def is_criminal(cls, sim_info: SimInfo) -> bool:
         """is_criminal(sim_info)
 
-        Determine if a sim is a Criminal.
+        Determine if a Sim is a Criminal.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -225,7 +225,7 @@ class CommonTraitUtils(HasClassLog):
     def is_evil(cls, sim_info: SimInfo) -> bool:
         """is_evil(sim_info)
 
-        Determine if a sim is Evil.
+        Determine if a Sim is Evil.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -242,7 +242,7 @@ class CommonTraitUtils(HasClassLog):
     def is_fertile(cls, sim_info: SimInfo) -> bool:
         """is_fertile(sim_info)
 
-        Determine if a sim is Fertile.
+        Determine if a Sim is Fertile.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -255,7 +255,7 @@ class CommonTraitUtils(HasClassLog):
     def is_friendly_pet(cls, sim_info: SimInfo) -> bool:
         """is_friendly_pet(sim_info)
 
-        Determine if a pet sim is Friendly.
+        Determine if a pet Sim is Friendly.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -285,7 +285,7 @@ class CommonTraitUtils(HasClassLog):
     def is_genius(cls, sim_info: SimInfo) -> bool:
         """is_genius(sim_info)
 
-        Determine if a sim is a Genius.
+        Determine if a Sim is a Genius.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -298,7 +298,7 @@ class CommonTraitUtils(HasClassLog):
     def is_good(cls, sim_info: SimInfo) -> bool:
         """is_good(sim_info)
 
-        Determine if a sim is Good.
+        Determine if a Sim is Good.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -311,7 +311,7 @@ class CommonTraitUtils(HasClassLog):
     def is_glutton(cls, sim_info: SimInfo) -> bool:
         """is_glutton(sim_info)
 
-        Determine if a sim is a Glutton.
+        Determine if a Sim is a Glutton.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -324,7 +324,7 @@ class CommonTraitUtils(HasClassLog):
     def is_glutton_human(cls, sim_info: SimInfo) -> bool:
         """is_glutton_human(sim_info)
 
-        Determine if a non pet sim is a Glutton
+        Determine if a non pet Sim is a Glutton
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -337,7 +337,7 @@ class CommonTraitUtils(HasClassLog):
     def is_glutton_pet(cls, sim_info: SimInfo) -> bool:
         """is_glutton_pet(sim_info)
 
-        Determine if a pet sim is a Glutton.
+        Determine if a pet Sim is a Glutton.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -354,7 +354,7 @@ class CommonTraitUtils(HasClassLog):
     def is_gregarious(cls, sim_info: SimInfo) -> bool:
         """is_gregarious(sim_info)
 
-        Determine if a sim is Gregarious.
+        Determine if a Sim is Gregarious.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -367,7 +367,7 @@ class CommonTraitUtils(HasClassLog):
     def is_hot_headed(cls, sim_info: SimInfo) -> bool:
         """is_hot_headed(sim_info)
 
-        Determine if a sim is Hot Headed.
+        Determine if a Sim is Hot Headed.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -380,7 +380,7 @@ class CommonTraitUtils(HasClassLog):
     def is_hunter_pet(cls, sim_info: SimInfo) -> bool:
         """is_hunter_pet(sim_info)
 
-        Determine if a pet sim is a Hunter.
+        Determine if a pet Sim is a Hunter.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -397,7 +397,7 @@ class CommonTraitUtils(HasClassLog):
     def is_incredibly_friendly(cls, sim_info: SimInfo) -> bool:
         """is_incredibly_friendly(sim_info)
 
-        Determine if a sim is Incredibly Friendly.
+        Determine if a Sim is Incredibly Friendly.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -410,7 +410,7 @@ class CommonTraitUtils(HasClassLog):
     def is_insane(cls, sim_info: SimInfo) -> bool:
         """is_insane(sim_info)
 
-        Determine if a sim is Insane.
+        Determine if a Sim is Insane.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -423,7 +423,7 @@ class CommonTraitUtils(HasClassLog):
     def is_insider(cls, sim_info: SimInfo) -> bool:
         """is_insider(sim_info)
 
-        Determine if a sim is an Insider.
+        Determine if a Sim is an Insider.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -436,7 +436,7 @@ class CommonTraitUtils(HasClassLog):
     def is_loyal_pet(cls, sim_info: SimInfo) -> bool:
         """is_loyal_pet(sim_info)
 
-        Determine if a pet sim is Loyal.
+        Determine if a pet Sim is Loyal.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -453,7 +453,7 @@ class CommonTraitUtils(HasClassLog):
     def is_mean(cls, sim_info: SimInfo) -> bool:
         """is_mean(sim_info)
 
-        Determine if a sim is Mean.
+        Determine if a Sim is Mean.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -466,7 +466,7 @@ class CommonTraitUtils(HasClassLog):
     def is_mentor(cls, sim_info: SimInfo) -> bool:
         """is_mentor(sim_info)
 
-        Determine if a sim is a Mentor.
+        Determine if a Sim is a Mentor.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -479,7 +479,7 @@ class CommonTraitUtils(HasClassLog):
     def is_morning_person(cls, sim_info: SimInfo) -> bool:
         """is_morning_person(sim_info)
 
-        Determine if a sim is a Morning Person.
+        Determine if a Sim is a Morning Person.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -492,7 +492,7 @@ class CommonTraitUtils(HasClassLog):
     def is_naughty_pet(cls, sim_info: SimInfo) -> bool:
         """is_naughty_pet(sim_info)
 
-        Determine if a pet sim is Naughty.
+        Determine if a pet Sim is Naughty.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -522,7 +522,7 @@ class CommonTraitUtils(HasClassLog):
     def is_night_owl(cls, sim_info: SimInfo) -> bool:
         """is_night_owl(sim_info)
 
-        Determine if a sim is a Night Owl.
+        Determine if a Sim is a Night Owl.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -539,7 +539,7 @@ class CommonTraitUtils(HasClassLog):
     def is_lazy(cls, sim_info: SimInfo) -> bool:
         """is_lazy(sim_info)
 
-        Determine if a sim is Lazy.
+        Determine if a Sim is Lazy.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -552,7 +552,7 @@ class CommonTraitUtils(HasClassLog):
     def is_loner(cls, sim_info: SimInfo) -> bool:
         """is_loner(sim_info)
 
-        Determine if a sim is a Loner.
+        Determine if a Sim is a Loner.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -565,7 +565,7 @@ class CommonTraitUtils(HasClassLog):
     def is_love_guru(cls, sim_info: SimInfo) -> bool:
         """is_love_guru(sim_info)
 
-        Determine if a sim is a Love Guru.
+        Determine if a Sim is a Love Guru.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -578,7 +578,7 @@ class CommonTraitUtils(HasClassLog):
     def is_self_absorbed(cls, sim_info: SimInfo) -> bool:
         """is_self_absorbed(sim_info)
 
-        Determine if a sim is Self Absorbed.
+        Determine if a Sim is Self Absorbed.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -591,7 +591,7 @@ class CommonTraitUtils(HasClassLog):
     def is_self_assured(cls, sim_info: SimInfo) -> bool:
         """is_self_assured(sim_info)
 
-        Determine if a sim is Self Assured.
+        Determine if a Sim is Self Assured.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -604,7 +604,7 @@ class CommonTraitUtils(HasClassLog):
     def is_service_sim(cls, sim_info: SimInfo) -> bool:
         """is_service_sim(sim_info)
 
-        Determine if a sim is a service sim.
+        Determine if a Sim is a service Sim.
 
         ..warning:: Obsolete: Use :func:`~is_service_sim` in :class:`.CommonSimTypeUtils` instead.
 
@@ -616,7 +616,7 @@ class CommonTraitUtils(HasClassLog):
     def is_shameless(cls, sim_info: SimInfo) -> bool:
         """is_shameless(sim_info)
 
-        Determine if a sim is Shameless.
+        Determine if a Sim is Shameless.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -629,7 +629,7 @@ class CommonTraitUtils(HasClassLog):
     def is_sincere(cls, sim_info: SimInfo) -> bool:
         """is_sincere(sim_info)
 
-        Determine if a sim is Sincere.
+        Determine if a Sim is Sincere.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -642,7 +642,7 @@ class CommonTraitUtils(HasClassLog):
     def is_skittish_pet(cls, sim_info: SimInfo) -> bool:
         """is_skittish_pet(sim_info)
 
-        Determine if a pet sim is Skittish.
+        Determine if a pet Sim is Skittish.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -659,7 +659,7 @@ class CommonTraitUtils(HasClassLog):
     def is_slob(cls, sim_info: SimInfo) -> bool:
         """is_slob(sim_info)
 
-        Determine if a sim is a Slob.
+        Determine if a Sim is a Slob.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -672,7 +672,7 @@ class CommonTraitUtils(HasClassLog):
     def is_snob(cls, sim_info: SimInfo) -> bool:
         """is_snob(sim_info)
 
-        Determine if a sim is a Snob.
+        Determine if a Sim is a Snob.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -685,7 +685,7 @@ class CommonTraitUtils(HasClassLog):
     def is_squeamish(cls, sim_info: SimInfo) -> bool:
         """is_squeamish(sim_info)
 
-        Determine if a sim is Squeamish.
+        Determine if a Sim is Squeamish.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -698,7 +698,7 @@ class CommonTraitUtils(HasClassLog):
     def is_survivalist(cls, sim_info: SimInfo) -> bool:
         """is_survivalist(sim_info)
 
-        Determine if a sim is a Survivalist.
+        Determine if a Sim is a Survivalist.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -711,7 +711,7 @@ class CommonTraitUtils(HasClassLog):
     def is_unflirty(cls, sim_info: SimInfo) -> bool:
         """is_unflirty(sim_info)
 
-        Determine if a sim is Unflirty.
+        Determine if a Sim is Unflirty.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -724,7 +724,7 @@ class CommonTraitUtils(HasClassLog):
     def hates_children(cls, sim_info: SimInfo) -> bool:
         """hates_children(sim_info)
 
-        Determine if a sim Hates Children.
+        Determine if a Sim Hates Children.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -737,7 +737,7 @@ class CommonTraitUtils(HasClassLog):
     def has_animal_attraction(cls, sim_info: SimInfo) -> bool:
         """has_animal_attraction(sim_info)
 
-        Determine if a sim has an Animal Attraction.
+        Determine if a Sim has an Animal Attraction.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -750,7 +750,7 @@ class CommonTraitUtils(HasClassLog):
     def has_animal_whisperer(cls, sim_info: SimInfo) -> bool:
         """has_animal_whisperer(sim_info)
 
-        Determine if a sim is an Animal Whisperer.
+        Determine if a Sim is an Animal Whisperer.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -763,7 +763,7 @@ class CommonTraitUtils(HasClassLog):
     def has_challenge_kindness_ambassador(cls, sim_info: SimInfo) -> bool:
         """has_challenge_kindness_ambassador(sim_info)
 
-        Determine if a sim has Challenged the Kindness Ambassador.
+        Determine if a Sim has Challenged the Kindness Ambassador.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -776,7 +776,7 @@ class CommonTraitUtils(HasClassLog):
     def has_commitment_issues(cls, sim_info: SimInfo) -> bool:
         """has_commitment_issues(sim_info)
 
-        Determine if a sim has Commitment Issues.
+        Determine if a Sim has Commitment Issues.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -789,7 +789,7 @@ class CommonTraitUtils(HasClassLog):
     def has_masculine_frame(cls, sim_info: SimInfo) -> bool:
         """has_masculine_frame(sim_info)
 
-        Determine if a sim has a Masculine Body Frame.
+        Determine if a Sim has a Masculine Body Frame.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -803,7 +803,7 @@ class CommonTraitUtils(HasClassLog):
     def has_feminine_frame(cls, sim_info: SimInfo) -> bool:
         """has_feminine_frame(sim_info)
 
-        Determine if a sim has a Feminine Body Frame.
+        Determine if a Sim has a Feminine Body Frame.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -817,7 +817,7 @@ class CommonTraitUtils(HasClassLog):
     def prefers_menswear(cls, sim_info: SimInfo) -> bool:
         """prefers_menswear(sim_info)
 
-        Determine if a sim prefers Mens Clothing.
+        Determine if a Sim prefers Mens Clothing.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -831,7 +831,7 @@ class CommonTraitUtils(HasClassLog):
     def prefers_womenswear(cls, sim_info: SimInfo) -> bool:
         """prefers_womenswear(sim_info)
 
-        Determine if a sim prefers Womens Clothing.
+        Determine if a Sim prefers Womens Clothing.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -845,10 +845,10 @@ class CommonTraitUtils(HasClassLog):
     def can_impregnate(cls, sim_info: SimInfo) -> bool:
         """can_impregnate(sim_info)
 
-        Determine if a sim Can Impregnate.
+        Determine if a Sim Can Impregnate.
 
         .. note:: Use :func:`~can_reproduce` for Pet Sims.
-        .. note:: This will check for a sim to not also have the GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE trait.
+        .. note:: This will check for a Sim to not also have the GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE trait.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -862,10 +862,10 @@ class CommonTraitUtils(HasClassLog):
     def can_not_impregnate(cls, sim_info: SimInfo) -> bool:
         """can_not_impregnate(sim_info)
 
-        Determine if a sim Can Not Impregnate.
+        Determine if a Sim Can Not Impregnate.
 
         .. note:: Use :func:`~can_not_reproduce` for Pet Sims.
-        .. note:: This will check for a sim to not also have the GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE trait.
+        .. note:: This will check for a Sim to not also have the GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE trait.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -879,10 +879,10 @@ class CommonTraitUtils(HasClassLog):
     def can_be_impregnated(cls, sim_info: SimInfo) -> bool:
         """can_be_impregnated(sim_info)
 
-        Determine if a sim Can Be Impregnated.
+        Determine if a Sim Can Be Impregnated.
 
         .. note:: Use :func:`~can_reproduce` for Pet Sims.
-        .. note:: Will return False if the sim has the GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED trait.
+        .. note:: Will return False if the Sim has the GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED trait.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -896,10 +896,10 @@ class CommonTraitUtils(HasClassLog):
     def can_not_be_impregnated(cls, sim_info: SimInfo) -> bool:
         """can_not_be_impregnated(sim_info)
 
-        Determine if a sim Can Not Be Impregnated.
+        Determine if a Sim Can Not Be Impregnated.
 
         .. note:: Use :func:`~can_not_reproduce` for Pet Sims.
-        .. note:: Will return False if the sim has the GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED trait.
+        .. note:: Will return False if the Sim has the GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED trait.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -933,10 +933,10 @@ class CommonTraitUtils(HasClassLog):
     def can_reproduce(cls, sim_info: SimInfo) -> bool:
         """can_reproduce(sim_info)
 
-        Determine if a pet sim can reproduce.
+        Determine if a pet Sim can reproduce.
 
         .. note:: Use :func:`~can_impregnate` and :func:`~can_be_impregnated` for Human Sims.
-        .. note:: Will return False if the pet sim has the PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE trait.
+        .. note:: Will return False if the pet Sim has the PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE trait.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -950,10 +950,10 @@ class CommonTraitUtils(HasClassLog):
     def can_not_reproduce(cls, sim_info: SimInfo) -> bool:
         """can_not_reproduce(sim_info)
 
-        Determine if a pet sim can reproduce.
+        Determine if a pet Sim can reproduce.
 
         ..note:: Use :func:`~can_not_impregnate` and :func:`~can_not_be_impregnated` for Human Sims.
-        .. note:: Will return False if the pet sim has the PREGNANCY_OPTIONS_PET_CAN_REPRODUCE trait.
+        .. note:: Will return False if the pet Sim has the PREGNANCY_OPTIONS_PET_CAN_REPRODUCE trait.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -967,7 +967,7 @@ class CommonTraitUtils(HasClassLog):
     def uses_toilet_standing(cls, sim_info: SimInfo) -> bool:
         """uses_toilet_standing(sim_info)
 
-        Determine if a sim uses the toilet while standing.
+        Determine if a Sim uses the toilet while standing.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -981,7 +981,7 @@ class CommonTraitUtils(HasClassLog):
     def uses_toilet_sitting(cls, sim_info: SimInfo) -> bool:
         """uses_toilet_sitting(sim_info)
 
-        Determine if a sim uses the toilet while sitting.
+        Determine if a Sim uses the toilet while sitting.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -995,13 +995,13 @@ class CommonTraitUtils(HasClassLog):
     def has_trait(cls, sim_info: SimInfo, *trait_ids: Union[int, CommonTraitId]) -> bool:
         """has_trait(sim_info, *trait_ids)
 
-        Determine if a sim has any of the specified traits.
+        Determine if a Sim has any of the specified traits.
 
-        :param sim_info: The sim to check.
+        :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :param trait_ids: An iterable of identifiers of Traits.
         :type trait_ids: Union[int, CommonTraitId]
-        :return: True, if the sim has any of the specified traits. False, if not.
+        :return: True, if the Sim has any of the specified traits. False, if not.
         :rtype: bool
         """
         if not trait_ids:
@@ -1013,17 +1013,81 @@ class CommonTraitUtils(HasClassLog):
         return False
 
     @classmethod
+    def has_any_traits(cls, sim_info: SimInfo, trait_ids: Iterator[Union[int, CommonTraitId]]) -> bool:
+        """has_any_traits(sim_info, trait_ids)
+
+        Determine if a Sim has any of the specified traits.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param trait_ids: An iterable of identifiers of Traits.
+        :type trait_ids: Iterator[Union[int, CommonTraitId]]
+        :return: True, if the Sim has any of the specified traits. False, if not.
+        :rtype: bool
+        """
+        trait_ids = tuple(trait_ids)
+        if not trait_ids:
+            return False
+        sim_trait_ids = CommonTraitUtils.get_trait_ids(sim_info)
+        for trait_id in sim_trait_ids:
+            if trait_id in trait_ids:
+                return True
+        return False
+
+    @classmethod
+    def has_all_traits(cls, sim_info: SimInfo, trait_ids: Iterator[Union[int, CommonTraitId]]) -> bool:
+        """has_all_traits(sim_info, trait_ids)
+
+        Determine if a Sim has any of the specified traits.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :param trait_ids: An iterable of identifiers of Traits.
+        :type trait_ids: Iterator[Union[int, CommonTraitId]]
+        :return: True, if the Sim has any of the specified traits. False, if not.
+        :rtype: bool
+        """
+        trait_ids = tuple(trait_ids)
+        if not trait_ids:
+            return False
+        sim_trait_ids = CommonTraitUtils.get_trait_ids(sim_info)
+        for trait_id in sim_trait_ids:
+            if trait_id in trait_ids:
+                return True
+        return False
+
+    @classmethod
+    def is_conflicting_trait(cls, sim_info: SimInfo, trait_id: Union[int, CommonTraitId]) -> bool:
+        """is_conflicting_trait(sim_info, trait_id)
+
+        Determine if a Trait conflicts with any of the Sims current Traits.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param trait_id: The identifier of the trait to check.
+        :type trait_id: int
+        :return: True, if the specified Trait conflicts with any Traits the Sim currently has. False, if not.
+        :rtype: bool
+        """
+        trait_to_check = CommonTraitUtils.load_trait_by_id(trait_id)
+        if trait_to_check is None:
+            return False
+        from traits.trait_tracker import TraitTracker
+        trait_tracker: TraitTracker = sim_info.trait_tracker
+        return trait_tracker.is_conflicting(trait_to_check)
+
+    @classmethod
     def get_trait_ids(cls, sim_info: SimInfo) -> List[int]:
         """get_trait_ids(sim_info)
 
-        Retrieve decimal identifiers for all Traits of a sim.
+        Retrieve decimal identifiers for all Traits of a Sim.
 
-        :param sim_info: The sim to check.
+        :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: A collection of Trait identifiers on a Sim.
         :rtype: List[int]
         """
-        trait_ids = []
+        trait_ids = list()
         for trait in CommonTraitUtils.get_traits(sim_info):
             trait_id = CommonTraitUtils.get_trait_id(trait)
             if trait_id is None:
@@ -1035,9 +1099,9 @@ class CommonTraitUtils(HasClassLog):
     def get_traits(cls, sim_info: SimInfo) -> List[Trait]:
         """get_traits(sim_info)
 
-        Retrieve all Traits of a sim.
+        Retrieve all Traits of a Sim.
 
-        :param sim_info: The sim to check.
+        :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: A collection of Traits on a Sim.
         :rtype: List[int]
@@ -1274,7 +1338,7 @@ def _common_show_known_traits(opt_sim: OptionalTargetParam=None, _connection: in
     output = CheatOutput(_connection)
     output('Attempting to show known traits.')
     active_sim_info = CommonSimUtils.get_active_sim_info()
-    output('Active sim: {}'.format(CommonSimNameUtils.get_full_name(active_sim_info)))
+    output('Active Sim: {}'.format(CommonSimNameUtils.get_full_name(active_sim_info)))
     target_sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if target_sim_info is None:
         output('Failed, no Sim was specified or the specified Sim was not found!')

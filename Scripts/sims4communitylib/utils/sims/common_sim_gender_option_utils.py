@@ -473,7 +473,7 @@ class CommonSimGenderOptionUtils:
         """
         if sim_info is None:
             return False
-        if not CommonSpeciesUtils.is_pet(sim_info):
+        if not CommonSpeciesUtils.is_animal(sim_info):
             return False
         if can_reproduce:
             CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
@@ -557,6 +557,7 @@ class CommonSimGenderOptionUtils:
             CommonTraitUtils.remove_trait(sim_info, toilet_standing)
             if not CommonSimGenderOptionUtils.uses_toilet_sitting(sim_info):
                 CommonTraitUtils.add_trait(sim_info, CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_UNKNOWN)
+
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender_options_toilet_usage(sim_info)
         return True
@@ -580,6 +581,7 @@ class CommonSimGenderOptionUtils:
 
         if toilet_sitting is None:
             return False
+
         if can_use_toilet_sitting and not CommonTraitUtils.has_trait(sim_info, toilet_sitting):
             CommonTraitUtils.remove_trait(sim_info, CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_UNKNOWN)
             CommonTraitUtils.add_trait(sim_info, toilet_sitting)
@@ -587,6 +589,7 @@ class CommonSimGenderOptionUtils:
             CommonTraitUtils.remove_trait(sim_info, toilet_sitting)
             if not CommonSimGenderOptionUtils.uses_toilet_standing(sim_info):
                 CommonTraitUtils.add_trait(sim_info, CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_UNKNOWN)
+
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender_options_toilet_usage(sim_info)
         return True
