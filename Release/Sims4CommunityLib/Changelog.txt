@@ -6,6 +6,21 @@ v1.75:
   only be stored back into the data dictionary if the result of the decode call is a CommonSerializable object.
 - Added a function to retrieve the stand passive interaction for Sims.
 - The stand_or_swim_at_none property will now properly combine STAND_AT_NONE_CONSTRAINT rather than STAND_CONSTRAINT as expected
+- Fixed an issue where a log file would be in use by another program and thus S4CL would not be able to log any new messages to it.
+- Cleaned up interaction logs
+- Added a Stop Watch to each interaction type to time how long it takes for an interaction to run from start to finish.
+- Added a command to print relationships a Sim has with other Sims to the console and the log file `s4clib.print_relationship_bits`
+- Added a function to retrieve the decimal identifier of a statistic
+- Fixed an issue with the s4clib.set_statistic_level command where you would not be able to set the value of a Commodity
+- Added an `is_conflicting_trait` function to `CommonTraitUtils`
+- Added `has_any_traits` and `has_all_traits` to `CommonTraitUtils`
+- Fixed the `is_statistic_locked` function of `CommonSimStatisticUtils` not properly checking the locked status of a Statistic.
+- Added commands:
+  - `s4clib.max_world_motives` -  Max the motives of all Sims
+  - `s4clib.max_all_motives #` - Max the motives of a Sim
+  - `s4clib.set_motive_level` -  Set the motive level of a Sim
+  - `s4clib.get_motive_level` -  Get the motive level of a Sim
+
 
 v1.74:
 - Added the ability to specify where data is persisted to within `CommonFilePersistenceService` and `CommonFolderPersistenceService` instead of being forced to use `Mods/mod_data`, which is the default.
