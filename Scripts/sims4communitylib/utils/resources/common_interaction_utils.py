@@ -96,7 +96,11 @@ class CommonInteractionUtils:
         try:
             return str(interaction.shortname() or '') or interaction.__class__.__name__
         except:
-            return ''
+            # noinspection PyBroadException
+            try:
+                return interaction.__class__.__name__
+            except:
+                return ''
 
     @staticmethod
     def get_interaction_short_names(interactions: Iterator[Interaction]) -> Tuple[str]:

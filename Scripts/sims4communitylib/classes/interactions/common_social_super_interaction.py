@@ -327,7 +327,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                     kwargles=kwargs
                 )
                 test_result = cls.on_test(context.sim, target, context, *args, **kwargs)
-                cls.get_verbose_log().format_with_message('Test Result', test_result=test_result)
+                cls.get_verbose_log().format_with_message('Test Result (CommonSocialSuperInteraction)', test_result=test_result)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
                 cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
@@ -353,7 +353,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                     kwargles=kwargs
                 )
                 super_test_result = super(CommonSocialSuperInteraction, inst_or_cls)._test(target, context, **kwargs)
-                cls.get_verbose_log().format_with_message('Super Test Result', super_test_result=super_test_result)
+                cls.get_verbose_log().format_with_message('Super Test Result (CommonSocialSuperInteraction)', super_test_result=super_test_result)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' super()._test.'.format(cls.__name__), exception=ex)
                 cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
@@ -373,7 +373,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                     kwargles=kwargs
                 )
                 post_super_test_result = cls.on_post_super_test(context.sim, target, context, *args, **kwargs)
-                cls.get_verbose_log().format_with_message('Post Test Result', post_super_test_result=post_super_test_result)
+                cls.get_verbose_log().format_with_message('Post Test Result (CommonSocialSuperInteraction)', post_super_test_result=post_super_test_result)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' on_post_super_test.'.format(cls.__name__), exception=ex)
                 cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)

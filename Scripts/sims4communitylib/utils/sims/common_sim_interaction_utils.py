@@ -333,7 +333,7 @@ class CommonSimInteractionUtils:
         :return: True, if all running interactions were successfully cancelled. False, if not.
         :rtype: bool
         """
-        for interaction in CommonSimInteractionUtils.get_running_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback):
+        for interaction in tuple(CommonSimInteractionUtils.get_running_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)):
             interaction.cancel(finishing_type, cancel_reason_msg=cancel_reason, **kwargs)
         return True
 
@@ -354,7 +354,7 @@ class CommonSimInteractionUtils:
         :return: True, if all queued interactions were successfully cancelled. False, if not.
         :rtype: bool
         """
-        for interaction in CommonSimInteractionUtils.get_queued_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback):
+        for interaction in tuple(CommonSimInteractionUtils.get_queued_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)):
             interaction.cancel(finishing_type, cancel_reason_msg=cancel_reason, **kwargs)
         return True
 
@@ -392,7 +392,7 @@ class CommonSimInteractionUtils:
             return tuple()
         if sim.si_state is None:
             return tuple()
-        for interaction in sim.si_state:
+        for interaction in tuple(sim.si_state):
             if include_interaction_callback is not None and not include_interaction_callback(interaction):
                 continue
             yield interaction
@@ -415,7 +415,7 @@ class CommonSimInteractionUtils:
             return tuple()
         if sim.queue is None:
             return tuple()
-        for interaction in sim.queue:
+        for interaction in tuple(sim.queue):
             if include_interaction_callback is not None and not include_interaction_callback(interaction):
                 continue
             yield interaction
@@ -1198,7 +1198,7 @@ def _common_show_running_interactions(opt_sim: OptionalTargetParam=None, _connec
         from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
         running_interaction_strings: List[str] = list()
         for interaction in CommonSimInteractionUtils.get_running_interactions_gen(sim_info):
-            interaction_name = CommonInteractionUtils.get_interaction_short_name(interaction)
+            interaction_name = CommonInteractionUtils.get_interaction_short_name(interaction) or interaction.__class__.__name__
             interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
             running_interaction_strings.append('{} ({})'.format(interaction_name, interaction_id))
         running_interaction_strings = sorted(running_interaction_strings, key=lambda x: x)
@@ -1206,7 +1206,7 @@ def _common_show_running_interactions(opt_sim: OptionalTargetParam=None, _connec
 
         queued_interaction_strings: List[str] = list()
         for interaction in CommonSimInteractionUtils.get_queued_interactions_gen(sim_info):
-            interaction_name = CommonInteractionUtils.get_interaction_short_name(interaction)
+            interaction_name = CommonInteractionUtils.get_interaction_short_name(interaction) or interaction.__class__.__name__
             interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
             queued_interaction_strings.append('{} ({})'.format(interaction_name, interaction_id))
         queued_interaction_strings = sorted(queued_interaction_strings, key=lambda x: x)

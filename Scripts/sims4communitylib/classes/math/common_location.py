@@ -100,4 +100,13 @@ class CommonLocation:
             raise Exception('Failed to convert {} with type {} was not of type {}.'.format(location, type(location), type(Location)))
         routing_surface = location.routing_surface if location.routing_surface is not None else CommonSurfaceIdentifier.empty(
             secondary_id=location.level)
-        return CommonLocation(CommonTransform.from_transform(location.transform), CommonSurfaceIdentifier.from_surface_identifier(routing_surface), parent_ref=location.parent_ref, joint_name_or_hash=location.joint_name_or_hash, slot_hash=location.slot_hash)
+        parent_ref = None
+        if location.parent_ref is not None and hasattr(location.parent_ref, 'provided_routing_surface'):
+            parent_ref = location.parent_ref
+        return CommonLocation(
+            CommonTransform.from_transform(location.transform),
+            CommonSurfaceIdentifier.from_surface_identifier(routing_surface),
+            parent_ref=parent_ref,
+            joint_name_or_hash=location.joint_name_or_hash,
+            slot_hash=location.slot_hash
+        )

@@ -6,6 +6,8 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Tuple
+
+import services
 from interactions.context import InteractionContext
 from objects.game_object import GameObject
 from objects.script_object import ScriptObject
@@ -128,7 +130,8 @@ class _S4CLDebugSimPhoneInteractionHandler(CommonScriptObjectInteractionHandler)
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), InteractionContext, InteractionContext.__init__.__name__)
 def _common_ensure_shift_held_is_true_when_it_should_be(original, self: InteractionContext, *_, **__):
     from sims4communitylib.s4cl_configuration import S4CLConfiguration
-    if S4CLConfiguration().enable_extra_shift_click_menus and ('shift_held' not in __ or not __['shift_held']):
+    cheat_service = services.get_cheat_service()
+    if cheat_service.cheats_enabled and S4CLConfiguration().enable_extra_shift_click_menus and ('shift_held' not in __ or not __['shift_held']):
         __['shift_held'] = CommonKeyboardUtils.is_holding_key_down(CommonKey.SHIFT)
     return original(self, *_, **__)
 
@@ -140,8 +143,9 @@ def _common_ensure_proper_interactions_appear_in_relationship_panel(original, se
         context: InteractionContext = args[0]
     elif len(args) == 2:
         context: InteractionContext = args[1]
+    cheat_service = services.get_cheat_service()
     from sims4communitylib.s4cl_configuration import S4CLConfiguration
-    if not S4CLConfiguration().enable_extra_shift_click_menus:
+    if not S4CLConfiguration().enable_extra_shift_click_menus or not cheat_service.cheats_enabled:
         yield from original(self, *args, **kwargs)
     elif context is not None:
         # noinspection PyBroadException
@@ -168,8 +172,9 @@ def _common_ensure_proper_interactions_appear_in_phone_panel(original, self: Sim
         context: InteractionContext = args[0]
     elif len(args) == 2:
         context: InteractionContext = args[1]
+    cheat_service = services.get_cheat_service()
     from sims4communitylib.s4cl_configuration import S4CLConfiguration
-    if not S4CLConfiguration().enable_extra_shift_click_menus:
+    if not S4CLConfiguration().enable_extra_shift_click_menus or not cheat_service.cheats_enabled:
         yield from original(self, *args, **kwargs)
     elif context is not None:
         # noinspection PyBroadException

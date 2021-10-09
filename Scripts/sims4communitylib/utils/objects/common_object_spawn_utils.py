@@ -109,10 +109,13 @@ class CommonObjectSpawnUtils:
             new_translation,
             location.transform.orientation
         )
+        parent_ref = None
+        if location.parent_ref is not None and hasattr(location.parent_ref, 'provided_routing_surface'):
+            parent_ref = location.parent_ref
         new_location = CommonLocation(
             new_transform,
             location.routing_surface,
-            parent_ref=location.parent_ref,
+            parent_ref=parent_ref,
             joint_name_or_hash=location.joint_name_or_hash,
             slot_hash=location.slot_hash
         )
