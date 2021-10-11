@@ -30,7 +30,7 @@ class CommonModIdentityUtils:
         if identifier is None:
             return 'Unknown_Mod'
         if isinstance(identifier, CommonModIdentity):
-            return identifier.name.replace(' ', '_') + identifier.version if identifier.version is not None else ''
+            return identifier.name.replace(' ', '_') + (('_' + identifier.version)if identifier.version is not None else '')
         if isinstance(identifier, str):
             return identifier.replace(' ', '_')
         return str(identifier).replace(' ', '_')
