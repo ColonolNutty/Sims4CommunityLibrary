@@ -7,15 +7,18 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Union
 
+from objects.components.state import StateComponent
 from server_commands.argument_helpers import OptionalTargetParam
 from sims.pregnancy.pregnancy_enums import PregnancyOrigin
 from sims.pregnancy.pregnancy_tracker import PregnancyTracker
 from sims.sim_info import SimInfo
 from sims4.commands import Command, CommandType, CheatOutput
+from sims4.resources import Types
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
@@ -69,6 +72,27 @@ class CommonSimPregnancyUtils:
         pregnancy_tracker.start_pregnancy(sim_info, partner_sim_info, pregnancy_origin=pregnancy_origin)
         pregnancy_tracker.clear_pregnancy_visuals()
         CommonSimStatisticUtils.set_statistic_value(sim_info, CommonStatisticId.PREGNANCY, 1.0)
+        return True
+
+    @staticmethod
+    def induce_labor_in_sim(sim_info: SimInfo) -> bool:
+        """induce_labor(sim_info)
+
+        Induce Labor in a pregnant Sim.
+
+        :param sim_info: The Sim to go into labor.
+        :type sim_info: SimInfo
+        :return: True, if labor was induced successfully. False, if not.
+        """
+        if sim_info is None or not CommonSimPregnancyUtils.is_pregnant(sim_info):
+            return False
+        # Pregnant_InLabor
+        state = CommonResourceUtils.load_instance(Types.OBJECT_STATE, 75273)
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return False
+        state_component: StateComponent = sim.state_component
+        state_component.set_state(state.state, state)
         return True
 
     @staticmethod

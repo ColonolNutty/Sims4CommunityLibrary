@@ -9,17 +9,19 @@ from typing import Any
 
 from event_testing.results import TestResult
 from interactions.context import InteractionContext
+from objects.components.state import StateComponent
 from sims.sim import Sim
+from sims4.resources import Types
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_pregnancy_utils import CommonSimPregnancyUtils
 from sims4communitylib.classes.interactions.common_immediate_super_interaction import CommonImmediateSuperInteraction
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
-from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 
 
 class S4CLDebugInduceLaborInteraction(CommonImmediateSuperInteraction):
@@ -57,12 +59,7 @@ class S4CLDebugInduceLaborInteraction(CommonImmediateSuperInteraction):
 
     # noinspection PyMissingOrEmptyDocstring
     def on_started(self, interaction_sim: Sim, interaction_target: Sim) -> bool:
-        self.log.format_with_message('Running \'{}\' on_started.'.format(self.__class__.__name__), interaction_sim=interaction_sim, interaction_target=interaction_target)
         target_sim_info = CommonSimUtils.get_sim_info(interaction_target)
-        target_sim_name = CommonSimNameUtils.get_full_name(target_sim_info)
-        buff_id = CommonSimPregnancyUtils.get_in_labor_buff(target_sim_info)
-        if buff_id != -1:
-            self.log.debug('The baby wants out now! Labor induced in \'{}\'. Chosen buff identifier: {}'.format(target_sim_name, str(buff_id)))
-            return CommonBuffUtils.add_buff(target_sim_info, buff_id)
-        self.log.debug('Failed to induce labor in \'{}\'.'.format(target_sim_name))
-        return False
+        self.log.format_with_message('The baby wants out now! Labor induced in Sim.', target_sim=target_sim_info)
+        CommonSimPregnancyUtils.induce_labor_in_sim(target_sim_info)
+        return True
