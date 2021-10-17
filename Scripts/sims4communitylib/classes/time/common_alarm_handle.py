@@ -5,12 +5,35 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from alarms import AlarmHandle
-from date_and_time import DateAndTime, TimeSpan
-from scheduling import Timeline
+import os
 from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.utils.common_time_utils import CommonTimeUtils
 from typing import Any, Callable
+
+
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+if not ON_RTD:
+    from scheduling import Timeline
+    from alarms import AlarmHandle
+    from date_and_time import DateAndTime, TimeSpan
+else:
+    # noinspection PyMissingOrEmptyDocstring
+    class AlarmHandle:
+        def cancel(self):
+            pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    class DateAndTime:
+        pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    class TimeSpan:
+        pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    class Timeline:
+        pass
 
 
 class CommonAlarmHandle(AlarmHandle):
@@ -39,9 +62,10 @@ class CommonAlarmHandle(AlarmHandle):
         )
 
 
-@Command('s4clib.print_current_time', command_type=CommandType.Live)
-def _s4clib_print_current_time(_connection: int=None):
-    output = CheatOutput(_connection)
-    output('Current time')
-    output('Hour {} Minute {}'.format(CommonTimeUtils.get_current_date_and_time().hour(), CommonTimeUtils.get_current_date_and_time().minute()))
-    output('Abs Hour {} Abs Minute {}'.format(CommonTimeUtils.get_current_date_and_time().absolute_hours(), CommonTimeUtils.get_current_date_and_time().absolute_minutes()))
+if not ON_RTD:
+    @Command('s4clib.print_current_time', command_type=CommandType.Live)
+    def _s4clib_print_current_time(_connection: int=None):
+        output = CheatOutput(_connection)
+        output('Current time')
+        output('Hour {} Minute {}'.format(CommonTimeUtils.get_current_date_and_time().hour(), CommonTimeUtils.get_current_date_and_time().minute()))
+        output('Abs Hour {} Abs Minute {}'.format(CommonTimeUtils.get_current_date_and_time().absolute_hours(), CommonTimeUtils.get_current_date_and_time().absolute_minutes()))

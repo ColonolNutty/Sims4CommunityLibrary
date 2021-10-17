@@ -23,7 +23,6 @@ else:
     class Timeline:
         pass
 
-
     # noinspection PyMissingOrEmptyDocstring
     class TimeSpan:
         pass
