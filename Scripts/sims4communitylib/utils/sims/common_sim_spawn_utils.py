@@ -89,7 +89,7 @@ else:
 
     # noinspection PyMissingOrEmptyDocstring
     class ResetReason:
-        pass
+        RESET_EXPECTED = 0
 
     # noinspection PyMissingOrEmptyDocstring,PyMissingTypeHints
     def posture_graph(*_, **__):
