@@ -5,14 +5,28 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import os
 from typing import Callable, Any, Union
-from date_and_time import TimeSpan
-from scheduling import Timeline
 from sims4communitylib.classes.time.common_alarm_handle import CommonAlarmHandle
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_time_utils import CommonTimeUtils
+
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+if not ON_RTD:
+    from scheduling import Timeline
+    from date_and_time import TimeSpan
+else:
+    # noinspection PyMissingOrEmptyDocstring
+    class Timeline:
+        pass
+
+
+    # noinspection PyMissingOrEmptyDocstring
+    class TimeSpan:
+        pass
 
 
 class CommonAlarmUtils(HasClassLog):
