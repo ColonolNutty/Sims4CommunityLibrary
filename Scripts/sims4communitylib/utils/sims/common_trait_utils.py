@@ -1051,10 +1051,10 @@ class CommonTraitUtils(HasClassLog):
         if not trait_ids:
             return False
         sim_trait_ids = CommonTraitUtils.get_trait_ids(sim_info)
-        for trait_id in sim_trait_ids:
-            if trait_id in trait_ids:
-                return True
-        return False
+        for trait_id in trait_ids:
+            if trait_id not in sim_trait_ids:
+                return False
+        return True
 
     @classmethod
     def is_conflicting_trait(cls, sim_info: SimInfo, trait_id: Union[int, CommonTraitId]) -> bool:
@@ -1115,6 +1115,7 @@ class CommonTraitUtils(HasClassLog):
             return traits
         return list([CommonTraitUtils.load_trait_by_id(trait_id) for trait_id in (*sim_info._base.trait_ids, *sim_info._base.base_trait_ids) if CommonTraitUtils.load_trait_by_id(trait_id) is not None])
 
+
     @classmethod
     def get_trait_name(cls, trait: Trait) -> Union[str, None]:
         """get_trait_name(trait)
@@ -1130,9 +1131,13 @@ class CommonTraitUtils(HasClassLog):
             return None
         # noinspection PyBroadException
         try:
-            return trait.__name__ or ''
+            return trait.__name__ or trait.__class__.__name__
         except:
-            return ''
+            # noinspection PyBroadException
+            try:
+                return trait.__class__.__name__
+            except:
+                return ''
 
     @classmethod
     def get_trait_names(cls, traits: Iterator[Trait]) -> Tuple[str]:

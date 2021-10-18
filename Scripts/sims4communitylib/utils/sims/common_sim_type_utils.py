@@ -14,6 +14,7 @@ from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_occult_type import CommonOccultType
 from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.enums.sim_type import CommonSimType
+from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -1654,6 +1655,8 @@ class CommonSimTypeUtils:
         age = CommonAge.get_age(sim_info)
         from sims4communitylib.utils.sims.common_sim_occult_type_utils import CommonSimOccultTypeUtils
         for occult_type in CommonSimOccultTypeUtils.get_all_occult_types_for_sim_gen(sim_info):
+            if CommonOccultUtils.is_robot(sim_info) and occult_type == CommonOccultType.NON_OCCULT:
+                continue
             yield CommonSimTypeUtils.determine_sim_type_for_species_age_occult(species, age, occult_type, combine_teen_young_adult_and_elder_age=combine_teen_young_adult_and_elder_age, combine_child_dog_types=combine_child_dog_types)
 
     @staticmethod

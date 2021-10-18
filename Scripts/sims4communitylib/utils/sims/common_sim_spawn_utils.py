@@ -21,9 +21,9 @@ from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 
 # ReadTheDocs
-from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
@@ -73,7 +73,7 @@ else:
 
     # noinspection PyMissingOrEmptyDocstring
     class CommandType:
-        Live = 0
+        pass
 
     # noinspection PyMissingOrEmptyDocstring
     class CheatOutput:
@@ -657,8 +657,8 @@ class CommonSimSpawnUtils:
             return
         sim.fade_out(fade_duration=fade_duration, immediate=immediate, additional_channels=additional_channels)
 
-if not ON_RTD:
 
+if not ON_RTD:
     @Command('s4clib.spawn_sims', command_type=CommandType.Live)
     def _s4cl_spawn_sims(species_str: str, count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
         output = CheatOutput(_connection)
