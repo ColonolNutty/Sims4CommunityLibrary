@@ -18,7 +18,6 @@ from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.sims.common_sim_loot_action_utils import CommonSimLootActionUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
-from sims4communitylib.utils.sims.common_sim_type_utils import CommonSimTypeUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 try:
@@ -1004,6 +1003,7 @@ def _common_print_occult_sim_info(opt_sim: OptionalTargetParam=None, _connection
             obj_type_acronym = 'S'
         elif CommonTypeUtils.is_sim_info_base_wrapper(occult_sim_info):
             obj_type_acronym = 'SIBW'
+        from sims4communitylib.utils.sims.common_sim_type_utils import CommonSimTypeUtils
         sim_types = tuple(CommonSimTypeUtils.get_all_sim_types_gen(occult_sim_info, combine_teen_young_adult_and_elder_age=False, combine_child_dog_types=False))
         current_sim_type = CommonSimTypeUtils.determine_sim_type(occult_sim_info, combine_teen_young_adult_and_elder_age=False, combine_child_dog_types=False, use_current_occult_type=True)
         output('Occult Sim Info [{}]: {} ({}, ({}), C:{}) [{}]'.format(occult_type.name, CommonSimNameUtils.get_full_name(occult_sim_info), str(CommonSimUtils.get_sim_id(occult_sim_info)), ', '.join([sim_type.name for sim_type in sim_types]), current_sim_type.name, obj_type_acronym))

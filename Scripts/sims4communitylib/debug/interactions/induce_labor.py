@@ -9,13 +9,10 @@ from typing import Any
 
 from event_testing.results import TestResult
 from interactions.context import InteractionContext
-from objects.components.state import StateComponent
 from sims.sim import Sim
-from sims4.resources import Types
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_pregnancy_utils import CommonSimPregnancyUtils
 from sims4communitylib.classes.interactions.common_immediate_super_interaction import CommonImmediateSuperInteraction
