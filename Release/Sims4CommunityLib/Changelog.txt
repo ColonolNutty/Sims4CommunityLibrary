@@ -1,3 +1,19 @@
+v1.76:
+- Fixed an error when converting a Location to a CommonLocation where the parent_ref did not have a provided_routing_surface property
+- Fixed an issue where the Cheat menu would be visible without Cheats being enabled when holding the SHIFT key.
+- Added a version number to logged files (Assuming the mod specifies a version number)
+- Fixed an issue with interactions not having proper visible names when printing them in the notification
+- Fixed an issue when cancelling all running interactions and the Sim adds something to their queue during that.
+- Added more details to Test Result verbose log messages in interactions to indicate which level of interaction is being called and where the result of the Test Result is returning from (Which class in particular).
+- Added MISSING_IMAGE_ICON to CommonIconId
+- Added a version number to appear when creating log files for mods
+- Fixed an issue when inducing labor in Male sims where they would not properly be able to give birth.
+- Added "induce_labor_in_sim" to CommonSimPregnancyUtils
+- Fixed an issue with CommonSimSpawnUtils not appearing in the docs
+- Fixed an issue with the CommonAlarmUtils module not rendering in the docs due to an error
+- Fixed an issue with CommonTraitUtils.has_all_traits where it was instead checking for ANY traits.
+- Fixed an issue within CommonSimTypeUtils.get_all_sim_types_gen where it would return a "human" form for Robot Sims, when Robot Sims do not have a "human" form!
+
 v1.75:
 - Added functions to convert CommonSpecies, CommonAge, and CommonGender into localized string ids
 - Added FOX to CommonStringId
