@@ -13,6 +13,11 @@ v1.76:
 - Fixed an issue with the CommonAlarmUtils module not rendering in the docs due to an error
 - Fixed an issue with CommonTraitUtils.has_all_traits where it was instead checking for ANY traits.
 - Fixed an issue within CommonSimTypeUtils.get_all_sim_types_gen where it would return a "human" form for Robot Sims, when Robot Sims do not have a "human" form!
+- Add kwargs to some CommonSimUtils functions to allow specifying allow_hidden_flags
+- When using the debug interactions, the results will now also be logged in the log file.
+- Added Yellow and Orange colors for colorizing text with.
+- Added the ability to decide whether or not to create a combined.json file in persistence.
+- Fixed an issue when retrieving the short name of an interaction for interactions without a short name
 
 v1.75:
 - Added functions to convert CommonSpecies, CommonAge, and CommonGender into localized string ids
