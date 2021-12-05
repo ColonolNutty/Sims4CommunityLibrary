@@ -33,7 +33,8 @@ class CommonIntervalDispatcher:
     :type run_once: bool
     """
     def __init__(self, mod_identifier: Union[str, CommonModIdentity], milliseconds: int, listening_func: Callable[..., Any], run_once: bool=False):
-        self._mod_name = mod_identifier.name if isinstance(mod_identifier, CommonModIdentity) else mod_identifier
+        from sims4communitylib.utils.misc.common_mod_identity_utils import CommonModIdentityUtils
+        self._mod_name = CommonModIdentityUtils.determine_mod_name_from_identifier(mod_identifier)
         self._minimum_milliseconds_to_dispatch = milliseconds
         self._listening_func = listening_func
         self.total_milliseconds_passed = 0.0

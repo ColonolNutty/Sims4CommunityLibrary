@@ -43,7 +43,8 @@ class CommonLog:
     """
     def __init__(self, mod_identifier: Union[str, CommonModIdentity], log_name: str, custom_file_path: str=None):
         self._log_name = log_name
-        self._mod_name = mod_identifier.name if isinstance(mod_identifier, CommonModIdentity) else mod_identifier
+        from sims4communitylib.utils.misc.common_mod_identity_utils import CommonModIdentityUtils
+        self._mod_name = CommonModIdentityUtils.determine_mod_name_from_identifier(mod_identifier)
         self._custom_file_path = custom_file_path
         self._enabled_message_types = tuple()
         self._should_log_extra_sim_details = False

@@ -28,8 +28,9 @@ class CommonInteractionType(CommonInt):
     ON_TERRAIN_LOAD: 'CommonInteractionType' = 0
     ON_OCEAN_LOAD: 'CommonInteractionType' = 1
     ON_SCRIPT_OBJECT_LOAD: 'CommonInteractionType' = 2
-    ADD_TO_SIM_RELATIONSHIP_PANEL_INTERACTIONS: 'CommonInteractionType' = 3
-    ADD_TO_SIM_PHONE_INTERACTIONS: 'CommonInteractionType' = 4
+    ADD_PRE_ROLL_SUPER_INTERACTION_ON_SCRIPT_OBJECT_LOAD: 'CommonInteractionType' = 3
+    ADD_TO_SIM_RELATIONSHIP_PANEL_INTERACTIONS: 'CommonInteractionType' = 4
+    ADD_TO_SIM_PHONE_INTERACTIONS: 'CommonInteractionType' = 5
 
 
 class CommonInteractionHandler:
@@ -135,6 +136,7 @@ class CommonInteractionRegistry(CommonService, HasLog):
             CommonInteractionType.ON_TERRAIN_LOAD: list(),
             CommonInteractionType.ON_OCEAN_LOAD: list(),
             CommonInteractionType.ON_SCRIPT_OBJECT_LOAD: list(),
+            CommonInteractionType.ADD_PRE_ROLL_SUPER_INTERACTION_ON_SCRIPT_OBJECT_LOAD: list(),
             CommonInteractionType.ADD_TO_SIM_RELATIONSHIP_PANEL_INTERACTIONS: list(),
             CommonInteractionType.ADD_TO_SIM_PHONE_INTERACTIONS: list()
         }
@@ -169,6 +171,37 @@ class CommonInteractionRegistry(CommonService, HasLog):
                 continue
             new_script_object_super_affordances.append(new_super_affordance)
         script_object._super_affordances += tuple(new_script_object_super_affordances)
+
+    def register_pre_roll_super_interactions_on_script_object_add(self, script_object: ScriptObject, *args, **kwargs):
+        """register_pre_roll_super_interactions_on_script_object_add(script_object, *args, **kwargs)
+
+        A hook that occurs upon a Script Object being added.
+
+        :param script_object: The script object being added.
+        :type script_object: ScriptObject
+        """
+        script_object_type = type(script_object)
+        self.log.format_with_message('Adding pre roll super interactions for type', script_object_type=script_object_type)
+        if not hasattr(script_object_type, '_preroll_super_affordances'):
+            self.verbose_log.format_with_message('Object did not have super affordances.', script_object=script_object_type)
+            return
+        new_preroll_super_affordances = list()
+        for interaction_handler in self._interaction_handlers[CommonInteractionType.ADD_PRE_ROLL_SUPER_INTERACTION_ON_SCRIPT_OBJECT_LOAD]:
+            if hasattr(interaction_handler, 'should_add') and not interaction_handler.should_add(script_object, *args, **kwargs):
+                continue
+            for interaction_instance in interaction_handler._interactions_to_add_gen():
+                if interaction_instance in new_preroll_super_affordances or interaction_instance in script_object_type._preroll_super_affordances:
+                    self.verbose_log.format_with_message('Interaction was already found in the interactions list.', script_object_type=script_object_type, interaction_instance=interaction_instance)
+                    continue
+                new_preroll_super_affordances.append(interaction_instance)
+        self.log.format_with_message('Adding super affordances to object.', script_object=script_object, script_object_type=script_object_type, new_preroll_super_affordances=new_preroll_super_affordances)
+        script_object_type._preroll_super_affordances += tuple(new_preroll_super_affordances)
+        new_script_object_preroll_super_affordances = list()
+        for new_super_affordance in new_preroll_super_affordances:
+            if new_super_affordance in script_object._preroll_super_affordances:
+                continue
+            new_script_object_preroll_super_affordances.append(new_super_affordance)
+        script_object._preroll_super_affordances += tuple(new_script_object_preroll_super_affordances)
 
     def _on_sim_relationship_panel_load(self, sim: Sim, *args, **kwargs):
         sim_class = type(sim)
@@ -272,6 +305,7 @@ class CommonInteractionRegistry(CommonService, HasLog):
 def _common_script_object_on_add(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonInteractionRegistry().on_script_object_add(self, *args, **kwargs)
+    CommonInteractionRegistry().register_pre_roll_super_interactions_on_script_object_add(self, *args, **kwargs)
     if CommonTypeUtils.is_sim_instance(self):
         CommonInteractionRegistry()._on_sim_relationship_panel_load(self, *args, **kwargs)
         CommonInteractionRegistry()._on_sim_phone_load(self, *args, **kwargs)

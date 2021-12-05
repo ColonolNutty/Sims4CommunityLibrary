@@ -40,6 +40,10 @@ class CommonStringId(CommonInt):
     TEXT_WITH_RED_COLOR: 'CommonStringId' = 835489330
     # Tokens: {0.String}
     TEXT_WITH_BLUE_COLOR: 'CommonStringId' = 1505840180
+    # Tokens: {0.String}
+    TEXT_WITH_YELLOW_COLOR: 'CommonStringId' = 3457894271
+    # Tokens: {0.String}
+    TEXT_WITH_ORANGE_COLOR: 'CommonStringId' = 2567694686
 
     # Ages
     BABY: 'CommonStringId' = 4016862175

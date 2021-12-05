@@ -54,14 +54,33 @@ class S4CLDebugShowRunningSituationsInteraction(CommonImmediateSuperInteraction)
         target_sim_name = CommonSimNameUtils.get_full_name(target_sim_info)
         situation_strings: List[str] = list()
         for situation in CommonSimSituationUtils.get_situations(target_sim_info):
+            from situations.situation import Situation
+            situation: Situation = situation
             situation_name = CommonSituationUtils.get_situation_name(situation)
             situation_id = CommonSituationUtils.get_situation_id(situation)
-            situation_strings.append('{} ({})'.format(situation_name, situation_id))
+            current_job = situation.get_current_job_for_sim(interaction_target)
+            # noinspection PyBroadException
+            try:
+                job_name = current_job.__name__ or 'No Job'
+            except:
+                job_name = 'No Job'
+            current_role = situation.get_current_role_state_for_sim(interaction_target)
+            # noinspection PyBroadException
+            try:
+                role_name = current_role.__name__ or 'No Role'
+            except:
+                role_name = 'No Role'
+            situation_strings.append('S:{} ({})\n  Job: {}\n  Role: {}'.format(situation_name, situation_id, job_name, role_name))
 
         situation_strings = sorted(situation_strings, key=lambda x: x)
-        sim_situations = ', '.join(situation_strings)
+        sim_situations = '\n\n'.join(situation_strings)
         text = ''
-        text += 'Running Situations:\n{}\n\n'.format(sim_situations)
+        text += 'Running Situations:\n{}'.format(sim_situations)
+        self.log.enable()
+        sim_buffs_for_log = '\n\n'.join(situation_strings)
+        for_log_text = 'Running Situations:\n{}\n\n'.format(sim_buffs_for_log)
+        self.log.debug(f'{target_sim_name} ({CommonSimUtils.get_sim_id(target_sim_info)}): {for_log_text}')
+        self.log.disable()
         CommonBasicNotification(
             CommonLocalizationUtils.create_localized_string('{} Running Situations ({})'.format(target_sim_name, CommonSimUtils.get_sim_id(target_sim_info))),
             CommonLocalizationUtils.create_localized_string(text)

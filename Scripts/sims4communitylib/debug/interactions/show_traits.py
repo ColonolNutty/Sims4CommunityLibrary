@@ -61,6 +61,11 @@ class S4CLDebugShowTraitsInteraction(CommonImmediateSuperInteraction):
         sim_traits = ', '.join(trait_strings)
         text = ''
         text += 'Traits:\n{}\n\n'.format(sim_traits)
+        self.log.enable()
+        sim_traits_for_log = ',\n'.join(trait_strings)
+        for_log_text = 'Traits:\n{}\n\n'.format(sim_traits_for_log)
+        self.log.debug(f'{target_sim_name} ({CommonSimUtils.get_sim_id(target_sim_info)}): {for_log_text}')
+        self.log.disable()
         CommonBasicNotification(
             CommonLocalizationUtils.create_localized_string('{} Traits ({})'.format(target_sim_name, CommonSimUtils.get_sim_id(target_sim_info))),
             CommonLocalizationUtils.create_localized_string(text)

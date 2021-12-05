@@ -88,13 +88,8 @@ class CommonModIdentity:
 
     @staticmethod
     def _get_mod_name(mod_identifier: Union[str, 'CommonModIdentity']) -> Union[str, None]:
-        if mod_identifier is None:
-            return 'Unknown_Mod'
-        if isinstance(mod_identifier, CommonModIdentity):
-            return mod_identifier.name.replace(' ', '_')
-        if isinstance(mod_identifier, str):
-            return mod_identifier.replace(' ', '_')
-        return str(mod_identifier).replace(' ', '_')
+        from sims4communitylib.utils.misc.common_mod_identity_utils import CommonModIdentityUtils
+        return CommonModIdentityUtils.determine_mod_name_from_identifier(mod_identifier)
 
     def __repr__(self) -> str:
         return 'mod_{}_version_{}_author_{}_namespace_{}'.format(self.name, self.version.replace('.', '_').replace('/', '_').replace('\\', '_'), self.author, self.base_namespace)

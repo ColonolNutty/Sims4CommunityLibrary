@@ -37,7 +37,8 @@ class CommonEventHandler:
             raise AssertionError('Event Function \'{}\' is missing the required argument with name \'event_data\'')
         if 'self' in function_signature.parameters or 'cls' in function_signature.parameters:
             raise AssertionError('Event functions must be static methods. Mod Name: \'{}\', Function: \'{}\''.format(repr(mod_identifier), event_function.__name__))
-        self._mod_name = mod_identifier.name if isinstance(mod_identifier, CommonModIdentity) else mod_identifier
+        from sims4communitylib.utils.misc.common_mod_identity_utils import CommonModIdentityUtils
+        self._mod_name = CommonModIdentityUtils.determine_mod_name_from_identifier(mod_identifier)
         self._event_function = event_function
         self._event_type = function_signature.parameters['event_data'].annotation
 

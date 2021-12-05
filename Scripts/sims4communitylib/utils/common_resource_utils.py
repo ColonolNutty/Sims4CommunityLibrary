@@ -166,9 +166,9 @@ class CommonResourceUtils:
     def get_enum_by_name(name: str, enum_type: Any, default_value: Any=None) -> Any:
         """get_enum_by_name(name, enum_type, default_value=None)
 
-        Retrieve an enum value by its a name.
+        Retrieve an enum value by its name.
 
-        :param name: The name of an outfit category.
+        :param name: The name of the enum value to retrieve.
         :type name: str
         :param enum_type: The type of enum to retrieve.
         :type enum_type: Any
@@ -183,6 +183,25 @@ class CommonResourceUtils:
             return enum_type[name]
         if hasattr(enum_type, 'name_to_value') and name in enum_type.name_to_value:
             return enum_type.name_to_value.get(name)
+        return default_value
+
+    @staticmethod
+    def get_enum_by_int_value(value: int, enum_type: Any, default_value: Any=None) -> Any:
+        """get_enum_by_int_value(value, enum_type, default_value=None)
+
+        Retrieve an enum value by its value.
+
+        :param value: The integer value of the enum value to retrieve.
+        :type value: int
+        :param enum_type: The type of enum to retrieve.
+        :type enum_type: Any
+        :param default_value: The default value to return if an enum value was not found using the specified name. Default is None.
+        :type default_value: Any, optional
+        :return: The enum value with a value matching the specified value or the default value if not found.
+        :rtype: Any
+        """
+        if hasattr(enum_type, 'value_to_name') and value in enum_type.value_to_name:
+            return CommonResourceUtils.get_enum_by_name(enum_type.value_to_name, enum_type, default_value=default_value)
         return default_value
 
     @staticmethod

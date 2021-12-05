@@ -29,6 +29,7 @@ class S4CLConfiguration(HasLog, CommonService):
             'enable_vanilla_logging': False,
             'enable_extra_shift_click_menus': True,
             'persist_mod_data_per_save_slot': False,
+            'create_combined_json': False,
             'enable_logs': {
                 'example_log_that_is_enabled': ['DEBUG', 'WARN']
             }
@@ -88,6 +89,13 @@ class S4CLConfiguration(HasLog, CommonService):
         if self._config_data is None or not self._config_data:
             return False
         return self._config_data.get('enable_extra_shift_click_menus', False)
+
+    @property
+    def create_combined_json(self) -> bool:
+        """ Whether or not to create a combined.json file when reading through folders. """
+        if self._config_data is None or not self._config_data:
+            return False
+        return self._config_data.get('create_combined_json', False)
 
     @property
     def enable_logs(self) -> Dict[str, Tuple[CommonMessageType]]:

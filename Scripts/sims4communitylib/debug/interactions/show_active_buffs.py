@@ -60,6 +60,11 @@ class S4CLDebugShowActiveBuffsInteraction(CommonImmediateSuperInteraction):
         sim_buffs = ', '.join(sim_buff_strings)
         text = ''
         text += 'Active Buffs:\n{}\n\n'.format(sim_buffs)
+        self.log.enable()
+        sim_buffs_for_log = ',\n'.join(sim_buff_strings)
+        for_log_text = 'Active Buffs:\n{}\n\n'.format(sim_buffs_for_log)
+        self.log.debug(f'{target_sim_name} ({CommonSimUtils.get_sim_id(target_sim_info)}): {for_log_text}')
+        self.log.disable()
         CommonBasicNotification(
             CommonLocalizationUtils.create_localized_string('{} Active Buffs ({})'.format(target_sim_name, CommonSimUtils.get_sim_id(target_sim_info))),
             CommonLocalizationUtils.create_localized_string(text)

@@ -70,6 +70,13 @@ class S4CLDebugShowRunningAndQueuedInteractionsInteraction(CommonImmediateSuperI
         text = ''
         text += 'Running Interactions:\n{}\n\n'.format(running_interaction_names)
         text += 'Queued Interactions:\n{}\n\n'.format(queued_interaction_names)
+        self.log.enable()
+        sim_running_interactions_for_log = ',\n'.join(running_interaction_strings)
+        for_log_text = 'Running Interactions:\n{}\n\n'.format(sim_running_interactions_for_log)
+        sim_queued_interactions_for_log = ',\n'.join(queued_interaction_strings)
+        for_log_text += 'Queued Interactions:\n{}\n\n'.format(sim_queued_interactions_for_log)
+        self.log.debug(f'{target_sim_name} ({CommonSimUtils.get_sim_id(target_sim_info)}): {for_log_text}')
+        self.log.disable()
         CommonBasicNotification(
             CommonLocalizationUtils.create_localized_string('{} Running and Queued Interactions ({})'.format(target_sim_name, CommonSimUtils.get_sim_id(target_sim_info))),
             CommonLocalizationUtils.create_localized_string(text)

@@ -19,3 +19,5 @@ class CommonLocalizedStringColor(CommonInt):
     BLUE: 'CommonLocalizedStringColor' = CommonStringId.TEXT_WITH_BLUE_COLOR
     GREEN: 'CommonLocalizedStringColor' = CommonStringId.TEXT_WITH_GREEN_COLOR
     RED: 'CommonLocalizedStringColor' = CommonStringId.TEXT_WITH_RED_COLOR
+    YELLOW: 'CommonLocalizedStringColor' = CommonStringId.TEXT_WITH_YELLOW_COLOR
+    ORANGE: 'CommonLocalizedStringColor' = CommonStringId.TEXT_WITH_ORANGE_COLOR
