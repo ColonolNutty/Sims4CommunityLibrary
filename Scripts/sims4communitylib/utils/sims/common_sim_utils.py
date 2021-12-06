@@ -9,7 +9,7 @@ import services
 import sims4.commands
 from typing import Iterator, Callable, Union
 
-from objects import HiddenReasonFlag
+from objects import HiddenReasonFlag, ALL_HIDDEN_REASONS
 from sims.sim import Sim
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
@@ -122,14 +122,14 @@ class CommonSimUtils:
         return CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=_first_and_last_name)
 
     @staticmethod
-    def get_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None, allow_hidden_flags: HiddenReasonFlag=HiddenReasonFlag.NONE) -> Iterator[Sim]:
+    def get_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None, allow_hidden_flags: HiddenReasonFlag=ALL_HIDDEN_REASONS) -> Iterator[Sim]:
         """get_all_sims_generator(include_sim_callback=None)
 
         Retrieve a Sim object for each and every Sim (including hidden Sims).
 
         :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. If set to None, All sims will be included.
         :type include_sim_callback: Callable[[SimInfo], bool], optional
-        :param allow_hidden_flags: Flags to indicate whether or not to consider types of hidden Sims as being instanced. Default is HiddenReasonFlag.NONE
+        :param allow_hidden_flags: Flags to indicate whether or not to consider types of hidden Sims as being instanced. Default is ALL_HIDDEN_REASONS.
         :type allow_hidden_flags: HiddenReasonFlag, optional
         :return: An iterable of all Sims matching the `include_sim_callback` filter.
         :rtype: Iterator[Sim]
@@ -160,7 +160,7 @@ class CommonSimUtils:
             yield sim_info
 
     @staticmethod
-    def get_instanced_sim_info_for_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None, allow_hidden_flags: HiddenReasonFlag=HiddenReasonFlag.NONE) -> Iterator[SimInfo]:
+    def get_instanced_sim_info_for_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None, allow_hidden_flags: HiddenReasonFlag=ALL_HIDDEN_REASONS) -> Iterator[SimInfo]:
         """get_instanced_sim_info_for_all_sims_generator(include_sim_callback=None, allow_hidden_flags=HiddenReasonFlag.NONE)
 
         Retrieve a SimInfo object for each and every sim.
@@ -169,7 +169,7 @@ class CommonSimUtils:
 
         :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. If set to None, All sims will be included.
         :type include_sim_callback: Callable[[SimInfo], bool], optional
-        :param allow_hidden_flags: Flags to indicate whether or not to consider types of hidden Sims as being instanced. Default is HiddenReasonFlag.NONE
+        :param allow_hidden_flags: Flags to indicate whether or not to consider types of hidden Sims as being instanced. Default is ALL_HIDDEN_REASONS
         :type allow_hidden_flags: HiddenReasonFlag, optional
         :return: An iterable of all Sims matching the `include_sim_callback` filter.
         :rtype: Iterator[SimInfo]
@@ -226,14 +226,14 @@ class CommonSimUtils:
         return sim_identifier
 
     @staticmethod
-    def get_sim_instance(sim_identifier: Union[int, Sim, SimInfo], allow_hidden_flags: HiddenReasonFlag=HiddenReasonFlag.NONE) -> Union[Sim, None]:
+    def get_sim_instance(sim_identifier: Union[int, Sim, SimInfo], allow_hidden_flags: HiddenReasonFlag=ALL_HIDDEN_REASONS) -> Union[Sim, None]:
         """get_sim_instance(sim_identifier, allow_hidden_flags=HiddenReasonFlag.NONE)
 
         Retrieve a Sim instance from a sim identifier.
 
         :param sim_identifier: The identifier or instance of a Sim to use.
         :type sim_identifier: Union[int, Sim, SimInfo]
-        :param allow_hidden_flags: Flags to indicate whether or not to consider types of hidden Sims as being instanced. Default is HiddenReasonFlag.NONE
+        :param allow_hidden_flags: Flags to indicate whether or not to consider types of hidden Sims as being instanced. Default is ALL_HIDDEN_REASONS
         :type allow_hidden_flags: HiddenReasonFlag, optional
         :return: The instance of the specified Sim or None if no instance was found.
         :rtype: Union[Sim, None]
@@ -246,7 +246,7 @@ class CommonSimUtils:
             sim_info = services.sim_info_manager().get(sim_identifier)
             if sim_info is None:
                 return None
-            return CommonSimUtils.get_sim_instance(sim_info)
+            return CommonSimUtils.get_sim_instance(sim_info, allow_hidden_flags=allow_hidden_flags)
         if isinstance(sim_identifier, SimInfoBaseWrapper):
             return sim_identifier.get_sim_instance(allow_hidden_flags=allow_hidden_flags)
         return sim_identifier
