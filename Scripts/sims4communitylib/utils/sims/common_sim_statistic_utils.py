@@ -6,14 +6,18 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Union, Iterator
+
+from objects.components.statistic_component import StatisticComponent
 from server_commands.argument_helpers import TunableInstanceParam, OptionalTargetParam
 from sims.sim_info import SimInfo
 from sims4.commands import Command, CommandType, CheatOutput
 from sims4.resources import Types
 from sims4communitylib.enums.statistics_enum import CommonStatisticId
+from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.resources.common_statistic_utils import CommonStatisticUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -166,7 +170,18 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         if statistic_instance is None:
             cls.get_log().format_with_message('No statistic found on Sim when getting statistic value.', statistic=statistic, sim=sim_info)
             return -1.0
-        return sim_info.get_stat_value(statistic_instance)
+        try:
+            if not CommonComponentUtils.has_component(sim_info, CommonComponentType.STATISTIC):
+                if not add:
+                    return -1.0
+                else:
+                    CommonComponentUtils.add_dynamic_component(sim_info, CommonComponentType.STATISTIC)
+            statistic_component: StatisticComponent = CommonComponentUtils.get_component(sim_info, CommonComponentType.STATISTIC, add_dynamic=add_dynamic)
+            if statistic_component is None:
+                return -1.0
+            return statistic_component.get_stat_value(statistic_instance)
+        except Exception as ex:
+            cls.get_log().format_error_with_message('An error occurred while getting statistic value.', sim_info=sim_info, sim_type=type(sim_info), has_get_stat_value=hasattr(sim_info, 'get_stat_value'), get_stat_value=sim_info.get_stat_value, exception=ex, update_tokens=False)
 
     # noinspection PyUnusedLocal
     @classmethod

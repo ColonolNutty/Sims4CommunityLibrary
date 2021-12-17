@@ -29,7 +29,28 @@ class CommonSituationUtils:
         """
         if isinstance(situation_identifier, int):
             return situation_identifier
-        return getattr(situation_identifier, 'guid64', None)
+        if not hasattr(situation_identifier, 'id'):
+            return -1
+        return situation_identifier.id or getattr(situation_identifier, 'id', -1)
+
+    @staticmethod
+    def get_situation_guid(situation_identifier: Union[int, Situation]) -> int:
+        """get_situation_guid(situation_identifier)
+
+        Retrieve the GUID of a Situation.
+
+        :param situation_identifier: The identifier or instance of a Situation.
+        :type situation_identifier: Union[int, Situation]
+        :return: The GUID of the specified Situation or -1 if it does not have one.
+        :rtype: int
+        """
+        if situation_identifier is None:
+            return -1
+        if isinstance(situation_identifier, int):
+            return situation_identifier
+        if not hasattr(situation_identifier, 'guid64'):
+            return -1
+        return getattr(situation_identifier, 'guid64', -1)
 
     @staticmethod
     def get_situation_name(situation: Situation) -> Union[str, None]:

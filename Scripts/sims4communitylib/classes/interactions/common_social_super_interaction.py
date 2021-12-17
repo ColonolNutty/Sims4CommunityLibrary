@@ -297,13 +297,13 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
             inst_or_cls = inst if inst is not None else cls
             try:
                 if context.sim is target:
-                    cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                    cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                     return TestResult(False, 'Cannot run a social as a self interaction.')
                 if target is None:
-                    cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                    cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                     return TestResult(False, 'Cannot run a social with no target.')
                 if target.is_sim and target.socials_locked:
-                    cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                    cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                     return TestResult(False, 'Cannot socialize with a Sim who has socials_locked set to true. This Sim is leaving the lot.')
                 if context.source == context.SOURCE_AUTONOMY:
                     sim = inst.sim if inst is not None else context.sim
@@ -312,10 +312,10 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                         attached_si = social_group.get_si_registered_for_sim(sim, affordance=cls)
                         if inst is not None:
                             if attached_si is not inst:
-                                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                                cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                                 return TestResult(False, 'Cannot run social since sim already has an interaction that is registered to group.')
                         else:
-                            cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                            cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                             return TestResult(False, 'Sim {} is already running matching affordance:{} ', sim, cls)
 
                 cls.get_verbose_log().format_with_message(
@@ -330,7 +330,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                 cls.get_verbose_log().format_with_message('Test Result (CommonSocialSuperInteraction)', test_result=test_result)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
-                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                 return TestResult.NONE
 
             if test_result is not None and isinstance(test_result, TestResult) and test_result.result is False:
@@ -340,7 +340,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                     tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.reason)
                 else:
                     tooltip = None
-                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                 return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip, icon=test_result.icon, influence_by_active_mood=test_result.influence_by_active_mood)
 
             try:
@@ -356,11 +356,11 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                 cls.get_verbose_log().format_with_message('Super Test Result (CommonSocialSuperInteraction)', super_test_result=super_test_result)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' super()._test.'.format(cls.__name__), exception=ex)
-                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                 return TestResult.NONE
 
             if super_test_result is not None and not super_test_result.result:
-                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                 return super_test_result
 
             try:
@@ -376,7 +376,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                 cls.get_verbose_log().format_with_message('Post Test Result (CommonSocialSuperInteraction)', post_super_test_result=post_super_test_result)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' on_post_super_test.'.format(cls.__name__), exception=ex)
-                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                 return TestResult.NONE
 
             if post_super_test_result is not None and isinstance(test_result, TestResult) and post_super_test_result.result is False:
@@ -386,14 +386,14 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, CommonSuperInteractio
                     post_super_test_result_tooltip = CommonLocalizationUtils.create_localized_tooltip(post_super_test_result.reason)
                 else:
                     post_super_test_result_tooltip = None
-                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                 return cls.create_test_result(post_super_test_result.result, post_super_test_result.reason, tooltip=post_super_test_result_tooltip, icon=post_super_test_result.icon, influence_by_active_mood=post_super_test_result.influence_by_active_mood)
 
-            cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+            cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
             return TestResult.TRUE
         except Exception as ex:
             cls.get_log().error('Error occurred while running _test of interaction \'{}\''.format(cls.__name__), exception=ex)
-        cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+        cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
         return TestResult(False)
 
     # noinspection SpellCheckingInspection

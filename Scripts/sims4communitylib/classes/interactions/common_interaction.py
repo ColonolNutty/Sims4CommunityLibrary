@@ -107,7 +107,7 @@ class CommonInteraction(Interaction, HasClassLog):
                 cls.get_verbose_log().format_with_message('Test Result (CommonInteraction)', test_result=test_result)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' on_test.'.format(cls.__name__), exception=ex)
-                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                 return TestResult.NONE
 
             if test_result is not None and isinstance(test_result, TestResult) and test_result.result is False:
@@ -117,7 +117,7 @@ class CommonInteraction(Interaction, HasClassLog):
                     tooltip = CommonLocalizationUtils.create_localized_tooltip(test_result.reason)
                 else:
                     tooltip = None
-                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                 return cls.create_test_result(test_result.result, test_result.reason, tooltip=tooltip, icon=test_result.icon, influence_by_active_mood=test_result.influence_by_active_mood)
 
             try:
@@ -132,11 +132,11 @@ class CommonInteraction(Interaction, HasClassLog):
                 cls.get_verbose_log().format_with_message('Super Test Result (CommonInteraction)', super_test_result=super_test_result)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' super()._test.'.format(cls.__name__), exception=ex)
-                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                 return TestResult.NONE
 
             if super_test_result is not None and not super_test_result.result:
-                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                 return super_test_result
 
             try:
@@ -151,7 +151,7 @@ class CommonInteraction(Interaction, HasClassLog):
                 cls.get_verbose_log().format_with_message('Post Test Result (CommonInteraction)', post_super_test_result=post_super_test_result)
             except Exception as ex:
                 cls.get_log().error('Error occurred while running interaction \'{}\' on_post_super_test.'.format(cls.__name__), exception=ex)
-                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                 return TestResult.NONE
 
             if post_super_test_result is not None and isinstance(test_result, TestResult) and post_super_test_result.result is False:
@@ -161,14 +161,14 @@ class CommonInteraction(Interaction, HasClassLog):
                     post_super_test_result_tooltip = CommonLocalizationUtils.create_localized_tooltip(post_super_test_result.reason)
                 else:
                     post_super_test_result_tooltip = None
-                cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
                 return cls.create_test_result(post_super_test_result.result, post_super_test_result.reason, tooltip=post_super_test_result_tooltip, icon=post_super_test_result.icon, influence_by_active_mood=post_super_test_result.influence_by_active_mood)
 
-            cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+            cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
             return TestResult.TRUE
         except Exception as ex:
             cls.get_log().error('Error occurred while running _test of interaction \'{}\''.format(cls.__name__), exception=ex)
-        cls.get_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
+        cls.get_verbose_log().format_with_message('Took {} seconds to return result from interaction.'.format(stop_watch.stop()), class_name=cls.__name__)
         return TestResult(False)
 
     # noinspection PyMethodParameters,PyMissingOrEmptyDocstring

@@ -34,39 +34,40 @@ class CommonSimSituationUtils:
 
     """
     @staticmethod
-    def has_situation(sim_info: SimInfo, situation_id: Union[int, CommonSituationId]) -> bool:
-        """has_situation(sim_info, situation_id)
+    def has_situation(sim_info: SimInfo, situation_guid: Union[int, CommonSituationId]) -> bool:
+        """has_situation(sim_info, situation_guid)
 
         Determine if a Sim is involved in the specified Situation.
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :param situation_id: The decimal identifiers of a Situation.
-        :type situation_id: Union[int, CommonSituationId]
+        :param situation_guid: The GUID of a Situation.
+        :type situation_guid: Union[int, CommonSituationId]
         :return: True, if the Sim is involved in the specified Situation. False, if not.
         :rtype: bool
         """
         if sim_info is None:
             return False
-        return situation_id in CommonSimSituationUtils.get_situation_ids(sim_info)
+        return situation_guid in CommonSimSituationUtils.get_situation_guids(sim_info)
 
+    # noinspection SpellCheckingInspection
     @staticmethod
-    def has_situations(sim_info: SimInfo, situation_ids: Iterator[Union[int, CommonSituationId]]) -> bool:
-        """has_situations(sim_info, situation_ids)
+    def has_situations(sim_info: SimInfo, situation_guids: Iterator[Union[int, CommonSituationId]]) -> bool:
+        """has_situations(sim_info, situation_guids)
 
         Determine if a Sim is involved in any of the specified Situations.
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :param situation_ids: The decimal identifiers of Situations.
-        :type situation_ids: Iterator[Union[int, CommonSituationId]]
+        :param situation_guids: The GUID of Situations.
+        :type situation_guids: Iterator[Union[int, CommonSituationId]]
         :return: True, if the Sim has any of the specified situations. False, if not.
         :rtype: bool
         """
         if sim_info is None:
             return False
-        for situation_id in CommonSimSituationUtils.get_situation_ids(sim_info):
-            if situation_id in situation_ids:
+        for situation_guid in CommonSimSituationUtils.get_situation_guids(sim_info):
+            if situation_guid in situation_guids:
                 return True
         return False
 
@@ -262,10 +263,30 @@ class CommonSimSituationUtils:
         situation_ids = []
         for situation in CommonSimSituationUtils.get_situations(sim_info):
             situation_id = CommonSituationUtils.get_situation_id(situation)
-            if situation_id is None:
+            if situation_id is None and situation_id != -1:
                 continue
             situation_ids.append(situation_id)
         return situation_ids
+
+    # noinspection SpellCheckingInspection
+    @staticmethod
+    def get_situation_guids(sim_info: SimInfo) -> List[int]:
+        """get_situation_guids(sim_info)
+
+        Retrieve GUIDs for all Situations a Sim is involved in.
+
+        :param sim_info: The sim to check.
+        :type sim_info: SimInfo
+        :return: A collection of Situation GUIDs the specified Sim is involved in.
+        :rtype: List[int]
+        """
+        situation_guids = []
+        for situation in CommonSimSituationUtils.get_situations(sim_info):
+            situation_guid = CommonSituationUtils.get_situation_guid(situation)
+            if situation_guid is None and situation_guid != -1:
+                continue
+            situation_guids.append(situation_guid)
+        return situation_guids
 
     @staticmethod
     def get_situation_goals(sim_info: SimInfo) -> Tuple[Union[SituationGoal, SituationGoalTargetedSim]]:
