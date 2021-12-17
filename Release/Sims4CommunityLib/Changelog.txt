@@ -18,6 +18,12 @@ v1.76:
 - Added Yellow and Orange colors for colorizing text with.
 - Added the ability to decide whether or not to create a combined.json file in persistence.
 - Fixed an issue when retrieving the short name of an interaction for interactions without a short name
+- The "Took # Seconds to blah" debug messages are now only shown in the verbose log for interactions
+- Fixed an issue with the get_situation_id function where it was getting the guid64 value instead of the expected id.
+- Added a get_situation_guid interaction for getting the guid64 value instead.
+- Added commands to set the gender preferences of all Sims or those of a specific gender. `s4clib.set_gender_pref_of_all_sims`, `s4clib.set_gender_pref_of_all_female_sims`, and `s4clib.set_gender_pref_of_all_male_sims`
+- Added interactions to set the first name, last name, and full name of Sims. `s4clib.set_first_name`, `s4clib.set_last_name`, and `s4clib.set_name`
+- Fixed an error that could occur when retrieving the statistic value of a Sim without a Statistic Component.
 
 v1.75:
 - Added functions to convert CommonSpecies, CommonAge, and CommonGender into localized string ids
