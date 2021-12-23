@@ -19,7 +19,7 @@ class CommonExceptionHandler:
     """
 
     @staticmethod
-    def log_exception(mod_identifier: Union[str, CommonModIdentity], exception_message: str, exception: Exception=None, custom_file_path: str=None) -> bool:
+    def log_exception(mod_identifier: Union[str, CommonModIdentity, None], exception_message: str, exception: Exception=None, custom_file_path: str=None) -> bool:
         """log_exception(mod_identifier, exception_message, exception=None, custom_file_path=None)
 
         Manually log an exception with a custom message.

@@ -21,6 +21,10 @@ def _common_fix_bucks_when_amount_is_float(original, self, bucks_type, amount: U
     # The game can modify game bucks using a float for the amount, this causes a number of issues, especially when trying to save the game.
     # This can be caused due to a Sim being a 5 star celebrity that doubles all Bucks earnings.
     # The fix is to convert the float amount to an int as the game expects it to be.
-    fixed_amount = int(amount)
-    return original(self, bucks_type, fixed_amount, *_, **__)
+    try:
+        fixed_amount = int(amount)
+        return original(self, bucks_type, fixed_amount, *_, **__)
+    except Exception as ex:
+        log.format_error_with_message('An error occurred while modifying bucks. (This exception is not caused by S4CL, but rather caught)', owner=self, bucks_type=bucks_type, amount=amount, argles=_, kwargles=__, exception=ex)
+    return False
 

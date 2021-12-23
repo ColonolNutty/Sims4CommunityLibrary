@@ -77,14 +77,14 @@ class _CommonVanillaLogOverride(CommonService):
             return
         _log = _CommonVanillaLogOverride().get_log(log_name)
         to_log_message = _CommonVanillaLogOverride()._format_message(message, *args, owner=owner, **kwargs)
-        _log.error(to_log_message, throw=False)
+        _log.error(to_log_message + ' (This exception is not caused by S4CL, but rather caught)', throw=False)
 
     def _exception(self, log_name: str, message: str, *args, exc: Exception=None, owner=None, **kwargs) -> Any:
         if not self.logs_enabled:
             return
         _log = _CommonVanillaLogOverride().get_log(log_name)
         to_log_message = _CommonVanillaLogOverride()._format_message(message, *args, owner=owner, **kwargs)
-        _log.error(to_log_message, exception=exc, throw=True)
+        _log.error(to_log_message + ' (This exception is not caused by S4CL, but rather caught)', exception=exc, throw=True)
 
 
 @Command('s4clib.enable_vanilla_logs', command_type=CommandType.Live)

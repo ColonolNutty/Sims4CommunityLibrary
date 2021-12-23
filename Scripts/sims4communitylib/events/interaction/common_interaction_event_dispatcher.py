@@ -66,8 +66,9 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
             if not CommonEventRegistry().dispatch(S4CLInteractionPreRunEvent(interaction, interaction_queue, timeline)):
                 return False
         except Exception as ex:
-            self.log.error(
-                'Error occurred while running _on_interaction_pre_run for interaction {} with short name \'{}\' and display name {}. Args: {}, Kwargs: {}'
+            CommonExceptionHandler.log_exception(
+                None,
+                'Error occurred while running _on_interaction_pre_run for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Args: {}, Kwargs: {}'
                     .format(
                         pformat(interaction),
                         CommonInteractionUtils.get_interaction_short_name(interaction),
@@ -86,8 +87,9 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
         try:
             CommonEventRegistry().dispatch(S4CLInteractionRunEvent(interaction, interaction_queue, run_result))
         except Exception as ex:
-            self.log.error(
-                'Error occurred while running _on_interaction_run for interaction {} with short name \'{}\' and display name {}. Original Run Result: {}, Args: {}, Kwargs: {}'.format(
+            CommonExceptionHandler.log_exception(
+                None,
+                'Error occurred while running _on_interaction_run for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Original Run Result: {}, Args: {}, Kwargs: {}'.format(
                     pformat(interaction),
                     CommonInteractionUtils.get_interaction_short_name(interaction),
                     CommonInteractionUtils.get_interaction_display_name(interaction),
@@ -106,8 +108,9 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
             if not CommonEventRegistry().dispatch(S4CLInteractionQueuedEvent(interaction, interaction_queue)):
                 return TestResult(False, 'Interaction \'{}\' Failed to Queue'.format(pformat(interaction)))
         except Exception as ex:
-            self.log.error(
-                'Error occurred while running _on_interaction_queued for interaction {} with short name \'{}\' and display name {}. Args: {}, Kwargs: {}'.format(
+            CommonExceptionHandler.log_exception(
+                None,
+                'Error occurred while running _on_interaction_queued for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Args: {}, Kwargs: {}'.format(
                     pformat(interaction),
                     CommonInteractionUtils.get_interaction_short_name(interaction),
                     CommonInteractionUtils.get_interaction_display_name(interaction),
@@ -124,8 +127,9 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
         try:
             CommonEventRegistry().dispatch(S4CLInteractionPostQueuedEvent(interaction, interaction_queue, queue_result))
         except Exception as ex:
-            self.log.error(
-                'Error occurred while running _on_interaction_post_queued for interaction {} with short name \'{}\' and display name {}. Queue Result: {}, Args: {}, Kwargs: {}'.format(
+            CommonExceptionHandler.log_exception(
+                None,
+                'Error occurred while running _on_interaction_post_queued for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Queue Result: {}, Args: {}, Kwargs: {}'.format(
                     pformat(interaction),
                     CommonInteractionUtils.get_interaction_short_name(interaction),
                     CommonInteractionUtils.get_interaction_display_name(interaction),
@@ -143,8 +147,9 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
         try:
             CommonEventRegistry().dispatch(S4CLInteractionOutcomeEvent(interaction, outcome, result))
         except Exception as ex:
-            self.log.error(
-                'Error occurred while running _on_interaction_outcome for interaction {} with short name \'{}\' and display name {}. Outcome: {}, Result: {}'.format(
+            CommonExceptionHandler.log_exception(
+                None,
+                'Error occurred while running _on_interaction_outcome for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Outcome: {}, Result: {}'.format(
                     pformat(interaction),
                     CommonInteractionUtils.get_interaction_short_name(interaction),
                     CommonInteractionUtils.get_interaction_display_name(interaction),
@@ -161,8 +166,9 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
         try:
             CommonEventRegistry().dispatch(S4CLInteractionCancelledEvent(interaction, finishing_type, cancel_reason_msg, ignore_must_run=ignore_must_run, **__))
         except Exception as ex:
-            self.log.error(
-                'Error occurred while running _on_interaction_cancelled for interaction {} with short name \'{}\' and display name {}. Finishing Type: {}, Cancel Reason: {}, Ignore Must Run: {}, Kwargs: {}'.format(
+            CommonExceptionHandler.log_exception(
+                None,
+                'Error occurred while running _on_interaction_cancelled for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Finishing Type: {}, Cancel Reason: {}, Ignore Must Run: {}, Kwargs: {}'.format(
                     pformat(interaction),
                     CommonInteractionUtils.get_interaction_short_name(interaction),
                     CommonInteractionUtils.get_interaction_display_name(interaction),
@@ -181,8 +187,9 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
         try:
             CommonEventRegistry().dispatch(S4CLMixerInteractionCancelledEvent(interaction, finishing_type, cancel_reason_msg, **__))
         except Exception as ex:
-            self.log.error(
-                'Error occurred while running _on_mixer_interaction_cancelled for interaction {} with short name \'{}\' and display name {}. Finishing Type: {}, Cancel Reason: {}, Kwargs: {}'.format(
+            CommonExceptionHandler.log_exception(
+                None,
+                'Error occurred while running _on_mixer_interaction_cancelled for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Finishing Type: {}, Cancel Reason: {}, Kwargs: {}'.format(
                     pformat(interaction),
                     CommonInteractionUtils.get_interaction_short_name(interaction),
                     CommonInteractionUtils.get_interaction_display_name(interaction),
@@ -200,8 +207,9 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
         try:
             CommonEventRegistry().dispatch(S4CLSuperInteractionCancelledEvent(interaction, finishing_type, cancel_reason_msg, **__))
         except Exception as ex:
-            self.log.error(
-                'Error occurred while running _on_super_interaction_cancelled for interaction {} with short name \'{}\' and display name {}. Finishing Type: {}, Cancel Reason: {}, Kwargs: {}'.format(
+            CommonExceptionHandler.log_exception(
+                None,
+                'Error occurred while running _on_super_interaction_cancelled for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Finishing Type: {}, Cancel Reason: {}, Kwargs: {}'.format(
                     pformat(interaction),
                     CommonInteractionUtils.get_interaction_short_name(interaction),
                     CommonInteractionUtils.get_interaction_display_name(interaction),
@@ -219,7 +227,21 @@ def _common_on_interaction_run(original, self, timeline: Timeline, interaction: 
     try:
         result = CommonInteractionEventDispatcherService()._on_interaction_pre_run(self, timeline, interaction, *_, **__)
         if result is None or result is True:
-            original_result = original(self, timeline, interaction, *_, **__)
+            try:
+                original_result = original(self, timeline, interaction, *_, **__)
+            except Exception as ex:
+                CommonExceptionHandler.log_exception(
+                    None,
+                    'Error occurred while running _on_interaction_run for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Args: {}, Kwargs: {}'.format(
+                        pformat(interaction),
+                        CommonInteractionUtils.get_interaction_short_name(interaction),
+                        CommonInteractionUtils.get_interaction_display_name(interaction),
+                        _,
+                        __
+                    ),
+                    exception=ex
+                )
+                return False
             CommonInteractionEventDispatcherService()._on_interaction_run(self, timeline, interaction, original_result, *_, **__)
             return original_result
         return result
@@ -243,7 +265,21 @@ def _common_on_interaction_queued(original, self, interaction: Interaction, *_, 
     try:
         result = CommonInteractionEventDispatcherService()._on_interaction_queued(self, interaction, *_, **__)
         if result is None or result is True:
-            original_result = original(self, interaction, *_, **__)
+            try:
+                original_result = original(self, interaction, *_, **__)
+            except Exception as ex:
+                CommonExceptionHandler.log_exception(
+                    None,
+                    'Error occurred while running _on_interaction_queued for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Args: {}, Kwargs: {}'.format(
+                        pformat(interaction),
+                        CommonInteractionUtils.get_interaction_short_name(interaction),
+                        CommonInteractionUtils.get_interaction_display_name(interaction),
+                        _,
+                        __
+                    ),
+                    exception=ex
+                )
+                return TestResult.NONE
             CommonInteractionEventDispatcherService()._on_interaction_post_queued(self, interaction, original_result, *_, **__)
             return original_result
         return result
@@ -269,11 +305,25 @@ def _common_on_interaction_queued(original, self, interaction: Interaction, *_, 
 def _common_on_interaction_outcome(original, self, *_, **__) -> Any:
     try:
         CommonInteractionEventDispatcherService()._on_interaction_outcome(self, *_, **__)
-        return original(self, *_, **__)
     except Exception as ex:
         CommonExceptionHandler.log_exception(
             ModInfo.get_identity(),
             'Error occurred while running _on_interaction_outcome for interaction {} with short name \'{}\' and display name {}. Args: {}, Kwargs: {}'.format(
+                pformat(self),
+                CommonInteractionUtils.get_interaction_short_name(self),
+                CommonInteractionUtils.get_interaction_display_name(self),
+                _,
+                __
+            ),
+            exception=ex
+        )
+
+    try:
+        return original(self, *_, **__)
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(
+            None,
+            'Error occurred while running _on_interaction_outcome for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Args: {}, Kwargs: {}'.format(
                 pformat(self),
                 CommonInteractionUtils.get_interaction_short_name(self),
                 CommonInteractionUtils.get_interaction_display_name(self),
@@ -289,11 +339,25 @@ def _common_on_interaction_outcome(original, self, *_, **__) -> Any:
 def _common_on_interaction_cancelled(original, self, *_, **__) -> Any:
     try:
         CommonInteractionEventDispatcherService()._on_interaction_cancelled(self, *_, **__)
-        return original(self, *_, **__)
     except Exception as ex:
         CommonExceptionHandler.log_exception(
             ModInfo.get_identity(),
             'Error occurred while running _on_interaction_cancelled for interaction {} with short name \'{}\' and display name {}. Args: {}, Kwargs: {}'.format(
+                pformat(self),
+                CommonInteractionUtils.get_interaction_short_name(self),
+                CommonInteractionUtils.get_interaction_display_name(self),
+                _,
+                __
+            ),
+            exception=ex
+        )
+
+    try:
+        return original(self, *_, **__)
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(
+            None,
+            'Error occurred while running _on_interaction_cancelled for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Args: {}, Kwargs: {}'.format(
                 pformat(self),
                 CommonInteractionUtils.get_interaction_short_name(self),
                 CommonInteractionUtils.get_interaction_display_name(self),
@@ -309,11 +373,25 @@ def _common_on_interaction_cancelled(original, self, *_, **__) -> Any:
 def _common_on_mixer_interaction_cancelled(original, self, *_, **__) -> Any:
     try:
         CommonInteractionEventDispatcherService()._on_mixer_interaction_cancelled(self, *_, **__)
-        return original(self, *_, **__)
     except Exception as ex:
         CommonExceptionHandler.log_exception(
             ModInfo.get_identity(),
             'Error occurred while running _on_mixer_interaction_cancelled for interaction {} with short name \'{}\' and display name {}. Args: {}, Kwargs: {}'.format(
+                pformat(self),
+                CommonInteractionUtils.get_interaction_short_name(self),
+                CommonInteractionUtils.get_interaction_display_name(self),
+                _,
+                __
+            ),
+            exception=ex
+        )
+
+    try:
+        return original(self, *_, **__)
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(
+            None,
+            'Error occurred while running _on_mixer_interaction_cancelled for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Args: {}, Kwargs: {}'.format(
                 pformat(self),
                 CommonInteractionUtils.get_interaction_short_name(self),
                 CommonInteractionUtils.get_interaction_display_name(self),
@@ -329,11 +407,25 @@ def _common_on_mixer_interaction_cancelled(original, self, *_, **__) -> Any:
 def _common_on_super_interaction_cancelled(original, self, *_, **__) -> Any:
     try:
         CommonInteractionEventDispatcherService()._on_super_interaction_cancelled(self, *_, **__)
-        return original(self, *_, **__)
     except Exception as ex:
         CommonExceptionHandler.log_exception(
             ModInfo.get_identity(),
             'Error occurred while running _on_super_interaction_cancelled for interaction {} with short name \'{}\' and display name {}. Args: {}, Kwargs: {}'.format(
+                pformat(self),
+                CommonInteractionUtils.get_interaction_short_name(self),
+                CommonInteractionUtils.get_interaction_display_name(self),
+                _,
+                __
+            ),
+            exception=ex
+        )
+
+    try:
+        return original(self, *_, **__)
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(
+            None,
+            'Error occurred while running _on_super_interaction_cancelled for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Args: {}, Kwargs: {}'.format(
                 pformat(self),
                 CommonInteractionUtils.get_interaction_short_name(self),
                 CommonInteractionUtils.get_interaction_display_name(self),

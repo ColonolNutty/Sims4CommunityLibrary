@@ -163,14 +163,14 @@ class CommonSimEventDispatcherService(CommonService):
         CommonEventRegistry.get().dispatch(S4CLSimSkillLeveledUpEvent(sim_info, skill, old_skill_level, new_skill_level))
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.__init__.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.__init__.__name__, handle_exceptions=False)
 def _common_on_sim_init(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_init(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.load_sim_info.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.load_sim_info.__name__, handle_exceptions=False)
 def _common_on_sim_load(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_load(self, *args, **kwargs)
@@ -178,7 +178,7 @@ def _common_on_sim_load(original, self, *args, **kwargs) -> Any:
 
 
 # noinspection PyUnusedLocal
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimSpawner, SimSpawner.spawn_sim.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimSpawner, SimSpawner.spawn_sim.__name__, handle_exceptions=False)
 def _common_on_sim_spawn(original, cls, *args, **kwargs) -> Any:
     result = original(*args, **kwargs)
     if result:
@@ -187,7 +187,7 @@ def _common_on_sim_spawn(original, cls, *args, **kwargs) -> Any:
 
 
 # noinspection PyUnusedLocal
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Skill, Skill.on_skill_level_up.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Skill, Skill.on_skill_level_up.__name__, handle_exceptions=False)
 def _common_on_sim_skill_level_up(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     if result:
@@ -195,21 +195,21 @@ def _common_on_sim_skill_level_up(original, self, *args, **kwargs) -> Any:
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), AgingMixin, AgingMixin.change_age.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), AgingMixin, AgingMixin.change_age.__name__, handle_exceptions=False)
 def _common_on_sim_change_age(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_change_age(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), OccultTracker, OccultTracker.add_occult_type.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), OccultTracker, OccultTracker.add_occult_type.__name__, handle_exceptions=False)
 def _common_on_sim_add_occult_type(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_add_occult_type(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), OccultTracker, OccultTracker.switch_to_occult_type.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), OccultTracker, OccultTracker.switch_to_occult_type.__name__, handle_exceptions=False)
 def _common_on_sim_change_occult_type(original, self, *args, **kwargs) -> Any:
     CommonSimEventDispatcherService.get()._on_sim_changing_occult_type(self, *args, **kwargs)
     result = original(self, *args, **kwargs)
@@ -217,27 +217,27 @@ def _common_on_sim_change_occult_type(original, self, *args, **kwargs) -> Any:
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), OccultTracker, OccultTracker.remove_occult_type.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), OccultTracker, OccultTracker.remove_occult_type.__name__, handle_exceptions=False)
 def _common_on_sim_remove_occult_type(original, self, *args, **kwargs) -> Any:
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_remove_occult_type(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.set_current_outfit.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.set_current_outfit.__name__, handle_exceptions=False)
 def _common_on_sim_set_current_outfit(original, self, *args, **kwargs) -> Any:
     CommonSimEventDispatcherService.get()._on_sim_set_current_outfit(self, *args, **kwargs)
     return original(self, *args, **kwargs)
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TraitTracker, TraitTracker._add_trait.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TraitTracker, TraitTracker._add_trait.__name__, handle_exceptions=False)
 def _common_on_sim_trait_added(original, self: TraitTracker, *args, **kwargs):
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_trait_added(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TraitTracker, TraitTracker._remove_trait.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TraitTracker, TraitTracker._remove_trait.__name__, handle_exceptions=False)
 def _common_on_sim_trait_removed(original, self: TraitTracker, *args, **kwargs):
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_trait_removed(self, *args, **kwargs)

@@ -52,13 +52,13 @@ if not ON_RTD:
     from game_services import GameServiceManager
     from services.persistence_service import PersistenceService, SaveGameData
 
-    @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), PersistenceService, PersistenceService.save_game_gen.__name__)
+    @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), PersistenceService, PersistenceService.save_game_gen.__name__, handle_exceptions=False)
     def _common_save_game_gen(original, self: PersistenceService, timeline, save_game_data: SaveGameData, send_save_message: bool=True, **kwargs):
         if send_save_message:
             CommonSaveEventDispatcher.get()._on_game_save(save_game_data)
         return original(self, timeline, save_game_data, send_save_message=send_save_message, **kwargs)
 
-    @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), GameServiceManager, GameServiceManager.on_all_households_and_sim_infos_loaded.__name__)
+    @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), GameServiceManager, GameServiceManager.on_all_households_and_sim_infos_loaded.__name__, handle_exceptions=False)
     def _common_save_game_loaded(original, self: GameServiceManager, *args, **kwargs):
         result = original(self, *args, **kwargs)
         CommonSaveEventDispatcher()._on_save_loaded()

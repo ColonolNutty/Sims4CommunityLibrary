@@ -31,6 +31,16 @@ class CommonPostureConstraintService(CommonService):
         return STAND_AT_NONE_CONSTRAINT
 
     @property
+    def stand_at_none(self) -> Constraint:
+        """ A posture constraint for a Sim to stand at no target.
+
+        :return: An instance of a Constraint.
+        :rtype: Constraint
+        """
+        from animation.posture_manifest_constants import STAND_AT_NONE_CONSTRAINT
+        return STAND_AT_NONE_CONSTRAINT
+
+    @property
     def swim_at_none(self) -> Constraint:
         """ A posture constraint for a Sim to swim at no target.
 
@@ -48,7 +58,7 @@ class CommonPostureConstraintService(CommonService):
         :rtype: Constraint
         """
         if self._stand_or_swim is None:
-            self._stand_or_swim = CommonPostureConstraintService.combine_constraints((self.stand, self.swim_at_none), debug_name='Stand-Or-Swim@None')
+            self._stand_or_swim = CommonPostureConstraintService.combine_constraints((self.stand_at_none, self.swim_at_none), debug_name='Stand-Or-Swim@None')
         return self._stand_or_swim
 
     @staticmethod

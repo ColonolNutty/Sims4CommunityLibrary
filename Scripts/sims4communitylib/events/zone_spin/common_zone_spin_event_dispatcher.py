@@ -64,27 +64,27 @@ class CommonZoneSpinEventDispatcher(CommonService):
         CommonEventRegistry.get().dispatch(S4CLZoneSaveEvent(zone, save_slot_data=save_slot_data, game_loaded=self.game_loaded, game_loading=self.game_loading))
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Zone, Zone.load_zone.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Zone, Zone.load_zone.__name__, handle_exceptions=False)
 def _common_on_early_zone_load(original, self: Zone, *args, **kwargs):
     result = original(self, *args, **kwargs)
     CommonZoneSpinEventDispatcher.get()._on_early_zone_load(self)
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Zone, Zone.do_zone_spin_up.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Zone, Zone.do_zone_spin_up.__name__, handle_exceptions=False)
 def _common_on_late_zone_load(original, self: Zone, *args, **kwargs):
     result = original(self, *args, **kwargs)
     CommonZoneSpinEventDispatcher.get()._on_late_zone_load(self, *args, **kwargs)
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Zone, Zone.on_teardown.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Zone, Zone.on_teardown.__name__, handle_exceptions=False)
 def _common_on_zone_teardown(original, self: Zone, client):
     CommonZoneSpinEventDispatcher.get()._on_zone_teardown(self, client)
     return original(self, client)
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Zone, Zone.save_zone.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Zone, Zone.save_zone.__name__, handle_exceptions=False)
 def _common_on_zone_save(original, self: Zone, *args, **kwargs):
     CommonZoneSpinEventDispatcher.get()._on_zone_save(self, *args, **kwargs)
     return original(self, *args, **kwargs)
