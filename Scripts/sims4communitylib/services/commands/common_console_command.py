@@ -7,14 +7,15 @@ Copyright (c) COLONOLNUTTY
 """
 import inspect
 from functools import wraps
-from typing import Any, Dict, Union, Iterator, Tuple
+from typing import Any, Dict, Union, Iterator, Tuple, Type
 
-from sims4.commands import CommandType, CommandRestrictionFlags, Command, CheatOutput, Output
+from sims4.commands import CommandType, CommandRestrictionFlags, CheatOutput, Output, CustomParam
 from sims4.common import Pack
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
+from sims4communitylib.utils.common_log_registry import CommonLogRegistry, CommonLog
+from singletons import UNSET
 
 
 class CommonConsoleCommandArgument:
@@ -101,7 +102,8 @@ class _CommonConsoleCommandMetaclass(type):
         command_type: CommandType=CommandType.Live,
         command_restriction_flags: CommandRestrictionFlags=CommandRestrictionFlags.UNRESTRICTED,
         required_pack_flags: Pack=None,
-        console_type: CommandType=None
+        console_type: CommandType=None,
+        show_with_help_command: bool=True
     ) -> Union['_CommonConsoleCommandMetaclass', None]:
         mod_name = mod_identity.name
         if mod_name is None:
@@ -117,7 +119,8 @@ class _CommonConsoleCommandMetaclass(type):
                 command_type=command_type,
                 command_restriction_flags=command_restriction_flags,
                 required_pack_flags=required_pack_flags,
-                console_type=console_type
+                console_type=console_type,
+                show_with_help_command=show_with_help_command
             )
             CommonConsoleCommandService()._add_command(command)
         return CommonConsoleCommandService().command(mod_identity, command_name, *command_aliases, command_type=command_type, command_restriction_flags=command_restriction_flags, required_pack_flags=required_pack_flags, console_type=console_type)
@@ -133,7 +136,8 @@ class CommonConsoleCommand(metaclass=_CommonConsoleCommandMetaclass):
         command_type=CommandType.Live,\
         command_restriction_flags=CommandRestrictionFlags.UNRESTRICTED,\
         required_pack_flags=None,\
-        console_type=None\
+        console_type=None,\
+        show_with_help_command=True\
     )
 
     Used to indicate a command that can be run in the CTRL+SHIFT+C console.
@@ -168,6 +172,8 @@ class CommonConsoleCommand(metaclass=_CommonConsoleCommandMetaclass):
     :type required_pack_flags: Pack, optional
     :param console_type: The type of console the command may be run in. If set to None, the default console will be used. Default is None.
     :type console_type: CommandType, optional
+    :param show_with_help_command: If True, this command will appear when a player does "<mod_name>.help". If False, it will not appear when a player does "<mod_name>.help" but will still appear when they do "<mod_name>.help <command>". Default is True.
+    :type show_with_help_command: bool, optional
     """
     def __init__(
         self,
@@ -179,7 +185,8 @@ class CommonConsoleCommand(metaclass=_CommonConsoleCommandMetaclass):
         command_type: CommandType=CommandType.Live,
         command_restriction_flags: CommandRestrictionFlags=CommandRestrictionFlags.UNRESTRICTED,
         required_pack_flags: Pack=None,
-        console_type: CommandType=None
+        console_type: CommandType=None,
+        show_with_help_command: bool=True
     ) -> None:
         self.mod_identity = mod_identity
         self.command_name = command_name
@@ -189,6 +196,7 @@ class CommonConsoleCommand(metaclass=_CommonConsoleCommandMetaclass):
         self.command_restriction_flags = command_restriction_flags
         self.required_pack_flags = required_pack_flags
         self.console_type = console_type
+        self.show_with_help_command = show_with_help_command
         self.command_arguments: Dict[str, CommonConsoleCommandArgument] = {
             arg.arg_name: arg
             for arg in command_arguments
@@ -261,6 +269,9 @@ class CommonConsoleCommandService(CommonService):
                     output(f'- For specific details about a command, run the command like so "{help_command_name} <command_name>"')
                     output('  ')
                     for (_command_name, _command) in CommonConsoleCommandService().get_commands_by_mod(mod_identity).items():
+                        _command: CommonConsoleCommand = _command
+                        if not _command.show_with_help_command:
+                            continue
                         output(repr(_command))
                 output('--------------------')
 
@@ -278,10 +289,11 @@ class CommonConsoleCommandService(CommonService):
             return None
         return self._commands_by_mod_name[mod_name][command_name]
 
-    @staticmethod
-    def command(mod_identity: CommonModIdentity, *command_aliases: str, command_type: CommandType=CommandType.Live, command_restriction_flags: CommandRestrictionFlags=CommandRestrictionFlags.UNRESTRICTED, required_pack_flags: Pack=None, console_type: CommandType=None) -> Any:
+    @classmethod
+    def command(cls, mod_identity: CommonModIdentity, *command_aliases: str, command_type: CommandType=CommandType.Live, command_restriction_flags: CommandRestrictionFlags=CommandRestrictionFlags.UNRESTRICTED, required_pack_flags: Pack=None, console_type: CommandType=None) -> Any:
         """Create a command."""
-        _command = Command(*command_aliases, command_type=command_type, command_restrictions=command_restriction_flags, pack=required_pack_flags, console_type=console_type)
+        log = CommonLogRegistry().register_log(mod_identity, f'{mod_identity.name}_command_log')
+        _command = cls._command(log, *command_aliases, command_type=command_type, command_restrictions=command_restriction_flags, pack=required_pack_flags, console_type=console_type)
 
         name = command_aliases[0]
 
@@ -291,11 +303,17 @@ class CommonConsoleCommandService(CommonService):
             arguments = inspect.signature(func).parameters
             num_of_arguments = len(arguments) - 1
             num_of_required_arguments = len([v for k, v in arguments.items() if v.default is inspect.Parameter.empty]) - 1
+            full_arg_spec = inspect.getfullargspec(func)
 
             @wraps(func)
-            def _wrapped_func(*_, _connection: int=None, **__):
+            def _wrapped_func(*_, _connection: int=None, _account: int=None, **__):
                 output = CheatOutput(_connection)
                 try:
+                    if '_account' in full_arg_spec.args or '_account' in full_arg_spec.kwonlyargs:
+                        __['_account'] = _account
+                    if '_connection' in full_arg_spec.args or '_connection' in full_arg_spec.kwonlyargs:
+                        __['_connection'] = _connection
+                    output('Doing command')
                     if len(_) + len(__) > num_of_arguments:
                         output('Too many arguments were passed in.')
                         output(f'Use the help command "{help_command_name} {name}" to see what arguments are needed!')
@@ -306,11 +324,135 @@ class CommonConsoleCommandService(CommonService):
                         return False
                     return func(output, *_, **__)
                 except Exception as ex:
-                    CommonExceptionHandler.log_exception(mod_identity, f'An exception occurred while running command. {func.__name__}', exception=ex)
-                    output(f'An error occurred while running command. Exception: "{ex}"')
+                    log.error(f'An exception occurred while running command. {func.__name__}', exception=ex)
+                    output(f'Error: "{ex}"')
 
-            return _command(_wrapped_func)
+            result = _command(_wrapped_func, func)
+            return result
+
         return _wrapped_command
+
+    # noinspection PyMissingTypeHints
+    @classmethod
+    def _command(cls, log: CommonLog, *aliases, command_type=CommandType.DebugOnly, command_restrictions=CommandRestrictionFlags.UNRESTRICTED, pack=None, console_type=None):
+        import sims4.common
+        import paths
+        import sims4.telemetry
+        from sims4.commands import CommandType, \
+            is_command_available, cheats_writer, TELEMETRY_FIELD_NAME, TELEMETRY_FIELD_ARGS, TELEMETRY_HOOK_COMMAND, CustomParam, \
+            prettify_usage, register
+        if console_type is not None and not paths.IS_DESKTOP:
+            relevant_type = console_type
+        else:
+            relevant_type = command_type
+        if console_type is not None:
+            most_limited_type = min(command_type, console_type)
+        else:
+            most_limited_type = command_type
+
+        def _is_valid_command() -> bool:
+            if relevant_type == CommandType.DebugOnly:
+                return False
+            elif pack and not sims4.common.are_packs_available(pack):
+                return False
+            return True
+
+        def _named_command(wrapped_func, original_func) -> Any:
+            if not _is_valid_command():
+                return
+            name = aliases[0]
+            full_arg_spec = inspect.getfullargspec(original_func)
+
+            def _invoke_command(*args, _session_id: int=0, **kw):
+                kw['_account'] = _session_id
+                kw['_connection'] = _session_id
+                output = CheatOutput(_session_id)
+                try:
+                    args = cls._parse_arguments(full_arg_spec, args, output)
+                    if not is_command_available(relevant_type):
+                        return
+                    if relevant_type == CommandType.Cheat:
+                        with sims4.telemetry.begin_hook(cheats_writer, TELEMETRY_HOOK_COMMAND) as hook:
+                            hook.write_string(TELEMETRY_FIELD_NAME, name)
+                            hook.write_string(TELEMETRY_FIELD_ARGS, str(args))
+                    return wrapped_func(*args, **kw)
+                except BaseException as e:
+                    output(f'Error: {e}')
+                    log.warn('Error executing command')
+                    if (full_arg_spec.varargs is None or full_arg_spec.varkw is None) and any(isinstance(arg_type, type) and issubclass(arg_type, CustomParam) for arg_type in full_arg_spec.annotations.values()):
+                        log.warn('Command has CustomParams, consider adding *args and **kwargs to your command params')
+                    raise e
+
+            _invoke_command.__name__ = 'invoke_command ({})'.format(name)
+            # noinspection PyDeprecation
+            usage = prettify_usage(str.format(inspect.formatargspec(*full_arg_spec)))
+            description = ''
+            for alias in aliases:
+                register(alias, command_restrictions, _invoke_command, description, usage, most_limited_type)
+            return wrapped_func
+
+        return _named_command
+
+    @classmethod
+    def _parse_arguments(cls, spec, args, output: Output):
+        args = list(args)
+        index = 0
+        # We slice off the front so that output is not considered.
+        spec_args = [_arg for _arg in spec.args if _arg != 'output']
+        for (name, index) in zip(spec_args, range(len(spec.args))):
+            if index >= len(args):
+                break
+            arg_type = spec.annotations.get(name)
+            if isinstance(arg_type, type) and issubclass(arg_type, CustomParam):
+                (arg_count, arg_value) = arg_type.get_arg_count_and_value(*args[index:])
+                if arg_value is UNSET:
+                    arg_values = args[index:index + arg_count]
+                    args[index] = arg_type(*arg_values)
+                else:
+                    args[index] = arg_value
+
+                if arg_count > 1:
+                    del args[index + 1:index + arg_count]
+                    index += arg_count - 1
+                    if arg_type is not None:
+                        arg_value = args[index]
+                        cls._parse_arg(args, arg_type, arg_value, name, index, output)
+
+            elif arg_type is not None:
+                arg_value = args[index]
+                cls._parse_arg(args, arg_type, arg_value, name, index, output)
+        if spec.varargs is not None:
+            arg_type = spec.annotations.get(spec.varargs)
+            if arg_type is not None:
+                index += 1
+                vararg_list = args[index:]
+                name = spec.varargs
+                for arg_value in vararg_list:
+                    cls._parse_arg(args, arg_type, arg_value, name, index, output)
+                    index += 1
+        return args
+
+    @classmethod
+    def _parse_arg(cls, args, arg_type: Type, arg_value: Any, name: str, index: int, output: Output):
+        from sims4.commands import CustomParam, \
+            BOOL_TRUE, BOOL_FALSE
+        if isinstance(arg_value, str):
+            if arg_type is bool:
+                lower_arg_value = arg_value.lower()
+                if lower_arg_value in BOOL_TRUE:
+                    args[index] = True
+                elif lower_arg_value in BOOL_FALSE:
+                    args[index] = False
+                else:
+                    output('Invalid entry specified for bool {}: {} (Expected one of {} for True, or one of {} for False.)'.format(name, arg_value, BOOL_TRUE, BOOL_FALSE))
+                    raise ValueError('invalid literal for boolean parameter')
+            else:
+                if arg_type is int:
+                    args[index] = int(arg_value, base=0)
+                elif isinstance(arg_type, type) and issubclass(arg_type, CustomParam):
+                    pass
+                else:
+                    args[index] = arg_type(arg_value)
 
 
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib_testing.example_command', 'Print an example message', command_aliases=('s4clib_testing.examplecommand',), command_arguments=(CommonConsoleCommandArgument('thing_to_print', 'Text or Num', 'If specified, this value will be printed to the console. Default is "24".'),))

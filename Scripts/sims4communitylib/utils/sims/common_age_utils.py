@@ -143,7 +143,7 @@ class CommonAgeUtils:
         age_transition.apply_aging_transition_loot(sim_info)
         sim_info._create_additional_statistics()
         sim_info._apply_life_skill_traits()
-        return CommonAgeUtils.get_age(sim_info) == age
+        return CommonAgeUtils.get_age(sim_info) == age or CommonAgeUtils.get_age(sim_info, exact_age=True) == age
 
     @staticmethod
     def are_same_age(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:
