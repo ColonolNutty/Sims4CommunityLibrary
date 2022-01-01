@@ -9,7 +9,11 @@ from typing import Tuple
 
 from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
+from sims.sim_spawner import SimSpawner
+from sims.sim_spawner_enums import SimNameType
 from sims4.commands import Command, CommandType, CheatOutput
+from sims4communitylib.enums.common_gender import CommonGender
+from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -125,6 +129,52 @@ class CommonSimNameUtils:
         """
         result: Tuple[str] = tuple([CommonSimNameUtils.get_full_name(sim_info) for sim_info in sim_info_list])
         return result
+
+    @staticmethod
+    def create_random_first_name(gender: CommonGender, species: CommonSpecies=CommonSpecies.HUMAN, sim_name_type: SimNameType=SimNameType.DEFAULT) -> str:
+        """create_random_first_name(gender, species=CommonSpecies.HUMAN, sim_name_type=SimNameType.DEFAULT)
+
+        Create a random first name.
+
+        :param gender: A gender.
+        :type gender: CommonGender
+        :param species: A species. Default is HUMAN.
+        :type species: CommonSpecies, optional
+        :param sim_name_type: An override for Sim Name Type. Default is SimNameType.DEFAULT.
+        :type sim_name_type: SimNameType, optional
+        :return: A random first name.
+        :rtype: str
+        """
+        vanilla_gender = CommonGender.convert_to_vanilla(gender)
+        vanilla_species = CommonSpecies.convert_to_vanilla(species)
+        return SimSpawner.get_random_first_name(vanilla_gender, species=vanilla_species, sim_name_type_override=sim_name_type)
+
+    @staticmethod
+    def create_random_last_name(gender: CommonGender, species: CommonSpecies=CommonSpecies.HUMAN, sim_name_type: SimNameType=SimNameType.DEFAULT) -> str:
+        """create_random_last_name(gender, species=CommonSpecies.HUMAN, sim_name_type=SimNameType.DEFAULT)
+
+        Create a random last name.
+
+        :param gender: A gender.
+        :type gender: CommonGender
+        :param species: A species. Default is HUMAN.
+        :type species: CommonSpecies, optional
+        :param sim_name_type: An override for Sim Name Type. Default is None.
+        :type sim_name_type: Any, optional
+        :return: A random last name.
+        :rtype: str
+        """
+        account = SimSpawner._get_default_account()
+        vanilla_gender = CommonGender.convert_to_vanilla(gender)
+        vanilla_species = CommonSpecies.convert_to_vanilla(species)
+        language = SimSpawner._get_language_for_locale(account.locale)
+        family_name = SimSpawner._get_random_last_name(language, sim_name_type=sim_name_type)
+        if sim_name_type == SimNameType.DEFAULT:
+            last_name = SimSpawner.get_last_name(family_name, vanilla_gender, species=vanilla_species)
+        else:
+            from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
+            last_name = SimSpawner._get_family_name_for_gender(language, family_name, CommonGenderUtils.is_female_gender(gender), sim_name_type=sim_name_type)
+        return last_name
 
 
 @Command('s4clib.set_first_name', command_type=CommandType.Live)

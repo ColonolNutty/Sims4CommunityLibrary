@@ -118,8 +118,8 @@ class CommonSimSpawnUtils:
         species: CommonSpecies,
         gender: CommonGender=None,
         age: CommonAge=None,
-        first_name: str='',
-        last_name: str='',
+        first_name: str=None,
+        last_name: str=None,
         trait_ids: Tuple[int]=(),
         household: Household=None,
         source: str='testing'
@@ -128,8 +128,8 @@ class CommonSimSpawnUtils:
             species,\
             gender=None,\
             age=None,\
-            first_name='',\
-            last_name='',\
+            first_name=None,\
+            last_name=None,\
             trait_ids=(),\
             household=None,\
             source='testing'\
@@ -143,9 +143,9 @@ class CommonSimSpawnUtils:
         :type gender: CommonGender, optional
         :param age: The age of the created Sim. Default is None.
         :type age: CommonAge, optional
-        :param first_name: The First Name of the created Sim. Default is an empty string.
+        :param first_name: The First Name of the created Sim. Default is random name.
         :type first_name: str, optional
-        :param last_name: The Last Name of the created Sim. Default is an empty string.
+        :param last_name: The Last Name of the created Sim. Default is random name.
         :type last_name: str, optional
         :param trait_ids: The decimal identifiers of the Traits to add to the created Sim. Default is an empty collection.
         :type trait_ids: Tuple[int], optional
@@ -162,8 +162,8 @@ class CommonSimSpawnUtils:
     def create_human_sim_info(
         gender: CommonGender=None,
         age: CommonAge=None,
-        first_name: str='',
-        last_name: str='',
+        first_name: str=None,
+        last_name: str=None,
         trait_ids: Tuple[int]=(),
         household: Household=None,
         source: str='testing'
@@ -171,8 +171,8 @@ class CommonSimSpawnUtils:
         """create_human_sim_info(\
             gender=None,\
             age=None,\
-            first_name='',\
-            last_name='',\
+            first_name=None,\
+            last_name=None,\
             trait_ids=(),\
             household=None,\
             source='testing'\
@@ -184,9 +184,9 @@ class CommonSimSpawnUtils:
         :type gender: CommonGender, optional
         :param age: The age of the created Sim. Default is None.
         :type age: CommonAge, optional
-        :param first_name: The First Name of the created Sim. Default is an empty string.
+        :param first_name: The First Name of the created Sim. Default is random name.
         :type first_name: str, optional
-        :param last_name: The Last Name of the created Sim. Default is an empty string.
+        :param last_name: The Last Name of the created Sim. Default is random name.
         :type last_name: str, optional
         :param trait_ids: The decimal identifiers of the Traits to add to the created Sim. Default is an empty collection.
         :type trait_ids: Tuple[int], optional
@@ -203,8 +203,8 @@ class CommonSimSpawnUtils:
     def create_large_dog_sim_info(
         gender: CommonGender=None,
         age: CommonAge=None,
-        first_name: str='',
-        last_name: str='',
+        first_name: str=None,
+        last_name: str=None,
         trait_ids: Tuple[int]=(),
         household: Household=None,
         source: str='testing'
@@ -212,8 +212,8 @@ class CommonSimSpawnUtils:
         """create_large_dog_sim_info(\
             gender=None,\
             age=None,\
-            first_name='',\
-            last_name='',\
+            first_name=None,\
+            last_name=None,\
             trait_ids=(),\
             household=None,\
             source='testing'\
@@ -225,9 +225,9 @@ class CommonSimSpawnUtils:
         :type gender: CommonGender, optional
         :param age: The age of the created Sim. Default is None.
         :type age: CommonAge, optional
-        :param first_name: The First Name of the created Sim. Default is an empty string.
+        :param first_name: The First Name of the created Sim. Default is random name.
         :type first_name: str, optional
-        :param last_name: The Last Name of the created Sim. Default is an empty string.
+        :param last_name: The Last Name of the created Sim. Default is random name.
         :type last_name: str, optional
         :param trait_ids: The decimal identifiers of the Traits to add to the created Sim. Default is an empty collection.
         :type trait_ids: Tuple[int], optional
@@ -244,8 +244,8 @@ class CommonSimSpawnUtils:
     def create_small_dog_sim_info(
         gender: CommonGender=None,
         age: CommonAge=None,
-        first_name: str='',
-        last_name: str='',
+        first_name: str=None,
+        last_name: str=None,
         trait_ids: Tuple[int]=(),
         household: Household=None,
         source: str='testing'
@@ -266,9 +266,9 @@ class CommonSimSpawnUtils:
         :type gender: CommonGender, optional
         :param age: The age of the created Sim. Default is None.
         :type age: CommonAge, optional
-        :param first_name: The First Name of the created Sim. Default is an empty string.
+        :param first_name: The First Name of the created Sim. Default is random name.
         :type first_name: str, optional
-        :param last_name: The Last Name of the created Sim. Default is an empty string.
+        :param last_name: The Last Name of the created Sim. Default is random name.
         :type last_name: str, optional
         :param trait_ids: The decimal identifiers of the Traits to add to the created Sim. Default is an empty collection.
         :type trait_ids: Tuple[int], optional
@@ -285,8 +285,8 @@ class CommonSimSpawnUtils:
     def create_cat_sim_info(
         gender: CommonGender=None,
         age: CommonAge=None,
-        first_name: str='',
-        last_name: str='',
+        first_name: str=None,
+        last_name: str=None,
         trait_ids: Tuple[int]=(),
         household: Household=None,
         source: str='testing'
@@ -307,9 +307,9 @@ class CommonSimSpawnUtils:
         :type gender: CommonGender, optional
         :param age: The age of the created Sim. Default is None.
         :type age: CommonAge, optional
-        :param first_name: The First Name of the created Sim. Default is an empty string.
+        :param first_name: The First Name of the created Sim. Default is random name.
         :type first_name: str, optional
-        :param last_name: The Last Name of the created Sim. Default is an empty string.
+        :param last_name: The Last Name of the created Sim. Default is random name.
         :type last_name: str, optional
         :param trait_ids: The decimal identifiers of the Traits to add to the created Sim. Default is an empty collection.
         :type trait_ids: Tuple[int], optional
@@ -326,8 +326,8 @@ class CommonSimSpawnUtils:
     def create_fox_sim_info(
         gender: CommonGender=None,
         age: CommonAge=None,
-        first_name: str='',
-        last_name: str='',
+        first_name: str=None,
+        last_name: str=None,
         trait_ids: Tuple[int]=(),
         household: Household=None,
         source: str='testing'
@@ -348,9 +348,9 @@ class CommonSimSpawnUtils:
         :type gender: CommonGender, optional
         :param age: The age of the created Sim. Default is None.
         :type age: CommonAge, optional
-        :param first_name: The First Name of the created Sim. Default is an empty string.
+        :param first_name: The First Name of the created Sim. Default is random name.
         :type first_name: str, optional
-        :param last_name: The Last Name of the created Sim. Default is an empty string.
+        :param last_name: The Last Name of the created Sim. Default is random name.
         :type last_name: str, optional
         :param trait_ids: The decimal identifiers of the Traits to add to the created Sim. Default is an empty collection.
         :type trait_ids: Tuple[int], optional
@@ -368,8 +368,8 @@ class CommonSimSpawnUtils:
         species: CommonSpecies,
         gender: CommonGender=None,
         age: CommonAge=None,
-        first_name: str='',
-        last_name: str='',
+        first_name: str=None,
+        last_name: str=None,
         trait_ids: Tuple[int]=(),
         household: Household=None,
         source: str='testing'
@@ -381,6 +381,8 @@ class CommonSimSpawnUtils:
         vanilla_species = CommonSpecies.convert_to_vanilla(species)
         if species is None:
             raise AssertionError(f'Invalid species specified for SimInfo creation! {species}')
+        first_name = first_name or CommonSimNameUtils.create_random_first_name(gender, species=species)
+        last_name = last_name or CommonSimNameUtils.create_random_last_name(gender, species=species)
         traits = tuple([CommonTraitUtils.load_trait_by_id(trait_id) for trait_id in trait_ids if CommonTraitUtils.load_trait_by_id(trait_id) is not None])
         sim_creator = SimCreator(gender=vanilla_gender, age=vanilla_age, species=vanilla_species, first_name=first_name or SimSpawner.get_random_first_name(vanilla_gender, species=vanilla_species), last_name=last_name, traits=traits)
         (sim_info_list, _) = SimSpawner.create_sim_infos((sim_creator,), household=household, generate_deterministic_sim=True, creation_source=source)
@@ -682,7 +684,7 @@ if not ON_RTD:
             active_sim_info = CommonSimUtils.get_active_sim_info()
             active_sim_location = CommonSimLocationUtils.get_location(active_sim_info)
             for x in range(count):
-                created_sim_info = CommonSimSpawnUtils.create_sim_info(species, gender=gender, age=age, first_name=str(x), last_name=str(x))
+                created_sim_info = CommonSimSpawnUtils.create_sim_info(species, gender=gender, age=age)
                 CommonSimSpawnUtils.spawn_sim(created_sim_info, location=active_sim_location)
         except Exception as ex:
             CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error spawning Sims {} Sim(s) of Species: {}, Gender: {}, and Age: {}.'.format(count, species.name, gender.name, age.name), exception=ex)
