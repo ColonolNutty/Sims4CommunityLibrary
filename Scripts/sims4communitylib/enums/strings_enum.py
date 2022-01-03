@@ -120,3 +120,7 @@ class CommonStringId(CommonInt):
     STRING_SPACE_STRING = 0x0699D5F4
     # Tokens: {0.String} ({1.String})
     STRING_SPACE_PARENTHESIS_SURROUNDED_STRING = 0x1A406429
+    # Tokens: {0.String}\n{1.String}
+    STRING_NEWLINE_STRING = 0xCE1E042E
+    # Tokens: {0.String}-{1.String}
+    STRING_HYPHEN_STRING = 0x032A81F9
