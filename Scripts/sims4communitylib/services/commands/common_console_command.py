@@ -322,7 +322,9 @@ class CommonConsoleCommandService(CommonService):
                         output('Missing some arguments.')
                         output(f'Use the help command "{help_command_name} {name}" to see what arguments are required!')
                         return False
-                    return func(output, *_, **__)
+                    command_result = func(output, *_, **__)
+                    output('Done')
+                    return command_result
                 except Exception as ex:
                     log.error(f'An exception occurred while running command. {func.__name__}', exception=ex)
                     output(f'Error: "{ex}"')

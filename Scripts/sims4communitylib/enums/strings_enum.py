@@ -111,3 +111,12 @@ class CommonStringId(CommonInt):
     S4CL_CONFIRMATION: 'CommonStringId' = 2520436614
     # {0.String}{1.String}
     S4CL_COMBINE_TWO_STRINGS: 'CommonStringId' = 4217460952
+
+    # Tokens: {0.String}: {1.String}
+    STRING_COLON_SPACE_STRING = 0x6284ACBA
+    # Tokens: {0.String}, {1.String}
+    STRING_COMMA_SPACE_STRING = 0x1429B07C
+    # Tokens: {0.String} {1.String}
+    STRING_SPACE_STRING = 0x0699D5F4
+    # Tokens: {0.String} ({1.String})
+    STRING_SPACE_PARENTHESIS_SURROUNDED_STRING = 0x1A406429
