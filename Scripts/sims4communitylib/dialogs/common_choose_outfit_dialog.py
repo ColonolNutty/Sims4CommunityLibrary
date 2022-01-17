@@ -357,7 +357,7 @@ def _common_testing_show_choose_outfit_dialog(_connection: int=None):
             title_tokens=title_tokens,
             description_tokens=description_tokens
         )
-        outfit_list = (OutfitCategory.EVERYDAY, 0)
+        outfit_list = ((OutfitCategory.EVERYDAY, 0),)
         dialog.show(sim_info, outfit_list=outfit_list, on_chosen=_on_chosen)
     except Exception as ex:
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)

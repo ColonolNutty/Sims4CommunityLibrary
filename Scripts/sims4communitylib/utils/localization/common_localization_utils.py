@@ -12,6 +12,7 @@ from sims4.localization import LocalizationHelperTuning, _create_localized_strin
     TunableLocalizedStringFactory
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
+from sims4communitylib.utils.localization.common_localized_string_separators import CommonLocalizedStringSeparator
 
 
 class CommonLocalizationUtils:
@@ -26,11 +27,11 @@ class CommonLocalizationUtils:
         A LocalizedTooltip used when displaying tooltips.
 
         :param string_id: The text that will display in the tooltip.
-        :type string_id: Union[int, str, LocalizedString, CommonStringId]
+        :type string_id: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator]
         :param tokens: A collection of objects to format into the `string_id`
         :type tokens: Any
         """
-        def __init__(self, string_id: Union[int, str, LocalizedString, CommonStringId], *tokens: Any):
+        def __init__(self, string_id: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator], *tokens: Any):
             super().__init__(string_id)
             self._tokens = tokens
 
@@ -38,13 +39,13 @@ class CommonLocalizationUtils:
             return CommonLocalizationUtils.create_localized_string(self._string_id, tokens=self._tokens)
 
     @staticmethod
-    def create_localized_tooltip(tooltip_text: Union[int, str, LocalizedString, CommonStringId], tooltip_tokens: Iterator[Any]=()) -> 'LocalizedTooltip':
+    def create_localized_tooltip(tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator], tooltip_tokens: Iterator[Any]=()) -> 'LocalizedTooltip':
         """create_localized_tooltip(tooltip_text, tooltip_tokens=())
 
         Create a LocalizedTooltip use this when you wish to display a tooltip on various things.
 
         :param tooltip_text: The text that will be displayed.
-        :type tooltip_text: Union[int, str, LocalizedString, CommonStringId]
+        :type tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator]
         :param tooltip_tokens: A collection of objects to format into the localized string. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few)
         :type tooltip_tokens: Iterable[Any], optional
         :return: A tooltip ready for display.
@@ -55,13 +56,13 @@ class CommonLocalizationUtils:
         return CommonLocalizationUtils.LocalizedTooltip(tooltip_text, *tuple(tooltip_tokens))
 
     @staticmethod
-    def create_localized_string(identifier: Union[int, str, LocalizedString, CommonStringId], tokens: Iterator[Any]=(), localize_tokens: bool=True, text_color: CommonLocalizedStringColor=CommonLocalizedStringColor.DEFAULT) -> LocalizedString:
+    def create_localized_string(identifier: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator], tokens: Iterator[Any]=(), localize_tokens: bool=True, text_color: CommonLocalizedStringColor=CommonLocalizedStringColor.DEFAULT) -> LocalizedString:
         """create_localized_string(identifier, tokens=(), localize_tokens=True, text_color=CommonLocalizedStringColor.DEFAULT)
 
         Create a LocalizedString formatted with the specified tokens.
 
         :param identifier: An identifier to locate a LocalizedString with, text that will be turned into a LocalizedString, or a LocalizedString itself.
-        :type identifier: Union[int, str, LocalizedString, CommonStringId]
+        :type identifier: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator]
         :param tokens: A collection of objects to format into the localized string. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few)
         :type tokens: Iterable[Any]
         :param localize_tokens: If True, the specified tokens will be localized. If False, the specified tokens will be formatted into the LocalizedString as they are. Default is True
@@ -89,6 +90,26 @@ class CommonLocalizationUtils:
         if isinstance(identifier, str):
             return CommonLocalizationUtils.create_localized_string(CommonLocalizationUtils.create_from_string(identifier), tokens=tokens, text_color=text_color)
         return CommonLocalizationUtils.create_localized_string(str(identifier), tokens=tokens, text_color=text_color)
+
+    @staticmethod
+    def combine_localized_strings(identifier_list: Iterator[Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator]], separator: CommonLocalizedStringSeparator=CommonLocalizedStringSeparator.NO_SEPARATOR) -> LocalizedString:
+        """combine_localized_strings(identifier_list, separator=CommonLocalizedStringSeparator.NO_SEPARATOR)
+
+        Combine multiple localized strings by a separator.
+
+        :param identifier_list: A collection of identifiers to locate LocalizedStrings with, text that will be turned into a LocalizedString and combined with the other strings in the collection.
+        :type identifier_list: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator]
+        :param separator: The separator to use when combining the strings. Default is to combine all of the strings by no separator, i.e. an empty space.
+        :type separator: CommonLocalizedStringSeparator, optional
+        :return: A localized string with all Localized Strings combined by the specified separator.
+        """
+        localized = None
+        for identifier in identifier_list:
+            if localized is None:
+                localized = identifier
+            else:
+                localized = CommonLocalizationUtils.create_localized_string(separator, tokens=(localized, identifier))
+        return localized
 
     @staticmethod
     def create_from_string(string_text: str) -> LocalizedString:

@@ -5,17 +5,19 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+
+import clock
 import services
 import sims4.commands
 from clock import ClockSpeedMode, GameClock, ClockSpeedMultiplierType
-from date_and_time import DateAndTime
+from date_and_time import DateAndTime, TimeSpan
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from time_service import TimeService
 
 
 class CommonTimeUtils:
-    """Utilities for handling the in-game Time.
+    """Utilities for handling the in-game Time, also known as Sim Time.
 
     """
     @staticmethod
@@ -365,6 +367,107 @@ class CommonTimeUtils:
         return int(date_and_time.day())
 
     @staticmethod
+    def create_interval_from_sim_seconds(seconds: int) -> TimeSpan:
+        """create_interval_from_sim_seconds(seconds)
+
+        Create a time span interval that spans from the current Sim time to a number of Sim seconds in the future.
+
+        :param seconds: A number of Sim seconds in the future the time span will indicate.
+        :type seconds: int
+        :return: A time span that will occur a number of Sim seconds in the future.
+        :rtype: TimeSpan
+        """
+        return clock.interval_in_sim_seconds(seconds)
+
+    @staticmethod
+    def create_interval_from_sim_minutes(minutes: int) -> TimeSpan:
+        """create_interval_from_sim_minutes(minutes)
+
+        Create a time span interval that spans from the current Sim time to a number of Sim minutes in the future.
+
+        :param minutes: A number of Sim minutes in the future the time span will indicate.
+        :type minutes: int
+        :return: A time span that will occur a number of Sim minutes in the future.
+        :rtype: TimeSpan
+        """
+        return clock.interval_in_sim_minutes(minutes)
+
+    @staticmethod
+    def create_interval_from_sim_hours(hours: int) -> TimeSpan:
+        """create_interval_from_sim_hours(hours)
+
+        Create a time span interval that spans from the current Sim time to a number of Sim hours in the future.
+
+        :param hours: A number of Sim hours in the future the time span will indicate.
+        :type hours: int
+        :return: A time span that will occur a number of Sim hours in the future.
+        :rtype: TimeSpan
+        """
+        return clock.interval_in_sim_hours(hours)
+
+    @staticmethod
+    def interval_in_sim_days(days: int) -> TimeSpan:
+        """interval_in_sim_days(days)
+
+        Create a time span interval that spans from the current Sim time to a number of Sim days in the future.
+
+        :param days: A number of Sim days in the future the time span will indicate.
+        :type days: int
+        :return: A time span that will occur a number of Sim days in the future.
+        :rtype: TimeSpan
+        """
+        return clock.interval_in_sim_days(days)
+
+    @staticmethod
+    def interval_in_sim_weeks(weeks: int) -> TimeSpan:
+        """interval_in_sim_weeks(weeks)
+
+        Create a time span interval that spans from the current Sim time to a number of Sim weeks in the future.
+
+        :param weeks: A number of Sim weeks in the future the time span will indicate.
+        :type weeks: int
+        :return: A time span that will occur a number of Sim weeks in the future.
+        :rtype: TimeSpan
+        """
+        return clock.interval_in_sim_weeks(weeks)
+
+    @staticmethod
+    def create_time_span(minutes: int=0, hours: int=0, days: int=0) -> TimeSpan:
+        """create_time_span(minutes=0, hours=0, days=0)
+
+        Create a time span that spans from the current Sim time to a number of Sim minutes, hours, or days in the future.
+
+        :param minutes: A number of Sim minutes in the future the time span will indicate. Default is 0 Sim minutes.
+        :type minutes: int, optional
+        :param hours: A number of Sim hours in the future the time span will indicate. Default is 0 Sim hours.
+        :type hours: int, optional
+        :param days: A number of Sim days in the future the time span will indicate. Default is 0 Sim days.
+        :type days: int, optional
+        :return: A time span that will occur a number of Sim minutes, hours, or days in the future.
+        :rtype: TimeSpan
+        """
+        from date_and_time import create_time_span
+        return create_time_span(days=days, hours=hours, minutes=minutes)
+
+    @staticmethod
+    def create_date_and_time(minutes: int=0, hours: int=0, days: int=0) -> DateAndTime:
+        """create_date_and_time(minutes=0, hours=0, days=0)
+
+        Create a date and time that takes place a number of Sim minutes, hours, or days in the future.
+
+        :param minutes: A number of Sim minutes in the future the date and time will be set at. Default is 0 Sim minutes.
+        :type minutes: int, optional
+        :param hours: A number of Sim hours in the future the date and time will be set at. Default is 0 Sim hours.
+        :type hours: int, optional
+        :param days: A number of Sim days in the future the date and time will be set at. Default is 0 Sim days.
+        :type days: int, optional
+        :return: A date and time that will occur a number of Sim minutes, hours, or days in the future.
+        :rtype: DateAndTime
+        """
+        from date_and_time import create_date_and_time
+        return create_date_and_time(days=days, hours=hours, minutes=minutes)
+
+    @staticmethod
     def is_sun_out() -> bool:
         """is_sun_out()
 
@@ -376,26 +479,30 @@ class CommonTimeUtils:
         return CommonTimeUtils.get_time_service().is_sun_out()
 
     @staticmethod
-    def is_day_time() -> bool:
-        """is_day_time()
+    def is_day_time(date_and_time: DateAndTime=None) -> bool:
+        """is_day_time(date_and_time=None)
 
         Determine if it is currently Day Time.
 
+        :param date_and_time: A date and time to check. If not specified, the current time will be used instead. Default is unspecified.
+        :type date_and_time: DateAndTime, optional
         :return: True, if it is day time. False, if not.
         :rtype: bool
         """
-        return CommonTimeUtils.get_time_service().is_day_time()
+        return CommonTimeUtils.get_time_service().is_day_time(time=date_and_time)
 
     @staticmethod
-    def is_night_time() -> bool:
-        """is_night_time()
+    def is_night_time(date_and_time: DateAndTime=None) -> bool:
+        """is_night_time(date_and_time=None)
 
         Determine if it is currently Night Time.
 
+        :param date_and_time: A date and time to check. If not specified, the current time will be used instead. Default is unspecified.
+        :type date_and_time: DateAndTime, optional
         :return: True, if it is night time. False, if not.
         :rtype: bool
         """
-        return not CommonTimeUtils.is_day_time()
+        return not CommonTimeUtils.is_day_time(date_and_time=date_and_time)
     
     @staticmethod
     def get_time_service() -> TimeService:
