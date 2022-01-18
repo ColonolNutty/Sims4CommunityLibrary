@@ -13,11 +13,15 @@ from event_testing.test_events import TestEvent
 from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Age
-from sims4.commands import Command, CommandType, CheatOutput
+from sims4.commands import Command, CommandType, CheatOutput, Output
 from sims4.resources import Types
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonAgeUtils:
@@ -86,6 +90,118 @@ class CommonAgeUtils:
         if int(Age.ADULT) <= age < int(Age.ELDER):
             return Age.ADULT
         return Age.ELDER
+
+    @staticmethod
+    def get_total_days_sim_has_been_in_their_current_age(sim_info: SimInfo) -> float:
+        """get_total_days_sim_has_been_in_their_current_age(sim_info)
+
+        Retrieve the total number of days a Sim has been in their current Age.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: A total number of days the specified Sim has been in their current Age.
+        :rtype: float
+        """
+        return sim_info.age_progress
+
+    @staticmethod
+    def get_percentage_total_days_sim_has_been_in_their_current_age(sim_info: SimInfo) -> float:
+        """get_percentage_total_days_sim_has_been_in_their_current_age(sim_info)
+
+        Retrieve the percentage total days a Sim has been in their current age.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The percentage total days the specified Sim has been in their current age.
+        :rtype: float
+        """
+        return sim_info.age_progress/sim_info._age_time*sim_info.AGE_PROGRESS_BAR_FACTOR
+
+    @staticmethod
+    def get_total_days_until_sim_ages_up(sim_info: SimInfo) -> int:
+        """get_total_days_until_sim_ages_up(sim_info)
+
+        Retrieve the total number of days a Sim has left until they age up.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The total number of days the specified Sim has left until they age up.
+        :rtype: int
+        """
+        return sim_info.days_until_ready_to_age()
+
+    @staticmethod
+    def get_total_days_to_age_up(sim_info: SimInfo) -> float:
+        """get_total_days_to_age_up(sim_info)
+
+        Retrieve the total number of days required for the next age of a Sim to be required. (Not to be confused with the amount of days they have left)
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The total number of days required for the specified Sim to reach their next age.
+        :rtype: float
+        """
+        aging_service = services.get_aging_service()
+        setting_multiplier = aging_service.get_speed_multiple(sim_info._age_speed_setting)
+        return sim_info._age_time/setting_multiplier
+
+    @staticmethod
+    def set_total_days_sim_has_been_in_their_current_age(sim_info: SimInfo, days: float) -> None:
+        """set_total_days_sim_has_been_in_their_current_age(sim_info, days)
+
+        Set the total number of days of progress made towards the next age of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param days: The total number of days the Sim has been in their current age.
+        :type days: float
+        """
+        delta_age = days
+        new_age_value = min(delta_age, sim_info._age_time)
+        sim_info._set_age_progress(new_age_value - sim_info.FILL_AGE_PROGRESS_BAR_BUFFER)
+
+    @staticmethod
+    def set_percentage_total_days_sim_has_been_in_their_current_age(sim_info: SimInfo, percentage_progress: float) -> None:
+        """set_percentage_total_days_sim_has_been_in_their_current_age(sim_info, percentage_progress)
+
+        Set the percentage total days a Sim has been in their current age.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param percentage_progress: A percentage total days a Sim has been in their current age.
+        :type percentage_progress: int
+        """
+        if percentage_progress < 0:
+            percentage_progress *= -1
+        delta_age = CommonAgeUtils.get_total_days_to_age_up(sim_info) * (percentage_progress / 100)
+        new_age_value = min(delta_age, sim_info._age_time)
+        sim_info._set_age_progress(new_age_value - sim_info.FILL_AGE_PROGRESS_BAR_BUFFER)
+
+    @staticmethod
+    def get_max_age_progress(sim_info: SimInfo) -> float:
+        """get_max_age_progress(sim_info)
+
+        Retrieve the total amount of progress a Sim can have before reaching their next age.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The maximum amount of age progress a Sim can have before reaching their next age.
+        :rtype: float
+        """
+        return CommonAgeUtils.get_total_days_to_age_up(sim_info)
+
+    @staticmethod
+    def get_random_age_progress(sim_info: SimInfo) -> float:
+        """get_random_age_progress(sim_info)
+
+        Calculate a value between zero and the maximum value of age progress a Sim can have for their current age (before they are considered to have reached the next age)
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: A randomized progression of age between the start of the Age of the specified Sim and the amount of progress to reach the next age.
+        :rtype: float
+        """
+        return CommonAgeUtils.get_max_age_progress(sim_info) * random.random()
 
     @staticmethod
     def set_age(sim_info: SimInfo, age: Union[CommonAge, Age, int]) -> bool:
@@ -704,13 +820,56 @@ class CommonAgeUtils:
             return False
 
 
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.set_age_progress_percentage', 'Set the percentage total days a Sim has been in their current age.')
+def _common_set_age_progress_percentage(output: Output, progress_percentage: int, opt_sim: OptionalTargetParam=None):
+    from server_commands.argument_helpers import get_optional_target
+    sim = get_optional_target(opt_sim, output._context)
+    sim_info = CommonSimUtils.get_sim_info(sim)
+    if sim_info is None:
+        output(f'Failed, Sim {opt_sim} did not exist.')
+        return
+    output(f'Setting the age progress of {sim} to {progress_percentage}')
+    return CommonAgeUtils.set_percentage_total_days_sim_has_been_in_their_current_age(sim_info, progress_percentage)
+
+
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.randomize_age_progress', 'Randomize the progress made towards the next age of a Sim.')
+def _common_randomize_age_progress(output: Output, opt_sim: OptionalTargetParam=None):
+    from server_commands.argument_helpers import get_optional_target
+    sim = get_optional_target(opt_sim, output._context)
+    sim_info = CommonSimUtils.get_sim_info(sim)
+    if sim_info is None:
+        output(f'Failed, Sim {opt_sim} did not exist.')
+        return
+    progress = CommonAgeUtils.get_random_age_progress(sim_info)
+    percentage_progress = (progress / CommonAgeUtils.get_total_days_to_age_up(sim_info)) * 100
+    output(f'Setting the age progress of {sim} to {percentage_progress}%')
+    CommonAgeUtils.set_percentage_total_days_sim_has_been_in_their_current_age(sim_info, percentage_progress)
+    return True
+
+
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.set_age', 'Set the age of a Sim.', command_arguments=(CommonConsoleCommandArgument('age_str', 'Text', f'The CommonAge to set the Sim to. Valid Ages: {", ".join(CommonAge.get_all_names())}'),))
+def _common_set_age(output: Output, age_str: str, opt_sim: OptionalTargetParam=None):
+    age = CommonResourceUtils.get_enum_by_name(age_str.upper(), CommonAge, default_value=CommonAge.INVALID)
+    if age is CommonAge.INVALID:
+        valid_ages = ','.join(CommonAge.get_all_names())
+        output(f'Invalid Age specified. Valid Ages: {valid_ages}')
+        return False
+    from server_commands.argument_helpers import get_optional_target
+    sim = get_optional_target(opt_sim, output._context)
+    sim_info = CommonSimUtils.get_sim_info(sim)
+    if sim_info is None:
+        output(f'Failed, Sim {opt_sim} did not exist.')
+        return
+    output(f'Setting the age of {sim} to {age_str}')
+    return CommonAgeUtils.set_age(sim_info, age)
+
+
 @Command('s4clib.print_sim_age', command_type=CommandType.Live)
 def _common_print_sim_age(opt_sim: OptionalTargetParam=None, _connection: int=None):
     from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
     from server_commands.argument_helpers import get_optional_target
     output = CheatOutput(_connection)
     output('Printing Sim Age.')
-    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
     sim = get_optional_target(opt_sim, _connection)
     sim_info = CommonSimUtils.get_sim_info(sim)
     if sim_info is None:
@@ -732,6 +891,12 @@ def _common_print_sim_age(opt_sim: OptionalTargetParam=None, _connection: int=No
         output('Approximate Age: {}'.format(get_age_result))
         get_age_exact_result = CommonAgeUtils.get_age(sim_info, exact_age=True)
         output('Exact Age: {}'.format(get_age_exact_result))
+        output('Age Progress: {}'.format(CommonAgeUtils.get_total_days_sim_has_been_in_their_current_age(sim_info)))
+        output('Age Progress (In Days): {}'.format(CommonAgeUtils.get_percentage_total_days_sim_has_been_in_their_current_age(sim_info)))
+        output('Days Until Ready To Age: {}'.format(CommonAgeUtils.get_total_days_until_sim_ages_up(sim_info)))
+        output('Total Days Until Next Age: {}'.format(CommonAgeUtils.get_total_days_to_age_up(sim_info)))
+        output('Randomized Progress: {}%'.format(CommonAgeUtils.get_random_age_progress(sim_info)))
+        output('Max Age Progress: {}'.format(CommonAgeUtils.get_max_age_progress(sim_info)))
     except Exception as ex:
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'An error occurred while printing Sim Age.', exception=ex)
         output('An error occurred while printing Sim Age.')

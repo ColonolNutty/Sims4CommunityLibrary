@@ -238,6 +238,16 @@ Sim Utilities
 
 
 *********************
+`Career`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_career_utils.CommonSimCareerUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+*********************
 `Club`
 *********************
 

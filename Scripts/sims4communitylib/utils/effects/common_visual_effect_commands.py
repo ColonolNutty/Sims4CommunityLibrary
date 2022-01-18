@@ -16,7 +16,7 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommandArgument, \
     CommonConsoleCommand
 from sims4communitylib.services.common_service import CommonService
-from sims4communitylib.utils.vfx.common_visual_effect import CommonVisualEffect
+from sims4communitylib.classes.effects.common_visual_effect import CommonVisualEffect
 
 
 class _CommonVisualEffectCommandService(CommonService):

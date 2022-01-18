@@ -90,6 +90,34 @@ Misc Utilities
 `Misc`
 --------------------------------------------------------
 
+
+*********************
+`Career`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_career_utils.CommonCareerUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
+`Career Tracks`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_career_track_utils.CommonCareerTrackUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
+`Career Levels`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_career_level_utils.CommonCareerLevelUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 *******************
 `Collections`
 *******************

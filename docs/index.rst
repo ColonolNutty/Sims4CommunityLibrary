@@ -13,6 +13,7 @@ To see the readme and the actual code, take a look at the repository on `Github`
 
    sims4communitylib.classes.buffs
    sims4communitylib.classes.calculations
+   sims4communitylib.classes.effects
    sims4communitylib.classes.interactions
    sims4communitylib.classes.options
    sims4communitylib.classes.math
