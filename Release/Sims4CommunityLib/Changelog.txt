@@ -24,6 +24,29 @@ v1.76:
 - Added commands to set the gender preferences of all Sims or those of a specific gender. `s4clib.set_gender_pref_of_all_sims`, `s4clib.set_gender_pref_of_all_female_sims`, and `s4clib.set_gender_pref_of_all_male_sims`
 - Added interactions to set the first name, last name, and full name of Sims. `s4clib.set_first_name`, `s4clib.set_last_name`, and `s4clib.set_name`
 - Fixed an error that could occur when retrieving the statistic value of a Sim without a Statistic Component.
+- S4CL will now catch way less errors
+- Added a custom Console Command called CommonConsoleCommand, which can be used to create commands while also providing a "help" command for your mod that will display all currently registered commands! `<mod_name>.help`
+- Added utilities for checking and retrieving available game packs
+- set_age will now return true if an exact age is used to set.
+- The Spawn commands will now spawn Sims with real names instead of simple numbering
+- Added functions to CommonSimNameUtils for creating random first and last names
+- Updated CommonConsoleCommand to print a done message after running a command.
+  - Added the ability to exclude commands from the help command display
+  - Added strings to the string tables for the following cases
+    - String Colon Space String
+    - String Comma Space String
+    - String Space String
+    - String Space Parenthesis Surrounded String
+- Added strings to string table:
+  - String Newline String
+  - String Hyphen String
+- Fixed an error with the test Choose Outfit Dialog
+- Added a few utilities for creating time spans and DateAndTime objects in CommonTimeUtils
+- Added the ability to combine strings using separators within CommonLocalizationUtils
+- Added CommonVisualEffect which can be used to display various visual effects.
+- Added new commands to add visual effects to Sims and objects. `s4clib.play_visual_effect` and `s4clib.stop_all_visual_effects`
+- Added a few functions to set age progress.
+- Added utilities for manipulating Careers, Career Tracks, and Career Levels
 
 v1.75:
 - Added functions to convert CommonSpecies, CommonAge, and CommonGender into localized string ids
