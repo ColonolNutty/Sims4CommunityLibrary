@@ -47,6 +47,26 @@ v1.76:
 - Added new commands to add visual effects to Sims and objects. `s4clib.play_visual_effect` and `s4clib.stop_all_visual_effects`
 - Added a few functions to set age progress.
 - Added utilities for manipulating Careers, Career Tracks, and Career Levels
+- New Enum type CommonIntFlags, this can be used to create enums that are bitwise capable!
+- CommonSimType is now a CommonIntFlags object and can be used with bitwise operations.
+- Added many new utilities and Enums for use within mods.
+  - Camera - Focus the camera on objects, positions, and Sims
+  - Some new Location utils - Some minor calculation functions with locations.
+  - Some new Age utils - Added a generic function to check if a Sim has an age
+  - Appearance Modifier Utils - Add/Remove/View appearance modifiers on Sims
+  - Plumbob Utils - Show/Hide the green thingy above Sim heads or make it fly off into the beyond (`s4clib.show_plumbob`, `s4clib.hide_plumbob`)
+  - Some new Situation utils
+  - New functions for the Career utils to modify Career work performance
+  - Object slots - Access container slots on objects.
+  - Object states - Manipulate object states.
+  - Currency Modifications - Modify various currency types (currently only Simoleons)
+  - Rabbit Holes - Put Sims into a rabbit hole while they "do something"
+  - Object filters - Filter through objects.
+  - Comparison classes - Classes that can be passed into functions that may be used to compare integers.
+- Added a service for cloning and modifying the clone Sim in CAS, thus allowing for a Mod author to "prompt" the player to choose a CAS Part or multiple CAS Parts.
+- Added a custom appearance modifier for applying CAS Parts to Sims. This will allow for dynamically applying Appearance Modifiers to Sims via Buffs or in other ways.
+  - A custom buff for displaying bare feet has been added as an example for doing this with the `s4clib_testing.toggle_example_appearance_modifier_buff` command
+- Added a new event that triggers AFTER a Sim changes their outfit.
 
 v1.75:
 - Added functions to convert CommonSpecies, CommonAge, and CommonGender into localized string ids
