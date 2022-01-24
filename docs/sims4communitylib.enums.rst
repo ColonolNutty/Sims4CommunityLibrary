@@ -6,6 +6,22 @@ Resource Identifiers
    sims4communitylib.enums.enumtypes
    sims4communitylib.enums.types
 
+`Appearance Modifier Priorities`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_appearance_modifier_priority.CommonAppearanceModifierPriority
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Appearance Modifier Types`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_appearance_modifier_type.CommonAppearanceModifierType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Body Frame`
 ------------------------------------------
 
@@ -18,6 +34,54 @@ Resource Identifiers
 ------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.buffs_enum.CommonBuffId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Business Advertising Types`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_business_advertising_type.CommonBusinessAdvertisingType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Business Customer Star Rating Types`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_business_customer_star_rating_type.CommonBusinessCustomerStarRatingType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Business Employee Types`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_business_employee_type.CommonBusinessEmployeeType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Business Quality Types`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_business_quality_type.CommonBusinessQualityType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Careers`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_career_ids.CommonCareerId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Currency Modify Reasons`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_currency_modify_reasons.CommonCurrencyModifyReason
    :members:
    :undoc-members:
    :show-inheritance:
@@ -118,6 +182,14 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Object Filter Types`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_object_filter_type.CommonObjectFilterType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Object Preference Tags`
 ------------------------------------------
 
@@ -126,10 +198,34 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Object Slot Names`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_object_slot_name_ids.CommonObjectSlotNameId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Object State Values`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_object_state_value_ids.CommonObjectStateValueId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Occult Types`
 ------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.common_occult_type.CommonOccultType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Pregnancy Origin`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_pregnancy_origin.CommonPregnancyOrigin
    :members:
    :undoc-members:
    :show-inheritance:

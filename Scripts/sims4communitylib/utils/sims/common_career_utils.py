@@ -7,8 +7,10 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Union, Iterator, Callable, Tuple, List
 
+import services
 from careers.career_location import CareerLocation
 from careers.career_tuning import Career, TunableCareerTrack, CareerLevel
+from sims4.tuning.instance_manager import InstanceManager
 
 
 class CommonCareerUtils:
@@ -173,7 +175,7 @@ class CommonCareerUtils:
         """
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-        for (career_guid, career) in CommonResourceUtils.load_all_instances(Types.CAREER):
+        for (_, career) in CommonResourceUtils.load_all_instances(Types.CAREER):
             if include_career_callback is not None and include_career_callback(career) is False:
                 continue
             yield career
@@ -196,3 +198,45 @@ class CommonCareerUtils:
         track = CommonCareerUtils.get_starting_career_track(career)
         from sims4communitylib.utils.sims.common_career_track_utils import CommonCareerTrackUtils
         return CommonCareerTrackUtils.determine_entry_level_into_career_track_by_user_level(track, desired_user_level)
+
+    @staticmethod
+    def get_work_performance(career: Career) -> float:
+        """get_work_performance(career)
+
+        Add an amount to the work performance of a career.
+
+        :param career: The career to modify.
+        :type career: Career
+        :return: The amount of work performance acquired in the specified Career.
+        :rtype: float
+        """
+        if career is None:
+            return 0.0
+        return career.work_performance
+
+    @staticmethod
+    def modify_work_performance(career: Career, amount: int):
+        """modify_work_performance(career, amount)
+
+        Modify the work performance acquired in a Career.
+
+        :param career: The career to modify.
+        :type career: Career
+        :param amount: The amount of work performance to apply to the Career.
+        :type amount: int
+        """
+        if career is None:
+            return
+        career.add_work_performance(amount)
+
+    @staticmethod
+    def get_instance_manager() -> InstanceManager:
+        """get_instance_manager()
+
+        Retrieve the instance manager for careers.
+
+        :return: The instance manager for careers.
+        :rtype: InteractionInstanceManager
+        """
+        from sims4.resources import Types
+        return services.get_instance_manager(Types.CAREER)

@@ -42,7 +42,7 @@ class CommonComponentUtils:
         :type component_container: ComponentContainer
         :param component_type: The type of component being retrieved.
         :type component_type: CommonComponentType
-        :param add_dynamic: Whether or not to add the component dynamically.
+        :param add_dynamic: Whether or not to add the component dynamically when it does not exist.
         :type add_dynamic: bool, optional
         :return: An object of type Component, or None if the specified component type is not found.
         :rtype: Union[Component, None]

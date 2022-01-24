@@ -20,7 +20,7 @@ if not ON_RTD:
 else:
     # noinspection PyMissingOrEmptyDocstring
     class AlarmHandle:
-        def cancel(self):
+        def cancel(self) -> Any:
             pass
 
     # noinspection PyMissingOrEmptyDocstring

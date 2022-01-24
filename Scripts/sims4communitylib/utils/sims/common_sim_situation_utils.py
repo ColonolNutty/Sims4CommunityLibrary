@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import services
-from typing import Callable, Iterator, Union, List, Tuple
+from typing import Callable, Iterator, Union, List, Tuple, Type
 
 from distributor.shared_messages import IconInfoData
 from server_commands.argument_helpers import OptionalTargetParam
@@ -72,6 +72,44 @@ class CommonSimSituationUtils:
         return False
 
     @staticmethod
+    def has_situation_job(sim_info: SimInfo, situation_job_id: int) -> bool:
+        """has_situation_job(sim_info, situation_job_id)
+
+        Determine if a Sim has been assigned a situation job.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param situation_job_id: The situation job to check for.
+        :type situation_job_id: int
+        :return: True, if the Sim has the specified situation job. False, if not.
+        :rtype: bool
+        """
+        return CommonSimSituationUtils.has_situation_jobs(sim_info, (situation_job_id,))
+
+    @staticmethod
+    def has_situation_jobs(sim_info: SimInfo, situation_job_ids: Tuple[int]) -> bool:
+        """has_situation_jobs(sim_info, situation_job_ids)
+
+        Determine if a Sim has been assigned any specified situation jobs.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param situation_job_ids: The situation jobs to check for.
+        :type situation_job_ids: Tuple[int]
+        :return: True, if the Sim has any of the specified situation jobs. False, if not.
+        :rtype: bool
+        """
+        sim_situations = CommonSimSituationUtils.get_situations(sim_info)
+        for situation in sim_situations:
+            for situation_job in situation.all_jobs_gen():
+                situation_job_id = CommonSituationUtils.get_situation_job_guid(situation_job)
+                if situation_job_id < 0:
+                    continue
+                if situation_job_id in situation_job_ids:
+                    return True
+        return False
+
+    @staticmethod
     def has_leave_situation(sim_info: SimInfo) -> bool:
         """has_situation_jobs(sim_info, situation_job_ids)
 
@@ -122,6 +160,21 @@ class CommonSimSituationUtils:
         return False
 
     @staticmethod
+    def is_in_situations_with_tag(sim_info: SimInfo, tag: CommonGameTag) -> bool:
+        """is_in_situations_with_tag(sim_info, tag)
+
+        Determine if a Sim is currently in a situation with a tag.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param tag: A tag to check for.
+        :type tag: CommonGameTag
+        :return: True, if the Sim is involved in any situations with any of the specified tags. False, if not.
+        :rtype: bool
+        """
+        return CommonSimSituationUtils.is_in_situations_with_any_tags(sim_info, (tag,))
+
+    @staticmethod
     def is_in_situations_with_any_tags(sim_info: SimInfo, tags: Tuple[CommonGameTag]) -> bool:
         """is_in_situations_with_any_tags(sim_info, tags)
 
@@ -144,6 +197,21 @@ class CommonSimSituationUtils:
                     if tag in getattr(situation_job, 'tags', tuple()):
                         return True
         return False
+
+    @staticmethod
+    def is_in_situations_of_type(sim_info: SimInfo, situation_type: Type[Situation]) -> bool:
+        """is_in_situations_of_type(sim_info, situation_type)
+
+        Determine if a Sim is currently in a situation that is of the a specific type.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param situation_type: The type of situation to check.
+        :type situation_type: Type[Situation]
+        :return: True, if the Sim is involved in any situations with any of the specified tags. False, if not.
+        :rtype: bool
+        """
+        return any(CommonSimSituationUtils.get_running_situations_sim_is_in_by_type(sim_info, situation_type))
 
     @staticmethod
     def make_sim_leave(sim_info: SimInfo):
@@ -225,6 +293,26 @@ class CommonSimSituationUtils:
                 continue
             goal_instance.force_complete(target_sim=CommonSimUtils.get_sim_instance(target_sim_info), score_override=score_override, start_cooldown=start_cooldown)
 
+    # noinspection SpellCheckingInspection
+    @staticmethod
+    def get_guids_of_all_running_situations_for_sim(sim_info: SimInfo) -> Tuple[int]:
+        """get_guids_of_all_running_situations_for_sim(sim_info)
+
+        Retrieve GUIDs for all Situations a Sim is involved in.
+
+        :param sim_info: The sim to check.
+        :type sim_info: SimInfo
+        :return: A collection of Situation GUIDs the specified Sim is involved in.
+        :rtype: Tuple[int]
+        """
+        situation_guids = []
+        for situation in CommonSimSituationUtils.get_situations(sim_info):
+            situation_guid = CommonSituationUtils.get_situation_guid(situation)
+            if situation_guid is None and situation_guid != -1:
+                continue
+            situation_guids.append(situation_guid)
+        return tuple(situation_guids)
+
     @staticmethod
     def get_situations(sim_info: SimInfo, include_situation_callback: Callable[[Situation], bool]=None) -> Iterator[Situation]:
         """get_situations(sim_info, include_situation_callback=None)
@@ -248,6 +336,98 @@ class CommonSimSituationUtils:
             if include_situation_callback is not None and not include_situation_callback(situation):
                 continue
             yield situation
+
+    @staticmethod
+    def get_first_running_situation_sim_is_in_by_type(sim_info: SimInfo, situation_type: Type[Situation]) -> Union[Situation, None]:
+        """get_first_running_situation_sim_is_in_by_type(sim_info, situation_type)
+
+        Retrieve the first Situation that a Sim is currently involved in that is a specific type.
+
+        :param sim_info: An instance of a Sim
+        :type sim_info: SimInfo
+        :param situation_type: A situation type to locate a situation with.
+        :type situation_type: Type[Situation]
+        :return: A situation the Sim is involved in that is of the specified type or None if not found.
+        :rtype: Union[Situation, None]
+        """
+        for situation in CommonSimSituationUtils.get_running_situations_sim_is_in_by_type(sim_info, situation_type):
+            return situation
+        return None
+
+    @staticmethod
+    def get_first_running_situation_sim_is_in_by_tag(sim_info: SimInfo, tag: CommonGameTag) -> Union[Situation, None]:
+        """get_first_running_situation_sim_is_in_by_tag(sim_info, tag)
+
+        Retrieve the first Situation that a Sim is currently involved in that has a tag.
+
+        :param sim_info: An instance of a Sim
+        :type sim_info: SimInfo
+        :param tag: The tag to locate a situation with.
+        :type tag: CommonGameTag
+        :return: A situation the Sim is involved in that has the specified tag or None if not found.
+        :rtype: Union[Situation, None]
+        """
+        for situation in CommonSimSituationUtils.get_running_situations_sim_is_in_by_tag(sim_info, tag):
+            return situation
+        return None
+
+    @staticmethod
+    def get_running_situations_sim_is_in_by_tag(sim_info: SimInfo, tag: CommonGameTag) -> Tuple[Situation]:
+        """get_running_situations_sim_is_in_by_tag(sim_info, tag)
+
+        Retrieve all Situations that a Sim is currently involved in that have the specified tag.
+
+        :param sim_info: An instance of a Sim
+        :type sim_info: SimInfo
+        :param tag: The tag to locate situations with.
+        :type tag: CommonGameTag
+        :return: An iterable of Situations the Sim is running that have the specified tag.
+        :rtype: Iterator[Situation]
+        """
+        def _situation_has_tag(_situation: Situation) -> bool:
+            if hasattr(_situation, 'tags'):
+                return tag in _situation.tags
+            return False
+
+        return tuple(CommonSimSituationUtils.get_situations(sim_info, include_situation_callback=_situation_has_tag))
+
+    @staticmethod
+    def get_running_situations_sim_is_in_by_tags(sim_info: SimInfo, tags: Tuple[CommonGameTag]) -> Tuple[Situation]:
+        """get_running_situations_sim_is_in_by_tag(sim_info, tags)
+
+        Retrieve all Situations that a Sim is currently involved in that have the specified tag.
+
+        :param sim_info: An instance of a Sim
+        :type sim_info: SimInfo
+        :param tags: A collection of tags to locate situations with. Matching situations will have at least one of these tags.
+        :type tags: Iterator[CommonGameTag]
+        :return: An iterable of Situations the Sim is running that have any of the specified tags.
+        :rtype: Iterator[Situation]
+        """
+        matching_situations: List[Situation] = list()
+        for tag in tags:
+            for situation in CommonSimSituationUtils.get_running_situations_sim_is_in_by_tag(sim_info, tag):
+                if situation not in matching_situations:
+                    matching_situations.append(situation)
+        return tuple(matching_situations)
+
+    @staticmethod
+    def get_running_situations_sim_is_in_by_type(sim_info: SimInfo, situation_type: Type[Situation]) -> Tuple[Situation]:
+        """get_running_situations_sim_is_in_by_type(sim_info, situation_type)
+
+        Retrieve all Situations that a Sim is currently involved in that match the specified type.
+
+        :param sim_info: An instance of a Sim
+        :type sim_info: SimInfo
+        :param situation_type: A situation type to locate situations with.
+        :type situation_type: Type[Situation]
+        :return: An iterable of Situations the Sim is running that are of the specified type.
+        :rtype: Iterator[Situation]
+        """
+        def _situation_is_of_type(_situation: Situation) -> bool:
+            return isinstance(_situation, situation_type)
+
+        return tuple(CommonSimSituationUtils.get_situations(sim_info, include_situation_callback=_situation_is_of_type))
 
     @staticmethod
     def get_situation_ids(sim_info: SimInfo) -> List[int]:

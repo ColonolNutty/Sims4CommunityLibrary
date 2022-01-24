@@ -118,3 +118,20 @@ class CommonInteractionId(CommonInt):
 
     S4CL_SOCIAL_SUPER_SIM_TO_FOX_HUMAN: 'CommonInteractionId' = 0xCC4FDF3D68E78F5E
     S4CL_SOCIAL_SUPER_SIM_TO_FOX_FOX: 'CommonInteractionId' = 0xCC2B053D68C8B3F0
+
+    SHOWER_TAKE_SHOWER_WALL_PRIVACY_CHILD_TEEN = 224187
+    GENERIC_TOILET_SIT_STALL = 213986
+
+    # bar_OrderDrink
+    BAR_ORDER_DRINK = 13050
+    # bar_PushOrderDrink_Autonomous
+    BAR_ORDER_DRINK_AUTONOMOUS = 13053
+    # bar_Order_Food
+    BAR_ORDER_FOOD = 178213
+
+    # bar_WaitForDrink
+    BAR_WAIT_FOR_DRINK = 13065
+    # bar_WaitFor_Food
+    BAR_WAIT_FOR_FOOD = 178214
+    # bar_WaitForFood_CriticCareer
+    BAR_WAIT_FOR_FOOD_CRITIC = 137790

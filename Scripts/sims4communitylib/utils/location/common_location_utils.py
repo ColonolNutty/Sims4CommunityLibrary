@@ -625,3 +625,21 @@ class CommonLocationUtils:
         :rtype: int
         """
         return services.get_world_description_id(CommonLocationUtils.get_zone_world_id(zone_id))
+
+    @staticmethod
+    def apply_surface_level_to_position(position: CommonVector3, surface_identifier: CommonSurfaceIdentifier) -> CommonVector3:
+        """apply_surface_level_to_position(game_object, interaction_context=None)
+
+        Get the position of the surface of an Object.
+
+        :param position: The position to update.
+        :type position: CommonVector3
+        :param surface_identifier: The surface identifier to apply.
+        :type surface_identifier: CommonSurfaceIdentifier
+        :return: The position with a surface level applied.
+        :rtype: CommonVector3
+        """
+        position = CommonVector3.from_vector3(position)
+        surface_identifier = CommonSurfaceIdentifier.from_surface_identifier(surface_identifier)
+        position = CommonVector3(position.x, CommonLocationUtils.get_surface_height_at(position.x, position.z, surface_identifier), position.z)
+        return CommonVector3.from_vector3(position)

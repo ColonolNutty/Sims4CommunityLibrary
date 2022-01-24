@@ -15,7 +15,7 @@ from sims4communitylib.events.event_handling.common_event import CommonEvent
 class S4CLSimSetCurrentOutfitEvent(CommonEvent):
     """S4CLSimSetCurrentOutfitEvent(sim_info, old_outfit_category_and_index, new_outfit_category_and_index)
 
-    An event that occurs when the current outfit of a Sim is being set.
+    An event that occurs when the current outfit of a Sim is being set. (Before it is actually set)
 
     :Example usage:
 
@@ -52,15 +52,15 @@ class S4CLSimSetCurrentOutfitEvent(CommonEvent):
 
     @property
     def sim_info(self) -> SimInfo:
-        """The Sim that changed."""
+        """The Sim that is changing."""
         return self._sim_info
 
     @property
     def old_outfit_category_and_index(self) -> Tuple[OutfitCategory, int]:
-        """The outfit category and index for the outfit the Sim has changed from."""
+        """The outfit category and index for the outfit the Sim is changing from."""
         return self._old_outfit_category_and_index
 
     @property
     def new_outfit_category_and_index(self) -> Tuple[OutfitCategory, int]:
-        """The outfit category and index for the outfit the Sim has changed to."""
+        """The outfit category and index for the outfit the Sim is changing to."""
         return self._new_outfit_category_and_index

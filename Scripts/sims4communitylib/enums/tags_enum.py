@@ -3098,7 +3098,6 @@ class CommonGameTag(CommonInt):
     INTERACTION_WRITE_ARTICLE: 'CommonGameTag' = 665
     INTERACTION_WRITE_JOKES: 'CommonGameTag' = 696
     INTERACTION_YOGA_CLASS_MEMBER: 'CommonGameTag' = 18461
-    INVALID: 'CommonGameTag' = 0
     INVENTORY_BOOKS_FUN: 'CommonGameTag' = 2350
     INVENTORY_BOOKS_OTHER: 'CommonGameTag' = 2352
     INVENTORY_BOOKS_SKILL: 'CommonGameTag' = 2351

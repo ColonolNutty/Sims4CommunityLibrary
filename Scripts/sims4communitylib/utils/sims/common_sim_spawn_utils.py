@@ -10,6 +10,7 @@ import os
 from typing import Union, Tuple, Callable, Any, Iterator
 
 from server_commands.argument_helpers import OptionalTargetParam
+from sims.sim_info_lod import SimInfoLODLevel
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.common_species import CommonSpecies
@@ -429,6 +430,95 @@ class CommonSimSpawnUtils:
         if active_location is None:
             active_position = CommonSimLocationUtils.get_position(active_sim_info)
         return CommonSimSpawnUtils.spawn_sim(sim_info, location=active_location, position=active_position, **kwargs)
+
+    @staticmethod
+    def clone_sim(source_sim_info: SimInfo, add_to_household: bool=True, household_override: Household=None) -> Union[SimInfo, None]:
+        """clone_sim(source_sim_info, add_to_household=True, household_override=None)
+
+        Clone a Sim and add them to the household of source_sim_info.
+
+        :param source_sim_info: The Sim to clone.
+        :type source_sim_info: SimInfo
+        :param add_to_household: If True, the Sim will be added to the household of "source_sim_info". If False, the Sim will be cloned into their own household. Default is True.
+        :type add_to_household: bool, optional
+        :param household_override: If specified, this household will be the one the cloned Sim will be added to. Default is None.
+        :type household_override: Household, optional
+        :return: The cloned Sim Info or None if cloning failed.
+        :rtype: Union[SimInfo, None]
+        """
+        import services
+        from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
+        if household_override is not None:
+            household = household_override
+        else:
+            if add_to_household:
+                household = CommonHouseholdUtils.get_household(source_sim_info)
+                if household is None:
+                    raise Exception(f'No household was specified from source Sim {source_sim_info} with household {household}!')
+            else:
+                household = CommonHouseholdUtils.create_empty_household()
+        household_id = CommonHouseholdUtils.get_id(household)
+        species = CommonSpecies.get_species(source_sim_info)
+        gender = CommonGender.get_gender(source_sim_info)
+        vanilla_gender = CommonGender.convert_to_vanilla(gender)
+        clone_sim_info = CommonSimSpawnUtils.create_sim_info(
+            species=species,
+            gender=gender,
+            age=CommonAge.get_age(source_sim_info),
+            first_name=SimSpawner.get_random_first_name(vanilla_gender, source_sim_info.species),
+            last_name=source_sim_info._base.last_name,
+            trait_ids=tuple(source_sim_info.trait_tracker.equipped_traits),
+            household=household,
+            source='cloning'
+        )
+        if clone_sim_info is None:
+            return None
+        try:
+            source_sim_proto = source_sim_info.save_sim(for_cloning=True)
+            clone_sim_id = clone_sim_info.sim_id
+            source_first_name = source_sim_info._base.first_name
+            source_last_name = source_sim_info._base.last_name
+            source_breed_name = source_sim_info._base.breed_name
+            source_first_name_key = source_sim_info._base.first_name_key
+            source_last_name_key = source_sim_info._base.last_name_key
+            source_full_name_key = source_sim_info._base.full_name_key
+            source_breed_name_key = source_sim_info._base.breed_name_key
+            clone_first_name = clone_sim_info._base.first_name
+            clone_last_name = clone_sim_info._base.last_name
+            clone_breed_name = clone_sim_info._base.breed_name
+            clone_first_name_key = clone_sim_info._base.first_name_key
+            clone_last_name_key = clone_sim_info._base.last_name_key
+            clone_full_name_key = clone_sim_info._base.full_name_key
+            clone_breed_name_key = clone_sim_info._base.breed_name_key
+            clone_sim_info.load_sim_info(source_sim_proto, is_clone=True, default_lod=SimInfoLODLevel.FULL)
+            clone_sim_info.sim_id = clone_sim_id
+            clone_sim_info._base.first_name = clone_first_name or source_first_name
+            clone_sim_info._base.last_name = clone_last_name or source_last_name
+            clone_sim_info._base.breed_name = clone_breed_name or source_breed_name
+            clone_sim_info._base.first_name_key = clone_first_name_key or source_first_name_key
+            clone_sim_info._base.last_name_key = clone_last_name_key or source_last_name_key
+            clone_sim_info._base.full_name_key = clone_full_name_key or source_full_name_key
+            clone_sim_info._base.breed_name_key = clone_breed_name_key or source_breed_name_key
+            clone_sim_info._household_id = household_id
+            source_trait_tracker = source_sim_info.trait_tracker
+            clone_trait_tracker = clone_sim_info.trait_tracker
+            for trait in clone_trait_tracker.personality_traits:
+                if not source_trait_tracker.has_trait(trait):
+                    clone_sim_info.remove_trait(trait)
+            for trait in clone_trait_tracker.gender_option_traits:
+                if not source_trait_tracker.has_trait(trait):
+                    clone_sim_info.remove_trait(trait)
+            services.sim_info_manager().set_default_genealogy(sim_infos=(clone_sim_info,))
+            clone_sim_info.set_default_data()
+            clone_sim_info.save_sim()
+            household.save_data()
+            if not household.is_active_household:
+                clone_sim_info.request_lod(SimInfoLODLevel.BASE)
+            clone_sim_info.resend_physical_attributes()
+        except Exception as ex:
+            CommonSimSpawnUtils.delete_sim(clone_sim_info)
+            raise ex
+        return clone_sim_info
 
     @staticmethod
     def despawn_sim(sim_info: SimInfo, source: str=None, cause: str=None, **kwargs) -> bool:

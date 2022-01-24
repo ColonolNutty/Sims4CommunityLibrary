@@ -36,7 +36,7 @@ class CommonAgeUtils:
 
         :param sim_info: The Sim to get the Age of.
         :type sim_info: SimInfo
-        :param exact_age: If set to True, the exact age of the Sim will be returned (Age 24 will be returned as 24). If set to False, the age of the Sim rounded to the nearest Age value will be returned. (Age 24 will be returned as Age.YOUNGADULT) Default is False.
+        :param exact_age: If set to True, the exact age of the Sim will be returned (Age 24 will be returned as 24). If set to False, the age of the Sim rounded to the nearest Age value will be returned. (Age 24 will be returned as Age.YOUNGADULT). Default is False.
         :type exact_age: bool, optional
         :return: The Age of the Sim or None if a problem occurs.
         :rtype: Union[Age, None]
@@ -792,6 +792,26 @@ class CommonAgeUtils:
             return vanilla_age in aging_data_ages
         except:
             return False
+
+    @staticmethod
+    def has_age(sim_info: SimInfo, age: Union[CommonAge, Age, int], exact_age: bool=False) -> bool:
+        """has_age(sim_info, age, exact_age=False)
+
+        Determine if a Sim has a matching Age.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param age: The age to check.
+        :type age: Union[CommonAge, Age, int]
+        :param exact_age: If True, the Sims exact age will be used. If False, the Sims approximate age will be used. In most cases, this should be False. Default is False.
+        :type exact_age: bool, optional
+        :return: True, if the age of the specified Sim matches the specified age. False, if not.
+        :rtype: bool
+        """
+        current_age = CommonAgeUtils.get_age(sim_info, exact_age=exact_age)
+        if current_age is None:
+            return False
+        return int(current_age) == int(age)
 
 
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.set_age_progress_percentage', 'Set the percentage total days a Sim has been in their current age.')

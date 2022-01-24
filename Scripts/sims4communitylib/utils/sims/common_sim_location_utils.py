@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 import os
 
 from typing import Union
+
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_quaternion import CommonQuaternion
 from sims4communitylib.classes.math.common_routing_location import CommonRoutingLocation

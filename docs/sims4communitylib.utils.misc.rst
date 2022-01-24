@@ -118,6 +118,15 @@ Misc Utilities
    :undoc-members:
    :show-inheritance:
 
+*********************
+`Camera`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_camera_utils.CommonCameraUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 *******************
 `Collections`
 *******************
@@ -146,6 +155,24 @@ Misc Utilities
    :show-inheritance:
 
 *******************
+`Math`
+*******************
+
+.. autoclass:: sims4communitylib.utils.common_math_utils.CommonMathUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*******************
+`Rabbit Hole`
+*******************
+
+.. autoclass:: sims4communitylib.utils.common_rabbit_hole_utils.CommonRabbitHoleUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*******************
 `Types`
 *******************
 
@@ -159,15 +186,6 @@ Misc Utilities
 *******************
 
 .. autoclass:: sims4communitylib.utils.common_weather_utils.CommonWeatherUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-*******************
-`Math`
-*******************
-
-.. autoclass:: sims4communitylib.utils.common_math_utils.CommonMathUtils
    :members:
    :undoc-members:
    :show-inheritance:

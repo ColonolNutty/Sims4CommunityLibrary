@@ -89,6 +89,14 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
+`After Set Outfit`
+------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_after_set_current_outfit.S4CLSimAfterSetCurrentOutfitEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Spawned Event`
 -------------------------------------------------------
 

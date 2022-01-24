@@ -7,7 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 import services
 from io import BytesIO
-from typing import ItemsView, Any, Union, Tuple, Type
+from typing import ItemsView, Any, Union, Tuple, Type, ValuesView, Dict
 from sims4.resources import ResourceLoader, Types
 from sims4.tuning.instance_manager import InstanceManager
 from sims4.tuning.merged_tuning_manager import get_manager
@@ -69,17 +69,56 @@ class CommonResourceUtils:
         return instance_manager.get(instance_id)
 
     @staticmethod
-    def load_all_instances(instance_type: Types) -> ItemsView[Any, Any]:
+    def load_all_instances(instance_type: Types) -> ItemsView[str, Any]:
         """load_all_instances(instance_type)
 
         Load all instances of the specified type.
 
-        :param instance_type: The type of instance being loaded.
+        :param instance_type: The type of instances being loaded.
         :type instance_type: Types
-        :return: All instances of the specified type.
-        :rtype: ItemsView[Any, Any]
+        :return: An items view of all instances of the specified type. (Resource Key, Instance)
+        :rtype: ItemsView[str, Any]
         """
         return CommonResourceUtils.get_instance_manager(instance_type).types.items()
+
+    @staticmethod
+    def load_all_instances_as_guid_to_instance(instance_type: Types) -> Dict[int, Any]:
+        """load_all_instances_as_guid_to_instance(instance_type)
+
+        Load all instances of the specified type and convert it to a dictionary mapping of GUID to Instance.
+
+        :param instance_type: The type of instances being loaded.
+        :type instance_type: Types
+        :return: A dictionary of instance GUID to instances of the specified type.
+        :rtype: Dict[int, Any]
+        """
+        return dict([(value_key.instance, value) for (value_key, value) in CommonResourceUtils.load_all_instances(instance_type)])
+
+    @staticmethod
+    def load_all_instance_types(instance_type: Types) -> Dict[str, Any]:
+        """load_all_instance_types(instance_type)
+
+        Load all instances of the specified type.
+
+        :param instance_type: The type of instances being loaded.
+        :type instance_type: Types
+        :return: A dictionary of resource keys to instances of the specified type.
+        :rtype: Dict[str, Any]
+        """
+        return CommonResourceUtils.get_instance_manager(instance_type).types
+
+    @staticmethod
+    def load_all_instance_values(instance_type: Types) -> ValuesView[Any]:
+        """load_all_instance_values(instance_type)
+
+        Load all instance values of the specified type.
+
+        :param instance_type: The type of instances being loaded.
+        :type instance_type: Types
+        :return: All instance values of the specified type.
+        :rtype: ValuesView[Any]
+        """
+        return CommonResourceUtils.get_instance_manager(instance_type).types.values()
 
     @staticmethod
     def get_instance_manager(instance_manager_type: Types) -> Union[InstanceManager, None]:
@@ -201,7 +240,7 @@ class CommonResourceUtils:
         :rtype: Any
         """
         if hasattr(enum_type, 'value_to_name') and value in enum_type.value_to_name:
-            return CommonResourceUtils.get_enum_by_name(enum_type.value_to_name, enum_type, default_value=default_value)
+            return CommonResourceUtils.get_enum_by_name(enum_type.value_to_name[value], enum_type, default_value=default_value)
         return default_value
 
     @staticmethod

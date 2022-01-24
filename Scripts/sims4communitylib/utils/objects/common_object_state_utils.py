@@ -249,7 +249,7 @@ class CommonObjectStateUtils:
         if not object_state_ids:
             return False
         for state_value in state_component.values():
-            if CommonObjectStateUtils.get_object_state_value_id(state_value) in object_state_ids:
+            if CommonObjectStateUtils.get_object_state_value_guid(state_value) in object_state_ids:
                 return True
         return False
 
@@ -272,19 +272,19 @@ class CommonObjectStateUtils:
         if not object_state_ids:
             return False
         for state_value in state_component.values():
-            if CommonObjectStateUtils.get_object_state_value_id(state_value) not in object_state_ids:
+            if CommonObjectStateUtils.get_object_state_value_guid(state_value) not in object_state_ids:
                 return False
         return True
 
     @staticmethod
-    def get_object_state_value_id(object_state_value: ObjectStateValue) -> Union[int, None]:
-        """get_object_state_id(state_value)
+    def get_object_state_value_guid(object_state_value: ObjectStateValue) -> Union[int, None]:
+        """get_object_state_value_guid(state_value)
 
-        Retrieve the decimal identifier of an object state.
+        Retrieve the GUID of an object state. (Not to be confused with the instance id)
 
         :param object_state_value: An instance of an object state.
         :type object_state_value: ObjectStateValue
-        :return: The identifier of the state value or None if no identifier is found.
+        :return: The GUID of the state value or None if no identifier is found.
         :rtype: Union[int, None]
         """
         if object_state_value is None:

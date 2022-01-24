@@ -89,6 +89,15 @@ Sim Utilities
 ------------------------------------------------------
 
 *******************
+`Appearance Modifiers`
+*******************
+
+.. autoclass:: sims4communitylib.utils.cas.common_sim_appearance_modifier_utils.CommonSimAppearanceModifierUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*******************
 `CAS`
 *******************
 
@@ -108,6 +117,15 @@ Sim Utilities
 
 `Stats`
 ------------------------------------------------------
+
+*********************
+`Currency`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_currency_utils.CommonSimCurrencyUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 *******************
 `Buffs`
@@ -319,11 +337,29 @@ Sim Utilities
    :undoc-members:
    :show-inheritance:
 
+****************
+`Plumbob`
+****************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_plumbob_utils.CommonSimPlumbobUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 *********************
 `Pregnancy`
 *********************
 
 .. autoclass:: sims4communitylib.utils.sims.common_sim_pregnancy_utils.CommonSimPregnancyUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
+`Rabbit Hole`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_rabbit_hole_utils.CommonSimRabbitHoleUtils
    :members:
    :undoc-members:
    :show-inheritance:

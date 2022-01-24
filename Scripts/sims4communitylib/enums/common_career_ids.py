@@ -1,0 +1,131 @@
+"""
+The Sims 4 Community Library is licensed under the Creative Commons Attribution 4.0 International public license (CC BY 4.0).
+https://creativecommons.org/licenses/by/4.0/
+https://creativecommons.org/licenses/by/4.0/legalcode
+
+Copyright (c) COLONOLNUTTY
+"""
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
+
+
+class CommonCareerId(CommonInt):
+    """Decimal Identifiers for Careers.
+
+    """
+    ACTIVE_ACTOR: 'CommonCareerId' = 189135
+    ACTIVE_DOCTOR: 'CommonCareerId' = 107230
+    ACTIVE_SCIENTIST: 'CommonCareerId' = 107255
+    ACTIVIST: 'CommonCareerId' = 135201
+    ASTRONAUT: 'CommonCareerId' = 12893
+    ATHLETIC: 'CommonCareerId' = 106458
+    BATUU_MISSIONS: 'CommonCareerId' = 231099
+    BUSINESS: 'CommonCareerId' = 106460
+    CIVIL_DESIGNER: 'CommonCareerId' = 232767
+    CONSERVATIONIST: 'CommonCareerId' = 204960
+    CORPORATE_WORKER: 'CommonCareerId' = 248315
+    COTTAGE_WORLD_VILLAGER_HELP: 'CommonCareerId' = 260893
+    CRIMINAL: 'CommonCareerId' = 27927
+    CRITIC: 'CommonCareerId' = 136115
+    CULINARY: 'CommonCareerId' = 9231
+    DETECTIVE: 'CommonCareerId' = 106132
+    EDUCATION: 'CommonCareerId' = 219591
+    ENGINEER: 'CommonCareerId' = 217872
+    ENTERTAINER: 'CommonCareerId' = 27929
+    FREELANCER_WITH_AGENCY_ARTIST: 'CommonCareerId' = 205686
+    FREELANCER_WITH_AGENCY_FASHION_PHOTOGRAPHER: 'CommonCareerId' = 214782
+    FREELANCER_WITH_AGENCY_MAKER: 'CommonCareerId' = 232809
+    FREELANCER_WITH_AGENCY_NONE: 'CommonCareerId' = 206791
+    FREELANCER_WITH_AGENCY_PARANORMAL_INVESTIGATOR: 'CommonCareerId' = 252593
+    FREELANCER_WITH_AGENCY_PROGRAMMER: 'CommonCareerId' = 207568
+    FREELANCER_WITH_AGENCY_WRITER: 'CommonCareerId' = 207579
+    GARDENER: 'CommonCareerId' = 186159
+    INTERIOR_DECORATOR: 'CommonCareerId' = 257934
+    LAW: 'CommonCareerId' = 223298
+    MILITARY: 'CommonCareerId' = 202483
+    NPC_ACTOR_CAREER_CAMERA_OPERATOR: 'CommonCareerId' = 196625
+    NPC_ACTOR_CAREER_HAIR_AND_MAKEUP_STYLIST: 'CommonCareerId' = 195951
+    NPC_ACTOR_CAREER_PRODUCER: 'CommonCareerId' = 196627
+    NPC_ACTOR_CAREER_SPECIAL_EFFECTS_OPERATOR: 'CommonCareerId' = 196558
+    NPC_ACTOR_CAREER_WARDROBE_STYLIST: 'CommonCareerId' = 195952
+    NPC_BUSINESS_RESTAURANT_CHEF: 'CommonCareerId' = 136209
+    NPC_BUSINESS_RESTAURANT_CRITIC: 'CommonCareerId' = 139565
+    NPC_BUSINESS_RESTAURANT_HOST: 'CommonCareerId' = 136208
+    NPC_BUSINESS_RESTAURANT_WAITER: 'CommonCareerId' = 136210
+    NPC_BUSINESS_RETAIL_EMPLOYEE: 'CommonCareerId' = 110057
+    NPC_BUSINESS_VET_CLINIC_VET: 'CommonCareerId' = 168569
+    NPC_COTTAGE_WORLD_GARDEN_SHOP_OWNER: 'CommonCareerId' = 260407
+    NPC_COTTAGE_WORLD_GROCERY_STORE_DELIVERY: 'CommonCareerId' = 260409
+    NPC_COTTAGE_WORLD_GROCERY_STORE_OWNER: 'CommonCareerId' = 260408
+    NPC_SERVICES_BONEHILDA: 'CommonCareerId' = 256924
+    NPC_SERVICES_BUTLER: 'CommonCareerId' = 147718
+    NPC_SERVICES_DELIVERIES_FOOD: 'CommonCareerId' = 262368
+    NPC_SERVICES_DELIVERIES_PIZZA: 'CommonCareerId' = 110043
+    NPC_SERVICES_FIREFIGHTER: 'CommonCareerId' = 237780
+    NPC_SERVICES_GARDENER: 'CommonCareerId' = 130529
+    NPC_SERVICES_HOME_CHEF: 'CommonCareerId' = 140900
+    NPC_SERVICES_MAID: 'CommonCareerId' = 109456
+    NPC_SERVICES_MAIL: 'CommonCareerId' = 109457
+    NPC_SERVICES_MASSAGE_THERAPIST: 'CommonCareerId' = 119666
+    NPC_SERVICES_NANNY: 'CommonCareerId' = 141901
+    NPC_SERVICES_REPAIR: 'CommonCareerId' = 129471
+    NPC_SPECIAL_ADOPTION_OFFICER: 'CommonCareerId' = 175923
+    NPC_SPECIAL_ECO_INSPECTOR: 'CommonCareerId' = 242362
+    NPC_SPECIAL_FATHER_WINTER: 'CommonCareerId' = 183371
+    NPC_SPECIAL_GRIM_REAPER: 'CommonCareerId' = 110326
+    NPC_SPECIAL_GYM_TRAINER: 'CommonCareerId' = 112014
+    NPC_SPECIAL_MASTER_FISHER: 'CommonCareerId' = 112090
+    NPC_SPECIAL_RANGER: 'CommonCareerId' = 112104
+    NPC_SPECIAL_TRAGIC_CLOWN: 'CommonCareerId' = 139889
+    NPC_SPECIAL_YOGA_INSTRUCTOR: 'CommonCareerId' = 118612
+    NPC_STRANGER_VILLE_ALIEN_POLLINATOR: 'CommonCareerId' = 115639
+    NPC_STRANGER_VILLE_OGA: 'CommonCareerId' = 205712
+    NPC_STRANGER_VILLE_SCIENTIST: 'CommonCareerId' = 205705
+    NPC_UNIVERSITY_PROFESSOR_ARTS: 'CommonCareerId' = 224750
+    NPC_UNIVERSITY_PROFESSOR_SCIENCE: 'CommonCareerId' = 224751
+    NPC_VENUE_BARISTA: 'CommonCareerId' = 122270
+    NPC_VENUE_BARTENDER: 'CommonCareerId' = 109458
+    NPC_VENUE_BARTENDER_COMPANY: 'CommonCareerId' = 130590
+    NPC_VENUE_BAR_REGULAR: 'CommonCareerId' = 122658
+    NPC_VENUE_COMMUNITY_GARDENER: 'CommonCareerId' = 112083
+    NPC_VENUE_CURIO_SHOP_OWNER: 'CommonCareerId' = 206662
+    NPC_VENUE_DJ: 'CommonCareerId' = 122818
+    NPC_VENUE_LANDLORD: 'CommonCareerId' = 143653
+    NPC_VENUE_LIBRARIAN: 'CommonCareerId' = 112015
+    NPC_VENUE_MASSAGE_THERAPIST: 'CommonCareerId' = 118550
+    NPC_VENUE_MAYOR: 'CommonCareerId' = 260410
+    NPC_VENUE_PAPARAZZI: 'CommonCareerId' = 197295
+    NPC_VENUE_PUB_OWNER: 'CommonCareerId' = 260411
+    NPC_VENUE_REFLEXOLOGIST: 'CommonCareerId' = 119506
+    NPC_VENUE_STALL_VENDOR: 'CommonCareerId' = 143285
+    ODD_JOB: 'CommonCareerId' = 207004
+    PAINTER: 'CommonCareerId' = 27930
+    PART_TIME_BABY_SITTER_ADULT: 'CommonCareerId' = 208723
+    PART_TIME_BABY_SITTER_TEEN: 'CommonCareerId' = 35221
+    PART_TIME_BARISTA_ADULT: 'CommonCareerId' = 208737
+    PART_TIME_BARISTA_TEEN: 'CommonCareerId' = 35220
+    PART_TIME_DIVER: 'CommonCareerId' = 208405
+    PART_TIME_FAST_FOOD_ADULT: 'CommonCareerId' = 208761
+    PART_TIME_FAST_FOOD_TEEN: 'CommonCareerId' = 35157
+    PART_TIME_FISHERMAN: 'CommonCareerId' = 207607
+    PART_TIME_LIFEGUARD_ADULT: 'CommonCareerId' = 205662
+    PART_TIME_LIFEGUARD_TEEN: 'CommonCareerId' = 208881
+    PART_TIME_MANUAL_LABOR_ADULT: 'CommonCareerId' = 208779
+    PART_TIME_MANUAL_LABOR_TEEN: 'CommonCareerId' = 35218
+    PART_TIME_RETAIL_ADULT: 'CommonCareerId' = 208874
+    PART_TIME_RETAIL_TEEN: 'CommonCareerId' = 35219
+    SCHOOL_CHILD: 'CommonCareerId' = 12895
+    SCHOOL_TEEN: 'CommonCareerId' = 9541
+    SECRET_AGENT: 'CommonCareerId' = 27931
+    SOCIAL_MEDIA: 'CommonCareerId' = 135363
+    STYLE_INFLUENCER: 'CommonCareerId' = 193202
+    TECH_GURU: 'CommonCareerId' = 27932
+    UNIVERSITY: 'CommonCareerId' = 223698
+    UNIVERSITY_COURSE_SLOT_A: 'CommonCareerId' = 209979
+    UNIVERSITY_COURSE_SLOT_B: 'CommonCareerId' = 209984
+    UNIVERSITY_COURSE_SLOT_C: 'CommonCareerId' = 209988
+    UNIVERSITY_COURSE_SLOT_D: 'CommonCareerId' = 209989
+    VOLUNTEER_DRAMA_CLUB: 'CommonCareerId' = 199274
+    VOLUNTEER_E_SPORTS: 'CommonCareerId' = 217092
+    VOLUNTEER_SCOUTING: 'CommonCareerId' = 186513
+    VOLUNTEER_SOCCER_TEAM: 'CommonCareerId' = 220913
+    WRITER: 'CommonCareerId' = 27933

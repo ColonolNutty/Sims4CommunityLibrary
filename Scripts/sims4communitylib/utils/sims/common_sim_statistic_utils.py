@@ -18,6 +18,7 @@ from sims4communitylib.exceptions.common_exceptions_handler import CommonExcepti
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
+from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.resources.common_statistic_utils import CommonStatisticUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -426,6 +427,10 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         return True
 
 
+log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_statistic_commands')
+log.enable()
+
+
 @Command('s4clib.set_statistic_value', command_type=CommandType.Live)
 def _common_set_statistic_value(statistic: TunableInstanceParam(Types.STATISTIC), value: float, opt_sim: OptionalTargetParam=None, _connection: int=None):
     from server_commands.argument_helpers import get_optional_target
@@ -498,3 +503,27 @@ def _common_remove_statistic(statistic: TunableInstanceParam(Types.STATISTIC), o
     except Exception as ex:
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to remove statistic {} from Sim {}.'.format(str(statistic), sim_name), exception=ex)
         output('Failed to remove statistic {} from Sim {}. {}'.format(str(statistic), sim_name, str(ex)))
+
+
+@Command('s4clib.print_static_commodities', command_type=CommandType.Live)
+def _common_print_static_commodities(opt_sim: OptionalTargetParam=None, _connection: int=None):
+    output = CheatOutput(_connection)
+    from server_commands.argument_helpers import get_optional_target
+    try:
+        sim = get_optional_target(opt_sim, output._context)
+        if sim is None:
+            output("Sim {} doesn't exist".format(opt_sim))
+            return False
+        sim_info = CommonSimUtils.get_sim_info(sim)
+        try:
+            output(f'Printing static commodities of Sim {sim_info}')
+            static_commodities_text = ''
+            for stat in list(sim_info.static_commodity_tracker):
+                static_commodities_text += '{} ({})\n'.format(stat, CommonStatisticUtils.get_statistic_id(stat))
+            log.debug(static_commodities_text)
+        except Exception as ex:
+            log.error('Error occurred printing static commodities.', exception=ex)
+    except Exception as ex:
+        output('An error occurred while printing static commodities.')
+        log.error('An error occurred while printing static commodities.', exception=ex)
+    return False

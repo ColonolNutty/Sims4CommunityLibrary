@@ -41,6 +41,14 @@ Custom Enum Types
    :undoc-members:
    :show-inheritance:
 
+`Int Flags`
+--------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.enumtypes.common_int_flags.CommonIntFlags
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Object Enum`
 -----------------------------------------------------
 

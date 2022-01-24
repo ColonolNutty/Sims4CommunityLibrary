@@ -1115,7 +1115,6 @@ class CommonTraitUtils(HasClassLog):
             return traits
         return list([CommonTraitUtils.load_trait_by_id(trait_id) for trait_id in (*sim_info._base.trait_ids, *sim_info._base.base_trait_ids) if CommonTraitUtils.load_trait_by_id(trait_id) is not None])
 
-
     @classmethod
     def get_trait_name(cls, trait: Trait) -> Union[str, None]:
         """get_trait_name(trait)

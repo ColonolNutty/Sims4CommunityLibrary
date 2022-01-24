@@ -7,13 +7,11 @@ Copyright (c) COLONOLNUTTY
 """
 from sims4.commands import Command, CommandType, CheatOutput
 from tag import Tag
-from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
 
-class _S4CLTagReaderForUpdate:
+class _S4CLReaderForUpdate:
     # noinspection SpellCheckingInspection
-    TAG_CONVERSIONS = {
+    CONVERSIONS = {
         'AGEAPPROPRIATE_ADULT': 'AGE_APPROPRIATE_ADULT',
         'AGEAPPROPRIATE_CHILD': 'AGE_APPROPRIATE_CHILD',
         'AGEAPPROPRIATE_ELDER': 'AGE_APPROPRIATE_ELDER',
@@ -4302,26 +4300,12 @@ class _S4CLTagReaderForUpdate:
     }
 
 
-log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'tag_printer')
-log.enable()
-
-
-# @CommonIntervalEventRegistry.run_once(ModInfo.get_identity(), milliseconds=10)
-@Command('s4clib.print_game_tags', command_type=CommandType.Live)
-def _common_print_game_tags_ready_for_update(_connection: int=None) -> None:
+@Command('s4clib_dev.log_game_tags', command_type=CommandType.Live)
+def _common_log_game_tags_ready_for_update(_connection: int=None) -> None:
     output = CheatOutput(_connection)
-    output('Printing Game Tags')
-    tags = list()
-    not_found_tags = list()
-    for (tag_name, tag_value) in Tag.name_to_value.items():
-        tag_name = tag_name.strip().upper()
-        if tag_name in _S4CLTagReaderForUpdate.TAG_CONVERSIONS:
-            tag_name = _S4CLTagReaderForUpdate.TAG_CONVERSIONS[tag_name]
-        else:
-            not_found_tags.append(tag_name)
-        tags.append((tag_name, tag_value))
-    sorted_tags = sorted(tags, key=lambda x: x[0])
-    for (tag, value) in sorted_tags:
-        log.debug('{}: \'CommonGameTag\' = {}'.format(tag, int(value)))
-    log.format_with_message('Finished logging tags. These tags were missing.', not_found_tags=not_found_tags)
-    output('Finished printing game tags')
+    output('Logging Game Tags to Messages.txt')
+    from sims4communitylib.enums.tags_enum import CommonGameTag
+    from sims4communitylib.utils.misc._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
+    # noinspection PyTypeChecker
+    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_enum(Tag, _S4CLReaderForUpdate.CONVERSIONS, CommonGameTag)
+    output(f'Finished logging Game Tags. {len(not_found_values)} values were not found.')
