@@ -10,15 +10,8 @@ from sims.sim import Sim
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4.math import Location
-
-try:
-    from objects.pools.ocean import Ocean
-except ModuleNotFoundError:
-    # Those without the Island Paradise expansion pack won't have an Ocean object
-    Ocean = None
 from objects.game_object import GameObject
 from objects.script_object import ScriptObject
-from objects.terrain import Terrain, _LocationPoint
 
 
 class CommonTypeUtils:
@@ -116,20 +109,49 @@ class CommonTypeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
+        from objects.terrain import Terrain
         return isinstance(obj, Terrain)
 
     @staticmethod
-    def is_ocean(obj: Any) -> bool:
-        """is_ocean(obj)
+    def is_land(obj: Any) -> bool:
+        """is_land(obj)
 
-        Determine if an object is of type Ocean
+        Determine if an object is of type Terrain or TerrainPoint.
 
         :param obj: The object to check.
         :type obj: Any
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        if Ocean is None:
+        return CommonTypeUtils.is_terrain(obj) or CommonTypeUtils.is_terrain_point(obj)
+
+    @staticmethod
+    def is_water(obj: Any) -> bool:
+        """is_water(obj)
+
+        Determine if an object is of type Ocean, OceanPoint, SwimmingPool, or PoolPoint.
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
+        """
+        return CommonTypeUtils.is_ocean(obj) or CommonTypeUtils.is_ocean_point(obj) or CommonTypeUtils.is_swimming_pool(obj) or CommonTypeUtils.is_pool_point(obj)
+
+    @staticmethod
+    def is_ocean(obj: Any) -> bool:
+        """is_ocean(obj)
+
+        Determine if an object is of type Ocean.
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
+        """
+        try:
+            from objects.pools.ocean import Ocean
+        except ModuleNotFoundError:
             return False
         return isinstance(obj, Ocean)
 
@@ -137,7 +159,7 @@ class CommonTypeUtils:
     def is_swimming_pool(obj: Any) -> bool:
         """is_swimming_pool(obj)
 
-        Determine if an object is of type SwimmingPool
+        Determine if an object is of type SwimmingPool.
 
         :param obj: The object to check.
         :type obj: Any
@@ -186,7 +208,53 @@ class CommonTypeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
+        from objects.terrain import _LocationPoint
         return isinstance(obj, _LocationPoint)
+
+    @staticmethod
+    def is_terrain_point(obj: Any) -> bool:
+        """is_terrain_point(obj)
+
+        Determine if an object is of type TerrainPoint.
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
+        """
+        from objects.terrain import TerrainPoint
+        return isinstance(obj, TerrainPoint)
+
+    @staticmethod
+    def is_ocean_point(obj: Any) -> bool:
+        """is_ocean_point(obj)
+
+        Determine if an object is of type OceanPoint.
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
+        """
+        try:
+            from objects.terrain import OceanPoint
+        except ModuleNotFoundError:
+            return False
+        return isinstance(obj, OceanPoint)
+
+    @staticmethod
+    def is_pool_point(obj: Any) -> bool:
+        """is_pool_point(obj)
+
+        Determine if an object is of type PoolPoint.
+
+        :param obj: The object to check.
+        :type obj: Any
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
+        """
+        from objects.terrain import PoolPoint
+        return isinstance(obj, PoolPoint)
 
     @staticmethod
     def is_pool_seat(obj: Any) -> bool:

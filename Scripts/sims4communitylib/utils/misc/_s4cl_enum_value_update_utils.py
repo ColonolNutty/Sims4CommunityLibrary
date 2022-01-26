@@ -33,7 +33,7 @@ class _S4CLEnumValueUpdateUtils(HasLog):
         super().__init__()
         self.log.enable()
 
-    def _read_values_from_enum(self, vanilla_enum_type: Union[Int, DynamicEnumLocked], name_to_cleaned_name_mappings: Dict[str, str], enum_type: Type, skip_not_found: bool=False) -> Tuple[str]:
+    def _read_values_from_enum(self, vanilla_enum_type: Union[Int, DynamicEnumLocked], name_to_cleaned_name_mappings: Dict[str, str], enum_type: Type, skip_not_found: bool=False) -> Tuple[Tuple[str, int]]:
         """_read_values_from_enum(vanilla_enum_type, name_to_cleaned_name_mappings, enum_type, skip_not_found=False)
 
         Read the values and return the ones not found.
@@ -53,7 +53,7 @@ class _S4CLEnumValueUpdateUtils(HasLog):
         self.log.format_with_message('---------------------------------------------------------------------------------')
         conversion_table: Dict[str, str] = dict()
         values: List[Tuple[str, int]] = list()
-        not_found_values: List[str] = list()
+        not_found_values: List[Tuple[str, int]] = list()
         for (value_name, value_value) in vanilla_enum_type.name_to_value.items():
             original_name = value_name.strip().upper()
             val_name = original_name
@@ -64,7 +64,7 @@ class _S4CLEnumValueUpdateUtils(HasLog):
                 if existing_value is not None:
                     val_name = existing_value.name
                 else:
-                    not_found_values.append(value_name)
+                    not_found_values.append((val_name, int(value_value)))
                     if skip_not_found:
                         continue
             conversion_table[original_name] = val_name
@@ -80,9 +80,13 @@ class _S4CLEnumValueUpdateUtils(HasLog):
         self.log.debug('}')
         self.log.format_with_message('---------------------------------------------------------------------------------')
         self.log.format_with_message(f'Finished Logging {enum_name}. These {enum_name} were not found in the conversion mapping.', not_found_values=not_found_values)
+        sorted_not_found_values = sorted(not_found_values, key=lambda x: x[0])
+        for (not_found_value_name, not_found_value_value) in sorted_not_found_values:
+            self.log.debug(f'{not_found_value_name}: \'{enum_name}\' = {int(not_found_value_value)}')
+        self.log.format_with_message('---------------------------------------------------------------------------------')
         return tuple(not_found_values)
 
-    def _read_values_from_instances(self, instance_type: Types, name_to_cleaned_name_mappings: Dict[str, str], enum_type: Type, skip_not_found: bool=False) -> Tuple[str]:
+    def _read_values_from_instances(self, instance_type: Types, name_to_cleaned_name_mappings: Dict[str, str], enum_type: Type, skip_not_found: bool=False) -> Tuple[Tuple[str, int]]:
         """_read_values_from_instances(instance_type, name_to_cleaned_name_mappings, enum_type, skip_not_found=False)
 
         Read the values and return the ones not found.
@@ -103,7 +107,7 @@ class _S4CLEnumValueUpdateUtils(HasLog):
         self.log.format_with_message('---------------------------------------------------------------------------------')
         conversion_table: Dict[str, str] = dict()
         values: List[Tuple[str, int]] = list()
-        not_found_values: List[str] = list()
+        not_found_values: List[Tuple[str, int]] = list()
         for (value_guid, value_instance) in CommonResourceUtils.load_all_instances_as_guid_to_instance(instance_type).items():
             original_name = value_instance.__name__.strip().upper()
             val_name = original_name
@@ -114,7 +118,7 @@ class _S4CLEnumValueUpdateUtils(HasLog):
                 if existing_value is not None:
                     val_name = existing_value.name
                 else:
-                    not_found_values.append(val_name)
+                    not_found_values.append((val_name, int(value_guid)))
                     if skip_not_found:
                         continue
             conversion_table[original_name] = val_name
@@ -130,4 +134,8 @@ class _S4CLEnumValueUpdateUtils(HasLog):
         self.log.debug('}')
         self.log.format_with_message('---------------------------------------------------------------------------------')
         self.log.format_with_message(f'Finished logging {enum_name}. These {enum_name} were not found in the conversion mapping.', not_found_values=not_found_values)
+        sorted_not_found_values = sorted(not_found_values, key=lambda x: x[0])
+        for (not_found_value_name, not_found_value_value) in sorted_not_found_values:
+            self.log.debug(f'{not_found_value_name}: \'{enum_name}\' = {int(not_found_value_value)}')
+        self.log.format_with_message('---------------------------------------------------------------------------------')
         return tuple(not_found_values)

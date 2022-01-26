@@ -13,6 +13,8 @@ from sims.sim_info import SimInfo
 from sims4 import commands
 from sims4.commands import Command, CommandType, CheatOutput
 from sims4.resources import Types
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
@@ -40,7 +42,7 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         return 'common_sim_motive_utils'
 
     @classmethod
-    def has_motive(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int]) -> bool:
+    def has_motive(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int]) -> CommonTestResult:
         """has_motive(sim_info, motive_id)
 
         Determine if a Sim has the specified Motive.
@@ -51,21 +53,21 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         :type sim_info: SimInfo
         :param motive_id: The identifier of the Motive to look for.
         :type motive_id: Union[CommonMotiveId, CommonInt, int]
-        :return: True, if the Sim has the specified Motive. False, if not.
-        :rtype: bool
+        :return: The result of testing if the Sim has the motive. True, if the Sim has the specified Motive. False, if not.
+        :rtype: CommonTestResult
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
-            return False
+            return CommonTestResult(False, 'sim_info was None.')
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return False
+            return CommonTestResult(False, f'{sim_info} did not have a mapped motive {motive_id}')
         cls.get_log().format_with_message('Mapped motive id, checking if Sim has the motive.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, sim=sim_info)
         return CommonSimStatisticUtils.has_statistic(sim_info, mapped_motive_id)
 
     @classmethod
-    def set_motive_level(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int], level: float) -> bool:
+    def set_motive_level(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int], level: float) -> CommonExecutionResult:
         """set_motive_level(sim_info, motive_id, level)
 
         Set the current level of a Motive on a Sim.
@@ -76,19 +78,19 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         :type motive_id: Union[CommonMotiveId, CommonInt, int]
         :param level: The amount to set the motive level to.
         :type level: float
-        :return: True, if the specified Motive was changed successfully. False, if not.
-        :rtype: bool
+        :return: The result of setting the motive level. True, if the specified Motive was changed successfully. False, if not.
+        :rtype: CommonExecutionResult
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
-            return False
+            return CommonExecutionResult(False, 'sim_info was None.')
         if not cls.has_motive(sim_info, motive_id):
             cls.get_log().format_with_message('Sim did not have the motive.', motive_id=motive_id, sim=sim_info)
-            return False
+            return CommonExecutionResult(False, f'{sim_info} did not have motive {motive_id}')
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return False
+            return CommonExecutionResult(False, f'Sim did not have motive {motive_id}')
         cls.get_log().format_with_message('Mapped motive id, setting the level for it on Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, level=level, sim=sim_info)
         return CommonSimStatisticUtils.set_statistic_value(sim_info, mapped_motive_id, level, add=True)
 
@@ -100,15 +102,15 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :param motive_id: The identifier of the Motive to get.
+        :param motive_id: The identifier of the Motive to get the value of.
         :type motive_id: Union[CommonMotiveId, CommonInt, int]
-        :return: True, if the specified Motive was changed successfully. False, if not.
-        :rtype: bool
+        :return: The current level of the motive for the specified Sim.
+        :rtype: float
         """
         return cls._get_motive_level(sim_info, motive_id)
 
     @classmethod
-    def increase_motive_level(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int], amount: float) -> bool:
+    def increase_motive_level(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int], amount: float) -> CommonExecutionResult:
         """increase_motive_level(sim_info, motive_id, amount)
 
         Increase the current level of a Motive of a Sim.
@@ -119,24 +121,24 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         :type motive_id: Union[CommonMotiveId, CommonInt, int]
         :param amount: The amount to increase the motive by.
         :type amount: float
-        :return: True, if the specified Motive was changed successfully. False, if not.
-        :rtype: bool
+        :return: The result of increasing motive level. True, if the specified Motive was changed successfully. False, if not.
+        :rtype: CommonExecutionResult
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
-            return False
+            return CommonExecutionResult(False, 'sim_info was None.')
         if not cls.has_motive(sim_info, motive_id):
             cls.get_log().format_with_message('Sim did not have the motive.', motive_id=motive_id, sim=sim_info)
-            return False
+            return CommonExecutionResult(False, f'Sim {sim_info} did not have the specified motive {motive_id}.')
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return False
+            return CommonExecutionResult(False, f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
         cls.get_log().format_with_message('Mapped motive id, Adding to it for Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, amount=amount, sim=sim_info)
         return CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount, add=True)
 
     @classmethod
-    def decrease_motive_level(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int], amount: float) -> bool:
+    def decrease_motive_level(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int], amount: float) -> CommonExecutionResult:
         """decrease_motive_level(sim_info, motive_id, amount)
 
         Decrease the current level of a Motive of a Sim.
@@ -147,19 +149,19 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         :type motive_id: Union[CommonMotiveId, CommonInt, int]
         :param amount: The amount to decrease the motive by.
         :type amount: float
-        :return: True, if the specified Motive was changed successfully. False, if not.
-        :rtype: bool
+        :return: The result of decreasing motive level. True, if the specified Motive was changed successfully. False, if not.
+        :rtype: CommonExecutionResult
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
-            return False
+            return CommonExecutionResult(False, 'sim_info was None.')
         if not cls.has_motive(sim_info, motive_id):
             cls.get_log().format_with_message('Sim did not have the motive.', motive_id=motive_id, sim=sim_info)
-            return False
+            return CommonExecutionResult(False, f'Sim {sim_info} did not have the specified motive {motive_id}.')
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return False
+            return CommonExecutionResult(False, f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
         cls.get_log().format_with_message('Mapped motive id, Subtracting from it for Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, amount=amount, sim=sim_info)
         return CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount * -1.0, add=True)
 
@@ -243,7 +245,7 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         return motive_level
 
     @classmethod
-    def has_bowels(cls, sim_info: SimInfo) -> bool:
+    def has_bowels(cls, sim_info: SimInfo) -> CommonTestResult:
         """has_bowels(sim_info)
 
         Determine if a Sim has bowels.
@@ -252,8 +254,8 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :return: True, if the Sim has bowels. False, if not.
-        :rtype: bool
+        :return: The result of the test. True, if the Sim has bowels. False, if not.
+        :rtype: CommonTestResult
         """
         return cls.has_motive(sim_info, CommonMotiveId.BOWEL)
 
@@ -427,7 +429,7 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         return cls._get_motive_level(sim_info, CommonMotiveId.WITCH_MAGIC)
 
     @classmethod
-    def is_motive_locked(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int]) -> bool:
+    def is_motive_locked(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int]) -> CommonTestResult:
         """is_motive_locked(sim_info, motive_id)
 
         Determine if a Motive is locked for a Sim.
@@ -436,26 +438,36 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         :type sim_info: SimInfo
         :param motive_id: The identifier of the motive to check.
         :type motive_id: Union[CommonMotiveId, CommonInt, int]
-        :return: True, if the specified Motive is locked for the Sim. False, if not.
-        :rtype: bool
+        :return: The result of the test. True, if the specified Motive is locked for the Sim. False, if not.
+        :rtype: CommonTestResult
         """
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
-        return CommonSimStatisticUtils.is_statistic_locked(sim_info, mapped_motive_id)
+        if mapped_motive_id == -1:
+            cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
+            return CommonTestResult(False, f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
+        motive_instance = CommonSimStatisticUtils.get_statistic(sim_info, mapped_motive_id)
+        if motive_instance is None:
+            return CommonTestResult(False, f'No motive found for id {mapped_motive_id}.')
+        if sim_info.is_locked(motive_instance):
+            return CommonTestResult(True, f'Motive {mapped_motive_id} is locked for Sim {sim_info}')
+        return CommonTestResult(False, f'Motive {mapped_motive_id} is not locked for Sim {sim_info}')
 
     @classmethod
-    def set_all_motives_max(cls, sim_info: SimInfo) -> bool:
+    def set_all_motives_max(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """set_all_motives_max(sim_info)
 
         Set all Motives for a Sim to their maximum values.
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :return: True, if successful. False, if not.
-        :rtype: bool
+        :return: The result of setting all motives to max. True, if successful. False, if not.
+        :rtype: CommonExecutionResult
         """
+        if sim_info is None:
+            return CommonExecutionResult(False, 'sim_info was None.')
         client_id = services.client_manager().get_first_client_id()
         commands.execute('stats.fill_commodities {}'.format(CommonSimUtils.get_sim_id(sim_info)), client_id)
-        return True
+        return CommonExecutionResult(True, f'Successfully set all motives to their max levels for Sim {sim_info}')
 
     @classmethod
     def _get_motive_level(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int]) -> float:
@@ -563,7 +575,7 @@ def _common_get_motive_level(motive: TunableInstanceParam(Types.STATISTIC), opt_
         output('Motive Level of {}: {}'.format(motive, motive_level))
     except Exception as ex:
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to get motive {} to Sim {}.'.format(str(motive), sim_name), exception=ex)
-        output('Failed to get motive {} to Sim {}. {}'.format(str(motive), sim_name, str(ex)))
+        output('Failed to get motive {} for Sim {}. {}'.format(str(motive), sim_name, str(ex)))
 
 
 @Command('s4clib.set_motive_level', command_type=CommandType.Live)
@@ -586,7 +598,7 @@ def _common_set_motive_level(motive: TunableInstanceParam(Types.STATISTIC), leve
             output('Failed to set motive level.')
     except Exception as ex:
         CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set motive {} to Sim {}.'.format(str(motive), sim_name), exception=ex)
-        output('Failed to set motive {} to Sim {}. {}'.format(str(motive), sim_name, str(ex)))
+        output('Failed to set motive {} for Sim {}. {}'.format(str(motive), sim_name, str(ex)))
 
 
 @Command('s4clib.max_all_motives', command_type=CommandType.Live)

@@ -20,11 +20,26 @@ class CommonSimBodyUtils:
     def get_wading_size(sim_info: SimInfo) -> Tuple[int, int]:
         """get_wading_size(sim_info)
 
-        Retrieve the size of a Sim if they were to wade in a pool of water.
+        Retrieve the size of a Sim if they were to wade in an Ocean of water.
+
+        .. note:: This function is obsolete. Please use :func:`~get_ocean_wading_size` instead.
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :return: A tuple indicating the x and y wading size of a Sim from their origin point.
+        :rtype: Tuple[int, int]
+        """
+        return CommonSimBodyUtils.get_ocean_wading_size(sim_info)
+
+    @staticmethod
+    def get_ocean_wading_size(sim_info: SimInfo) -> Tuple[int, int]:
+        """get_ocean_wading_size(sim_info)
+
+        Retrieve the size of a Sim if they were to wade in an Ocean of water.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: A tuple indicating the x and y Ocean wading size of a Sim from their origin point.
         :rtype: Tuple[int, int]
         """
         # noinspection PyBroadException
@@ -36,6 +51,30 @@ class CommonSimBodyUtils:
         if sim is None:
             return 0, 0
         wading_interval = OceanTuning.get_actor_wading_interval(sim)
+        if wading_interval is None:
+            return 0, 0
+        return wading_interval.lower_bound, wading_interval.upper_bound
+
+    @staticmethod
+    def get_pond_wading_size(sim_info: SimInfo) -> Tuple[int, int]:
+        """get_wading_size(sim_info)
+
+        Retrieve the size of a Sim if they were to wade in a pond of water.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: A tuple indicating the x and y Pond wading size of a Sim from their origin point.
+        :rtype: Tuple[int, int]
+        """
+        # noinspection PyBroadException
+        try:
+            from objects.pools.pond_utils import PondUtils
+        except:
+            return 0, 0
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return 0, 0
+        wading_interval = PondUtils.get_actor_wading_interval(sim)
         if wading_interval is None:
             return 0, 0
         return wading_interval.lower_bound, wading_interval.upper_bound

@@ -18,6 +18,7 @@ class CommonExecutionResult(TestResult):
     """CommonExecutionResult(\
         result,\
         reason,\
+        success_override=None,\
         tooltip_text=None,\
         tooltip_tokens=(),\
         icon=None,\
@@ -28,11 +29,15 @@ class CommonExecutionResult(TestResult):
 
     .. note:: This class can be used in place of TestResult
 
-    :param result: A value that indicates whether the execution was successful or not. If True, the execution was successful. If False, the execution was not successful.
-    :type result: bool
+    :param result: The result of execution. This value can be any type.
+    :type result: Any
+    :param reason: The reason for the success or failure of execution.
+    :type reason: str
+    :param success_override: If True, the execution will be indicated as being a success. If False, the execution will be indicated as being a failure. If None, the execution success will be indicated by whether result is set or not, if result is a bool, success is True and failure is False. Default is None.
+    :type success_override: bool
     :param tooltip_text: The text that will be displayed. If not specified, then no tooltip will be displayed. Default is None.
     :type tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator], optional
-    :param tooltip_tokens: A collection of objects to format into the localized string. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few)
+    :param tooltip_tokens: A collection of objects to format into the localized tooltip. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few)
     :type tooltip_tokens: Iterable[Any], optional
     :param icon: The icon to display. Default is None.
     :type icon: Any, optional
@@ -43,21 +48,111 @@ class CommonExecutionResult(TestResult):
     FALSE = None
     NONE = None
 
-    def __init__(self, result: bool, reason: str, tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator, CommonLocalizationUtils.LocalizedTooltip]=None, tooltip_tokens: Iterator[Any]=(), icon: Any=None, influenced_by_active_mood: bool=False) -> None:
+    def __init__(self, result: Any, reason: str, success_override: bool=None, tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator, CommonLocalizationUtils.LocalizedTooltip]=None, tooltip_tokens: Iterator[Any]=(), icon: Any=None, influenced_by_active_mood: bool=False) -> None:
+        self._tooltip_text = tooltip_text
+        self._tooltip_tokens = tooltip_tokens
         tooltip = CommonLocalizationUtils.create_localized_tooltip(tooltip_text, tooltip_tokens=tooltip_tokens)
         super().__init__(result, reason, tooltip=tooltip, icon=icon, influence_by_active_mood=influenced_by_active_mood)
+        self._success_override = success_override
+        if success_override is None:
+            # noinspection PyBroadException
+            try:
+                success_override = bool(result)
+            except:
+                if result:
+                    success_override = True
+                else:
+                    success_override = False
+        self._success = success_override
 
     @property
     def is_success(self) -> bool:
-        """Whether or not the result is successful."""
-        return bool(self.result)
+        """True, if the result of execution is successful. False, if not."""
+        return self._success
+
+    @property
+    def is_failure(self) -> bool:
+        """False, if the result of execution is a failure. False, if not."""
+        return not self.is_success
 
     def __repr__(self) -> str:
         if self.reason:
             return f'<{self.__class__.__name__}: {bool(self.result)} ({self.reason})>'
         return f'<{self.__class__.__name__}: {bool(self.result)}>'
 
+    def __str__(self) -> str:
+        if self.reason:
+            return self.reason
+        return str(self.result)
 
-CommonExecutionResult.TRUE = CommonExecutionResult(True, 'Success')
-CommonExecutionResult.FALSE = CommonExecutionResult(False, 'Failed')
-CommonExecutionResult.NONE = CommonExecutionResult(False, 'Failed')
+    def __eq__(self, other) -> bool:
+        if isinstance(other, bool):
+            return self.is_success is other
+        if isinstance(other, CommonExecutionResult):
+            return self.result == other.result and self.is_success == other.is_success
+        if isinstance(other, TestResult):
+            return self.is_success == other.result
+        return self.result == other
+
+    def __ne__(self, other) -> bool:
+        return not self == other
+
+    def __bool__(self) -> bool:
+        return self._success
+
+    def __or__(self, other) -> 'CommonExecutionResult':
+        if isinstance(other, CommonExecutionResult):
+            is_success = self.is_success or other.is_success
+            result = self.result or other.result
+            tooltip_text = self._tooltip_text or other._tooltip_text
+            tooltip_tokens = self._tooltip_tokens or other._tooltip_tokens
+        elif isinstance(other, TestResult):
+            is_success = self.is_success or other.result
+            result = self.result or other.result
+            if self._tooltip_text:
+                tooltip_text = self._tooltip_text
+                tooltip_tokens = self._tooltip_tokens
+            else:
+                tooltip_text = other.tooltip
+                tooltip_tokens = tuple()
+        else:
+            return self
+
+        if self._reason:
+            reason = self._reason
+        else:
+            reason = other._reason
+        icon = self.icon or other.icon
+        influence_by_active_mood = self.influence_by_active_mood or other.influence_by_active_mood
+        return CommonExecutionResult(result, reason, success_override=is_success, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influence_by_active_mood)
+
+    def __and__(self, other: 'CommonExecutionResult') -> 'CommonExecutionResult':
+        if isinstance(other, CommonExecutionResult):
+            is_success = self.is_success and other.is_success
+            result = self.result or other.result
+            tooltip_text = self._tooltip_text or other._tooltip_text
+            tooltip_tokens = self._tooltip_tokens or other._tooltip_tokens
+        elif isinstance(other, TestResult):
+            is_success = self.is_success and other.result
+            result = self.result or other.result
+            if self._tooltip_text:
+                tooltip_text = self._tooltip_text
+                tooltip_tokens = self._tooltip_tokens
+            else:
+                tooltip_text = other.tooltip
+                tooltip_tokens = tuple()
+        else:
+            return self
+
+        if self._reason:
+            reason = self._reason
+        else:
+            reason = other._reason
+        icon = self.icon or other.icon
+        influence_by_active_mood = self.influence_by_active_mood or other.influence_by_active_mood
+        return CommonExecutionResult(result, reason, success_override=is_success, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influence_by_active_mood)
+
+
+CommonExecutionResult.TRUE = CommonExecutionResult(True, 'Success Generic')
+CommonExecutionResult.FALSE = CommonExecutionResult(False, 'Failure Unknown')
+CommonExecutionResult.NONE = CommonExecutionResult(False, 'Failure Unknown')

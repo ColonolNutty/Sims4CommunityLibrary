@@ -8,15 +8,158 @@ Copyright (c) COLONOLNUTTY
 import services
 from typing import Union, Iterator, Any, Tuple, List
 from interactions.base.interaction import Interaction
+from interactions.context import InteractionContext
 from interactions.interaction_instance_manager import InteractionInstanceManager
 from protocolbuffers.Localization_pb2 import LocalizedString
+from server.pick_info import PickInfo
+from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
+from sims4communitylib.classes.math.common_vector3 import CommonVector3
 from sims4communitylib.enums.interactions_enum import CommonInteractionId
+from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
 
 
 class CommonInteractionUtils:
     """Utilities for manipulating Interactions.
 
     """
+
+    @staticmethod
+    def has_any_static_commodities(interaction: Interaction, static_commodity_ids: Iterator[int]) -> bool:
+        """has_any_static_commodities(interaction, static_commodity_ids)
+
+        Determine if an interaction has any of the specified static commodities.
+
+        :param interaction: An instance of an interaction.
+        :type interaction: Interaction
+        :param static_commodity_ids: A collection of static commodity ids.
+        :type static_commodity_ids: Iterator[int], optional
+        :return: True, if the interaction has any of the specified static commodities. False, if not.
+        :rtype: bool
+        """
+        interaction_commodities = interaction.static_commodities
+        if not interaction_commodities:
+            return False
+        static_commodity_ids = tuple(static_commodity_ids)
+        if not static_commodity_ids:
+            return True
+        for static_commodity_id in static_commodity_ids:
+            for interaction_commodity in interaction_commodities:
+                interaction_commodity_id = getattr(interaction_commodity, 'guid64', None)
+                if static_commodity_id == interaction_commodity_id:
+                    return True
+        return False
+
+    @staticmethod
+    def has_all_static_commodities(interaction: Interaction, static_commodity_ids: Iterator[int]) -> bool:
+        """has_all_static_commodities(interaction, static_commodity_ids)
+
+        Determine if an interaction has all of the specified static commodities.
+
+        :param interaction: An instance of an interaction.
+        :type interaction: Interaction
+        :param static_commodity_ids: A collection of static commodity ids.
+        :type static_commodity_ids: Iterator[int], optional
+        :return: True, if the interaction has all of the specified static commodities. False, if not.
+        :rtype: bool
+        """
+        interaction_commodities = interaction.static_commodities
+        if not interaction_commodities:
+            return False
+        static_commodity_ids = tuple(static_commodity_ids)
+        if not static_commodity_ids:
+            return True
+        for static_commodity_id in static_commodity_ids:
+            has_commodity = False
+            for interaction_commodity in interaction_commodities:
+                interaction_commodity_id = getattr(interaction_commodity, 'guid64', None)
+                if static_commodity_id == interaction_commodity_id:
+                    has_commodity = True
+                    break
+            if not has_commodity:
+                return False
+        return True
+
+    @staticmethod
+    def get_pick_info_from_interaction_context(interaction_context: InteractionContext) -> Union[PickInfo, None]:
+        """get_pick_info_from_interaction_context(interaction_context)
+
+        Retrieve the pick info of an interaction context.
+
+        :param interaction_context: An interaction context.
+        :type interaction_context: InteractionContext
+        :return: The pick info of the interaction context or None, if not found.
+        :rtype: PickInfo
+        """
+        if interaction_context is None or interaction_context.pick is None:
+            return None
+        return interaction_context.pick
+
+    @staticmethod
+    def get_picked_routing_surface_from_interaction_context(interaction_context: InteractionContext) -> Union[CommonSurfaceIdentifier, None]:
+        """get_picked_routing_surface_from_interaction_context(interaction_context)
+
+        Retrieve the picked routing surface from an interaction context.
+
+        :param interaction_context: An interaction context.
+        :type interaction_context: InteractionContext
+        :return: The picked routing surface from the interaction context or None if a problem occurs.
+        :rtype: Union[CommonSurfaceIdentifier, None]
+        """
+        pick_info = CommonInteractionUtils.get_pick_info_from_interaction_context(interaction_context)
+        if pick_info is None:
+            return None
+        return CommonSurfaceIdentifier.from_surface_identifier(pick_info.routing_surface)
+
+    @staticmethod
+    def get_picked_position_from_interaction_context(interaction_context: InteractionContext) -> Union[CommonVector3, None]:
+        """get_picked_position_from_interaction_context(interaction_context)
+
+        Retrieve the picked position from an interaction context.
+
+        :param interaction_context: An interaction context.
+        :type interaction_context: InteractionContext
+        :return: The picked position from the interaction context or None if a problem occurs.
+        :rtype: Union[CommonVector3, None]
+        """
+        pick_info = CommonInteractionUtils.get_pick_info_from_interaction_context(interaction_context)
+        if pick_info is None:
+            return None
+        return CommonVector3.from_vector3(pick_info.location)
+
+    @staticmethod
+    def get_picked_routing_position_from_interaction_context(interaction_context: InteractionContext) -> Union[CommonVector3, None]:
+        """get_picked_routing_position_from_interaction_context(interaction_context)
+
+        Retrieve the picked routing position from an interaction context.
+
+        :param interaction_context: An interaction context.
+        :type interaction_context: InteractionContext
+        :return: The picked routing position with the routing surface applied to it from the interaction context or None if a problem occurs.
+        :rtype: Union[CommonVector3, None]
+        """
+        pick_info = CommonInteractionUtils.get_pick_info_from_interaction_context(interaction_context)
+        if pick_info is None:
+            return None
+        picked_position = CommonVector3.from_vector3(pick_info.location)
+        picked_routing_surface = CommonSurfaceIdentifier.from_surface_identifier(pick_info.routing_surface)
+        picked_position.y = CommonLocationUtils.get_surface_height_at(picked_position.x, picked_position.z, picked_routing_surface)
+        return picked_position
+
+    @staticmethod
+    def get_picked_routing_surface_level_from_interaction_context(interaction_context: InteractionContext) -> Union[int, None]:
+        """get_picked_routing_surface_level_from_interaction_context(interaction_context)
+
+        Retrieve the picked routing surface level from an interaction context.
+
+        :param interaction_context: An interaction context.
+        :type interaction_context: InteractionContext
+        :return: The picked routing surface level from the interaction context or None if a problem occurs.
+        :rtype: Union[int, None]
+        """
+        routing_surface = CommonInteractionUtils.get_picked_routing_surface_from_interaction_context(interaction_context)
+        if routing_surface is None:
+            return None
+        return routing_surface.secondary_id
 
     @staticmethod
     def get_interaction_id(interaction_identifier: Union[int, Interaction]) -> Union[int, None]:

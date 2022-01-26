@@ -222,6 +222,8 @@ class CommonSimSituationUtils:
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         """
+        if sim_info is None:
+            return
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return
@@ -235,7 +237,7 @@ class CommonSimSituationUtils:
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :param situation_id: The decimal identifier of the Situation to remove the Sim from.
+        :param situation_id: The instance identifier of the Situation to remove the Sim from.
         :type situation_id: int
         :return: True, if the Sim was successfully removed from the situation. False, if not.
         :rtype: bool
@@ -259,6 +261,8 @@ class CommonSimSituationUtils:
         :param visit_situation_override: An instance of a Situation to use for the Visit. If not specified, the default visit situation will be used. Default is None.
         :type visit_situation_override: Situation, optional
         """
+        if sim_info is None:
+            return
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return
