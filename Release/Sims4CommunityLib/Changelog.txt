@@ -63,10 +63,23 @@ v1.76:
   - Rabbit Holes - Put Sims into a rabbit hole while they "do something"
   - Object filters - Filter through objects.
   - Comparison classes - Classes that can be passed into functions that may be used to compare integers.
+  - CommonTerrainInteractionUtils, CommonTerrainLocationUtils, and CommonTerrainUtils.
 - Added a service for cloning and modifying the clone Sim in CAS, thus allowing for a Mod author to "prompt" the player to choose a CAS Part or multiple CAS Parts.
 - Added a custom appearance modifier for applying CAS Parts to Sims. This will allow for dynamically applying Appearance Modifiers to Sims via Buffs or in other ways.
   - A custom buff for displaying bare feet has been added as an example for doing this with the `s4clib_testing.toggle_example_appearance_modifier_buff` command
 - Added a new event that triggers AFTER a Sim changes their outfit.
+- Updated CommonExecutionResult to provide the ability to decide the success/failure of the result separately from the result itself.
+- The result argument of CommonExecutionResult can now be set to a non bool value. This allows CommonExecutionResult to be used for other returned values.
+- Created CommonTestResult to be used as a bool representation of CommonExecutionResult. It should be returned when running functions that test things to allow tooltips and provide reasons for the True/False result.
+- Updated many of the statistic and motive utils to return CommonExecutionResult and CommonTestResult instead of just bool.
+- Added many new trait ids to CommonTraitId
+- Added utilities for checking static commodities and retrieving pick info of interactions to CommonInteractionUtils
+- Added CommonSimRoutingUtils for doing things related to routing for Sims.
+- The CommonTerrainUtils under utils/location is now obsolete, please use CommonTerrainLocationUtils instead.
+- Added a function to CommonSimBodyUtils to retrieve the pond wading size of a Sim.
+- Obsoleted the CommonSimBodyUtils.get_wading_size function in favor of the CommonSimBodyUtils.get_ocean_wading_size function.
+- Fixed an issue with interactions being registered to Ocean targets twice.
+- Fixed a long standing annoyance to those using S4CL and Wicked Whims together where the Toggle Phone Silence button would not be available due to a bug that exists in Wicked Whims where it flags the Toggle Phone Silence button as a CHEAT.
 
 v1.75:
 - Added functions to convert CommonSpecies, CommonAge, and CommonGender into localized string ids
