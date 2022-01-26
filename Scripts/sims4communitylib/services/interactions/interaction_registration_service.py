@@ -242,7 +242,7 @@ class CommonInteractionRegistry(CommonService, HasLog):
         new_super_affordances = list()
         for interaction_handler in self._interaction_handlers[CommonInteractionType.ON_TERRAIN_LOAD]:
             for interaction_instance in interaction_handler._interactions_to_add_gen():
-                if interaction_instance in new_super_affordances:
+                if interaction_instance in new_super_affordances or interaction_instance in terrain_service.TERRAIN_DEFINITION.cls._super_affordances:
                     continue
                 new_super_affordances.append(interaction_instance)
         new_terrain_definition_class = terrain_service.TERRAIN_DEFINITION.cls
@@ -260,7 +260,7 @@ class CommonInteractionRegistry(CommonService, HasLog):
         new_super_affordances = list()
         for interaction_handler in self._interaction_handlers[CommonInteractionType.ON_OCEAN_LOAD]:
             for interaction_instance in interaction_handler._interactions_to_add_gen():
-                if interaction_instance in new_super_affordances:
+                if interaction_instance in new_super_affordances or interaction_instance in terrain_service.OCEAN_DEFINITION.cls._super_affordances:
                     continue
                 new_super_affordances.append(interaction_instance)
         new_ocean_definition_class = terrain_service.OCEAN_DEFINITION.cls
