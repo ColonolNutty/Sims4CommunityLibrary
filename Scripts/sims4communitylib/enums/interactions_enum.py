@@ -135,3 +135,5 @@ class CommonInteractionId(CommonInt):
     BAR_WAIT_FOR_FOOD = 178214
     # bar_WaitForFood_CriticCareer
     BAR_WAIT_FOR_FOOD_CRITIC = 137790
+
+    TOGGLE_PHONE_SILENCE = 40130  # toggle_phone_silence
