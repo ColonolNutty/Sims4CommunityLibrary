@@ -10,13 +10,13 @@ from typing import Any, Tuple, Union, List
 
 from sims.outfits.outfit_enums import OutfitCategory, BodyTypeFlag, BodyType
 from sims.sim_info import SimInfo
+from sims4communitylib.dtos.common_cas_part import CommonCASPart
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.common_appearance_modifier_type import CommonAppearanceModifierType
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
-from sims4communitylib.utils.cas.common_cas_utils import CommonCASUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -64,13 +64,13 @@ class CommonAttachCASPartsAppearanceModifier(AppearanceModifier.BaseAppearanceMo
                 def log_identifier(self) -> str:
                     return 'common_example_apply_bare_feet'
 
-                def _get_cas_part_ids(
+                def _get_cas_parts(
                     self,
                     source_sim_info: SimInfo,
                     modified_sim_info: SimInfo,
                     original_unmodified_sim_info: SimInfo,
                     random_seed: int
-                ) -> Tuple[int]:
+                ) -> Tuple[CommonCASPart]:
                     # Human
                     # yfShoes_Nude
                     adult_human_female_bare_feet_id = 6543
@@ -126,7 +126,7 @@ class CommonAttachCASPartsAppearanceModifier(AppearanceModifier.BaseAppearanceMo
                     if bare_feet_cas_part_id is None:
                         return tuple()
 
-                    return bare_feet_cas_part_id,
+                    return CommonCASPart(bare_feet_cas_part_id, CommonCASUtils.get_body_type_of_cas_part(bare_feet_cas_part_id)),
 
             # We override the original "appearance_modifiers" to so we can insert our custom appearance modifier.
             FACTORY_TUNABLES = {
@@ -247,29 +247,31 @@ class CommonAttachCASPartsAppearanceModifier(AppearanceModifier.BaseAppearanceMo
                 self.log.format_with_message('Based On Sim Info found, using Based On Sim Info!', original_unmodified_sim=original_unmodified_sim_info)
 
             self.log.format_with_message('Copying the base attributes of Sim to the modified Sim.', sim=source_sim_info, original_unmodified_sim=original_unmodified_sim_info, modified_sim=modified_sim_info)
-            from sims.sim_info_base_wrapper import SimInfoBaseWrapper
-            SimInfoBaseWrapper.copy_base_attributes(modified_sim_info, source_sim_info)
-            SimInfoBaseWrapper.copy_physical_attributes(modified_sim_info, source_sim_info)
-            modified_sim_info.skin_tone = source_sim_info._base.skin_tone
-            modified_sim_info.skin_tone_val_shift = source_sim_info._base.skin_tone_val_shift
-            modified_sim_info.load_outfits(source_sim_info.save_outfits())
+            if source_sim_info is not modified_sim_info:
+                from sims.sim_info_base_wrapper import SimInfoBaseWrapper
+                SimInfoBaseWrapper.copy_base_attributes(modified_sim_info, source_sim_info)
+                SimInfoBaseWrapper.copy_physical_attributes(modified_sim_info, source_sim_info)
+                modified_sim_info.skin_tone = source_sim_info._base.skin_tone
+                modified_sim_info.skin_tone_val_shift = source_sim_info._base.skin_tone_val_shift
+                modified_sim_info.load_outfits(source_sim_info.save_outfits())
 
-            cas_part_ids = self._get_cas_part_ids(source_sim_info, modified_sim_info, original_unmodified_sim_info, random_seed)
-            body_types = self._apply_cas_part_ids(cas_part_ids, source_sim_info, modified_sim_info, original_unmodified_sim_info, random_seed)
+            cas_parts = self._get_cas_parts(source_sim_info, modified_sim_info, original_unmodified_sim_info, random_seed)
+            body_types = self._apply_cas_parts(cas_parts, source_sim_info, modified_sim_info, original_unmodified_sim_info, random_seed)
 
             if not body_types:
-                self.log.format_with_message('Failed to apply CAS Parts! No body parts', sim=original_unmodified_sim_info, cas_part_ids=cas_part_ids)
+                self.log.format_with_message('No body types were returned. Assuming BodyTypeFlag is NONE', sim=original_unmodified_sim_info, cas_part_ids_and_body_types=cas_parts)
                 return BodyTypeFlag.NONE
-            self.log.format_with_message('Done applying CAS Parts!', sim=original_unmodified_sim_info, cas_part_ids=cas_part_ids)
-            return BodyTypeFlag.make_body_type_flag(*body_types)
+            body_type_flags = BodyTypeFlag.make_body_type_flag(*body_types)
+            self.log.format_with_message('Done applying CAS Parts!', sim=original_unmodified_sim_info, cas_part_ids_and_body_types=cas_parts, body_type_flags=body_type_flags)
+            return body_type_flags
         except Exception as ex:
             self.log.error('An error occurred while applying selected part.', exception=ex)
         return BodyTypeFlag.NONE
 
-    def _get_cas_part_ids(self, source_sim_info: SimInfo, modified_sim_info: SimInfo, original_unmodified_sim_info: SimInfo, random_seed: int) -> Tuple[int]:
-        """_get_cas_part_ids(source_sim_info, modified_sim_info, original_unmodified_sim_info, random_seed)
+    def _get_cas_parts(self, source_sim_info: SimInfo, modified_sim_info: SimInfo, original_unmodified_sim_info: SimInfo, random_seed: int) -> Tuple[CommonCASPart]:
+        """_get_cas_parts(source_sim_info, modified_sim_info, original_unmodified_sim_info, random_seed)
 
-        Retrieve a collection of CAS Part ids being applied to the Sim.
+        Retrieve a collection of CAS Parts being applied to the Sim.
 
         :param source_sim_info: The Sim the parts are being applied to. (This Sim is replaced with "modified_sim_info" after the first appearance modifier modification)
         :type source_sim_info: SimInfo
@@ -279,35 +281,23 @@ class CommonAttachCASPartsAppearanceModifier(AppearanceModifier.BaseAppearanceMo
         :type original_unmodified_sim_info: SimInfo
         :param random_seed: The seed used to assign the appearance modifier.
         :type random_seed: int
-        :return: A collection of CAS Part Identifiers that will be applied to the Sim.
-        :rtype: Tuple[int]
+        :return: A collection of CAS Parts that will be applied to the Sim.
+        :rtype: Tuple[CommonCASPart]
         """
         raise NotImplementedError()
 
-    def _apply_cas_part_ids(self, cas_part_ids: Tuple[int], source_sim_info: SimInfo, modified_sim_info: SimInfo, original_unmodified_sim_info: SimInfo, random_seed: int) -> Tuple[Union[BodyType, int]]:
-        if not cas_part_ids:
+    def _apply_cas_parts(self, cas_parts: Tuple[CommonCASPart], source_sim_info: SimInfo, modified_sim_info: SimInfo, original_unmodified_sim_info: SimInfo, random_seed: int) -> Tuple[Union[BodyType, int]]:
+        if not cas_parts:
             self.log.format_with_message('No CAS Parts were found to apply.', sim=original_unmodified_sim_info)
             return tuple()
 
-        self.log.format_with_message('Applying CAS Parts with ids', sim=original_unmodified_sim_info, cas_part_ids=cas_part_ids)
+        self.log.format_with_message('Applying CAS Parts with ids', sim=original_unmodified_sim_info, cas_part_ids_and_body_types=cas_parts)
 
-        body_types: List[Union[BodyType, int]] = list()
-        for cas_part_id in cas_part_ids:
-            body_type = self._apply_cas_part_id(cas_part_id, source_sim_info, modified_sim_info, original_unmodified_sim_info, random_seed)
-            body_types.append(body_type)
-            source_sim_info = modified_sim_info
-        self.log.format_with_message('Finished applying CAS Parts.', original_sim=original_unmodified_sim_info, cas_part_ids=cas_part_ids)
+        from sims4communitylib.utils.cas.common_cas_utils import CommonCASUtils
+        CommonCASUtils.attach_cas_parts_to_all_outfits_of_sim(modified_sim_info, cas_parts)
+
+        body_types: List[Union[BodyType, int]] = tuple([cas_part.body_type for cas_part in cas_parts])
         return tuple(body_types)
-
-    def _apply_cas_part_id(self, cas_part_id: int, source_sim_info: SimInfo, modified_sim_info: SimInfo, original_unmodified_sim_info: SimInfo, random_seed: int) -> Union[BodyType, int]:
-        from cas.cas import set_caspart
-        # Source Sim, Modified Sim, CAS Part Id, Should Toggle, Replace With Random, Update Genetics, Random Seed, Remove Conflicting
-        result = set_caspart(source_sim_info._base, modified_sim_info._base, cas_part_id, False, False, False, random_seed, remove_conflicting=True)
-        if result:
-            self.log.format_with_message('Applied CAS part.', sim=original_unmodified_sim_info, cas_part_id=cas_part_id)
-            return CommonCASUtils.get_body_type_of_cas_part(cas_part_id)
-        else:
-            self.log.format_with_message('Failed to apply CAS Part.', sim=original_unmodified_sim_info, cas_part_id=cas_part_id, result=result)
 
     @property
     def modifier_type(self) -> CommonAppearanceModifierType:

@@ -6,8 +6,9 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-from typing import Tuple, Union, Any
+from typing import Tuple, Union, Any, Iterator
 
+from sims4communitylib.dtos.common_cas_part import CommonCASPart
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
@@ -134,6 +135,47 @@ class CommonCASUtils:
         if value in BodyType.value_to_name:
             return CommonResourceUtils.get_enum_by_name(BodyType.value_to_name[value], BodyType, default_value=value)
         return value
+
+    @staticmethod
+    def attach_cas_parts_to_all_outfits_of_sim(sim_info: SimInfo, cas_parts: Iterator[CommonCASPart]):
+        """attach_cas_parts_to_all_outfits_of_sim(sim_info, cas_parts)
+
+        Attach a collection of CAS Parts to a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param cas_parts: A collection of CAS Parts to attach to the Sim.
+        :type cas_parts: Iterator[CommonCASPart]
+        """
+        cas_part_ids = [int(cas_part.cas_part_id) for cas_part in cas_parts]
+        cas_part_body_types = [int(cas_part.body_type) for cas_part in cas_parts]
+        from protocolbuffers import S4Common_pb2, Outfits_pb2
+        saved_outfits = sim_info.save_outfits()
+        for saved_outfit in saved_outfits.outfits:
+            # noinspection PyUnresolvedReferences
+            saved_outfit_parts = dict(zip(list(saved_outfit.body_types_list.body_types), list(saved_outfit.parts.ids)))
+            body_types = list()
+            part_ids = list()
+            for (body_type, part_id) in saved_outfit_parts.items():
+                if int(body_type) in cas_part_body_types:
+                    # Remove the existing body types that match the ones we are replacing.
+                    continue
+                body_types.append(body_type)
+                part_ids.append(part_id)
+
+            # Add the new cas parts and their body types.
+            for cas_part_id in cas_part_ids:
+                body_types.append(int(CommonCASUtils.get_body_type_of_cas_part(cas_part_id)))
+                part_ids.append(cas_part_id)
+
+            # Save the parts.
+            saved_outfit.parts = S4Common_pb2.IdList()
+            # noinspection PyUnresolvedReferences
+            saved_outfit.parts.ids.extend(part_ids)
+            saved_outfit.body_types_list = Outfits_pb2.BodyTypesList()
+            # noinspection PyUnresolvedReferences
+            saved_outfit.body_types_list.body_types.extend(body_types)
+        sim_info._base.outfits = saved_outfits.SerializeToString()
 
     @staticmethod
     def attach_cas_part_to_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None, mod_identity: CommonModIdentity=None, **__) -> bool:

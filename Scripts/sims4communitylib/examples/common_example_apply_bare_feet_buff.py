@@ -13,8 +13,10 @@ from sims.sim_info import SimInfo
 from sims4.tuning.tunable import TunableList, TunableTuple, TunableVariant, OptionalTunable
 from sims4communitylib.classes.appearance_modifiers.common_attach_cas_parts_appearance_modifier import \
     CommonAttachCASPartsAppearanceModifier
+from sims4communitylib.dtos.common_cas_part import CommonCASPart
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.cas.common_cas_utils import CommonCASUtils
 from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
 from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
@@ -36,13 +38,13 @@ class CommonExampleApplyBareFeetAppearanceModifier(AppearanceModifier):
         def log_identifier(self) -> str:
             return 'common_example_apply_bare_feet'
 
-        def _get_cas_part_ids(
+        def _get_cas_parts(
             self,
             source_sim_info: SimInfo,
             modified_sim_info: SimInfo,
             original_unmodified_sim_info: SimInfo,
             random_seed: int
-        ) -> Tuple[int]:
+        ) -> Tuple[CommonCASPart]:
             # Human
             # yfShoes_Nude
             adult_human_female_bare_feet_id = 6543
@@ -98,7 +100,7 @@ class CommonExampleApplyBareFeetAppearanceModifier(AppearanceModifier):
             if bare_feet_cas_part_id is None:
                 return tuple()
 
-            return bare_feet_cas_part_id,
+            return CommonCASPart(bare_feet_cas_part_id, CommonCASUtils.get_body_type_of_cas_part(bare_feet_cas_part_id)),
 
     # We override the original "appearance_modifiers" to so we can insert our custom appearance modifier.
     FACTORY_TUNABLES = {
