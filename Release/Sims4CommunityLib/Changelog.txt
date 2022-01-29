@@ -78,6 +78,7 @@ v1.76:
 - The CommonTerrainUtils under utils/location is now obsolete, please use CommonTerrainLocationUtils instead.
 - Added a function to CommonSimBodyUtils to retrieve the pond wading size of a Sim.
 - Obsoleted the CommonSimBodyUtils.get_wading_size function in favor of the CommonSimBodyUtils.get_ocean_wading_size function.
+- Added a class CommonCASPart that allows basic CAS part data and information to be stored and passed along to various things.
 - Fixed an issue with interactions being registered to Ocean targets twice.
 - Fixed a long standing annoyance to those using S4CL and Wicked Whims together where the Toggle Phone Silence button would not be available due to a bug that exists in Wicked Whims where it flags the Toggle Phone Silence button as a CHEAT.
 

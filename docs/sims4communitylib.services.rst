@@ -1,6 +1,10 @@
 Services
 ==================================
 
+.. toctree::
+
+   sims4communitylib.services.commands
+
 `General`
 ------------------------------------------------------
 

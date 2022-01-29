@@ -10,6 +10,7 @@ from typing import Callable, Iterator, Union
 import services
 from objects.definition import Definition
 from objects.game_object import GameObject
+from objects.object_manager import ObjectManager
 from objects.script_object import ScriptObject
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
@@ -137,7 +138,7 @@ class CommonObjectUtils:
         :return: An instance of an Object or None if not found.
         :rtype: GameObject
         """
-        return services.object_manager().get(game_object_id)
+        return CommonObjectUtils.get_game_object_manager().get(game_object_id)
 
     @staticmethod
     def has_root_parent(object_instance: ScriptObject) -> bool:
@@ -183,7 +184,7 @@ class CommonObjectUtils:
         :return: An iterable of all Objects matching the `include_object_callback` filter.
         :rtype: Iterator[GameObject]
         """
-        game_object_list = tuple(services.object_manager().get_all())
+        game_object_list = tuple(CommonObjectUtils.get_game_object_manager().get_all())
         for game_object in game_object_list:
             if game_object is None:
                 continue
@@ -213,3 +214,14 @@ class CommonObjectUtils:
             include_object_callback=include_object_callback
         ):
             yield game_object
+
+    @staticmethod
+    def get_game_object_manager() -> ObjectManager:
+        """get_game_object_manager()
+
+        Retrieve the manager that manages all Game Objects in a game world.
+
+        :return: The manager that manages all Game Objects in a game world.
+        :rtype: ObjectManager
+        """
+        return services.object_manager()

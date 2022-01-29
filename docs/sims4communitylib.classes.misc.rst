@@ -8,3 +8,11 @@ Misc Classes
    :members:
    :private-members:
    :show-inheritance:
+
+`Test Result`
+-----------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.classes.testing.common_test_result.CommonTestResult
+   :members:
+   :private-members:
+   :show-inheritance:

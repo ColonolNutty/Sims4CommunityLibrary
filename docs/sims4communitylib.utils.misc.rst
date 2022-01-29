@@ -90,6 +90,14 @@ Misc Utilities
 `Misc`
 --------------------------------------------------------
 
+*********************
+`Camera`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_camera_utils.CommonCameraUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
 *********************
 `Career`
@@ -118,15 +126,6 @@ Misc Utilities
    :undoc-members:
    :show-inheritance:
 
-*********************
-`Camera`
-*********************
-
-.. autoclass:: sims4communitylib.utils.sims.common_camera_utils.CommonCameraUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 *******************
 `Collections`
 *******************
@@ -141,6 +140,15 @@ Misc Utilities
 *******************
 
 .. autoclass:: sims4communitylib.utils.common_function_utils.CommonFunctionUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
+`Game Client`
+*********************
+
+.. autoclass:: sims4communitylib.utils.misc.common_game_client_utils.CommonGameClientUtils
    :members:
    :undoc-members:
    :show-inheritance:

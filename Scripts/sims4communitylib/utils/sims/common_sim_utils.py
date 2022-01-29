@@ -13,7 +13,9 @@ from objects import HiddenReasonFlag, ALL_HIDDEN_REASONS
 from sims.sim import Sim
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
+from sims.sim_info_manager import SimInfoManager
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
+from sims4communitylib.utils.misc.common_game_client_utils import CommonGameClientUtils
 
 
 class CommonSimUtils:
@@ -28,17 +30,19 @@ class CommonSimUtils:
 
     """
     @staticmethod
-    def get_active_sim() -> Sim:
+    def get_active_sim() -> Union[Sim, None]:
         """get_active_sim()
 
         Retrieve a Sim object of the Currently Active Sim.
 
         .. note:: The Active Sim is the Sim with the Plumbob above their head.
 
-        :return: An instance of the Active Sim.
-        :rtype: Sim
+        :return: An instance of the Active Sim or None if not found.
+        :rtype: Union[Sim, None]
         """
-        client = services.client_manager().get_first_client()
+        client = CommonGameClientUtils.get_first_game_client()
+        if client is None:
+            return None
         return client.active_sim
 
     @staticmethod
@@ -49,7 +53,7 @@ class CommonSimUtils:
 
         .. note:: The Active Sim is the Sim with the Plumbob above their head.
 
-        :return: The decimal identifier of the active Sim or -1 if the active Sim does not have an id.
+        :return: The decimal identifier of the active Sim or -1 if the active Sim does not have an id or if no active Sim was found.
         :rtype: int
         """
         active_sim_info = CommonSimUtils.get_active_sim_info()
@@ -58,15 +62,18 @@ class CommonSimUtils:
         return CommonSimUtils.get_sim_id(active_sim_info)
 
     @staticmethod
-    def get_active_sim_info() -> SimInfo:
+    def get_active_sim_info() -> Union[SimInfo, None]:
         """get_active_sim_info()
 
         Retrieve a SimInfo object of the Currently Active Sim.
 
-        :return: The SimInfo of the Active Sim.
-        :rtype: SimInfo
+        :return: The SimInfo of the Active Sim or None if not found.
+        :rtype: Union[SimInfo, None]
         """
-        client = services.client_manager().get_first_client()
+        client = CommonGameClientUtils.get_first_game_client()
+        if client is None:
+            return None
+        # noinspection PyPropertyAccess
         return client.active_sim_info
 
     @staticmethod
@@ -100,6 +107,44 @@ class CommonSimUtils:
         return None
 
     @staticmethod
+    def get_sim_info_for_all_sims_with_last_name_generator(last_name: str) -> Iterator[SimInfo]:
+        """get_sim_info_for_all_sims_with_last_name_generator(last_name)
+
+        Retrieve a SimInfo object for each and every Sim with the specified Last Name.
+
+        :param last_name: A last name to look for.
+        :type last_name: str
+        :return: An iterable of Sims found with the specified last name.
+        :rtype: Iterator[SimInfo]
+        """
+        from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+        last_name = last_name.lower()
+
+        def _has_last_name(sim_info: SimInfo) -> bool:
+            return CommonSimNameUtils.get_last_name(sim_info).lower() == last_name
+
+        return CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=_has_last_name)
+
+    @staticmethod
+    def get_sim_info_for_all_sims_with_first_name_generator(first_name: str) -> Iterator[SimInfo]:
+        """get_sim_info_for_all_sims_with_first_name_generator(first_name)
+
+        Retrieve a SimInfo object for each and every Sim with the specified First Name.
+
+        :param first_name: A first name to look for.
+        :type first_name: str
+        :return: An iterable of Sims found with the specified first name.
+        :rtype: Iterator[SimInfo]
+        """
+        from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
+        first_name = first_name.lower()
+
+        def _has_first_name(sim_info: SimInfo) -> bool:
+            return CommonSimNameUtils.get_first_name(sim_info).lower() == first_name
+
+        return CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=_has_first_name)
+
+    @staticmethod
     def get_sim_info_for_all_sims_with_name_generator(first_name: str, last_name: str) -> Iterator[SimInfo]:
         """get_sim_info_for_all_sims_with_name_generator(first_name, last_name)
 
@@ -116,10 +161,10 @@ class CommonSimUtils:
         first_name = first_name.lower()
         last_name = last_name.lower()
 
-        def _first_and_last_name(sim_info: SimInfo) -> bool:
+        def _has_first_and_last_name(sim_info: SimInfo) -> bool:
             return CommonSimNameUtils.get_first_name(sim_info).lower() == first_name and CommonSimNameUtils.get_last_name(sim_info).lower() == last_name
 
-        return CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=_first_and_last_name)
+        return CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=_has_first_and_last_name)
 
     @staticmethod
     def get_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None, allow_hidden_flags: HiddenReasonFlag=ALL_HIDDEN_REASONS) -> Iterator[Sim]:
@@ -151,7 +196,7 @@ class CommonSimUtils:
         :return: An iterable of all Sims matching the `include_sim_callback` filter.
         :rtype: Iterator[SimInfo]
         """
-        sim_info_list = tuple(services.sim_info_manager().get_all())
+        sim_info_list = tuple(CommonSimUtils.get_sim_info_manager().get_all())
         for sim_info in sim_info_list:
             if sim_info is None:
                 continue
@@ -220,7 +265,7 @@ class CommonSimUtils:
         if isinstance(sim_identifier, Sim):
             return sim_identifier.sim_info
         if isinstance(sim_identifier, int):
-            return services.sim_info_manager().get(sim_identifier)
+            return CommonSimUtils.get_sim_info_manager().get(sim_identifier)
         if isinstance(sim_identifier, SimInfoBaseWrapper):
             return sim_identifier.get_sim_info()
         return sim_identifier
@@ -243,13 +288,24 @@ class CommonSimUtils:
         if isinstance(sim_identifier, SimInfo):
             return sim_identifier.get_sim_instance(allow_hidden_flags=allow_hidden_flags)
         if isinstance(sim_identifier, int):
-            sim_info = services.sim_info_manager().get(sim_identifier)
+            sim_info = CommonSimUtils.get_sim_info_manager().get(sim_identifier)
             if sim_info is None:
                 return None
             return CommonSimUtils.get_sim_instance(sim_info, allow_hidden_flags=allow_hidden_flags)
         if isinstance(sim_identifier, SimInfoBaseWrapper):
             return sim_identifier.get_sim_instance(allow_hidden_flags=allow_hidden_flags)
         return sim_identifier
+
+    @staticmethod
+    def get_sim_info_manager() -> SimInfoManager:
+        """get_sim_info_manager()
+
+        Retrieve the manager that manages the Sim Info of all Sims in a game world.
+
+        :return: The manager that manages the Sim Info of all Sims in a game world.
+        :rtype: SimInfoManager
+        """
+        return services.sim_info_manager()
 
 
 @sims4.commands.Command('s4clib_testing.display_name_of_currently_active_sim', command_type=sims4.commands.CommandType.Live)

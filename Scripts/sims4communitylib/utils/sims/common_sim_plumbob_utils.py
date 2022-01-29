@@ -6,12 +6,14 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from interactions.utils.plumbbob import unslot_plumbbob, reslot_plumbbob
-from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
-from sims4.commands import Output
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
 from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
+from sims4communitylib.services.commands.common_console_command_parameters import \
+    CommonOptionalSimInfoConsoleCommandParameter
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -123,25 +125,23 @@ class CommonSimPlumbobUtils:
         unslot_plumbbob(sim)
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.hide_plumbob', 'Hide the plumbob above a Sim.')
-def _common_hide_plumbob(output: Output, opt_sim: OptionalTargetParam=None):
-    from server_commands.argument_helpers import get_optional_target
-    sim = get_optional_target(opt_sim, output._context)
-    sim_info = CommonSimUtils.get_sim_info(sim)
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.hide_plumbob', 'Hide the plumbob above a Sim.', command_arguments=(
+    CommonConsoleCommandArgument('opt_sim', 'Sim Id', 'The instance id of the Sim to hide the plumbob of.', is_optional=True, default_value='Active Sim'),
+))
+def _common_hide_plumbob(output: CommonConsoleCommandOutput, sim_info: CommonOptionalSimInfoConsoleCommandParameter=None):
+    sim_info: SimInfo = sim_info
     if sim_info is None:
-        output(f'Failed, Sim {opt_sim} did not exist.')
         return
     output(f'Hiding plumbob for Sim {sim_info}')
     CommonSimPlumbobUtils().hide_plumbob(sim_info)
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.show_plumbob', 'Show the plumbob above a Sim.')
-def _common_show_plumbob(output: Output, opt_sim: OptionalTargetParam=None):
-    from server_commands.argument_helpers import get_optional_target
-    sim = get_optional_target(opt_sim, output._context)
-    sim_info = CommonSimUtils.get_sim_info(sim)
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.show_plumbob', 'Show the plumbob above a Sim.', command_arguments=(
+    CommonConsoleCommandArgument('opt_sim', 'Sim Id', 'The instance id of the Sim to show the plumbob of.', is_optional=True, default_value='Active Sim'),
+))
+def _common_show_plumbob(output: CommonConsoleCommandOutput, sim_info: CommonOptionalSimInfoConsoleCommandParameter=None):
+    sim_info: SimInfo=sim_info
     if sim_info is None:
-        output(f'Failed, Sim {opt_sim} did not exist.')
         return
     output(f'Showing plumbob for Sim {sim_info}')
     CommonSimPlumbobUtils().show_plumbob(sim_info)

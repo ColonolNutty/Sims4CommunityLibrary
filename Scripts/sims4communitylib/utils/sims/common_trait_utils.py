@@ -11,7 +11,7 @@ from typing import List, Union, Callable, Iterator, Tuple
 from distributor.shared_messages import IconInfoData
 from relationships.relationship_tracker import RelationshipTracker
 from relationships.sim_knowledge import SimKnowledge
-from server_commands.argument_helpers import TunableInstanceParam, OptionalTargetParam
+from server_commands.argument_helpers import TunableInstanceParam, OptionalTargetParam, OptionalSimInfoParam
 from sims.sim_info import SimInfo
 from sims4.commands import Command, CommandType, CheatOutput
 from sims4.resources import Types
@@ -1368,13 +1368,12 @@ def _common_show_known_traits(opt_sim: OptionalTargetParam=None, _connection: in
 
 
 @Command('s4clib.add_trait', command_type=CommandType.Live)
-def _common_add_trait(trait: TunableInstanceParam(Types.TRAIT), opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
+def _common_add_trait(trait: TunableInstanceParam(Types.TRAIT), sim_info: OptionalSimInfoParam=None, _connection: int=None):
     output = CheatOutput(_connection)
     if trait is None:
         output('Failed, Trait not specified or Trait did not exist! s4clib.add_trait <trait_name_or_id> [opt_sim=None]')
         return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    sim_info: SimInfo = sim_info
     if sim_info is None:
         output('Failed, no Sim was specified or the specified Sim was not found!')
         return

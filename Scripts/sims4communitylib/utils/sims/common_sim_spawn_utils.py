@@ -9,14 +9,16 @@ import os
 
 from typing import Union, Tuple, Callable, Any, Iterator
 
-from server_commands.argument_helpers import OptionalTargetParam
+from server_commands.argument_helpers import RequiredTargetParam
 from sims.sim_info_lod import SimInfoLODLevel
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
@@ -40,12 +42,11 @@ if not ON_RTD:
     from sims.household import Household
     from sims.sim_info import SimInfo
     from sims.sim_spawner import SimCreator, SimSpawner
-    from sims4.commands import Command, CommandType, CheatOutput
     from animation.posture_manifest import Hand
     from interactions.si_state import SIState
     from objects.object_enums import ResetReason
     from postures import posture_graph
-    from postures.posture_specs import get_origin_spec, PostureSpecVariable
+    from postures.posture_specs import PostureSpecVariable
     from postures.posture_state import PostureState
 else:
     # noinspection PyMissingOrEmptyDocstring
@@ -446,7 +447,6 @@ class CommonSimSpawnUtils:
         :return: The cloned Sim Info or None if cloning failed.
         :rtype: Union[SimInfo, None]
         """
-        import services
         from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
         if household_override is not None:
             household = household_override
@@ -508,7 +508,7 @@ class CommonSimSpawnUtils:
             for trait in clone_trait_tracker.gender_option_traits:
                 if not source_trait_tracker.has_trait(trait):
                     clone_sim_info.remove_trait(trait)
-            services.sim_info_manager().set_default_genealogy(sim_infos=(clone_sim_info,))
+            CommonSimUtils.get_sim_info_manager().set_default_genealogy(sim_infos=(clone_sim_info,))
             clone_sim_info.set_default_data()
             clone_sim_info.save_sim()
             household.save_data()
@@ -667,6 +667,7 @@ class CommonSimSpawnUtils:
             sim._stop_animation_interaction()
             sim.asm_auto_exit.clear()
             sim._start_animation_interaction()
+            from postures.posture_specs import get_origin_spec
             # noinspection PyBroadException
             try:
                 sim.posture_state = PostureState(sim, None, get_origin_spec(posture_type), {PostureSpecVariable.HAND: (Hand.LEFT,)})
@@ -751,25 +752,28 @@ class CommonSimSpawnUtils:
 
 
 if not ON_RTD:
-    @Command('s4clib.spawn_sims', command_type=CommandType.Live)
-    def _s4cl_spawn_sims(species_str: str, count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
-        output = CheatOutput(_connection)
-        species: CommonSpecies = CommonResourceUtils.get_enum_by_name(species_str.upper(), CommonSpecies, default_value=None)
+    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.spawn_sims', 'Spawn Sims of a certain species, gender, and age.', command_arguments=(
+        CommonConsoleCommandArgument('species', 'CommonSpecies',
+                                     f'The spawned Sims will have this species. Valid species include: {CommonSpecies.get_comma_separated_names_string()}', is_optional=False),
+        CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=1),
+        CommonConsoleCommandArgument('gender', 'CommonGender',
+                                     f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name),
+        CommonConsoleCommandArgument('age', 'CommonAge',
+                                     f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name)
+    ))
+    def _s4cl_spawn_sims(output: CommonConsoleCommandOutput, species: CommonSpecies, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
         if species is None:
-            output('{} is not a valid species. Valid Species: ({})'.format(gender_str, ', '.join(CommonSpecies.get_all_names())))
             return
-        gender: CommonGender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), CommonGender, default_value=None)
-        if gender is None:
-            output('{} is not a valid gender. Valid Genders: ({})'.format(gender_str, ', '.join(CommonGender.get_all_names())))
+        if gender == CommonGender.INVALID:
+            output(f'{gender} is not a valid gender. Valid Genders: ({CommonGender.get_comma_separated_names_string()})')
             return
-        age: CommonAge = CommonResourceUtils.get_enum_by_name(age_str.upper(), CommonAge, default_value=None)
-        if age is None:
-            output('{} is not a valid age. Valid Ages: ({})'.format(age_str, ', '.join(CommonAge.get_all_names())))
+        if age == CommonAge.INVALID:
+            output(f'{age} is not a valid age. Valid Ages: ({CommonAge.get_comma_separated_names_string()})')
             return
         if count <= 0:
             output('Please enter a count above zero.')
             return
-        output('Spawning {} {} Sim(s) of Gender: {} and Age: {}.'.format(count, species.name, gender.name, age.name))
+        output(f'Spawning {count} {species.name} Sim(s) of Gender: {gender.name} and Age: {age.name}.')
         try:
             active_sim_info = CommonSimUtils.get_active_sim_info()
             active_sim_location = CommonSimLocationUtils.get_location(active_sim_info)
@@ -777,127 +781,138 @@ if not ON_RTD:
                 created_sim_info = CommonSimSpawnUtils.create_sim_info(species, gender=gender, age=age)
                 CommonSimSpawnUtils.spawn_sim(created_sim_info, location=active_sim_location)
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error spawning Sims {} Sim(s) of Species: {}, Gender: {}, and Age: {}.'.format(count, species.name, gender.name, age.name), exception=ex)
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), f'Error spawning Sims {count} Sim(s) of Species: {species.name}, Gender: {gender.name}, and Age: {age.name}.', exception=ex)
             output('An error occurred while spawning Sim(s).')
-        output('Done Spawning {} {} Sim(s) of Gender: {} and Age: {}.'.format(count, species.name, gender.name, age.name))
+        output(f'Done Spawning {count} {species.name} Sim(s) of Gender: {gender.name} and Age: {age.name}.')
         output('If the space around your Sim was too crowded for a new Sim to spawn, you may locate the spawned Sim(s) in front of the lot.')
 
 
-    @Command('s4clib.spawn_human_sims', command_type=CommandType.Live)
-    def _s4cl_spawn_human_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
-        return _s4cl_spawn_sims(species_str=CommonSpecies.HUMAN.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)
+    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.spawn_human_sims', 'Spawn Human Sims of a certain gender and age.', command_arguments=(
+        CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=1),
+        CommonConsoleCommandArgument('gender', 'CommonGender',
+                                     f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name),
+        CommonConsoleCommandArgument('age', 'CommonAge',
+                                     f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name)
+    ))
+    def _s4cl_spawn_human_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
+        return _s4cl_spawn_sims(output, species=CommonSpecies.HUMAN, count=count, gender=gender, age=age)
+
+    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.spawn_large_dog_sims', 'Spawn Large Dog Sims of a certain gender and age.', command_arguments=(
+        CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=1),
+        CommonConsoleCommandArgument('gender', 'CommonGender',
+                                     f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name),
+        CommonConsoleCommandArgument('age', 'CommonAge',
+                                     f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name)
+    ))
+    def _s4cl_spawn_large_dog_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
+        return _s4cl_spawn_sims(output, species=CommonSpecies.LARGE_DOG, count=count, gender=gender, age=age)
+
+    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.spawn_small_dog_sims', 'Spawn Small Dog Sims of a certain gender and age.', command_arguments=(
+        CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=1),
+        CommonConsoleCommandArgument('gender', 'CommonGender',
+                                     f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name),
+        CommonConsoleCommandArgument('age', 'CommonAge',
+                                     f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name)
+    ))
+    def _s4cl_spawn_small_dog_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
+        return _s4cl_spawn_sims(output, species=CommonSpecies.SMALL_DOG, count=count, gender=gender, age=age)
+
+    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.spawn_cat_sims', 'Spawn Cat Sims of a certain gender and age.', command_arguments=(
+        CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=1),
+        CommonConsoleCommandArgument('gender', 'CommonGender',
+                                     f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name),
+        CommonConsoleCommandArgument('age', 'CommonAge',
+                                     f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name)
+    ))
+    def _s4cl_spawn_cat_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
+        return _s4cl_spawn_sims(output, species=CommonSpecies.CAT, count=count, gender=gender, age=age)
+
+    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.spawn_fox_sims', 'Spawn Fox Sims of a certain gender and age.', command_arguments=(
+        CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=1),
+        CommonConsoleCommandArgument('gender', 'CommonGender',
+                                     f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name),
+        CommonConsoleCommandArgument('age', 'CommonAge',
+                                     f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name)
+    ))
+    def _s4cl_spawn_fox_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
+        return _s4cl_spawn_sims(output, species=CommonSpecies.FOX, count=count, gender=gender, age=age)
 
 
-    @Command('s4clib.spawn_large_dog_sims', command_type=CommandType.Live)
-    def _s4cl_spawn_large_dog_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
-        return _s4cl_spawn_sims(species_str=CommonSpecies.LARGE_DOG.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)
+    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.spawn_random_sims', 'Spawn a random number of Sims.', command_arguments=(
+        CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=5),
+    ))
+    def _s4clib_spawn_random_sims(output: CommonConsoleCommandOutput, count: int=5):
+        _s4cl_spawn_human_sims(output, count=count, gender=CommonGender.MALE, age=CommonAge.TODDLER)
+        _s4cl_spawn_human_sims(output, count=count, gender=CommonGender.MALE, age=CommonAge.CHILD)
+        _s4cl_spawn_human_sims(output, count=count, gender=CommonGender.MALE, age=CommonAge.ADULT)
 
+        _s4cl_spawn_human_sims(output, count=count, gender=CommonGender.FEMALE, age=CommonAge.TODDLER)
+        _s4cl_spawn_human_sims(output, count=count, gender=CommonGender.FEMALE, age=CommonAge.CHILD)
+        _s4cl_spawn_human_sims(output, count=count, gender=CommonGender.FEMALE, age=CommonAge.ADULT)
 
-    @Command('s4clib.spawn_small_dog_sims', command_type=CommandType.Live)
-    def _s4cl_spawn_small_dog_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
-        return _s4cl_spawn_sims(species_str=CommonSpecies.SMALL_DOG.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)
+        _s4cl_spawn_large_dog_sims(output, count=count, gender=CommonGender.MALE, age=CommonAge.CHILD)
+        _s4cl_spawn_large_dog_sims(output, count=count, gender=CommonGender.MALE, age=CommonAge.ADULT)
 
+        _s4cl_spawn_large_dog_sims(output, count=count, gender=CommonGender.FEMALE, age=CommonAge.CHILD)
+        _s4cl_spawn_large_dog_sims(output, count=count, gender=CommonGender.FEMALE, age=CommonAge.ADULT)
 
-    @Command('s4clib.spawn_cat_sims', command_type=CommandType.Live)
-    def _s4cl_spawn_cat_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
-        return _s4cl_spawn_sims(species_str=CommonSpecies.CAT.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)
+        _s4cl_spawn_small_dog_sims(output, count=count, gender=CommonGender.MALE, age=CommonAge.CHILD)
+        _s4cl_spawn_small_dog_sims(output, count=count, gender=CommonGender.MALE, age=CommonAge.ADULT)
 
+        _s4cl_spawn_small_dog_sims(output, count=count, gender=CommonGender.FEMALE, age=CommonAge.CHILD)
+        _s4cl_spawn_small_dog_sims(output, count=count, gender=CommonGender.FEMALE, age=CommonAge.ADULT)
 
-    @Command('s4clib.spawn_fox_sims', command_type=CommandType.Live)
-    def _s4cl_spawn_fox_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
-        return _s4cl_spawn_sims(species_str=CommonSpecies.FOX.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)
+        _s4cl_spawn_cat_sims(output, count=count, gender=CommonGender.MALE, age=CommonAge.CHILD)
+        _s4cl_spawn_cat_sims(output, count=count, gender=CommonGender.MALE, age=CommonAge.ADULT)
 
+        _s4cl_spawn_cat_sims(output, count=count, gender=CommonGender.FEMALE, age=CommonAge.CHILD)
+        _s4cl_spawn_cat_sims(output, count=count, gender=CommonGender.FEMALE, age=CommonAge.ADULT)
 
-    @Command('s4clib.spawn_human_sims', command_type=CommandType.Live)
-    def _s4cl_spawn_human_sims(count: int=1, gender_str: str='male', age_str: str='adult', _connection: int=None):
-        return _s4cl_spawn_sims(species_str=CommonSpecies.HUMAN.name, count=count, gender_str=gender_str, age_str=age_str, _connection=_connection)
+        _s4cl_spawn_fox_sims(output, count=count, gender=CommonGender.MALE, age=CommonAge.ADULT)
 
+        _s4cl_spawn_fox_sims(output, count=count, gender=CommonGender.FEMALE, age=CommonAge.ADULT)
 
-    @Command('s4clib.spawn_random_sims', command_type=CommandType.Live)
-    def _s4clib_spawn_random_sims(count: int=5, _connection: int=None):
-        _s4cl_spawn_human_sims(count=count, gender_str='male', age_str='toddler', _connection=_connection)
-        _s4cl_spawn_human_sims(count=count, gender_str='male', age_str='child', _connection=_connection)
-        _s4cl_spawn_human_sims(count=count, gender_str='male', age_str='adult', _connection=_connection)
-
-        _s4cl_spawn_human_sims(count=count, gender_str='female', age_str='toddler', _connection=_connection)
-        _s4cl_spawn_human_sims(count=count, gender_str='female', age_str='child', _connection=_connection)
-        _s4cl_spawn_human_sims(count=count, gender_str='female', age_str='adult', _connection=_connection)
-
-        _s4cl_spawn_large_dog_sims(count=count, gender_str='male', age_str='child', _connection=_connection)
-        _s4cl_spawn_large_dog_sims(count=count, gender_str='male', age_str='adult', _connection=_connection)
-
-        _s4cl_spawn_large_dog_sims(count=count, gender_str='female', age_str='child', _connection=_connection)
-        _s4cl_spawn_large_dog_sims(count=count, gender_str='female', age_str='adult', _connection=_connection)
-
-        _s4cl_spawn_small_dog_sims(count=count, gender_str='male', age_str='child', _connection=_connection)
-        _s4cl_spawn_small_dog_sims(count=count, gender_str='male', age_str='adult', _connection=_connection)
-
-        _s4cl_spawn_small_dog_sims(count=count, gender_str='female', age_str='child', _connection=_connection)
-        _s4cl_spawn_small_dog_sims(count=count, gender_str='female', age_str='adult', _connection=_connection)
-
-        _s4cl_spawn_cat_sims(count=count, gender_str='male', age_str='child', _connection=_connection)
-        _s4cl_spawn_cat_sims(count=count, gender_str='male', age_str='adult', _connection=_connection)
-
-        _s4cl_spawn_cat_sims(count=count, gender_str='female', age_str='child', _connection=_connection)
-        _s4cl_spawn_cat_sims(count=count, gender_str='female', age_str='adult', _connection=_connection)
-
-        _s4cl_spawn_fox_sims(count=count, gender_str='male', age_str='adult', _connection=_connection)
-
-        _s4cl_spawn_fox_sims(count=count, gender_str='female', age_str='adult', _connection=_connection)
-
-    @Command('s4clib.purge_self', command_type=CommandType.Live)
-    def _s4cl_purge_self(_connection: int=None):
-        output = CheatOutput(_connection)
-        output('Purging the active Sim from existence.')
+    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.purge_self', 'Delete the active Sim. WARNING: Not recommended in single Sim households, since you cannot do interactions without an active Sim!')
+    def _s4cl_purge_self(output: CommonConsoleCommandOutput):
         active_sim_info = CommonSimUtils.get_active_sim_info()
+        output(f'Purging the active Sim ({active_sim_info}) from existence.')
         return CommonSimSpawnUtils.delete_sim(active_sim_info)
 
 
-    @Command('s4clib.purge_sim', command_type=CommandType.Live)
-    def _s4cl_purge_self(opt_sim: OptionalTargetParam=None, _connection: int=None):
-        from server_commands.argument_helpers import get_optional_target
-        output = CheatOutput(_connection)
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.purge_sim', 'Purge a Sim, essentially deleting them.', command_arguments=(
+        CommonConsoleCommandArgument('opt_sim', 'Sim Id', 'The instance id of the Sim to purge.', is_optional=False),
+    ))
+    def _s4cl_purge_sim(output: CommonConsoleCommandOutput, sim: RequiredTargetParam):
+        sim_info = output.get_sim(sim)
         if sim_info is None:
-            output('Failed, no Sim was specified or the specified Sim was not found!')
             return
         if sim_info is CommonSimUtils.get_active_sim_info():
-            output('Failed, to purge the active Sim, use s4clib.purge_self instead.')
+            output('Failed, If you want to purge the active Sim, use "s4clib.purge_self" instead.')
             return
-        output('Purging Sim from existence {}'.format(CommonSimNameUtils.get_full_name(sim_info)))
+        output(f'Purging Sim from existence {sim_info}')
         CommonSimSpawnUtils.delete_sim(sim_info, source='Player', cause='Command Purged')
 
 
-    @Command('s4clib.be_alone', command_type=CommandType.Live)
-    def _s4cl_be_alone(_connection: int=None):
-        output = CheatOutput(_connection)
-        try:
-            active_sim_info = CommonSimUtils.get_active_sim_info()
-            output('Purging everyone but your active Sim.')
-            sim_count = 0
-            sim_info_list = tuple(CommonSimUtils.get_sim_info_for_all_sims_generator())
-            for sim_info in sim_info_list:
-                if sim_info is active_sim_info:
-                    continue
-                CommonSimSpawnUtils.delete_sim(sim_info, source='Player', cause='Command Purged')
-                sim_count += 1
-            output('Purged {} Sims'.format(sim_count))
-        except Exception as ex:
-            output('Failed, an exception occurred')
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'An error occurred while running command.', exception=ex)
+    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.be_alone', 'Purge all Sims except the active Sim from the neighborhood.')
+    def _s4cl_be_alone(output: CommonConsoleCommandOutput):
+        active_sim_info = CommonSimUtils.get_active_sim_info()
+        output('Purging everyone but your active Sim.')
+        sim_count = 0
+        sim_info_list = tuple(CommonSimUtils.get_sim_info_for_all_sims_generator())
+        for sim_info in sim_info_list:
+            if sim_info is active_sim_info:
+                continue
+            CommonSimSpawnUtils.delete_sim(sim_info, source='Player', cause='Command Purged')
+            sim_count += 1
+        output(f'Purged {sim_count} Sims')
 
 
-    @Command('s4clib.purge_neighborhood', command_type=CommandType.Live)
-    def _s4cl_purge_neighborhood(_connection: int=None):
-        output = CheatOutput(_connection)
-        try:
-            output('Purging all Sims')
-            sim_count = 0
-            sim_info_list = tuple(CommonSimUtils.get_sim_info_for_all_sims_generator())
-            for sim_info in sim_info_list:
-                CommonSimSpawnUtils.delete_sim(sim_info, source='Player', cause='Command Purged')
-                sim_count += 1
-            output('Purged {} Sims'.format(sim_count))
-        except Exception as ex:
-            output('Failed, an exception occurred')
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'An error occurred while running command.', exception=ex)
+    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.purge_neighborhood', 'Purge all Sims including the active Sim from the neighborhood, essentially making your neighborhood a ghost town. WARNING: Only use this for fun, since you cannot do interactions without an active Sim!')
+    def _s4cl_purge_neighborhood(output: CommonConsoleCommandOutput):
+        output('Purging all Sims')
+        sim_count = 0
+        sim_info_list = tuple(CommonSimUtils.get_sim_info_for_all_sims_generator())
+        for sim_info in sim_info_list:
+            CommonSimSpawnUtils.delete_sim(sim_info, source='Player', cause='Command Purged')
+            sim_count += 1
+        output(f'Purged {sim_count} Sims')

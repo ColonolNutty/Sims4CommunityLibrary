@@ -302,9 +302,9 @@ class CommonInteractionUtils:
     def get_instance_manager() -> InteractionInstanceManager:
         """get_instance_manager()
 
-        Retrieve the instance manager for interactions.
+        Retrieve the instance manager that manages all tunables for interactions.
 
-        :return: The instance manager for interactions.
+        :return: The instance manager that manages all tunables for interactions.
         :rtype: InteractionInstanceManager
         """
         from sims4.resources import Types
