@@ -276,7 +276,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                 ))
             def _common_help_command(output: Output, command_name: str=None):
                 output('--------------------')
-                if command_name is not None:
+                if command_name:
                     _command = CommonConsoleCommandService().get_command_by_mod_and_name(mod_identity, command_name)
                     if _command is None:
                         output(f'No command found with name. {command_name}')

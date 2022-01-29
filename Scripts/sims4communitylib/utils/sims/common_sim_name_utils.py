@@ -7,14 +7,15 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Tuple
 
-from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
 from sims.sim_spawner import SimSpawner
 from sims.sim_spawner_enums import SimNameType
-from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.common_species import CommonSpecies
-from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 
 
 class CommonSimNameUtils:
@@ -177,45 +178,40 @@ class CommonSimNameUtils:
         return last_name
 
 
-@Command('s4clib.set_first_name', command_type=CommandType.Live)
-def _common_set_first_name(first_name: str=None, opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    if not first_name:
-        output(f'Failed, {first_name} is not a valid first name.')
-        return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.set_first_name', 'Set the first name of a Sim.', command_arguments=(
+    CommonConsoleCommandArgument('first_name', 'Text', 'The first name to give to the Sim.'),
+    CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to change the first name of.'),
+))
+def _common_set_first_name(output: CommonConsoleCommandOutput, first_name: str, sim_info: SimInfo=None):
     if sim_info is None:
         output('Failed, no Sim was specified or the specified Sim was not found!')
         return
     CommonSimNameUtils.set_first_name(sim_info, first_name)
 
 
-@Command('s4clib.set_last_name', command_type=CommandType.Live)
-def _common_set_last_name(last_name: str=None, opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    if not last_name:
-        output(f'Failed, {last_name} is not a valid last name.')
-        return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.set_last_name', 'Set the last name of a Sim.', command_arguments=(
+    CommonConsoleCommandArgument('last_name', 'Text', 'The last name to give to the Sim.'),
+    CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to change the last name of.'),
+))
+def _common_set_last_name(output: CommonConsoleCommandOutput, last_name: str, sim_info: SimInfo=None):
     if sim_info is None:
         output('Failed, no Sim was specified or the specified Sim was not found!')
         return
     CommonSimNameUtils.set_last_name(sim_info, last_name)
 
 
-@Command('s4clib.set_name', command_type=CommandType.Live)
-def _common_set_name(first_name: str=None, last_name: str=None, opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.set_name', 'Set the full name of a Sim.', command_arguments=(
+    CommonConsoleCommandArgument('first_name', 'Text', 'The first name to give to the Sim.'),
+    CommonConsoleCommandArgument('last_name', 'Text', 'The last name to give to the Sim.'),
+    CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to change the first and last name of.'),
+))
+def _common_set_name(output: CommonConsoleCommandOutput, first_name: str, last_name: str, sim_info: SimInfo=None):
     if not first_name:
         output(f'Failed, {first_name} is not a valid first name.')
         return
-    if not last_name:
+    if last_name is None:
         output(f'Failed, {last_name} is not a valid last name.')
         return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
         output('Failed, no Sim was specified or the specified Sim was not found!')
         return
