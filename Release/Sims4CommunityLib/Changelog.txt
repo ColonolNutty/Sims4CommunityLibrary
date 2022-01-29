@@ -32,12 +32,17 @@ v1.76:
 - Added functions to CommonSimNameUtils for creating random first and last names
 - Updated CommonConsoleCommand to print a done message after running a command.
   - Added the ability to exclude commands from the help command display
-  - Added strings to the string tables for the following cases
-    - String Colon Space String
-    - String Comma Space String
-    - String Space String
-    - String Space Parenthesis Surrounded String
-- Added strings to string table:
+  - It will properly parse custom argument types such as SimInfo, GameObject, CommonInt, and CommonIntFlags, without needing to do all the extra work of parsing an id or a string.
+  - These custom commands can also handle quotation surrounded values, so you can enter as many spaces as you want in a command. For example, you can do this command `s4clib.set_first_name "Mr. Fantastic Of The Highest Order` and the first name of your Sim will then become "Mr. Fantastic Of The Highest Order".
+  - Added utilities for accessing the game client object
+  - Added custom parameter classes for specifying required or optional Sim Info or Game Object arguments for CommonConsoleCommand
+  - Added a few utility functions for retrieving SimInfo manager, Game Object manager, and other types of managers
+  - Updated the commands for Sim Spawn and Sim Name Utilties to use CommonConsoleCommands and thus show up under the S4CL help command. "sims4communitylib.help"
+- Added strings to the string tables for the following cases
+  - String Colon Space String
+  - String Comma Space String
+  - String Space String
+  - String Space Parenthesis Surrounded String
   - String Newline String
   - String Hyphen String
 - Fixed an error with the test Choose Outfit Dialog
@@ -81,6 +86,11 @@ v1.76:
 - Added a class CommonCASPart that allows basic CAS part data and information to be stored and passed along to various things.
 - Fixed an issue with interactions being registered to Ocean targets twice.
 - Fixed a long standing annoyance to those using S4CL and Wicked Whims together where the Toggle Phone Silence button would not be available due to a bug that exists in Wicked Whims where it flags the Toggle Phone Silence button as a CHEAT.
+- Updated CommonConsoleCommand, now it will properly parse custom argument types such as SimInfo, GameObject, CommonInt, and CommonIntFlags, without needing to do all the extra work of parsing an id or a string.
+- Added utilities for accessing the game client object
+- Added custom parameter classes for specifying required or optional Sim Info or Game Object arguments for CommonConsoleCommand
+- Added a few utility functions for retrieving SimInfo manager, Game Object manager, and other types of managers
+- Updated the Spawn and Name commands to use CommonConsoleCommands and thus show up under the S4CL help command.
 
 v1.75:
 - Added functions to convert CommonSpecies, CommonAge, and CommonGender into localized string ids
