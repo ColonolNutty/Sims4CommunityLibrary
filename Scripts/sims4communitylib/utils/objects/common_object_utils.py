@@ -12,13 +12,23 @@ from objects.definition import Definition
 from objects.game_object import GameObject
 from objects.object_manager import ObjectManager
 from objects.script_object import ScriptObject
+from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
-class CommonObjectUtils:
+class CommonObjectUtils(_HasS4CLClassLog):
     """Utilities for retrieving Objects in various ways.
 
     """
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_log_identifier(cls) -> str:
+        return 'common_object_utils'
+
     @staticmethod
     def create_unique_identifier(game_object: GameObject) -> int:
         """create_unique_identifier(game_object)
@@ -225,3 +235,34 @@ class CommonObjectUtils:
         :rtype: ObjectManager
         """
         return services.object_manager()
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.print_objects',
+    'Print a list of all objects.'
+)
+def _s4cl_testing_log_all_objects(output: CommonConsoleCommandOutput):
+    log = CommonObjectUtils.get_log()
+    try:
+        log.enable()
+        output(f'Printing a list of all objects.')
+        log.debug(f'Printing a list of all objects.')
+        all_objects_str_list = list()
+        for game_object in CommonObjectUtils.get_instance_for_all_game_objects_generator():
+            object_id = CommonObjectUtils.get_object_id(game_object)
+            from sims4communitylib.utils.objects.common_object_location_utils import CommonObjectLocationUtils
+            object_location = CommonObjectLocationUtils.get_location(game_object)
+            from sims4communitylib.utils.common_type_utils import CommonTypeUtils
+            if CommonTypeUtils.is_sim_or_sim_info(game_object):
+                all_objects_str_list.append(f'Sim {game_object} ({object_id}): Loc: {object_location}')
+            else:
+                all_objects_str_list.append(f'Object {game_object} ({object_id}): Loc: {object_location}')
+
+        all_objects_str_list = sorted(all_objects_str_list)
+        for all_objects_str in all_objects_str_list:
+            output(all_objects_str)
+            log.debug(all_objects_str)
+        log.debug('Done printing a list of all objects.')
+    finally:
+        log.disable()

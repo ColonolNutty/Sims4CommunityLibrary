@@ -11,6 +11,10 @@ from objects.game_object import GameObject
 from server.client import Client
 from sims.sim_info import SimInfo
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
@@ -99,3 +103,39 @@ class CommonCameraUtils:
         """
         from camera import cancel_focus
         cancel_focus(object=game_object)
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.focus_on_object',
+    'Move the camera to focus on an object.',
+    command_arguments=(
+        CommonConsoleCommandArgument('game_object', 'Game Object Id', 'The instance id of the object to focus on.'),
+    )
+)
+def _common_focus_on_object_command(output: CommonConsoleCommandOutput, game_object: GameObject):
+    if game_object is None:
+        return
+    output(f'Attempting to focus the camera on object {game_object}.')
+    if CommonCameraUtils.start_focus(game_object):
+        output(f'SUCCESS: Successfully focused the camera on object {game_object}.')
+    else:
+        output(f'FAILED: Failed to focus the camera on object {game_object}.')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.focus_on_sim',
+    'Move the camera to focus on a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('game_object', 'Game Object Id', 'The instance id of the object to focus on.'),
+    )
+)
+def _common_focus_on_sim_command(output: CommonConsoleCommandOutput, sim_info: SimInfo):
+    if sim_info is None:
+        return
+    output(f'Attempting to focus the camera on Sim {sim_info}.')
+    if CommonCameraUtils.start_focus(sim_info):
+        output(f'SUCCESS: Successfully focused the camera on Sim {sim_info}.')
+    else:
+        output(f'FAILED: Failed to focus the camera on Sim {sim_info}.')

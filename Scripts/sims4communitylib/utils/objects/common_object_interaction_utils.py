@@ -5,13 +5,24 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Callable, Iterator
+from pprint import pformat
+from typing import Callable, Iterator, List
 from interactions.base.interaction import Interaction
+from objects.game_object import GameObject
 from objects.script_object import ScriptObject
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
+from sims4communitylib.utils.common_log_utils import CommonLogUtils
+from sims4communitylib.utils.common_type_utils import CommonTypeUtils
+from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
 from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonObjectInteractionUtils(HasClassLog):
@@ -153,7 +164,7 @@ class CommonObjectInteractionUtils(HasClassLog):
         current_super_affordances_list = list(script_object_type._super_affordances)
         for super_interaction in current_super_affordances_list:
             super_interaction_id = CommonInteractionUtils.get_interaction_id(super_interaction)
-            if super_interaction_id in interaction_guids:
+            if super_interaction_id not in interaction_guids:
                 continue
             new_super_affordances.remove(super_interaction)
         script_object_type._super_affordances = tuple(new_super_affordances)
@@ -162,7 +173,72 @@ class CommonObjectInteractionUtils(HasClassLog):
         current_object_super_affordances_list = list(script_object._super_affordances)
         for obj_super_interaction in current_object_super_affordances_list:
             obj_super_interaction_id = CommonInteractionUtils.get_interaction_id(obj_super_interaction)
-            if obj_super_interaction_id in interaction_guids:
+            if obj_super_interaction_id not in interaction_guids:
                 continue
             new_object_super_affordances.remove(obj_super_interaction)
         script_object._super_affordances = tuple(new_object_super_affordances)
+
+    @classmethod
+    def _log_all_interactions(cls, target_object: ScriptObject):
+        log = cls.get_log()
+        log.enable()
+        object_id = CommonObjectUtils.get_object_id(target_object) if target_object is not None else -1
+        definition_id = -1
+        if CommonTypeUtils.is_sim_or_sim_info(target_object):
+            # noinspection PyTypeChecker
+            object_id = CommonSimUtils.get_sim_id(target_object)
+        elif CommonTypeUtils.is_game_object(target_object):
+            # noinspection PyTypeChecker
+            definition = CommonObjectUtils.get_game_object_definition(target_object)
+            if definition is not None:
+                definition_id = definition.id
+        log.debug(f'Interactions that can be performed on \'{target_object}\' id:{object_id} def_id:{definition_id}:')
+        interactions = CommonObjectInteractionUtils.get_all_interactions_registered_to_object_gen(target_object)
+        target_object: GameObject = target_object
+        interaction_short_names: List[str] = list()
+        for interaction in interactions:
+            interaction: Interaction = interaction
+            try:
+                interaction_short_name = CommonInteractionUtils.get_interaction_short_name(interaction)
+                interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
+                interaction_short_names.append(f'{interaction_short_name} ({interaction_id})')
+            except Exception as ex:
+                log.error('Problem while attempting to handle interaction {}'.format(pformat(interaction)), exception=ex)
+                continue
+        for component in target_object.components:
+            if not hasattr(component, 'component_super_affordances_gen'):
+                continue
+            for affordance in component.component_super_affordances_gen():
+                try:
+                    interaction_short_name = CommonInteractionUtils.get_interaction_short_name(affordance)
+                    interaction_id = CommonInteractionUtils.get_interaction_id(affordance)
+                    interaction_short_names.append(f'{interaction_short_name} ({interaction_id})')
+                except Exception as ex:
+                    log.error(f'Problem while attempting to handle affordance {pformat(affordance)}', exception=ex)
+                    continue
+
+        sorted_short_names = sorted(interaction_short_names, key=lambda x: x)
+        log.format(interactions=sorted_short_names)
+        log.debug('Done Logging Available Interactions.')
+        log.disable()
+        CommonBasicNotification(
+            CommonStringId.S4CL_LOG_ALL_INTERACTIONS,
+            CommonStringId.S4CL_DONE_LOGGING_ALL_INTERACTIONS,
+            description_tokens=(CommonLogUtils.get_message_file_path(cls.get_mod_identity()), )
+        ).show()
+        return True
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.print_object_interactions',
+    'Log all interactions an object has.',
+    command_arguments=(
+        CommonConsoleCommandArgument('game_object', 'Game Object Id', 'The instance id of the game object to check.'),
+    )
+)
+def _s4cl_testing_log_all_interactions(output: CommonConsoleCommandOutput, game_object: GameObject):
+    if game_object is None:
+        return
+    output(f'Logging interactions of {game_object}')
+    CommonObjectInteractionUtils._log_all_interactions(game_object)
