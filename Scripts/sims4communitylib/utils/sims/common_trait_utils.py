@@ -5,24 +5,23 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from pprint import pformat
 from typing import List, Union, Callable, Iterator, Tuple
 
 from distributor.shared_messages import IconInfoData
 from relationships.relationship_tracker import RelationshipTracker
 from relationships.sim_knowledge import SimKnowledge
-from server_commands.argument_helpers import TunableInstanceParam, OptionalTargetParam, OptionalSimInfoParam
+from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
-from sims4.commands import Command, CommandType, CheatOutput
 from sims4.resources import Types
 from sims4communitylib.enums.traits_enum import CommonTraitId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommandArgument, \
+    CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
-from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from traits.traits import Trait
 
@@ -1336,110 +1335,124 @@ class CommonTraitUtils(HasClassLog):
         return CommonResourceUtils.load_instance(Types.TRAIT, trait)
 
 
-@Command('s4clib.show_known_traits', command_type=CommandType.Live)
-def _common_show_known_traits(opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    output('Attempting to show known traits.')
-    active_sim_info = CommonSimUtils.get_active_sim_info()
-    output('Active Sim: {}'.format(CommonSimNameUtils.get_full_name(active_sim_info)))
-    target_sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
-    if target_sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.print_known_traits',
+    'Print a list of all personality, occult, and other types of traits Sim A knows about Sim B. (For example Sim A could know that Sim B is Childish)',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info_a', 'Sim Id or Name', 'The instance id or name of a Sim to check.', is_optional=True, default_value='Active Sim'),
+        CommonConsoleCommandArgument('sim_info_b', 'Sim Id or Name', 'The instance id or name of a Sim to check.', is_optional=True, default_value='Active Sim'),
+    )
+)
+def _common_print_known_traits(output: CommonConsoleCommandOutput, sim_info_a: SimInfo=None, sim_info_b: SimInfo=None):
+    if sim_info_a is None:
         return
-    if active_sim_info is target_sim_info:
-        output('Failed, Target Sim is the same as the Active Sim.')
+    if sim_info_b is None:
         return
-    target_sim_id = CommonSimUtils.get_sim_id(target_sim_info)
-    try:
-        output('Getting relationship of {} towards {}'.format(CommonSimNameUtils.get_full_name(active_sim_info), CommonSimNameUtils.get_full_name(target_sim_info)))
-        relationship_tracker: RelationshipTracker = active_sim_info.relationship_tracker
-        output('Getting knowledge')
-        knowledge: SimKnowledge = relationship_tracker.get_knowledge(target_sim_id, initialize=False)
-        output('Printing knowledge')
-        if knowledge.known_traits is None:
-            output('No known traits.')
-            return
-        output('Known Traits:')
-        output(pformat(knowledge.known_traits))
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to retrieve knowledge for Sim {} to Sim {}'.format(CommonSimNameUtils.get_full_name(active_sim_info), CommonSimNameUtils.get_full_name(target_sim_info)), exception=ex)
-        output('Failed to retrieve knowledge for Sim {} to Sim {}. {}'.format(CommonSimNameUtils.get_full_name(active_sim_info), CommonSimNameUtils.get_full_name(target_sim_info), str(ex)))
+    if sim_info_a is sim_info_b:
+        output('ERROR: Sim A knows all traits about Sim B, because Sim A IS Sim B. Please specify at least one other Sim for either Sim A or Sim B when running this command!')
+        return
+    output(f'Attempting to print the traits that Sim A knows about Sim B.')
+    sim_id_b = CommonSimUtils.get_sim_id(sim_info_b)
+    relationship_tracker: RelationshipTracker = sim_info_a.relationship_tracker
+    knowledge: SimKnowledge = relationship_tracker.get_knowledge(sim_id_b, initialize=False)
+    if knowledge.known_traits is None and knowledge.known_traits:
+        output('SUCCESS: Sim A knows zero traits about Sim B.')
+        return
+    output(f'Traits that Sim A {sim_info_a} knows about Sim B {sim_info_b}:')
+    for trait in knowledge.known_traits:
+        output(f'- {trait}')
 
 
-@Command('s4clib.add_trait', command_type=CommandType.Live)
-def _common_add_trait(trait: TunableInstanceParam(Types.TRAIT), sim_info: OptionalSimInfoParam=None, _connection: int=None):
-    output = CheatOutput(_connection)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.add_trait',
+    'Add a trait to a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('trait', 'Trait Id or Tuning Name', 'The decimal identifier or Tuning Name of the Trait to add.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of a Sim to add the trait to.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.addtrait',
+    )
+)
+def _common_add_trait(output: CommonConsoleCommandOutput, trait: TunableInstanceParam(Types.TRAIT), sim_info: SimInfo=None):
     if trait is None:
-        output('Failed, Trait not specified or Trait did not exist! s4clib.add_trait <trait_name_or_id> [opt_sim=None]')
         return
-    sim_info: SimInfo = sim_info
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Adding trait {} to Sim {}'.format(str(trait), sim_name))
-    try:
-        if CommonTraitUtils.add_trait(sim_info, trait):
-            output('Successfully added trait.')
-        else:
-            output('Failed to add trait.')
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to add trait {} to Sim {}.'.format(str(trait), sim_name), exception=ex)
-        output('Failed to add trait {} to Sim {}. {}'.format(str(trait), sim_name, str(ex)))
+    output(f'Adding trait {trait} to Sim {sim_info}')
+    result = CommonTraitUtils.add_trait(sim_info, trait)
+    if result:
+        output(f'SUCCESS: Successfully added trait {trait} to Sim {sim_info}.')
+    else:
+        output(f'FAILED: Failed to add trait {trait} to Sim {sim_info}. {result}')
 
 
-@Command('s4clib.remove_trait', command_type=CommandType.Live)
-def _common_remove_trait(trait: TunableInstanceParam(Types.TRAIT), opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.remove_trait',
+    'Remove a trait from a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('trait', 'Trait Id or Tuning Name', 'The decimal identifier or Tuning Name of the Trait to remove.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of a Sim to remove the trait from.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.removetrait',
+    )
+)
+def _common_remove_trait(output: CommonConsoleCommandOutput, trait: TunableInstanceParam(Types.TRAIT), sim_info: SimInfo=None):
     if trait is None:
-        output('Failed, Trait not specified or Trait did not exist! s4clib.remove_trait <trait_name_or_id> [opt_sim=None]')
         return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Removing trait {} from Sim {}'.format(str(trait), sim_name))
-    try:
-        if CommonTraitUtils.remove_trait(sim_info, trait):
-            output('Successfully removed trait.')
-        else:
-            output('Failed to remove trait.')
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to remove trait {} from Sim {}.'.format(str(trait), sim_name), exception=ex)
-        output('Failed to remove trait {} from Sim {}. {}'.format(str(trait), sim_name, str(ex)))
+    output(f'Removing trait {trait} from Sim {sim_info}')
+    if CommonTraitUtils.remove_trait(sim_info, trait):
+        output(f'SUCCESS: Successfully removed trait {trait} from Sim {sim_info}.')
+    else:
+        output(f'FAILED: Failed to remove trait {trait} from Sim {sim_info}.')
 
 
-@Command('s4clib.show_traits', command_type=CommandType.Live)
-def _common_show_traits(opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    sim = get_optional_target(opt_sim, _connection)
-    sim_info = CommonSimUtils.get_sim_info(sim)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.print_traits',
+    'Print a list of all traits on a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of a Sim to check.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib_testing.printtraits',
+    )
+)
+def _common_show_traits(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Showing traits of Sim {}'.format(sim_name))
+    log = CommonTraitUtils.get_log()
     try:
+        log.enable()
+        output(f'Showing traits of Sim {sim_info}')
         trait_strings: List[str] = list()
         for trait in CommonTraitUtils.get_traits(sim_info):
             trait_name = CommonTraitUtils.get_trait_name(trait)
             trait_id = CommonTraitUtils.get_trait_id(trait)
-            trait_strings.append('{} ({})'.format(trait_name, trait_id))
+            trait_strings.append(f'{trait_name} ({trait_id})')
 
         trait_strings = sorted(trait_strings, key=lambda x: x)
         sim_traits = ', '.join(trait_strings)
         text = ''
-        text += 'Traits:\n{}\n\n'.format(sim_traits)
+        text += f'Traits:\n{sim_traits}\n\n'
+        sim_id = CommonSimUtils.get_sim_id(sim_info)
+        log.debug(f'{sim_info} Traits ({sim_id})')
+        log.debug(text)
         CommonBasicNotification(
-            CommonLocalizationUtils.create_localized_string('{} Traits ({})'.format(sim_name, CommonSimUtils.get_sim_id(sim_info))),
+            CommonLocalizationUtils.create_localized_string(f'{sim_info} Traits ({sim_id})'),
             CommonLocalizationUtils.create_localized_string(text)
         ).show(
-            icon=IconInfoData(obj_instance=sim)
+            icon=IconInfoData(obj_instance=CommonSimUtils.get_sim_instance(sim_info))
         )
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show traits of Sim {}.'.format(sim_name), exception=ex)
-        output('Failed to show traits of Sim {}. {}'.format(sim_name, str(ex)))
+    finally:
+        log.disable()

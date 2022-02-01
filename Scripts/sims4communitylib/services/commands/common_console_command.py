@@ -289,7 +289,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                     output('- The "=..." part of an argument indicates the default value of that argument IF NOT SPECIFIED when invoking the command.')
                     output(f'- For specific details about a command, run the command like so "{help_command_name} <command_name>"')
                     output('  ')
-                    for (_command_name, _command) in CommonConsoleCommandService().get_commands_by_mod(mod_identity).items():
+                    for (_command_name, _command) in sorted(list(CommonConsoleCommandService().get_commands_by_mod(mod_identity).items()), key=lambda x: x[0]):
                         _command: CommonConsoleCommand = _command
                         if not _command.show_with_help_command:
                             continue

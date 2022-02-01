@@ -7,22 +7,36 @@ Copyright (c) COLONOLNUTTY
 """
 from sims4communitylib.dialogs.common_ui_dialog_response import CommonUiDialogResponse
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from ui.ui_dialog import UiDialog, UiDialogOption
 from typing import Tuple, Any, Iterator
-from sims4.commands import Command, CommandType, CheatOutput
 
 from event_testing.resolver import Resolver
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonUiResponseDialog(UiDialog, HasClassLog):
-    """A ui response dialog."""
+    """CommonUiResponseDialog(owner, responses, *args, resolver=None, target_sim_id=None, dialog_options=UiDialogOption.DISABLE_CLOSE_BUTTON, **kwargs)
+
+    A dialog that displays various responses for the player to choose from.
+
+    :param owner: The owner of the dialog.
+    :type owner: Any
+    :param responses: An iteration of responses the player may choose.
+    :type responses: Iterator[CommonUiDialogResponse]
+    :param resolver: A resolver used to determine the display name of responses. Default is None.
+    :type resolver: Resolver, optional
+    :param target_sim_id: The Sim Id of the Target the response is directed at. Default is None.
+    :type target_sim_id: int, optional
+    :param dialog_options: Flags used to change how the dialog appears or functions. Default is UiDialogOption.DISABLE_CLOSE_BUTTON.
+    :type dialog_options: UiDialogOption, optional
+    """
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(cls) -> CommonModIdentity:
@@ -115,34 +129,29 @@ class CommonUiResponseDialog(UiDialog, HasClassLog):
         return result
 
 
-@Command('s4clib_testing.show_ui_response_dialog', command_type=CommandType.Live)
-def _common_testing_show_ui_response_dialog(_connection: int=None):
-    output = CheatOutput(_connection)
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib_testing.show_ui_response_dialog', 'Show an example of a UI Response Dialog.', show_with_help_command=False)
+def _common_testing_show_ui_response_dialog(output: CommonConsoleCommandOutput):
     output('Showing test ui response dialog.')
 
     def _on_chosen(_: CommonUiResponseDialog):
         response_value = _.get_response_value()
         output('Chosen value {}'.format(response_value if response_value is not None else 'No value chosen.'))
 
-    try:
-        responses: Tuple[CommonUiDialogResponse] = (
-            CommonUiDialogResponse(0, 'one', text='Button one'),
-            CommonUiDialogResponse(1, 'two', text='Button two')
-        )
-        title = CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN, tokens=(CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN), ))
-        description = CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN, tokens=(CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE), ))
+    responses: Tuple[CommonUiDialogResponse] = (
+        CommonUiDialogResponse(0, 'one', text='Button one'),
+        CommonUiDialogResponse(1, 'two', text='Button two')
+    )
+    title = CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN, tokens=(CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN), ))
+    description = CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN, tokens=(CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE), ))
 
-        active_sim_info = CommonSimUtils.get_active_sim_info()
-        dialog = CommonUiResponseDialog.TunableFactory().default(
-            active_sim_info,
-            responses,
-            # Having a value of 0 means that we want to display the Close button with no other dialog options.
-            dialog_options=0,
-            text=lambda *_, **__: description,
-            title=lambda *_, **__: title
-        )
-        dialog.add_listener(_on_chosen)
-        dialog.show_dialog()
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show button dialog.', exception=ex)
-    output('Done')
+    active_sim_info = CommonSimUtils.get_active_sim_info()
+    dialog = CommonUiResponseDialog.TunableFactory().default(
+        active_sim_info,
+        responses,
+        # Having a value of 0 means that we want to display the Close button with no other dialog options.
+        dialog_options=0,
+        text=lambda *_, **__: description,
+        title=lambda *_, **__: title
+    )
+    dialog.add_listener(_on_chosen)
+    dialog.show_dialog()

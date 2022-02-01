@@ -182,12 +182,11 @@ class CommonChooseOutfitDialog(CommonChooseDialog):
         if outfit_list:
             return tuple(outfit_list)
         outfit_list: List[Tuple[OutfitCategory, int]] = list()
-        from sims.outfits.outfit_utils import get_maximum_outfits_for_category
         for outfit_category in OutfitCategory.values:
             if outfit_category in exclude_outfit_categories:
                 continue
             outfit_index = 0
-            while outfit_index < get_maximum_outfits_for_category(outfit_category):
+            while outfit_index < CommonOutfitUtils.get_maximum_number_of_outfits_for_category(outfit_category):
                 outfit_list.append((outfit_category, outfit_index))
                 outfit_index += 1
         return tuple(outfit_list)

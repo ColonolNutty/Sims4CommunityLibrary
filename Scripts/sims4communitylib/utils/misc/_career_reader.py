@@ -5,10 +5,10 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4.commands import Command, CommandType, CheatOutput
 from sims4.resources import Types
 from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 
 
 class _S4CLReaderForUpdate:
@@ -134,18 +134,10 @@ class _S4CLReaderForUpdate:
     }
 
 
-log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_career_printer')
-log.enable()
-
-
-@Command('s4clib_dev.log_careers', command_type=CommandType.Live)
-def _common_log_careers_ready_for_update(_connection: int=None) -> None:
-    try:
-        output = CheatOutput(_connection)
-        output('Logging Careers')
-        from sims4communitylib.utils.misc._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
-        from sims4communitylib.enums.common_career_ids import CommonCareerId
-        not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instances(Types.CAREER, _S4CLReaderForUpdate.CONVERSIONS, CommonCareerId, skip_not_found=True)
-        output(f'Finished logging Careers. {len(not_found_values)} values were not found.')
-    except Exception as ex:
-        log.error('Error when logging careers.', exception=ex)
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib_dev.log_careers', 'Logs a list of careers and career ids for easy transfer to CommonCareerId', show_with_help_command=False)
+def _common_log_careers_ready_for_update(output: CommonConsoleCommandOutput) -> None:
+    output('Logging Careers')
+    from sims4communitylib.utils.misc._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
+    from sims4communitylib.enums.common_career_ids import CommonCareerId
+    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instances(Types.CAREER, _S4CLReaderForUpdate.CONVERSIONS, CommonCareerId, skip_not_found=True)
+    output(f'Finished logging Careers. {len(not_found_values)} values were not found.')

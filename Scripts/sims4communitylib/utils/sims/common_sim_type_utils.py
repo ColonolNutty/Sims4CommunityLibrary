@@ -6,16 +6,16 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Dict, Iterator
-
-from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
-from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_occult_type import CommonOccultType
 from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.enums.sim_type import CommonSimType
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
-from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonSimTypeUtils:
@@ -1809,15 +1809,20 @@ class CommonSimTypeUtils:
         return CommonSimTypeUtils._OCCULT_SIM_TYPE_TO_NON_OCCULT_SIM_TYPE_MAPPING[sim_type]
 
 
-@Command('s4clib.print_sim_types', command_type=CommandType.Live)
-def _common_print_sim_types_for_sim(opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.print_sim_types',
+    'Print a list of all Sim Types a Sim matches to.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to check.', is_optional=True, default_value='Active Sim'),
+        CommonConsoleCommandArgument('combine_teen_young_adult_and_elder_age', 'True or False', 'If True, Teen, Young Adult, and Elder will come out with the same Sim Type as an Adult Sim would. (No effect on Sims that do not fall into these ages)', is_optional=True, default_value=False),
+        CommonConsoleCommandArgument('combine_child_dog_types', 'True or False', 'If True, Child Small Dog and Child Large Dog will come out as a singular Sim Type of Child Dog. (No effect on Sims that are not Child Dogs)', is_optional=True, default_value=False),
+    ),
+)
+def _common_print_sim_types_for_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo=None, combine_teen_young_adult_and_elder_age: bool=False, combine_child_dog_types: bool=False):
     if sim_info is None:
-        output('FAILED: no Sim was specified or the specified Sim was not found!')
         return
-    output('Printing all available Sim types.')
-    for sim_type in CommonSimTypeUtils.get_all_sim_types_gen(sim_info, combine_teen_young_adult_and_elder_age=False, combine_child_dog_types=False):
-        output('Sim Type: {}'.format(sim_type.name))
-    output('Done')
+    output(f'Printing all Sim Types of Sim {sim_info}:')
+    for sim_type in CommonSimTypeUtils.get_all_sim_types_gen(sim_info, combine_teen_young_adult_and_elder_age=combine_teen_young_adult_and_elder_age, combine_child_dog_types=combine_child_dog_types):
+        sim_type_name = sim_type.name
+        output(f'- {sim_type_name}')

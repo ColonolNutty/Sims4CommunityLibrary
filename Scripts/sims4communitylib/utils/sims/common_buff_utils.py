@@ -10,21 +10,21 @@ from typing import Union, List, Tuple, Iterator
 from buffs.buff import Buff
 from distributor.shared_messages import IconInfoData
 from protocolbuffers.Localization_pb2 import LocalizedString
-from server_commands.argument_helpers import TunableInstanceParam, OptionalTargetParam
+from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
-from sims4.commands import Command, CommandType, CheatOutput
 from sims4.resources import Types
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.types.component_types import CommonComponentType
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
-from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -337,79 +337,95 @@ class CommonBuffUtils(HasClassLog):
         return CommonResourceUtils.load_instance(Types.BUFF, buff)
 
 
-@Command('s4clib.add_buff', command_type=CommandType.Live)
-def _common_add_buff(buff: TunableInstanceParam(Types.BUFF), opt_sim: OptionalTargetParam=None, buff_reason: str=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.add_buff',
+    'Add a buff to a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('buff', 'Buff Id or Tuning Name', 'The decimal identifier or Tuning Name of the Buff to add.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of a Sim to add the buff to.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.addbuff',
+    )
+)
+def _common_add_buff(output: CommonConsoleCommandOutput, buff: TunableInstanceParam(Types.BUFF), sim_info: SimInfo=None, buff_reason: str=None):
     if buff is None:
-        output('Failed, Buff not specified or Buff did not exist! s4clib.add_buff <buff_name_or_id> [opt_sim=None]')
         return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Adding buff {} to Sim {}'.format(str(buff), sim_name))
-    try:
-        if CommonBuffUtils.add_buff(sim_info, buff, buff_reason=buff_reason):
-            output('Successfully added buff.')
-        else:
-            output('Failed to add buff.')
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to add buff {} to Sim {}.'.format(str(buff), sim_name), exception=ex)
-        output('Failed to add buff {} to Sim {}. {}'.format(str(buff), sim_name, str(ex)))
+    output(f'Adding buff {buff} to Sim {sim_info}')
+    result = CommonBuffUtils.add_buff(sim_info, buff, buff_reason=buff_reason)
+    if result:
+        output(f'SUCCESS: Successfully added buff {buff} to Sim {sim_info}.')
+    else:
+        output(f'FAILED: Failed to add buff {buff} to Sim {sim_info}: {result}')
 
 
-@Command('s4clib.remove_buff', command_type=CommandType.Live)
-def _common_remove_buff(buff: TunableInstanceParam(Types.BUFF), opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.remove_buff',
+    'Remove a buff from a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('buff', 'Buff Id or Tuning Name', 'The decimal identifier or Tuning Name of the Buff to remove.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of a Sim to remove the buff from.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.removebuff',
+    )
+)
+def _common_remove_buff(output: CommonConsoleCommandOutput, buff: TunableInstanceParam(Types.BUFF), sim_info: SimInfo=None):
     if buff is None:
-        output('Failed, Buff not specified or Buff did not exist! s4clib.remove_buff <buff_name_or_id> [opt_sim=None]')
         return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Removing buff {} from Sim {}'.format(str(buff), sim_name))
-    try:
-        if CommonBuffUtils.remove_buff(sim_info, buff):
-            output('Successfully removed buff.')
-        else:
-            output('Failed to remove buff.')
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to remove buff {} from Sim {}.'.format(str(buff), sim_name), exception=ex)
-        output('Failed to remove buff {} from Sim {}. {}'.format(str(buff), sim_name, str(ex)))
+    output(f'Removing buff {buff} from Sim {sim_info}')
+    result = CommonBuffUtils.remove_buff(sim_info, buff)
+    if result:
+        output(f'SUCCESS: Successfully removed buff {buff} from Sim {sim_info}.')
+    else:
+        output(f'FAILED: Failed to remove buff {buff} from Sim {sim_info}: {result}')
 
 
-@Command('s4clib.show_active_buffs', command_type=CommandType.Live)
-def _common_show_active_buffs(opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    sim = get_optional_target(opt_sim, _connection)
-    sim_info = CommonSimUtils.get_sim_info(sim)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.print_buffs',
+    'Print a list of all buffs on a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of a Sim to check.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib_testing.printbuffs',
+    )
+)
+def _common_print_buffs_on_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Showing active buffs of Sim {}'.format(sim_name))
+    log = CommonBuffUtils.get_log()
     try:
-        sim_buff_strings: List[str] = list()
+        log.enable()
+        output(f'Attempting to print buffs on Sim {sim_info}')
+        buff_strings: List[str] = list()
         for buff in CommonBuffUtils.get_buffs(sim_info):
             buff_name = CommonBuffUtils.get_buff_name(buff)
             buff_id = CommonBuffUtils.get_buff_id(buff)
-            sim_buff_strings.append('{} ({})'.format(buff_name, buff_id))
-        sim_buff_strings = sorted(sim_buff_strings, key=lambda x: x)
-        sim_buffs = ', '.join(sim_buff_strings)
+            buff_strings.append(f'{buff_name} ({buff_id})')
+
+        buff_strings = sorted(buff_strings, key=lambda x: x)
+        sim_buffs = ', '.join(buff_strings)
         text = ''
-        text += 'Active Buffs:\n{}\n\n'.format(sim_buffs)
+        text += f'Buffs:\n{sim_buffs}\n\n'
+        sim_id = CommonSimUtils.get_sim_id(sim_info)
+        log.debug(f'{sim_info} Buffs ({sim_id})')
+        log.debug(text)
         CommonBasicNotification(
-            CommonLocalizationUtils.create_localized_string('{} Active Buffs ({})'.format(sim_name, CommonSimUtils.get_sim_id(sim_info))),
+            CommonLocalizationUtils.create_localized_string(f'{sim_info} Buffs ({sim_id})'),
             CommonLocalizationUtils.create_localized_string(text)
         ).show(
             icon=IconInfoData(obj_instance=CommonSimUtils.get_sim_instance(sim_info))
         )
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show active buffs of Sim {}.'.format(sim_name), exception=ex)
-        output('Failed to show active buffs of Sim {}. {}'.format(sim_name, str(ex)))
+    finally:
+        log.disable()

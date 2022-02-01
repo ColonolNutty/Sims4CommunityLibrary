@@ -9,17 +9,18 @@ import services
 from typing import Callable, Iterator, Union, List, Tuple, Type
 
 from distributor.shared_messages import IconInfoData
-from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
-from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.situations_enum import CommonSituationId
 from sims4communitylib.enums.tags_enum import CommonGameTag
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.logging.has_class_log import HasClassLog
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.resources.common_situation_utils import CommonSituationUtils
-from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from situations.dynamic_situation_goal_tracker import DynamicSituationGoalTracker
 from situations.situation import Situation
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -29,10 +30,21 @@ from situations.situation_goal_tracker import SituationGoalTracker
 from whims.whim_set import WhimSetBaseMixin
 
 
-class CommonSimSituationUtils:
+class CommonSimSituationUtils(HasClassLog):
     """Utilities for manipulating the Situations of Sims.
 
     """
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
+        return ModInfo.get_identity()
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_log_identifier(cls) -> str:
+        return 'common_sim_situation_utils'
+
     @staticmethod
     def has_situation(sim_info: SimInfo, situation_guid: Union[int, CommonSituationId]) -> bool:
         """has_situation(sim_info, situation_guid)
@@ -498,34 +510,43 @@ class CommonSimSituationUtils:
         return tuple(goal_instances)
 
 
-@Command('s4clib.show_running_situations', command_type=CommandType.Live)
-def _common_show_running_situations(opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    sim = get_optional_target(opt_sim, _connection)
-    sim_info = CommonSimUtils.get_sim_info(sim)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.print_situations',
+    'Print a list of all situations a Sim is in.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to check.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib_testing.printsituations',
+    )
+)
+def _common_show_running_situations(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Showing active situations of Sim {}'.format(sim_name))
+    log = CommonSimSituationUtils.get_log()
     try:
+        log.enable()
+        output(f'Attempting to print all running situations of Sim {sim_info}')
         situation_strings: List[str] = list()
         for situation in CommonSimSituationUtils.get_situations(sim_info):
             situation_name = CommonSituationUtils.get_situation_name(situation)
             situation_id = CommonSituationUtils.get_situation_id(situation)
-            situation_strings.append('{} ({})'.format(situation_name, situation_id))
+            situation_strings.append(f'{situation_name} ({situation_id})')
 
         situation_strings = sorted(situation_strings, key=lambda x: x)
         sim_situations = ', '.join(situation_strings)
         text = ''
-        text += 'Running Situations:\n{}\n\n'.format(sim_situations)
+        text += f'Situations:\n{sim_situations}\n\n'
+        sim_id = CommonSimUtils.get_sim_id(sim_info)
+        log.debug(f'{sim_info} Situations ({sim_id})')
+        log.debug(text)
         CommonBasicNotification(
-            CommonLocalizationUtils.create_localized_string('{} Running Situations ({})'.format(sim_name, CommonSimUtils.get_sim_id(sim_info))),
+            CommonLocalizationUtils.create_localized_string(f'{sim_info} Situations ({sim_id})'),
             CommonLocalizationUtils.create_localized_string(text)
         ).show(
             icon=IconInfoData(obj_instance=CommonSimUtils.get_sim_instance(sim_info))
         )
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show active situations of Sim {}.'.format(sim_name), exception=ex)
-        output('Failed to show active situations of Sim {}. {}'.format(sim_name, str(ex)))
+    finally:
+        log.disable()

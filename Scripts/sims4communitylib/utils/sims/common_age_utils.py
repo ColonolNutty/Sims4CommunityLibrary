@@ -10,18 +10,14 @@ from typing import Union
 
 import services
 from event_testing.test_events import TestEvent
-from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Age
-from sims4.commands import Command, CommandType, CheatOutput, Output
 from sims4.resources import Types
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
-from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 
 
 class CommonAgeUtils:
@@ -814,82 +810,119 @@ class CommonAgeUtils:
         return int(current_age) == int(age)
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.set_age_progress_percentage', 'Set the percentage total days a Sim has been in their current age.')
-def _common_set_age_progress_percentage(output: Output, progress_percentage: int, opt_sim: OptionalTargetParam=None):
-    from server_commands.argument_helpers import get_optional_target
-    sim = get_optional_target(opt_sim, output._context)
-    sim_info = CommonSimUtils.get_sim_info(sim)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.set_age_progress_percentage',
+    'Set the percentage of total days a Sim has been in their current age.',
+    command_arguments=(
+        CommonConsoleCommandArgument('progress_percentage', 'Decimal Percentage', 'The percentage of total days to set the Age Progress of the Sim. Values are 0.0 to 100.0'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of a Sim to change.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.setageprogresspercentage',
+    )
+)
+def _common_set_age_progress_percentage(output: CommonConsoleCommandOutput, progress_percentage: float, sim_info: SimInfo=None):
     if sim_info is None:
-        output(f'Failed, Sim {opt_sim} did not exist.')
+        output('ERROR: No Sim was specified or the specified Sim was not found!')
         return
-    output(f'Setting the age progress of {sim} to {progress_percentage}')
-    return CommonAgeUtils.set_percentage_total_days_sim_has_been_in_their_current_age(sim_info, progress_percentage)
+    output(f'Attempting to set the age progress of {sim_info} to {progress_percentage}%')
+    if CommonAgeUtils.set_percentage_total_days_sim_has_been_in_their_current_age(sim_info, progress_percentage):
+        output(f'SUCCESS: Successfully set the age progress of Sim {sim_info} to {progress_percentage}%')
+    else:
+        output(f'FAILED: Failed to set the age progress of Sim {sim_info} to {progress_percentage}%')
+    output(f'Done setting the age progress of Sim {sim_info} to {progress_percentage}%')
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.randomize_age_progress', 'Randomize the progress made towards the next age of a Sim.')
-def _common_randomize_age_progress(output: Output, opt_sim: OptionalTargetParam=None):
-    from server_commands.argument_helpers import get_optional_target
-    sim = get_optional_target(opt_sim, output._context)
-    sim_info = CommonSimUtils.get_sim_info(sim)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.randomize_age_progress',
+    'Randomize the progress made towards the next age of a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of a Sim to change.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.randomizeageprogress',
+    )
+)
+def _common_randomize_age_progress(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     if sim_info is None:
-        output(f'Failed, Sim {opt_sim} did not exist.')
+        output('ERROR: No Sim was specified or the specified Sim was not found!')
         return
     progress = CommonAgeUtils.get_total_days_to_age_up(sim_info) * random.random()
     percentage_progress = (progress / CommonAgeUtils.get_total_days_to_age_up(sim_info)) * 100
-    output(f'Setting the age progress of {sim} to {percentage_progress}%')
+    output(f'Attempting to randomize the age progress of {sim_info} to {percentage_progress}%')
     CommonAgeUtils.set_percentage_total_days_sim_has_been_in_their_current_age(sim_info, percentage_progress)
+    output(f'Done randomizing the age progress of Sim {sim_info} to {percentage_progress}%')
     return True
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.set_age', 'Set the age of a Sim.', command_arguments=(CommonConsoleCommandArgument('age_str', 'Text', f'The CommonAge to set the Sim to. Valid Ages: {", ".join(CommonAge.get_all_names())}'),))
-def _common_set_age(output: Output, age_str: str, opt_sim: OptionalTargetParam=None):
-    age = CommonResourceUtils.get_enum_by_name(age_str.upper(), CommonAge, default_value=CommonAge.INVALID)
-    if age is CommonAge.INVALID:
-        valid_ages = ','.join(CommonAge.get_all_names())
-        output(f'Invalid Age specified. Valid Ages: {valid_ages}')
-        return False
-    from server_commands.argument_helpers import get_optional_target
-    sim = get_optional_target(opt_sim, output._context)
-    sim_info = CommonSimUtils.get_sim_info(sim)
-    if sim_info is None:
-        output(f'Failed, Sim {opt_sim} did not exist.')
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.set_age',
+    'Set the age of a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('age', 'CommonAge', f'The age to set the Sim to. Valid Ages: {CommonAge.get_comma_separated_names_string()}'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of a Sim to change.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.setage',
+    )
+)
+def _common_set_age(output: CommonConsoleCommandOutput, age: CommonAge, sim_info: SimInfo=None):
+    if age is None:
         return
-    output(f'Setting the age of {sim} to {age_str}')
-    return CommonAgeUtils.set_age(sim_info, age)
+    if sim_info is None:
+        output('ERROR: No Sim was specified or the specified Sim was not found!')
+        return
+    age_name = age.name
+    output(f'Setting the age of {sim_info} to {age_name}')
+    if CommonAgeUtils.set_age(sim_info, age):
+        output(f'SUCCESS: Successfully set the age of Sim {sim_info} to {age_name}')
+    else:
+        output(f'FAILED: Failed to set the age of Sim {sim_info} to {age_name}')
+    output(f'Done setting the age of Sim {sim_info} to {age_name}')
 
 
-@Command('s4clib.print_sim_age', command_type=CommandType.Live)
-def _common_print_sim_age(opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    output('Printing Sim Age.')
-    sim = get_optional_target(opt_sim, _connection)
-    sim_info = CommonSimUtils.get_sim_info(sim)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.print_sim_age',
+    'Print information about the Age of a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of a Sim to check.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.printsimage',
+    )
+)
+def _common_print_sim_age(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
+        output('ERROR: No Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Showing Age of Sim {}'.format(sim_name))
-    try:
-        if hasattr(sim_info, '_base') and hasattr(sim_info._base, 'age'):
-            output('_base.age {}'.format(sim_info._base.age))
-        if hasattr(sim_info, 'age'):
-            # noinspection PyPropertyAccess
-            output('age {}'.format(sim_info.age))
-        if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age'):
-            output('sim_info._base.age {}'.format(sim_info.sim_info._base.age))
-        if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, 'age'):
-            output('sim_info.age {}'.format(sim_info.sim_info.age))
-        get_age_result = CommonAgeUtils.get_age(sim_info)
-        output('Approximate Age: {}'.format(get_age_result))
-        get_age_exact_result = CommonAgeUtils.get_age(sim_info, exact_age=True)
-        output('Exact Age: {}'.format(get_age_exact_result))
-        output('Age Progress: {}'.format(CommonAgeUtils.get_total_days_sim_has_been_in_their_current_age(sim_info)))
-        output('Age Progress (In Days): {}'.format(CommonAgeUtils.get_percentage_total_days_sim_has_been_in_their_current_age(sim_info)))
-        output('Days Until Ready To Age: {}'.format(CommonAgeUtils.get_total_days_until_sim_ages_up(sim_info)))
-        output('Max Total Days To Age Up: {}'.format(CommonAgeUtils.get_total_days_to_age_up(sim_info)))
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'An error occurred while printing Sim Age.', exception=ex)
-        output('An error occurred while printing Sim Age.')
-    output('Done printing Sim Age.')
+    output(f'Attempting to print Age Info for Sim {sim_info}.')
+    if hasattr(sim_info, '_base') and hasattr(sim_info._base, 'age'):
+        output(f'_base.age {sim_info._base.age}')
+    if hasattr(sim_info, 'age'):
+        # noinspection PyPropertyAccess
+        output(f'age {sim_info.age}')
+    if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age'):
+        output(f'sim_info._base.age {sim_info.sim_info._base.age}')
+    if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, 'age'):
+        output(f'sim_info.age {sim_info.sim_info.age}')
+    get_age_result = CommonAgeUtils.get_age(sim_info)
+    output(f'Approximate Age: {get_age_result}')
+    get_age_exact_result = CommonAgeUtils.get_age(sim_info, exact_age=True)
+    output(f'Exact Age: {get_age_exact_result}')
+    total_days_has_been_in_current_age = CommonAgeUtils.get_total_days_sim_has_been_in_their_current_age(sim_info)
+    output(f'Age Progress: {total_days_has_been_in_current_age}')
+    percentage_total_days_sim_has_been_in_current_age = CommonAgeUtils.get_percentage_total_days_sim_has_been_in_their_current_age(sim_info)
+    output(f'Age Progress (In Days): {percentage_total_days_sim_has_been_in_current_age}')
+    total_days_until_sim_ages_up = CommonAgeUtils.get_total_days_until_sim_ages_up(sim_info)
+    output(f'Days Until Ready To Age: {total_days_until_sim_ages_up}')
+    total_days_to_age_up = CommonAgeUtils.get_total_days_to_age_up(sim_info)
+    output(f'Max Total Days To Age Up: {total_days_to_age_up}')
+    output(f'Done printing Age Info for Sim {sim_info}.')

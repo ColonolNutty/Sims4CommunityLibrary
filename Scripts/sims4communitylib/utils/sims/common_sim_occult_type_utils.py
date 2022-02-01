@@ -10,6 +10,10 @@ from typing import Iterator, Union, Dict, Callable
 from sims.occult.occult_enums import OccultType
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.common_occult_type import CommonOccultType
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 
 
@@ -210,3 +214,25 @@ class CommonSimOccultTypeUtils:
             CommonOccultType.WITCH: OccultType.WITCH if hasattr(OccultType, 'WITCH') else None
         }
         return conversion_mapping.get(occult_type, None)
+
+
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.print_custom_occults',
+    'Print a list of all custom CommonOccultTypes a Sim has.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance Id or name of the Sim to print the occult types of.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.printcustomoccults',
+    )
+)
+def _common_print_custom_occult_types_for_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+    if sim_info is None:
+        return
+    occult_types_str = ', '.join([occult_type.name if hasattr(occult_type, 'name') else str(occult_type) for occult_type in CommonSimOccultTypeUtils.get_all_occult_types_for_sim_gen(sim_info)])
+    output(f'Occult Types: {occult_types_str}')
+    current_occult_type = CommonSimOccultTypeUtils.determine_current_occult_type(sim_info)
+    current_occult_type_str = current_occult_type.name if hasattr(current_occult_type, 'name') else str(current_occult_type)
+    output(f'Current Occult Type: {current_occult_type_str}')

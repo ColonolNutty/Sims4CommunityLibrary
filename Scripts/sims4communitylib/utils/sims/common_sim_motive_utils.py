@@ -8,20 +8,20 @@ Copyright (c) COLONOLNUTTY
 from typing import Dict, Union
 
 import services
-from server_commands.argument_helpers import TunableInstanceParam, OptionalTargetParam
+from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
 from sims4 import commands
-from sims4.commands import Command, CommandType, CheatOutput
 from sims4.resources import Types
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
-from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_statistic_utils import CommonSimStatisticUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
@@ -557,75 +557,73 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         return CommonSimMotiveUtils._MOTIVE_MAPPINGS
 
 
-@Command('s4clib.get_motive_level', command_type=CommandType.Live)
-def _common_get_motive_level(motive: TunableInstanceParam(Types.STATISTIC), opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.print_motive_level',
+    'Print the current level of a Motive for a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('motive', 'Motive Id or Tuning Name', 'The tuning name or decimal identifier of a Motive.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to check.', is_optional=True, default_value='Active Sim'),
+    )
+)
+def _common_print_motive_level(output: CommonConsoleCommandOutput, motive: TunableInstanceParam(Types.STATISTIC), sim_info: SimInfo=None):
     if motive is None:
-        output('Failed, Motive not specified or Motive did not exist! s4clib.set_motive_level <motive_name_or_id> <level> [opt_sim=None]')
+        output('ERROR: No Motive specified or Motive did not exist!')
         return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
         output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Setting motive {} to Sim {}'.format(str(motive), sim_name))
-    try:
-        motive_level = CommonSimMotiveUtils.get_motive_level(sim_info, motive)
-        output('Motive Level of {}: {}'.format(motive, motive_level))
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to get motive {} to Sim {}.'.format(str(motive), sim_name), exception=ex)
-        output('Failed to get motive {} for Sim {}. {}'.format(str(motive), sim_name, str(ex)))
+    output(f'Setting motive {motive} to Sim {sim_info}')
+    motive_level = CommonSimMotiveUtils.get_motive_level(sim_info, motive)
+    output(f'Motive Level of {motive}: {motive_level}')
 
 
-@Command('s4clib.set_motive_level', command_type=CommandType.Live)
-def _common_set_motive_level(motive: TunableInstanceParam(Types.STATISTIC), level: float, opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.set_motive_level',
+    'Set the current level of a Motive for a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('motive', 'Motive Id or Tuning Name', 'The tuning name or decimal identifier of a Motive.'),
+        CommonConsoleCommandArgument('level', 'Decimal Number', 'The amount to set the motive level to between -100 and 100.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to change.', is_optional=True, default_value='Active Sim'),
+    )
+)
+def _common_set_motive_level(output: CommonConsoleCommandOutput, motive: TunableInstanceParam(Types.STATISTIC), level: float, sim_info: SimInfo=None):
     if motive is None:
-        output('Failed, Motive not specified or Motive did not exist! s4clib.set_motive_level <motive_name_or_id> <level> [opt_sim=None]')
+        output('ERROR: Failed, Motive not specified or Motive did not exist! s4clib.set_motive_level <motive_name_or_id> <level> [opt_sim=None]')
         return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Setting motive {} to Sim {}'.format(str(motive), sim_name))
-    try:
-        if CommonSimMotiveUtils.set_motive_level(sim_info, motive, level):
-            output('Successfully set motive level.')
-        else:
-            output('Failed to set motive level.')
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set motive {} to Sim {}.'.format(str(motive), sim_name), exception=ex)
-        output('Failed to set motive {} for Sim {}. {}'.format(str(motive), sim_name, str(ex)))
+    output(f'Attempting to set motive {motive} for Sim {sim_info} to {level}')
+    if CommonSimMotiveUtils.set_motive_level(sim_info, motive, level):
+        output(f'SUCCESS: Successfully set the motive level of motive {motive} for Sim {sim_info} to {level}.')
+    else:
+        output(f'FAILED: Failed to set motive level of motive {motive} for Sim {sim_info} to {level}.')
 
 
-@Command('s4clib.max_all_motives', command_type=CommandType.Live)
-def _common_max_all_motives(opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.max_all_motives',
+    'Set all Motive Levels to their maximum for a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to change.', is_optional=True, default_value='Active Sim'),
+    )
+)
+def _common_max_all_motives(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    try:
+    CommonSimMotiveUtils.set_all_motives_max(sim_info)
+    output(f'SUCCESS: Maxed the motives of {sim_info}.')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.max_world_motives',
+    'Set all Motive Levels to their maximum for all Sims.'
+)
+def _common_max_world_motives(output: CommonConsoleCommandOutput):
+    sim_count = 0
+    for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
         CommonSimMotiveUtils.set_all_motives_max(sim_info)
-        output('Maxed the motives of {}.'.format(CommonSimNameUtils.get_full_name(sim_info)))
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to max the motives of {}.'.format(CommonSimNameUtils.get_full_name(sim_info)), exception=ex)
-        output('Failed to max the motives of {}. {}'.format(CommonSimNameUtils.get_full_name(sim_info), str(ex)))
-
-
-@Command('s4clib.max_world_motives', command_type=CommandType.Live)
-def _common_max_world_motives(_connection: int=None):
-    output = CheatOutput(_connection)
-    try:
-        sim_count = 0
-        for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
-            CommonSimMotiveUtils.set_all_motives_max(sim_info)
-            sim_count += 1
-        output('Maxed the motives of {} Sim(s).'.format(sim_count))
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to max the motives of all Sims.', exception=ex)
-        output('Failed to max the motives of all Sims. {}'.format(str(ex)))
+        sim_count += 1
+    output('Maxed the motives of {} Sim(s).'.format(sim_count))

@@ -7,22 +7,25 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Union, Iterator
 
+from distributor.shared_messages import IconInfoData
 from objects.components.statistic_component import StatisticComponent
-from server_commands.argument_helpers import TunableInstanceParam, OptionalTargetParam
+from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
-from sims4.commands import Command, CommandType, CheatOutput
 from sims4.resources import Types
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.statistics_enum import CommonStatisticId
 from sims4communitylib.enums.types.component_types import CommonComponentType
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.resources.common_statistic_utils import CommonStatisticUtils
-from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from statistics.base_statistic import BaseStatistic
 
@@ -50,7 +53,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         :return: True, if the Sim has any of the statistics. False, if not.
         :rtype: bool
         """
-        statistic = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add=False)
+        statistic = cls.get_statistic(sim_info, statistic, add=False)
         if statistic is not None:
             return CommonTestResult(True, f'{sim_info} had statistic {statistic}.')
         return CommonTestResult(False, f'{sim_info} did not have statistic {statistic}.')
@@ -69,7 +72,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         :rtype: bool
         """
         for statistic in statistics:
-            result = CommonSimStatisticUtils.has_statistic(sim_info, statistic)
+            result = cls.has_statistic(sim_info, statistic)
             if result:
                 return result
         return CommonTestResult(False, f'{sim_info} did not have any of the specified statistics.')
@@ -99,7 +102,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         if statistic_id is None:
             cls.get_log().format_with_message('No statistic found when checking locked.', statistic=statistic, sim=sim_info)
             return CommonTestResult(False, 'The specified statistic did not exist.')
-        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic_id, add=add)
+        statistic_instance = cls.get_statistic(sim_info, statistic_id, add=add)
         if statistic_instance is None:
             cls.get_log().format_with_message('No statistic found on Sim when checking locked.', statistic=statistic, statistic_id=statistic_id, sim=sim_info)
             return CommonTestResult(False, f'{sim_info} did not have statistic {statistic}.')
@@ -120,7 +123,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         :return: The value of the statistic, `-1.0` if the statistic is not found.
         :rtype: float
         """
-        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic)
+        statistic_instance = cls.get_statistic(sim_info, statistic)
         if statistic_instance is None:
             cls.get_log().format_with_message('No statistic found on Sim when getting level.', statistic=statistic, sim=sim_info)
             return -1.0
@@ -214,7 +217,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', statistic=statistic, sim=sim_info)
             return CommonExecutionResult(False, 'sim_info was None.')
-        result = CommonSimStatisticUtils.is_statistic_locked(sim_info, statistic, add=add)
+        result = cls.is_statistic_locked(sim_info, statistic, add=add)
         if result:
             cls.get_log().format_with_message('Statistic is locked and thus cannot be set.', statistic=statistic, sim=sim_info)
             return result
@@ -243,7 +246,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         :return: The result of setting the statistic level. True, if successful. False, if not successful.
         :rtype: CommonExecutionResult
         """
-        return CommonSimStatisticUtils.set_statistic_user_value(sim_info, statistic, value, add=add)
+        return cls.set_statistic_user_value(sim_info, statistic, value, add=add)
 
     # noinspection PyUnusedLocal
     @classmethod
@@ -268,11 +271,11 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', statistic=statistic, sim=sim_info)
             return CommonExecutionResult(False, 'sim_info was None.')
-        result = CommonSimStatisticUtils.is_statistic_locked(sim_info, statistic, add=add)
+        result = cls.is_statistic_locked(sim_info, statistic, add=add)
         if result:
             cls.get_log().format_with_message('Statistic is locked and thus cannot be set.', statistic=statistic, sim=sim_info)
             return result
-        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add=add)
+        statistic_instance = cls.get_statistic(sim_info, statistic, add=add)
         if statistic_instance is None:
             cls.get_log().format_with_message('No statistic found on Sim when setting statistic user value.', statistic=statistic, sim=sim_info)
             return CommonExecutionResult(False, 'The specified statistic did not exist.')
@@ -302,7 +305,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', statistic=statistic, sim=sim_info)
             return CommonExecutionResult(False, 'SimInfo was None.')
-        return CommonSimStatisticUtils.set_statistic_value(sim_info, statistic, CommonSimStatisticUtils.get_statistic_value(sim_info, statistic) + value, add=add)
+        return cls.set_statistic_value(sim_info, statistic, cls.get_statistic_value(sim_info, statistic) + value, add=add)
 
     @classmethod
     def remove_statistic(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic]) -> bool:
@@ -379,7 +382,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', statistic=statistic, sim=sim_info)
             return False
-        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add=add)
+        statistic_instance = cls.get_statistic(sim_info, statistic, add=add)
         if statistic_instance is None:
             cls.get_log().format_with_message('No statistic found on Sim.', statistic=statistic, sim=sim_info)
             return False
@@ -425,7 +428,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', statistic=statistic, sim=sim_info)
             return False
-        statistic_instance = CommonSimStatisticUtils.get_statistic(sim_info, statistic, add=add)
+        statistic_instance = cls.get_statistic(sim_info, statistic, add=add)
         if statistic_instance is None:
             cls.get_log().format_with_message('No statistic found on Sim.', statistic=statistic, sim=sim_info)
             return False
@@ -436,103 +439,127 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         return True
 
 
-log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_statistic_commands')
-log.enable()
+commands_log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_statistic_commands')
+commands_log.enable()
 
 
-@Command('s4clib.set_statistic_value', command_type=CommandType.Live)
-def _common_set_statistic_value(statistic: TunableInstanceParam(Types.STATISTIC), value: float, opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.set_statistic_value',
+    'Set the value of a statistic on a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('statistic', 'Statistic Id or Tuning Name', 'The tuning name or decimal identifier of a Statistic.'),
+        CommonConsoleCommandArgument('value', 'Decimal Number', 'The value to set the statistic to.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to change.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.set_stat_value',
+        's4clib.setstatvalue',
+        's4clib.setstatisticvalue'
+    )
+)
+def _common_set_statistic_value(output: CommonConsoleCommandOutput, statistic: TunableInstanceParam(Types.STATISTIC), value: float, sim_info: SimInfo=None):
     if statistic is None:
-        output('Failed, Statistic not specified or Statistic did not exist! s4clib.set_statistic_value <statistic_name_or_id> <value> [opt_sim=None]')
+        output('ERROR: No Statistic specified or the specified Statistic did not exist!')
         return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Setting statistic {} to Sim {}'.format(str(statistic), sim_name))
-    try:
-        if CommonSimStatisticUtils.set_statistic_value(sim_info, CommonStatisticUtils.get_statistic_id(statistic), value):
-            output('Successfully set statistic value.')
-        else:
-            output('Failed to set statistic.')
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set statistic {} to Sim {}.'.format(str(statistic), sim_name), exception=ex)
-        output('Failed to set statistic {} to Sim {}. {}'.format(str(statistic), sim_name, str(ex)))
+    output(f'Attempting to set statistic {statistic} on Sim {sim_info} to value {value}.')
+    if CommonSimStatisticUtils.set_statistic_value(sim_info, CommonStatisticUtils.get_statistic_id(statistic), value):
+        output(f'SUCCESS: Successfully set statistic {statistic} of Sim {sim_info} to value {value}.')
+    else:
+        output(f'FAILED: Failed to set statistic {statistic} of Sim {sim_info} to value {value}')
 
 
-@Command('s4clib.set_statistic_user_value', 's4clib.set_statistic_level', command_type=CommandType.Live)
-def _common_set_statistic_user_value(statistic: TunableInstanceParam(Types.STATISTIC), value: float, opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    try:
-        if statistic is None:
-            output('Failed, Statistic not specified or Statistic did not exist! s4clib.set_statistic_level <statistic_name_or_id> <value> [opt_sim=None]')
-            return
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
-        if sim_info is None:
-            output('Failed, no Sim was specified or the specified Sim was not found!')
-            return
-        sim_name = CommonSimNameUtils.get_full_name(sim_info)
-        output('Setting statistic {} to Sim {}'.format(str(statistic), sim_name))
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set statistic {} to Sim.'.format(str(statistic)), exception=ex)
-        output('Failed to set statistic {}. {}'.format(statistic, str(ex)))
-        return
-    try:
-        if CommonSimStatisticUtils.set_statistic_user_value(sim_info, statistic, value):
-            output('Successfully set statistic value.')
-        else:
-            output('Failed to set statistic.')
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set statistic {} to Sim {}.'.format(str(statistic), sim_name), exception=ex)
-        output('Failed to set statistic {} to Sim {}. {}'.format(str(statistic), sim_name, str(ex)))
-
-
-@Command('s4clib.remove_statistic', 's4clib.remove_commodity', command_type=CommandType.Live)
-def _common_remove_statistic(statistic: TunableInstanceParam(Types.STATISTIC), opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.set_statistic_level',
+    'Set the user level of a statistic on a Sim (User level should be set instead of setting value for statistics that belong to a Sim, such as Motives or Skills).',
+    command_arguments=(
+        CommonConsoleCommandArgument('statistic', 'Statistic Id or Tuning Name', 'The tuning name or decimal identifier of a Statistic.'),
+        CommonConsoleCommandArgument('level', 'Decimal Number', 'The level to set the statistic to.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to change.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.set_statistic_user_value',
+        's4clib.set_stat_level',
+        's4clib.setstatlevel',
+        's4clib.setstatisticlevel'
+    )
+)
+def _common_set_statistic_user_value(output: CommonConsoleCommandOutput, statistic: TunableInstanceParam(Types.STATISTIC), level: float, sim_info: SimInfo=None):
     if statistic is None:
-        output('Failed, Statistic not specified or Statistic did not exist! s4clib.remove_statistic <statistic_name_or_id> [opt_sim=None]')
+        output('ERROR: No Statistic specified or the specified Statistic did not exist!')
         return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Removing statistic {} from Sim {}'.format(str(statistic), sim_name))
-    try:
-        if CommonSimStatisticUtils.remove_statistic(sim_info, CommonStatisticUtils.get_statistic_id(statistic)):
-            output('Successfully removed statistic.')
-        else:
-            output('Failed to remove statistic.')
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to remove statistic {} from Sim {}.'.format(str(statistic), sim_name), exception=ex)
-        output('Failed to remove statistic {} from Sim {}. {}'.format(str(statistic), sim_name, str(ex)))
+    output(f'Attempting to set statistic {statistic} on Sim {sim_info} to user level {level}.')
+    if CommonSimStatisticUtils.set_statistic_user_value(sim_info, statistic, level):
+        output(f'SUCCESS: Successfully set statistic {statistic} on Sim {sim_info} to user level {level}.')
+    else:
+        output(f'FAILED: Failed to set statistic {statistic} on Sim {sim_info} to user level {level}.')
 
 
-@Command('s4clib.print_static_commodities', command_type=CommandType.Live)
-def _common_print_static_commodities(opt_sim: OptionalTargetParam=None, _connection: int=None):
-    output = CheatOutput(_connection)
-    from server_commands.argument_helpers import get_optional_target
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.remove_statistic',
+    'Remove a Statistic or Commodity from a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('statistic', 'Statistic Id or Tuning Name', 'The tuning name or decimal identifier of a Statistic or Commodity.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to change.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.remove_commodity',
+        's4clib.remove_stat',
+        's4clib.removestat',
+        's4clib.removestatistic'
+    )
+)
+def _common_remove_statistic(output: CommonConsoleCommandOutput, statistic: TunableInstanceParam(Types.STATISTIC), sim_info: SimInfo=None):
+    if statistic is None:
+        output('ERROR: No Statistic specified or the specified Statistic did not exist!')
+        return
+    if sim_info is None:
+        return
+    output(f'Attempting to remove statistic {statistic} from Sim {sim_info}.')
+    if CommonSimStatisticUtils.remove_statistic(sim_info, CommonStatisticUtils.get_statistic_id(statistic)):
+        output(f'SUCCESS: Successfully removed statistic {statistic} from Sim {sim_info}.')
+    else:
+        output(f'FAILED: Failed to remove statistic {statistic} from Sim {sim_info}.')
+
+
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.print_static_commodities',
+    'Print a list of a Static Commodities on a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to check.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib_testing.printstaticcommodities',
+    )
+)
+def _common_print_static_commodities(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+    log = CommonSimStatisticUtils.get_log()
     try:
-        sim = get_optional_target(opt_sim, output._context)
-        if sim is None:
-            output("Sim {} doesn't exist".format(opt_sim))
-            return False
-        sim_info = CommonSimUtils.get_sim_info(sim)
-        try:
-            output(f'Printing static commodities of Sim {sim_info}')
-            static_commodities_text = ''
-            for stat in list(sim_info.static_commodity_tracker):
-                static_commodities_text += '{} ({})\n'.format(stat, CommonStatisticUtils.get_statistic_id(stat))
-            log.debug(static_commodities_text)
-        except Exception as ex:
-            log.error('Error occurred printing static commodities.', exception=ex)
-    except Exception as ex:
-        output('An error occurred while printing static commodities.')
-        log.error('An error occurred while printing static commodities.', exception=ex)
-    return False
+        log.enable()
+        output(f'Printing static commodities of Sim {sim_info}')
+        text = ''
+        for stat in list(sim_info.static_commodity_tracker):
+            statistic_id = CommonStatisticUtils.get_statistic_id(stat)
+            text += f'{stat} ({statistic_id})\n'
+        sim_id = CommonSimUtils.get_sim_id(sim_info)
+        log.debug(f'{sim_info} Static Commodities ({sim_id})')
+        log.debug(text)
+        CommonBasicNotification(
+            CommonLocalizationUtils.create_localized_string(f'{sim_info} Static Commodities ({sim_id})'),
+            CommonLocalizationUtils.create_localized_string(text)
+        ).show(
+            icon=IconInfoData(obj_instance=CommonSimUtils.get_sim_instance(sim_info))
+        )
+    finally:
+        log.disable()

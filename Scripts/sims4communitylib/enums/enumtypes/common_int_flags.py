@@ -110,6 +110,12 @@ except:
         def __contains__(self, value: 'IntFlags'):
             pass
 
+        def __and__(self, other: 'IntFlags'):
+            pass
+
+        def __or__(self, other: 'IntFlags'):
+            pass
+
 
 class CommonIntFlags(IntFlags):
     """An inheritable class that inherits from the vanilla Sims 4 enum.IntFlags class so you don't have to.

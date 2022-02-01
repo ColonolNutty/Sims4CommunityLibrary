@@ -51,6 +51,17 @@ class CommonOccultType(CommonInt):
         name_list: Tuple[str] = tuple([value.name for value in cls.get_all()])
         return name_list
 
+    @classmethod
+    def get_comma_separated_names_string(cls) -> str:
+        """get_comma_separated_names_string()
+
+        Create a string containing all names of all CommonOccultType values (excluding CommonOccultType.NONE), separated by a comma.
+
+        :return: A string containing all names of all CommonOccultType values (excluding CommonOccultType.NONE), separated by a comma.
+        :rtype: str
+        """
+        return ', '.join(cls.get_all_names())
+
     @staticmethod
     def determine_occult_type(sim_info: SimInfo) -> 'CommonOccultType':
         """determine_occult_type(sim_info)

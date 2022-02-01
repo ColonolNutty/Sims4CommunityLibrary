@@ -74,3 +74,14 @@ class CommonVoiceActorType(CommonInt):
         """
         name_list: Tuple[str] = tuple([value.name for value in cls.get_all()])
         return name_list
+
+    @classmethod
+    def get_comma_separated_names_string(cls) -> str:
+        """get_comma_separated_names_string()
+
+        Create a string containing all names of all CommonVoiceActorType values (excluding CommonVoiceActorType.UNKNOWN), separated by a comma.
+
+        :return: A string containing all names of all CommonVoiceActorType values (excluding CommonVoiceActorType.UNKNOWN), separated by a comma.
+        :rtype: str
+        """
+        return ', '.join(cls.get_all_names())

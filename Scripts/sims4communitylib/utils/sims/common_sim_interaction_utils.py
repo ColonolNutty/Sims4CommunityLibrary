@@ -14,30 +14,39 @@ from interactions.base.interaction import Interaction
 from interactions.context import InteractionSource, InteractionContext, QueueInsertStrategy
 from interactions.interaction_finisher import FinishingType
 from interactions.priority import Priority
-from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
-from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.interactions_enum import CommonInteractionId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+from sims4communitylib.logging.has_class_log import HasClassLog
+from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
-from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
-from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 
-log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'common_sim_interaction_utils')
 
-
-class CommonSimInteractionUtils:
+class CommonSimInteractionUtils(HasClassLog):
     """Utilities for manipulating the interactions of Sims.
 
     """
-    @staticmethod
-    def is_sitting(sim_info: SimInfo) -> bool:
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
+        return ModInfo.get_identity()
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_log_identifier(cls) -> str:
+        return 'common_sim_interaction_utils'
+    
+    @classmethod
+    def is_sitting(cls, sim_info: SimInfo) -> bool:
         """is_sitting(sim_info)
 
         Determine if a Sim is currently sitting.
@@ -58,10 +67,10 @@ class CommonSimInteractionUtils:
             CommonInteractionId.SEATING_SIT_DIRECTOR_CHAIR,
             CommonInteractionId.SEATING_SIT_HAIR_MAKE_UP_CHAIR,
         )
-        return CommonSimInteractionUtils.has_interactions_running_or_queued(sim_info, interactions)
+        return cls.has_interactions_running_or_queued(sim_info, interactions)
 
-    @staticmethod
-    def is_standing(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_standing(cls, sim_info: SimInfo) -> bool:
         """is_standing(sim_info)
 
         Determine if a Sim is standing.
@@ -80,10 +89,10 @@ class CommonSimInteractionUtils:
             CommonInteractionId.CAT_STAND,
             CommonInteractionId.CAT_STAND_PASSIVE
         )
-        return CommonSimInteractionUtils.has_interactions_running_or_queued(sim_info, interactions)
+        return cls.has_interactions_running_or_queued(sim_info, interactions)
 
-    @staticmethod
-    def is_swimming(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_swimming(cls, sim_info: SimInfo) -> bool:
         """is_swimming(sim_info)
 
         Determine if a Sim is swimming.
@@ -100,10 +109,10 @@ class CommonSimInteractionUtils:
             CommonInteractionId.DOG_SWIM,
             CommonInteractionId.DOG_SWIM_PASSIVE
         )
-        return CommonSimInteractionUtils.has_interactions_running_or_queued(sim_info, interactions)
+        return cls.has_interactions_running_or_queued(sim_info, interactions)
 
-    @staticmethod
-    def get_swim_interaction(sim_info: SimInfo) -> Union[int, CommonInteractionId]:
+    @classmethod
+    def get_swim_interaction(cls, sim_info: SimInfo) -> Union[int, CommonInteractionId]:
         """get_swim_interaction(sim_info)
 
         Retrieve a Swim interaction appropriate for a Sim.
@@ -122,8 +131,8 @@ class CommonSimInteractionUtils:
         # Cats don't have a swim interaction. Because they cannot swim.
         return -1
 
-    @staticmethod
-    def get_stand_interaction(sim_info: SimInfo) -> Union[int, CommonInteractionId]:
+    @classmethod
+    def get_stand_interaction(cls, sim_info: SimInfo) -> Union[int, CommonInteractionId]:
         """get_stand_interaction(sim_info)
 
         Retrieve a Stand interaction appropriate for a Sim.
@@ -144,8 +153,8 @@ class CommonSimInteractionUtils:
             return CommonInteractionId.FOX_STAND
         return -1
 
-    @staticmethod
-    def get_stand_passive_interaction(sim_info: SimInfo) -> Union[int, CommonInteractionId]:
+    @classmethod
+    def get_stand_passive_interaction(cls, sim_info: SimInfo) -> Union[int, CommonInteractionId]:
         """get_stand_passive_interaction(sim_info)
 
         Retrieve a Stand Passive interaction appropriate for a Sim.
@@ -166,8 +175,8 @@ class CommonSimInteractionUtils:
             return CommonInteractionId.FOX_STAND_PASSIVE
         return -1
 
-    @staticmethod
-    def lock_interaction_queue(sim_info: SimInfo):
+    @classmethod
+    def lock_interaction_queue(cls, sim_info: SimInfo):
         """lock_interaction_queue(sim_info)
 
         Lock the interaction queue of a Sim.
@@ -180,8 +189,8 @@ class CommonSimInteractionUtils:
             return
         sim.queue.lock()
 
-    @staticmethod
-    def unlock_interaction_queue(sim_info: SimInfo):
+    @classmethod
+    def unlock_interaction_queue(cls, sim_info: SimInfo):
         """unlock_interaction_queue(sim_info)
 
         Unlock the interaction queue of a Sim.
@@ -194,8 +203,8 @@ class CommonSimInteractionUtils:
             return
         sim.queue.unlock()
 
-    @staticmethod
-    def has_interaction_running_or_queued(sim_info: SimInfo, interaction_id: Union[int, CommonInteractionId]) -> bool:
+    @classmethod
+    def has_interaction_running_or_queued(cls, sim_info: SimInfo, interaction_id: Union[int, CommonInteractionId]) -> bool:
         """has_interaction_running_or_queued(sim_info, interaction_id)
 
         Determine if a Sim has the specified interaction running or in their interaction queue.
@@ -207,10 +216,10 @@ class CommonSimInteractionUtils:
         :return: True, if the Sim has the specified interaction running or queued. False, if not.
         :rtype: bool
         """
-        return CommonSimInteractionUtils.has_interactions_running_or_queued(sim_info, (interaction_id, ))
+        return cls.has_interactions_running_or_queued(sim_info, (interaction_id, ))
 
-    @staticmethod
-    def has_interaction_running(sim_info: SimInfo, interaction_id: Union[int, CommonInteractionId]) -> bool:
+    @classmethod
+    def has_interaction_running(cls, sim_info: SimInfo, interaction_id: Union[int, CommonInteractionId]) -> bool:
         """has_interaction_running(sim_info, interaction_id)
 
         Determine if a Sim is running the specified interaction.
@@ -222,10 +231,10 @@ class CommonSimInteractionUtils:
         :return: True, if the Sim has the specified interaction running. False, if not.
         :rtype: bool
         """
-        return CommonSimInteractionUtils.has_interactions_running(sim_info, (interaction_id, ))
+        return cls.has_interactions_running(sim_info, (interaction_id, ))
 
-    @staticmethod
-    def has_interaction_queued(sim_info: SimInfo, interaction_id: Union[int, CommonInteractionId]) -> bool:
+    @classmethod
+    def has_interaction_queued(cls, sim_info: SimInfo, interaction_id: Union[int, CommonInteractionId]) -> bool:
         """has_interaction_queued(sim_info, interaction_id)
 
         Determine if a Sim is running the specified interaction.
@@ -237,10 +246,10 @@ class CommonSimInteractionUtils:
         :return: True, if the Sim has the specified interaction queued. False, if not.
         :rtype: bool
         """
-        return CommonSimInteractionUtils.has_interactions_queued(sim_info, (interaction_id, ))
+        return cls.has_interactions_queued(sim_info, (interaction_id, ))
 
-    @staticmethod
-    def has_interactions_running_or_queued(sim_info: SimInfo, interaction_ids: Iterator[Union[int, CommonInteractionId]]) -> bool:
+    @classmethod
+    def has_interactions_running_or_queued(cls, sim_info: SimInfo, interaction_ids: Iterator[Union[int, CommonInteractionId]]) -> bool:
         """has_interactions_running_or_queued(sim_info, interaction_ids)
 
         Determine if a Sim has any of the specified interactions running or in their interaction queue.
@@ -252,14 +261,14 @@ class CommonSimInteractionUtils:
         :return: True, if the Sim has any of the specified interactions running or queued. False, if not.
         :rtype: bool
         """
-        for interaction in CommonSimInteractionUtils.get_queued_or_running_interactions_gen(sim_info):
+        for interaction in cls.get_queued_or_running_interactions_gen(sim_info):
             interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
             if interaction_id in interaction_ids:
                 return True
         return False
 
-    @staticmethod
-    def has_interactions_running(sim_info: SimInfo, interaction_ids: Iterator[int]) -> bool:
+    @classmethod
+    def has_interactions_running(cls, sim_info: SimInfo, interaction_ids: Iterator[int]) -> bool:
         """has_interactions_running(sim_info, interaction_ids)
 
         Determine if a Sim is running any of the specified interactions.
@@ -271,14 +280,14 @@ class CommonSimInteractionUtils:
         :return: True, if the Sim has any of the specified interactions running. False, if not.
         :rtype: bool
         """
-        for interaction in CommonSimInteractionUtils.get_running_interactions_gen(sim_info):
+        for interaction in cls.get_running_interactions_gen(sim_info):
             interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
             if interaction_id in interaction_ids:
                 return True
         return False
 
-    @staticmethod
-    def has_interactions_queued(sim_info: SimInfo, interaction_ids: Iterator[int]) -> bool:
+    @classmethod
+    def has_interactions_queued(cls, sim_info: SimInfo, interaction_ids: Iterator[int]) -> bool:
         """has_interactions_queued(sim_info, interaction_ids)
 
         Determine if a Sim has any of the specified interactions in their interaction queue.
@@ -290,14 +299,14 @@ class CommonSimInteractionUtils:
         :return: True, if the Sim has any of the specified interactions queued. False, if not.
         :rtype: bool
         """
-        for interaction in CommonSimInteractionUtils.get_queued_interactions_gen(sim_info):
+        for interaction in cls.get_queued_interactions_gen(sim_info):
             interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
             if interaction_id in interaction_ids:
                 return True
         return False
 
-    @staticmethod
-    def cancel_all_queued_or_running_interactions(sim_info: SimInfo, cancel_reason: str, finishing_type: FinishingType=FinishingType.USER_CANCEL, include_interaction_callback: Callable[[Interaction], bool]=None, **kwargs) -> bool:
+    @classmethod
+    def cancel_all_queued_or_running_interactions(cls, sim_info: SimInfo, cancel_reason: str, finishing_type: FinishingType=FinishingType.USER_CANCEL, include_interaction_callback: Callable[[Interaction], bool]=None, **kwargs) -> bool:
         """cancel_all_queued_or_running_interactions(sim_info, cancel_reason, finishing_type=FinishingType.USER_CANCEL, include_interaction_callback=None, **kwargs)
 
         Cancel all interactions that a Sim currently has queued or is currently running.
@@ -313,11 +322,11 @@ class CommonSimInteractionUtils:
         :return: True, if all queued and running Interactions that pass the include callback were successfully cancelled. False, if not.
         :rtype: bool
         """
-        return CommonSimInteractionUtils.cancel_all_queued_interactions(sim_info, cancel_reason, finishing_type=finishing_type, include_interaction_callback=include_interaction_callback, **kwargs)\
-               and CommonSimInteractionUtils.cancel_all_running_interactions(sim_info, cancel_reason, finishing_type=finishing_type, include_interaction_callback=include_interaction_callback, **kwargs)
+        return cls.cancel_all_queued_interactions(sim_info, cancel_reason, finishing_type=finishing_type, include_interaction_callback=include_interaction_callback, **kwargs)\
+               and cls.cancel_all_running_interactions(sim_info, cancel_reason, finishing_type=finishing_type, include_interaction_callback=include_interaction_callback, **kwargs)
 
-    @staticmethod
-    def cancel_all_running_interactions(sim_info: SimInfo, cancel_reason: str, finishing_type: FinishingType=FinishingType.USER_CANCEL, include_interaction_callback: Callable[[Interaction], bool]=None, **kwargs) -> bool:
+    @classmethod
+    def cancel_all_running_interactions(cls, sim_info: SimInfo, cancel_reason: str, finishing_type: FinishingType=FinishingType.USER_CANCEL, include_interaction_callback: Callable[[Interaction], bool]=None, **kwargs) -> bool:
         """cancel_all_running_interactions(sim_info, cancel_reason, finishing_type=FinishingType.USER_CANCEL, include_interaction_callback=None, **kwargs)
 
         Cancel all interactions that a Sim is currently running.
@@ -333,12 +342,12 @@ class CommonSimInteractionUtils:
         :return: True, if all running interactions were successfully cancelled. False, if not.
         :rtype: bool
         """
-        for interaction in tuple(CommonSimInteractionUtils.get_running_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)):
+        for interaction in tuple(cls.get_running_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)):
             interaction.cancel(finishing_type, cancel_reason_msg=cancel_reason, **kwargs)
         return True
 
-    @staticmethod
-    def cancel_all_queued_interactions(sim_info: SimInfo, cancel_reason: str, finishing_type: FinishingType=FinishingType.USER_CANCEL, include_interaction_callback: Callable[[Interaction], bool]=None, **kwargs) -> bool:
+    @classmethod
+    def cancel_all_queued_interactions(cls, sim_info: SimInfo, cancel_reason: str, finishing_type: FinishingType=FinishingType.USER_CANCEL, include_interaction_callback: Callable[[Interaction], bool]=None, **kwargs) -> bool:
         """cancel_all_queued_interactions(sim_info, cancel_reason, finishing_type=FinishingType.USER_CANCEL, include_interaction_callback=None, **kwargs)
 
         Cancel all interactions that a Sim currently has queued.
@@ -354,12 +363,12 @@ class CommonSimInteractionUtils:
         :return: True, if all queued interactions were successfully cancelled. False, if not.
         :rtype: bool
         """
-        for interaction in tuple(CommonSimInteractionUtils.get_queued_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)):
+        for interaction in tuple(cls.get_queued_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)):
             interaction.cancel(finishing_type, cancel_reason_msg=cancel_reason, **kwargs)
         return True
 
-    @staticmethod
-    def get_queued_or_running_interactions_gen(sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
+    @classmethod
+    def get_queued_or_running_interactions_gen(cls, sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
         """get_queued_or_running_interactions_gen(sim_info, include_interaction_callback=None)
 
         Retrieve all interactions that a Sim has queued or is currently running.
@@ -371,11 +380,11 @@ class CommonSimInteractionUtils:
         :return: An iterable of all queued or running Interactions that pass the include callback filter.
         :rtype: Iterator[Interaction]
         """
-        yield from CommonSimInteractionUtils.get_queued_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)
-        yield from CommonSimInteractionUtils.get_running_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)
+        yield from cls.get_queued_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)
+        yield from cls.get_running_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)
 
-    @staticmethod
-    def get_running_interactions_gen(sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
+    @classmethod
+    def get_running_interactions_gen(cls, sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
         """get_running_interactions_gen(sim_info, include_interaction_callback=None)
 
         Retrieve all interactions that a Sim is currently running.
@@ -397,8 +406,8 @@ class CommonSimInteractionUtils:
                 continue
             yield interaction
 
-    @staticmethod
-    def get_queued_interactions_gen(sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
+    @classmethod
+    def get_queued_interactions_gen(cls, sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
         """get_queued_interactions_gen(sim_info, include_interaction_callback=None)
 
         Retrieve all interactions that a Sim currently has queued.
@@ -420,8 +429,9 @@ class CommonSimInteractionUtils:
                 continue
             yield interaction
 
-    @staticmethod
+    @classmethod
     def queue_interaction(
+        cls,
         sim_info: SimInfo,
         interaction_id: Union[int, CommonInteractionId],
         social_super_interaction_id: Union[int, CommonInteractionId]=None,
@@ -460,6 +470,7 @@ class CommonSimInteractionUtils:
         :return: The result of pushing the interaction to the queue of a Sim.
         :rtype: EnqueueResult
         """
+        log = cls.get_log()
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None or sim.si_state is None or sim.queue is None or sim.posture_state is None or sim.posture is None:
             if sim is not None:
@@ -471,18 +482,18 @@ class CommonSimInteractionUtils:
         if interaction_instance is None:
             log.format_with_message('No interaction found with id.', id=interaction_id)
             return EnqueueResult.NONE
-        if skip_if_running and CommonSimInteractionUtils.has_interaction_running_or_queued(sim_info, interaction_id):
+        if skip_if_running and cls.has_interaction_running_or_queued(sim_info, interaction_id):
             log.debug('Skipping queue because it is already running.')
             return EnqueueResult.NONE
 
-        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(
+        interaction_context = interaction_context or cls.create_interaction_context(
             sim_info,
             insert_strategy=QueueInsertStrategy.LAST
         )
 
         if CommonInteractionUtils.is_super_interaction(interaction_instance):
             log.debug('Is super.')
-            return CommonSimInteractionUtils.queue_super_interaction(
+            return cls.queue_super_interaction(
                 sim_info,
                 interaction_id,
                 target=target,
@@ -493,7 +504,7 @@ class CommonSimInteractionUtils:
 
         if CommonInteractionUtils.is_social_mixer_interaction(interaction_instance):
             log.debug('Is social mixer')
-            return CommonSimInteractionUtils.queue_social_mixer_interaction(
+            return cls.queue_social_mixer_interaction(
                 sim_info,
                 interaction_id,
                 social_super_interaction_id,
@@ -504,15 +515,16 @@ class CommonSimInteractionUtils:
             )
 
         log.debug('Is mixer')
-        return CommonSimInteractionUtils.queue_mixer_interaction(
+        return cls.queue_mixer_interaction(
             sim_info,
             interaction_id,
             target=target,
             interaction_context=interaction_context
         )
 
-    @staticmethod
+    @classmethod
     def queue_super_interaction(
+        cls,
         sim_info: SimInfo,
         super_interaction_id: Union[int, CommonInteractionId],
         target: Any=None,
@@ -544,6 +556,7 @@ class CommonSimInteractionUtils:
         :return: The result of pushing the interaction to the queue of a Sim.
         :rtype: EnqueueResult
         """
+        log = cls.get_log()
         log.format_with_message('Pushing super interaction', sim=sim_info, interaction_id=super_interaction_id, target=target, interaction_context=interaction_context)
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
@@ -553,7 +566,7 @@ class CommonSimInteractionUtils:
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
             target = CommonSimUtils.get_sim_instance(target)
 
-        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
+        interaction_context = interaction_context or cls.create_interaction_context(sim_info)
         super_interaction_instance = CommonInteractionUtils.load_interaction_by_id(super_interaction_id)
         if super_interaction_instance is None:
             log.format_with_message('No super interaction instance found for id.', super_interaction_id=super_interaction_id)
@@ -570,8 +583,9 @@ class CommonSimInteractionUtils:
             log.format_with_message('Failed to push super interaction.', result=result)
         return result
 
-    @staticmethod
+    @classmethod
     def queue_social_mixer_interaction(
+        cls,
         sim_info: SimInfo,
         social_mixer_interaction_id: Union[int, CommonInteractionId],
         social_super_interaction_id: Union[int, CommonInteractionId],
@@ -607,9 +621,10 @@ class CommonSimInteractionUtils:
         :return: The result of pushing the interaction to the queue of a Sim.
         :rtype: EnqueueResult
         """
+        log = cls.get_log()
         if social_super_interaction_id is not None and social_mixer_interaction_id is None:
             log.format_with_message('Interaction was actually a Super interaction!', sim=sim_info, super_interaction_id=social_super_interaction_id)
-            return CommonSimInteractionUtils.queue_super_interaction(
+            return cls.queue_super_interaction(
                 sim_info,
                 social_super_interaction_id,
                 target=target,
@@ -625,7 +640,7 @@ class CommonSimInteractionUtils:
             log.debug('No social mixer affordance instance found with id.')
             return EnqueueResult.NONE
 
-        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
+        interaction_context = interaction_context or cls.create_interaction_context(sim_info)
         # noinspection PyTypeChecker
         super_affordance_instance = CommonInteractionUtils.load_interaction_by_id(social_super_interaction_id)
         if super_affordance_instance is None:
@@ -644,7 +659,7 @@ class CommonSimInteractionUtils:
             log.debug('No super affordance found with id.')
             super_interaction = _get_existing_social_super_interaction(sim.si_state) or _get_existing_social_super_interaction(sim.queue)
             if super_interaction is None:
-                si_result = CommonSimInteractionUtils.queue_interaction(
+                si_result = cls.queue_interaction(
                     sim_info,
                     social_super_interaction_id,
                     target=target,
@@ -690,8 +705,9 @@ class CommonSimInteractionUtils:
             log.format_with_message('Failed to queue social mixer interaction', result=result)
         return result
 
-    @staticmethod
+    @classmethod
     def queue_mixer_interaction(
+        cls,
         sim_info: SimInfo,
         mixer_interaction_id: Union[int, CommonInteractionId],
         target: Any=None,
@@ -719,6 +735,7 @@ class CommonSimInteractionUtils:
         :return: The result of pushing the interaction to the queue of a Sim.
         :rtype: EnqueueResult
         """
+        log = cls.get_log()
         log.format_with_message(
             'Attempting to queue mixer interaction.',
             sim=sim_info,
@@ -757,7 +774,7 @@ class CommonSimInteractionUtils:
             return EnqueueResult.NONE
 
         super_interaction_instance = source_interaction.super_affordance
-        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
+        interaction_context = interaction_context or cls.create_interaction_context(sim_info)
         for (aop, test_result) in get_valid_aops_gen(
             target,
             mixer_interaction_instance,
@@ -781,8 +798,9 @@ class CommonSimInteractionUtils:
             log.format_with_message('Executing interaction using Aop.', aop=aop, affordance=aop.affordance)
             return aop.execute(interaction_context, **kwargs)
 
-    @staticmethod
+    @classmethod
     def test_interaction(
+        cls,
         sim_info: SimInfo,
         interaction_id: Union[int, CommonInteractionId],
         social_super_interaction_id: Union[int, CommonInteractionId]=None,
@@ -819,6 +837,7 @@ class CommonSimInteractionUtils:
         :return: The result of testing a push of the interaction to the queue of a Sim.
         :rtype: TestResult
         """
+        log = cls.get_log()
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None or sim.si_state is None or sim.queue is None or sim.posture_state is None or sim.posture is None:
             if sim is not None:
@@ -831,14 +850,14 @@ class CommonSimInteractionUtils:
             log.format_with_message('No interaction found with id.', id=interaction_id)
             return TestResult.NONE
 
-        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(
+        interaction_context = interaction_context or cls.create_interaction_context(
             sim_info,
             insert_strategy=QueueInsertStrategy.LAST
         )
 
         if CommonInteractionUtils.is_super_interaction(interaction_instance):
             log.debug('Is super.')
-            return CommonSimInteractionUtils.test_super_interaction(
+            return cls.test_super_interaction(
                 sim_info,
                 interaction_id,
                 target=target,
@@ -849,7 +868,7 @@ class CommonSimInteractionUtils:
 
         if CommonInteractionUtils.is_social_mixer_interaction(interaction_instance):
             log.debug('Is social mixer')
-            return CommonSimInteractionUtils.test_social_mixer_interaction(
+            return cls.test_social_mixer_interaction(
                 sim_info,
                 interaction_id,
                 social_super_interaction_id,
@@ -860,15 +879,16 @@ class CommonSimInteractionUtils:
             )
 
         log.debug('Is mixer')
-        return CommonSimInteractionUtils.test_mixer_interaction(
+        return cls.test_mixer_interaction(
             sim_info,
             interaction_id,
             target=target,
             interaction_context=interaction_context
         )
 
-    @staticmethod
+    @classmethod
     def test_super_interaction(
+        cls,
         sim_info: SimInfo,
         super_interaction_id: Union[int, CommonInteractionId],
         target: Any=None,
@@ -900,6 +920,7 @@ class CommonSimInteractionUtils:
         :return: The result of testing a push of the interaction to the queue of a Sim.
         :rtype: TestResult
         """
+        log = cls.get_log()
         log.format_with_message('Testing super interaction', sim=sim_info, interaction_id=super_interaction_id, target=target, interaction_context=interaction_context)
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
@@ -914,7 +935,7 @@ class CommonSimInteractionUtils:
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
             target = CommonSimUtils.get_sim_instance(target)
 
-        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
+        interaction_context = interaction_context or cls.create_interaction_context(sim_info)
 
         return sim.test_super_affordance(
             super_interaction_instance,
@@ -924,8 +945,9 @@ class CommonSimInteractionUtils:
             **kwargs
         )
 
-    @staticmethod
+    @classmethod
     def test_social_mixer_interaction(
+        cls,
         sim_info: SimInfo,
         social_mixer_interaction_id: Union[int, CommonInteractionId],
         social_super_interaction_id: Union[int, CommonInteractionId],
@@ -961,9 +983,10 @@ class CommonSimInteractionUtils:
         :return: The result of testing a push of the interaction to the queue of a Sim.
         :rtype: TestResult
         """
+        log = cls.get_log()
         if social_super_interaction_id is not None and social_mixer_interaction_id is None:
             log.format_with_message('Interaction was actually a Super interaction!', sim=sim_info, super_interaction_id=social_super_interaction_id)
-            return CommonSimInteractionUtils.queue_super_interaction(
+            return cls.queue_super_interaction(
                 sim_info,
                 social_super_interaction_id,
                 target=target,
@@ -979,7 +1002,7 @@ class CommonSimInteractionUtils:
             log.debug('No social mixer affordance instance found with id.')
             return EnqueueResult.NONE
 
-        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
+        interaction_context = interaction_context or cls.create_interaction_context(sim_info)
         # noinspection PyTypeChecker
         super_affordance_instance = CommonInteractionUtils.load_interaction_by_id(social_super_interaction_id)
         if super_affordance_instance is None:
@@ -998,7 +1021,7 @@ class CommonSimInteractionUtils:
             log.debug('No super affordance found with id.')
             super_interaction = _get_existing_social_super_interaction(sim.si_state) or _get_existing_social_super_interaction(sim.queue)
             if super_interaction is None:
-                si_result = CommonSimInteractionUtils.queue_interaction(
+                si_result = cls.queue_interaction(
                     sim_info,
                     social_super_interaction_id,
                     target=target,
@@ -1041,8 +1064,9 @@ class CommonSimInteractionUtils:
         )
         return aop.test(interaction_context)
 
-    @staticmethod
+    @classmethod
     def test_mixer_interaction(
+        cls,
         sim_info: SimInfo,
         mixer_interaction_id: Union[int, CommonInteractionId],
         target: Any=None,
@@ -1070,6 +1094,7 @@ class CommonSimInteractionUtils:
         :return: The result of testing a push of the interaction to the queue of a Sim.
         :rtype: TestResult
         """
+        log = cls.get_log()
         log.format_with_message(
             'Attempting to test mixer interaction.',
             sim=sim_info,
@@ -1108,7 +1133,7 @@ class CommonSimInteractionUtils:
             return TestResult.NONE
 
         super_interaction_instance = source_interaction.super_affordance
-        interaction_context = interaction_context or CommonSimInteractionUtils.create_interaction_context(sim_info)
+        interaction_context = interaction_context or cls.create_interaction_context(sim_info)
         for (aop, test_result) in get_valid_aops_gen(
             target,
             mixer_interaction_instance,
@@ -1132,8 +1157,9 @@ class CommonSimInteractionUtils:
             log.format_with_message('Executing interaction using Aop.', aop=aop, affordance=aop.affordance)
             return aop.test(interaction_context, **kwargs)
 
-    @staticmethod
+    @classmethod
     def create_interaction_context(
+        cls,
         sim_info: SimInfo,
         interaction_source: InteractionSource=InteractionContext.SOURCE_SCRIPT_WITH_USER_INTENT,
         priority: Priority=Priority.High,
@@ -1183,24 +1209,32 @@ class CommonSimInteractionUtils:
         )
 
 
-@Command('s4clib.show_running_interactions', command_type=CommandType.Live)
-def _common_show_running_interactions(opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    sim = get_optional_target(opt_sim, _connection)
-    sim_info = CommonSimUtils.get_sim_info(sim)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.print_running_interactions',
+    'Print a list of all interactions a Sim is running.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance Id or name of the Sim to check.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib_testing.printrunninginteractions',
+    )
+)
+def _common_show_running_interactions(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Showing running and queued interactions of Sim {}'.format(sim_name))
+    log = CommonSimInteractionUtils.get_log()
     try:
+        log.enable()
+        output(f'Attempting to print all running and queued interactions of Sim {sim_info}')
         from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
         running_interaction_strings: List[str] = list()
         for interaction in CommonSimInteractionUtils.get_running_interactions_gen(sim_info):
             interaction_name = CommonInteractionUtils.get_interaction_short_name(interaction) or interaction.__class__.__name__
             interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
-            running_interaction_strings.append('{} ({})'.format(interaction_name, interaction_id))
+            running_interaction_strings.append(f'{interaction_name} ({interaction_id})')
+
         running_interaction_strings = sorted(running_interaction_strings, key=lambda x: x)
         running_interaction_names = ', '.join(running_interaction_strings)
 
@@ -1208,18 +1242,21 @@ def _common_show_running_interactions(opt_sim: OptionalTargetParam=None, _connec
         for interaction in CommonSimInteractionUtils.get_queued_interactions_gen(sim_info):
             interaction_name = CommonInteractionUtils.get_interaction_short_name(interaction) or interaction.__class__.__name__
             interaction_id = CommonInteractionUtils.get_interaction_id(interaction)
-            queued_interaction_strings.append('{} ({})'.format(interaction_name, interaction_id))
+            queued_interaction_strings.append(f'{interaction_name} ({interaction_id})')
+
         queued_interaction_strings = sorted(queued_interaction_strings, key=lambda x: x)
         queued_interaction_names = ', '.join(queued_interaction_strings)
         text = ''
-        text += 'Running Interactions:\n{}\n\n'.format(running_interaction_names)
-        text += 'Queued Interactions:\n{}\n\n'.format(queued_interaction_names)
+        text += f'Running Interactions:\n{running_interaction_names}\n\n'
+        text += f'Queued Interactions:\n{queued_interaction_names}\n\n'
+        sim_id = CommonSimUtils.get_sim_id(sim_info)
+        log.debug(f'{sim_info} Interactions ({sim_id})')
+        log.debug(text)
         CommonBasicNotification(
-            CommonLocalizationUtils.create_localized_string('{} Running and Queued Interactions ({})'.format(sim_name, CommonSimUtils.get_sim_id(sim_info))),
+            CommonLocalizationUtils.create_localized_string(f'{sim_info} Interactions ({sim_id})'),
             CommonLocalizationUtils.create_localized_string(text)
         ).show(
             icon=IconInfoData(obj_instance=CommonSimUtils.get_sim_instance(sim_info))
         )
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show running or queued interactions of Sim {}.'.format(sim_name), exception=ex)
-        output('Failed to show running or queued interactions of Sim {}. {}'.format(sim_name, str(ex)))
+    finally:
+        log.disable()

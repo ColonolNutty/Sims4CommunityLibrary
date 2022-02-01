@@ -7,25 +7,24 @@ Copyright (c) COLONOLNUTTY
 """
 import services
 from typing import List, Callable, Dict, Tuple
-from server_commands.argument_helpers import OptionalTargetParam
 from sims.occult.occult_enums import OccultType
 from sims.outfits.outfit_enums import OutfitCategory, BodyType
 from sims.sim_info import SimInfo
-from sims4.commands import CheatOutput, CommandType, Command
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
 from sims4communitylib.events.sim.events.sim_set_current_outfit import S4CLSimSetCurrentOutfitEvent
 from sims4communitylib.events.zone_spin.events.zone_late_load import S4CLZoneLateLoadEvent
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
 from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
-from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_spawn_utils import CommonSimSpawnUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
@@ -232,9 +231,8 @@ class CommonEditSimCloneInCASService(CommonService, HasLog):
         from sims.outfits.outfit_tracker import OutfitTrackerMixin
         outfits: OutfitTrackerMixin = sim_info.get_outfits()
         current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
-        from sims.outfits.outfit_utils import get_maximum_outfits_for_category
         for outfit_category in CommonOutfitUtils.get_all_outfit_categories():
-            for outfit_index in range(get_maximum_outfits_for_category(outfit_category)):
+            for outfit_index in range(CommonOutfitUtils.get_maximum_number_of_outfits_for_category(outfit_category)):
                 outfit = (outfit_category, outfit_index)
                 if outfit_category in (self._outfit_category_and_index[0], OutfitCategory.BATHING, OutfitCategory.SPECIAL) and outfit_index == 0:
                     self.log.format_with_message('Skipping first outfit.', sim=sim_info, outfit=outfit)
@@ -249,19 +247,22 @@ class CommonEditSimCloneInCASService(CommonService, HasLog):
         CommonOutfitUtils.set_current_outfit(sim_info, current_outfit)
 
 
-@Command('s4clib.modify_sim_clone', command_type=CommandType.Live)
-def _s4clib_modify_sim_clone(opt_sim: OptionalTargetParam=None, _connection: int=None):
-    output = CheatOutput(_connection)
-    from server_commands.argument_helpers import get_optional_target
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.modify_sim_clone',
+    'Create a Clone of a Sim and open CAS to modify them.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to create and modify a clone of.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.modifysimclone',
+    )
+)
+def _s4clib_modify_sim_clone(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     if sim_info is None:
-        output('ERROR: No Sim was specified or the specified Sim was not found!')
         return
-    output('Opening Sim clone for Sim \'{}\''.format(CommonSimNameUtils.get_full_name(sim_info)))
-    try:
-        CommonEditSimCloneInCASService().modify_sim_clone_for_sim(sim_info)
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred while opening Sim clone for Sim \'{}\''.format(CommonSimNameUtils.get_full_name(sim_info)), exception=ex)
+    output(f'Modifying a clone of Sim \'{sim_info}\' in CAS.')
+    CommonEditSimCloneInCASService().modify_sim_clone_for_sim(sim_info)
     output('Done')
 
 

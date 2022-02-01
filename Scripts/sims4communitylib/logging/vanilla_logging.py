@@ -7,10 +7,11 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Any
 
-from sims4.commands import Command, CommandType, CheatOutput
 from sims4.log import Logger
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.s4cl_configuration import S4CLConfiguration
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry, CommonLog
@@ -87,20 +88,38 @@ class _CommonVanillaLogOverride(CommonService):
         _log.error(to_log_message + ' (This exception is not caused by S4CL, but rather caught)', exception=exc, throw=True)
 
 
-@Command('s4clib.enable_vanilla_logs', command_type=CommandType.Live)
-def _common_enable_vanilla_logs(_connection: int=None):
-    output = CheatOutput(_connection)
-    output('Enabling vanilla logs.')
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.enable_vanilla_logs',
+    'Enable the Vanilla Logs. Vanilla Logs are useful for discovering previously unknown exceptions and messages being logged by the game itself. Vanilla logs appear under "The Sims 4/mod_logs/vanilla_logs"',
+    command_aliases=(
+        's4clib.enablevanillalogs',
+    )
+)
+def _common_enable_vanilla_logs(output: CommonConsoleCommandOutput):
+    output('Enabling the Vanilla Logs.')
+    if _CommonVanillaLogOverride().logs_enabled:
+        output('The Vanilla Logs are already enabled.')
+        return
     _CommonVanillaLogOverride().enable_logs()
-    output('Done')
+    output('Vanilla Logs are now enabled.')
 
 
-@Command('s4clib.disable_vanilla_logs', command_type=CommandType.Live)
-def _common_disable_vanilla_logs(_connection: int=None):
-    output = CheatOutput(_connection)
-    output('Disabling vanilla logs.')
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.disable_vanilla_logs',
+    'Disable the Vanilla Logs.',
+    command_aliases=(
+        's4clib.disablevanillalogs',
+    )
+)
+def _common_disable_vanilla_logs(output: CommonConsoleCommandOutput):
+    output('Disabling the Vanilla Logs.')
+    if not _CommonVanillaLogOverride().logs_enabled:
+        output('The Vanilla Logs are already disabled.')
+        return
     _CommonVanillaLogOverride().disable_logs()
-    output('Done')
+    output('Vanilla Logs are now disabled.')
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, 'log', handle_exceptions=False)

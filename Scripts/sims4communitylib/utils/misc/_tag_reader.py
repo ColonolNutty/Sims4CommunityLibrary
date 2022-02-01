@@ -5,7 +5,9 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4.commands import Command, CommandType, CheatOutput
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from tag import Tag
 
 
@@ -4300,9 +4302,8 @@ class _S4CLReaderForUpdate:
     }
 
 
-@Command('s4clib_dev.log_game_tags', command_type=CommandType.Live)
-def _common_log_game_tags_ready_for_update(_connection: int=None) -> None:
-    output = CheatOutput(_connection)
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib_dev.log_game_tags', 'Logs a list of game tags and game tag values for easy transfer to CommonGameTag', show_with_help_command=False)
+def _common_log_game_tags_ready_for_update(output: CommonConsoleCommandOutput) -> None:
     output('Logging Game Tags to Messages.txt')
     from sims4communitylib.enums.tags_enum import CommonGameTag
     from sims4communitylib.utils.misc._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils

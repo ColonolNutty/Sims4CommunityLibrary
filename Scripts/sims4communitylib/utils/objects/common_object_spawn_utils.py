@@ -9,16 +9,18 @@ import random
 
 import objects.system
 from objects.object_enums import ItemLocation
-from sims4.commands import Command, CommandType, CheatOutput
+from sims.sim_info import SimInfo
 from typing import Any, Callable, Union, Tuple, Iterator
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_transform import CommonTransform
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from carry.carry_postures import CarryingObject
 from objects.game_object import GameObject
 from objects.object_enums import ResetReason
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 
 
 class CommonObjectSpawnUtils:
@@ -284,64 +286,58 @@ class CommonObjectSpawnUtils:
         game_object.fade_out(fade_duration=fade_duration, immediate=immediate, additional_channels=additional_channels)
 
 
-@Command('s4clib.spawn_object', command_type=CommandType.Live)
-def _common_spawn_object(object_definition_id: str='20359', _connection: int=None):
-    output = CheatOutput(_connection)
-    # noinspection PyBroadException
-    try:
-        object_definition_id = int(object_definition_id)
-    except Exception:
-        output('ERROR: object_definition_id must be a number.')
-        return
-    if object_definition_id < 0:
-        output('ERROR: object_definition_id must be a positive number.')
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.spawn_object',
+    'Spawn a Game Object at the feet of a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('object_definition_id', 'Decimal Identifier', 'The decimal identifier of the Object Definition for the object to spawn.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to spawn the object at.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.spawnobject',
+    )
+)
+def _common_spawn_object(output: CommonConsoleCommandOutput, object_definition_id: int, sim_info: SimInfo=None):
+    if object_definition_id <= 0:
+        output('ERROR: object_definition_id must be a positive number above zero.')
         return
     output('Attempting to spawn object on the current lot with id \'{}\'.'.format(object_definition_id))
     from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
-    from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
     from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
-    active_sim_info = CommonSimUtils.get_active_sim_info()
-    location = CommonSimLocationUtils.get_location(active_sim_info)
-    try:
-        game_object = CommonObjectSpawnUtils.spawn_object_on_lot(object_definition_id, location)
-        if game_object is None:
-            output('ERROR: Failed to spawn object.')
-        else:
-            output('Object spawned successfully. Can you see it? Object Id: {}'.format(CommonObjectUtils.get_object_id(game_object)))
-    except Exception as ex:
-        output('ERROR: A problem occurred while attempting to spawn the object. {}'.format(object_definition_id))
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to spawn object. {}'.format(object_definition_id), exception=ex)
-    output('Done spawning object.')
+    sim_location = CommonSimLocationUtils.get_location(sim_info)
+    game_object = CommonObjectSpawnUtils.spawn_object_on_lot(object_definition_id, sim_location)
+    if game_object is not None:
+        game_object_id = CommonObjectUtils.get_object_id(game_object)
+        output(f'SUCCESS: Object {game_object} spawned successfully. Can you see it? Object Id: {game_object_id}')
+    else:
+        output(f'ERROR: Failed to spawn object with definition id {object_definition_id}.')
+    output(f'Done spawning object {game_object}.')
 
 
-@Command('s4clib.destroy_object', command_type=CommandType.Live)
-def _common_destroy_object(object_id: str='20359', _connection: int=None):
-    output = CheatOutput(_connection)
-    # noinspection PyBroadException
-    try:
-        object_id = int(object_id)
-    except Exception:
-        output('ERROR: object_id must be a number.')
-        return
-    if object_id < 0:
-        output('ERROR: object_id must be a positive number.')
-        return
-    output('Attempting to destroy object with id \'{}\'.'.format(object_id))
-    from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
-    game_object = CommonObjectUtils.get_game_object(object_id)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.destroy_object',
+    'Destroy/Delete a game object.',
+    command_arguments=(
+        CommonConsoleCommandArgument('game_object', 'Game Object Instance Id', 'The instance id of a game object to destroy/delete.'),
+    ),
+    command_aliases=(
+        's4clib.destroyobject',
+    )
+)
+def _common_destroy_object(output: CommonConsoleCommandOutput, game_object: GameObject):
     if game_object is None:
-        output('ERROR: No object was found with id \'{}\''.format(object_id))
         return
-    output('Object found, attempting to destroy it. {}'.format(game_object))
-    try:
-        def _on_destroyed() -> None:
-            output('Object successfully destroyed.')
+    game_object_str = str(game_object)
+    output(f'Attempting to destroy object \'{game_object_str}\'.')
 
-        if CommonObjectSpawnUtils.schedule_object_for_destroy(game_object, source='S4CL Command', cause='S4CL Command', on_destroyed=_on_destroyed):
-            output('Successfully scheduled the object for destruction. Please wait.')
-        else:
-            output('ERROR: Failed to schedule the object for destruction.')
-    except Exception as ex:
-        output('ERROR: A problem occurred while attempting to destroy the object. {}'.format(object_id))
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to destroy object. {}'.format(object_id), exception=ex)
-    output('Done destroying object.')
+    def _on_destroyed() -> None:
+        output(f'SUCCESS: Object {game_object_str} successfully destroyed.')
+
+    if CommonObjectSpawnUtils.schedule_object_for_destroy(game_object, source='S4CL Command', cause='S4CL Command', on_destroyed=_on_destroyed):
+        output(f'Successfully scheduled object {game_object} for destruction. Please wait.')
+    else:
+        output(f'FAILED: Failed to schedule object {game_object} for destruction.')
+    output(f'Done destroying or scheduling the destruction of object {game_object}.')

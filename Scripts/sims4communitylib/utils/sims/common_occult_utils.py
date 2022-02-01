@@ -7,17 +7,17 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Iterator, Tuple, Union
 
-from server_commands.argument_helpers import OptionalTargetParam
 from sims.occult.occult_enums import OccultType
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
-from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.common_occult_type import CommonOccultType
 from sims4communitylib.enums.traits_enum import CommonTraitId
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.sims.common_sim_loot_action_utils import CommonSimLootActionUtils
-from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 try:
@@ -899,103 +899,166 @@ class CommonOccultUtils:
         return sim_info.occult_types
 
 
-@Command('s4clib.switch_sim_to_occult', command_type=CommandType.Live)
-def _common_switch_sim_to_occult(occult_type_str: str, opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    output('Attempting to switch Sim to the specified occult.')
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.switch_sim_to_occult',
+    'Switch a Sim to an Occult form (If they have it)',
+    command_arguments=(
+        CommonConsoleCommandArgument('occult_type', 'CommonOccultType', f'The name of an Occult Type to switch the form of the Sim to. Valid Values: {CommonOccultType.get_comma_separated_names_string()}'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance Id or name of the Sim that will switch forms.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.switchsimtooccult',
+        's4clib.switchoccult',
+        's4clib.switch_occult',
+        's4clib.switch_occult_type',
+        's4clib.switchocculttype'
+    )
+)
+def _common_switch_sim_to_occult(output: CommonConsoleCommandOutput, occult_type: CommonOccultType, sim_info: SimInfo=None):
     if sim_info is None:
-        output('FAILED: No Sim was specified or the specified Sim was not found!')
         return
-    occult_type = CommonResourceUtils.get_enum_by_name(occult_type_str.upper(), OccultType, default_value=-1)
-    if occult_type == -1:
-        output('FAILED: The specified occult type is not a valid occult type, it was "{}"'.format(occult_type_str))
+    if occult_type is None:
         return
+    occult_type_name = occult_type.name
+    output(f'Attempting to switch Sim {sim_info} to their {occult_type_name} form.')
     if CommonOccultUtils.switch_to_occult_form(sim_info, occult_type):
-        output('SUCCESS: Switched the Sim to the specified occult.')
+        output(f'SUCCESS: Successfully switched Sim {sim_info} to their {occult_type_name} form.')
     else:
-        output('FAILED: Failed to switch Sim to the specified occult.')
+        output(f'FAILED: Failed to switch Sim {sim_info} to their {occult_type_name} form.')
 
 
-@Command('s4clib.add_occult_to_sim', command_type=CommandType.Live)
-def _common_add_occult_to_sim(occult_type_str: str, opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    output('Attempting to add the specified occult to Sim.')
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.add_occult_to_sim',
+    'Add an Occult Type to a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('occult_type', 'CommonOccultType', f'The name of an Occult Type to add to the Sim. Valid Values: {CommonOccultType.get_comma_separated_names_string()}'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance Id or name of the Sim to add the occult to.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.addocculttosim',
+        's4clib.add_occult',
+        's4clib.addoccult',
+        's4clib.add_occult_type',
+        's4clib.addocculttype',
+    )
+)
+def _common_add_occult_to_sim(output: CommonConsoleCommandOutput, occult_type: CommonOccultType, sim_info: SimInfo=None):
     if sim_info is None:
-        output('FAILED: no Sim was specified or the specified Sim was not found!')
         return
-    occult_type = CommonResourceUtils.get_enum_by_name(occult_type_str.upper(), CommonOccultType, default_value=CommonOccultType.NONE)
-    if occult_type == CommonOccultType.NONE:
-        output('FAILED: The specified occult type is not a valid occult type, it was "{}"'.format(occult_type_str))
+    if occult_type is None:
         return
+    occult_type_name = occult_type.name
+    output(f'Attempting to add occult {occult_type_name} to Sim {sim_info}')
     if CommonOccultUtils.add_occult(sim_info, occult_type):
-        output('SUCCESS: Successfully added occult to Sim.')
+        output(f'SUCCESS: Successfully added occult {occult_type_name} to Sim {sim_info}.')
     else:
-        output('FAILED: Failed to add occult to Sim.')
+        output(f'FAILED: Failed to add occult {occult_type_name} to Sim {sim_info}.')
 
 
-@Command('s4clib.remove_occult_from_sim', command_type=CommandType.Live)
-def _common_remove_occult_from_sim(occult_type_str: str, opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    output('Attempting to remove the specified occult from Sim.')
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.remove_occult_from_sim',
+    'Remove an Occult Type from a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('occult_type', 'CommonOccultType', f'The name of an Occult Type to remove from the Sim. Valid Values: {CommonOccultType.get_comma_separated_names_string()}'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance Id or name of the Sim to remove the occult from.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.removeoccultfromsim',
+        's4clib.remove_occult',
+        's4clib.removeoccult',
+        's4clib.remove_occult_type',
+        's4clib.removeocculttype',
+    )
+)
+def _common_remove_occult_from_sim(output: CommonConsoleCommandOutput, occult_type: CommonOccultType, sim_info: SimInfo=None):
     if sim_info is None:
-        output('FAILED: No Sim was specified or the specified Sim was not found!')
         return
-    occult_type = CommonResourceUtils.get_enum_by_name(occult_type_str.upper(), CommonOccultType, default_value=CommonOccultType.NONE)
-    if occult_type == CommonOccultType.NONE:
-        output('FAILED: The specified occult type is not a valid occult type, it was "{}"'.format(occult_type_str))
+    if occult_type is None:
         return
+    occult_type_name = occult_type.name
+    output(f'Attempting to remove occult {occult_type_name} from Sim {sim_info}')
     if CommonOccultUtils.remove_occult(sim_info, occult_type):
-        output('SUCCESS: Successfully removed occult type.')
+        output(f'SUCCESS: Successfully removed occult {occult_type_name} from Sim {sim_info}.')
     else:
-        output('FAILED: Failed to remove occult type.')
+        output(f'FAILED: Failed to remove occult {occult_type_name} from Sim {sim_info}.')
 
 
-@Command('s4clib.remove_all_occults_from_sim', command_type=CommandType.Live)
-def _common_remove_all_occults_from_sim(opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    output('Attempting to remove all occults from Sim.')
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.remove_all_occults_from_sim',
+    'Remove all Occult Types from a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance Id or name of the Sim to remove the occult types from.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.removealloccultsfromsim',
+        's4clib.remove_all_occults',
+        's4clib.removealloccults',
+        's4clib.remove_all_occult_types',
+        's4clib.removeallocculttypes',
+    )
+)
+def _common_remove_all_occults_from_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     if sim_info is None:
-        output('FAILED: no Sim was specified or the specified Sim was not found!')
         return
+    output(f'Attempting to remove all occult types from Sim {sim_info}.')
     if CommonOccultUtils.remove_all_occults(sim_info):
-        output('SUCCESS: Successfully removed all occults from the Sim.')
+        output(f'SUCCESS: Successfully removed all occult types from Sim {sim_info}.')
     else:
-        output('FAILED: Failed to remove all occults from the Sim.')
+        output(f'FAILED: Failed to remove all occult types from Sim {sim_info}.')
 
 
-@Command('s4clib.print_vanilla_occult_types', command_type=CommandType.Live)
-def _common_print_vanilla_occult_types_for_sim(opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.print_vanilla_occults',
+    'Print a list of all vanilla OccultType values a Sim has.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance Id or name of the Sim to print the occult types of.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.printvanillaoccults',
+    )
+)
+def _common_print_vanilla_occult_types_for_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     if sim_info is None:
-        output('FAILED: no Sim was specified or the specified Sim was not found!')
         return
-    output('Occult Types: {}'.format(CommonOccultUtils._get_occult_types(sim_info)))
-    output('Current Occult Types: {}'.format(CommonOccultUtils.get_current_occult_type(sim_info)))
+    occult_types_str = ', '.join([occult_type.name if hasattr(occult_type, 'name') else str(occult_type) for occult_type in CommonOccultUtils._get_occult_types(sim_info)])
+    output(f'Occult Types: {occult_types_str}')
+    current_occult_types_str = ', '.join([occult_type.name if hasattr(occult_type, 'name') else str(occult_type) for occult_type in CommonOccultUtils.get_current_occult_type(sim_info)])
+    output(f'Current Occult Types: {current_occult_types_str}')
 
 
-@Command('s4clib.print_occult_sim_infos', command_type=CommandType.Live)
-def _common_print_occult_sim_info(opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.print_occult_sim_infos',
+    'Print information about the Occult Sim Infos of a Sim for each occult type they have.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance Id or name of the Sim to check.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib_testing.printoccultsiminfos',
+    )
+)
+def _common_print_occult_sim_infos(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     if sim_info is None:
-        output('FAILED: no Sim was specified or the specified Sim was not found!')
         return
+    output(f'Attempting to print Occult Information for Sim {sim_info}')
     for occult_type in OccultType.values:
+        occult_type_name = occult_type.name
         occult_sim_info = CommonOccultUtils.get_occult_sim_info(sim_info, occult_type)
         if occult_sim_info is None:
-            output('Occult Sim Info[{}]: None'.format(occult_type.name))
+            output(f'Occult Sim Info[{occult_type_name}]: None')
             continue
+        occult_sim_id = CommonSimUtils.get_sim_id(occult_sim_info)
         obj_type_acronym = 'UnknownType'
         if CommonTypeUtils.is_sim_info(occult_sim_info):
             obj_type_acronym = 'SI'
@@ -1005,6 +1068,7 @@ def _common_print_occult_sim_info(opt_sim: OptionalTargetParam=None, _connection
             obj_type_acronym = 'SIBW'
         from sims4communitylib.utils.sims.common_sim_type_utils import CommonSimTypeUtils
         sim_types = tuple(CommonSimTypeUtils.get_all_sim_types_gen(occult_sim_info, combine_teen_young_adult_and_elder_age=False, combine_child_dog_types=False))
+        sim_types_str = ', '.join([sim_type.name for sim_type in sim_types])
         current_sim_type = CommonSimTypeUtils.determine_sim_type(occult_sim_info, combine_teen_young_adult_and_elder_age=False, combine_child_dog_types=False, use_current_occult_type=True)
-        output('Occult Sim Info [{}]: {} ({}, ({}), C:{}) [{}]'.format(occult_type.name, CommonSimNameUtils.get_full_name(occult_sim_info), str(CommonSimUtils.get_sim_id(occult_sim_info)), ', '.join([sim_type.name for sim_type in sim_types]), current_sim_type.name, obj_type_acronym))
-    output('Done')
+        current_sim_type_name = current_sim_type.name
+        output(f'Occult Sim Info [{occult_type_name}]: {occult_sim_info} ({occult_sim_id}, ({sim_types_str}), C:{current_sim_type_name}) [{obj_type_acronym}]')

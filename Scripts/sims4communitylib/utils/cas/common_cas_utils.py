@@ -6,32 +6,25 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-from typing import Tuple, Union, Any, Iterator
+from typing import Tuple, Union, Iterator
 
 from sims4communitylib.dtos.common_cas_part import CommonCASPart
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
 # ReadTheDocs
-from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
-from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 if not ON_RTD:
-    from server_commands.argument_helpers import OptionalTargetParam
     from sims.outfits.outfit_enums import OutfitCategory, BodyType
     from sims.sim_info import SimInfo
-    from sims4.commands import Command, CheatOutput, CommandType
 else:
-    # noinspection PyMissingOrEmptyDocstring
-    class OptionalTargetParam:
-        pass
-
     # noinspection PyMissingOrEmptyDocstring
     class OutfitCategory:
         pass
@@ -42,18 +35,6 @@ else:
 
     # noinspection PyMissingOrEmptyDocstring
     class SimInfo:
-        pass
-
-    # noinspection PyMissingOrEmptyDocstring
-    class Command:
-        pass
-
-    # noinspection PyMissingOrEmptyDocstring
-    class CheatOutput:
-        pass
-
-    # noinspection PyMissingOrEmptyDocstring
-    class CommandType:
         pass
 
 log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 's4cl_common_cas_utils')
@@ -366,24 +347,30 @@ class CommonCASUtils:
 
 
 if not ON_RTD:
-    @Command('s4clib.attach_cas_part', command_type=CommandType.Live)
-    def _s4clib_attach_cas_part(cas_part_id: int, body_type_str: str='any', opt_sim: OptionalTargetParam=None, _connection: Any=None):
-        from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
-        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-        from server_commands.argument_helpers import get_optional_target
-        output = CheatOutput(_connection)
+    @CommonConsoleCommand(
+        ModInfo.get_identity(),
+        's4clib.attach_cas_part',
+        'Attach a CAS Part to a Sim. This is a permanent change to their current outfit!',
+        command_arguments=(
+            CommonConsoleCommandArgument('cas_part_id', 'Decimal Identifier', 'The decimal identifier of the CAS Part to attach.'),
+            CommonConsoleCommandArgument('body_type', 'Body Type Name or Number', 'The body type to attach the CAS Part to. If not specified the body type of the CAS Part itself will be used.', is_optional=True, default_value='CAS Part Default Body Type'),
+            CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to attach the CAS Part to.', is_optional=True, default_value='Active Sim')
+        ),
+        command_aliases=(
+            's4clib.attachcaspart',
+        )
+    )
+    def _s4clib_attach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int, body_type_str: str='any', sim_info: SimInfo=None):
+        if sim_info is None:
+            return
         if cas_part_id < 0:
-            output('ERROR: cas_part_id must be a positive number.')
+            output('ERROR: CAS Part must be a positive number.')
             return
         if not CommonCASUtils.is_cas_part_loaded(cas_part_id):
-            output('ERROR: No cas part was found with id: {}'.format(cas_part_id))
-            return
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
-        if sim_info is None:
-            output('Failed, no Sim was specified or the specified Sim was not found!')
+            output(f'ERROR: No CAS Part was found with id: {cas_part_id}')
             return
         if body_type_str is None:
-            output('No body_type specified.')
+            output('ERROR: No Body Type specified.')
             return
         if body_type_str == 'any':
             body_type = BodyType.NONE
@@ -391,42 +378,46 @@ if not ON_RTD:
             try:
                 body_type = int(body_type_str)
             except ValueError:
-                output('Specified body type is neither a number nor a body type name {}'.format(body_type_str))
+                output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
                 return
         else:
             body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
             if body_type == BodyType.NONE:
-                output('Specified body type is not a body type, it was "{}"'.format(body_type_str))
+                output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
                 return
 
-        output('Attempting to attach CAS Part \'{}\' to Sim \'{}\''.format(cas_part_id, CommonSimNameUtils.get_full_name(sim_info)))
-        try:
-            if CommonCASUtils.attach_cas_part_to_sim(sim_info, cas_part_id, body_type=body_type):
-                output('CAS Part attached to Sim {} successfully.'.format(CommonSimNameUtils.get_full_name(sim_info)))
-        except Exception as ex:
-            output('An error occurred while trying to attach the CAS Part!')
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to attach a CAS Part to a Sim.', exception=ex)
+        output(f'Attempting to attach CAS Part \'{cas_part_id}\' to Sim {sim_info} at body location {body_type}')
+        if CommonCASUtils.attach_cas_part_to_sim(sim_info, cas_part_id, body_type=body_type):
+            output(f'SUCCESS: CAS Part has been successfully attached to Sim {sim_info}.')
+        else:
+            output(f'FAILED: CAS Part failed to attach to Sim {sim_info}.')
         output('Done attaching CAS Part to the Sim.')
 
 
-    @Command('s4clib.detach_cas_part', command_type=CommandType.Live)
-    def _s4clib_detach_cas_part(cas_part_id: int, body_type_str: str='all', opt_sim: OptionalTargetParam=None, _connection: Any=None):
-        from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
-        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-        from server_commands.argument_helpers import get_optional_target
-        output = CheatOutput(_connection)
+    @CommonConsoleCommand(
+        ModInfo.get_identity(),
+        's4clib.detach_cas_part',
+        'Detach a CAS Part from a Sim. This is a permanent change to their current outfit!',
+        command_arguments=(
+            CommonConsoleCommandArgument('cas_part_id', 'Decimal Identifier', 'The decimal identifier of the CAS Part to detach.'),
+            CommonConsoleCommandArgument('body_type', 'Body Type Name or Number', 'The body type to detach the CAS Part from. If not specified the CAS part will be removed from any body types it is attached to on the Sim.', is_optional=True, default_value='All Body Types'),
+            CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to detach the CAS Part from.', is_optional=True, default_value='Active Sim')
+        ),
+        command_aliases=(
+            's4clib.detachcaspart',
+        )
+    )
+    def _s4clib_detach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int, body_type_str: str='all', sim_info: SimInfo=None):
+        if sim_info is None:
+            return
         if cas_part_id < 0:
-            output('ERROR: cas_part_id must be a positive number.')
+            output('ERROR: CAS Part Id must be a positive number.')
             return
         if not CommonCASUtils.is_cas_part_loaded(cas_part_id):
-            output('ERROR: No cas part was found with id: {}'.format(cas_part_id))
-            return
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
-        if sim_info is None:
-            output('Failed, no Sim was specified or the specified Sim was not found!')
+            output(f'ERROR: No CAS Part was found with id: {cas_part_id}')
             return
         if body_type_str is None:
-            output('ERROR: No body_type was specified.')
+            output('ERROR: No Body Type was specified.')
             return
         if body_type_str == 'all':
             body_type = None
@@ -434,85 +425,110 @@ if not ON_RTD:
             try:
                 body_type = int(body_type_str)
             except ValueError:
-                output('Specified body type is neither a number nor a body type name {}'.format(body_type_str))
+                output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
                 return
         else:
             body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
             if body_type == BodyType.NONE:
-                output('Specified body type is not a body type {}'.format(body_type_str))
+                output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
                 return
-        output('Attempting to detach CAS Part \'{}\' from Sim \'{}\''.format(cas_part_id, CommonSimNameUtils.get_full_name(sim_info)))
-        try:
-            if CommonCASUtils.detach_cas_part_from_sim(sim_info, cas_part_id, body_type=body_type):
-                output('CAS Part detached from Sim {} successfully.'.format(CommonSimNameUtils.get_full_name(sim_info)))
-        except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Error occurred trying to detach a CAS Part from a Sim.', exception=ex)
-        output('Done detaching CAS Pat to the Sim.')
+        output(f'Attempting to detach CAS Part \'{cas_part_id}\' from Sim {sim_info} at Body Type(s) {body_type_str}')
+        if CommonCASUtils.detach_cas_part_from_sim(sim_info, cas_part_id, body_type=body_type):
+            output(f'SUCCESS: CAS Part has been successfully detached from Sim {sim_info}.')
+        else:
+            output(f'FAILED: CAS Part failed to detach from Sim {sim_info}.')
+        output('Done detaching CAS Part from the Sim.')
 
 
-    @Command('s4clib.print_cas_part_at_body_type', command_type=CommandType.Live)
-    def _s4clib_print_cas_part_at_body_type(body_type_str: str, opt_sim: OptionalTargetParam=None, _connection: int=None):
-        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-        from server_commands.argument_helpers import get_optional_target
-        output = CheatOutput(_connection)
-        output('Printing CAS Part at body type. ')
+    @CommonConsoleCommand(
+        ModInfo.get_identity(),
+        's4clib.print_cas_part_at_body_type',
+        'Print the Decimal Identifier of the CAS Part located at a specified Body Type on the current outfit of a Sim.',
+        command_arguments=(
+            CommonConsoleCommandArgument('body_type', 'Body Type Name or Number', 'The Body Type on the Sim to check.'),
+            CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to check.', is_optional=True, default_value='Active Sim')
+        )
+    )
+    def _s4clib_print_cas_part_at_body_type(output: CommonConsoleCommandOutput, body_type_str: str, sim_info: SimInfo=None):
+        if sim_info is None:
+            return
         if body_type_str is None:
-            output('No body_type specified.')
+            output('ERROR: No Body Type was specified.')
             return
         if not body_type_str.isnumeric():
             body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
             if body_type == BodyType.NONE:
-                output('Specified body type is not a body type {}'.format(body_type_str))
+                output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
                 return
         else:
             try:
                 body_type = int(body_type_str)
             except ValueError:
-                output('Specified body type is neither a number nor a body type name {}'.format(body_type_str))
+                output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
                 return
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
-        if sim_info is None:
-            output('Failed, no Sim was specified or the specified Sim was not found!')
-            return
+        output(f'Attempting to Print the ID of the CAS Part located at body type {body_type_str} on the outfit of {sim_info}.')
         cas_part_id = CommonCASUtils.get_cas_part_id_at_body_type(sim_info, body_type)
-        output('Found cas part id at body type {}: {}'.format(body_type, cas_part_id))
+        output(f'Finished locating CAS Part Id. Sim: {sim_info} Body Type: {body_type_str}: CAS Part Id: {cas_part_id}')
 
 
-    @Command('s4clib.is_cas_part_available', command_type=CommandType.Live)
-    def _s4clib_is_cas_part_available(part_id: int=None, _connection: int=None):
-        output = CheatOutput(_connection)
-        if part_id is None:
-            output('No CAS Part specified!')
+    @CommonConsoleCommand(
+        ModInfo.get_identity(),
+        's4clib.is_cas_part_available',
+        'Determine if a CAS Part is available by its Decimal Identifier.',
+        command_arguments=(
+            CommonConsoleCommandArgument('cas_part_id', 'Decimal Identifier', 'The CAS Part to check.'),
+        )
+    )
+    def _s4clib_is_cas_part_available(output: CommonConsoleCommandOutput, cas_part_id: int):
+        if cas_part_id is None:
+            output('ERROR: No CAS Part was specified!')
             return
-        output('Checking if CAS Part {} is available.'.format(part_id))
-        if CommonCASUtils.is_cas_part_loaded(part_id):
-            output('CAS Part is available.')
+        output(f'Checking if CAS Part with Id {cas_part_id} is available.')
+        if CommonCASUtils.is_cas_part_loaded(cas_part_id):
+            output(f'SUCCESS: The CAS Part with id {cas_part_id} is available.')
         else:
-            output('CAS Part is not available.')
+            output(f'FAILED: The CAS Part with id {cas_part_id} is not available.')
 
 
-    @Command('s4clib.print_skin_tone', command_type=CommandType.Live)
-    def _common_print_skin_tone(opt_sim: OptionalTargetParam=None, _connection: int=None):
-        from server_commands.argument_helpers import get_optional_target
-        output = CheatOutput(_connection)
-        output('Attempting to get skin tone.')
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    @CommonConsoleCommand(
+        ModInfo.get_identity(),
+        's4clib.print_skin_tone',
+        'Print the Id of the Skin Tone of a Sim.',
+        command_arguments=(
+            CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to retrieve the information from.', is_optional=True, default_value='Active Sim'),
+        ),
+        command_aliases=(
+            's4clib.printskintone',
+        )
+    )
+    def _common_print_skin_tone(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
         if sim_info is None:
-            output('Failed, no Sim was specified or the specified Sim was not found!')
+            output('ERROR: Failed, no Sim was specified or the specified Sim was not found!')
             return
-        output('Sim: {}'.format(CommonSimNameUtils.get_full_name(sim_info)))
-        output('Skin Tone: {}'.format(CommonCASUtils.get_skin_tone(sim_info)))
-        output('Skin Tone Val Shift: {}'.format(CommonCASUtils.get_skin_tone_value_shift(sim_info)))
+        output(f'Attempting to print the Skin Tone of Sim {sim_info}.')
+        output(f'Sim: {sim_info}')
+        skin_tone_id = CommonCASUtils.get_skin_tone(sim_info)
+        output(f'Skin Tone: {skin_tone_id}')
+        skin_tone_value_shift = CommonCASUtils.get_skin_tone_value_shift(sim_info)
+        output(f'Skin Tone Value Shift: {skin_tone_value_shift}')
 
 
-    @Command('s4clib.set_skin_tone', command_type=CommandType.Live)
-    def _common_set_skin_tone(skin_tone_id: int, opt_sim: OptionalTargetParam=None, _connection: int=None):
-        from server_commands.argument_helpers import get_optional_target
-        output = CheatOutput(_connection)
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
+    @CommonConsoleCommand(
+        ModInfo.get_identity(),
+        's4clib.set_skin_tone',
+        'Change the Skin Tone of a Sim to a specified Skin Tone.',
+        command_arguments=(
+            CommonConsoleCommandArgument('skin_tone_id', 'Decimal Identifier', 'The decimal identifier of the Skin Tone to change the Sim to.'),
+            CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to change the Skin Tone of.', is_optional=True, default_value='Active Sim')
+        ),
+        command_aliases=(
+            's4clib.setskintone',
+        )
+    )
+    def _common_set_skin_tone(output: CommonConsoleCommandOutput, skin_tone_id: int, sim_info: SimInfo=None):
         if sim_info is None:
-            output('Failed, no Sim was specified or the specified Sim was not found!')
+            output('ERROR: Failed, no Sim was specified or the specified Sim was not found!')
             return
-        output('Attempting to set the skin tone \'{}\' of Sim \'{}\''.format(skin_tone_id, CommonSimNameUtils.get_full_name(sim_info)))
+        output(f'Attempting to set the skin tone of Sim {sim_info} to \'{skin_tone_id}\'.')
         CommonCASUtils.set_skin_tone(sim_info, skin_tone_id)
-        output('Done setting the skin overlay of the Sim.')
+        output(f'Done setting the Skin Tone of the Sim {sim_info}.')

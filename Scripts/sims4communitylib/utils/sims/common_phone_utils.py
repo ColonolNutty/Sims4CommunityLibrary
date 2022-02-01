@@ -5,7 +5,9 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4.commands import Command, CommandType, CheatOutput
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
 
 
@@ -45,17 +47,31 @@ class CommonPhoneUtils:
         CommonLocationUtils.get_current_zone().ui_dialog_service._set_is_phone_silenced(is_silenced)
 
 
-@Command('s4clib.silence_phone', command_type=CommandType.Live)
-def _common_silence_phone(_connection: int=None):
-    output = CheatOutput(_connection)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.silence_phone',
+    'Turn on the silent mode for the phone.',
+    command_aliases=(
+        's4clib.silencephone',
+    )
+)
+def _common_silence_phone(output: CommonConsoleCommandOutput):
     output('Silencing Phone')
     CommonPhoneUtils.silence_phone()
     output('Done')
 
 
-@Command('s4clib.unsilence_phone', command_type=CommandType.Live)
-def _common_unsilence_phone(_connection: int=None):
-    output = CheatOutput(_connection)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.unsilence_phone',
+    'Turn off the silent mode for the phone.',
+    command_aliases=(
+        's4clib.unsilencephone',
+    )
+)
+def _common_unsilence_phone(output: CommonConsoleCommandOutput):
     output('Unsilencing Phone')
     CommonPhoneUtils.unsilence_phone()
     output('Done')

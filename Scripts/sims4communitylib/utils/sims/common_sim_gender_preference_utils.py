@@ -7,16 +7,15 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Tuple
 
-from server_commands.argument_helpers import OptionalTargetParam
 from sims.sim_info import SimInfo
-from sims4.commands import Command, CommandType, CheatOutput
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -183,147 +182,176 @@ class CommonSimGenderPreferenceUtils:
         return CommonGender.FEMALE,
 
 
-@Command('s4clib.set_gender_pref', command_type=CommandType.Live)
-def _common_set_gender_pref(gender_str: str=None, amount: int=None, opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    if gender_str is None:
-        output('Please specify a gender. Valid Genders: ({})'.format(', '.join(CommonGender.get_all_names())))
-        return
-    if amount is None:
-        output('Please specify an amount.'.format(', '.join(CommonGender.get_all_names())))
-        return
-    if amount > 100 or amount < 0:
-        output('Please specify an amount between 0-100.')
-        return
-    gender: CommonGender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), CommonGender, default_value=None)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.set_gender_pref',
+    'Set the gender preference amount of a Sim towards a Gender.',
+    command_arguments=(
+        CommonConsoleCommandArgument('gender', 'CommonGender', f'The gender to change the preference of the Sim for. Valid Values: {CommonGender.get_comma_separated_names_string()}'),
+        CommonConsoleCommandArgument('percentage', 'Number', 'The percentage of preference between 0 and 100 for the gender.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of the Sim to change.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.setgenderpref',
+        's4clib.set_gender_preference',
+        's4clib.setgenderpreference',
+    )
+)
+def _common_set_gender_pref(output: CommonConsoleCommandOutput, gender: CommonGender, percentage_amount: int, sim_info: SimInfo=None):
     if gender is None:
-        output('{} is not a valid gender. Valid Genders: ({})'.format(gender_str, ', '.join(CommonGender.get_all_names())))
         return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    output('Setting gender preference of Sim {} for gender {} to {}'.format(sim_name, gender.name, amount))
-    try:
-        if CommonSimGenderPreferenceUtils.set_gender_preference_amount(sim_info, gender, amount):
-            output('Successfully set gender preference.')
-        else:
-            output('Failed to set gender preference.')
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set gender preference of Sim {} for gender {} to {}.'.format(sim_name, gender.name, amount), exception=ex)
-        output('Failed to set gender preference of Sim {} for gender {} to {}. Exception: {}'.format(sim_name, gender.name, amount, str(ex)))
+    if percentage_amount is None:
+        return
+    if percentage_amount > 100 or percentage_amount < 0:
+        output('ERROR: Please specify a percentage between 0 and 100.')
+        return
+    gender_name = gender.name
+    output(f'Attempting to set the gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%')
+    if CommonSimGenderPreferenceUtils.set_gender_preference_amount(sim_info, gender, percentage_amount):
+        output(f'SUCCESS: Successfully set the gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%')
+    else:
+        output(f'FAILED: Failed to set the gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%')
 
 
-@Command('s4clib.set_gender_pref_of_all_sims', command_type=CommandType.Live)
-def _common_set_gender_pref_of_all_sims(gender_str: str=None, amount: int=None, _connection: int=None):
-    output = CheatOutput(_connection)
-    if gender_str is None:
-        output('Please specify a gender. Valid Genders: ({})'.format(', '.join(CommonGender.get_all_names())))
-        return
-    if amount is None:
-        output('Please specify an amount.'.format(', '.join(CommonGender.get_all_names())))
-        return
-    if amount > 100 or amount < 0:
-        output('Please specify an amount between 0-100.')
-        return
-    gender: CommonGender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), CommonGender, default_value=None)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.set_gender_pref_of_all_sims',
+    'Set the gender preference amount of all Sims towards a Gender.',
+    command_arguments=(
+        CommonConsoleCommandArgument('gender', 'CommonGender', f'The gender to change the preferences of the Sims for. Valid Values: {CommonGender.get_comma_separated_names_string()}'),
+        CommonConsoleCommandArgument('percentage', 'Number', 'The percentage of preference between 0 and 100 for the gender.')
+    ),
+    command_aliases=(
+        's4clib.setgenderprefofallsims',
+        's4clib.setgenderpreferenceofallsims',
+        's4clib.set_gender_preference_of_all_sims',
+        's4clib.set_all_gender_preferences',
+        's4clib.setallgenderpreferences',
+    )
+)
+def _common_set_gender_pref_of_all_sims(output: CommonConsoleCommandOutput, gender: CommonGender, percentage_amount: int):
     if gender is None:
-        output('{} is not a valid gender. Valid Genders: ({})'.format(gender_str, ', '.join(CommonGender.get_all_names())))
         return
-    sim_count = 0
-    output('Setting gender preference of all Sims for gender {} to {}'.format(gender.name, amount))
+    if percentage_amount is None:
+        return
+    if percentage_amount > 100 or percentage_amount < 0:
+        output('ERROR: Please specify a percentage between 0 and 100.')
+        return
+    gender_name = gender.name
+    count_of_sims_changed = 0
+    output(f'Setting gender preference of all Sims for gender {gender_name} to {percentage_amount}%')
     for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
-        sim_name = CommonSimNameUtils.get_full_name(sim_info)
         try:
-            if CommonSimGenderPreferenceUtils.set_gender_preference_amount(sim_info, gender, amount):
-                sim_count += 1
+            if CommonSimGenderPreferenceUtils.set_gender_preference_amount(sim_info, gender, percentage_amount):
+                count_of_sims_changed += 1
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set gender preference of Sim {} for gender {} to {}.'.format(sim_name, gender.name, amount), exception=ex)
-            output('Failed to set gender preference of Sim {} for gender {} to {}. Exception: {}'.format(sim_name, gender.name, amount, str(ex)))
-    output(f'Updated Gender Preferences of {sim_count} Sims.')
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), f'Failed to set gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%', exception=ex)
+            output(f'ERROR: Failed to set gender preference of Sim {sim_info} for gender {gender} to {percentage_amount}%. Exception: {ex}')
+    output(f'Updated the Gender Preferences of {count_of_sims_changed} Sims.')
 
 
-@Command('s4clib.set_gender_pref_of_all_female_sims', command_type=CommandType.Live)
-def _common_set_gender_pref_of_all_female_sims(gender_str: str=None, amount: int=None, _connection: int=None):
-    output = CheatOutput(_connection)
-    if gender_str is None:
-        output('Please specify a gender. Valid Genders: ({})'.format(', '.join(CommonGender.get_all_names())))
-        return
-    if amount is None:
-        output('Please specify an amount.'.format(', '.join(CommonGender.get_all_names())))
-        return
-    if amount > 100 or amount < 0:
-        output('Please specify an amount between 0-100.')
-        return
-    gender: CommonGender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), CommonGender, default_value=None)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.set_gender_pref_of_all_female_sims',
+    'Set the gender preference amount of all Female Sims towards a Gender.',
+    command_arguments=(
+        CommonConsoleCommandArgument('gender', 'CommonGender', f'The gender to change the preferences of the Sims for. Valid Values: {CommonGender.get_comma_separated_names_string()}'),
+        CommonConsoleCommandArgument('percentage', 'Number', 'The percentage of preference between 0 and 100 for the gender.')
+    ),
+    command_aliases=(
+        's4clib.setgenderprefofallfemalesims',
+        's4clib.setgenderpreferenceofallfemalesims',
+        's4clib.set_gender_preference_of_all_female_sims',
+        's4clib.set_all_female_gender_preferences',
+        's4clib.setallfemalegenderpreferences',
+    )
+)
+def _common_set_gender_pref_of_all_female_sims(output: CommonConsoleCommandOutput, gender: CommonGender, percentage_amount: int):
     if gender is None:
-        output('{} is not a valid gender. Valid Genders: ({})'.format(gender_str, ', '.join(CommonGender.get_all_names())))
         return
+    if percentage_amount is None:
+        return
+    if percentage_amount > 100 or percentage_amount < 0:
+        output('ERROR: Please specify a percentage between 0 and 100.')
+        return
+    gender_name = gender.name
     sim_count = 0
-    output('Setting gender preference of all Female Sims for gender {} to {}'.format(gender.name, amount))
+    output(f'Setting gender preference of all Female Sims for gender {gender_name} to {percentage_amount}%')
     from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
     for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=CommonGenderUtils.is_female):
-        sim_name = CommonSimNameUtils.get_full_name(sim_info)
         try:
-            if CommonSimGenderPreferenceUtils.set_gender_preference_amount(sim_info, gender, amount):
+            if CommonSimGenderPreferenceUtils.set_gender_preference_amount(sim_info, gender, percentage_amount):
                 sim_count += 1
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set gender preference of Sim {} for gender {} to {}.'.format(sim_name, gender.name, amount), exception=ex)
-            output('Failed to set gender preference of Sim {} for gender {} to {}. Exception: {}'.format(sim_name, gender.name, amount, str(ex)))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), f'Failed to set gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%.', exception=ex)
+            output(f'Failed to set gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%. Exception: {ex}')
     output(f'Updated Gender Preferences of {sim_count} Sims.')
 
 
-@Command('s4clib.set_gender_pref_of_all_male_sims', command_type=CommandType.Live)
-def _common_set_gender_pref_of_all_male_sims(gender_str: str=None, amount: int=None, _connection: int=None):
-    output = CheatOutput(_connection)
-    if gender_str is None:
-        output('Please specify a gender. Valid Genders: ({})'.format(', '.join(CommonGender.get_all_names())))
-        return
-    if amount is None:
-        output('Please specify an amount.'.format(', '.join(CommonGender.get_all_names())))
-        return
-    if amount > 100 or amount < 0:
-        output('Please specify an amount between 0-100.')
-        return
-    gender: CommonGender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), CommonGender, default_value=None)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.set_gender_pref_of_all_male_sims',
+    'Set the gender preference amount of all Male Sims towards a Gender.',
+    command_arguments=(
+        CommonConsoleCommandArgument('gender', 'CommonGender', f'The gender to change the preferences of the Sims for. Valid Values: {CommonGender.get_comma_separated_names_string()}'),
+        CommonConsoleCommandArgument('percentage', 'Number', 'The percentage of preference between 0 and 100 for the gender.')
+    ),
+    command_aliases=(
+        's4clib.setgenderprefofallmalesims',
+        's4clib.setgenderpreferenceofallmalesims',
+        's4clib.set_gender_preference_of_all_male_sims',
+        's4clib.set_all_male_gender_preferences',
+        's4clib.setallmalegenderpreferences',
+    )
+)
+def _common_set_gender_pref_of_all_male_sims(output: CommonConsoleCommandOutput, gender: CommonGender, percentage_amount: int):
     if gender is None:
-        output('{} is not a valid gender. Valid Genders: ({})'.format(gender_str, ', '.join(CommonGender.get_all_names())))
         return
+    if percentage_amount is None:
+        return
+    if percentage_amount > 100 or percentage_amount < 0:
+        output('ERROR: Please specify a percentage between 0 and 100.')
+        return
+    gender_name = gender.name
     sim_count = 0
-    output('Setting gender preference of all Male Sims for gender {} to {}'.format(gender.name, amount))
+    output(f'Setting gender preference of all Male Sims for gender {gender_name} to {percentage_amount}%')
     from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
     for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=CommonGenderUtils.is_male):
-        sim_name = CommonSimNameUtils.get_full_name(sim_info)
         try:
-            if CommonSimGenderPreferenceUtils.set_gender_preference_amount(sim_info, gender, amount):
+            if CommonSimGenderPreferenceUtils.set_gender_preference_amount(sim_info, gender, percentage_amount):
                 sim_count += 1
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to set gender preference of Sim {} for gender {} to {}.'.format(sim_name, gender.name, amount), exception=ex)
-            output('Failed to set gender preference of Sim {} for gender {} to {}. Exception: {}'.format(sim_name, gender.name, amount, str(ex)))
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), f'Failed to set gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%.', exception=ex)
+            output(f'Failed to set gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%. Exception: {ex}')
     output(f'Updated Gender Preferences of {sim_count} Sims.')
 
 
-@Command('s4clib.get_gender_pref', command_type=CommandType.Live)
-def _common_get_gender_pref(gender_str: str=None, opt_sim: OptionalTargetParam=None, _connection: int=None):
-    from server_commands.argument_helpers import get_optional_target
-    output = CheatOutput(_connection)
-    if gender_str is None:
-        output('Please specify a gender. Valid Genders: ({})'.format(', '.join(CommonGender.get_all_names())))
-        return
-    gender: CommonGender = CommonResourceUtils.get_enum_by_name(gender_str.upper(), CommonGender, default_value=None)
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.print_gender_pref',
+    'Print the gender preference amount a Sim has towards a Gender.',
+    command_arguments=(
+        CommonConsoleCommandArgument('gender', 'CommonGender', f'The gender to change the preference of the Sim for. Valid Values: {CommonGender.get_comma_separated_names_string()}'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of the Sim to change.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.printgenderpref',
+        's4clib.print_gender_preference',
+        's4clib.printgenderpreference',
+    )
+)
+def _common_get_gender_pref(output: CommonConsoleCommandOutput, gender: CommonGender, sim_info: SimInfo=None):
     if gender is None:
-        output('{} is not a valid gender. Valid Genders: ({})'.format(gender_str, ', '.join(CommonGender.get_all_names())))
         return
-    sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, _connection))
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    sim_name = CommonSimNameUtils.get_full_name(sim_info)
-    try:
-        preference_for_gender = CommonSimGenderPreferenceUtils.get_gender_preference_amount(sim_info, gender)
-        output('{} has a {}% preference for gender'.format(sim_name, preference_for_gender))
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to get gender preference of Sim {} for gender {}.'.format(sim_name, gender.name), exception=ex)
-        output('Failed to get gender preference of Sim {} for gender {}. Exception: {}'.format(sim_name, gender.name, str(ex)))
+    gender_name = gender.name
+    preference_percentage_amount = CommonSimGenderPreferenceUtils.get_gender_preference_amount(sim_info, gender)
+    output(f'{sim_info} has a {preference_percentage_amount}% preference for gender {gender_name}')

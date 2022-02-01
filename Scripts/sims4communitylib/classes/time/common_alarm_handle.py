@@ -6,7 +6,9 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-from sims4.commands import Command, CommandType, CheatOutput
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_time_utils import CommonTimeUtils
 from typing import Any, Callable
 
@@ -63,9 +65,8 @@ class CommonAlarmHandle(AlarmHandle):
 
 
 if not ON_RTD:
-    @Command('s4clib.print_current_time', command_type=CommandType.Live)
-    def _s4clib_print_current_time(_connection: int=None):
-        output = CheatOutput(_connection)
+    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.print_current_time', 'Prints the current time.')
+    def _s4clib_print_current_time(output: CommonConsoleCommandOutput):
         output('Current time')
         output('Hour {} Minute {}'.format(CommonTimeUtils.get_current_date_and_time().hour(), CommonTimeUtils.get_current_date_and_time().minute()))
         output('Abs Hour {} Abs Minute {}'.format(CommonTimeUtils.get_current_date_and_time().absolute_hours(), CommonTimeUtils.get_current_date_and_time().absolute_minutes()))
