@@ -90,7 +90,7 @@ v1.76:
 - Added utilities for accessing the game client object
 - Added custom parameter classes for specifying required or optional Sim Info or Game Object arguments for CommonConsoleCommand
 - Added a few utility functions for retrieving SimInfo manager, Game Object manager, and other types of managers
-- Updated the Spawn and Name commands to use CommonConsoleCommands and thus show up under the S4CL help command.
+- Updated most commands to use CommonConsoleCommands and thus show up under the S4CL help command.
 
 v1.75:
 - Added functions to convert CommonSpecies, CommonAge, and CommonGender into localized string ids
