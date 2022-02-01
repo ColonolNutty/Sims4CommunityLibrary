@@ -5,9 +5,12 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from typing import TYPE_CHECKING
 from sims4communitylib.mod_support.has_mod_identity import HasModIdentity
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegistry
+
+if TYPE_CHECKING:
+    from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegistry
 
 
 class HasLog(HasModIdentity):
@@ -17,8 +20,8 @@ class HasLog(HasModIdentity):
 
     """
     def __init__(self) -> None:
-        self._log: CommonLog = None
-        self._verbose_log: CommonLog = None
+        self._log: 'CommonLog' = None
+        self._verbose_log: 'CommonLog' = None
         self._mod_identity: CommonModIdentity = None
 
     @property
@@ -33,10 +36,10 @@ class HasLog(HasModIdentity):
         :rtype: CommonModIdentity
         :exception NotImplementedError: Thrown when the property is not implemented.
         """
-        raise NotImplementedError('Missing \'{}.mod_identity\'.'.format(self.__class__.__name__))
+        raise NotImplementedError(f'Missing \'{self.__class__.__name__}.mod_identity\'.')
 
     @property
-    def verbose_log(self) -> CommonLog:
+    def verbose_log(self) -> 'CommonLog':
         """The verbose log for instances of the class.
 
         .. note:: It uses the `mod_identity` and `verbose_log_identifier` when logging.
@@ -47,12 +50,13 @@ class HasLog(HasModIdentity):
         :rtype: CommonLog
         """
         if self._verbose_log is None:
+            from sims4communitylib.utils.common_log_registry import CommonLogRegistry
             mod_name = CommonModIdentity._get_mod_name(self.mod_identity)
             self._verbose_log = CommonLogRegistry.get().register_log(mod_name, self.verbose_log_identifier)
         return self._verbose_log
 
     @property
-    def log(self) -> CommonLog:
+    def log(self) -> 'CommonLog':
         """The log for instances of the class.
 
         .. note:: It uses the `mod_identity` and `log_identifier` when logging.
@@ -61,6 +65,7 @@ class HasLog(HasModIdentity):
         :rtype: CommonLog
         """
         if self._log is None:
+            from sims4communitylib.utils.common_log_registry import CommonLogRegistry
             mod_name = CommonModIdentity._get_mod_name(self.mod_identity)
             self._log = CommonLogRegistry.get().register_log(mod_name, self.log_identifier)
             if self._verbose_log is None:

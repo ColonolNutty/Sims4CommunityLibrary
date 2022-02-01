@@ -6,7 +6,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import services
-import sims4.commands
 from typing import Iterator, Callable, Union
 
 from objects import HiddenReasonFlag, ALL_HIDDEN_REASONS
@@ -14,6 +13,10 @@ from sims.sim import Sim
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims.sim_info_manager import SimInfoManager
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.misc.common_game_client_utils import CommonGameClientUtils
 
@@ -308,21 +311,29 @@ class CommonSimUtils:
         return services.sim_info_manager()
 
 
-@sims4.commands.Command('s4clib_testing.display_name_of_currently_active_sim', command_type=sims4.commands.CommandType.Live)
-def _s4clib_testing_display_name_of_currently_active_sim(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
-    sim_info = CommonSimUtils.get_active_sim_info()
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.print_name_of_sim',
+    'Print the first and last name of a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance identifier of a Sim.', is_optional=True, default_value='Active Sim'),
+    )
+)
+def _s4clib_testing_print_name_of_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     # noinspection PyPropertyAccess
-    output('Currently Active Sim: {} {}'.format(sim_info.first_name, sim_info.last_name))
+    output(f'First Name: {sim_info.first_name}  Last Name: \'{sim_info.last_name}\'')
 
 
-@sims4.commands.Command('s4clib_testing.display_names_of_all_sims', command_type=sims4.commands.CommandType.Live)
-def _s4clib_testing_display_names_of_all_sims(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
-    output('Showing the names of all sims (This may take awhile).')
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.print_names_of_all_sims',
+    'Print a list of the first and last names of all Sims.'
+)
+def _s4clib_testing_print_names_of_all_sims(output: CommonConsoleCommandOutput):
+    output('Printing the names of all sims (This may take awhile).')
     current_count = 1
     for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
         # noinspection PyPropertyAccess
-        output('{}: {} {}'.format(str(current_count), sim_info.first_name, sim_info.last_name))
+        output(f'{current_count}: First: \'{sim_info.first_name}\' Last: \'{sim_info.last_name}\'')
         current_count += 1
     output('Done showing the names of all sims.')

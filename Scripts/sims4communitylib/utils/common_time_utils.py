@@ -8,11 +8,11 @@ Copyright (c) COLONOLNUTTY
 
 import clock
 import services
-import sims4.commands
 from clock import ClockSpeedMode, GameClock, ClockSpeedMultiplierType
 from date_and_time import DateAndTime, TimeSpan
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from time_service import TimeService
 
 
@@ -527,13 +527,12 @@ class CommonTimeUtils:
         return services.game_clock_service()
 
 
-@sims4.commands.Command('s4clib_testing.test_game_pause', command_type=sims4.commands.CommandType.Live)
-def _s4clib_testing_test_game_pause(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.pause_game',
+    'Pause the game.'
+)
+def _s4clib_pause_game(output: CommonConsoleCommandOutput):
     output('Attempting to pause the game.')
-    try:
-        CommonTimeUtils.pause_the_game()
-        output('Game paused successfully.')
-    except Exception as ex:
-        output('Failed to pause the game! See Exception log.')
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to pause the game!', exception=ex)
+    CommonTimeUtils.pause_the_game()
+    output('Game paused successfully.')

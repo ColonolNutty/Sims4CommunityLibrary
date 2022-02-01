@@ -7,7 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 import inspect
 from functools import wraps
-from typing import Any, Dict, Union, Iterator, Tuple, Type, List
+from typing import Any, Dict, Union, Iterator, Tuple, Type, List, TYPE_CHECKING
 
 from objects.game_object import GameObject
 from sims.sim_info import SimInfo
@@ -18,8 +18,10 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.services.common_service import CommonService
-from sims4communitylib.utils.common_log_registry import CommonLogRegistry, CommonLog
 from singletons import UNSET
+
+if TYPE_CHECKING:
+    from sims4communitylib.utils.common_log_registry import CommonLog
 
 
 class CommonConsoleCommandArgument:
@@ -261,6 +263,8 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
         return f'{mod_name}.help'
 
     def _create_help_command(self, mod_identity: CommonModIdentity) -> None:
+        from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+        help_log = CommonLogRegistry().register_log(mod_identity, f'{mod_identity.name}_help')
         mod_name = CommonModIdentity._get_mod_name(mod_identity.name).lower()
         if mod_name not in self._commands_by_mod_name:
             self._commands_by_mod_name[mod_name] = dict()
@@ -274,27 +278,46 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                 command_arguments=(
                     CommonConsoleCommandOptionalArgument('command_name', 'Text', f'If set, "{help_command_name}" will print the details of the <command_name> instead of all commands. Example: "{help_command_name} {help_command_name}"', default_value=None),
                 ))
-            def _common_help_command(output: Output, command_name: str=None):
-                output('--------------------')
-                if command_name:
-                    _command = CommonConsoleCommandService().get_command_by_mod_and_name(mod_identity, command_name)
-                    if _command is None:
-                        output(f'No command found with name. {command_name}')
+            def _common_help_command(output: CommonConsoleCommandOutput, command_name: str=None):
+                try:
+                    help_log.enable()
+                    output('--------------------')
+                    help_log.debug('--------------------')
+                    output(f'NOTE: The following details have also been logged to "The Sims 4/mod_logs/<mod_name>_Messages.txt", in case not all data is shown.')
+                    if command_name:
+                        _command = CommonConsoleCommandService().get_command_by_mod_and_name(mod_identity, command_name)
+                        if _command is None:
+                            output(f'No command found with name. {command_name}')
+                            help_log.debug(f'No command found with name. {command_name}')
+                        else:
+                            command_str = str(_command)
+                            output(command_str)
+                            help_log.debug(command_str)
                     else:
-                        output(str(_command))
-                else:
-                    output(f'{mod_identity.name} Commands:')
-                    output('- Angle Brackets (<>) means the argument is Required and must be provided when running the command')
-                    output('- Square Brackets ([]) means the argument is Optional and does not need to be provided when running the command.')
-                    output('- The "=..." part of an argument indicates the default value of that argument IF NOT SPECIFIED when invoking the command.')
-                    output(f'- For specific details about a command, run the command like so "{help_command_name} <command_name>"')
-                    output('  ')
-                    for (_command_name, _command) in sorted(list(CommonConsoleCommandService().get_commands_by_mod(mod_identity).items()), key=lambda x: x[0]):
-                        _command: CommonConsoleCommand = _command
-                        if not _command.show_with_help_command:
-                            continue
-                        output(repr(_command))
-                output('--------------------')
+                        output(f'{mod_identity.name} Commands:')
+                        output('- Angle Brackets (<>) means the argument is Required and must be provided when running the command')
+                        output('- Square Brackets ([]) means the argument is Optional and does not need to be provided when running the command.')
+                        output('- The "=..." part of an argument indicates the default value of that argument IF NOT SPECIFIED when invoking the command.')
+                        output(f'- For specific details about a command, run the command like so "{help_command_name} <command_name>"')
+                        output('  ')
+                        help_log.debug(f'{mod_identity.name} Commands:')
+                        help_log.debug('- Angle Brackets (<>) means the argument is Required and must be provided when running the command')
+                        help_log.debug('- Square Brackets ([]) means the argument is Optional and does not need to be provided when running the command.')
+                        help_log.debug('- The "=..." part of an argument indicates the default value of that argument IF NOT SPECIFIED when invoking the command.')
+                        help_log.debug(f'- For specific details about a command, run the command like so "{help_command_name} <command_name>"')
+                        help_log.debug('  ')
+                        for (_command_name, _command) in sorted(list(CommonConsoleCommandService().get_commands_by_mod(mod_identity).items()), key=lambda x: x[0]):
+                            _command: CommonConsoleCommand = _command
+                            if not _command.show_with_help_command:
+                                continue
+                            command_repr = repr(_command)
+                            output(command_repr)
+                            help_log.debug(command_repr)
+                    output('--------------------')
+                    help_log.debug('--------------------')
+                    output(f'NOTE: The above details have also been logged to "The Sims 4/mod_logs/<mod_name>_Messages.txt", in case not all data is shown.')
+                finally:
+                    help_log.disable()
 
     def get_commands_by_mod(self, mod_identity: CommonModIdentity) -> Dict[str, CommonConsoleCommand]:
         """Retrieve the commands available for a mod."""
@@ -313,6 +336,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
     @classmethod
     def command(cls, mod_identity: CommonModIdentity, *command_aliases: str, command_type: CommandType=CommandType.Live, command_restriction_flags: CommandRestrictionFlags=CommandRestrictionFlags.UNRESTRICTED, required_pack_flags: Pack=None, console_type: CommandType=None) -> Any:
         """Create a command."""
+        from sims4communitylib.utils.common_log_registry import CommonLogRegistry
         log = CommonLogRegistry().register_log(mod_identity, f'{mod_identity.name}_command_log')
         _command = cls._command(log, *command_aliases, command_type=command_type, command_restrictions=command_restriction_flags, pack=required_pack_flags, console_type=console_type)
 
@@ -332,7 +356,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                         __['_connection'] = _connection
                     output(f'Running command "{command_name}"')
                     command_result = func(output, *_, **__)
-                    output('Done')
+                    output(f'Command "{command_name}" finished running.')
                     return command_result
                 except Exception as ex:
                     log.error(f'An exception occurred while running command. {func.__name__}', exception=ex)
@@ -345,7 +369,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
 
     # noinspection PyMissingTypeHints
     @classmethod
-    def _command(cls, log: CommonLog, *aliases: str, command_type: CommandType=CommandType.DebugOnly, command_restrictions: CommandRestrictionFlags=CommandRestrictionFlags.UNRESTRICTED, pack: Pack=None, console_type: CommandType=None):
+    def _command(cls, log: 'CommonLog', *aliases: str, command_type: CommandType=CommandType.DebugOnly, command_restrictions: CommandRestrictionFlags=CommandRestrictionFlags.UNRESTRICTED, pack: Pack=None, console_type: CommandType=None):
         import sims4.common
         import paths
         import sims4.telemetry
@@ -524,6 +548,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                     kwarg_values = unassigned_cleaned_args.pop().split(' ')
             else:
                 kwarg_values = cleaned_kwargs[kwarg_name].split(' ')
+
             kwarg_type = full_arg_spec.annotations.get(kwarg_name)
             if (isinstance(kwarg_type, type) and issubclass(kwarg_type, CustomParam)) or kwarg_type is SimInfo or issubclass(kwarg_type, SimInfo) or kwarg_type is GameObject or issubclass(kwarg_type, GameObject):
                 if kwarg_type is SimInfo or issubclass(kwarg_type, SimInfo):
@@ -557,7 +582,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                 elif lower_arg_value in BOOL_FALSE:
                     return False
                 else:
-                    output(f'Invalid entry specified for bool {name}: {arg_value} (Expected one of {BOOL_TRUE} for True, or one of {BOOL_FALSE} for False.)')
+                    output(f'ERROR: Invalid entry specified for bool {name}: {arg_value} (Expected one of {BOOL_TRUE} for True, or one of {BOOL_FALSE} for False.)')
                     raise ValueError('invalid literal for boolean parameter')
             else:
                 from sims4communitylib.enums.enumtypes.common_int import CommonInt
@@ -569,11 +594,13 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                         if result is None:
                             # noinspection PyUnresolvedReferences
                             valid_values = ', '.join([val.name for val in arg_type.values])
-                            output(f'{arg_value} is not a valid {arg_type_name}. Valid {arg_type_name}: {valid_values}')
+                            output(f'ERROR: {arg_value} is not a valid {arg_type_name}. Valid {arg_type_name}: {valid_values}')
                         return result
                 elif arg_type is int:
                     return int(arg_value, base=0)
-                elif isinstance(arg_type, type) and issubclass(arg_type, CustomParam):
+                elif arg_type is str and not arg_value:
+                    return default_value
+                elif (isinstance(arg_type, type) and issubclass(arg_type, CustomParam)) or arg_type is SimInfo or issubclass(arg_type, SimInfo) or arg_type is GameObject or issubclass(arg_type, GameObject):
                     pass
                 else:
                     try:

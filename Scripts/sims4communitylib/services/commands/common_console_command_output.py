@@ -11,7 +11,6 @@ from objects.game_object import GameObject
 from server_commands.argument_helpers import OptionalTargetParam, RequiredTargetParam
 from sims.sim_info import SimInfo
 from sims4.commands import CheatOutput
-from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonConsoleCommandOutput(CheatOutput):
@@ -31,6 +30,7 @@ class CommonConsoleCommandOutput(CheatOutput):
         :return: An instance of the Sim that matches the target or None if not found.
         :rtype: Union[Sim, None]
         """
+        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
         from server_commands.argument_helpers import get_optional_target
         sim = get_optional_target(target, self.connection)
         sim_info = CommonSimUtils.get_sim_info(sim)

@@ -5,10 +5,14 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from typing import TYPE_CHECKING
+
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.has_class_mod_identity import HasClassModIdentity
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegistry
+
+if TYPE_CHECKING:
+    from sims4communitylib.utils.common_log_registry import CommonLog, CommonLogRegistry
 
 
 class HasClassLog(HasClassModIdentity, HasLog):
@@ -40,12 +44,12 @@ class HasClassLog(HasClassModIdentity, HasLog):
 
     # noinspection PyMissingOrEmptyDocstring
     @property
-    def log(self) -> CommonLog:
+    def log(self) -> 'CommonLog':
         return self.__class__.get_log()
 
     # noinspection PyMissingOrEmptyDocstring
     @property
-    def verbose_log(self) -> CommonLog:
+    def verbose_log(self) -> 'CommonLog':
         return self.__class__.get_verbose_log()
 
     @classmethod
@@ -62,10 +66,10 @@ class HasClassLog(HasClassModIdentity, HasLog):
         :rtype: CommonModIdentity
         :exception NotImplementedError: Thrown when the function is not implemented.
         """
-        raise NotImplementedError('Missing \'{}\'.'.format(cls.get_mod_identity.__name__))
+        raise NotImplementedError(f'Missing \'{cls.__name__}.get_mod_identity\'.')
 
     @classmethod
-    def get_log(cls) -> CommonLog:
+    def get_log(cls) -> 'CommonLog':
         """get_log()
 
         Retrieve a log for the class.
@@ -75,6 +79,7 @@ class HasClassLog(HasClassModIdentity, HasLog):
         :return: An instance of CommonLog
         :rtype: CommonLog
         """
+        from sims4communitylib.utils.common_log_registry import CommonLogRegistry
         if not hasattr(cls, '_log') or getattr(cls, '_log', None) is None:
             mod_name = CommonModIdentity._get_mod_name(cls.get_mod_identity())
             setattr(cls, '_log', CommonLogRegistry().register_log(mod_name, cls.get_log_identifier()))
@@ -83,7 +88,7 @@ class HasClassLog(HasClassModIdentity, HasLog):
         return getattr(cls, '_log', None)
 
     @classmethod
-    def get_verbose_log(cls) -> CommonLog:
+    def get_verbose_log(cls) -> 'CommonLog':
         """get_verbose_log()
 
         Retrieve a verbose log for the class.
@@ -95,6 +100,7 @@ class HasClassLog(HasClassModIdentity, HasLog):
         :return: An instance of CommonLog
         :rtype: CommonLog
         """
+        from sims4communitylib.utils.common_log_registry import CommonLogRegistry
         if not hasattr(cls, '_verbose_log') or getattr(cls, '_verbose_log', None) is None:
             mod_name = CommonModIdentity._get_mod_name(cls.get_mod_identity())
             setattr(cls, '_verbose_log', CommonLogRegistry().register_log(mod_name, cls.get_verbose_log_identifier()))
@@ -124,4 +130,5 @@ class HasClassLog(HasClassModIdentity, HasLog):
         :return: The identifier for the log
         :rtype: str
         """
-        return '{}_verbose'.format(cls.get_log_identifier())
+        log_identifier = cls.get_log_identifier()
+        return f'{log_identifier}_verbose'

@@ -30,4 +30,4 @@ class HasClassModIdentity(HasModIdentity):
         :return: The identity of a mod.
         :rtype: CommonModIdentity
         """
-        raise NotImplementedError('Missing \'{}\'.'.format(cls.get_mod_identity.__name__))
+        raise NotImplementedError(f'Missing \'{cls.get_mod_identity.__name__}\'.')

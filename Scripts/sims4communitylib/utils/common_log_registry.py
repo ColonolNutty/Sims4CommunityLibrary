@@ -6,7 +6,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-import sims4.commands
 from typing import List, Dict, Any, Union, Tuple
 from pprint import pformat
 
@@ -702,80 +701,3 @@ class CommonLogRegistry(CommonService):
             for log_name in self._registered_logs.get(mod_name, dict()):
                 self._registered_logs[mod_name][log_name].disable()
         return True
-
-
-@sims4.commands.Command('s4clib.enable_log', 's4clib.enablelog', command_type=sims4.commands.CommandType.Live)
-def _common_command_enable_log(log_name: str=None, mod_name: str=None, _connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
-    try:
-        if log_name is None:
-            output('specify a log name (See all logs via "s4clib.logs" command)')
-            return
-        output('Attempting to enable log with name \'{}\''.format(log_name))
-        if CommonLogRegistry.get().log_exists(log_name, mod_identifier=mod_name) or mod_name is not None:
-            if CommonLogRegistry.get().enable_logs(log_name, mod_identifier=mod_name):
-                output('Log enabled: {}'.format(log_name))
-            else:
-                if mod_name is None:
-                    output('Failed to enable log with name \'{}\', did you forget to specify a mod name?'.format(log_name))
-                else:
-                    output('Failed to enable log with name \'{}\' for mod \'{}\''.format(log_name, mod_name))
-        else:
-            if mod_name is None:
-                output('No log found with name \'{}\''.format(log_name))
-            else:
-                output('No log found with name \'{}\' for mod \'{}\''.format(log_name, mod_name))
-    except Exception as ex:
-        output('Failed to enable log: {}'.format(pformat(ex)))
-
-
-@sims4.commands.Command('s4clib.disable_log', 's4clib.disablelog', command_type=sims4.commands.CommandType.Live)
-def _common_command_disable_log(log_name: str=None, mod_name: str=None, _connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
-    try:
-        if log_name is None:
-            output('specify a log name (See all logs via "s4clib.logs" command)')
-            return
-        output('Attempting to disable log with name \'{}\''.format(log_name))
-        if CommonLogRegistry.get().log_exists(log_name, mod_identifier=mod_name):
-            if CommonLogRegistry.get().disable_logs(log_name, mod_identifier=mod_name):
-                output('Log disabled: {}'.format(log_name))
-            else:
-                if mod_name is None:
-                    output('Failed to disable log with name \'{}\', did you forget to specify a mod name?'.format(log_name))
-                else:
-                    output('Failed to disable log with name \'{}\' for mod \'{}\''.format(log_name, mod_name))
-        else:
-            if mod_name is None:
-                output('No log found with name \'{}\''.format(log_name))
-            else:
-                output('No log found with name \'{}\' for mod \'{}\''.format(log_name, mod_name))
-    except Exception as ex:
-        output('Failed to disable log: {}'.format(pformat(ex)))
-
-
-@sims4.commands.Command('s4clib.disable_all_logs', 's4clib.disablealllogs', command_type=sims4.commands.CommandType.Live)
-def _common_command_disable_all_logs(mod_name: str=None, _connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
-    output('Disabling all logs')
-    try:
-        CommonLogRegistry.get().disable_all_logs(mod_identifier=mod_name)
-    except Exception as ex:
-        output('Failed to disable all logs: {}'.format(pformat(ex)))
-    output('All logs disabled')
-
-
-@sims4.commands.Command('s4clib.logs', command_type=sims4.commands.CommandType.Live)
-def _common_command_show_all_logs(mod_identifier: str=None, _connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
-    try:
-        log_names = CommonLogRegistry.get().get_registered_log_names(mod_identifier=mod_identifier)
-        if log_names is None or output is None:
-            return
-        if len(log_names) == 0:
-            output('No registered logs found')
-            return
-        for log_name in log_names:
-            output('' + str(log_name))
-    except Exception as ex:
-        output('Failed to show logs: {}'.format(pformat(ex)))
