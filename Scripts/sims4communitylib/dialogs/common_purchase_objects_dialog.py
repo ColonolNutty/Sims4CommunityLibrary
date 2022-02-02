@@ -103,8 +103,8 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
     :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: The description to display in the dialog.
     :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
-    :param purchasable_object_rows: The objects that may be purchased
-    :type purchasable_object_rows: Iterator[PurchasePickerRow]
+    :param purchasable_objects: The objects that may be purchased
+    :type purchasable_objects: Iterator[PurchasePickerRow]
     :param title_tokens: Tokens to format into the title.
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: Tokens to format into the description.
@@ -121,7 +121,7 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
         mod_identity: CommonModIdentity,
         title_identifier: Union[int, str, LocalizedString, CommonStringId],
         description_identifier: Union[int, str, LocalizedString, CommonStringId],
-        purchasable_object_rows: Iterator[PurchasePickerRow],
+        purchasable_objects: Iterator[PurchasePickerRow],
         title_tokens: Iterator[Any]=(),
         description_tokens: Iterator[Any]=(),
         required_tooltip: Union[int, str, LocalizedString, CommonStringId]=None,
@@ -130,7 +130,7 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
         super().__init__(
             title_identifier,
             description_identifier,
-            purchasable_object_rows,
+            purchasable_objects,
             title_tokens=title_tokens,
             description_tokens=description_tokens,
             mod_identity=mod_identity,
@@ -182,6 +182,8 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
         :type object_delivery_method: CommonObjectDeliveryMethod, optional
         """
         try:
+            if object_delivery_method is CommonObjectDeliveryMethod.NONE:
+                raise AssertionError('object_delivery_method was set to NONE.')
             return self._show(
                 on_chosen=on_chosen,
                 target_sim_info_to_receive_objects=target_sim_info_to_receive_objects,
@@ -215,6 +217,8 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
             categories=categories,
             object_delivery_method=object_delivery_method
         )
+        if _dialog:
+            raise AssertionError('Failed to create the purchase objects dialog.')
         self.log.debug('Showing dialog.')
         _dialog.show_dialog()
 
@@ -304,14 +308,11 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
                 max_selectable=UiDialogObjectPicker._MaxSelectableUnlimited()
             )
             purchase_picker_data = PurchasePickerData()
-            if object_delivery_method == CommonObjectDeliveryMethod.MAIL:
-                purchase_picker_data.mailmain_delivery = True
-            elif object_delivery_method == CommonObjectDeliveryMethod.INVENTORY:
+            if object_delivery_method == CommonObjectDeliveryMethod.INVENTORY:
                 purchase_picker_data.inventory_owner_id_to_purchase_to = inventory_target_id
             for purchase_object in purchase_objects:
                 purchase_picker_data.add_definition_to_purchase(purchase_object)
             dialog.object_id = purchase_picker_data.inventory_owner_id_to_purchase_to
-            dialog.mailman_purchase = purchase_picker_data.mailmain_delivery
             dialog.inventory_object_id = purchase_picker_data.inventory_owner_id_to_purchase_from
             dialog.purchase_by_object_ids = purchase_picker_data.use_obj_ids_in_response
             dialog.show_description = 1

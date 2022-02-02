@@ -10,6 +10,7 @@ from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 class CommonObjectDeliveryMethod(CommonInt):
     """A method of delivery for objects."""
-    NONE: 'CommonObjectDeliveryMethod' = 0
-    MAIL: 'CommonObjectDeliveryMethod' = 1
-    INVENTORY: 'CommonObjectDeliveryMethod' = 2
+    NONE: 'CommonObjectDeliveryMethod' = ...
+    INVENTORY: 'CommonObjectDeliveryMethod' = ...
+    # Sims 4 removed the ability to deliver items via the mail, so we'll fall back to inventory for now.
+    MAIL: 'CommonObjectDeliveryMethod' = INVENTORY
