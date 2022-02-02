@@ -90,6 +90,8 @@ v1.76:
 - Added utilities for accessing the game client object
 - Added custom parameter classes for specifying required or optional Sim Info or Game Object arguments for CommonConsoleCommand
 - Added a few utility functions for retrieving SimInfo manager, Game Object manager, and other types of managers
+- Added the ability to change a Sim into a plant Sim via the `s4clib.add_occult` command.
+- Added a few functions to CommonOccultUtils that allow you to check the availability of Occult types.
 - Updated all commands to use CommonConsoleCommands and thus show up under the S4CL help command.
   - Do `sims4communitylib.help` to see descriptions, arguments, etc. about the various commands.
     - To see more detailed info about a specific command do `sims4communitylib.help <command>`.
