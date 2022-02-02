@@ -5,15 +5,15 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import sims4.commands
 from typing import Any, Callable, Union, Iterator
 
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.dialogs.common_dialog import CommonDialog
 from sims4communitylib.enums.strings_enum import CommonStringId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
@@ -146,9 +146,12 @@ class CommonOkDialog(CommonDialog):
         return None
 
 
-@sims4.commands.Command('s4clib_testing.show_ok_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_ok_dialog(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.show_ok_dialog',
+    'Show an example of CommonPurchaseObjectsDialog.'
+)
+def _common_testing_show_ok_dialog(output: CommonConsoleCommandOutput):
     output('Showing test ok dialog.')
 
     def _on_acknowledged(_dialog: UiDialogOk):
@@ -157,19 +160,15 @@ def _common_testing_show_ok_dialog(_connection: int=None):
         else:
             output('Dialog closed.')
 
-    try:
-        # LocalizedStrings within other LocalizedStrings
-        title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
-        description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
-        dialog = CommonOkDialog(
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            title_tokens=title_tokens,
-            description_tokens=description_tokens,
-            ok_text_identifier=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE, text_color=CommonLocalizedStringColor.RED)
-        )
-        dialog.show(on_acknowledged=_on_acknowledged)
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
-        output('Failed to show ok dialog, please locate your exception log file.')
+    # LocalizedStrings within other LocalizedStrings
+    title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+    description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+    dialog = CommonOkDialog(
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        title_tokens=title_tokens,
+        description_tokens=description_tokens,
+        ok_text_identifier=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE, text_color=CommonLocalizedStringColor.RED)
+    )
+    dialog.show(on_acknowledged=_on_acknowledged)
     output('Done showing.')

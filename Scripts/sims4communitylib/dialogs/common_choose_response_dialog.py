@@ -8,7 +8,6 @@ Copyright (c) COLONOLNUTTY
 import math
 import os
 
-import sims4.commands
 from typing import Tuple, Any, Callable, Union, Iterator
 
 from pprint import pformat
@@ -22,9 +21,10 @@ from sims4communitylib.dialogs.common_dialog_navigation_button_tag import Common
 from sims4communitylib.dialogs.common_ui_dialog_response import CommonUiDialogResponse
 from sims4communitylib.dialogs.common_ui_response_dialog import CommonUiResponseDialog
 from sims4communitylib.enums.strings_enum import CommonStringId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
@@ -464,51 +464,50 @@ class CommonChooseResponseDialog(CommonDialog):
         return None
 
 
-@sims4.commands.Command('s4clib_testing.show_choose_response_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_choose_response_dialog(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.show_choose_response_dialog',
+    'Show an example of CommonChooseResponseDialog.'
+)
+def _common_testing_show_choose_response_dialog(output: CommonConsoleCommandOutput):
     output('Showing test choose response dialog.')
 
     def _on_chosen(choice: str, outcome: CommonChoiceOutcome):
         output('Chose {} with result: {}.'.format(pformat(choice), pformat(outcome)))
 
-    try:
-        responses: Tuple[CommonUiDialogResponse] = (
-            CommonUiDialogResponse(
-                1,
-                'Value 1',
-                text=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE)
-            ),
-            CommonUiDialogResponse(
-                2,
-                'Value 2',
-                text=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO)
-            ),
-            CommonUiDialogResponse(
-                3,
-                'Value 3',
-                text=CommonLocalizationUtils.create_localized_string('Test Button 3')
-            )
+    responses: Tuple[CommonUiDialogResponse] = (
+        CommonUiDialogResponse(
+            1,
+            'Value 1',
+            text=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE)
+        ),
+        CommonUiDialogResponse(
+            2,
+            'Value 2',
+            text=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO)
+        ),
+        CommonUiDialogResponse(
+            3,
+            'Value 3',
+            text=CommonLocalizationUtils.create_localized_string('Test Button 3')
         )
-        title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
-        description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+    )
+    title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+    description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
 
-        active_sim_info = CommonSimUtils.get_active_sim_info()
-        dialog = CommonChooseResponseDialog(
-            ModInfo.get_identity(),
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            responses,
-            title_tokens=title_tokens,
-            description_tokens=description_tokens,
-            per_page=2
-        )
-        dialog.show(
-            sim_info=active_sim_info,
-            on_chosen=_on_chosen,
-            include_previous_button=False
-        )
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
-        output('Failed to show dialog, please locate your exception log file.')
+    active_sim_info = CommonSimUtils.get_active_sim_info()
+    dialog = CommonChooseResponseDialog(
+        ModInfo.get_identity(),
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        responses,
+        title_tokens=title_tokens,
+        description_tokens=description_tokens,
+        per_page=2
+    )
+    dialog.show(
+        sim_info=active_sim_info,
+        on_chosen=_on_chosen,
+        include_previous_button=False
+    )
     output('Done showing.')

@@ -7,7 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 from pprint import pformat
 
-import sims4.commands
 from typing import Union, Any, Iterator, Callable, Tuple
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims.sim_info import SimInfo
@@ -16,9 +15,10 @@ from sims4communitylib.dialogs.option_dialogs.options.sims.common_dialog_sim_opt
 from sims4communitylib.dialogs.option_dialogs.options.sims.common_dialog_sim_option_context import \
     CommonDialogSimOptionContext
 from sims4communitylib.enums.strings_enum import CommonStringId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
@@ -140,48 +140,47 @@ class CommonPremadeChooseSimsOptionDialog(CommonChooseSimsOptionDialog):
         return 's4cl_premade_choose_sims_option_dialog'
 
 
-@sims4.commands.Command('s4clib_testing.show_premade_choose_sims_option_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_premade_choose_sims_option_dialog(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.show_premade_choose_sims_option_dialog',
+    'Show an example of CommonPremadeChooseSimsOptionDialog.'
+)
+def _common_testing_show_premade_choose_sims_option_dialog(output: CommonConsoleCommandOutput):
     output('Showing test premade choose Sims option dialog.')
 
     def _on_submit(_chosen_sim_info_list: Tuple[SimInfo]):
         output('Chose Sims with names \'{}\''.format(pformat(CommonSimNameUtils.get_full_names(_chosen_sim_info_list))))
 
-    try:
-        # LocalizedStrings within other LocalizedStrings
-        title_tokens = (
-            CommonLocalizationUtils.create_localized_string(
-                CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
-                text_color=CommonLocalizedStringColor.GREEN
-            ),
-        )
-        description_tokens = (
-            CommonLocalizationUtils.create_localized_string(
-                CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME,
-                tokens=(CommonSimUtils.get_active_sim_info(),),
-                text_color=CommonLocalizedStringColor.BLUE
-            ),
-        )
+    # LocalizedStrings within other LocalizedStrings
+    title_tokens = (
+        CommonLocalizationUtils.create_localized_string(
+            CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
+            text_color=CommonLocalizedStringColor.GREEN
+        ),
+    )
+    description_tokens = (
+        CommonLocalizationUtils.create_localized_string(
+            CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME,
+            tokens=(CommonSimUtils.get_active_sim_info(),),
+            text_color=CommonLocalizedStringColor.BLUE
+        ),
+    )
 
-        # Create the dialog that will only show adult (include_sim_callback=CommonAgeUtils.is_adult) Sims in the current area (instanced_sims_only=True).
-        option_dialog = CommonPremadeChooseSimsOptionDialog(
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            title_tokens=title_tokens,
-            description_tokens=description_tokens,
-            mod_identity=ModInfo.get_identity(),
-            include_sim_callback=CommonAgeUtils.is_adult,
-            instanced_sims_only=True
-        )
+    # Create the dialog that will only show adult (include_sim_callback=CommonAgeUtils.is_adult) Sims in the current area (instanced_sims_only=True).
+    option_dialog = CommonPremadeChooseSimsOptionDialog(
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        title_tokens=title_tokens,
+        description_tokens=description_tokens,
+        mod_identity=ModInfo.get_identity(),
+        include_sim_callback=CommonAgeUtils.is_adult,
+        instanced_sims_only=True
+    )
 
-        option_dialog.show(
-            sim_info=CommonSimUtils.get_active_sim_info(),
-            column_count=4,
-            max_selectable=5,
-            on_submit=_on_submit
-        )
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
-        output('Failed to show dialog, please locate your exception log file.')
+    option_dialog.show(
+        sim_info=CommonSimUtils.get_active_sim_info(),
+        column_count=4,
+        max_selectable=5,
+        on_submit=_on_submit
+    )
     output('Done showing.')

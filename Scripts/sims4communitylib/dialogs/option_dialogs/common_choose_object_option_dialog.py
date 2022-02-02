@@ -7,7 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 from pprint import pformat
 
-import sims4.commands
 from typing import Any, Union, Callable, Iterator
 
 from protocolbuffers.Localization_pb2 import LocalizedString
@@ -18,9 +17,10 @@ from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_conte
 from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_option_category import \
     CommonDialogObjectOptionCategory
 from sims4communitylib.enums.strings_enum import CommonStringId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_object_option import CommonDialogObjectOption
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
@@ -277,82 +277,81 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
         )
 
 
-@sims4.commands.Command('s4clib_testing.show_choose_object_option_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_choose_object_option_dialog(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.show_choose_object_option_dialog',
+    'Show an example of CommonChooseObjectOptionDialog.'
+)
+def _common_testing_show_choose_object_option_dialog(output: CommonConsoleCommandOutput):
     output('Showing test choose object option dialog.')
 
     def _on_option_chosen(option_identifier: str, choice: str):
         output('Chose option {} with value: {}.'.format(pformat(option_identifier), pformat(choice)))
 
-    try:
-        # LocalizedStrings within other LocalizedStrings
-        title_tokens = (
-            CommonLocalizationUtils.create_localized_string(
+    # LocalizedStrings within other LocalizedStrings
+    title_tokens = (
+        CommonLocalizationUtils.create_localized_string(
+            CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
+            text_color=CommonLocalizedStringColor.GREEN
+        ),
+    )
+    description_tokens = (
+        CommonLocalizationUtils.create_localized_string(
+            CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME,
+            tokens=(CommonSimUtils.get_active_sim_info(),),
+            text_color=CommonLocalizedStringColor.BLUE
+        ),
+    )
+    option_dialog = CommonChooseObjectOptionDialog(
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        title_tokens=title_tokens,
+        description_tokens=description_tokens,
+        per_page=2
+    )
+
+    from sims4communitylib.utils.common_icon_utils import CommonIconUtils
+
+    option_dialog.add_option(
+        CommonDialogObjectOption(
+            'Option 1',
+            'Value 1',
+            CommonDialogOptionContext(
                 CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
-                text_color=CommonLocalizedStringColor.GREEN
+                CommonStringId.TESTING_TEST_BUTTON_ONE,
+                icon=CommonIconUtils.load_checked_square_icon()
             ),
+            on_chosen=_on_option_chosen
         )
-        description_tokens = (
-            CommonLocalizationUtils.create_localized_string(
-                CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME,
-                tokens=(CommonSimUtils.get_active_sim_info(),),
-                text_color=CommonLocalizedStringColor.BLUE
+    )
+
+    option_dialog.add_option(
+        CommonDialogObjectOption(
+            'Option 2',
+            'Value 2',
+            CommonDialogOptionContext(
+                CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
+                CommonStringId.TESTING_TEST_BUTTON_TWO,
+                icon=CommonIconUtils.load_arrow_navigate_into_icon()
             ),
+            on_chosen=_on_option_chosen
         )
-        option_dialog = CommonChooseObjectOptionDialog(
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            title_tokens=title_tokens,
-            description_tokens=description_tokens,
-            per_page=2
-        )
+    )
 
-        from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-
-        option_dialog.add_option(
-            CommonDialogObjectOption(
-                'Option 1',
-                'Value 1',
-                CommonDialogOptionContext(
-                    CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
-                    CommonStringId.TESTING_TEST_BUTTON_ONE,
-                    icon=CommonIconUtils.load_checked_square_icon()
-                ),
-                on_chosen=_on_option_chosen
-            )
+    option_dialog.add_option(
+        CommonDialogObjectOption(
+            'Option 3',
+            'Value 3',
+            CommonDialogOptionContext(
+                CommonLocalizationUtils.create_localized_string('Value 3'),
+                CommonStringId.TESTING_TEST_BUTTON_TWO,
+                icon=CommonIconUtils.load_arrow_navigate_into_icon()
+            ),
+            on_chosen=_on_option_chosen
         )
+    )
 
-        option_dialog.add_option(
-            CommonDialogObjectOption(
-                'Option 2',
-                'Value 2',
-                CommonDialogOptionContext(
-                    CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
-                    CommonStringId.TESTING_TEST_BUTTON_TWO,
-                    icon=CommonIconUtils.load_arrow_navigate_into_icon()
-                ),
-                on_chosen=_on_option_chosen
-            )
-        )
-
-        option_dialog.add_option(
-            CommonDialogObjectOption(
-                'Option 3',
-                'Value 3',
-                CommonDialogOptionContext(
-                    CommonLocalizationUtils.create_localized_string('Value 3'),
-                    CommonStringId.TESTING_TEST_BUTTON_TWO,
-                    icon=CommonIconUtils.load_arrow_navigate_into_icon()
-                ),
-                on_chosen=_on_option_chosen
-            )
-        )
-
-        option_dialog.show(
-            sim_info=CommonSimUtils.get_active_sim_info()
-        )
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
-        output('Failed to show dialog, please locate your exception log file.')
+    option_dialog.show(
+        sim_info=CommonSimUtils.get_active_sim_info()
+    )
     output('Done showing.')

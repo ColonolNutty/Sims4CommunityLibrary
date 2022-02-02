@@ -129,7 +129,7 @@ class CommonUiResponseDialog(UiDialog, HasClassLog):
         return result
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib_testing.show_ui_response_dialog', 'Show an example of a UI Response Dialog.', show_with_help_command=False)
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib_testing.show_ui_response_dialog', 'Show an example of UI Response Dialog.', show_with_help_command=False)
 def _common_testing_show_ui_response_dialog(output: CommonConsoleCommandOutput):
     output('Showing test ui response dialog.')
 

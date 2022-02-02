@@ -16,8 +16,9 @@ from sims4communitylib.enums.common_appearance_modifier_type import CommonAppear
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
-from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 
 
 # ReadTheDocs
@@ -334,15 +335,16 @@ class CommonAttachCASPartsAppearanceModifier(AppearanceModifier.BaseAppearanceMo
 
 
 if not ON_RTD:
-    from sims4.commands import Output
-    from server_commands.argument_helpers import OptionalTargetParam
-
-    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib_testing.toggle_example_appearance_modifier_buff', 'Apply an example S4CL buff that will make the feet of the Sims with it bare.')
-    def _s4cl_testing_apply_example_bare_feet_buff(output: Output, opt_sim: OptionalTargetParam=None):
-        from server_commands.argument_helpers import get_optional_target
-        sim_info = CommonSimUtils.get_sim_info(get_optional_target(opt_sim, output._context))
+    @CommonConsoleCommand(
+        ModInfo.get_identity(),
+        's4clib_testing.toggle_example_appearance_modifier_buff',
+        'Apply an example S4CL buff that will make the feet of the Sims with it bare.',
+        command_arguments=(
+            CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim to attach the buff to.', is_optional=True, default_value='Active Sim'),
+        )
+    )
+    def _s4cl_testing_apply_example_bare_feet_buff(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
         if sim_info is None:
-            output(f'ERROR: The Sim did not exist: {opt_sim}')
             return False
         output(f'Toggling bare feet example buff on Sim {sim_info}.')
         from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils

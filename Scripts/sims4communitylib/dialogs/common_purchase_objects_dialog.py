@@ -7,7 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 from collections import namedtuple
 
-import sims4.commands
 from typing import Tuple, Any, Callable, Union, Iterator, List
 
 from pprint import pformat
@@ -23,9 +22,10 @@ from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtil
 from sims4communitylib.enums.common_object_delivery_method import CommonObjectDeliveryMethod
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.tags_enum import CommonGameTag
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.common_icon_utils import CommonIconUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
@@ -328,56 +328,54 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
         return None
 
 
-@sims4.commands.Command('s4clib_testing.show_purchase_objects_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_purchase_objects_dialog(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.show_purchase_objects_dialog',
+    'Show an example of CommonPurchaseObjectsDialog.'
+)
+def _common_testing_show_purchase_objects_dialog(output: CommonConsoleCommandOutput):
     output('Showing test purchase object dialog.')
 
     def _on_chosen(choices: str, outcome: CommonChoiceOutcome):
         output('Chose {} with result: {}.'.format(pformat(choices), pformat(outcome)))
 
-    try:
-        # LocalizedStrings within other LocalizedStrings
-        title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
-        description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
-        show_discount = True
-        from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-        active_sim_info = CommonSimUtils.get_active_sim_info()
-        obj_id = 20359
-        obj_definition = CommonObjectUtils.get_object_definition(obj_id)
-        tags = obj_definition.build_buy_tags
-        options = [
-            PurchasePickerRow(
-                def_id=obj_definition.id,
-                num_owned=CommonSimInventoryUtils.get_count_of_object_in_inventory(active_sim_info, obj_id),
-                tags=obj_definition.build_buy_tags,
-                num_available=2000,
-                custom_price=50,
-                objects=tuple(),
-                show_discount=show_discount,
-                icon_info_data_override=None,  # Should be an instance of IconInfoData
-                is_enable=True,
-                row_tooltip=None,
-                row_description=None
-            ),
-        ]
-        categories = list()
-        for tag in tags:
-            tag_name = CommonGameTag.value_to_name.get(tag, None)
-            if tag_name is None:
-                continue
-            categories.append(CommonDialogObjectOptionCategory(tag, obj_definition.icon, category_name=tag_name))
-        dialog = CommonPurchaseObjectsDialog(
-            ModInfo.get_identity(),
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            tuple(options),
-            title_tokens=title_tokens,
-            description_tokens=description_tokens
-        )
-        dialog.log.enable()
-        dialog.show(on_chosen=_on_chosen, categories=categories)
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
-        output('Failed to show dialog, please locate your exception log file.')
+    # LocalizedStrings within other LocalizedStrings
+    title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+    description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+    show_discount = True
+    active_sim_info = CommonSimUtils.get_active_sim_info()
+    obj_id = 20359
+    obj_definition = CommonObjectUtils.get_object_definition(obj_id)
+    tags = obj_definition.build_buy_tags
+    options = [
+        PurchasePickerRow(
+            def_id=obj_definition.id,
+            num_owned=CommonSimInventoryUtils.get_count_of_object_in_inventory(active_sim_info, obj_id),
+            tags=obj_definition.build_buy_tags,
+            num_available=2000,
+            custom_price=50,
+            objects=tuple(),
+            show_discount=show_discount,
+            icon_info_data_override=None,  # Should be an instance of IconInfoData
+            is_enable=True,
+            row_tooltip=None,
+            row_description=None
+        ),
+    ]
+    categories = list()
+    for tag in tags:
+        tag_name = CommonGameTag.value_to_name.get(tag, None)
+        if tag_name is None:
+            continue
+        categories.append(CommonDialogObjectOptionCategory(tag, obj_definition.icon, category_name=tag_name))
+    dialog = CommonPurchaseObjectsDialog(
+        ModInfo.get_identity(),
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        tuple(options),
+        title_tokens=title_tokens,
+        description_tokens=description_tokens
+    )
+    dialog.log.enable()
+    dialog.show(on_chosen=_on_chosen, categories=categories)
     output('Done showing.')

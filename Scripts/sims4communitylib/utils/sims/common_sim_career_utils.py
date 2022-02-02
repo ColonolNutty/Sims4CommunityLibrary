@@ -17,22 +17,21 @@ from careers.career_tuning import Career, CareerLevel, TunableCareerTrack
 from event_testing.resolver import SingleSimResolver
 from event_testing.results import TestResult
 from rewards.reward_enums import RewardType
-from server_commands.argument_helpers import OptionalTargetParam, TunableInstanceParam
+from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
-from sims4.commands import Output
 from sims4.resources import Types
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_time_utils import CommonTimeUtils
 from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
 from sims4communitylib.utils.sims.common_career_track_utils import CommonCareerTrackUtils
 from sims4communitylib.utils.sims.common_career_utils import CommonCareerUtils
 from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
 from sims4communitylib.utils.sims.common_sim_type_utils import CommonSimTypeUtils
-from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 from singletons import DEFAULT
 
@@ -874,45 +873,47 @@ class CommonSimCareerUtils(HasClassLog):
         return career.get_career_entry_level(career_history=career_history, resolver=SingleSimResolver(sim_info))
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.add_career', 'Add a career to a Sim.', command_arguments=(
-    CommonConsoleCommandArgument('career', 'Name or Decimal Id', 'The name or id of a career to add.'),
-    CommonConsoleCommandArgument('user_level', 'Number', 'The Career Level to put the Sim into for the Career.', is_optional=True, default_value='Starting Level'),
-    CommonConsoleCommandArgument('opt_sim', 'Instance Id', 'The instance id of a Sim.', is_optional=True, default_value='Active Sim')
-))
-def _common_add_career(output: Output, career: TunableInstanceParam(Types.CAREER), user_level: int=None, opt_sim: OptionalTargetParam=None):
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.add_career',
+    'Add a career to a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('career', 'Name or Decimal Id', 'The name or id of a career to add.'),
+        CommonConsoleCommandArgument('user_level', 'Number', 'The Career Level to put the Sim into for the Career.', is_optional=True, default_value='Starting Level'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim.', is_optional=True, default_value='Active Sim'),
+    )
+)
+def _common_add_career(output: CommonConsoleCommandOutput, career: TunableInstanceParam(Types.CAREER), user_level: int=None, sim_info: SimInfo=None):
+    if sim_info is None:
+        return
     output(f'Attempting to add career {career}')
-    from server_commands.argument_helpers import get_optional_target
-    sim = get_optional_target(opt_sim, output._context)
-    if sim is None:
-        output("Sim {} doesn't exist".format(opt_sim))
-        return False
-    sim_info = CommonSimUtils.get_sim_info(sim)
     if career is None:
         output(f'Failed, Career does not exist.')
         return False
     output('Adding career')
     result = CommonSimCareerUtils.add_career(sim_info, career, user_level=user_level, randomize_agency=True, use_career_history=False, show_confirmation_dialog=False)
     if result:
-        output('Career added.')
+        output(f'SUCCESS: Career added.')
     else:
-        output(f'Failed to add career. {result.reason}')
+        output(f'FAILED: Failed to add career. {result.reason}')
     return True
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.randomize_career', 'Set a random career on a Sim.', command_arguments=(
-    CommonConsoleCommandArgument('opt_sim', 'Instance Id', 'The instance id of a Sim.', is_optional=True, default_value='Active Sim'),
-))
-def _common_randomize_career(output: Output, opt_sim: OptionalTargetParam=None):
-    from server_commands.argument_helpers import get_optional_target
-    sim = get_optional_target(opt_sim, output._context)
-    if sim is None:
-        output("Sim {} doesn't exist".format(opt_sim))
-        return False
-    sim_info = CommonSimUtils.get_sim_info(sim)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.randomize_career',
+    'Give a random career to a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim.', is_optional=True, default_value='Active Sim'),
+    )
+)
+def _common_randomize_career(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+    if sim_info is None:
+        return
     output(f'Attempting to randomize career for Sim {sim_info}')
     result = CommonSimCareerUtils.randomize_career(sim_info, remove_all_existing_careers=True, randomize_agency=True, use_career_history=False)
     if result:
-        output(f'Career randomized to {result.reason}')
+        output(f'SUCCESS: Career randomized to {result.reason}')
     else:
-        output(f'Failed to randomize career. {result.reason}')
+        output(f'FAILED: Failed to randomize career. {result.reason}')
     return True

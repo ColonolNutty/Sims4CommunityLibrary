@@ -5,13 +5,13 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import sims4.commands
 from typing import Any, Union, Iterator, Tuple
 from distributor.shared_messages import IconInfoData
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.enums.strings_enum import CommonStringId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -141,35 +141,33 @@ class CommonBasicNotification:
         )
 
 
-@sims4.commands.Command('s4clib_testing.show_basic_notification', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_basic_notification(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.show_basic_notification',
+    'Show an example of CommonBasicNotification.'
+)
+def _common_testing_show_basic_notification(output: CommonConsoleCommandOutput):
     output('Showing test basic notification.')
 
-    try:
-        # LocalizedStrings within other LocalizedStrings
-        title_tokens = (
-            CommonLocalizationUtils.create_localized_string(
-                CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
-                text_color=CommonLocalizedStringColor.BLUE
-            ),
-        )
-        description_tokens = (
-            CommonLocalizationUtils.create_localized_string(
-                CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME,
-                tokens=(CommonSimUtils.get_active_sim_info(),),
-                text_color=CommonLocalizedStringColor.BLUE
-            ),
-        )
-        dialog = CommonBasicNotification(
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            title_tokens=title_tokens,
-            description_tokens=description_tokens,
-            urgency=UiDialogNotification.UiDialogNotificationUrgency.URGENT
-        )
-        dialog.show()
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show a basic notification', exception=ex)
-        output('Failed to show a basic notification, please locate your exception log file.')
-    output('Done showing.')
+    # LocalizedStrings within other LocalizedStrings
+    title_tokens = (
+        CommonLocalizationUtils.create_localized_string(
+            CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
+            text_color=CommonLocalizedStringColor.BLUE
+        ),
+    )
+    description_tokens = (
+        CommonLocalizationUtils.create_localized_string(
+            CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME,
+            tokens=(CommonSimUtils.get_active_sim_info(),),
+            text_color=CommonLocalizedStringColor.BLUE
+        ),
+    )
+    dialog = CommonBasicNotification(
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        title_tokens=title_tokens,
+        description_tokens=description_tokens,
+        urgency=UiDialogNotification.UiDialogNotificationUrgency.URGENT
+    )
+    dialog.show()

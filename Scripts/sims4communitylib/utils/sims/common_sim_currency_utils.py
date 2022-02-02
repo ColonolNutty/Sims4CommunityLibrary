@@ -7,15 +7,14 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Union
 
-from server_commands.argument_helpers import OptionalTargetParam
 from sims.funds import FamilyFunds
 from sims.sim_info import SimInfo
-from sims4.commands import Output
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.enums.common_currency_modify_reasons import CommonCurrencyModifyReason
 from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
-from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 
 
 class CommonSimCurrencyUtils:
@@ -101,33 +100,41 @@ class CommonSimCurrencyUtils:
         return household.funds
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.add_simoleons', 'Add simoleons to a household.')
-def _common_add_simoleons(output: Output, amount: int, opt_sim: OptionalTargetParam=None):
-    from server_commands.argument_helpers import get_optional_target
-    sim = get_optional_target(opt_sim, output._context)
-    sim_info = CommonSimUtils.get_sim_info(sim)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.add_simoleons',
+    'Add simoleons to a household.',
+    command_arguments=(
+        CommonConsoleCommandArgument('amount', 'Number', 'The amount of money to add to the household.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim.', is_optional=True, default_value='Active Sim'),
+    )
+)
+def _common_add_simoleons(output: CommonConsoleCommandOutput, amount: int, sim_info: SimInfo=None):
     if sim_info is None:
-        output(f'Failed, Sim {opt_sim} did not exist.')
         return False
     result = CommonSimCurrencyUtils.add_simoleons_to_household(sim_info, amount, CommonCurrencyModifyReason.CHEAT)
     if result:
-        output(f'Successfully added currency to Sim {sim_info}')
+        output(f'SUCCESS: Successfully added currency to Sim {sim_info}')
         return True
-    output(f'ERROR: Failed to add currency to Sim {sim_info}. {result.reason}')
+    output(f'FAILED: Failed to add currency to Sim {sim_info}. {result.reason}')
     return False
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.remove_simoleons', 'Add simoleons to a household.')
-def _common_add_simoleons(output: Output, amount: int, opt_sim: OptionalTargetParam=None):
-    from server_commands.argument_helpers import get_optional_target
-    sim = get_optional_target(opt_sim, output._context)
-    sim_info = CommonSimUtils.get_sim_info(sim)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.remove_simoleons',
+    'Remove simoleons from a household.',
+    command_arguments=(
+        CommonConsoleCommandArgument('amount', 'Number', 'The amount of money to remove from the household.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim.', is_optional=True, default_value='Active Sim'),
+    )
+)
+def _common_add_simoleons(output: CommonConsoleCommandOutput, amount: int, sim_info: SimInfo=None):
     if sim_info is None:
-        output(f'Failed, Sim {opt_sim} did not exist.')
         return False
     result = CommonSimCurrencyUtils.add_simoleons_to_household(sim_info, amount, CommonCurrencyModifyReason.CHEAT)
     if result:
-        output(f'Successfully removed currency from Sim {sim_info}')
+        output(f'SUCCESS: Successfully removed currency from Sim {sim_info}')
         return True
-    output(f'ERROR: Failed to remove currency from Sim {sim_info}. {result.reason}')
+    output(f'FAILED: Failed to remove currency from Sim {sim_info}. {result.reason}')
     return False

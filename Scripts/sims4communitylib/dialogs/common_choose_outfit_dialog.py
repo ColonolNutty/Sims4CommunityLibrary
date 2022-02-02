@@ -5,7 +5,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import sims4.commands
 from typing import Tuple, Any, Callable, Union, Iterator, List
 
 from pprint import pformat
@@ -17,9 +16,10 @@ from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
 from sims4communitylib.dialogs.common_choose_dialog import CommonChooseDialog
 from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtils
 from sims4communitylib.enums.strings_enum import CommonStringId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
@@ -335,30 +335,28 @@ class CommonChooseOutfitDialog(CommonChooseDialog):
         return None
 
 
-@sims4.commands.Command('s4clib_testing.show_choose_outfit_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_choose_outfit_dialog(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.show_choose_outfit_dialog',
+    'Show an example of CommonChooseResponseDialog.'
+)
+def _common_testing_show_choose_outfit_dialog(output: CommonConsoleCommandOutput):
     output('Showing test choose outfit dialog.')
 
     def _on_chosen(choice: Tuple[OutfitCategory, int], outcome: CommonChoiceOutcome):
         output('Chose {} with result: {}.'.format(pformat(choice), pformat(outcome)))
 
-    try:
-        sim_info = CommonSimUtils.get_active_sim_info()
-        # LocalizedStrings within other LocalizedStrings
-        title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
-        description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(sim_info,), text_color=CommonLocalizedStringColor.BLUE),)
-        from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-        dialog = CommonChooseOutfitDialog(
-            ModInfo.get_identity(),
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            title_tokens=title_tokens,
-            description_tokens=description_tokens
-        )
-        outfit_list = ((OutfitCategory.EVERYDAY, 0),)
-        dialog.show(sim_info, outfit_list=outfit_list, on_chosen=_on_chosen)
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
-        output('Failed to show dialog, please locate your exception log file.')
+    sim_info = CommonSimUtils.get_active_sim_info()
+    # LocalizedStrings within other LocalizedStrings
+    title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+    description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(sim_info,), text_color=CommonLocalizedStringColor.BLUE),)
+    dialog = CommonChooseOutfitDialog(
+        ModInfo.get_identity(),
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        title_tokens=title_tokens,
+        description_tokens=description_tokens
+    )
+    outfit_list = ((OutfitCategory.EVERYDAY, 0),)
+    dialog.show(sim_info, outfit_list=outfit_list, on_chosen=_on_chosen)
     output('Done showing.')

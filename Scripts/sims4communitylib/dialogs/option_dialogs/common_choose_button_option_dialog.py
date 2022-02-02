@@ -7,7 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 from pprint import pformat
 
-import sims4.commands
 from typing import Any, Union, Callable, Iterator
 
 from protocolbuffers.Localization_pb2 import LocalizedString
@@ -20,9 +19,13 @@ from sims4communitylib.dialogs.option_dialogs.options.response.common_dialog_but
 from sims4communitylib.dialogs.option_dialogs.options.response.common_dialog_response_option_context import \
     CommonDialogResponseOptionContext
 from sims4communitylib.enums.strings_enum import CommonStringId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
+from sims4communitylib.services.commands.common_console_command_parameters import \
+    CommonOptionalSimInfoConsoleCommandParameter
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
@@ -258,9 +261,15 @@ class CommonChooseButtonOptionDialog(CommonChooseResponseOptionDialog):
         )
 
 
-@sims4.commands.Command('s4clib_testing.show_choose_button_option_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_choose_button_option_dialog(with_target: bool=False, _connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.show_choose_button_option_dialog',
+    'Show an example of CommonChooseButtonOptionDialog.',
+    command_arguments=(
+        CommonConsoleCommandArgument('target_sim_info', 'Sim Id or Name', 'The name or instance id of a Sim that will be the target of the dialog.', is_optional=True, default_value='No Sim'),
+    )
+)
+def _common_testing_show_choose_button_option_dialog(output: CommonConsoleCommandOutput, target_sim_info: CommonOptionalSimInfoConsoleCommandParameter=None):
     output('Showing test choose button option dialog.')
 
     def _on_option_chosen(option_identifier: str, choice: str):
@@ -272,73 +281,69 @@ def _common_testing_show_choose_button_option_dialog(with_target: bool=False, _c
     def _on_close() -> None:
         output('Closed dialog.')
 
-    try:
-        # LocalizedStrings within other LocalizedStrings
-        title_tokens = (
-            CommonLocalizationUtils.create_localized_string(
+    # LocalizedStrings within other LocalizedStrings
+    title_tokens = (
+        CommonLocalizationUtils.create_localized_string(
+            CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
+            text_color=CommonLocalizedStringColor.GREEN
+        ),
+    )
+    description_tokens = (
+        CommonLocalizationUtils.create_localized_string(
+            CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME,
+            tokens=(CommonSimUtils.get_active_sim_info(),),
+            text_color=CommonLocalizedStringColor.BLUE
+        ),
+    )
+    option_dialog = CommonChooseButtonOptionDialog(
+        ModInfo.get_identity(),
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        title_tokens=title_tokens,
+        description_tokens=description_tokens,
+        on_previous=_on_previous_chosen,
+        on_close=_on_close,
+        per_page=2
+    )
+
+    option_dialog.add_option(
+        CommonDialogButtonOption(
+            'Option 1',
+            'Value 1',
+            CommonDialogResponseOptionContext(
                 CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
-                text_color=CommonLocalizedStringColor.GREEN
+                subtext_identifier=CommonStringId.TESTING_TEST_BUTTON_ONE
             ),
+            on_chosen=_on_option_chosen
         )
-        description_tokens = (
-            CommonLocalizationUtils.create_localized_string(
-                CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME,
-                tokens=(CommonSimUtils.get_active_sim_info(),),
-                text_color=CommonLocalizedStringColor.BLUE
+    )
+
+    option_dialog.add_option(
+        CommonDialogButtonOption(
+            'Option 2',
+            'Value 2',
+            CommonDialogResponseOptionContext(
+                CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
+                subtext_identifier=CommonStringId.TESTING_TEST_BUTTON_TWO,
             ),
+            on_chosen=_on_option_chosen
         )
-        option_dialog = CommonChooseButtonOptionDialog(
-            ModInfo.get_identity(),
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            title_tokens=title_tokens,
-            description_tokens=description_tokens,
-            on_previous=_on_previous_chosen,
-            on_close=_on_close,
-            per_page=2
-        )
+    )
 
-        option_dialog.add_option(
-            CommonDialogButtonOption(
-                'Option 1',
-                'Value 1',
-                CommonDialogResponseOptionContext(
-                    CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
-                    subtext_identifier=CommonStringId.TESTING_TEST_BUTTON_ONE
-                ),
-                on_chosen=_on_option_chosen
-            )
+    option_dialog.add_option(
+        CommonDialogButtonOption(
+            'Option 3',
+            'Value 3',
+            CommonDialogResponseOptionContext(
+                CommonLocalizationUtils.create_localized_string('Value 3'),
+                subtext_identifier=CommonStringId.TESTING_TEST_BUTTON_TWO
+            ),
+            on_chosen=_on_option_chosen
         )
+    )
 
-        option_dialog.add_option(
-            CommonDialogButtonOption(
-                'Option 2',
-                'Value 2',
-                CommonDialogResponseOptionContext(
-                    CommonStringId.TESTING_SOME_TEXT_FOR_TESTING,
-                    subtext_identifier=CommonStringId.TESTING_TEST_BUTTON_TWO,
-                ),
-                on_chosen=_on_option_chosen
-            )
-        )
-
-        option_dialog.add_option(
-            CommonDialogButtonOption(
-                'Option 3',
-                'Value 3',
-                CommonDialogResponseOptionContext(
-                    CommonLocalizationUtils.create_localized_string('Value 3'),
-                    subtext_identifier=CommonStringId.TESTING_TEST_BUTTON_TWO
-                ),
-                on_chosen=_on_option_chosen
-            )
-        )
-
-        option_dialog.show(
-            sim_info=CommonSimUtils.get_active_sim_info(),
-            target_sim_info=CommonSimUtils.get_active_sim_info() if with_target else None
-        )
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
-        output('Failed to show dialog, please locate your exception log file.')
+    option_dialog.show(
+        sim_info=CommonSimUtils.get_active_sim_info(),
+        target_sim_info=target_sim_info if target_sim_info is not CommonSimUtils.get_active_sim_info() else None
+    )
     output('Done showing.')

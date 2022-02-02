@@ -237,7 +237,7 @@ class CommonObjectInteractionUtils(HasClassLog):
         CommonConsoleCommandArgument('game_object', 'Game Object Id', 'The instance id of the game object to check.'),
     )
 )
-def _s4cl_testing_log_all_interactions(output: CommonConsoleCommandOutput, game_object: GameObject):
+def _s4clib_testing_print_all_interactions(output: CommonConsoleCommandOutput, game_object: GameObject):
     if game_object is None:
         return
     output(f'Logging interactions of {game_object}')

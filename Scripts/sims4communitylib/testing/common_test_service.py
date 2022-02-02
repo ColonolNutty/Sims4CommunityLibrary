@@ -16,7 +16,7 @@ from sims4communitylib.services.common_service import CommonService
 try:
     from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
-    community_test_log_log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 'community_test_log')
+    community_test_log_log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'community_test_log')
     community_test_log_log.enable()
 
     def _community_test_log(val: str):
@@ -235,11 +235,19 @@ class CommonTestService(CommonService):
 
 
 try:
-    import sims4.commands
+    from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+        CommonConsoleCommandArgument
+    from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 
-    @sims4.commands.Command('s4clib.run_tests', command_type=sims4.commands.CommandType.Live)
-    def _common_run_tests(*_, _connection: int=None, **__):
-        output = sims4.commands.CheatOutput(_connection)
-        CommonTestService.get().run_tests(*_, callback=output, **__)
+    @CommonConsoleCommand(
+        ModInfo.get_identity(),
+        's4clib.run_tests',
+        'Run any tests that are registered with S4CL (Only useful to mod authors)',
+        command_arguments=(
+            CommonConsoleCommandArgument('test_class_name', 'Text', 'If specified, only the tests located within the class matching this name will be run. If not specified, all registered tests will run.', is_optional=True, default_value='All Tests'),
+        )
+    )
+    def _common_run_tests(output: CommonConsoleCommandOutput, test_class_name: str=None, **__):
+        CommonTestService.get().run_tests(test_class_name, callback=output, **__)
 except ModuleNotFoundError:
     pass

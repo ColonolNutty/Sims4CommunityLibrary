@@ -5,15 +5,15 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import sims4.commands
 from typing import Any, Callable, Union, Iterator
 
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.dialogs.common_dialog import CommonDialog
 from sims4communitylib.enums.strings_enum import CommonStringId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
@@ -170,9 +170,12 @@ class CommonOkCancelDialog(CommonDialog):
         return None
 
 
-@sims4.commands.Command('s4clib_testing.show_ok_cancel_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_ok_cancel_dialog(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.show_ok_cancel_dialog',
+    'Show an example of CommonOkCancelDialog.'
+)
+def _common_testing_show_ok_cancel_dialog(output: CommonConsoleCommandOutput):
     output('Showing test ok cancel dialog.')
 
     def _ok_chosen(_: UiDialogOkCancel):
@@ -181,20 +184,16 @@ def _common_testing_show_ok_cancel_dialog(_connection: int=None):
     def _cancel_chosen(_: UiDialogOkCancel):
         output('Cancel option chosen.')
 
-    try:
-        # LocalizedStrings within other LocalizedStrings
-        title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
-        description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
-        dialog = CommonOkCancelDialog(
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            title_tokens=title_tokens,
-            description_tokens=description_tokens,
-            ok_text_identifier=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE, text_color=CommonLocalizedStringColor.RED),
-            cancel_text_identifier=CommonStringId.TESTING_TEST_BUTTON_TWO
-        )
-        dialog.show(on_ok_selected=_ok_chosen, on_cancel_selected=_cancel_chosen)
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
-        output('Failed to show ok cancel dialog, please locate your exception log file.')
+    # LocalizedStrings within other LocalizedStrings
+    title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+    description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+    dialog = CommonOkCancelDialog(
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        title_tokens=title_tokens,
+        description_tokens=description_tokens,
+        ok_text_identifier=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE, text_color=CommonLocalizedStringColor.RED),
+        cancel_text_identifier=CommonStringId.TESTING_TEST_BUTTON_TWO
+    )
+    dialog.show(on_ok_selected=_ok_chosen, on_cancel_selected=_cancel_chosen)
     output('Done showing.')

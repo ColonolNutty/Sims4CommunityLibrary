@@ -5,7 +5,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import sims4.commands
 from typing import Tuple, Any, Callable, Union
 
 from pprint import pformat
@@ -13,8 +12,9 @@ from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtils
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 from sims4communitylib.enums.strings_enum import CommonStringId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
@@ -164,36 +164,36 @@ class CommonChooseItemDialog:
                                                        picker_type=picker_type)
 
 
-@sims4.commands.Command('s4clib_testing.show_choose_item_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_choose_item_dialog(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.show_choose_item_dialog',
+    'Show an example of CommonChooseItemDialog.',
+    show_with_help_command=False
+)
+def _common_testing_show_choose_item_dialog(output: CommonConsoleCommandOutput):
     output('Showing test choose item dialog.')
 
     def _item_chosen(chosen_item: str, result: CommonChooseItemResult):
         output('Item chosen {} with result: {}.'.format(pformat(chosen_item), pformat(result)))
 
-    try:
-        # LocalizedStrings within other LocalizedStrings
-        title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
-        description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
-        from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-        options = [ObjectPickerRow(option_id=1, name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
-                                   row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE),
-                                   row_tooltip=None,
-                                   icon=CommonIconUtils.load_checked_square_icon(),
-                                   tag='Value 1'),
-                   ObjectPickerRow(option_id=2, name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
-                                   row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
-                                   row_tooltip=None,
-                                   icon=CommonIconUtils.load_arrow_navigate_into_icon(),
-                                   tag='Value 2')]
-        dialog = CommonChooseItemDialog(CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-                                        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-                                        tuple(options),
-                                        title_tokens=title_tokens,
-                                        description_tokens=description_tokens)
-        dialog.show(on_item_chosen=_item_chosen)
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
-        output('Failed to show dialog, please locate your exception log file.')
+    # LocalizedStrings within other LocalizedStrings
+    title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+    description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+    from sims4communitylib.utils.common_icon_utils import CommonIconUtils
+    options = [ObjectPickerRow(option_id=1, name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
+                               row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE),
+                               row_tooltip=None,
+                               icon=CommonIconUtils.load_checked_square_icon(),
+                               tag='Value 1'),
+               ObjectPickerRow(option_id=2, name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
+                               row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
+                               row_tooltip=None,
+                               icon=CommonIconUtils.load_arrow_navigate_into_icon(),
+                               tag='Value 2')]
+    dialog = CommonChooseItemDialog(CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                                    CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+                                    tuple(options),
+                                    title_tokens=title_tokens,
+                                    description_tokens=description_tokens)
+    dialog.show(on_item_chosen=_item_chosen)
     output('Done showing.')

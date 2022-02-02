@@ -7,7 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 from pprint import pformat
 
-import sims4.commands
 from typing import Tuple, Any, Callable, Union, Iterator, List, Dict
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims.sim_info import SimInfo
@@ -18,9 +17,10 @@ from sims4communitylib.dialogs.common_dialog import CommonDialog
 from sims4communitylib.dialogs.custom_dialogs.picker_dialogs.common_ui_multi_picker import CommonUiMultiPicker
 from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtils
 from sims4communitylib.enums.strings_enum import CommonStringId
-from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.localization.common_localized_string_colors import CommonLocalizedStringColor
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
@@ -321,9 +321,12 @@ class CommonMultiPaneChooseDialog(CommonDialog):
         return None
 
 
-@sims4.commands.Command('s4clib_testing.show_multi_pane_choose_dialog', command_type=sims4.commands.CommandType.Live)
-def _common_testing_show_multi_pane_choose_dialog(_connection: int=None):
-    output = sims4.commands.CheatOutput(_connection)
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.show_multi_pane_choose_dialog',
+    'Show an example of CommonMultiPaneChooseDialog.'
+)
+def _common_testing_show_multi_pane_choose_dialog(output: CommonConsoleCommandOutput):
     output('Showing test multi-pane choose dialog.')
 
     def _on_submit(choices_made: Dict[int, Any], outcome: CommonChoiceOutcome) -> None:
@@ -337,98 +340,94 @@ def _common_testing_show_multi_pane_choose_dialog(_connection: int=None):
 
     sim_info = CommonSimUtils.get_active_sim_info()
 
-    try:
-        # LocalizedStrings within other LocalizedStrings
-        title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
-        description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
-        from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-        # Create the dialog.
-        dialog = CommonMultiPaneChooseDialog(
-            ModInfo.get_identity(),
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            title_tokens=title_tokens,
-            description_tokens=description_tokens
+    # LocalizedStrings within other LocalizedStrings
+    title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
+    description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
+    from sims4communitylib.utils.common_icon_utils import CommonIconUtils
+    # Create the dialog.
+    dialog = CommonMultiPaneChooseDialog(
+        ModInfo.get_identity(),
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        title_tokens=title_tokens,
+        description_tokens=description_tokens
+    )
+
+    sub_dialog_one_options = [
+        ObjectPickerRow(
+            option_id=1,
+            name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
+            row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE),
+            row_tooltip=None,
+            icon=CommonIconUtils.load_checked_square_icon(),
+            tag='Value 1'
+        ),
+        ObjectPickerRow(
+            option_id=2,
+            name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
+            row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
+            row_tooltip=None,
+            icon=CommonIconUtils.load_arrow_navigate_into_icon(),
+            tag='Value 2'
+        ),
+        ObjectPickerRow(
+            option_id=3,
+            name=CommonLocalizationUtils.create_localized_string('Value 3'),
+            row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
+            row_tooltip=None,
+            icon=CommonIconUtils.load_arrow_navigate_into_icon(),
+            tag='Value 3'
         )
+    ]
 
-        sub_dialog_one_options = [
-            ObjectPickerRow(
-                option_id=1,
-                name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
-                row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE),
-                row_tooltip=None,
-                icon=CommonIconUtils.load_checked_square_icon(),
-                tag='Value 1'
-            ),
-            ObjectPickerRow(
-                option_id=2,
-                name=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING),
-                row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
-                row_tooltip=None,
-                icon=CommonIconUtils.load_arrow_navigate_into_icon(),
-                tag='Value 2'
-            ),
-            ObjectPickerRow(
-                option_id=3,
-                name=CommonLocalizationUtils.create_localized_string('Value 3'),
-                row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
-                row_tooltip=None,
-                icon=CommonIconUtils.load_arrow_navigate_into_icon(),
-                tag='Value 3'
-            )
-        ]
+    # Add sub dialog one.
+    sub_dialog_one = CommonChooseObjectDialog(
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        tuple(sub_dialog_one_options),
+        title_tokens=title_tokens,
+        description_tokens=description_tokens
+    )
+    dialog.add_sub_dialog(sub_dialog_one, on_chosen=_on_sub_dialog_one_chosen, sim_info=sim_info)
 
-        # Add sub dialog one.
-        sub_dialog_one = CommonChooseObjectDialog(
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            tuple(sub_dialog_one_options),
-            title_tokens=title_tokens,
-            description_tokens=description_tokens
+    # Add sub dialog two.
+    sub_dialog_two_options = [
+        ObjectPickerRow(
+            option_id=4,
+            name=CommonLocalizationUtils.create_localized_string('Value 4'),
+            row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE),
+            row_tooltip=None,
+            icon=CommonIconUtils.load_checked_square_icon(),
+            tag='Value 4'
+        ),
+        ObjectPickerRow(
+            option_id=5,
+            name=CommonLocalizationUtils.create_localized_string('Value 5'),
+            row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
+            row_tooltip=None,
+            icon=CommonIconUtils.load_arrow_navigate_into_icon(),
+            tag='Value 5'
+        ),
+        ObjectPickerRow(
+            option_id=6,
+            name=CommonLocalizationUtils.create_localized_string('Value 6'),
+            row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
+            row_tooltip=None,
+            icon=CommonIconUtils.load_arrow_navigate_into_icon(),
+            tag='Value 6'
         )
-        dialog.add_sub_dialog(sub_dialog_one, on_chosen=_on_sub_dialog_one_chosen, sim_info=sim_info)
+    ]
 
-        # Add sub dialog two.
-        sub_dialog_two_options = [
-            ObjectPickerRow(
-                option_id=4,
-                name=CommonLocalizationUtils.create_localized_string('Value 4'),
-                row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_ONE),
-                row_tooltip=None,
-                icon=CommonIconUtils.load_checked_square_icon(),
-                tag='Value 4'
-            ),
-            ObjectPickerRow(
-                option_id=5,
-                name=CommonLocalizationUtils.create_localized_string('Value 5'),
-                row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
-                row_tooltip=None,
-                icon=CommonIconUtils.load_arrow_navigate_into_icon(),
-                tag='Value 5'
-            ),
-            ObjectPickerRow(
-                option_id=6,
-                name=CommonLocalizationUtils.create_localized_string('Value 6'),
-                row_description=CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_BUTTON_TWO),
-                row_tooltip=None,
-                icon=CommonIconUtils.load_arrow_navigate_into_icon(),
-                tag='Value 6'
-            )
-        ]
+    sub_dialog_two = CommonChooseObjectDialog(
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
+        tuple(sub_dialog_two_options),
+        title_tokens=title_tokens,
+        description_tokens=description_tokens
+    )
 
-        sub_dialog_two = CommonChooseObjectDialog(
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
-            tuple(sub_dialog_two_options),
-            title_tokens=title_tokens,
-            description_tokens=description_tokens
-        )
+    dialog.add_sub_dialog(sub_dialog_two, on_chosen=_on_sub_dialog_two_chosen, include_pagination=True)
 
-        dialog.add_sub_dialog(sub_dialog_two, on_chosen=_on_sub_dialog_two_chosen, include_pagination=True)
-
-        # Show the dialog.
-        dialog.show(on_submit=_on_submit)
-    except Exception as ex:
-        CommonExceptionHandler.log_exception(ModInfo.get_identity(), 'Failed to show dialog', exception=ex)
-        output('Failed to show dialog, please locate your exception log file.')
+    # Show the dialog.
+    dialog.show(on_submit=_on_submit)
     output('Done showing.')
