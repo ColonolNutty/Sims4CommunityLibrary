@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, Tuple
+from typing import Union, Tuple, Iterator
 
 from sims.occult.occult_enums import OccultType
 from sims.sim_info import SimInfo
@@ -28,39 +28,45 @@ class CommonOccultType(CommonInt):
     WITCH: 'CommonOccultType' = 9
 
     @classmethod
-    def get_all(cls) -> Tuple['CommonOccultType']:
-        """get_all()
+    def get_all(cls, exclude_occult_types: Iterator['CommonOccultType']=()) -> Tuple['CommonOccultType']:
+        """get_all(exclude_occult_types=())
 
         Retrieve a collection of all CommonOccultType, excluding CommonOccultType.NONE.
 
+        :param exclude_occult_types: An iterable of occult types to exclude from the result.
+        :type exclude_occult_types: CommonOccultType
         :return: A collection of all CommonOccultType, without CommonOccultType.NONE.
         :rtype: Tuple[CommonOccultType]
         """
-        value_list: Tuple[CommonOccultType] = tuple([value for value in cls.values if value != cls.NONE])
+        value_list: Tuple[CommonOccultType] = tuple([value for value in cls.values if value != cls.NONE and (not exclude_occult_types or value not in exclude_occult_types)])
         return value_list
 
     @classmethod
-    def get_all_names(cls) -> Tuple[str]:
-        """get_all_names()
+    def get_all_names(cls, exclude_occult_types: Iterator['CommonOccultType']=()) -> Tuple[str]:
+        """get_all_names(exclude_occult_types=())
 
         Retrieve a collection of the names of all CommonOccultType, excluding CommonOccultType.NONE.
 
+        :param exclude_occult_types: An iterable of occult types to exclude from the result.
+        :type exclude_occult_types: CommonOccultType
         :return: A collection of the names of all CommonOccultType, without CommonOccultType.NONE.
         :rtype: Tuple[str]
         """
-        name_list: Tuple[str] = tuple([value.name for value in cls.get_all()])
+        name_list: Tuple[str] = tuple([value.name for value in cls.get_all(exclude_occult_types=exclude_occult_types)])
         return name_list
 
     @classmethod
-    def get_comma_separated_names_string(cls) -> str:
-        """get_comma_separated_names_string()
+    def get_comma_separated_names_string(cls, exclude_occult_types: Iterator['CommonOccultType']=()) -> str:
+        """get_comma_separated_names_string(exclude_occult_types=())
 
         Create a string containing all names of all CommonOccultType values (excluding CommonOccultType.NONE), separated by a comma.
 
+        :param exclude_occult_types: An iterable of occult types to exclude from the result.
+        :type exclude_occult_types: CommonOccultType
         :return: A string containing all names of all CommonOccultType values (excluding CommonOccultType.NONE), separated by a comma.
         :rtype: str
         """
-        return ', '.join(cls.get_all_names())
+        return ', '.join(cls.get_all_names(exclude_occult_types=exclude_occult_types))
 
     @staticmethod
     def determine_occult_type(sim_info: SimInfo) -> 'CommonOccultType':

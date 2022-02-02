@@ -8,8 +8,6 @@ Copyright (c) COLONOLNUTTY
 import os
 
 from typing import Union, Tuple, Callable, Any, Iterator
-
-from server_commands.argument_helpers import RequiredTargetParam
 from sims.sim_info_lod import SimInfoLODLevel
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_gender import CommonGender
@@ -880,10 +878,9 @@ if not ON_RTD:
 
 
     @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.purge_sim', 'Purge a Sim, essentially deleting them.', command_arguments=(
-        CommonConsoleCommandArgument('opt_sim', 'Sim Id', 'The instance id of the Sim to purge.', is_optional=False),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to purge.', is_optional=False),
     ))
-    def _s4cl_purge_sim(output: CommonConsoleCommandOutput, sim: RequiredTargetParam):
-        sim_info = output.get_sim(sim)
+    def _s4cl_purge_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo):
         if sim_info is None:
             return
         if sim_info is CommonSimUtils.get_active_sim_info():

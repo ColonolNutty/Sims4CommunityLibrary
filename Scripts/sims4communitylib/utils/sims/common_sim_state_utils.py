@@ -7,6 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 import services
 from sims.sim_info import SimInfo
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -17,26 +18,30 @@ class CommonSimStateUtils:
 
     """
     @staticmethod
-    def is_dying(sim_info: SimInfo) -> bool:
+    def is_dying(sim_info: SimInfo) -> CommonTestResult:
         """is_dying(sim_info)
 
         Determine if a Sim is currently dying.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim is dying. False, if the Sim is not dying.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim is dying. False, if the Sim is not dying.
+        :rtype: CommonTestResult
         """
         return CommonBuffUtils.has_buff(sim_info, CommonBuffId.SIM_IS_DYING)
 
     @staticmethod
-    def is_wearing_towel(sim_info: SimInfo) -> bool:
+    def is_wearing_towel(sim_info: SimInfo) -> CommonTestResult:
         """is_wearing_towel(sim_info)
 
         Determine if a Sim is wearing a towel.
 
         ..warning:: Obsolete: Use :func:`~is_wearing_towel` in :class:`.CommonOutfitUtils` instead.
 
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: The result of testing. True, if the sim is wearing a towel. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
         return CommonOutfitUtils.is_wearing_towel(sim_info)

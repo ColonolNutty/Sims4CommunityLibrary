@@ -7,6 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Dict, Iterator
 from sims.sim_info import SimInfo
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_occult_type import CommonOccultType
 from sims4communitylib.enums.common_species import CommonSpecies
@@ -1545,7 +1546,7 @@ class CommonSimTypeUtils:
         return sim_info.is_played_sim
 
     @staticmethod
-    def is_service_sim(sim_info: SimInfo) -> bool:
+    def is_service_sim(sim_info: SimInfo) -> CommonTestResult:
         """Determine if a Sim is a Service Sim.
 
         .. note::
@@ -1572,8 +1573,8 @@ class CommonSimTypeUtils:
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim is a Service Sim. False, if not.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim is a Service Sim. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.enums.traits_enum import CommonTraitId
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
@@ -1597,7 +1598,7 @@ class CommonSimTypeUtils:
             CommonTraitId.IS_RESTAURANT_CRITIC,
             CommonTraitId.IS_STATUE_BUSKER
         )
-        return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+        return CommonTraitUtils.has_any_traits(sim_info, trait_ids)
 
     @staticmethod
     def is_occult(sim_info: SimInfo, combine_teen_young_adult_and_elder_age: bool=True, combine_child_dog_types: bool=True) -> bool:

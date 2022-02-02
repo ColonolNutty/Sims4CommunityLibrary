@@ -12,8 +12,6 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
-from sims4communitylib.services.commands.common_console_command_parameters import \
-    CommonOptionalSimInfoConsoleCommandParameter
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -126,10 +124,9 @@ class CommonSimPlumbobUtils:
 
 
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.hide_plumbob', 'Hide the plumbob above a Sim.', command_arguments=(
-    CommonConsoleCommandArgument('opt_sim', 'Sim Id', 'The instance id of the Sim to hide the plumbob of.', is_optional=True, default_value='Active Sim'),
+    CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to hide the plumbob of.', is_optional=True, default_value='Active Sim'),
 ))
-def _common_hide_plumbob(output: CommonConsoleCommandOutput, sim_info: CommonOptionalSimInfoConsoleCommandParameter=None):
-    sim_info: SimInfo = sim_info
+def _common_hide_plumbob(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     if sim_info is None:
         return
     output(f'Hiding plumbob for Sim {sim_info}')
@@ -137,10 +134,9 @@ def _common_hide_plumbob(output: CommonConsoleCommandOutput, sim_info: CommonOpt
 
 
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.show_plumbob', 'Show the plumbob above a Sim.', command_arguments=(
-    CommonConsoleCommandArgument('opt_sim', 'Sim Id', 'The instance id of the Sim to show the plumbob of.', is_optional=True, default_value='Active Sim'),
+    CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to show the plumbob of.', is_optional=True, default_value='Active Sim'),
 ))
-def _common_show_plumbob(output: CommonConsoleCommandOutput, sim_info: CommonOptionalSimInfoConsoleCommandParameter=None):
-    sim_info: SimInfo=sim_info
+def _common_show_plumbob(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
     if sim_info is None:
         return
     output(f'Showing plumbob for Sim {sim_info}')

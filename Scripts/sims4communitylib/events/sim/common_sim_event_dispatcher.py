@@ -18,7 +18,6 @@ from sims.sim_info_types import Age
 from sims.sim_spawner import SimSpawner
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_gender import CommonGender
-from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
 from sims4communitylib.events.sim.events.sim_added_occult_type import S4CLSimAddedOccultTypeEvent
 from sims4communitylib.events.sim.events.sim_after_set_current_outfit import S4CLSimAfterSetCurrentOutfitEvent
@@ -49,7 +48,6 @@ from sims4communitylib.events.sim.events.sim_trait_removed import S4CLSimTraitRe
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
-from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from statistics.skill import Skill
@@ -254,7 +252,8 @@ def _common_on_sim_trait_removed(original, self: TraitTracker, *args, **kwargs):
 
 @CommonEventRegistry.handle_events(ModInfo.get_identity())
 def _common_register_buff_added_or_removed_on_sim_spawned(event_data: S4CLSimSpawnedEvent) -> bool:
-    buff_component: BuffComponent = CommonComponentUtils.get_component(event_data.sim_info, CommonComponentType.BUFF)
+    from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
+    buff_component: BuffComponent = CommonBuffUtils.get_buff_component(event_data.sim_info)
     if not buff_component:
         return False
 

@@ -55,14 +55,10 @@ class CommonExecutionResult(TestResult):
         super().__init__(result, reason, tooltip=tooltip, icon=icon, influence_by_active_mood=influenced_by_active_mood)
         self._success_override = success_override
         if success_override is None:
-            # noinspection PyBroadException
-            try:
-                success_override = bool(result)
-            except:
-                if result:
-                    success_override = True
-                else:
-                    success_override = False
+            if result:
+                success_override = True
+            else:
+                success_override = False
         self._success = success_override
 
     @property

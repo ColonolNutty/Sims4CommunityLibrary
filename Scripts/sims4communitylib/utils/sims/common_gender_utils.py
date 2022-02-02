@@ -90,15 +90,15 @@ class CommonGenderUtils:
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         result = False
-        frame = CommonSimGenderOptionUtils.has_masculine_frame(sim_info)
-        prefers_menswear = CommonSimGenderOptionUtils.prefers_menswear(sim_info)
-        can_impregnate = CommonSimGenderOptionUtils.can_impregnate(sim_info)
-        can_be_impregnated = CommonSimGenderOptionUtils.can_be_impregnated(sim_info)
-        can_reproduce = CommonSimGenderOptionUtils.can_reproduce(sim_info)
+        frame = CommonSimGenderOptionUtils.has_masculine_frame(sim_info).result
+        prefers_menswear = CommonSimGenderOptionUtils.prefers_menswear(sim_info).result
+        can_impregnate = CommonSimGenderOptionUtils.can_impregnate(sim_info).result
+        can_be_impregnated = CommonSimGenderOptionUtils.can_be_impregnated(sim_info).result
+        can_reproduce = CommonSimGenderOptionUtils.can_reproduce(sim_info).result
         voice_pitch = CommonSimVoiceUtils.get_voice_pitch(sim_info)
         voice_actor = CommonSimVoiceUtils.get_voice_actor(sim_info)
-        uses_toilet_standing = CommonSimGenderOptionUtils.uses_toilet_standing(sim_info)
-        has_breasts = CommonSimGenderOptionUtils.has_breasts(sim_info)
+        uses_toilet_standing = CommonSimGenderOptionUtils.uses_toilet_standing(sim_info).result
+        has_breasts = CommonSimGenderOptionUtils.has_breasts(sim_info).result
         saved_outfits = sim_info.save_outfits()
         current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
         if CommonGenderUtils.is_male(sim_info):

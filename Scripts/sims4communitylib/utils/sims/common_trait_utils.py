@@ -13,6 +13,8 @@ from relationships.sim_knowledge import SimKnowledge
 from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
 from sims4.resources import Types
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
@@ -42,7 +44,7 @@ class CommonTraitUtils(HasClassLog):
         return 'common_trait_utils'
 
     @classmethod
-    def is_special_npc(cls, sim_info: SimInfo) -> bool:
+    def is_special_npc(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_special_npc(sim_info)
 
         Determine if a Sim is a Special NPC.
@@ -58,8 +60,8 @@ class CommonTraitUtils(HasClassLog):
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim is a special NPC. False, if the Sim is not a Special NPC.
+        :rtype: CommonTestResult
         """
         traits = (
             CommonTraitId.HIDDEN_IS_EVENT_NPC_CHALLENGE,
@@ -67,540 +69,540 @@ class CommonTraitUtils(HasClassLog):
             CommonTraitId.SCARECROW,
             CommonTraitId.FLOWER_BUNNY
         )
-        return CommonTraitUtils.has_trait(sim_info, *traits)
+        return cls.has_any_traits(sim_info, traits)
 
     @classmethod
-    def is_active(cls, sim_info: SimInfo) -> bool:
+    def is_active(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_active(sim_info)
 
         Determine if a Sim is active.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.ACTIVE)
+        return cls.has_trait(sim_info, CommonTraitId.ACTIVE)
 
     @classmethod
-    def is_aggressive_pet(cls, sim_info: SimInfo) -> bool:
+    def is_aggressive_pet(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_aggressive_pet(sim_info)
 
         Determine if a pet Sim is Aggressive.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        trait_ids = (
+        traits = (
             CommonTraitId.PET_AGGRESSIVE_DOG,
             CommonTraitId.PET_AGGRESSIVE_CAT
         )
-        return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+        return cls.has_any_traits(sim_info, traits)
 
     @classmethod
-    def is_alluring(cls, sim_info: SimInfo) -> bool:
+    def is_alluring(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_alluring(sim_info)
 
         Determine if a Sim is Alluring.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.ALLURING)
+        return cls.has_trait(sim_info, CommonTraitId.ALLURING)
 
     @classmethod
-    def is_antiseptic(cls, sim_info: SimInfo) -> bool:
+    def is_antiseptic(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_antiseptic(sim_info)
 
         Determine if a Sim is Antiseptic.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.ANTISEPTIC)
+        return cls.has_trait(sim_info, CommonTraitId.ANTISEPTIC)
 
     @classmethod
-    def is_bro(cls, sim_info: SimInfo) -> bool:
+    def is_bro(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_bro(sim_info)
 
         Determine if a Sim is a Bro.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.BRO)
+        return cls.has_trait(sim_info, CommonTraitId.BRO)
 
     @classmethod
-    def is_carefree(cls, sim_info: SimInfo) -> bool:
+    def is_carefree(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_carefree(sim_info)
 
         Determine if a Sim is Care Free.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.CAREFREE)
+        return cls.has_trait(sim_info, CommonTraitId.CAREFREE)
 
     @classmethod
-    def is_cat_lover(cls, sim_info: SimInfo) -> bool:
+    def is_cat_lover(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_cat_lover(sim_info)
 
         Determine if a Sim is a Cat Lover.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.CAT_LOVER)
+        return cls.has_trait(sim_info, CommonTraitId.CAT_LOVER)
 
     @classmethod
-    def is_dog_lover(cls, sim_info: SimInfo) -> bool:
+    def is_dog_lover(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_dog_lover(sim_info)
 
         Determine if a Sim is a Dog Lover.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.DOG_LOVER)
+        return cls.has_trait(sim_info, CommonTraitId.DOG_LOVER)
 
     @classmethod
-    def is_clumsy(cls, sim_info: SimInfo) -> bool:
+    def is_clumsy(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_clumsy(sim_info)
 
         Determine if a Sim is Clumsy.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.CLUMSY)
+        return cls.has_trait(sim_info, CommonTraitId.CLUMSY)
 
     @classmethod
-    def is_dastardly(cls, sim_info: SimInfo) -> bool:
+    def is_dastardly(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_dastardly(sim_info)
 
         Determine if a Sim is Dastardly.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.DASTARDLY)
+        return cls.has_trait(sim_info, CommonTraitId.DASTARDLY)
 
     @classmethod
-    def is_criminal(cls, sim_info: SimInfo) -> bool:
+    def is_criminal(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_criminal(sim_info)
 
         Determine if a Sim is a Criminal.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        trait_ids = (
+        traits = (
             CommonTraitId.DETECTIVE_CAREER_CRIMINAL,
             CommonTraitId.DETECTIVE_CAREER_POLICE_STATION_CRIMINAL_NPC
         )
-        return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+        return cls.has_any_traits(sim_info, traits)
 
     @classmethod
-    def is_evil(cls, sim_info: SimInfo) -> bool:
+    def is_evil(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_evil(sim_info)
 
         Determine if a Sim is Evil.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        trait_ids = (
+        traits = (
             CommonTraitId.EVIL,
             CommonTraitId.EVIL_BEGONIA_SCENT
         )
-        return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+        return cls.has_any_traits(sim_info, traits)
 
     @classmethod
-    def is_fertile(cls, sim_info: SimInfo) -> bool:
+    def is_fertile(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_fertile(sim_info)
 
         Determine if a Sim is Fertile.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.FERTILE)
+        return cls.has_trait(sim_info, CommonTraitId.FERTILE)
 
     @classmethod
-    def is_friendly_pet(cls, sim_info: SimInfo) -> bool:
+    def is_friendly_pet(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_friendly_pet(sim_info)
 
         Determine if a pet Sim is Friendly.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        trait_ids = (
+        traits = (
             CommonTraitId.PET_FRIENDLY_DOG,
             CommonTraitId.PET_FRIENDLY_CAT
         )
-        return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+        return cls.has_any_traits(sim_info, traits)
 
     @classmethod
-    def is_geek(cls, sim_info: SimInfo) -> bool:
+    def is_geek(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_geek(sim_info)
 
         Determine if a Sim is a geek.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GEEK)
+        return cls.has_trait(sim_info, CommonTraitId.GEEK)
 
     @classmethod
-    def is_genius(cls, sim_info: SimInfo) -> bool:
+    def is_genius(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_genius(sim_info)
 
         Determine if a Sim is a Genius.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GENIUS)
+        return cls.has_trait(sim_info, CommonTraitId.GENIUS)
 
     @classmethod
-    def is_good(cls, sim_info: SimInfo) -> bool:
+    def is_good(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_good(sim_info)
 
         Determine if a Sim is Good.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GOOD)
+        return cls.has_trait(sim_info, CommonTraitId.GOOD)
 
     @classmethod
-    def is_glutton(cls, sim_info: SimInfo) -> bool:
+    def is_glutton(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_glutton(sim_info)
 
         Determine if a Sim is a Glutton.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.is_glutton_human(sim_info) or CommonTraitUtils.is_glutton_pet(sim_info)
+        return cls.is_glutton_human(sim_info) or cls.is_glutton_pet(sim_info)
 
     @classmethod
-    def is_glutton_human(cls, sim_info: SimInfo) -> bool:
+    def is_glutton_human(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_glutton_human(sim_info)
 
         Determine if a non pet Sim is a Glutton
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GLUTTON)
+        return cls.has_trait(sim_info, CommonTraitId.GLUTTON)
 
     @classmethod
-    def is_glutton_pet(cls, sim_info: SimInfo) -> bool:
+    def is_glutton_pet(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_glutton_pet(sim_info)
 
         Determine if a pet Sim is a Glutton.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        trait_ids = (
+        traits = (
             CommonTraitId.PET_GLUTTON_DOG,
             CommonTraitId.PET_GLUTTON_CAT
         )
-        return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+        return cls.has_any_traits(sim_info, traits)
 
     @classmethod
-    def is_gregarious(cls, sim_info: SimInfo) -> bool:
+    def is_gregarious(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_gregarious(sim_info)
 
         Determine if a Sim is Gregarious.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.GREGARIOUS)
+        return cls.has_trait(sim_info, CommonTraitId.GREGARIOUS)
 
     @classmethod
-    def is_hot_headed(cls, sim_info: SimInfo) -> bool:
+    def is_hot_headed(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_hot_headed(sim_info)
 
         Determine if a Sim is Hot Headed.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.HOT_HEADED)
+        return cls.has_trait(sim_info, CommonTraitId.HOT_HEADED)
 
     @classmethod
-    def is_hunter_pet(cls, sim_info: SimInfo) -> bool:
+    def is_hunter_pet(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_hunter_pet(sim_info)
 
         Determine if a pet Sim is a Hunter.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        trait_ids = (
+        traits = (
             CommonTraitId.PET_HUNTER_DOG,
             CommonTraitId.PET_HUNTER_CAT
         )
-        return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+        return cls.has_any_traits(sim_info, traits)
 
     @classmethod
-    def is_incredibly_friendly(cls, sim_info: SimInfo) -> bool:
+    def is_incredibly_friendly(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_incredibly_friendly(sim_info)
 
         Determine if a Sim is Incredibly Friendly.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.INCREDIBLY_FRIENDLY)
+        return cls.has_trait(sim_info, CommonTraitId.INCREDIBLY_FRIENDLY)
 
     @classmethod
-    def is_insane(cls, sim_info: SimInfo) -> bool:
+    def is_insane(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_insane(sim_info)
 
         Determine if a Sim is Insane.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.INSANE)
+        return cls.has_trait(sim_info, CommonTraitId.INSANE)
 
     @classmethod
-    def is_insider(cls, sim_info: SimInfo) -> bool:
+    def is_insider(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_insider(sim_info)
 
         Determine if a Sim is an Insider.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.INSIDER)
+        return cls.has_trait(sim_info, CommonTraitId.INSIDER)
 
     @classmethod
-    def is_loyal_pet(cls, sim_info: SimInfo) -> bool:
+    def is_loyal_pet(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_loyal_pet(sim_info)
 
         Determine if a pet Sim is Loyal.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        trait_ids = (
+        traits = (
             CommonTraitId.PET_LOYAL_DOG,
             CommonTraitId.PET_LOYAL_CAT
         )
-        return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+        return cls.has_any_traits(sim_info, traits)
 
     @classmethod
-    def is_mean(cls, sim_info: SimInfo) -> bool:
+    def is_mean(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_mean(sim_info)
 
         Determine if a Sim is Mean.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.MEAN)
+        return cls.has_trait(sim_info, CommonTraitId.MEAN)
 
     @classmethod
-    def is_mentor(cls, sim_info: SimInfo) -> bool:
+    def is_mentor(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_mentor(sim_info)
 
         Determine if a Sim is a Mentor.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.MENTOR)
+        return cls.has_trait(sim_info, CommonTraitId.MENTOR)
 
     @classmethod
-    def is_morning_person(cls, sim_info: SimInfo) -> bool:
+    def is_morning_person(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_morning_person(sim_info)
 
         Determine if a Sim is a Morning Person.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.MORNING_PERSON)
+        return cls.has_trait(sim_info, CommonTraitId.MORNING_PERSON)
 
     @classmethod
-    def is_naughty_pet(cls, sim_info: SimInfo) -> bool:
+    def is_naughty_pet(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_naughty_pet(sim_info)
 
         Determine if a pet Sim is Naughty.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        trait_ids = (
+        traits = (
             CommonTraitId.PET_NAUGHTY_DOG,
             CommonTraitId.PET_NAUGHTY_CAT
         )
-        return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+        return cls.has_any_traits(sim_info, traits)
 
     @classmethod
-    def is_neat(cls, sim_info: SimInfo) -> bool:
+    def is_neat(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_neat(sim_info)
 
         Determine if a Sim is neat.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.NEAT)
+        return cls.has_trait(sim_info, CommonTraitId.NEAT)
 
     @classmethod
-    def is_night_owl(cls, sim_info: SimInfo) -> bool:
+    def is_night_owl(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_night_owl(sim_info)
 
         Determine if a Sim is a Night Owl.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        trait_ids = (
+        traits = (
             CommonTraitId.NIGHT_OWL,
             CommonTraitId.NIGHT_OWL_CRYSTAL_HELMET
         )
-        return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+        return cls.has_any_traits(sim_info, traits)
 
     @classmethod
-    def is_lazy(cls, sim_info: SimInfo) -> bool:
+    def is_lazy(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_lazy(sim_info)
 
         Determine if a Sim is Lazy.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.LAZY)
+        return cls.has_trait(sim_info, CommonTraitId.LAZY)
 
     @classmethod
-    def is_loner(cls, sim_info: SimInfo) -> bool:
+    def is_loner(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_loner(sim_info)
 
         Determine if a Sim is a Loner.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.LONER)
+        return cls.has_trait(sim_info, CommonTraitId.LONER)
 
     @classmethod
-    def is_love_guru(cls, sim_info: SimInfo) -> bool:
+    def is_love_guru(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_love_guru(sim_info)
 
         Determine if a Sim is a Love Guru.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.LOVE_GURU)
+        return cls.has_trait(sim_info, CommonTraitId.LOVE_GURU)
 
     @classmethod
-    def is_self_absorbed(cls, sim_info: SimInfo) -> bool:
+    def is_self_absorbed(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_self_absorbed(sim_info)
 
         Determine if a Sim is Self Absorbed.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SELF_ABSORBED)
+        return cls.has_trait(sim_info, CommonTraitId.SELF_ABSORBED)
 
     @classmethod
-    def is_self_assured(cls, sim_info: SimInfo) -> bool:
+    def is_self_assured(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_self_assured(sim_info)
 
         Determine if a Sim is Self Assured.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SELF_ASSURED)
+        return cls.has_trait(sim_info, CommonTraitId.SELF_ASSURED)
 
     @classmethod
-    def is_service_sim(cls, sim_info: SimInfo) -> bool:
+    def is_service_sim(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_service_sim(sim_info)
 
         Determine if a Sim is a service Sim.
@@ -612,236 +614,236 @@ class CommonTraitUtils(HasClassLog):
         return CommonSimTypeUtils.is_service_sim(sim_info)
 
     @classmethod
-    def is_shameless(cls, sim_info: SimInfo) -> bool:
+    def is_shameless(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_shameless(sim_info)
 
         Determine if a Sim is Shameless.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SHAMELESS)
+        return cls.has_trait(sim_info, CommonTraitId.SHAMELESS)
 
     @classmethod
-    def is_sincere(cls, sim_info: SimInfo) -> bool:
+    def is_sincere(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_sincere(sim_info)
 
         Determine if a Sim is Sincere.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SINCERE)
+        return cls.has_trait(sim_info, CommonTraitId.SINCERE)
 
     @classmethod
-    def is_skittish_pet(cls, sim_info: SimInfo) -> bool:
+    def is_skittish_pet(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_skittish_pet(sim_info)
 
         Determine if a pet Sim is Skittish.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        trait_ids = (
+        traits = (
             CommonTraitId.PET_SKITTISH_DOG,
             CommonTraitId.PET_SKITTISH_CAT
         )
-        return CommonTraitUtils.has_trait(sim_info, *trait_ids)
+        return cls.has_any_traits(sim_info, traits)
 
     @classmethod
-    def is_slob(cls, sim_info: SimInfo) -> bool:
+    def is_slob(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_slob(sim_info)
 
         Determine if a Sim is a Slob.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SLOB)
+        return cls.has_trait(sim_info, CommonTraitId.SLOB)
 
     @classmethod
-    def is_snob(cls, sim_info: SimInfo) -> bool:
+    def is_snob(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_snob(sim_info)
 
         Determine if a Sim is a Snob.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SNOB)
+        return cls.has_trait(sim_info, CommonTraitId.SNOB)
 
     @classmethod
-    def is_squeamish(cls, sim_info: SimInfo) -> bool:
+    def is_squeamish(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_squeamish(sim_info)
 
         Determine if a Sim is Squeamish.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SQUEAMISH)
+        return cls.has_trait(sim_info, CommonTraitId.SQUEAMISH)
 
     @classmethod
-    def is_survivalist(cls, sim_info: SimInfo) -> bool:
+    def is_survivalist(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_survivalist(sim_info)
 
         Determine if a Sim is a Survivalist.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.SURVIVALIST)
+        return cls.has_trait(sim_info, CommonTraitId.SURVIVALIST)
 
     @classmethod
-    def is_unflirty(cls, sim_info: SimInfo) -> bool:
+    def is_unflirty(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_unflirty(sim_info)
 
         Determine if a Sim is Unflirty.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim has the Trait. False, if the Sim does not have the Trait.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.UNFLIRTY)
+        return cls.has_trait(sim_info, CommonTraitId.UNFLIRTY)
 
     @classmethod
-    def hates_children(cls, sim_info: SimInfo) -> bool:
+    def hates_children(cls, sim_info: SimInfo) -> CommonTestResult:
         """hates_children(sim_info)
 
         Determine if a Sim Hates Children.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim does. False, if the Sim does not.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Hates Children trait. False, if not.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.HATES_CHILDREN)
+        return cls.has_trait(sim_info, CommonTraitId.HATES_CHILDREN)
 
     @classmethod
-    def has_animal_attraction(cls, sim_info: SimInfo) -> bool:
+    def has_animal_attraction(cls, sim_info: SimInfo) -> CommonTestResult:
         """has_animal_attraction(sim_info)
 
         Determine if a Sim has an Animal Attraction.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim does. False, if the Sim does not.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if not.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.ANIMAL_ATTRACTION)
+        return cls.has_trait(sim_info, CommonTraitId.ANIMAL_ATTRACTION)
 
     @classmethod
-    def has_animal_whisperer(cls, sim_info: SimInfo) -> bool:
+    def has_animal_whisperer(cls, sim_info: SimInfo) -> CommonTestResult:
         """has_animal_whisperer(sim_info)
 
         Determine if a Sim is an Animal Whisperer.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim does. False, if the Sim does not.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if not.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.ANIMAL_WHISPERER)
+        return cls.has_trait(sim_info, CommonTraitId.ANIMAL_WHISPERER)
 
     @classmethod
-    def has_challenge_kindness_ambassador(cls, sim_info: SimInfo) -> bool:
+    def has_challenge_kindness_ambassador(cls, sim_info: SimInfo) -> CommonTestResult:
         """has_challenge_kindness_ambassador(sim_info)
 
         Determine if a Sim has Challenged the Kindness Ambassador.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim does. False, if the Sim does not.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has challenged the kindness ambassador. False, if not.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.CHALLENGE_KINDNESS_AMBASSADOR)
+        return cls.has_trait(sim_info, CommonTraitId.CHALLENGE_KINDNESS_AMBASSADOR)
 
     @classmethod
-    def has_commitment_issues(cls, sim_info: SimInfo) -> bool:
+    def has_commitment_issues(cls, sim_info: SimInfo) -> CommonTestResult:
         """has_commitment_issues(sim_info)
 
         Determine if a Sim has Commitment Issues.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim does. False, if the Sim does not.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has the Trait. False, if not.
+        :rtype: CommonTestResult
         """
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.COMMITMENT_ISSUES)
+        return cls.has_trait(sim_info, CommonTraitId.COMMITMENT_ISSUES)
 
     @classmethod
-    def has_masculine_frame(cls, sim_info: SimInfo) -> bool:
+    def has_masculine_frame(cls, sim_info: SimInfo) -> CommonTestResult:
         """has_masculine_frame(sim_info)
 
         Determine if a Sim has a Masculine Body Frame.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim does. False, if the Sim does not.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has a masculine frame. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.has_masculine_frame(sim_info)
 
     @classmethod
-    def has_feminine_frame(cls, sim_info: SimInfo) -> bool:
+    def has_feminine_frame(cls, sim_info: SimInfo) -> CommonTestResult:
         """has_feminine_frame(sim_info)
 
         Determine if a Sim has a Feminine Body Frame.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim does. False, if the Sim does not.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim has a feminine frame. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.has_feminine_frame(sim_info)
 
     @classmethod
-    def prefers_menswear(cls, sim_info: SimInfo) -> bool:
+    def prefers_menswear(cls, sim_info: SimInfo) -> CommonTestResult:
         """prefers_menswear(sim_info)
 
         Determine if a Sim prefers Mens Clothing.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim does. False, if the Sim does not.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim prefers menswear. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.prefers_menswear(sim_info)
 
     @classmethod
-    def prefers_womenswear(cls, sim_info: SimInfo) -> bool:
+    def prefers_womenswear(cls, sim_info: SimInfo) -> CommonTestResult:
         """prefers_womenswear(sim_info)
 
         Determine if a Sim prefers Womens Clothing.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim does. False, if the Sim does not.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim prefers womenswear. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.prefers_womenswear(sim_info)
 
     @classmethod
-    def can_impregnate(cls, sim_info: SimInfo) -> bool:
+    def can_impregnate(cls, sim_info: SimInfo) -> CommonTestResult:
         """can_impregnate(sim_info)
 
         Determine if a Sim Can Impregnate.
@@ -851,14 +853,14 @@ class CommonTraitUtils(HasClassLog):
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim can impregnate other Sims. False, if the Sim can not impregnate other Sims.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim can impregnate other Sims. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_impregnate(sim_info)
 
     @classmethod
-    def can_not_impregnate(cls, sim_info: SimInfo) -> bool:
+    def can_not_impregnate(cls, sim_info: SimInfo) -> CommonTestResult:
         """can_not_impregnate(sim_info)
 
         Determine if a Sim Can Not Impregnate.
@@ -868,14 +870,14 @@ class CommonTraitUtils(HasClassLog):
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim can not impregnate other Sims. False, if the Sim can impregnate other Sims.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim can not impregnate other Sims. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_not_impregnate(sim_info)
 
     @classmethod
-    def can_be_impregnated(cls, sim_info: SimInfo) -> bool:
+    def can_be_impregnated(cls, sim_info: SimInfo) -> CommonTestResult:
         """can_be_impregnated(sim_info)
 
         Determine if a Sim Can Be Impregnated.
@@ -885,14 +887,14 @@ class CommonTraitUtils(HasClassLog):
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim can be impregnated. False, if the Sim can not be impregnated.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim can be impregnated. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_be_impregnated(sim_info)
 
     @classmethod
-    def can_not_be_impregnated(cls, sim_info: SimInfo) -> bool:
+    def can_not_be_impregnated(cls, sim_info: SimInfo) -> CommonTestResult:
         """can_not_be_impregnated(sim_info)
 
         Determine if a Sim Can Not Be Impregnated.
@@ -902,14 +904,14 @@ class CommonTraitUtils(HasClassLog):
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim can not be impregnated. False, if the Sim can be impregnated.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim can not be impregnated. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_not_be_impregnated(sim_info)
 
     @classmethod
-    def can_create_pregnancy(cls, sim_info: SimInfo) -> bool:
+    def can_create_pregnancy(cls, sim_info: SimInfo) -> CommonTestResult:
         """can_create_pregnancy(sim_info)
 
         Determine if a Sim can either impregnate, be impregnated, or can reproduce.
@@ -922,14 +924,14 @@ class CommonTraitUtils(HasClassLog):
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim can create pregnancies. False, if the Sim can not create pregnancies.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim can create pregnancies. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_create_pregnancy(sim_info)
 
     @classmethod
-    def can_reproduce(cls, sim_info: SimInfo) -> bool:
+    def can_reproduce(cls, sim_info: SimInfo) -> CommonTestResult:
         """can_reproduce(sim_info)
 
         Determine if a pet Sim can reproduce.
@@ -939,14 +941,14 @@ class CommonTraitUtils(HasClassLog):
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim can reproduce. False, if the Sim can not reproduce.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim can reproduce. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_reproduce(sim_info)
 
     @classmethod
-    def can_not_reproduce(cls, sim_info: SimInfo) -> bool:
+    def can_not_reproduce(cls, sim_info: SimInfo) -> CommonTestResult:
         """can_not_reproduce(sim_info)
 
         Determine if a pet Sim can reproduce.
@@ -956,107 +958,109 @@ class CommonTraitUtils(HasClassLog):
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim can not reproduce. False, if the Sim can reproduce.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim can not reproduce. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.can_not_reproduce(sim_info)
 
     @classmethod
-    def uses_toilet_standing(cls, sim_info: SimInfo) -> bool:
+    def uses_toilet_standing(cls, sim_info: SimInfo) -> CommonTestResult:
         """uses_toilet_standing(sim_info)
 
         Determine if a Sim uses the toilet while standing.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim uses toilets while standing. False, if the Sim does not use toilets while standing.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim uses toilets while standing. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.uses_toilet_standing(sim_info)
 
     @classmethod
-    def uses_toilet_sitting(cls, sim_info: SimInfo) -> bool:
+    def uses_toilet_sitting(cls, sim_info: SimInfo) -> CommonTestResult:
         """uses_toilet_sitting(sim_info)
 
         Determine if a Sim uses the toilet while sitting.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the Sim uses toilets while sitting. False, if the Sim does not use toilets while sitting.
-        :rtype: bool
+        :return: The result of testing. True, if the Sim uses toilets while sitting. False, if not.
+        :rtype: CommonTestResult
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
         return CommonSimGenderOptionUtils.uses_toilet_sitting(sim_info)
 
     @classmethod
-    def has_trait(cls, sim_info: SimInfo, *trait_ids: Union[int, CommonTraitId]) -> bool:
-        """has_trait(sim_info, *trait_ids)
+    def has_trait(cls, sim_info: SimInfo, *trait: Union[int, CommonTraitId, Trait]) -> CommonTestResult:
+        """has_trait(sim_info, trait)
 
-        Determine if a Sim has any of the specified traits.
+        Determine if a Sim has a Trait.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :param trait_ids: An iterable of identifiers of Traits.
-        :type trait_ids: Union[int, CommonTraitId]
-        :return: True, if the Sim has any of the specified traits. False, if not.
-        :rtype: bool
+        :param trait: The trait to check for.
+        :type trait: Union[int, CommonTraitId, Trait]
+        :return: The result of testing. True, if the Sim has the specified trait. False, if not.
+        :rtype: CommonTestResult
         """
-        if not trait_ids:
-            return False
-        sim_trait_ids = CommonTraitUtils.get_trait_ids(sim_info)
-        for trait_id in sim_trait_ids:
-            if trait_id in trait_ids:
-                return True
-        return False
+        return cls.has_any_traits(sim_info, trait)
 
     @classmethod
-    def has_any_traits(cls, sim_info: SimInfo, trait_ids: Iterator[Union[int, CommonTraitId]]) -> bool:
+    def has_any_traits(cls, sim_info: SimInfo, traits: Iterator[Union[int, CommonTraitId, Trait]]) -> CommonTestResult:
         """has_any_traits(sim_info, trait_ids)
 
         Determine if a Sim has any of the specified traits.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :param trait_ids: An iterable of identifiers of Traits.
-        :type trait_ids: Iterator[Union[int, CommonTraitId]]
-        :return: True, if the Sim has any of the specified traits. False, if not.
-        :rtype: bool
+        :param traits: An iterable of identifiers of Traits.
+        :type traits: Iterator[Union[int, CommonTraitId, Trait]]
+        :return: The result of testing. True, if the Sim has any of the specified traits. False, if not.
+        :rtype: CommonTestResult
         """
-        trait_ids = tuple(trait_ids)
-        if not trait_ids:
-            return False
-        sim_trait_ids = CommonTraitUtils.get_trait_ids(sim_info)
-        for trait_id in sim_trait_ids:
-            if trait_id in trait_ids:
-                return True
-        return False
+        if sim_info is None:
+            raise AssertionError('Argument sim_info was None')
+        if not traits:
+            return CommonTestResult(False, 'No traits were specified.')
+        sim_trait_ids = cls.get_trait_ids(sim_info)
+        for trait in traits:
+            trait_id = cls.get_trait_id(trait)
+            if trait_id in sim_trait_ids:
+                return CommonTestResult.TRUE
+        return CommonTestResult(False, f'Sim did not have any of the specified traits.')
 
     @classmethod
-    def has_all_traits(cls, sim_info: SimInfo, trait_ids: Iterator[Union[int, CommonTraitId]]) -> bool:
+    def has_all_traits(cls, sim_info: SimInfo, traits: Iterator[Union[int, CommonTraitId, Trait]]) -> CommonTestResult:
         """has_all_traits(sim_info, trait_ids)
 
         Determine if a Sim has any of the specified traits.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :param trait_ids: An iterable of identifiers of Traits.
-        :type trait_ids: Iterator[Union[int, CommonTraitId]]
-        :return: True, if the Sim has any of the specified traits. False, if not.
-        :rtype: bool
+        :param traits: An iterable of identifiers of Traits.
+        :type traits: Iterator[Union[int, CommonTraitId, Trait]]
+        :return: The result of testing. True, if the Sim has any of the specified traits. False, if not.
+        :rtype: CommonTestResult
         """
-        trait_ids = tuple(trait_ids)
-        if not trait_ids:
-            return False
-        sim_trait_ids = CommonTraitUtils.get_trait_ids(sim_info)
-        for trait_id in trait_ids:
+        if sim_info is None:
+            raise AssertionError('Argument sim_info was None')
+        if not traits:
+            return CommonTestResult(False, 'No traits were specified.')
+        sim_trait_ids = cls.get_trait_ids(sim_info)
+        missing_traits_list = list()
+        for trait in traits:
+            trait_id = cls.get_trait_id(trait)
             if trait_id not in sim_trait_ids:
-                return False
-        return True
+                missing_traits_list.append(trait)
+        if missing_traits_list:
+            missing_traits_list_str = ', '.join([cls.get_trait_name(trait) or str(trait) if isinstance(trait, Trait) else str(trait) for trait in missing_traits_list])
+            return CommonTestResult(False, f'Sim did not have all traits. Missing Buffs: {missing_traits_list_str}')
+        return CommonTestResult.TRUE
 
     @classmethod
-    def is_conflicting_trait(cls, sim_info: SimInfo, trait_id: Union[int, CommonTraitId]) -> bool:
+    def is_conflicting_trait(cls, sim_info: SimInfo, trait_id: Union[int, CommonTraitId, Trait]) -> CommonTestResult:
         """is_conflicting_trait(sim_info, trait_id)
 
         Determine if a Trait conflicts with any of the Sims current Traits.
@@ -1065,12 +1069,12 @@ class CommonTraitUtils(HasClassLog):
         :type sim_info: SimInfo
         :param trait_id: The identifier of the trait to check.
         :type trait_id: int
-        :return: True, if the specified Trait conflicts with any Traits the Sim currently has. False, if not.
-        :rtype: bool
+        :return: The result of testing. True, if the specified Trait conflicts with any Traits the Sim currently has. False, if not.
+        :rtype: CommonTestResult
         """
-        trait_to_check = CommonTraitUtils.load_trait_by_id(trait_id)
+        trait_to_check = cls.load_trait_by_id(trait_id)
         if trait_to_check is None:
-            return False
+            return CommonTestResult(False, f'Trait {trait_id} did not exist, thus it cannot conflict.')
         from traits.trait_tracker import TraitTracker
         trait_tracker: TraitTracker = sim_info.trait_tracker
         return trait_tracker.is_conflicting(trait_to_check)
@@ -1087,8 +1091,8 @@ class CommonTraitUtils(HasClassLog):
         :rtype: List[int]
         """
         trait_ids = list()
-        for trait in CommonTraitUtils.get_traits(sim_info):
-            trait_id = CommonTraitUtils.get_trait_id(trait)
+        for trait in cls.get_traits(sim_info):
+            trait_id = cls.get_trait_id(trait)
             if trait_id is None:
                 continue
             trait_ids.append(trait_id)
@@ -1112,7 +1116,7 @@ class CommonTraitUtils(HasClassLog):
             return traits
         if not hasattr(sim_info, '_base'):
             return traits
-        return list([CommonTraitUtils.load_trait_by_id(trait_id) for trait_id in (*sim_info._base.trait_ids, *sim_info._base.base_trait_ids) if CommonTraitUtils.load_trait_by_id(trait_id) is not None])
+        return list([cls.load_trait_by_id(trait_id) for trait_id in (*sim_info._base.trait_ids, *sim_info._base.base_trait_ids) if cls.load_trait_by_id(trait_id) is not None])
 
     @classmethod
     def get_trait_name(cls, trait: Trait) -> Union[str, None]:
@@ -1154,7 +1158,7 @@ class CommonTraitUtils(HasClassLog):
         for trait in traits:
             # noinspection PyBroadException
             try:
-                name = CommonTraitUtils.get_trait_name(trait)
+                name = cls.get_trait_name(trait)
                 if not name:
                     continue
             except:
@@ -1177,62 +1181,119 @@ class CommonTraitUtils(HasClassLog):
         """
         if not hasattr(sim_info, 'trait_tracker') or not hasattr(sim_info.trait_tracker, 'equipped_traits'):
             if hasattr(sim_info, '_base'):
-                return list([CommonTraitUtils.load_trait_by_id(trait_id) for trait_id in (*sim_info._base.trait_ids, *sim_info._base.base_trait_ids) if CommonTraitUtils.load_trait_by_id(trait_id) is not None])
+                return list([cls.load_trait_by_id(trait_id) for trait_id in (*sim_info._base.trait_ids, *sim_info._base.base_trait_ids) if cls.load_trait_by_id(trait_id) is not None])
             return list()
         return list(sim_info.trait_tracker.equipped_traits)
 
     @classmethod
-    def add_trait(cls, sim_info: SimInfo, *traits: Union[int, CommonTraitId, Trait]) -> bool:
-        """add_trait(sim_info, *traits)
+    def add_trait(cls, sim_info: SimInfo, *trait: Union[int, CommonTraitId, Trait]) -> CommonExecutionResult:
+        """add_trait(sim_info, trait)
 
-        Add the specified traits to a Sim.
+        Add a Trait to a Sim.
 
         :param sim_info: The Sim to add the specified traits to.
         :type sim_info: SimInfo
-        :param traits: An iterable of Trait identifiers of traits being added.
-        :type traits: Union[int, CommonTraitId, Trait]
-        :return: True, if all specified traits were successfully added to the Sim. False, if not.
-        :rtype: bool
+        :param trait: The trait being added.
+        :type trait: Union[int, CommonTraitId, Trait]
+        :return: The result of adding the trait. True, if the trait was successfully added to the Sim. False, if not.
+        :rtype: CommonExecutionResult
         """
-        success = False
+        return cls.add_traits(sim_info, trait)
+
+    @classmethod
+    def add_traits(cls, sim_info: SimInfo, traits: Iterator[Union[int, CommonTraitId, Trait]]) -> CommonExecutionResult:
+        """add_traits(sim_info, traits)
+
+        Add Traits to a Sim.
+
+        :param sim_info: The Sim to add the specified traits to.
+        :type sim_info: SimInfo
+        :param traits: An iterable of identifiers of traits being added.
+        :type traits: Iterator[Union[int, CommonTraitId, Trait]]
+        :return: The result of adding the traits. True, if all specified traits were successfully added to the Sim. False, if not.
+        :rtype: CommonExecutionResult
+        """
+        if sim_info is None:
+            raise AssertionError('Argument sim_info was None')
+        has_any = False
+        success = True
+        failed_to_add_traits = list()
         for trait_id in traits:
             trait = cls.load_trait_by_id(trait_id)
             if trait is None:
                 cls.get_log().format_with_message('Failed to load trait by its id.', trait_id=trait_id)
+                failed_to_add_traits.append(trait_id)
                 continue
+            has_any = True
             cls.get_log().format_with_message('Attempting to add trait', trait=trait, trait_id=trait_id)
-            if sim_info.add_trait(trait):
-                cls.get_log().format_with_message('Successfully added trait.', trait=trait, trait_id=trait_id)
-                success = True
+            if cls.has_trait(sim_info, trait):
+                continue
+            add_result = sim_info.add_trait(trait)
+            if not add_result:
+                cls.get_log().format_with_message('Failed to add trait.', trait=trait, trait_id=trait_id, reason=add_result)
+                success = False
+                failed_to_add_traits.append(trait)
             else:
-                cls.get_log().format_with_message('Failed to add trait.', trait=trait, trait_id=trait_id)
-        return success
+                cls.get_log().format_with_message('Successfully added trait.', trait=trait, trait_id=trait_id)
+        if not success:
+            failed_to_add_traits_str = ', '.join([cls.get_trait_name(trait) or str(trait) if isinstance(trait, Trait) else str(trait) for trait in failed_to_add_traits])
+            return CommonExecutionResult(False, f'Failed to add traits. {failed_to_add_traits_str}')
+        if not has_any:
+            return CommonExecutionResult(True, 'Finished "adding" traits, but none of the specified traits were loaded.')
+        return CommonExecutionResult.TRUE
 
     @classmethod
-    def remove_trait(cls, sim_info: SimInfo, *traits: Union[int, CommonTraitId, Trait]) -> bool:
-        """remove_trait(sim_info, *trait)
+    def remove_trait(cls, sim_info: SimInfo, *trait: Union[int, CommonTraitId, Trait]) -> CommonExecutionResult:
+        """remove_trait(sim_info, trait)
 
-        Remove the specified traits from a Sim.
+        Remove a Trait from a Sim.
+
+        :param sim_info: The Sim to remove the specified traits from.
+        :type sim_info: SimInfo
+        :param trait: The trait being removed.
+        :type trait: Union[int, CommonTraitId, Trait]
+        :return: The result of removing the trait. True, if the trait was successfully removed from the Sim. False, if not.
+        :rtype: CommonExecutionResult
+        """
+        return cls.remove_traits(sim_info, trait)
+
+    @classmethod
+    def remove_traits(cls, sim_info: SimInfo, traits: Iterator[Union[int, CommonTraitId, Trait]]) -> CommonExecutionResult:
+        """remove_traits(sim_info, traits)
+
+        Remove Traits from a Sim.
 
         :param sim_info: The Sim to remove the specified traits from.
         :type sim_info: SimInfo
         :param traits: An iterable of Trait identifiers of traits being removed.
-        :type traits: Union[int, CommonTraitId, Trait]
-        :return: True, if all specified traits were successfully removed from the Sim. False, if not.
-        :rtype: bool
+        :type traits: Iterator[Union[int, CommonTraitId, Trait]]
+        :return: The result of removing the traits. True, if all specified traits were successfully removed from the Sim. False, if not.
+        :rtype: CommonExecutionResult
         """
-        success = False
-        for trait in traits:
-            if isinstance(trait, int) or isinstance(trait, CommonTraitId):
-                trait = CommonTraitUtils.load_trait_by_id(trait)
+        has_any_loaded = False
+        success = True
+        failed_to_remove_traits = list()
+        for trait_id in traits:
+            trait = cls.load_trait_by_id(trait_id)
             if trait is None:
+                failed_to_remove_traits.append(trait_id)
                 continue
-            if sim_info.remove_trait(trait):
-                success = True
-        return success
+            has_any_loaded = True
+            if not cls.has_trait(sim_info, trait):
+                continue
+            if not sim_info.remove_trait(trait):
+                failed_to_remove_traits.append(trait)
+                success = False
+
+        if not success:
+            failed_to_remove_traits_str = ', '.join([cls.get_trait_name(trait) or str(trait) if isinstance(trait, Trait) else str(trait) for trait in failed_to_remove_traits])
+            return CommonExecutionResult(False, f'Failed to remove traits. {failed_to_remove_traits_str}')
+        if not has_any_loaded:
+            return CommonExecutionResult(True, 'Finished "removing" traits, but none of the specified traits were loaded.')
+        return CommonExecutionResult.TRUE
 
     @classmethod
-    def swap_traits(cls, sim_info: SimInfo, trait_id_one: Union[int, CommonTraitId], trait_id_two: Union[int, CommonTraitId]) -> bool:
+    def swap_traits(cls, sim_info: SimInfo, trait_id_one: Union[int, CommonTraitId, Trait], trait_id_two: Union[int, CommonTraitId, Trait]) -> CommonExecutionResult:
         """swap_traits(sim_info, trait_id_one, trait_id_two)
 
         Remove one trait and add another to a Sim.
@@ -1243,57 +1304,57 @@ class CommonTraitUtils(HasClassLog):
         :param sim_info: The Sim to remove the specified traits from.
         :type sim_info: SimInfo
         :param trait_id_one: The first trait to remove/add
-        :type trait_id_one: Union[int, CommonTraitId]
+        :type trait_id_one: Union[int, CommonTraitId, Trait]
         :param trait_id_two: The second trait to remove/add
-        :type trait_id_two: Union[int, CommonTraitId]
-        :return: True, if the Traits were swapped successfully. False, if neither Trait exists on a Sim or the traits were not swapped successfully.
-        :rtype: bool
+        :type trait_id_two: Union[int, CommonTraitId, Trait]
+        :return: The result of swapping traits. True, if the Traits were swapped successfully. False, if neither Trait exists on a Sim or the traits were not swapped successfully.
+        :rtype: CommonExecutionResult
         """
         # Has Trait One
-        if CommonTraitUtils.has_trait(sim_info, trait_id_one):
-            CommonTraitUtils.remove_trait(sim_info, trait_id_one)
-            if not CommonTraitUtils.has_trait(sim_info, trait_id_two):
-                CommonTraitUtils.add_trait(sim_info, trait_id_two)
-            return True
+        if cls.has_trait(sim_info, trait_id_one):
+            cls.remove_trait(sim_info, trait_id_one)
+            if not cls.has_trait(sim_info, trait_id_two):
+                return cls.add_trait(sim_info, trait_id_two)
+            return CommonExecutionResult.TRUE
         # Has Trait Two
-        elif CommonTraitUtils.has_trait(sim_info, trait_id_two):
-            CommonTraitUtils.remove_trait(sim_info, trait_id_two)
-            if not CommonTraitUtils.has_trait(sim_info, trait_id_one):
-                CommonTraitUtils.add_trait(sim_info, trait_id_one)
-            return True
-        return False
+        elif cls.has_trait(sim_info, trait_id_two):
+            cls.remove_trait(sim_info, trait_id_two)
+            if not cls.has_trait(sim_info, trait_id_one):
+                return cls.add_trait(sim_info, trait_id_one)
+            return CommonExecutionResult.TRUE
+        return CommonExecutionResult(False, f'Sim had neither Trait One {trait_id_one} nor Trait Two {trait_id_two}.')
 
     @classmethod
-    def add_trait_to_all_sims(cls, trait_id: Union[int, CommonTraitId], include_sim_callback: Callable[[SimInfo], bool]=None):
+    def add_trait_to_all_sims(cls, trait_id: Union[int, CommonTraitId, Trait], include_sim_callback: Callable[[SimInfo], bool]=None):
         """add_trait_to_all_sims(trait_id, include_sim_callback=None)
 
         Add a trait to all Sims that match the specified include filter.
 
         :param trait_id: The identifier of the Trait to add to all Sims.
-        :type trait_id: Union[int, CommonTraitId]
+        :type trait_id: Union[int, CommonTraitId, Trait]
         :param include_sim_callback: Only Sims that match this filter will have the Trait added.
         :type include_sim_callback: Callback[[SimInfo], bool], optional
         """
         for sim_info in CommonSimUtils.get_instanced_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
-            if CommonTraitUtils.has_trait(sim_info, trait_id):
+            if cls.has_trait(sim_info, trait_id):
                 continue
-            CommonTraitUtils.add_trait(sim_info, trait_id)
+            cls.add_trait(sim_info, trait_id)
 
     @classmethod
-    def remove_trait_from_all_sims(cls, trait_id: Union[int, CommonTraitId], include_sim_callback: Callable[[SimInfo], bool]=None):
+    def remove_trait_from_all_sims(cls, trait_id: Union[int, CommonTraitId, Trait], include_sim_callback: Callable[[SimInfo], bool]=None):
         """remove_trait_from_all_sims(trait_id, include_sim_callback=None)
 
         Remove a trait from all Sims that match the specified include filter.
 
         :param trait_id: The identifier of the Trait to remove from all Sims.
-        :type trait_id: Union[int, CommonTraitId]
+        :type trait_id: Union[int, CommonTraitId, Trait]
         :param include_sim_callback: Only Sims that match this filter will have the Trait removed.
         :type include_sim_callback: Callback[[SimInfo], bool], optional
         """
         for sim_info in CommonSimUtils.get_instanced_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
-            if not CommonTraitUtils.has_trait(sim_info, trait_id):
+            if not cls.has_trait(sim_info, trait_id):
                 continue
-            CommonTraitUtils.remove_trait(sim_info, trait_id)
+            cls.remove_trait(sim_info, trait_id)
 
     @classmethod
     def get_trait_id(cls, trait_identifier: Union[int, Trait]) -> Union[int, None]:
@@ -1309,6 +1370,21 @@ class CommonTraitUtils(HasClassLog):
         if isinstance(trait_identifier, int):
             return trait_identifier
         return getattr(trait_identifier, 'guid64', None)
+
+    @classmethod
+    def is_trait_available(cls, trait: Union[int, CommonTraitId, Trait]) -> bool:
+        """is_trait_available(trait)
+
+        Determine if a Trait is available for use.
+
+        .. note:: If the Trait is part of a package that is not installed, it will be considered as not available.
+
+        :param trait: The trait to check for.
+        :type trait: Union[int, CommonTraitId, Trait]
+        :return: True, if the Trait is available for use. False, if not.
+        :rtype: bool
+        """
+        return cls.load_trait_by_id(trait) is not None
 
     @classmethod
     def load_trait_by_id(cls, trait: Union[int, CommonTraitId, Trait]) -> Union[Trait, None]:
@@ -1386,9 +1462,9 @@ def _common_add_trait(output: CommonConsoleCommandOutput, trait: TunableInstance
     output(f'Adding trait {trait} to Sim {sim_info}')
     result = CommonTraitUtils.add_trait(sim_info, trait)
     if result:
-        output(f'SUCCESS: Successfully added trait {trait} to Sim {sim_info}.')
+        output(f'SUCCESS: Successfully added trait {trait} to Sim {sim_info}: {result.reason}')
     else:
-        output(f'FAILED: Failed to add trait {trait} to Sim {sim_info}. {result}')
+        output(f'FAILED: Failed to add trait {trait} to Sim {sim_info}. {result.reason}')
 
 
 # noinspection SpellCheckingInspection
@@ -1410,10 +1486,11 @@ def _common_remove_trait(output: CommonConsoleCommandOutput, trait: TunableInsta
     if sim_info is None:
         return
     output(f'Removing trait {trait} from Sim {sim_info}')
-    if CommonTraitUtils.remove_trait(sim_info, trait):
-        output(f'SUCCESS: Successfully removed trait {trait} from Sim {sim_info}.')
+    result = CommonTraitUtils.remove_trait(sim_info, trait)
+    if result:
+        output(f'SUCCESS: Successfully removed trait {trait} from Sim {sim_info}: {result.reason}')
     else:
-        output(f'FAILED: Failed to remove trait {trait} from Sim {sim_info}.')
+        output(f'FAILED: Failed to remove trait {trait} from Sim {sim_info}: {result.reason}')
 
 
 # noinspection SpellCheckingInspection

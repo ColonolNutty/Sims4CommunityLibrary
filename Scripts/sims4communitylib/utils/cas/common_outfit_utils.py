@@ -11,6 +11,7 @@ from buffs.appearance_modifier.appearance_tracker import ModifierInfo
 from cas.cas import OutfitData
 from sims.outfits.outfit_enums import OutfitCategory, BodyType, OutfitFilterFlag, BodyTypeFlag
 from sims.sim_info import SimInfo
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.tags_enum import CommonGameTag
 from sims4communitylib.logging.has_class_log import HasClassLog
@@ -402,15 +403,15 @@ class CommonOutfitUtils(HasClassLog):
         return CommonOutfitUtils.is_batuu_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_towel(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_towel(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_wearing_towel(sim_info)
 
         Determine if a Sim is currently wearing a towel.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :return: True, if the sim is wearing a towel. False, if not.
-        :rtype: bool
+        :return: The result of testing. True, if the sim is wearing a towel. False, if not.
+        :rtype: CommonTestResult
         """
         return CommonBuffUtils.has_buff(sim_info, CommonBuffId.IS_WEARING_TOWEL)
 

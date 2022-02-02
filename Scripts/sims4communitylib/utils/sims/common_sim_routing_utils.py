@@ -120,4 +120,4 @@ class CommonSimRoutingUtils:
 
         if water_height <= upper_bound:
             return CommonTestResult(False, f'Water is too shallow ({water_height}) for Sim {sim_info} ({lower_bound}, {upper_bound})')
-        return CommonTestResult(True, f'Sim {sim_info} can swim at position.')
+        return CommonTestResult(True, f'Sim can swim at position.')
