@@ -55,6 +55,28 @@ class CommonTestResult(CommonExecutionResult):
     ) -> None:
         super().__init__(result, reason, success_override=result, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influenced_by_active_mood)
 
+    def reverse_result(self) -> 'CommonTestResult':
+        """reverse_result()
+
+        Create a CommonTestResult that has a reversed result of this one, but with the same reason and tooltip information.
+
+        .. note:: This function works best when the result value has an opposite, such as a boolean.
+
+        :return: This CommonTestResult, but with a reversed result value.
+        :rtype: CommonTestResult
+        """
+        return self.__class__(not self.result, self.reason, tooltip_text=self._tooltip_text, tooltip_tokens=self._tooltip_tokens)
+
+    def reverse_success(self) -> 'CommonTestResult':
+        """reverse_success()
+
+        Create a CommonTestResult that has a reversed success of this one, but with the same reason and tooltip information.
+
+        :return: This CommonTestResult, but with a reversed success value.
+        :rtype: CommonTestResult
+        """
+        return self.__class__(not self.result, self.reason, tooltip_text=self._tooltip_text, tooltip_tokens=self._tooltip_tokens)
+
     def __eq__(self, other) -> bool:
         if isinstance(other, bool):
             return self.is_success is other
@@ -86,7 +108,7 @@ class CommonTestResult(CommonExecutionResult):
             reason = other._reason
         icon = self.icon or other.icon
         influence_by_active_mood = self.influence_by_active_mood or other.influence_by_active_mood
-        return CommonTestResult(result, reason, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influence_by_active_mood)
+        return self.__class__(result, reason, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influence_by_active_mood)
 
     def __and__(self, other: 'CommonTestResult') -> 'CommonTestResult':
         if isinstance(other, CommonTestResult):
@@ -110,7 +132,7 @@ class CommonTestResult(CommonExecutionResult):
             reason = other._reason
         icon = self.icon or other.icon
         influence_by_active_mood = self.influence_by_active_mood or other.influence_by_active_mood
-        return CommonTestResult(result, reason, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influence_by_active_mood)
+        return self.__class__(result, reason, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influence_by_active_mood)
 
 
 CommonTestResult.TRUE = CommonTestResult(True, 'Success Generic')

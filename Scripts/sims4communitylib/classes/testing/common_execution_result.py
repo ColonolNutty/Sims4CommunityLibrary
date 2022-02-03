@@ -61,6 +61,28 @@ class CommonExecutionResult(TestResult):
                 success_override = False
         self._success = success_override
 
+    def reverse_result(self) -> 'CommonExecutionResult':
+        """reverse_result()
+
+        Create a CommonExecutionResult that has a reversed result of this one, but with the same reason and tooltip information.
+
+        .. note:: This function works best when the result value has an opposite, such as a boolean.
+
+        :return: This CommonExecutionResult, but with a reversed result value.
+        :rtype: CommonExecutionResult
+        """
+        return CommonExecutionResult(not self.result, self.reason, success_override=self._success, tooltip_text=self._tooltip_text, tooltip_tokens=self._tooltip_tokens)
+
+    def reverse_success(self) -> 'CommonExecutionResult':
+        """reverse_success()
+
+        Create a CommonExecutionResult that has a reversed success of this one, but with the same reason and tooltip information.
+
+        :return: This CommonExecutionResult, but with a reversed success value.
+        :rtype: CommonExecutionResult
+        """
+        return CommonExecutionResult(self.result, self.reason, success_override=not self._success, tooltip_text=self._tooltip_text, tooltip_tokens=self._tooltip_tokens)
+
     @property
     def is_success(self) -> bool:
         """True, if the result of execution is successful. False, if not."""
