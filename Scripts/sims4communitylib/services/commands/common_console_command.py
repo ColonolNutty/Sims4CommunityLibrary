@@ -427,7 +427,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                     return wrapped_func(*args, **kwargs)
                 except Exception as ex:
                     output(f'ERROR: {ex}')
-                    if (full_arg_spec.varargs is None or full_arg_spec.varkw is None) and any(isinstance(arg_type, type) and issubclass(arg_type, CustomParam) for arg_type in full_arg_spec.annotations.values()):
+                    if (full_arg_spec.varargs is None or full_arg_spec.varkw is None) and any(inspect.isclass(arg_type) and isinstance(arg_type, type) and issubclass(arg_type, CustomParam) for arg_type in full_arg_spec.annotations.values()):
                         log.format_error_with_message(f'Command "{name}" has CustomParams, consider adding *args and **kwargs to your command params', exception=ex)
                     else:
                         log.error(f'Error executing command {name}', exception=ex)
@@ -510,7 +510,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                 continue
             arg_type = full_arg_spec.annotations.get(name)
             arg_values = cleaned_arg_value.split(' ')
-            if (isinstance(arg_type, type) and issubclass(arg_type, CustomParam)) or arg_type is SimInfo or issubclass(arg_type, SimInfo) or arg_type is GameObject or issubclass(arg_type, GameObject):
+            if inspect.isclass(arg_type) and ((isinstance(arg_type, type) and issubclass(arg_type, CustomParam)) or arg_type is SimInfo or issubclass(arg_type, SimInfo) or arg_type is GameObject or issubclass(arg_type, GameObject)):
                 if arg_type is SimInfo or issubclass(arg_type, SimInfo):
                     arg_value = CommonRequiredSimInfoConsoleCommandParameter.get_value(output, *arg_values)
                 elif arg_type is GameObject or issubclass(arg_type, GameObject):
@@ -550,7 +550,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                 kwarg_values = cleaned_kwargs[kwarg_name].split(' ')
 
             kwarg_type = full_arg_spec.annotations.get(kwarg_name)
-            if (isinstance(kwarg_type, type) and issubclass(kwarg_type, CustomParam)) or kwarg_type is SimInfo or issubclass(kwarg_type, SimInfo) or kwarg_type is GameObject or issubclass(kwarg_type, GameObject):
+            if inspect.isclass(kwarg_type) and ((isinstance(kwarg_type, type) and issubclass(kwarg_type, CustomParam)) or kwarg_type is SimInfo or issubclass(kwarg_type, SimInfo) or kwarg_type is GameObject or issubclass(kwarg_type, GameObject)):
                 if kwarg_type is SimInfo or issubclass(kwarg_type, SimInfo):
                     kwarg_value = CommonOptionalSimInfoConsoleCommandParameter.get_value(output, *kwarg_values)
                 elif kwarg_type is GameObject or issubclass(kwarg_type, GameObject):
@@ -587,7 +587,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
             else:
                 from sims4communitylib.enums.enumtypes.common_int import CommonInt
                 from sims4communitylib.enums.enumtypes.common_int_flags import CommonIntFlags
-                if arg_type is CommonInt or arg_type is CommonIntFlags or issubclass(arg_type, CommonInt) or issubclass(arg_type, CommonIntFlags):
+                if inspect.isclass(arg_type) and (arg_type is CommonInt or arg_type is CommonIntFlags or issubclass(arg_type, CommonInt) or issubclass(arg_type, CommonIntFlags)):
                     if arg_value is not None:
                         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
                         result = CommonResourceUtils.get_enum_by_name(arg_value.upper(), arg_type, default_value=default_value)
@@ -596,17 +596,20 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                             valid_values = ', '.join([val.name for val in arg_type.values])
                             output(f'ERROR: {arg_value} is not a valid {arg_type_name}. Valid {arg_type_name}: {valid_values}')
                         return result
-                elif arg_type is int:
+                elif arg_type is int or arg_value.isnumeric():
                     return int(arg_value, base=0)
                 elif arg_type is str and not arg_value:
                     return default_value
-                elif (isinstance(arg_type, type) and issubclass(arg_type, CustomParam)) or arg_type is SimInfo or issubclass(arg_type, SimInfo) or arg_type is GameObject or issubclass(arg_type, GameObject):
+                elif inspect.isclass(arg_type) and ((isinstance(arg_type, type) and issubclass(arg_type, CustomParam)) or arg_type is SimInfo or issubclass(arg_type, SimInfo) or arg_type is GameObject or issubclass(arg_type, GameObject)):
                     pass
                 else:
                     try:
                         return arg_type(arg_value)
+                    except ValueError as ex:
+                        output(f'ERROR: Failed to parse value {arg_value} as {arg_type_name}: {ex}')
+                        return arg_value
                     except Exception as ex:
-                        output(f'ERROR: Failed to parse value {arg_value} as {arg_type_name}')
+                        output(f'ERROR: Failed to parse value {arg_value} as {arg_type_name}: {ex}')
                         raise ex
         return arg_value
 
