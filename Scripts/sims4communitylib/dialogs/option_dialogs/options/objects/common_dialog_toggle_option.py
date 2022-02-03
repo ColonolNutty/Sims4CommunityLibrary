@@ -46,7 +46,7 @@ class CommonDialogToggleOption(CommonDialogObjectOption):
     def icon(self) -> Any:
         if super().icon is not None:
             return super().icon
-        if self.value is True:
+        if self.value:
             return CommonIconUtils.load_checked_square_icon()
         return CommonIconUtils.load_unchecked_square_icon()
 

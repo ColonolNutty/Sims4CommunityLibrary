@@ -67,16 +67,6 @@ class CommonTestResult(CommonExecutionResult):
         """
         return self.__class__(not self.result, self.reason, tooltip_text=self._tooltip_text, tooltip_tokens=self._tooltip_tokens)
 
-    def reverse_success(self) -> 'CommonTestResult':
-        """reverse_success()
-
-        Create a CommonTestResult that has a reversed success of this one, but with the same reason and tooltip information.
-
-        :return: This CommonTestResult, but with a reversed success value.
-        :rtype: CommonTestResult
-        """
-        return self.__class__(not self.result, self.reason, tooltip_text=self._tooltip_text, tooltip_tokens=self._tooltip_tokens)
-
     def __eq__(self, other) -> bool:
         if isinstance(other, bool):
             return self.is_success is other
