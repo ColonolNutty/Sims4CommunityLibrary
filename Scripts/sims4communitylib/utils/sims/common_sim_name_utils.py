@@ -11,6 +11,7 @@ from sims.sim_info import SimInfo
 from sims.sim_spawner import SimSpawner
 from sims.sim_spawner_enums import SimNameType
 from sims4communitylib.enums.common_gender import CommonGender
+from sims4communitylib.enums.common_sim_name_type import CommonSimNameType
 from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
@@ -132,8 +133,8 @@ class CommonSimNameUtils:
         return result
 
     @staticmethod
-    def create_random_first_name(gender: CommonGender, species: CommonSpecies=CommonSpecies.HUMAN, sim_name_type: SimNameType=SimNameType.DEFAULT) -> str:
-        """create_random_first_name(gender, species=CommonSpecies.HUMAN, sim_name_type=SimNameType.DEFAULT)
+    def create_random_first_name(gender: CommonGender, species: CommonSpecies=CommonSpecies.HUMAN, sim_name_type: CommonSimNameType=CommonSimNameType.DEFAULT) -> str:
+        """create_random_first_name(gender, species=CommonSpecies.HUMAN, sim_name_type=CommonSimNameType.DEFAULT)
 
         Create a random first name.
 
@@ -141,18 +142,19 @@ class CommonSimNameUtils:
         :type gender: CommonGender
         :param species: A species. Default is HUMAN.
         :type species: CommonSpecies, optional
-        :param sim_name_type: An override for Sim Name Type. Default is SimNameType.DEFAULT.
-        :type sim_name_type: SimNameType, optional
+        :param sim_name_type: The Sim Name Type determines from which list of names to randomize the name from. Default is CommonSimNameType.DEFAULT.
+        :type sim_name_type: CommonSimNameType, optional
         :return: A random first name.
         :rtype: str
         """
         vanilla_gender = CommonGender.convert_to_vanilla(gender)
         vanilla_species = CommonSpecies.convert_to_vanilla(species)
-        return SimSpawner.get_random_first_name(vanilla_gender, species=vanilla_species, sim_name_type_override=sim_name_type)
+        vanilla_sim_name_type = CommonSimNameType.convert_to_vanilla(sim_name_type)
+        return SimSpawner.get_random_first_name(vanilla_gender, species=vanilla_species, sim_name_type_override=vanilla_sim_name_type)
 
     @staticmethod
-    def create_random_last_name(gender: CommonGender, species: CommonSpecies=CommonSpecies.HUMAN, sim_name_type: SimNameType=SimNameType.DEFAULT) -> str:
-        """create_random_last_name(gender, species=CommonSpecies.HUMAN, sim_name_type=SimNameType.DEFAULT)
+    def create_random_last_name(gender: CommonGender, species: CommonSpecies=CommonSpecies.HUMAN, sim_name_type: CommonSimNameType=CommonSimNameType.DEFAULT) -> str:
+        """create_random_last_name(gender, species=CommonSpecies.HUMAN, sim_name_type=CommonSimNameType.DEFAULT)
 
         Create a random last name.
 
@@ -160,22 +162,40 @@ class CommonSimNameUtils:
         :type gender: CommonGender
         :param species: A species. Default is HUMAN.
         :type species: CommonSpecies, optional
-        :param sim_name_type: An override for Sim Name Type. Default is None.
-        :type sim_name_type: Any, optional
+        :param sim_name_type: The Sim Name Type determines from which list of names to randomize the name from. Default is CommonSimNameType.DEFAULT.
+        :type sim_name_type: CommonSimNameType, optional
         :return: A random last name.
         :rtype: str
         """
         account = SimSpawner._get_default_account()
         vanilla_gender = CommonGender.convert_to_vanilla(gender)
         vanilla_species = CommonSpecies.convert_to_vanilla(species)
+        vanilla_sim_name_type = CommonSimNameType.convert_to_vanilla(sim_name_type)
         language = SimSpawner._get_language_for_locale(account.locale)
-        family_name = SimSpawner._get_random_last_name(language, sim_name_type=sim_name_type)
+        family_name = SimSpawner._get_random_last_name(language, sim_name_type=vanilla_sim_name_type)
         if sim_name_type == SimNameType.DEFAULT:
             last_name = SimSpawner.get_last_name(family_name, vanilla_gender, species=vanilla_species)
         else:
             from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
-            last_name = SimSpawner._get_family_name_for_gender(language, family_name, CommonGenderUtils.is_female_gender(gender), sim_name_type=sim_name_type)
+            last_name = SimSpawner._get_family_name_for_gender(language, family_name, CommonGenderUtils.is_female_gender(gender), sim_name_type=vanilla_sim_name_type)
         return last_name
+
+
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.randomize_name', 'Randomize the first and last names of a Sim.', command_arguments=(
+    CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to change the first and last names of.'),
+    CommonConsoleCommandArgument('sim_name_type', 'CommonSimNameType', f'Determines from which list of names to randomize the name from. Valid Values: {CommonSimNameType.get_comma_separated_names_string()}'),
+))
+def _common_randomize_name(output: CommonConsoleCommandOutput, sim_info: SimInfo=None, sim_name_type: CommonSimNameType=CommonSimNameType.DEFAULT):
+    if sim_info is None:
+        return
+    gender = CommonGender.get_gender(sim_info)
+    species = CommonSpecies.get_species(sim_info)
+    first_name = CommonSimNameUtils.create_random_first_name(gender, species=species, sim_name_type=sim_name_type)
+    output(f'Setting the first name of Sim {sim_info} to {first_name}')
+    CommonSimNameUtils.set_first_name(sim_info, first_name)
+    last_name = CommonSimNameUtils.create_random_last_name(gender, species=species, sim_name_type=sim_name_type)
+    output(f'Setting the last name of Sim {sim_info} to {last_name}')
+    CommonSimNameUtils.set_last_name(sim_info, last_name)
 
 
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.set_first_name', 'Set the first name of a Sim.', command_arguments=(
@@ -184,8 +204,22 @@ class CommonSimNameUtils:
 ))
 def _common_set_first_name(output: CommonConsoleCommandOutput, first_name: str, sim_info: SimInfo=None):
     if sim_info is None:
-        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
+    output(f'Setting the first name of Sim {sim_info} to {first_name}')
+    CommonSimNameUtils.set_first_name(sim_info, first_name)
+
+
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.randomize_first_name', 'Randomize the first name of a Sim.', command_arguments=(
+    CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to change the first name of.'),
+    CommonConsoleCommandArgument('sim_name_type', 'CommonSimNameType', f'Determines from which list of names to randomize the name from. Valid Values: {CommonSimNameType.get_comma_separated_names_string()}'),
+))
+def _common_randomize_first_name(output: CommonConsoleCommandOutput, sim_info: SimInfo=None, sim_name_type: CommonSimNameType=CommonSimNameType.DEFAULT):
+    if sim_info is None:
+        return
+    gender = CommonGender.get_gender(sim_info)
+    species = CommonSpecies.get_species(sim_info)
+    first_name = CommonSimNameUtils.create_random_first_name(gender, species=species, sim_name_type=sim_name_type)
+    output(f'Setting the first name of Sim {sim_info} to {first_name}')
     CommonSimNameUtils.set_first_name(sim_info, first_name)
 
 
@@ -197,6 +231,21 @@ def _common_set_last_name(output: CommonConsoleCommandOutput, last_name: str, si
     if sim_info is None:
         output('Failed, no Sim was specified or the specified Sim was not found!')
         return
+    output(f'Setting the last name of Sim {sim_info} to {last_name}')
+    CommonSimNameUtils.set_last_name(sim_info, last_name)
+
+
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.randomize_last_name', 'Randomize the last name of a Sim.', command_arguments=(
+    CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to change the last name of.'),
+    CommonConsoleCommandArgument('sim_name_type', 'CommonSimNameType', f'Determines from which list of names to randomize the name from. Valid Values: {CommonSimNameType.get_comma_separated_names_string()}'),
+))
+def _common_randomize_last_name(output: CommonConsoleCommandOutput, sim_info: SimInfo=None, sim_name_type: CommonSimNameType=CommonSimNameType.DEFAULT):
+    if sim_info is None:
+        return
+    gender = CommonGender.get_gender(sim_info)
+    species = CommonSpecies.get_species(sim_info)
+    last_name = CommonSimNameUtils.create_random_last_name(gender, species=species, sim_name_type=sim_name_type)
+    output(f'Setting the last name of Sim {sim_info} to {last_name}')
     CommonSimNameUtils.set_last_name(sim_info, last_name)
 
 
