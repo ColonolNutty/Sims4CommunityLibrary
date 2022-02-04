@@ -176,7 +176,7 @@ class CommonCareerUtils:
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         for (_, career) in CommonResourceUtils.load_all_instances(Types.CAREER):
-            if include_career_callback is not None and include_career_callback(career) is False:
+            if include_career_callback is not None and not include_career_callback(career):
                 continue
             yield career
 

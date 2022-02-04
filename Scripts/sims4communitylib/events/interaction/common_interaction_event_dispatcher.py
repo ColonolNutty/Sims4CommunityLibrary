@@ -16,6 +16,7 @@ from interactions.interaction_finisher import FinishingType
 from interactions.interaction_queue import InteractionQueue
 from interactions.utils.outcome import InteractionOutcome
 from interactions.utils.outcome_enums import OutcomeResult
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
 from sims4communitylib.events.interaction.events.interaction_cancelled import S4CLInteractionCancelledEvent
 from sims4communitylib.events.interaction.events.interaction_outcome import S4CLInteractionOutcomeEvent
@@ -106,7 +107,7 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
             return None
         try:
             if not CommonEventRegistry().dispatch(S4CLInteractionQueuedEvent(interaction, interaction_queue)):
-                return TestResult(False, 'Interaction \'{}\' Failed to Queue'.format(pformat(interaction)))
+                return CommonTestResult(False, 'Interaction \'{}\' Failed to Queue'.format(pformat(interaction)))
         except Exception as ex:
             CommonExceptionHandler.log_exception(
                 None,
@@ -226,7 +227,7 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
 def _common_on_interaction_run(original, self, timeline: Timeline, interaction: Interaction, *_, **__) -> bool:
     try:
         result = CommonInteractionEventDispatcherService()._on_interaction_pre_run(self, timeline, interaction, *_, **__)
-        if result is None or result is True:
+        if result is None or result:
             try:
                 original_result = original(self, timeline, interaction, *_, **__)
             except Exception as ex:
@@ -264,7 +265,7 @@ def _common_on_interaction_run(original, self, timeline: Timeline, interaction: 
 def _common_on_interaction_queued(original, self, interaction: Interaction, *_, **__) -> TestResult:
     try:
         result = CommonInteractionEventDispatcherService()._on_interaction_queued(self, interaction, *_, **__)
-        if result is None or result is True:
+        if result is None or result:
             try:
                 original_result = original(self, interaction, *_, **__)
             except Exception as ex:
@@ -295,7 +296,7 @@ def _common_on_interaction_queued(original, self, interaction: Interaction, *_, 
             ),
             exception=ex
         )
-    return TestResult(False, 'Interaction \'{}\' with short name \'{}\' Failed to Queue'.format(
+    return CommonTestResult(False, 'Interaction \'{}\' with short name \'{}\' Failed to Queue'.format(
         pformat(interaction),
         CommonInteractionUtils.get_interaction_short_name(interaction)
     ))

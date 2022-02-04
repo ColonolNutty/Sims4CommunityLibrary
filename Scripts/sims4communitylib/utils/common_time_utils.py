@@ -59,7 +59,7 @@ class CommonTimeUtils:
     def set_game_speed_normal() -> bool:
         """set_game_speed_normal()
 
-        Change the game time to Normal speed.
+        Change the speed of the game clock to Normal speed.
 
         :return: True, if successful. False, if not.
         :rtype: bool
@@ -70,7 +70,7 @@ class CommonTimeUtils:
     def set_game_speed_to_speed_two() -> bool:
         """set_game_speed_to_speed_two()
 
-        Change the game time to Speed Two.
+        Change the speed of the game clock to Speed Two.
 
         :return: True, if successful. False, if not.
         :rtype: bool
@@ -81,7 +81,7 @@ class CommonTimeUtils:
     def set_game_speed_to_speed_three() -> bool:
         """set_game_speed_to_speed_three()
 
-        Change the game time to Speed Three.
+        Change the speed of the game clock to Speed Three.
 
         :return: True, if successful. False, if not.
         :rtype: bool
@@ -92,7 +92,7 @@ class CommonTimeUtils:
     def set_game_speed_to_interaction_startup_speed() -> bool:
         """set_game_speed_to_interaction_startup_speed()
 
-        Change the game time to Interaction Startup Speed.
+        Change the speed of the game clock to Interaction Startup Speed.
 
         :return: True, if successful. False, if not.
         :rtype: bool
@@ -103,7 +103,7 @@ class CommonTimeUtils:
     def set_game_speed_to_super_speed_three() -> bool:
         """set_game_speed_to_super_speed_three()
 
-        Change the game time to Super Speed Three.
+        Change the speed of the game clock to Super Speed Three.
 
         :return: True, if successful. False, if not.
         :rtype: bool

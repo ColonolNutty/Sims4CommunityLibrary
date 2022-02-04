@@ -203,7 +203,7 @@ class CommonSimUtils:
         for sim_info in sim_info_list:
             if sim_info is None:
                 continue
-            if include_sim_callback is not None and include_sim_callback(sim_info) is False:
+            if include_sim_callback is not None and not include_sim_callback(sim_info):
                 continue
             yield sim_info
 

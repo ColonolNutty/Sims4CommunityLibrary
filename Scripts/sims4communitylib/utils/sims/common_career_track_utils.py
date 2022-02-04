@@ -145,7 +145,7 @@ class CommonCareerTrackUtils:
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         for (_, career_track) in CommonResourceUtils.load_all_instances(Types.CAREER_TRACK):
-            if include_career_track_callback is not None and include_career_track_callback(career_track) is False:
+            if include_career_track_callback is not None and not include_career_track_callback(career_track):
                 continue
             yield career_track
 

@@ -86,7 +86,7 @@ class CommonSimCareerUtils(HasClassLog):
         if career_tracker is None:
             return tuple()
         for career in career_tracker.careers.values():
-            if include_career_callback is not None and include_career_callback(career) is False:
+            if include_career_callback is not None and not include_career_callback(career):
                 continue
             yield career
 

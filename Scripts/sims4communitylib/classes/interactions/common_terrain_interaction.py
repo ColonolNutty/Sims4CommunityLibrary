@@ -11,14 +11,13 @@ from typing import Any
 from event_testing.results import TestResult
 from interactions.context import InteractionContext
 from sims.sim import Sim
-from sims4communitylib.classes.interactions.common_interaction import CommonInteraction
+from sims4communitylib.classes.interactions.common_super_interaction import CommonSuperInteraction
 
 # ReadTheDocs
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
 if not ON_RTD:
-    from interactions.base.immediate_interaction import ImmediateSuperInteraction
     from objects.terrain import TravelMixin, TerrainInteractionMixin
 else:
     # noinspection PyMissingOrEmptyDocstring
@@ -39,12 +38,8 @@ else:
     class TerrainInteractionMixin(MockClass):
         pass
 
-    # noinspection PyMissingOrEmptyDocstring
-    class ImmediateSuperInteraction(MockClass):
-        pass
 
-
-class CommonTerrainInteraction(CommonInteraction, TravelMixin, TerrainInteractionMixin, ImmediateSuperInteraction):
+class CommonTerrainInteraction(CommonSuperInteraction, TravelMixin, TerrainInteractionMixin):
     """CommonTerrainInteraction(*_, **__)
 
     An inheritable class that provides a way to create custom Terrain Interactions.
@@ -83,7 +78,10 @@ class CommonTerrainInteraction(CommonInteraction, TravelMixin, TerrainInteractio
                 # Put here what you want the interaction to do as soon as the player clicks it while it is enabled.
                 return True
     """
-    pass
+    def __init__(self, *_, **__) -> None:
+        super().__init__(*_, **__)
+        TravelMixin.__init__(*_, **__)
+        TerrainInteractionMixin.__init__(*_, **__)
 
 
 # The following is an example interaction that varies when it will display, when it will be hidden, and when it will be disabled with a tooltip.
