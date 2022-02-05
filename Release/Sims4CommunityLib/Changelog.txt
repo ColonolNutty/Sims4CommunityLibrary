@@ -87,6 +87,7 @@ v1.76:
 - Fixed an issue with interactions being registered to Ocean targets twice.
 - Fixed a long standing annoyance to those using S4CL and Wicked Whims together where the Toggle Phone Silence button would not be available due to a bug that exists in Wicked Whims where it flags the Toggle Phone Silence button as a CHEAT.
 - Updated CommonConsoleCommand, now it will properly parse custom argument types such as SimInfo, GameObject, CommonInt, and CommonIntFlags, without needing to do all the extra work of parsing an id or a string.
+- Added commands to randomize the first and last names of a Sim.
 - Added utilities for accessing the game client object
 - Added custom parameter classes for specifying required or optional Sim Info or Game Object arguments for CommonConsoleCommand
 - Added a few utility functions for retrieving SimInfo manager, Game Object manager, and other types of managers
@@ -96,6 +97,7 @@ v1.76:
   - Do `sims4communitylib.help` to see descriptions, arguments, etc. about the various commands.
     - To see more detailed info about a specific command do `sims4communitylib.help <command>`.
     - Example sims4communitylib.help s4clib.add_buff
+- Fixed various issues with CommonSuperInteraction, CommonSocialSuperInteraction, CommonSocialMixerInteraction, CommonMixerInteraction, CommonInteraction, and CommonTerrainInteraction.
 
 v1.75:
 - Added functions to convert CommonSpecies, CommonAge, and CommonGender into localized string ids

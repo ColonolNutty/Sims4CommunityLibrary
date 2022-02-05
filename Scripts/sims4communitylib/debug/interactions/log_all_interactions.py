@@ -7,13 +7,14 @@ Copyright (c) COLONOLNUTTY
 """
 from pprint import pformat
 from typing import Any, List, Tuple
-from event_testing.results import TestResult
 from interactions import ParticipantType
 from interactions.base.interaction import Interaction
 from interactions.context import InteractionContext
 from objects.game_object import GameObject
 from sims.sim import Sim
 from sims4communitylib.classes.interactions.common_immediate_super_interaction import CommonImmediateSuperInteraction
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
@@ -41,20 +42,20 @@ class S4CLDebugLogAllInteractionsInteraction(CommonImmediateSuperInteraction):
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
-    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, picked_item_ids: Tuple[int]=(), **kwargs) -> TestResult:
+    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, picked_item_ids: Tuple[int]=(), **kwargs) -> CommonTestResult:
         if interaction_target is None and not picked_item_ids:
             cls.get_log().debug('Failed, No Target was found.')
-            return TestResult.NONE
+            return cls.create_test_result(False)
         cls.get_log().format_with_message(
             'Success, can show Log All Interactions interaction.',
             interaction_sim=interaction_sim,
             interaction_target=interaction_target,
             picked_item_ids=picked_item_ids
         )
-        return TestResult.TRUE
+        return cls.create_test_result(True)
 
     # noinspection PyMissingOrEmptyDocstring
-    def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
+    def on_started(self, interaction_sim: Sim, interaction_target: Any) -> CommonExecutionResult:
         self.log.enable()
         # noinspection PyUnresolvedReferences
         picked_item_id = self.get_participant(ParticipantType.PickedItemId)
@@ -66,7 +67,7 @@ class S4CLDebugLogAllInteractionsInteraction(CommonImmediateSuperInteraction):
                 new_target = CommonObjectUtils.get_game_object(picked_item_id)
                 if new_target is None:
                     self.log.format_with_message('No object with the identifier found.', picked_item_id=picked_item_id)
-                    return False
+                    return CommonExecutionResult(False, f'Picked Item {picked_item_id} was not found.')
                 else:
                     self.log.format_with_message('Found object target using picked item id.', new_target=new_target)
                     interaction_target = new_target
@@ -116,4 +117,4 @@ class S4CLDebugLogAllInteractionsInteraction(CommonImmediateSuperInteraction):
             CommonStringId.S4CL_DONE_LOGGING_ALL_INTERACTIONS,
             description_tokens=(CommonLogUtils.get_message_file_path(self.mod_identity), )
         ).show()
-        return True
+        return CommonExecutionResult.TRUE

@@ -38,15 +38,15 @@ Since you have specified the above tuning file to look for the `ExampleInteracti
 Create a folder named `mod_root_namespace` and create a file within it named `example_interaction.py`.
 ```Python
 from typing import Any
-
-from event_testing.results import TestResult
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from interactions.context import InteractionContext
 from sims.sim import Sim
-from sims4communitylib.classes.interactions.common_terrain_interaction import CommonTerrainInteraction
+from sims4communitylib.classes.interactions.common_immediate_super_interaction import CommonImmediateSuperInteraction
 
-class ExampleInteraction(CommonTerrainInteraction):
+class ExampleInteraction(CommonImmediateSuperInteraction):
     @classmethod
-    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
+    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> CommonTestResult:
         result = 1 + 1
         # Ignore the following logic, it'll never go in either of the checks, but it is just an example.
         if result == 3:
@@ -56,39 +56,39 @@ class ExampleInteraction(CommonTerrainInteraction):
         if result == 4:
             # Alternative way to specify a Tooltip
             # Interaction will show but be disabled and it will display "Test Tooltip" when hovered by the player.
-            return cls.create_test_result(False, reason="No Reason", tooltip=CommonLocalizationUtils.create_localized_tooltip("Test Tooltip"))
+            return cls.create_test_result(False, reason="No Reason", tooltip='Test Tooltip')
 
         if result == 5:
             # Interaction will be hidden completely.
-            return TestResult.NONE
+            return CommonTestResult.NONE
 
         # Interaction will display and be enabled.
-        return TestResult.TRUE
+        return CommonTestResult.TRUE
 
-    def on_started(self, interaction_sim: Sim, interaction_target: Any) -> bool:
+    def on_started(self, interaction_sim: Sim, interaction_target: Any) -> CommonExecutionResult:
         # Put here what you want the interaction to do as soon as the player clicks it while it is enabled.
-        return True
+        return CommonExecutionResult.TRUE
 ```
 Let's break this file down:
 First, notice the name of the class, it is `ExampleInteraction` which matches the value of `c` in the tuning file previously.
 
-The class inherits from another class: `CommonTerrainInteraction`. This is one of the base classes for creating custom interactions while using `S4CL`. It can be used for interactions that appear on Sims as well.
+The class inherits from another class: `CommonImmediateSuperInteraction`. This is one of the base classes for creating custom interactions while using `S4CL`. It can be used for interactions that appear on Sims as well.
 
 It contains many more hooks than what you see here, but to keep this example simple, we'll be utilizing `on_test` and `on_started`, which are the two main hooks for writing custom interactions.
 
-- `on_test` This hook will tell the interaction when and how it should display by using `TestResult` (We'll go more into this further down)
+- `on_test` This hook will tell the interaction when and how it should display by using `CommonTestResult` (We'll go more into this further down)
 - `on_started` This hook will be what the interaction does when the player (or a sim) is performing an interaction.
 ### Custom Test Results:
-Let's take a look at the different types of `TestResult` we can return and their effects.
+Let's take a look at the different types of `CommonTestResult` we can return and their effects.
 
 Show:
 
-`return TestResult.TRUE`
+`return CommonTestResult.TRUE`
 - Returning this value will show your interaction.
 
 Hide:
 
-`return TestResult.NONE`
+`return CommonTestResult.NONE`
 - Returning this value will hide your interaction completely.
 
 Tooltip:
@@ -115,7 +115,6 @@ from sims4communitylib.services.interactions.interaction_registration_service im
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 
 @CommonInteractionRegistry.register_interaction_handler(CommonInteractionType.ON_SCRIPT_OBJECT_LOAD)
 class _RegisterExampleInteractionHandler(CommonScriptObjectInteractionHandler):

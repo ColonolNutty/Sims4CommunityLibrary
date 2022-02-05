@@ -37,7 +37,7 @@ class CommonExecutionResult(TestResult):
     :type success_override: bool
     :param tooltip_text: The text that will be displayed. If not specified, then no tooltip will be displayed. Default is None.
     :type tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator], optional
-    :param tooltip_tokens: A collection of objects to format into the localized tooltip. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few)
+    :param tooltip_tokens: A collection of objects to format into the localized tooltip. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few). Default is an empty collection.
     :type tooltip_tokens: Iterable[Any], optional
     :param icon: The icon to display. Default is None.
     :type icon: Any, optional
@@ -51,7 +51,12 @@ class CommonExecutionResult(TestResult):
     def __init__(self, result: Any, reason: str, success_override: bool=None, tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator, CommonLocalizationUtils.LocalizedTooltip]=None, tooltip_tokens: Iterator[Any]=(), icon: Any=None, influenced_by_active_mood: bool=False) -> None:
         self._tooltip_text = tooltip_text
         self._tooltip_tokens = tooltip_tokens
-        tooltip = CommonLocalizationUtils.create_localized_tooltip(tooltip_text, tooltip_tokens=tooltip_tokens)
+        if tooltip_text is not None:
+            tooltip = CommonLocalizationUtils.create_localized_tooltip(tooltip_text, tooltip_tokens=tooltip_tokens)
+        elif reason is not None:
+            tooltip = CommonLocalizationUtils.create_localized_tooltip(reason, tooltip_tokens=tooltip_tokens)
+        else:
+            tooltip = None
         super().__init__(result, reason, tooltip=tooltip, icon=icon, influence_by_active_mood=influenced_by_active_mood)
         self._success_override = success_override
         if success_override is None:

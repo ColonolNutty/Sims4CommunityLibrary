@@ -60,7 +60,7 @@ class CommonInteractionOverrideName(HasClassLog):
             if override_name is not None:
                 return override_name
         except Exception as ex:
-            cls.get_log().error('An error occurred while running get_name of interaction {}'.format(cls.__name__), exception=ex)
+            cls.get_log().error('An error occurred while running get_name of CommonInteractionOverrideName {}'.format(cls.__name__), exception=ex)
         return super(Interaction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
 
     # noinspection PyUnusedLocal
