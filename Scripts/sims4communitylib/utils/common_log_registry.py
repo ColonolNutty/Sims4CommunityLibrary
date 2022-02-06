@@ -640,6 +640,8 @@ class CommonLogRegistry(CommonService):
         else:
             mod_name = CommonModIdentity._get_mod_name(mod_identifier)
             mod_name = mod_name.lower()
+            if mod_name not in self._registered_logs:
+                return False
             if log_name not in self._registered_logs[mod_name]:
                 log = self.register_log(mod_name, log_name)
                 if log is not None:
@@ -673,6 +675,8 @@ class CommonLogRegistry(CommonService):
         else:
             mod_name = CommonModIdentity._get_mod_name(mod_identifier)
             mod_name = mod_name.lower()
+            if mod_name not in self._registered_logs:
+                return False
             if log_name not in self._registered_logs[mod_name]:
                 return False
             self._registered_logs[mod_name][log_name].disable()
@@ -698,6 +702,8 @@ class CommonLogRegistry(CommonService):
         else:
             mod_name = CommonModIdentity._get_mod_name(mod_identifier)
             mod_name = mod_name.lower()
-            for log_name in self._registered_logs.get(mod_name, dict()):
+            if mod_name not in self._registered_logs:
+                return False
+            for log_name in self._registered_logs[mod_name]:
                 self._registered_logs[mod_name][log_name].disable()
         return True
