@@ -98,6 +98,7 @@ v1.76:
     - To see more detailed info about a specific command do `sims4communitylib.help <command>`.
     - Example sims4communitylib.help s4clib.add_buff
 - Fixed various issues with CommonSuperInteraction, CommonSocialSuperInteraction, CommonSocialMixerInteraction, CommonMixerInteraction, CommonInteraction, and CommonTerrainInteraction.
+  - This unfortunately may lead to some weirdness in mods that have interactions containing things they didn't realize were in there (Because they were not working previously)
 
 v1.75:
 - Added functions to convert CommonSpecies, CommonAge, and CommonGender into localized string ids
