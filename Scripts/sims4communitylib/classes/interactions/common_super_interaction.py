@@ -830,9 +830,9 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
                     kwargles=kwargs
                 )
                 test_result = cls.on_test(context.sim, target, context, **kwargs)
-                verbose_log.format_with_message('Test Result (CommonSuperInteraction)', test_result=test_result)
+                verbose_log.format_with_message('Test Result (CommonConstrainedSuperInteraction)', test_result=test_result)
             except Exception as ex:
-                log.error('Error occurred while running CommonSuperInteraction \'{}\' on_test.'.format(cls.__name__), exception=ex)
+                log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' on_test.'.format(cls.__name__), exception=ex)
                 return cls.create_test_result(False, f'An error occurred {ex}. See the log for more details. "The Sims 4/mod_logs/<mod_name>_Exceptions.txt"')
 
             if test_result is not None:
@@ -858,12 +858,12 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
                     kwargles=kwargs
                 )
                 super_test_result: TestResult = super()._test(target, context, **kwargs)
-                verbose_log.format_with_message('Super Test Result (CommonSuperInteraction)', super_test_result=super_test_result)
+                verbose_log.format_with_message('Super Test Result (CommonConstrainedSuperInteraction)', super_test_result=super_test_result)
 
                 if super_test_result is not None and (isinstance(test_result, TestResult) and not super_test_result.result):
                     return CommonTestResult.convert_from_vanilla(super_test_result)
             except Exception as ex:
-                log.error('Error occurred while running CommonSuperInteraction \'{}\' super()._test.'.format(cls.__name__), exception=ex)
+                log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' super()._test.'.format(cls.__name__), exception=ex)
                 return cls.create_test_result(False, f'An error occurred {ex}. See the log for more details. "The Sims 4/mod_logs/<mod_name>_Exceptions.txt"')
 
             try:
@@ -876,9 +876,9 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
                     kwargles=kwargs
                 )
                 post_super_test_result = cls.on_post_super_test(context.sim, target, context, **kwargs)
-                verbose_log.format_with_message('Post Test Result (CommonSuperInteraction)', post_super_test_result=post_super_test_result)
+                verbose_log.format_with_message('Post Test Result (CommonConstrainedSuperInteraction)', post_super_test_result=post_super_test_result)
             except Exception as ex:
-                log.error('Error occurred while running CommonSuperInteraction \'{}\' on_post_super_test.'.format(cls.__name__), exception=ex)
+                log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' on_post_super_test.'.format(cls.__name__), exception=ex)
                 return cls.create_test_result(False, f'An error occurred {ex}. See the log for more details. "The Sims 4/mod_logs/<mod_name>_Exceptions.txt"')
 
             if post_super_test_result is not None:
@@ -896,17 +896,17 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
 
             return cls.create_test_result(True)
         except Exception as ex:
-            log.error('Error occurred while running _test of CommonSuperInteraction \'{}\''.format(cls.__name__), exception=ex)
+            log.error('Error occurred while running _test of CommonConstrainedSuperInteraction \'{}\''.format(cls.__name__), exception=ex)
             return cls.create_test_result(False, f'An error occurred {ex}. See the log for more details. "The Sims 4/mod_logs/<mod_name>_Exceptions.txt"')
         finally:
             if verbose_log.enabled:
-                verbose_log.format_with_message('Took {} seconds to return result from CommonSuperInteraction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                verbose_log.format_with_message('Took {} seconds to return result from CommonConstrainedSuperInteraction.'.format(stop_watch.stop()), class_name=cls.__name__)
             else:
                 stop_watch.stop()
 
     # noinspection PyMethodParameters,PyMissingOrEmptyDocstring
     @flexmethod
-    def get_name(cls, inst: 'CommonSuperInteraction', target: Any=DEFAULT, context: InteractionContext=DEFAULT, **interaction_parameters) -> Union[LocalizedString, None]:
+    def get_name(cls, inst: 'CommonConstrainedSuperInteraction', target: Any=DEFAULT, context: InteractionContext=DEFAULT, **interaction_parameters) -> Union[LocalizedString, None]:
         inst_or_cls = inst or cls
         try:
             context_inst_or_cls = context or inst_or_cls
@@ -931,10 +931,10 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
             if override_name is not None:
                 return override_name
         except Exception as ex:
-            cls.get_log().error('An error occurred while running get_name of CommonSuperInteraction {}'.format(cls.__name__), exception=ex)
-        return super(CommonSuperInteraction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+            cls.get_log().error('An error occurred while running get_name of CommonConstrainedSuperInteraction {}'.format(cls.__name__), exception=ex)
+        return super(CommonConstrainedSuperInteraction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
 
-    def _trigger_interaction_start_event(self: 'CommonSuperInteraction'):
+    def _trigger_interaction_start_event(self: 'CommonConstrainedSuperInteraction'):
         try:
             self.verbose_log.format_with_message(
                 'Running on_started.',
@@ -948,7 +948,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
                 return False
             return super()._trigger_interaction_start_event()
         except Exception as ex:
-            self.log.error('Error occurred while running CommonSuperInteraction \'{}\' on_started.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' on_started.'.format(self.__class__.__name__), exception=ex)
 
     # noinspection PyMissingOrEmptyDocstring
     def apply_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT):
@@ -962,7 +962,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
             )
             (new_posture_state, new_participant_type, new_sim) = self.modify_posture_state(posture_state, participant_type=participant_type, sim=sim)
         except Exception as ex:
-            self.log.error('Error occurred while running CommonSuperInteraction \'{}\' modify_posture_state.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' modify_posture_state.'.format(self.__class__.__name__), exception=ex)
             return None, None, None
         return super().apply_posture_state(new_posture_state, participant_type=new_participant_type, sim=new_sim)
 
@@ -983,7 +983,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
             )
             self.on_killed(self.sim, self.target)
         except Exception as ex:
-            self.log.error('Error occurred while running CommonSuperInteraction \'{}\' on_killed.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' on_killed.'.format(self.__class__.__name__), exception=ex)
         return super().kill()
 
     def _cancel(self, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> bool:
@@ -1010,10 +1010,10 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
             )
             self.on_cancelled(self.sim, self.target, finishing_type, cancel_reason_msg, **kwargs)
         except Exception as ex:
-            self.log.error('Error occurred while running CommonSuperInteraction \'{}\' _cancel.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' _cancel.'.format(self.__class__.__name__), exception=ex)
         return super()._cancel(finishing_type, cancel_reason_msg, **kwargs)
 
-    def on_reset(self: 'CommonSuperInteraction'):
+    def on_reset(self: 'CommonConstrainedSuperInteraction'):
         """on_reset()
 
         A function that occurs upon an interaction being reset.
@@ -1028,10 +1028,10 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
             )
             self._on_reset(self.sim, self.target)
         except Exception as ex:
-            self.log.error('Error occurred while running CommonSuperInteraction \'{}\' on_reset.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' on_reset.'.format(self.__class__.__name__), exception=ex)
         return super().on_reset()
 
-    def _post_perform(self: 'CommonSuperInteraction'):
+    def _post_perform(self: 'CommonConstrainedSuperInteraction'):
         super_result = super()._post_perform()
         try:
             self.verbose_log.format_with_message(
@@ -1042,7 +1042,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
             )
             self.on_performed(self.sim, self.target)
         except Exception as ex:
-            self.log.error('Error occurred while running CommonSuperInteraction \'{}\' _post_perform.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' _post_perform.'.format(self.__class__.__name__), exception=ex)
         return super_result
 
     def send_current_progress(self, *args: Any, **kwargs: Any):
@@ -1064,7 +1064,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
             if result is not None:
                 return result
         except Exception as ex:
-            self.log.error('Error occurred while running CommonSuperInteraction \'{}\' send_current_progress.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' send_current_progress.'.format(self.__class__.__name__), exception=ex)
         return super().send_current_progress(*args, **kwargs)
 
     def setup_asm_default(self, asm: NativeAsm, *args, **kwargs) -> bool:
@@ -1091,7 +1091,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
             if result is not None:
                 return result
         except Exception as ex:
-            self.log.error('Error occurred while running CommonSuperInteraction \'{}\' setup_asm_default.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' setup_asm_default.'.format(self.__class__.__name__), exception=ex)
         return super().setup_asm_default(asm, *args, **kwargs)
 
     def _run_interaction_gen(self, timeline: Timeline):
@@ -1105,19 +1105,19 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
             )
             self.on_run(self.sim, self.target, timeline)
         except Exception as ex:
-            self.log.error('Error occurred while running CommonSuperInteraction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
         yield from super()._run_interaction_gen(timeline)
 
     # noinspection PyMethodParameters
     @flexmethod
-    def _constraint_gen(cls, inst: 'CommonSuperInteraction', sim: Sim, target: Any, participant_type: ParticipantType=ParticipantType.Actor, **kwargs) -> Constraint:
+    def _constraint_gen(cls, inst: 'CommonConstrainedSuperInteraction', sim: Sim, target: Any, participant_type: ParticipantType=ParticipantType.Actor, **kwargs) -> Constraint:
         inst_or_cls = inst if inst is not None else cls
         try:
             replacement_results = cls.on_replacement_constraints_gen(inst_or_cls, sim or inst_or_cls.sim, inst_or_cls.get_constraint_target(target) or target or inst_or_cls.target)
             if replacement_results is not None:
                 yield from replacement_results
             else:
-                yield from super(CommonSuperInteraction, inst_or_cls)._constraint_gen(sim, target, participant_type=participant_type, **kwargs)
+                yield from super(CommonConstrainedSuperInteraction, inst_or_cls)._constraint_gen(sim, target, participant_type=participant_type, **kwargs)
                 result = cls.on_constraint_gen(inst_or_cls, sim or inst_or_cls.sim, inst_or_cls.get_constraint_target(target) or target or inst_or_cls.target)
                 if result is not None:
                     if inspect.isgenerator(result):
@@ -1125,13 +1125,13 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
                     else:
                         yield result
         except Exception as ex:
-            cls.get_log().error('Error occurred while running CommonSuperInteraction \'{}\' _on_constraint_gen.'.format(cls.__name__), exception=ex)
+            cls.get_log().error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' _on_constraint_gen.'.format(cls.__name__), exception=ex)
 
     # The following functions are hooks into various parts of an interaction override them in your own interaction to provide custom functionality.
 
     # noinspection PyUnusedLocal
     @classmethod
-    def on_replacement_constraints_gen(cls, inst_or_cls: 'CommonSuperInteraction', sim: Sim, target: Any) -> Union[Iterator[Constraint], None]:
+    def on_replacement_constraints_gen(cls, inst_or_cls: 'CommonConstrainedSuperInteraction', sim: Sim, target: Any) -> Union[Iterator[Constraint], None]:
         """on_replacement_constraints_gen(inst_or_cls, sim, target)
 
         A hook that occurs before the normal constraints of an interaction, these constraints will replace the normal constraints of the interaction.
@@ -1139,7 +1139,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
         .. note:: If None is returned, the normal constraints will be used. (Plus any additional constraints from on_constraint_gen)
 
         :param inst_or_cls: An instance or the class of the interaction.
-        :type inst_or_cls: CommonSuperInteraction
+        :type inst_or_cls: CommonConstrainedSuperInteraction
         :param sim: The source Sim of the interaction.
         :type sim: Sim
         :param target: The target Object of the interaction.
@@ -1354,7 +1354,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
         cls,
         interaction_sim: Sim,
         interaction_target: Any,
-        interaction: 'CommonSuperInteraction'=None,
+        interaction: 'CommonConstrainedSuperInteraction'=None,
         interaction_context: InteractionContext=None,
         **interaction_parameters
     ) -> Union[LocalizedString, None]:
@@ -1375,7 +1375,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
         :param interaction_target: The target Object of the interaction.
         :type interaction_target: Any
         :param interaction: The interaction being performed or None.
-        :type interaction: CommonSuperInteraction
+        :type interaction: CommonConstrainedSuperInteraction
         :param interaction_context: The context of the interaction being performed or None.
         :type interaction_context: InteractionContext
         :param interaction_parameters: Parameters for the interaction.
@@ -1436,7 +1436,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
         try:
             self._send_progress_bar_update_msg(percent, rate_change, start_msg=start_message)
         except Exception as ex:
-            self.log.error('Error occurred while running CommonSuperInteraction \'{}\' set_current_progress_bar.'.format(self.__class__.__name__), exception=ex)
+            self.log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' set_current_progress_bar.'.format(self.__class__.__name__), exception=ex)
 
     # noinspection PyUnusedLocal
     def on_run(self, interaction_sim: Sim, interaction_target: Any, timeline: Timeline):
