@@ -18,7 +18,6 @@ from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOut
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
-# ReadTheDocs
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 if not ON_RTD:

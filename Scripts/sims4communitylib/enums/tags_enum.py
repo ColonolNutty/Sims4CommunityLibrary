@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 
+# noinspection SpellCheckingInspection
 class CommonGameTag(CommonInt):
     """Identifiers for vanilla game tags (These have been gathered dynamically from the :class:`.Tag` enum).
 
@@ -1400,6 +1401,7 @@ class CommonGameTag(CommonInt):
     FUNC_FAVORITE_CHOPSTICK_STEEL: 'CommonGameTag' = 69688
     FUNC_FAVORITE_CHOPSTICK_WOOD: 'CommonGameTag' = 69686
     FUNC_FESTIVAL_AUTONOMY_AREA_MARKER: 'CommonGameTag' = 1575
+    # noinspection PyRedeclaration
     FUNC_FESTIVAL_AUTONOMY_AREA_MARKER: 'CommonGameTag' = 55297
     FUNC_FESTIVAL_BLOSSOM_TEA_FOUNTAIN: 'CommonGameTag' = 55388
     FUNC_FESTIVAL_CURRY_CONTEST: 'CommonGameTag' = 55369

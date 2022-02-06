@@ -58,11 +58,11 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
-            return CommonTestResult(False, 'sim_info was None.')
+            return CommonTestResult(False, reason='sim_info was None.')
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return CommonTestResult(False, f'Sim did not have a mapped motive {motive_id}')
+            return CommonTestResult(False, reason=f'Sim did not have a mapped motive {motive_id}')
         cls.get_log().format_with_message('Mapped motive id, checking if Sim has the motive.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, sim=sim_info)
         return CommonSimStatisticUtils.has_statistic(sim_info, mapped_motive_id)
 
@@ -83,14 +83,14 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, 'sim_info was None.')
+            return CommonExecutionResult(False, reason='sim_info was None.')
         if not cls.has_motive(sim_info, motive_id):
             cls.get_log().format_with_message('Sim did not have the motive.', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, f'Sim did not have motive {motive_id}')
+            return CommonExecutionResult(False, reason=f'Sim did not have motive {motive_id}')
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, f'Sim did not have motive {motive_id}')
+            return CommonExecutionResult(False, reason=f'Sim did not have motive {motive_id}')
         cls.get_log().format_with_message('Mapped motive id, setting the level for it on Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, level=level, sim=sim_info)
         return CommonSimStatisticUtils.set_statistic_value(sim_info, mapped_motive_id, level, add=True)
 
@@ -126,14 +126,14 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, 'sim_info was None.')
+            return CommonExecutionResult(False, reason='sim_info was None.')
         if not cls.has_motive(sim_info, motive_id):
             cls.get_log().format_with_message('Sim did not have the motive.', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, f'Sim did not have the specified motive {motive_id}.')
+            return CommonExecutionResult(False, reason=f'Sim did not have the specified motive {motive_id}.')
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
+            return CommonExecutionResult(False, reason=f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
         cls.get_log().format_with_message('Mapped motive id, Adding to it for Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, amount=amount, sim=sim_info)
         return CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount, add=True)
 
@@ -154,14 +154,14 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, 'sim_info was None.')
+            return CommonExecutionResult(False, reason='sim_info was None.')
         if not cls.has_motive(sim_info, motive_id):
             cls.get_log().format_with_message('Sim did not have the motive.', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, f'Sim did not have the specified motive {motive_id}.')
+            return CommonExecutionResult(False, reason=f'Sim did not have the specified motive {motive_id}.')
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
+            return CommonExecutionResult(False, reason=f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
         cls.get_log().format_with_message('Mapped motive id, Subtracting from it for Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, amount=amount, sim=sim_info)
         return CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount * -1.0, add=True)
 
@@ -444,13 +444,13 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return CommonTestResult(False, f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
+            return CommonTestResult(False, reason=f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
         motive_instance = CommonSimStatisticUtils.get_statistic(sim_info, mapped_motive_id)
         if motive_instance is None:
-            return CommonTestResult(False, f'No motive found for id {mapped_motive_id}.')
+            return CommonTestResult(False, reason=f'No motive found for id {mapped_motive_id}.')
         if sim_info.is_locked(motive_instance):
-            return CommonTestResult(True, f'Motive {mapped_motive_id} is locked for Sim {sim_info}')
-        return CommonTestResult(False, f'Motive {mapped_motive_id} is not locked for Sim {sim_info}')
+            return CommonTestResult(True, reason=f'Motive {mapped_motive_id} is locked for Sim {sim_info}')
+        return CommonTestResult(False, reason=f'Motive {mapped_motive_id} is not locked for Sim {sim_info}')
 
     @classmethod
     def set_all_motives_max(cls, sim_info: SimInfo) -> CommonExecutionResult:
@@ -464,10 +464,10 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            return CommonExecutionResult(False, 'sim_info was None.')
+            return CommonExecutionResult(False, reason='sim_info was None.')
         client_id = services.client_manager().get_first_client_id()
         commands.execute('stats.fill_commodities {}'.format(CommonSimUtils.get_sim_id(sim_info)), client_id)
-        return CommonExecutionResult(True, f'Successfully set all motives to their max levels for Sim {sim_info}')
+        return CommonExecutionResult(True, reason=f'Successfully set all motives to their max levels for Sim {sim_info}')
 
     @classmethod
     def _get_motive_level(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int]) -> float:

@@ -347,8 +347,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
             full_arg_spec = inspect.getfullargspec(func)
 
             @wraps(func)
-            def _wrapped_func(*_, _connection: int=None, _account: int=None, **__):
-                output = CommonConsoleCommandOutput(_connection)
+            def _wrapped_func(output: CommonConsoleCommandOutput, *_, _connection: int=None, _account: int=None, **__):
                 try:
                     if '_account' in full_arg_spec.args or '_account' in full_arg_spec.kwonlyargs:
                         __['_account'] = _account
@@ -424,7 +423,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                         with sims4.telemetry.begin_hook(cheats_writer, TELEMETRY_HOOK_COMMAND) as hook:
                             hook.write_string(TELEMETRY_FIELD_NAME, name)
                             hook.write_string(TELEMETRY_FIELD_ARGS, str(args))
-                    return wrapped_func(*args, **kwargs)
+                    return wrapped_func(output, *args, **kwargs)
                 except Exception as ex:
                     output(f'ERROR: {ex}')
                     if (full_arg_spec.varargs is None or full_arg_spec.varkw is None) and any(inspect.isclass(arg_type) and isinstance(arg_type, type) and issubclass(arg_type, CustomParam) for arg_type in full_arg_spec.annotations.values()):

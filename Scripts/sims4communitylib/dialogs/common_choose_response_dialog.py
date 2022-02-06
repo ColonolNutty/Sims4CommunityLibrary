@@ -31,7 +31,6 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from ui.ui_dialog import UiDialogOption, ButtonType
 
-# ReadTheDocs
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 

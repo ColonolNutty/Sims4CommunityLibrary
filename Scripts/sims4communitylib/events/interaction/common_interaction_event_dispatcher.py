@@ -8,7 +8,6 @@ Copyright (c) COLONOLNUTTY
 import os
 from pprint import pformat
 from typing import Union, Any
-from event_testing.results import TestResult
 from interactions.base.interaction import Interaction
 from interactions.base.mixer_interaction import MixerInteraction
 from interactions.base.super_interaction import SuperInteraction
@@ -34,7 +33,6 @@ from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
 
-# ReadTheDocs
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
@@ -102,12 +100,12 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
             )
         return None
 
-    def _on_interaction_queued(self, interaction_queue: InteractionQueue, interaction: Interaction, *_, **__) -> Union[TestResult, None]:
+    def _on_interaction_queued(self, interaction_queue: InteractionQueue, interaction: Interaction, *_, **__) -> Union[CommonTestResult, None]:
         if interaction is None or interaction.sim is None:
             return None
         try:
             if not CommonEventRegistry().dispatch(S4CLInteractionQueuedEvent(interaction, interaction_queue)):
-                return CommonTestResult(False, 'Interaction \'{}\' Failed to Queue'.format(pformat(interaction)))
+                return CommonTestResult(False, reason='Interaction \'{}\' Failed to Queue'.format(pformat(interaction)))
         except Exception as ex:
             CommonExceptionHandler.log_exception(
                 None,
@@ -122,7 +120,7 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
             )
         return None
 
-    def _on_interaction_post_queued(self, interaction_queue: InteractionQueue, interaction: Interaction, queue_result: TestResult, *_, **__) -> None:
+    def _on_interaction_post_queued(self, interaction_queue: InteractionQueue, interaction: Interaction, queue_result: CommonTestResult, *_, **__) -> None:
         if interaction is None or interaction.sim is None:
             return None
         try:
@@ -262,7 +260,7 @@ def _common_on_interaction_run(original, self, timeline: Timeline, interaction: 
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), InteractionQueue, InteractionQueue.append.__name__)
-def _common_on_interaction_queued(original, self, interaction: Interaction, *_, **__) -> TestResult:
+def _common_on_interaction_queued(original, self, interaction: Interaction, *_, **__) -> CommonTestResult:
     try:
         result = CommonInteractionEventDispatcherService()._on_interaction_queued(self, interaction, *_, **__)
         if result is None or result:
@@ -280,7 +278,8 @@ def _common_on_interaction_queued(original, self, interaction: Interaction, *_, 
                     ),
                     exception=ex
                 )
-                return TestResult.NONE
+                return CommonTestResult.NONE
+            original_result: CommonTestResult = CommonTestResult.convert_from_vanilla(original_result)
             CommonInteractionEventDispatcherService()._on_interaction_post_queued(self, interaction, original_result, *_, **__)
             return original_result
         return result
@@ -296,7 +295,7 @@ def _common_on_interaction_queued(original, self, interaction: Interaction, *_, 
             ),
             exception=ex
         )
-    return CommonTestResult(False, 'Interaction \'{}\' with short name \'{}\' Failed to Queue'.format(
+    return CommonTestResult(False, reason='Interaction \'{}\' with short name \'{}\' Failed to Queue'.format(
         pformat(interaction),
         CommonInteractionUtils.get_interaction_short_name(interaction)
     ))

@@ -49,7 +49,7 @@ class CommonOccultUtils:
         :rtype: Iterator[OccultType]
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         yield OccultType.HUMAN
         sim_occult_types = CommonOccultUtils._get_occult_types(sim_info)
         for occult_type in OccultType.values:
@@ -75,7 +75,7 @@ class CommonOccultUtils:
         :rtype: Iterator[SimInfo]
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         exclude_occult_types: Tuple[OccultType] = tuple(exclude_occult_types)
         yield sim_info
         current_occult_type = CommonOccultUtils.get_current_occult_type(sim_info)
@@ -101,12 +101,12 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         from sims4communitylib.utils.sims.common_sim_occult_type_utils import CommonSimOccultTypeUtils
         occult_type = CommonSimOccultTypeUtils.determine_occult_type(sim_info)
         if occult_type not in (CommonOccultType.NON_OCCULT, CommonOccultType.NONE):
-            return CommonTestResult(True, f'Sim had an occult type. {occult_type}')
-        return CommonTestResult(False, f'Sim did not have an occult type. {occult_type}')
+            return CommonTestResult(True, reason=f'Sim had an occult type. {occult_type}')
+        return CommonTestResult(False, reason=f'Sim did not have an occult type. {occult_type}')
 
     @staticmethod
     def has_occult_type(sim_info: SimInfo, occult_type: OccultType) -> CommonTestResult:
@@ -122,10 +122,10 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         if bool(CommonOccultUtils._get_occult_types(sim_info) & occult_type):
-            return CommonTestResult(True, f'Sim had occult type {occult_type}.')
-        return CommonTestResult(False, f'Sim did not have occult type {occult_type}')
+            return CommonTestResult(True, reason=f'Sim had occult type {occult_type}.')
+        return CommonTestResult(False, reason=f'Sim did not have occult type {occult_type}')
 
     @staticmethod
     def has_occult_sim_info(sim_info: SimInfo, occult_type: OccultType) -> CommonTestResult:
@@ -141,12 +141,12 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         if not hasattr(sim_info, 'occult_tracker') or sim_info.occult_tracker is None:
-            return CommonTestResult(False, 'Sim did not have an occult tracker, thus they did not have any occult types.')
+            return CommonTestResult(False, reason='Sim did not have an occult tracker, thus they did not have any occult types.')
         if sim_info.occult_tracker.has_occult_type(occult_type):
-            return CommonTestResult(True, f'Sim had a Sim Info for {occult_type}.')
-        return CommonTestResult(False, f'Sim did not have a Sim Info {occult_type}')
+            return CommonTestResult(True, reason=f'Sim had a Sim Info for {occult_type}.')
+        return CommonTestResult(False, reason=f'Sim did not have a Sim Info {occult_type}')
 
     @staticmethod
     def get_current_occult_sim_info(sim_info: SimInfo) -> Union[SimInfo, SimInfoBaseWrapper, None]:
@@ -160,7 +160,7 @@ class CommonOccultUtils:
         :rtype: Union[SimInfo, SimInfoBaseWrapper, None]
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         current_occult_type = CommonOccultUtils.get_current_occult_type(sim_info)
         return CommonOccultUtils.get_occult_sim_info(sim_info, current_occult_type)
 
@@ -178,7 +178,7 @@ class CommonOccultUtils:
         :rtype: Union[SimInfo, SimInfoBaseWrapper, None]
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         if not hasattr(sim_info, 'occult_tracker') or sim_info.occult_tracker is None:
             return None
         occult_sim_info = sim_info.occult_tracker.get_occult_sim_info(occult_type)
@@ -198,7 +198,7 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_occult_available_result = CommonOccultUtils.is_occult_available(occult_type)
         if not is_occult_available_result:
             return is_occult_available_result
@@ -212,7 +212,7 @@ class CommonOccultUtils:
             CommonOccultType.WITCH: CommonOccultUtils.add_witch_occult
         }
         if occult_type not in occult_type_add_mappings:
-            return CommonExecutionResult(False, f'The specified occult type did not have an add function. {occult_type.name}')
+            return CommonExecutionResult(False, reason=f'The specified occult type did not have an add function. {occult_type.name}')
         return occult_type_add_mappings[occult_type](sim_info)
 
     @staticmethod
@@ -229,10 +229,10 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_occult_available_result = CommonOccultUtils.is_occult_available(occult_type)
         if not is_occult_available_result:
-            return CommonExecutionResult(True, is_occult_available_result.reason, tooltip_text=is_occult_available_result.tooltip)
+            return is_occult_available_result.reverse_result()
         occult_type_remove_mappings = {
             CommonOccultType.ALIEN: CommonOccultUtils.remove_alien_occult,
             CommonOccultType.MERMAID: CommonOccultUtils.remove_mermaid_occult,
@@ -243,7 +243,7 @@ class CommonOccultUtils:
             CommonOccultType.WITCH: CommonOccultUtils.remove_witch_occult
         }
         if occult_type not in occult_type_remove_mappings:
-            return CommonExecutionResult(False, f'The specified occult type did not have a remove function. {occult_type.name}')
+            return CommonExecutionResult(False, reason=f'The specified occult type did not have a remove function. {occult_type.name}')
         return occult_type_remove_mappings[occult_type](sim_info)
 
     @staticmethod
@@ -258,7 +258,7 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_alien_available_result = CommonOccultUtils.is_alien_occult_available()
         if not is_alien_available_result:
             return is_alien_available_result
@@ -328,13 +328,13 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_alien_available_result = CommonOccultUtils.is_alien_occult_available()
         if not is_alien_available_result:
-            return CommonExecutionResult(True, is_alien_available_result.reason, tooltip_text=is_alien_available_result.tooltip)
+            return is_alien_available_result.reverse_result()
         is_alien_result = CommonOccultUtils.is_alien(sim_info)
         if not is_alien_result:
-            return CommonExecutionResult(True, is_alien_result.reason, tooltip_text=is_alien_result.tooltip)
+            return is_alien_result.reverse_result()
         CommonOccultUtils.switch_to_occult_form(sim_info, OccultType.HUMAN)
         sim_info.occult_tracker.remove_occult_type(OccultType.ALIEN)
         return CommonExecutionResult.TRUE
@@ -351,7 +351,7 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_mermaid_available_result = CommonOccultUtils.is_mermaid_occult_available()
         if not is_mermaid_available_result:
             return is_mermaid_available_result
@@ -376,13 +376,13 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_mermaid_available_result = CommonOccultUtils.is_mermaid_occult_available()
         if not is_mermaid_available_result:
-            return CommonExecutionResult(True, is_mermaid_available_result.reason, tooltip_text=is_mermaid_available_result.tooltip)
+            return is_mermaid_available_result.reverse_result()
         is_mermaid_result = CommonOccultUtils.is_mermaid(sim_info)
         if not is_mermaid_result:
-            return CommonExecutionResult(True, is_mermaid_result.reason, tooltip_text=is_mermaid_result.tooltip)
+            return is_mermaid_result.reverse_result()
         traits: Tuple[int] = (
             CommonTraitId.OCCULT_MERMAID_MERMAID_FORM,
             CommonTraitId.OCCULT_MERMAID_DISCOVERED,
@@ -405,7 +405,7 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_plant_sim_available_result = CommonOccultUtils.is_plant_sim_occult_available()
         if not is_plant_sim_available_result:
             return is_plant_sim_available_result
@@ -427,10 +427,10 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_plant_sim_available_result = CommonOccultUtils.is_plant_sim_occult_available()
         if not is_plant_sim_available_result:
-            return CommonExecutionResult(True, is_plant_sim_available_result.reason, tooltip_text=is_plant_sim_available_result.tooltip)
+            return is_plant_sim_available_result.reverse_result()
         remove_result = CommonBuffUtils.remove_buff(sim_info, CommonBuffId.PLANT_SIMS_MAIN_VISIBLE)
         if not remove_result:
             return remove_result
@@ -448,7 +448,7 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_robot_available_result = CommonOccultUtils.is_robot_occult_available()
         if not is_robot_available_result:
             return is_robot_available_result
@@ -469,13 +469,13 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_robot_available_result = CommonOccultUtils.is_robot_occult_available()
         if not is_robot_available_result:
-            return CommonExecutionResult(True, is_robot_available_result.reason, tooltip_text=is_robot_available_result.tooltip)
+            return is_robot_available_result.reverse_result()
         is_robot_result = CommonOccultUtils.is_robot(sim_info)
         if not is_robot_result:
-            return CommonExecutionResult(True, is_robot_result.reason, tooltip_text=is_robot_result.tooltip)
+            return is_robot_result.reverse_result()
         return CommonTraitUtils.remove_trait(sim_info, CommonTraitId.OCCULT_ROBOT)
 
     @staticmethod
@@ -490,7 +490,7 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_skeleton_available_result = CommonOccultUtils.is_skeleton_occult_available()
         if not is_skeleton_available_result:
             return is_skeleton_available_result
@@ -515,13 +515,13 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_skeleton_available_result = CommonOccultUtils.is_skeleton_occult_available()
         if not is_skeleton_available_result:
-            return CommonExecutionResult(True, is_skeleton_available_result.reason, tooltip_text=is_skeleton_available_result.tooltip)
+            return is_skeleton_available_result.reverse_result()
         is_skeleton_result = CommonOccultUtils.is_skeleton(sim_info)
         if not is_skeleton_result:
-            return CommonExecutionResult(True, is_skeleton_result.reason, tooltip_text=is_skeleton_result.tooltip)
+            return is_skeleton_result.reverse_result()
         # loot_Skeleton_Remove
         remove_loot_id = 175975
         if CommonSimLootActionUtils.apply_loot_actions_by_id_to_sim(remove_loot_id, sim_info):
@@ -540,7 +540,7 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_vampire_available_result = CommonOccultUtils.is_vampire_occult_available()
         if not is_vampire_available_result:
             return is_vampire_available_result
@@ -565,13 +565,13 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_vampire_available_result = CommonOccultUtils.is_vampire_occult_available()
         if not is_vampire_available_result:
-            return CommonExecutionResult(True, is_vampire_available_result.reason, tooltip_text=is_vampire_available_result.tooltip)
+            return is_vampire_available_result.reverse_result()
         is_vampire_result = CommonOccultUtils.is_vampire(sim_info)
         if not is_vampire_result:
-            return CommonTestResult(True, is_vampire_result.reason, tooltip_text=is_vampire_result.tooltip)
+            is_vampire_result.reverse_result()
         loot_action_ids: Tuple[int] = (
             # loot_VampireCure_RemoveVampirism
             150170,
@@ -594,7 +594,7 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_witch_available_result = CommonOccultUtils.is_witch_occult_available()
         if not is_witch_available_result:
             return is_witch_available_result
@@ -619,13 +619,13 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_witch_available_result = CommonOccultUtils.is_witch_occult_available()
         if not is_witch_available_result:
-            return CommonExecutionResult(True, is_witch_available_result.reason, tooltip_text=is_witch_available_result.tooltip)
+            is_witch_available_result.reverse_result()
         is_witch_result = CommonOccultUtils.is_witch(sim_info)
         if not is_witch_result:
-            return CommonExecutionResult(True, is_witch_result.reason, tooltip_text=is_witch_result.tooltip)
+            return is_witch_result.reverse_result()
         # loot_WitchOccult_RemoveOccult
         remove_loot_id = 215274
         if CommonSimLootActionUtils.apply_loot_actions_by_id_to_duo_sims(remove_loot_id, sim_info, sim_info):
@@ -644,7 +644,7 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         switch_to_non_occult_form_result = CommonOccultUtils.switch_to_occult_form(sim_info, OccultType.HUMAN)
         if not switch_to_non_occult_form_result:
             return switch_to_non_occult_form_result
@@ -668,7 +668,7 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         switch_to_non_occult_form_result = CommonOccultUtils.switch_to_occult_form(sim_info, OccultType.HUMAN)
         if not switch_to_non_occult_form_result:
             return switch_to_non_occult_form_result
@@ -694,11 +694,11 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         if isinstance(occult_type, CommonOccultType):
             vanilla_occult_type = CommonOccultType.convert_to_vanilla(occult_type)
             if vanilla_occult_type is None:
-                return CommonExecutionResult(False, f'Sim failed to switch to occult type {occult_type.name}')
+                return CommonExecutionResult(False, reason=f'Sim failed to switch to occult type {occult_type.name}')
         else:
             vanilla_occult_type = occult_type
         sim_info.occult_tracker.switch_to_occult_type(vanilla_occult_type)
@@ -716,7 +716,7 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_vampire_available_result = CommonOccultUtils.is_vampire_occult_available()
         if not is_vampire_available_result:
             return is_vampire_available_result
@@ -734,7 +734,7 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_alien_available_result = CommonOccultUtils.is_alien_occult_available()
         if not is_alien_available_result:
             return is_alien_available_result
@@ -752,7 +752,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_plant_sim_available_result = CommonOccultUtils.is_plant_sim_occult_available()
         if not is_plant_sim_available_result:
             return is_plant_sim_available_result
@@ -770,7 +770,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_ghost_available_result = CommonOccultUtils.is_ghost_occult_available()
         if not is_ghost_available_result:
             return is_ghost_available_result
@@ -779,7 +779,7 @@ class CommonOccultUtils:
             is_ghost_trait = getattr(trait, 'is_ghost_trait', None)
             if is_ghost_trait:
                 return CommonTestResult.TRUE
-        return CommonTestResult(False, f'Sim is not a ghost.')
+        return CommonTestResult(False, reason=f'Sim is not a ghost.')
 
     @staticmethod
     def is_robot(sim_info: SimInfo) -> CommonTestResult:
@@ -793,7 +793,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_robot_available_result = CommonOccultUtils.is_robot_occult_available()
         if not is_robot_available_result:
             return is_robot_available_result
@@ -802,7 +802,7 @@ class CommonOccultUtils:
             trait_type = getattr(trait, 'trait_type', -1)
             if trait_type == TraitType.ROBOT:
                 return CommonTestResult.TRUE
-        return CommonTestResult(False, f'Sim is not a robot.')
+        return CommonTestResult(False, reason=f'Sim is not a robot.')
     
     @staticmethod
     def is_skeleton(sim_info: SimInfo) -> CommonTestResult:
@@ -816,7 +816,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_skeleton_available_result = CommonOccultUtils.is_skeleton_occult_available()
         if not is_skeleton_available_result:
             return is_skeleton_available_result
@@ -830,7 +830,7 @@ class CommonOccultUtils:
             trait_id = CommonTraitUtils.get_trait_id(trait)
             if trait_id in skeleton_trait_ids:
                 return CommonTestResult.TRUE
-        return CommonTestResult(False, f'Sim is not a skeleton.')
+        return CommonTestResult(False, reason=f'Sim is not a skeleton.')
 
     @staticmethod
     def is_witch(sim_info: SimInfo) -> CommonTestResult:
@@ -844,15 +844,15 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_witch_available_result = CommonOccultUtils.is_witch_occult_available()
         if not is_witch_available_result:
             return is_witch_available_result
         if CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_WITCH):
-            return CommonTestResult(True, f'Sim had the Witch occult trait.')
+            return CommonTestResult(True, reason=f'Sim had the Witch occult trait.')
         if CommonOccultUtils.has_occult_type(sim_info, OccultType.WITCH):
-            return CommonTestResult(True, f'Sim had the Witch occult type.')
-        return CommonTestResult(False, f'Sim is not a Witch.')
+            return CommonTestResult(True, reason=f'Sim had the Witch occult type.')
+        return CommonTestResult(False, reason=f'Sim is not a Witch.')
 
     @staticmethod
     def is_mermaid(sim_info: SimInfo) -> CommonTestResult:
@@ -866,15 +866,15 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_mermaid_available_result = CommonOccultUtils.is_mermaid_occult_available()
         if not is_mermaid_available_result:
             return is_mermaid_available_result
         if CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_MERMAID):
-            return CommonTestResult(True, f'Sim had the Mermaid occult trait.')
+            return CommonTestResult(True, reason=f'Sim had the Mermaid occult trait.')
         if CommonOccultUtils.has_occult_type(sim_info, OccultType.MERMAID):
-            return CommonTestResult(True, f'Sim had the Mermaid occult type.')
-        return CommonTestResult(False, f'Sim is not a Witch.')
+            return CommonTestResult(True, reason=f'Sim had the Mermaid occult type.')
+        return CommonTestResult(False, reason=f'Sim is not a Witch.')
 
     @staticmethod
     def is_in_mermaid_form(sim_info: SimInfo) -> CommonTestResult:
@@ -888,13 +888,13 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_mermaid_available_result = CommonOccultUtils.is_mermaid_occult_available()
         if not is_mermaid_available_result:
             return is_mermaid_available_result
         if CommonOccultUtils.get_current_occult_type(sim_info) == OccultType.MERMAID:
-            return CommonTestResult(True, f'Sim is currently in Mermaid Form.')
-        return CommonTestResult(False, f'Sim is not in Mermaid Form.')
+            return CommonTestResult(True, reason=f'Sim is currently in Mermaid Form.')
+        return CommonTestResult(False, reason=f'Sim is not in Mermaid Form.')
 
     @staticmethod
     def is_mermaid_in_mermaid_form(sim_info: SimInfo) -> CommonTestResult:
@@ -908,7 +908,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_mermaid_available_result = CommonOccultUtils.is_mermaid_occult_available()
         if not is_mermaid_available_result:
             return is_mermaid_available_result
@@ -934,7 +934,7 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.is_currently_a_non_occult(sim_info)
 
     @staticmethod
@@ -949,13 +949,13 @@ class CommonOccultUtils:
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         if not hasattr(OccultType, 'HUMAN'):
-            return CommonExecutionResult(False, 'Humans do not exist. They are a myth! (At least in this persons game)')
+            return CommonExecutionResult(False, reason='Humans do not exist. They are a myth! (At least in this persons game)')
         current_occult = CommonOccultUtils.get_current_occult_type(sim_info)
         if current_occult == OccultType.HUMAN:
-            return CommonExecutionResult(True, 'Sim is currently a Human.')
-        return CommonExecutionResult(False, 'Sim is not currently a Human.')
+            return CommonExecutionResult(True, reason='Sim is currently a Human.')
+        return CommonExecutionResult(False, reason='Sim is not currently a Human.')
 
     @staticmethod
     def is_currently_a_mermaid(sim_info: SimInfo) -> CommonTestResult:
@@ -969,7 +969,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.is_in_mermaid_form(sim_info)
 
     @staticmethod
@@ -986,7 +986,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.is_robot(sim_info)
 
     @staticmethod
@@ -1003,7 +1003,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.is_skeleton(sim_info)
 
     @staticmethod
@@ -1020,7 +1020,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.is_plant_sim(sim_info)
 
     @staticmethod
@@ -1037,7 +1037,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.is_ghost(sim_info)
 
     @staticmethod
@@ -1052,13 +1052,13 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_vampire_available_result = CommonOccultUtils.is_vampire_occult_available()
         if not is_vampire_available_result:
             return is_vampire_available_result
         if CommonOccultUtils.get_current_occult_type(sim_info) == OccultType.VAMPIRE:
-            return CommonTestResult(True, 'Sim is currently a Vampire.')
-        return CommonTestResult(False, 'Sim is not currently a Vampire.')
+            return CommonTestResult(True, reason='Sim is currently a Vampire.')
+        return CommonTestResult(False, reason='Sim is not currently a Vampire.')
 
     @staticmethod
     def is_currently_an_alien(sim_info: SimInfo) -> CommonTestResult:
@@ -1072,13 +1072,13 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_alien_available_result = CommonOccultUtils.is_alien_occult_available()
         if not is_alien_available_result:
             return is_alien_available_result
         if CommonOccultUtils.get_current_occult_type(sim_info) == OccultType.ALIEN:
-            return CommonTestResult(True, 'Sim is currently an Alien.')
-        return CommonTestResult(False, 'Sim is not currently an Alien.')
+            return CommonTestResult(True, reason='Sim is currently an Alien.')
+        return CommonTestResult(False, reason='Sim is not currently an Alien.')
 
     @staticmethod
     def is_currently_a_witch(sim_info: SimInfo) -> CommonTestResult:
@@ -1092,13 +1092,13 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         is_witch_available_result = CommonOccultUtils.is_witch_occult_available()
         if not is_witch_available_result:
             return is_witch_available_result
         if CommonOccultUtils.get_current_occult_type(sim_info) == OccultType.WITCH:
-            return CommonTestResult(True, 'Sim is currently a Witch.')
-        return CommonTestResult(False, 'Sim is not currently a Witch.')
+            return CommonTestResult(True, reason='Sim is currently a Witch.')
+        return CommonTestResult(False, reason='Sim is not currently a Witch.')
 
     @staticmethod
     def get_sim_info_of_all_occults_gen(sim_info: SimInfo, *exclude_occult_types: OccultType) -> Iterator[SimInfo]:
@@ -1116,7 +1116,7 @@ class CommonOccultUtils:
         :rtype: Iterator[SimInfo]
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.get_sim_info_for_all_occults_gen(sim_info, exclude_occult_types)
 
     @staticmethod
@@ -1146,7 +1146,7 @@ class CommonOccultUtils:
         :rtype: Union[OccultType, None]
         """
         if sim_info is None:
-            raise AssertionError('sim_info was None')
+            raise AssertionError('Argument sim_info was None')
         if not hasattr(sim_info, 'current_occult_types'):
             if not hasattr(sim_info, '_base') or not hasattr(sim_info._base, 'current_occult_types'):
                 return None
@@ -1168,7 +1168,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if occult_type == CommonOccultType.NON_OCCULT:
-            return CommonTestResult(True, 'Obviously the Non Occult "occult type" is available, what did you expect?')
+            return CommonTestResult(True, reason='Obviously the Non Occult "occult type" is available, what did you expect?')
         occult_type_mappings = {
             CommonOccultType.ALIEN: CommonOccultUtils.is_alien_occult_available,
             CommonOccultType.MERMAID: CommonOccultUtils.is_mermaid_occult_available,
@@ -1180,7 +1180,7 @@ class CommonOccultUtils:
             CommonOccultType.GHOST: CommonOccultUtils.is_ghost_occult_available
         }
         if occult_type not in occult_type_mappings:
-            return CommonTestResult(False, f'Occult Type {occult_type} is not available because it is not a valid occult type.')
+            return CommonTestResult(False, reason=f'Occult Type {occult_type} is not available because it is not a valid occult type.')
         return occult_type_mappings[occult_type]()
 
     @staticmethod
@@ -1193,9 +1193,9 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if not hasattr(OccultType, 'ALIEN'):
-            return CommonTestResult(False, 'Aliens do not exist. They are a myth! (At least in this persons game, OccultType did not contain ALIEN)')
+            return CommonTestResult(False, reason='Aliens do not exist. They are a myth! (At least in this persons game, OccultType did not contain ALIEN)')
         if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_ALIEN):
-            return CommonTestResult(False, 'The Alien trait is not available.')
+            return CommonTestResult(False, reason='The Alien trait is not available.')
         return CommonTestResult.TRUE
 
     @staticmethod
@@ -1208,9 +1208,9 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if not hasattr(OccultType, 'MERMAID'):
-            return CommonTestResult(False, 'Mermaids do not exist. They are a myth! (At least in this persons game, OccultType did not contain MERMAID)')
+            return CommonTestResult(False, reason='Mermaids do not exist. They are a myth! (At least in this persons game, OccultType did not contain MERMAID)')
         if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_MERMAID):
-            return CommonTestResult(False, 'The Mermaid trait is not available.')
+            return CommonTestResult(False, reason='The Mermaid trait is not available.')
         return CommonTestResult.TRUE
 
     @staticmethod
@@ -1223,9 +1223,9 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if not hasattr(TraitType, 'ROBOT'):
-            return CommonTestResult(False, 'Robots do not exist. They are a myth! (At least in this persons game, TraitType did not contain ROBOT)')
+            return CommonTestResult(False, reason='Robots do not exist. They are a myth! (At least in this persons game, TraitType did not contain ROBOT)')
         if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_ROBOT):
-            return CommonTestResult(False, 'The Robot trait is not available.')
+            return CommonTestResult(False, reason='The Robot trait is not available.')
         return CommonTestResult.TRUE
 
     @staticmethod
@@ -1238,7 +1238,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if not CommonTraitUtils.is_trait_available(CommonTraitId.HIDDEN_SKELETON):
-            return CommonTestResult(False, 'The Skeleton trait is not available.')
+            return CommonTestResult(False, reason='The Skeleton trait is not available.')
         return CommonTestResult.TRUE
 
     @staticmethod
@@ -1251,9 +1251,9 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if not hasattr(OccultType, 'VAMPIRE'):
-            return CommonTestResult(False, 'Vampires do not exist. They are a myth! (At least in this persons game, OccultType did not contain VAMPIRE)')
+            return CommonTestResult(False, reason='Vampires do not exist. They are a myth! (At least in this persons game, OccultType did not contain VAMPIRE)')
         if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_VAMPIRE):
-            return CommonTestResult(False, 'The Vampire trait is not available.')
+            return CommonTestResult(False, reason='The Vampire trait is not available.')
         return CommonTestResult.TRUE
 
     @staticmethod
@@ -1266,9 +1266,9 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if not hasattr(OccultType, 'WITCH'):
-            return CommonTestResult(False, 'Witches do not exist. They are a myth! (At least in this persons game, OccultType did not contain WITCH)')
+            return CommonTestResult(False, reason='Witches do not exist. They are a myth! (At least in this persons game, OccultType did not contain WITCH)')
         if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_WITCH):
-            return CommonTestResult(False, 'The Witch trait is not available.')
+            return CommonTestResult(False, reason='The Witch trait is not available.')
         return CommonTestResult.TRUE
 
     @staticmethod
@@ -1281,7 +1281,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if not CommonTraitUtils.is_trait_available(CommonTraitId.PLANT_SIM):
-            return CommonTestResult(False, 'The Plant Sim trait is not available.')
+            return CommonTestResult(False, reason='The Plant Sim trait is not available.')
         return CommonTestResult.TRUE
 
     @staticmethod
@@ -1294,7 +1294,7 @@ class CommonOccultUtils:
         :rtype: CommonTestResult
         """
         if not hasattr(TraitType, 'GHOST'):
-            return CommonTestResult(False, 'Ghosts do not exist. They are a myth! (At least in this persons game, TraitType did not contain GHOST)')
+            return CommonTestResult(False, reason='Ghosts do not exist. They are a myth! (At least in this persons game, TraitType did not contain GHOST)')
         ghost_traits = (
             CommonTraitId.GHOST_ANGER,
             CommonTraitId.GHOST_ANIMAL_OBJECTS_KILLER_CHICKEN,
@@ -1332,7 +1332,7 @@ class CommonOccultUtils:
         for ghost_trait in ghost_traits:
             if CommonTraitUtils.is_trait_available(ghost_trait):
                 return CommonTestResult.TRUE
-        return CommonTestResult(False, 'No Ghost traits were available.')
+        return CommonTestResult(False, reason='No Ghost traits were available.')
 
     @staticmethod
     def _get_occult_types(sim_info: SimInfo) -> OccultType:

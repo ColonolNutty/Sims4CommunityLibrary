@@ -17,7 +17,6 @@ from sims4communitylib.utils.common_json_io_utils import CommonJSONIOUtils
 from sims4communitylib.utils.common_log_registry import CommonMessageType
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
-# ReadTheDocs
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 

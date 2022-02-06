@@ -8,13 +8,14 @@ Copyright (c) COLONOLNUTTY
 from typing import Iterator, Union, Any, Callable, List
 
 from distributor.shared_messages import IconInfoData
-from event_testing.results import EnqueueResult, TestResult
+from event_testing.results import EnqueueResult
 from interactions.aop import AffordanceObjectPair
 from interactions.base.interaction import Interaction
 from interactions.context import InteractionSource, InteractionContext, QueueInsertStrategy
 from interactions.interaction_finisher import FinishingType
 from interactions.priority import Priority
 from sims.sim_info import SimInfo
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.interactions_enum import CommonInteractionId
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
@@ -784,7 +785,7 @@ class CommonSimInteractionUtils(HasClassLog):
             False,
             push_super_on_prepare=False
         ):
-            test_result: TestResult = test_result
+            test_result: CommonTestResult = CommonTestResult.convert_from_vanilla(test_result)
             if test_result is None or test_result.result:
                 log.format_with_message('Failed to queue using affordance.', aop=aop, affordance=aop.affordance)
                 continue
@@ -808,7 +809,7 @@ class CommonSimInteractionUtils(HasClassLog):
         picked_object: Any=None,
         interaction_context: InteractionContext=None,
         **kwargs
-    ) -> TestResult:
+    ) -> CommonTestResult:
         """test_interaction(\
             sim_info,\
             interaction_id,\
@@ -835,7 +836,7 @@ class CommonSimInteractionUtils(HasClassLog):
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
         :type interaction_context: InteractionContext, optional
         :return: The result of testing a push of the interaction to the queue of a Sim.
-        :rtype: TestResult
+        :rtype: CommonTestResult
         """
         log = cls.get_log()
         sim = CommonSimUtils.get_sim_instance(sim_info)
@@ -844,11 +845,11 @@ class CommonSimInteractionUtils(HasClassLog):
                 log.format_with_message('No posture, sim, or state', sim=sim, si_state=sim.si_state, queue=sim.queue, posture_state=sim.posture_state, posture=sim.posture)
             else:
                 log.format_with_message('No sim instance.', sim=sim_info)
-            return TestResult.NONE
+            return CommonTestResult.NONE
         interaction_instance = CommonInteractionUtils.load_interaction_by_id(interaction_id)
         if interaction_instance is None:
             log.format_with_message('No interaction found with id.', id=interaction_id)
-            return TestResult.NONE
+            return CommonTestResult.NONE
 
         interaction_context = interaction_context or cls.create_interaction_context(
             sim_info,
@@ -895,7 +896,7 @@ class CommonSimInteractionUtils(HasClassLog):
         picked_object: Any=None,
         interaction_context: InteractionContext=None,
         **kwargs
-    ) -> TestResult:
+    ) -> CommonTestResult:
         """test_super_interaction(\
             sim_info,\
             super_interaction_id,\
@@ -918,32 +919,32 @@ class CommonSimInteractionUtils(HasClassLog):
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
         :type interaction_context: InteractionContext, optional
         :return: The result of testing a push of the interaction to the queue of a Sim.
-        :rtype: TestResult
+        :rtype: CommonTestResult
         """
         log = cls.get_log()
         log.format_with_message('Testing super interaction', sim=sim_info, interaction_id=super_interaction_id, target=target, interaction_context=interaction_context)
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             log.debug('No sim instance for super interaction.')
-            return TestResult.NONE
+            return CommonTestResult.NONE
 
         super_interaction_instance = CommonInteractionUtils.load_interaction_by_id(super_interaction_id)
         if super_interaction_instance is None:
             log.format_with_message('No super interaction instance found for id.', super_interaction_id=super_interaction_id)
-            return TestResult.NONE
+            return CommonTestResult.NONE
 
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
             target = CommonSimUtils.get_sim_instance(target)
 
         interaction_context = interaction_context or cls.create_interaction_context(sim_info)
 
-        return sim.test_super_affordance(
+        return CommonTestResult.convert_from_vanilla(sim.test_super_affordance(
             super_interaction_instance,
             target,
             interaction_context,
             picked_object=picked_object or target,
             **kwargs
-        )
+        ))
 
     @classmethod
     def test_social_mixer_interaction(
@@ -955,7 +956,7 @@ class CommonSimInteractionUtils(HasClassLog):
         picked_object: Any=None,
         interaction_context: InteractionContext=None,
         **kwargs
-    ) -> TestResult:
+    ) -> CommonTestResult:
         """test_social_mixer_interaction(\
             sim_info,\
             social_mixer_interaction_id,\
@@ -981,7 +982,7 @@ class CommonSimInteractionUtils(HasClassLog):
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
         :type interaction_context: InteractionContext, optional
         :return: The result of testing a push of the interaction to the queue of a Sim.
-        :rtype: TestResult
+        :rtype: CommonTestResult
         """
         log = cls.get_log()
         if social_super_interaction_id is not None and social_mixer_interaction_id is None:
@@ -1062,7 +1063,7 @@ class CommonSimInteractionUtils(HasClassLog):
             push_super_on_prepare=True,
             **kwargs
         )
-        return aop.test(interaction_context)
+        return CommonTestResult.convert_from_vanilla(aop.test(interaction_context))
 
     @classmethod
     def test_mixer_interaction(
@@ -1072,7 +1073,7 @@ class CommonSimInteractionUtils(HasClassLog):
         target: Any=None,
         interaction_context: InteractionContext=None,
         **kwargs
-    ) -> TestResult:
+    ) -> CommonTestResult:
         """test_mixer_interaction(\
             sim_info,\
             mixer_interaction_id,\
@@ -1092,7 +1093,7 @@ class CommonSimInteractionUtils(HasClassLog):
         :param interaction_context: The context to queue the interaction with. See also :func:`~create_interaction_context`. Default is None.
         :type interaction_context: InteractionContext, optional
         :return: The result of testing a push of the interaction to the queue of a Sim.
-        :rtype: TestResult
+        :rtype: CommonTestResult
         """
         log = cls.get_log()
         log.format_with_message(
@@ -1107,20 +1108,20 @@ class CommonSimInteractionUtils(HasClassLog):
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             log.debug('No Sim instance.')
-            return TestResult.NONE
+            return CommonTestResult.NONE
         if sim.posture is None:
             log.debug('No Sim Posture.')
-            return TestResult.NONE
+            return CommonTestResult.NONE
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
             target = CommonSimUtils.get_sim_instance(target)
         mixer_interaction_instance = CommonInteractionUtils.load_interaction_by_id(mixer_interaction_id)
         if mixer_interaction_instance is None:
             log.debug('No mixer interaction instance found.')
-            return TestResult.NONE
+            return CommonTestResult.NONE
         source_interaction = sim.posture.source_interaction
         if source_interaction is None:
             log.debug('Sim did not have a source interaction.')
-            return TestResult.NONE
+            return CommonTestResult.NONE
         if hasattr(mixer_interaction_instance, 'lock_out_time') and mixer_interaction_instance.lock_out_time:
             log.debug('Using Sim specific lock out time.')
             sim_specific_lockout = mixer_interaction_instance.lock_out_time.target_based_lock_out
@@ -1130,7 +1131,7 @@ class CommonSimInteractionUtils(HasClassLog):
 
         if sim_specific_lockout and sim.is_sub_action_locked_out(mixer_interaction_instance):
             log.debug('Sim was locked out of performing the mixer interaction.')
-            return TestResult.NONE
+            return CommonTestResult.NONE
 
         super_interaction_instance = source_interaction.super_affordance
         interaction_context = interaction_context or cls.create_interaction_context(sim_info)
@@ -1143,7 +1144,7 @@ class CommonSimInteractionUtils(HasClassLog):
             False,
             push_super_on_prepare=False
         ):
-            test_result: TestResult = test_result
+            test_result = CommonTestResult.convert_from_vanilla(test_result)
             if test_result is None or test_result.result:
                 log.format_with_message('Failed to queue using affordance.', aop=aop, affordance=aop.affordance)
                 continue

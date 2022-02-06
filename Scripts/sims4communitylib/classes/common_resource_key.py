@@ -7,8 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 import os
 from typing import Union
-
-# ReadTheDocs
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'

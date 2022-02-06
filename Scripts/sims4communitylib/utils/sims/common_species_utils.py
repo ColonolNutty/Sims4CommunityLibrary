@@ -71,9 +71,10 @@ class CommonSpeciesUtils:
         :return: True, if both Sims are the same species. False, if not.
         :rtype: bool
         """
-        if sim_info is None or other_sim_info is None:
-            log.debug('Either sim_info or other_sim_info is None')
-            return False
+        if sim_info is None:
+            raise AssertionError('Argument sim_info was None')
+        if other_sim_info is None:
+            raise AssertionError('Argument other_sim_info was None')
         from sims4communitylib.enums.common_species import CommonSpecies
         species_one = CommonSpecies.get_species(sim_info)
         species_two = CommonSpecies.get_species(other_sim_info)

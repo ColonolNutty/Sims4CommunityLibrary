@@ -15,17 +15,19 @@ from sims4communitylib.classes.math.common_routing_location import CommonRouting
 from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
 from sims4communitylib.classes.math.common_transform import CommonTransform
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
 from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
 from sims4communitylib.utils.sims.common_sim_interaction_utils import CommonSimInteractionUtils
 from sims4communitylib.utils.sims.common_sim_type_utils import CommonSimTypeUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
-# ReadTheDocs
+
+
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 if not ON_RTD:
     from autonomy.autonomy_component import AutonomyComponent
-    from event_testing.results import EnqueueResult, TestResult
+    from event_testing.results import EnqueueResult
     import routing
     from routing import RoutingContext
     import objects.terrain
@@ -451,10 +453,10 @@ class CommonSimLocationUtils:
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return EnqueueResult(TestResult(False, 'No Sim was specified to be sent.'), None)
+            return EnqueueResult(CommonTestResult(False, reason='No Sim was specified to be sent.'), None)
         from server_commands.sim_commands import _build_terrain_interaction_target_and_context, CommandTuning
         if position is None:
-            return EnqueueResult(TestResult(False, 'No Position specified to send the Sim to!'), None)
+            return EnqueueResult(CommonTestResult(False, reason='No Position specified to send the Sim to!'), None)
         routing_surface = CommonSurfaceIdentifier.empty(secondary_id=level)
         (target, context) = _build_terrain_interaction_target_and_context(sim, position, routing_surface, PickType.PICK_TERRAIN, objects.terrain.TerrainPoint)
         if go_here_interaction_id is not None:
@@ -481,7 +483,7 @@ class CommonSimLocationUtils:
         :rtype: EnqueueResult
         """
         if position is None:
-            return EnqueueResult(TestResult(False, 'No Position specified to send the Sim to!'), None)
+            return EnqueueResult(CommonTestResult(False, reason='No Position specified to send the Sim to!'), None)
 
         transform = CommonTransform(position, CommonQuaternion.empty())
         location = CommonLocation(transform, CommonSurfaceIdentifier.empty(secondary_id=level))
@@ -503,7 +505,7 @@ class CommonSimLocationUtils:
         :rtype: EnqueueResult
         """
         if location is None:
-            return EnqueueResult(TestResult(False, 'No Location specified to send the Sim to!'), None)
+            return EnqueueResult(CommonTestResult(False, reason='No Location specified to send the Sim to!'), None)
 
         position = location.transform.translation
         level = location.routing_surface.secondary_id
@@ -528,9 +530,9 @@ class CommonSimLocationUtils:
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return EnqueueResult(TestResult(False, 'No Sim was specified to be sent.'), None)
+            return EnqueueResult(CommonTestResult(False, reason='No Sim was specified to be sent.'), None)
         if location is None:
-            return EnqueueResult(TestResult(False, 'No Location specified to send the Sim to!'), None)
+            return EnqueueResult(CommonTestResult(False, reason='No Location specified to send the Sim to!'), None)
         from placement import find_good_location, create_starting_location, create_fgl_context_for_sim
         routing_surface = location.routing_surface
         starting_location = create_starting_location(transform=location.transform, routing_surface=routing_surface)

@@ -1023,13 +1023,13 @@ class CommonTraitUtils(HasClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not traits:
-            return CommonTestResult(False, 'No traits were specified.')
+            return CommonTestResult(False, reason='No traits were specified.')
         sim_trait_ids = cls.get_trait_ids(sim_info)
         for trait in traits:
             trait_id = cls.get_trait_id(trait)
             if trait_id in sim_trait_ids:
                 return CommonTestResult.TRUE
-        return CommonTestResult(False, f'Sim did not have any of the specified traits.')
+        return CommonTestResult(False, reason=f'Sim did not have any of the specified traits.')
 
     @classmethod
     def has_all_traits(cls, sim_info: SimInfo, traits: Iterator[Union[int, CommonTraitId, Trait]]) -> CommonTestResult:
@@ -1047,7 +1047,7 @@ class CommonTraitUtils(HasClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not traits:
-            return CommonTestResult(False, 'No traits were specified.')
+            return CommonTestResult(False, reason='No traits were specified.')
         sim_trait_ids = cls.get_trait_ids(sim_info)
         missing_traits_list = list()
         for trait in traits:
@@ -1056,7 +1056,7 @@ class CommonTraitUtils(HasClassLog):
                 missing_traits_list.append(trait)
         if missing_traits_list:
             missing_traits_list_str = ', '.join([cls.get_trait_name(trait) or str(trait) if isinstance(trait, Trait) else str(trait) for trait in missing_traits_list])
-            return CommonTestResult(False, f'Sim did not have all traits. Missing Buffs: {missing_traits_list_str}')
+            return CommonTestResult(False, reason=f'Sim did not have all traits. Missing Buffs: {missing_traits_list_str}')
         return CommonTestResult.TRUE
 
     @classmethod
@@ -1074,7 +1074,7 @@ class CommonTraitUtils(HasClassLog):
         """
         trait_to_check = cls.load_trait_by_id(trait_id)
         if trait_to_check is None:
-            return CommonTestResult(False, f'Trait {trait_id} did not exist, thus it cannot conflict.')
+            return CommonTestResult(False, reason=f'Trait {trait_id} did not exist, thus it cannot conflict.')
         from traits.trait_tracker import TraitTracker
         trait_tracker: TraitTracker = sim_info.trait_tracker
         return trait_tracker.is_conflicting(trait_to_check)
@@ -1237,9 +1237,9 @@ class CommonTraitUtils(HasClassLog):
                 cls.get_log().format_with_message('Successfully added trait.', trait=trait, trait_id=trait_id)
         if not success:
             failed_to_add_traits_str = ', '.join([cls.get_trait_name(trait) or str(trait) if isinstance(trait, Trait) else str(trait) for trait in failed_to_add_traits])
-            return CommonExecutionResult(False, f'Failed to add traits. {failed_to_add_traits_str}')
+            return CommonExecutionResult(False, reason=f'Failed to add traits. {failed_to_add_traits_str}')
         if not has_any:
-            return CommonExecutionResult(True, 'Finished "adding" traits, but none of the specified traits were loaded.')
+            return CommonExecutionResult(True, reason='Finished "adding" traits, but none of the specified traits were loaded.')
         return CommonExecutionResult.TRUE
 
     @classmethod
@@ -1287,9 +1287,9 @@ class CommonTraitUtils(HasClassLog):
 
         if not success:
             failed_to_remove_traits_str = ', '.join([cls.get_trait_name(trait) or str(trait) if isinstance(trait, Trait) else str(trait) for trait in failed_to_remove_traits])
-            return CommonExecutionResult(False, f'Failed to remove traits. {failed_to_remove_traits_str}')
+            return CommonExecutionResult(False, reason=f'Failed to remove traits. {failed_to_remove_traits_str}')
         if not has_any_loaded:
-            return CommonExecutionResult(True, 'Finished "removing" traits, but none of the specified traits were loaded.')
+            return CommonExecutionResult(True, reason='Finished "removing" traits, but none of the specified traits were loaded.')
         return CommonExecutionResult.TRUE
 
     @classmethod
@@ -1322,7 +1322,7 @@ class CommonTraitUtils(HasClassLog):
             if not cls.has_trait(sim_info, trait_id_one):
                 return cls.add_trait(sim_info, trait_id_one)
             return CommonExecutionResult.TRUE
-        return CommonExecutionResult(False, f'Sim had neither Trait One {trait_id_one} nor Trait Two {trait_id_two}.')
+        return CommonExecutionResult(False, reason=f'Sim had neither Trait One {trait_id_one} nor Trait Two {trait_id_two}.')
 
     @classmethod
     def add_trait_to_all_sims(cls, trait_id: Union[int, CommonTraitId, Trait], include_sim_callback: Callable[[SimInfo], bool]=None):

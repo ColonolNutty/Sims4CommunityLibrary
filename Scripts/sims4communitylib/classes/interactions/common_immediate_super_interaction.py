@@ -9,7 +9,6 @@ import inspect
 import os
 from typing import Union, Any, Tuple, List, Set, Iterator
 
-from event_testing.results import TestResult
 from interactions import ParticipantType
 from interactions.constraints import Constraint
 from interactions.context import InteractionContext
@@ -29,7 +28,6 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 from singletons import DEFAULT
 
 
-# ReadTheDocs
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
@@ -64,6 +62,8 @@ class CommonImmediateSuperInteraction(ImmediateSuperInteraction, HasClassLog):
     .. warning:: Due to an issue with how Read The Docs functions, the base classes of this class will have different namespaces than they do in the source code!
     """
 
+    __slots__ = {'context'}
+
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(cls) -> Union[CommonModIdentity, None]:
@@ -74,10 +74,11 @@ class CommonImmediateSuperInteraction(ImmediateSuperInteraction, HasClassLog):
         HasClassLog.__init__(self)
 
     @classmethod
-    def _test(cls, target: Any, context: InteractionContext, **kwargs) -> TestResult:
+    def _test(cls, target: Any, context: InteractionContext, **kwargs) -> CommonTestResult:
+        from event_testing.results import TestResult
+        from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
         log = cls.get_log()
         verbose_log = cls.get_verbose_log()
-        from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
         stop_watch = CommonStopWatch()
         stop_watch.start()
         try:
@@ -124,8 +125,8 @@ class CommonImmediateSuperInteraction(ImmediateSuperInteraction, HasClassLog):
                 log.error('Error occurred while running CommonImmediateSuperInteraction \'{}\' super()._test.'.format(cls.__name__), exception=ex)
                 return cls.create_test_result(False, f'An error occurred {ex}. See the log for more details. "The Sims 4/mod_logs/<mod_name>_Exceptions.txt"')
 
-            if super_test_result is not None and (isinstance(test_result, TestResult) and not super_test_result.result):
-                return super_test_result
+            if super_test_result is not None and isinstance(test_result, TestResult) and not super_test_result.result:
+                return CommonTestResult.convert_from_vanilla(test_result)
 
             try:
                 verbose_log.format_with_message(
@@ -356,7 +357,6 @@ class CommonImmediateSuperInteraction(ImmediateSuperInteraction, HasClassLog):
         return super().setup_asm_default(asm, *args, **kwargs)
 
     def _run_interaction_gen(self, timeline: Timeline):
-        yield from super()._run_interaction_gen(timeline)
         try:
             self.verbose_log.format_with_message(
                 'Running on_run.',
@@ -368,6 +368,7 @@ class CommonImmediateSuperInteraction(ImmediateSuperInteraction, HasClassLog):
             self.on_run(self.sim, self.target, timeline)
         except Exception as ex:
             self.log.error('Error occurred while running CommonImmediateSuperInteraction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
+        yield from super()._run_interaction_gen(timeline)
 
     # noinspection PyMethodParameters
     @flexmethod
@@ -469,13 +470,13 @@ class CommonImmediateSuperInteraction(ImmediateSuperInteraction, HasClassLog):
         :type icon: CommonResourceKey, optional
         :param influence_by_active_mood: If true, the Test Result will be influenced by the active mood.
         :type influence_by_active_mood: bool, optional
-        :return: The desired outcome for a call of :func:`~on_test`, default is `CommonTestResult.NONE`
+        :return: The desired outcome for a call of :func:`~on_test`.
         :rtype: CommonTestResult
         """
         try:
             return CommonTestResult(
                 result,
-                reason.format(*text_tokens) if reason is not None else reason,
+                reason=reason.format(*text_tokens) if reason is not None else reason,
                 tooltip_text=tooltip,
                 tooltip_tokens=tooltip_tokens,
                 icon=icon,

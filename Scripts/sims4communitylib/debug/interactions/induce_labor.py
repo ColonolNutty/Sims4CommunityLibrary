@@ -7,9 +7,9 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Any
 
-from event_testing.results import TestResult
 from interactions.context import InteractionContext
 from sims.sim import Sim
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
@@ -36,23 +36,23 @@ class S4CLDebugInduceLaborInteraction(CommonImmediateSuperInteraction):
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
-    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
+    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> CommonTestResult:
         if interaction_target is None or not CommonTypeUtils.is_sim_or_sim_info(interaction_target):
             cls.get_log().debug('Target is not a Sim.')
-            return TestResult.NONE
+            return CommonTestResult.NONE
         target_sim_info = CommonSimUtils.get_sim_info(interaction_target)
         if not CommonSimPregnancyUtils.can_be_impregnated(target_sim_info):
             cls.get_log().format_with_message('Sim cannot be impregnated and thus cannot be pregnant.', target_sim=target_sim_info)
-            return TestResult.NONE
+            return CommonTestResult.NONE
         if not hasattr(target_sim_info, 'pregnancy_tracker'):
             cls.get_log().format_with_message('Target does not have a pregnancy tracker.', target_sim=target_sim_info)
-            return TestResult.NONE
+            return CommonTestResult.NONE
         cls.get_log().format_with_message('Checking if Sim is pregnant.', target_sim=target_sim_info)
         if not CommonSimPregnancyUtils.is_pregnant(target_sim_info):
             cls.get_log().format_with_message('Sim is not pregnant.', sim=target_sim_info)
             return cls.create_test_result(False, reason='\'{}\' is not pregnant.'.format(CommonSimNameUtils.get_full_name(target_sim_info)), tooltip=CommonLocalizationUtils.create_localized_tooltip(CommonStringId.S4CL_SIM_IS_NOT_PREGNANT, tooltip_tokens=(target_sim_info, )))
         cls.get_log().debug('Success.')
-        return TestResult.TRUE
+        return CommonTestResult.TRUE
 
     # noinspection PyMissingOrEmptyDocstring
     def on_started(self, interaction_sim: Sim, interaction_target: Sim) -> bool:

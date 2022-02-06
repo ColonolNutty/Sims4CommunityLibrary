@@ -44,7 +44,7 @@ class CommonSimVoiceUtils:
         if CommonSimVoiceUtils.get_voice_actor(sim_info):
             return CommonTestResult.TRUE
         voice_actor_str = voice_actor.name if hasattr(voice_actor, 'name') else str(voice_actor)
-        return CommonTestResult(False, f'Sim did not have voice actor {voice_actor_str}')
+        return CommonTestResult(False, reason=f'Sim did not have voice actor {voice_actor_str}')
 
     @staticmethod
     def has_voice_pitch(sim_info: SimInfo, voice_pitch: float) -> CommonTestResult:
@@ -61,7 +61,7 @@ class CommonSimVoiceUtils:
         """
         if CommonSimVoiceUtils.get_voice_pitch(sim_info) == voice_pitch:
             return CommonTestResult.TRUE
-        return CommonTestResult(False, f'Sim did not have voice pitch {voice_pitch}')
+        return CommonTestResult(False, reason=f'Sim did not have voice pitch {voice_pitch}')
 
     @staticmethod
     def get_voice_pitch(sim_info: SimInfo) -> float:
@@ -178,7 +178,7 @@ class CommonSimVoiceUtils:
             return CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_CAT_AMBIGUOUS_1)
         elif CommonSpeciesUtils.is_fox(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
             return CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_FOX_AMBIGUOUS_1)
-        return CommonExecutionResult(False, f'Failed to locate a default male voice actor for Sim {sim_info}')
+        return CommonExecutionResult(False, reason=f'Failed to locate a default male voice actor for Sim {sim_info}')
 
     @staticmethod
     def set_to_default_female_voice(sim_info: SimInfo) -> CommonExecutionResult:
@@ -214,7 +214,7 @@ class CommonSimVoiceUtils:
             return CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_CAT_AMBIGUOUS_1)
         elif CommonSpeciesUtils.is_fox(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
             return CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_FOX_AMBIGUOUS_1)
-        return CommonExecutionResult(False, f'Failed to locate a default female voice actor for Sim {sim_info}')
+        return CommonExecutionResult(False, reason=f'Failed to locate a default female voice actor for Sim {sim_info}')
 
     @staticmethod
     def determine_available_voice_types(sim_info: SimInfo) -> Tuple[CommonVoiceActorType]:

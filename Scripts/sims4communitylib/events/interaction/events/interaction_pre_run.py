@@ -10,7 +10,6 @@ from interactions.base.interaction import Interaction
 from interactions.interaction_queue import InteractionQueue
 from sims4communitylib.events.event_handling.common_event import CommonEvent
 
-# ReadTheDocs
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.

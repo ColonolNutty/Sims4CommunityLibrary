@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 import inspect
 import os
 from typing import Any, Union, Tuple, Iterator, List, Set
+from singletons import DEFAULT
 
 from interactions import ParticipantType
 from interactions.constraints import Constraint
@@ -19,9 +20,6 @@ from sims4communitylib.classes.testing.common_test_result import CommonTestResul
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
-
-# ReadTheDocs
-from singletons import DEFAULT
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
@@ -111,9 +109,9 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
                     # return cls.create_test_result(False, reason="No Reason", tooltip=CommonLocalizationUtils.create_localized_tooltip("Test Tooltip"))
                 if result == 3:
                     # Interaction will be hidden completely.
-                    return TestResult.NONE
+                    return CommonTestResult.NONE
                 # Interaction will display and be enabled.
-                return TestResult.TRUE
+                return CommonTestResult.TRUE
 
             # Instead of on_started, SocialSuperInteractions use on_run.
             def on_run(self, interaction_sim: Sim, interaction_target: Any, timeline: Timeline) -> bool:
@@ -132,6 +130,8 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
 
     """
 
+    __slots__ = {'context'}
+
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(cls) -> Union[CommonModIdentity, None]:
@@ -144,10 +144,11 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
     # noinspection PyMethodParameters
     @flexmethod
     def _test(cls, inst: 'CommonSocialSuperInteraction', target: Any, context: InteractionContext, **kwargs):
+        from event_testing.results import TestResult
+        from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
         inst_or_cls = inst or cls
         log = cls.get_log()
         verbose_log = cls.get_verbose_log()
-        from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
         stop_watch = CommonStopWatch()
         stop_watch.start()
         try:
@@ -192,12 +193,12 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
                 )
                 super_test_result: TestResult = super(CommonSocialSuperInteraction, inst_or_cls)._test(target, context, **kwargs)
                 verbose_log.format_with_message('Super Test Result (CommonSocialSuperInteraction)', super_test_result=super_test_result)
+
+                if super_test_result is not None and (isinstance(test_result, TestResult) and not super_test_result.result):
+                    return CommonTestResult.convert_from_vanilla(super_test_result)
             except Exception as ex:
                 log.error('Error occurred while running CommonSocialSuperInteraction \'{}\' super()._test.'.format(cls.__name__), exception=ex)
                 return cls.create_test_result(False, f'An error occurred {ex}. See the log for more details. "The Sims 4/mod_logs/<mod_name>_Exceptions.txt"')
-
-            if super_test_result is not None and (isinstance(test_result, TestResult) and not super_test_result.result):
-                return super_test_result
 
             try:
                 verbose_log.format_with_message(
@@ -430,7 +431,6 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
         return super().setup_asm_default(asm, *args, **kwargs)
 
     def _run_interaction_gen(self, timeline: Timeline):
-        yield from super()._run_interaction_gen(timeline)
         try:
             self.verbose_log.format_with_message(
                 'Running on_run.',
@@ -442,6 +442,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
             self.on_run(self.sim, self.target, timeline)
         except Exception as ex:
             self.log.error('Error occurred while running CommonSocialSuperInteraction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
+        yield from super()._run_interaction_gen(timeline)
 
     # noinspection PyMethodParameters
     @flexmethod
@@ -543,13 +544,13 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
         :type icon: CommonResourceKey, optional
         :param influence_by_active_mood: If true, the Test Result will be influenced by the active mood.
         :type influence_by_active_mood: bool, optional
-        :return: The desired outcome for a call of :func:`~on_test`, default is `CommonTestResult.NONE`
+        :return: The desired outcome for a call of :func:`~on_test`.
         :rtype: CommonTestResult
         """
         try:
             return CommonTestResult(
                 result,
-                reason.format(*text_tokens) if reason is not None else reason,
+                reason=reason.format(*text_tokens) if reason is not None else reason,
                 tooltip_text=tooltip,
                 tooltip_tokens=tooltip_tokens,
                 icon=icon,

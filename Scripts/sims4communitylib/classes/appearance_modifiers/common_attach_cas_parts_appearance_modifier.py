@@ -20,8 +20,6 @@ from sims4communitylib.services.commands.common_console_command import CommonCon
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 
-
-# ReadTheDocs
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
@@ -287,6 +285,7 @@ class CommonAttachCASPartsAppearanceModifier(AppearanceModifier.BaseAppearanceMo
         """
         raise NotImplementedError()
 
+    # noinspection PyUnusedLocal
     def _apply_cas_parts(self, cas_parts: Tuple[CommonCASPart], source_sim_info: SimInfo, modified_sim_info: SimInfo, original_unmodified_sim_info: SimInfo, random_seed: int) -> Tuple[Union[BodyType, int]]:
         if not cas_parts:
             self.log.format_with_message('No CAS Parts were found to apply.', sim=original_unmodified_sim_info)

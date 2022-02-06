@@ -145,15 +145,15 @@ class CommonBuffUtils(HasClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
-            return CommonTestResult(False, f'Target Sim {sim_info} did not have a Buff Component.')
+            return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
         if not buffs:
-            return CommonTestResult(False, 'No buffs were specified.')
+            return CommonTestResult(False, reason='No buffs were specified.')
         sim_buff_ids = cls.get_buff_ids(sim_info)
         for buff in buffs:
             buff_id = cls.get_buff_id(buff)
             if buff_id in sim_buff_ids:
                 return CommonTestResult.TRUE
-        return CommonTestResult(False, f'Sim did not have any of the specified buffs.')
+        return CommonTestResult(False, reason=f'Sim did not have any of the specified buffs.')
 
     @classmethod
     def has_all_buffs(cls, sim_info: SimInfo, buffs: Iterator[Union[int, CommonBuffId, Buff]]) -> CommonTestResult:
@@ -171,9 +171,9 @@ class CommonBuffUtils(HasClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
-            return CommonTestResult(False, f'Target Sim {sim_info} did not have a Buff Component.')
+            return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
         if not buffs:
-            return CommonTestResult(False, 'No buffs were specified.')
+            return CommonTestResult(False, reason='No buffs were specified.')
         sim_buff_ids = cls.get_buff_ids(sim_info)
         missing_buffs_list = list()
         for buff in buffs:
@@ -182,7 +182,7 @@ class CommonBuffUtils(HasClassLog):
                 missing_buffs_list.append(buff)
         if missing_buffs_list:
             missing_buffs_list_str = ', '.join([cls.get_buff_name(buff) or str(buff) if isinstance(buff, Buff) else str(buff) for buff in missing_buffs_list])
-            return CommonTestResult(False, f'Sim did not have all buffs. Missing Buffs: {missing_buffs_list_str}')
+            return CommonTestResult(False, reason=f'Sim did not have all buffs. Missing Buffs: {missing_buffs_list_str}')
         return CommonTestResult.TRUE
 
     @classmethod
@@ -269,7 +269,7 @@ class CommonBuffUtils(HasClassLog):
             raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             cls.get_log().format_with_message('Failed to add Buff to Sim. They did not have a Buff component!', buffs=buffs, sim=sim_info, buff_reason=buff_reason)
-            return CommonExecutionResult(False, f'Target Sim {sim_info} did not have a Buff Component.')
+            return CommonExecutionResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
         localized_buff_reason = None
         if buff_reason is not None:
             localized_buff_reason = CommonLocalizationUtils.create_localized_string(buff_reason)
@@ -295,9 +295,9 @@ class CommonBuffUtils(HasClassLog):
         cls.get_log().format_with_message('Finished adding buffs to Sim.', buffs=buffs, sim=sim_info, buff_reason=buff_reason, success=success, has_any_loaded=has_any_loaded, failed_to_add_buffs=failed_to_add_buffs)
         if not success:
             failed_to_add_buffs_str = ', '.join([cls.get_buff_name(buff) or str(buff) if isinstance(buff, Buff) else str(buff) for buff in failed_to_add_buffs])
-            return CommonExecutionResult(False, f'Failed to add buffs. {failed_to_add_buffs_str}')
+            return CommonExecutionResult(False, reason=f'Failed to add buffs. {failed_to_add_buffs_str}')
         if not has_any_loaded:
-            return CommonExecutionResult(True, 'Finished "adding" buffs, but none of the specified buffs were loaded.')
+            return CommonExecutionResult(True, reason='Finished "adding" buffs, but none of the specified buffs were loaded.')
         return CommonExecutionResult.TRUE
 
     @classmethod
@@ -331,7 +331,7 @@ class CommonBuffUtils(HasClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
-            return CommonExecutionResult(False, f'Target Sim {sim_info} did not have a Buff Component.')
+            return CommonExecutionResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
         has_any_loaded = False
         success = True
         failed_to_remove_buffs = list()
@@ -350,9 +350,9 @@ class CommonBuffUtils(HasClassLog):
 
         if not success:
             failed_to_remove_buffs_str = ', '.join([cls.get_buff_name(buff) or str(buff) if isinstance(buff, Buff) else str(buff) for buff in failed_to_remove_buffs])
-            return CommonExecutionResult(False, f'Failed to remove buffs. {failed_to_remove_buffs_str}')
+            return CommonExecutionResult(False, reason=f'Failed to remove buffs. {failed_to_remove_buffs_str}')
         if not has_any_loaded:
-            return CommonExecutionResult(True, 'Finished "removing" buffs, but none of the specified buffs were loaded.')
+            return CommonExecutionResult(True, reason='Finished "removing" buffs, but none of the specified buffs were loaded.')
         return CommonExecutionResult.TRUE
 
     @classmethod

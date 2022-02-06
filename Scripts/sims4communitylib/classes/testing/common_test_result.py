@@ -18,7 +18,7 @@ from sims4communitylib.utils.localization.common_localized_string_separators imp
 class CommonTestResult(CommonExecutionResult):
     """CommonTestResult(\
         result,\
-        reason,\
+        reason=None,\
         tooltip_text=None,\
         tooltip_tokens=(),\
         icon=None,\
@@ -31,6 +31,8 @@ class CommonTestResult(CommonExecutionResult):
 
     :param result: A value that indicates whether the test was successful or not. If True, the test was successful. If False, the test was not successful.
     :type result: bool
+    :param reason: The reason for the success or failure of the test result. Default is None.
+    :type reason: Union[str, None], optional
     :param tooltip_text: The text that will be displayed. If not specified, then no tooltip will be displayed. Default is None.
     :type tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator], optional
     :param tooltip_tokens: A collection of objects to format into the localized tooltip. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few). Default is an empty collection.
@@ -47,13 +49,26 @@ class CommonTestResult(CommonExecutionResult):
     def __init__(
         self,
         result: bool,
-        reason: str,
+        reason: Union[str, None]=None,
         tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator, CommonLocalizationUtils.LocalizedTooltip]=None,
         tooltip_tokens: Iterator[Any]=(),
         icon: Any=None,
         influenced_by_active_mood: bool=False
     ) -> None:
-        super().__init__(result, reason, success_override=result, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influenced_by_active_mood)
+        super().__init__(result, reason=reason, success_override=result, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influenced_by_active_mood)
+
+    @classmethod
+    def convert_from_vanilla(cls, test_result: TestResult) -> 'CommonTestResult':
+        """convert_from_vanilla(test_result)
+
+        Convert a vanilla TestResult into a CommonTestResult.
+
+        :param test_result: An instance of a TestResult
+        :type test_result: TestResult
+        :return: The specified TestResult translated to a CommonTestResult.
+        :rtype: CommonTestResult
+        """
+        return CommonTestResult(test_result.result, reason=test_result.reason, tooltip_text=test_result.tooltip, icon=test_result.icon, influenced_by_active_mood=test_result.influence_by_active_mood)
 
     def reverse_result(self) -> 'CommonTestResult':
         """reverse_result()
@@ -125,6 +140,6 @@ class CommonTestResult(CommonExecutionResult):
         return self.__class__(result, reason, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influence_by_active_mood)
 
 
-CommonTestResult.TRUE = CommonTestResult(True, 'Success Generic')
-CommonTestResult.FALSE = CommonTestResult(False, 'Failure Unknown')
-CommonTestResult.NONE = CommonTestResult(False, 'Failure Unknown')
+CommonTestResult.TRUE = CommonTestResult(True, reason='Success Generic')
+CommonTestResult.FALSE = CommonTestResult(False, reason='Failure Unknown')
+CommonTestResult.NONE = CommonTestResult(False)

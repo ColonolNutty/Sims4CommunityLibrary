@@ -141,20 +141,20 @@ class CommonSimPregnancyUtils(HasClassLog):
         can_be_impregnated_trait = cls.determine_can_be_impregnated_trait(sim_info)
         can_not_be_impregnated_trait = cls.determine_can_not_be_impregnated_trait(sim_info)
         if can_be_impregnated_trait is None:
-            return CommonTestResult(False, f'No Can Be Impregnated trait was found for Sim {sim_info}.')
+            return CommonTestResult(False, reason=f'No Can Be Impregnated trait was found for Sim {sim_info}.')
         if can_not_be_impregnated_trait is None:
-            return CommonTestResult(False, f'No Cannot Be Impregnated trait was found for Sim {sim_info}.')
+            return CommonTestResult(False, reason=f'No Cannot Be Impregnated trait was found for Sim {sim_info}.')
         if CommonSpeciesUtils.is_animal(sim_info):
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
-                return CommonTestResult(False, f'Animal Sim {sim_info} had the Cannot Reproduce trait.')
+                return CommonTestResult(False, reason=f'Animal Sim {sim_info} had the Cannot Reproduce trait.')
             if not CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
-                return CommonTestResult(False, f'Animal Sim {sim_info} did not have the Can Reproduce trait.')
+                return CommonTestResult(False, reason=f'Animal Sim {sim_info} did not have the Can Reproduce trait.')
 
         if CommonTraitUtils.has_trait(sim_info, can_not_be_impregnated_trait):
-            return CommonTestResult(False, f'Sim had the Cannot Be Impregnated trait.')
+            return CommonTestResult(False, reason=f'Sim had the Cannot Be Impregnated trait.')
         if not CommonTraitUtils.has_trait(sim_info, can_be_impregnated_trait):
-            return CommonTestResult(False, f'Sim did not have the Can Be Impregnated trait.')
-        return CommonTestResult(True, f'Sim can be impregnated by other Sims.')
+            return CommonTestResult(False, reason=f'Sim did not have the Can Be Impregnated trait.')
+        return CommonTestResult(True, reason=f'Sim can be impregnated by other Sims.')
 
     @classmethod
     def can_impregnate(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -172,20 +172,20 @@ class CommonSimPregnancyUtils(HasClassLog):
         can_impregnate_trait = cls.determine_can_impregnate_trait(sim_info)
         can_not_impregnate_trait = cls.determine_can_not_impregnate_trait(sim_info)
         if can_impregnate_trait is None:
-            return CommonTestResult(False, f'No Can Impregnate trait was found for Sim {sim_info}.')
+            return CommonTestResult(False, reason=f'No Can Impregnate trait was found for Sim {sim_info}.')
         if can_not_impregnate_trait is None:
-            return CommonTestResult(False, f'No Cannot Impregnate trait was found for Sim {sim_info}.')
+            return CommonTestResult(False, reason=f'No Cannot Impregnate trait was found for Sim {sim_info}.')
         if CommonSpeciesUtils.is_animal(sim_info):
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
-                return CommonTestResult(False, f'Sim had the Cannot Reproduce trait.')
+                return CommonTestResult(False, reason=f'Sim had the Cannot Reproduce trait.')
             if not CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
-                return CommonTestResult(False, f'Sim did not have the Can Reproduce trait.')
+                return CommonTestResult(False, reason=f'Sim did not have the Can Reproduce trait.')
 
         if CommonTraitUtils.has_trait(sim_info, can_not_impregnate_trait):
-            return CommonTestResult(False, f'Sim had the Cannot Impregnate trait.')
+            return CommonTestResult(False, reason=f'Sim had the Cannot Impregnate trait.')
         if not CommonTraitUtils.has_trait(sim_info, can_impregnate_trait):
-            return CommonTestResult(False, f'Sim did not have the Can Impregnate trait')
-        return CommonTestResult(True, f'Sim can impregnate other Sims.')
+            return CommonTestResult(False, reason=f'Sim did not have the Can Impregnate trait')
+        return CommonTestResult(True, reason=f'Sim can impregnate other Sims.')
 
     @classmethod
     def get_partner_of_pregnant_sim(cls, sim_info: SimInfo) -> Union[SimInfo, None]:

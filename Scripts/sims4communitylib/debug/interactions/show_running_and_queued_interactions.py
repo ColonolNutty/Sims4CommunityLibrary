@@ -8,10 +8,10 @@ Copyright (c) COLONOLNUTTY
 from typing import Any, List
 
 from distributor.shared_messages import IconInfoData
-from event_testing.results import TestResult
 from interactions.context import InteractionContext
 from sims.sim import Sim
 from sims4communitylib.classes.interactions.common_immediate_super_interaction import CommonImmediateSuperInteraction
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
@@ -39,12 +39,12 @@ class S4CLDebugShowRunningAndQueuedInteractionsInteraction(CommonImmediateSuperI
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
-    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
+    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> CommonTestResult:
         if interaction_target is None or not CommonTypeUtils.is_sim_or_sim_info(interaction_target):
             cls.get_log().debug('Failed, Target is not a Sim.')
-            return TestResult.NONE
+            return CommonTestResult.NONE
         cls.get_log().debug('Success, can show running and queued interactions.')
-        return TestResult.TRUE
+        return CommonTestResult.TRUE
 
     # noinspection PyMissingOrEmptyDocstring
     def on_started(self, interaction_sim: Sim, interaction_target: Sim) -> bool:

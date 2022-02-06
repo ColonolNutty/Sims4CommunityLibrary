@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 
+# noinspection SpellCheckingInspection
 class CommonTraitId(CommonInt):
     """Identifiers for vanilla sim traits.
 

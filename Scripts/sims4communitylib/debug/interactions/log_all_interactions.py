@@ -67,7 +67,7 @@ class S4CLDebugLogAllInteractionsInteraction(CommonImmediateSuperInteraction):
                 new_target = CommonObjectUtils.get_game_object(picked_item_id)
                 if new_target is None:
                     self.log.format_with_message('No object with the identifier found.', picked_item_id=picked_item_id)
-                    return CommonExecutionResult(False, f'Picked Item {picked_item_id} was not found.')
+                    return CommonExecutionResult(False, reason=f'Picked Item {picked_item_id} was not found.')
                 else:
                     self.log.format_with_message('Found object target using picked item id.', new_target=new_target)
                     interaction_target = new_target

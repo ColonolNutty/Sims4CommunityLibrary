@@ -56,7 +56,7 @@ class CommonSimCurrencyUtils:
         """
         household_funds = cls.get_household_funds(sim_info)
         if household_funds is None:
-            return CommonExecutionResult(False, 'The Sim was not a part of a household that has funds.')
+            return CommonExecutionResult(False, reason='The Sim was not a part of a household that has funds.')
         household_funds.add(amount, reason, **kwargs)
         return CommonExecutionResult.TRUE
 

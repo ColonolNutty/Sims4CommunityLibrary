@@ -5,9 +5,9 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from event_testing.results import TestResult
 from interactions.base.interaction import Interaction
 from interactions.interaction_queue import InteractionQueue
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.events.event_handling.common_event import CommonEvent
 
 
@@ -44,10 +44,10 @@ class S4CLInteractionPostQueuedEvent(CommonEvent):
     :param interaction_queue: The interaction queue of the Sim.
     :type interaction_queue: InteractionQueue
     :param queue_result: The result of the interaction being Queued.
-    :type queue_result: TestResult
+    :type queue_result: CommonTestResult
     """
 
-    def __init__(self, interaction: Interaction, interaction_queue: InteractionQueue, queue_result: TestResult):
+    def __init__(self, interaction: Interaction, interaction_queue: InteractionQueue, queue_result: CommonTestResult):
         self._interaction = interaction
         self._interaction_queue = interaction_queue
         self._queue_result = queue_result
@@ -71,10 +71,10 @@ class S4CLInteractionPostQueuedEvent(CommonEvent):
         return self._interaction_queue
 
     @property
-    def queue_result(self) -> TestResult:
+    def queue_result(self) -> CommonTestResult:
         """The result of the interaction being Queued.
 
         :return: The result of the interaction being Queued.
-        :rtype: TestResult
+        :rtype: CommonTestResult
         """
         return self._queue_result

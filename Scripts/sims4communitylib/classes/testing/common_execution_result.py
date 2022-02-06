@@ -17,7 +17,7 @@ from sims4communitylib.utils.localization.common_localized_string_separators imp
 class CommonExecutionResult(TestResult):
     """CommonExecutionResult(\
         result,\
-        reason,\
+        reason=None,\
         success_override=None,\
         tooltip_text=None,\
         tooltip_tokens=(),\
@@ -31,8 +31,8 @@ class CommonExecutionResult(TestResult):
 
     :param result: The result of execution. This value can be any type.
     :type result: Any
-    :param reason: The reason for the success or failure of execution.
-    :type reason: str
+    :param reason: The reason for the success or failure of the execution result. Default is None.
+    :type reason: Union[str, None], optional
     :param success_override: If True, the execution will be indicated as being a success. If False, the execution will be indicated as being a failure. If None, the execution success will be indicated by whether result is set or not, if result is a bool, success is True and failure is False. Default is None.
     :type success_override: bool
     :param tooltip_text: The text that will be displayed. If not specified, then no tooltip will be displayed. Default is None.
@@ -48,7 +48,16 @@ class CommonExecutionResult(TestResult):
     FALSE = None
     NONE = None
 
-    def __init__(self, result: Any, reason: str, success_override: bool=None, tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator, CommonLocalizationUtils.LocalizedTooltip]=None, tooltip_tokens: Iterator[Any]=(), icon: Any=None, influenced_by_active_mood: bool=False) -> None:
+    def __init__(
+        self,
+        result: Any,
+        reason: Union[str, None]=None,
+        success_override: bool=None,
+        tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator, CommonLocalizationUtils.LocalizedTooltip]=None,
+        tooltip_tokens: Iterator[Any]=(),
+        icon: Any=None,
+        influenced_by_active_mood: bool=False
+    ) -> None:
         self._tooltip_text = tooltip_text
         self._tooltip_tokens = tooltip_tokens
         if tooltip_text is not None:
@@ -76,7 +85,7 @@ class CommonExecutionResult(TestResult):
         :return: This CommonExecutionResult, but with a reversed result value.
         :rtype: CommonExecutionResult
         """
-        return CommonExecutionResult(not self.result, self.reason, success_override=self._success, tooltip_text=self._tooltip_text, tooltip_tokens=self._tooltip_tokens)
+        return CommonExecutionResult(not self.result, reason=self.reason, success_override=self._success, tooltip_text=self._tooltip_text, tooltip_tokens=self._tooltip_tokens)
 
     @property
     def is_success(self) -> bool:
@@ -137,7 +146,7 @@ class CommonExecutionResult(TestResult):
             reason = other._reason
         icon = self.icon or other.icon
         influence_by_active_mood = self.influence_by_active_mood or other.influence_by_active_mood
-        return CommonExecutionResult(result, reason, success_override=is_success, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influence_by_active_mood)
+        return CommonExecutionResult(result, reason=reason, success_override=is_success, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influence_by_active_mood)
 
     def __and__(self, other: 'CommonExecutionResult') -> 'CommonExecutionResult':
         if isinstance(other, CommonExecutionResult):
@@ -163,9 +172,9 @@ class CommonExecutionResult(TestResult):
             reason = other._reason
         icon = self.icon or other.icon
         influence_by_active_mood = self.influence_by_active_mood or other.influence_by_active_mood
-        return CommonExecutionResult(result, reason, success_override=is_success, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influence_by_active_mood)
+        return CommonExecutionResult(result, reason=reason, success_override=is_success, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influence_by_active_mood)
 
 
-CommonExecutionResult.TRUE = CommonExecutionResult(True, 'Success Generic')
-CommonExecutionResult.FALSE = CommonExecutionResult(False, 'Failure Unknown')
-CommonExecutionResult.NONE = CommonExecutionResult(False, 'Failure Unknown')
+CommonExecutionResult.TRUE = CommonExecutionResult(True, reason='Success Generic')
+CommonExecutionResult.FALSE = CommonExecutionResult(False, reason='Failure Unknown')
+CommonExecutionResult.NONE = CommonExecutionResult(False)

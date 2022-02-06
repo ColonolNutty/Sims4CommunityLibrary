@@ -9,7 +9,6 @@ import inspect
 import os
 from typing import Any, Union, Tuple, List, Set, Iterator
 
-from event_testing.results import TestResult
 from interactions import ParticipantType
 from interactions.constraints import Constraint
 from interactions.context import InteractionContext
@@ -17,8 +16,6 @@ from interactions.interaction_finisher import FinishingType
 from native.animation import NativeAsm
 from postures.posture_state import PostureState
 from protocolbuffers.Localization_pb2 import LocalizedString
-
-# ReadTheDocs
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.logging.has_class_log import HasClassLog
@@ -86,7 +83,7 @@ class CommonBaseSuperInteraction(SuperInteraction, HasClassLog):
         # The following is an example interaction that varies when it will display, when it will be hidden, and when it will be disabled with a tooltip.
         class _ExampleInteraction(CommonBaseSuperInteraction):
             @classmethod
-            def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
+            def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> CommonTestResult:
                 result = 1 + 1
                 if result == 2:
                     # Interaction will be displayed, but disabled, it will also have a tooltip that displays on hover with the text "Test Tooltip"
@@ -95,11 +92,13 @@ class CommonBaseSuperInteraction(SuperInteraction, HasClassLog):
                     # return cls.create_test_result(False, reason="No Reason", tooltip=CommonLocalizationUtils.create_localized_tooltip("Test Tooltip"))
                 if result == 3:
                     # Interaction will be hidden completely.
-                    return TestResult.NONE
+                    return CommonTestResult.NONE
                 # Interaction will display and be enabled.
-                return TestResult.TRUE
+                return CommonTestResult.TRUE
 
     """
+
+    __slots__ = {'context'}
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
@@ -131,7 +130,7 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
         # The following is an example interaction that varies when it will display, when it will be hidden, and when it will be disabled with a tooltip.
         class _ExampleInteraction(CommonSuperInteraction):
             @classmethod
-            def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
+            def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> CommonTestResult:
                 result = 1 + 1
                 if result == 2:
                     # Interaction will be displayed, but disabled, it will also have a tooltip that displays on hover with the text "Test Tooltip"
@@ -140,9 +139,9 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
                     # return cls.create_test_result(False, reason="No Reason", tooltip=CommonLocalizationUtils.create_localized_tooltip("Test Tooltip"))
                 if result == 3:
                     # Interaction will be hidden completely.
-                    return TestResult.NONE
+                    return CommonTestResult.NONE
                 # Interaction will display and be enabled.
-                return TestResult.TRUE
+                return CommonTestResult.TRUE
 
             # Instead of on_started, SuperInteractions use on_run.
             def on_run(self, interaction_sim: Sim, interaction_target: Any: timeline: Timeline) -> bool:
@@ -154,10 +153,11 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
     """
 
     @classmethod
-    def _test(cls, target: Any, context: InteractionContext, **kwargs) -> TestResult:
+    def _test(cls, target: Any, context: InteractionContext, **kwargs) -> CommonTestResult:
+        from event_testing.results import TestResult
+        from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
         log = cls.get_log()
         verbose_log = cls.get_verbose_log()
-        from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
         stop_watch = CommonStopWatch()
         stop_watch.start()
         try:
@@ -200,12 +200,12 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
                 )
                 super_test_result: TestResult = super()._test(target, context, **kwargs)
                 verbose_log.format_with_message('Super Test Result (CommonSuperInteraction)', super_test_result=super_test_result)
+
+                if super_test_result is not None and (isinstance(test_result, TestResult) and not super_test_result.result):
+                    return CommonTestResult.convert_from_vanilla(super_test_result)
             except Exception as ex:
                 log.error('Error occurred while running CommonSuperInteraction \'{}\' super()._test.'.format(cls.__name__), exception=ex)
                 return cls.create_test_result(False, f'An error occurred {ex}. See the log for more details. "The Sims 4/mod_logs/<mod_name>_Exceptions.txt"')
-
-            if super_test_result is not None and (isinstance(test_result, TestResult) and not super_test_result.result):
-                return super_test_result
 
             try:
                 verbose_log.format_with_message(
@@ -436,7 +436,6 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
         return super().setup_asm_default(asm, *args, **kwargs)
 
     def _run_interaction_gen(self, timeline: Timeline):
-        yield from super()._run_interaction_gen(timeline)
         try:
             self.verbose_log.format_with_message(
                 'Running on_run.',
@@ -448,6 +447,7 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
             self.on_run(self.sim, self.target, timeline)
         except Exception as ex:
             self.log.error('Error occurred while running CommonSuperInteraction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
+        yield from super()._run_interaction_gen(timeline)
 
     # noinspection PyMethodParameters
     @flexmethod
@@ -549,13 +549,13 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
         :type icon: CommonResourceKey, optional
         :param influence_by_active_mood: If true, the Test Result will be influenced by the active mood.
         :type influence_by_active_mood: bool, optional
-        :return: The desired outcome for a call of :func:`~on_test`, default is `CommonTestResult.NONE`
+        :return: The desired outcome for a call of :func:`~on_test`.
         :rtype: CommonTestResult
         """
         try:
             return CommonTestResult(
                 result,
-                reason.format(*text_tokens) if reason is not None else reason,
+                reason=reason.format(*text_tokens) if reason is not None else reason,
                 tooltip_text=tooltip,
                 tooltip_tokens=tooltip_tokens,
                 icon=icon,
@@ -812,10 +812,11 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
         HasClassLog.__init__(self)
 
     @classmethod
-    def _test(cls, target: Any, context: InteractionContext, **kwargs) -> TestResult:
+    def _test(cls, target: Any, context: InteractionContext, **kwargs) -> CommonTestResult:
+        from event_testing.results import TestResult
+        from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
         log = cls.get_log()
         verbose_log = cls.get_verbose_log()
-        from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
         stop_watch = CommonStopWatch()
         stop_watch.start()
         try:
@@ -858,12 +859,12 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
                 )
                 super_test_result: TestResult = super()._test(target, context, **kwargs)
                 verbose_log.format_with_message('Super Test Result (CommonSuperInteraction)', super_test_result=super_test_result)
+
+                if super_test_result is not None and (isinstance(test_result, TestResult) and not super_test_result.result):
+                    return CommonTestResult.convert_from_vanilla(super_test_result)
             except Exception as ex:
                 log.error('Error occurred while running CommonSuperInteraction \'{}\' super()._test.'.format(cls.__name__), exception=ex)
                 return cls.create_test_result(False, f'An error occurred {ex}. See the log for more details. "The Sims 4/mod_logs/<mod_name>_Exceptions.txt"')
-
-            if super_test_result is not None and (isinstance(test_result, TestResult) and not super_test_result.result):
-                return super_test_result
 
             try:
                 verbose_log.format_with_message(
@@ -1094,7 +1095,6 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
         return super().setup_asm_default(asm, *args, **kwargs)
 
     def _run_interaction_gen(self, timeline: Timeline):
-        yield from super()._run_interaction_gen(timeline)
         try:
             self.verbose_log.format_with_message(
                 'Running on_run.',
@@ -1106,6 +1106,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
             self.on_run(self.sim, self.target, timeline)
         except Exception as ex:
             self.log.error('Error occurred while running CommonSuperInteraction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
+        yield from super()._run_interaction_gen(timeline)
 
     # noinspection PyMethodParameters
     @flexmethod
@@ -1207,13 +1208,13 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
         :type icon: CommonResourceKey, optional
         :param influence_by_active_mood: If true, the Test Result will be influenced by the active mood.
         :type influence_by_active_mood: bool, optional
-        :return: The desired outcome for a call of :func:`~on_test`, default is `CommonTestResult.NONE`
+        :return: The desired outcome for a call of :func:`~on_test`.
         :rtype: CommonTestResult
         """
         try:
             return CommonTestResult(
                 result,
-                reason.format(*text_tokens) if reason is not None else reason,
+                reason=reason.format(*text_tokens) if reason is not None else reason,
                 tooltip_text=tooltip,
                 tooltip_tokens=tooltip_tokens,
                 icon=icon,

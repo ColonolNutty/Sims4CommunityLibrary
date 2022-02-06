@@ -15,11 +15,12 @@ from careers.career_history import CareerHistory
 from careers.career_tracker import CareerTracker
 from careers.career_tuning import Career, CareerLevel, TunableCareerTrack
 from event_testing.resolver import SingleSimResolver
-from event_testing.results import TestResult
 from rewards.reward_enums import RewardType
 from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
 from sims4.resources import Types
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
@@ -250,7 +251,7 @@ class CommonSimCareerUtils(HasClassLog):
         return False
 
     @classmethod
-    def attend_career(cls, career: Career, allow_career_events: bool=True) -> TestResult:
+    def attend_career(cls, career: Career, allow_career_events: bool=True) -> CommonExecutionResult:
         """attend_career(career, allow_career_events=True)
 
         Start a career without running any career events (If they are an active career).
@@ -260,21 +261,21 @@ class CommonSimCareerUtils(HasClassLog):
         :param allow_career_events: If True, a career event will be started for active careers. If False, a career event will not be started for active careers. No effect on non active careers. Default is True.
         :rtype: allow_career_events: bool, optional
         :return: Tbe result of the action.
-        :rtype: TestResult
+        :rtype: CommonExecutionResult
         """
         if allow_career_events and career.is_active:
             return cls.start_active_career_on_current_lot(career)
 
         if services.get_persistence_service().is_save_locked():
-            return TestResult(False, 'Currently save locked.')
+            return CommonExecutionResult(False, reason='Currently save locked.')
         if not services.get_career_service().enabled:
-            return TestResult(False, 'Career service is not enabled.')
+            return CommonExecutionResult(False, reason='Career service is not enabled.')
         from date_and_time import create_time_span
         start_time = CommonTimeUtils.get_current_date_and_time()
         end_time = start_time + create_time_span(hours=10)
 
         if start_time > end_time:
-            return TestResult(False, 'Start time is greater than end time.')
+            return CommonExecutionResult(False, reason='Start time is greater than end time.')
 
         career._at_work = False
         career._career_session_extended = False
@@ -300,10 +301,10 @@ class CommonSimCareerUtils(HasClassLog):
         career.attend_work(start_tones=False)
         from careers.career_base import TELEMETRY_WORKDAY_TYPE_ACTIVE
         career._send_workday_info_telemetry(TELEMETRY_WORKDAY_TYPE_ACTIVE)
-        return TestResult.TRUE
+        return CommonExecutionResult.TRUE
 
     @classmethod
-    def start_active_career_on_current_lot(cls, career: Career, career_event: CareerEvent=None) -> TestResult:
+    def start_active_career_on_current_lot(cls, career: Career, career_event: CareerEvent=None) -> CommonExecutionResult:
         """start_active_career_on_current_lot(career, career_event=None)
 
         Start a career event on the current lot for an Active career.
@@ -315,20 +316,20 @@ class CommonSimCareerUtils(HasClassLog):
         :param career_event: The career event to trigger. If set to None, a random career event will be chosen from the career. Default is None.
         :type career_event: CareerEvent, optional
         :return: Tbe result of the action.
-        :rtype: TestResult
+        :rtype: CommonExecutionResult
         """
         if not career.is_active:
-            return TestResult(False, 'Career is not an active career.')
+            return CommonExecutionResult(False, reason='Career is not an active career.')
         if services.get_persistence_service().is_save_locked():
-            return TestResult(False, 'Currently save locked.')
+            return CommonExecutionResult(False, reason='Currently save locked.')
         if not services.get_career_service().enabled:
-            return TestResult(False, 'Career service is not enabled.')
+            return CommonExecutionResult(False, reason='Career service is not enabled.')
         from date_and_time import create_time_span
         start_time = CommonTimeUtils.get_current_date_and_time()
         end_time = start_time + create_time_span(hours=10)
 
         if start_time > end_time:
-            return TestResult(False, 'Start time is greater than end time.')
+            return CommonExecutionResult(False, reason='Start time is greater than end time.')
 
         career._at_work = False
         career._career_session_extended = False
@@ -349,7 +350,7 @@ class CommonSimCareerUtils(HasClassLog):
             career.reset_homework_help()
 
         if career._sim_info.is_npc:
-            return TestResult(False, 'Sim is an NPC, NPCs are not allowed to start active careers.')
+            return CommonExecutionResult(False, reason='Sim is an NPC, NPCs are not allowed to start active careers.')
 
         import careers.career_base
         current_gig = career.get_current_gig()
@@ -363,15 +364,15 @@ class CommonSimCareerUtils(HasClassLog):
                 resolver = SingleSimResolver(career._sim_info)
                 available_events = tuple(event for event in career.career_events if career.is_career_event_on_cooldown(event) or event.tests.run_tests(resolver))
                 if not available_events:
-                    return TestResult(False, 'No events were available.')
+                    return CommonExecutionResult(False, reason='No events were available.')
                 household = career._sim_info.household
                 for sim_info in household.sim_info_gen():
                     if cls.is_taking_part_in_active_career_event(sim_info):
-                        return TestResult(False, 'Sim is already at the active event.')
+                        return CommonExecutionResult(False, reason='Sim is already at the active event.')
                 career_event = random.choice(available_events)
 
         career._on_career_event_accepted(career_event)
-        return TestResult.TRUE
+        return CommonExecutionResult.TRUE
 
     @classmethod
     def randomize_career(
@@ -384,7 +385,7 @@ class CommonSimCareerUtils(HasClassLog):
         force_out_of_retirement: bool=True,
         force_quit_previous_jobs: bool=True,
         check_availability: bool=True
-    ) -> TestResult:
+    ) -> CommonExecutionResult:
         """set_random_career(\
             sim_info,\
             choose_random_career_level=True,\
@@ -413,10 +414,10 @@ class CommonSimCareerUtils(HasClassLog):
         :param check_availability: If True, every career will be checked for availability before becoming available. If False, every career regardless of availability will be selectable. Default is True. WARNING: A Career that is not allowed for a Sim may be chosen if this is set to False!
         :type check_availability: bool, optional
         :return: The result of setting their career.
-        :rtype: TestResult
+        :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            return TestResult(False, 'SimInfo was None.')
+            raise AssertionError('Argument sim_info was None')
         if remove_all_existing_careers:
             cls.remove_careers(sim_info)
 
@@ -427,7 +428,7 @@ class CommonSimCareerUtils(HasClassLog):
 
         all_careers = tuple(CommonCareerUtils.get_all_careers_generator(include_career_callback=_career_is_available))
         if not all_careers:
-            return TestResult(False, 'No careers found to be available for Sim.')
+            return CommonExecutionResult(False, reason='No careers found to be available for Sim.')
         cls.get_log().format_with_message('Found all available careers.', careers=sorted([f'{career.__name__} ({CommonCareerUtils.get_career_guid(career)})' for career in all_careers], key=lambda x: x))
         chosen_career = random.choice(all_careers)
         career_level = None
@@ -438,10 +439,10 @@ class CommonSimCareerUtils(HasClassLog):
         result = cls.add_career(sim_info, chosen_career, randomize_agency=randomize_agency, career_level=career_level, use_career_history=use_career_history, force_out_of_retirement=force_out_of_retirement, force_quit_previous_jobs=force_quit_previous_jobs)
         if not result:
             return result
-        return TestResult(True, f'{chosen_career.__name__}')
+        return CommonExecutionResult(True, reason=f'{chosen_career.__name__}')
 
     @classmethod
-    def is_career_available_for_sim(cls, sim_info: SimInfo, career: Career, from_join: bool=False) -> TestResult:
+    def is_career_available_for_sim(cls, sim_info: SimInfo, career: Career, from_join: bool=False) -> CommonTestResult:
         """is_career_available_for_sim(sim_info, career, from_join=False)
 
         Determine if a Career is available for a Sim.
@@ -452,8 +453,8 @@ class CommonSimCareerUtils(HasClassLog):
         :type career: Career
         :param from_join: Use to flag whether the career is planned to be tested as though the Sim is joining it. Default is False.
         :type from_join: bool, optional
-        :return: True, if the Career is available for the specified Sim. False, if not.
-        :rtype: bool
+        :return: The result of testing for availability. True, if the Career is available for the specified Sim. False, if not.
+        :rtype: CommonTestResult
         """
         non_playable_career_ids: Tuple[int] = (
             223698,  # University_BaseCareer
@@ -476,17 +477,17 @@ class CommonSimCareerUtils(HasClassLog):
         )
         if not CommonSimTypeUtils.is_non_player_sim(sim_info):
             if 'npc' in career.__name__.lower():
-                return TestResult(False, 'The Career is an NPC career and the Sim is not an NPC.')
+                return CommonTestResult(False, reason='The Career is an NPC career and the Sim is not an NPC.')
         career_guid = CommonCareerUtils.get_career_guid(career)
         if career_guid in non_playable_career_ids:
-            return TestResult(False, 'Career is non playable.')
+            return CommonTestResult(False, reason='Career is non playable.')
         valid_result = career.is_valid_career(sim_info=sim_info, from_join=from_join)
         if not valid_result:
             return valid_result
         if career_guid not in allowed_non_displayed_career_ids:
             if from_join and not career.show_career_in_join_career_picker:
-                return TestResult(False, 'Career is not joinable through normal means.')
-        return TestResult.TRUE
+                return CommonTestResult(False, reason='Career is not joinable through normal means.')
+        return CommonTestResult.TRUE
 
     @classmethod
     def add_career(
@@ -511,7 +512,7 @@ class CommonSimCareerUtils(HasClassLog):
         defer_first_assignment: bool=False,
         schedule_init_only: bool=False,
         allow_outfit_generation: bool=True
-    ) -> TestResult:
+    ) -> CommonExecutionResult:
         """add_career(\
             sim_info,\
             career_identifier,\
@@ -578,19 +579,19 @@ class CommonSimCareerUtils(HasClassLog):
         :param allow_outfit_generation: If True, an outfit for the career will be generated upon join. If False, an outfit will not be generated. Default is True.
         :type allow_outfit_generation: bool, optional
         :return: The result of adding the Career or the reason why it was not properly added.
-        :rtype: TestResult
+        :rtype: CommonExecutionResult
         """
         if sim_info is None or career_identifier is None:
-            return TestResult(False, f'Sim or Career Identifier was None Sim: {sim_info} ID: {career_identifier}.')
+            return CommonExecutionResult(False, reason=f'Sim or Career Identifier was None Sim: {sim_info} ID: {career_identifier}.')
         if remove_all_existing_careers:
             cls.remove_careers(sim_info)
         career = CommonCareerUtils.load_career_by_guid(career_identifier)
         career_tracker = cls.get_career_tracker(sim_info)
         if career_tracker is None:
-            return TestResult(False, f'The Sim did not have a career tracker. {sim_info}')
+            return CommonExecutionResult(False, reason=f'The Sim did not have a career tracker. {sim_info}')
         if career_tracker.has_career_by_uid(CommonCareerUtils.get_career_guid(career)):
             cls.get_log().format_with_message('Sim already had the specified career.', sim=sim_info, career=career)
-            return TestResult.TRUE
+            return CommonExecutionResult.TRUE
 
         picked_track = None
         if career_level is None and user_level is not None:
@@ -606,7 +607,7 @@ class CommonSimCareerUtils(HasClassLog):
 
         if career_level is None:
             cls.get_log().format_with_message('No career level found.', sim=sim_info, career_history=career_tracker.career_history, career=career)
-            return TestResult(False, f'Failed to locate career level for Sim {sim_info}, Career {career}, and Career History {career_tracker.career_history}.')
+            return CommonExecutionResult(False, reason=f'Failed to locate career level for Sim {sim_info}, Career {career}, and Career History {career_tracker.career_history}.')
 
         cls.get_log().format_with_message('Adding new career.', picked_track=picked_track, career_level=career_level, sim=sim_info, career=career)
         new_career = career_level.career(sim_info)
@@ -654,7 +655,7 @@ class CommonSimCareerUtils(HasClassLog):
         defer_first_assignment: bool=False,
         schedule_init_only: bool=False,
         allow_outfit_generation: bool=True
-    ) -> TestResult:
+    ) -> CommonExecutionResult:
         if show_confirmation_dialog:
             (level, _, track) = new_career.get_career_entry_data(career_history=career_tracker._career_history, user_level_override=user_level_override, career_level_override=career_level_override)
             career_level_tuning = CommonCareerTrackUtils.get_career_level_by_index(track, level)
@@ -687,7 +688,7 @@ class CommonSimCareerUtils(HasClassLog):
                 if not force_out_of_retirement:
                     career_tracker._retirement.send_dialog(Career.UNRETIRE_DIALOG, career_level_tuning.get_title(career_tracker._sim_info), icon_override=DEFAULT, on_response=lambda dialog: _on_unretire_confirmation_dialog_response(dialog))
                     cls.get_log().format_with_message('Sim is retired.')
-                    return TestResult(False, 'Sim was retired.')
+                    return CommonExecutionResult(False, reason='Sim was retired.')
 
             if new_career.can_quit:
                 def _on_quit_confirmation_dialog_response(dialog, _disallowed_reward_types: Tuple[RewardType]=disallowed_reward_types) -> None:
@@ -723,14 +724,14 @@ class CommonSimCareerUtils(HasClassLog):
                         switch_jobs_dialog = Career.SWITCH_MANY_JOBS_DIALOG
                     career.send_career_message(switch_jobs_dialog, career_level_tuning.get_title(career_tracker._sim_info), icon_override=DEFAULT, on_response=lambda dialog: _on_quit_confirmation_dialog_response(dialog, _disallowed_reward_types=(RewardType.MONEY,)))
                     cls.get_log().format_with_message('Sim has quittable careers. Too many jobs!')
-                    return TestResult(False, 'Sim had existing jobs, they need to be quit before.')
+                    return CommonExecutionResult(False, reason='Sim had existing jobs, they need to be quit before.')
 
         cls.get_log().format_with_message('Doing end retirement.')
         career_tracker.end_retirement()
         career_tracker.remove_custom_career_data(send_update=False)
         if new_career.guid64 in career_tracker._careers:
             cls.get_log().format_with_message('Attempting to add career that Sim is already in.', career=new_career, sim=career_tracker._sim_info)
-            return TestResult(False, 'Sim already had the career.')
+            return CommonExecutionResult(False, reason='Sim already had the career.')
         if new_career.can_quit:
             career_tracker.quit_quittable_careers(post_quit_msg=post_quit_msg, schedule_shift_type=schedule_shift_override)
         career_tracker._careers[new_career.guid64] = new_career
@@ -758,7 +759,7 @@ class CommonSimCareerUtils(HasClassLog):
             new_career.on_promoted.append(career_tracker._on_promoted)
         if career_tracker._on_demoted not in new_career.on_demoted:
             new_career.on_demoted.append(career_tracker._on_demoted)
-        return TestResult.TRUE
+        return CommonExecutionResult.TRUE
 
     @classmethod
     def remove_careers(cls, sim_info: SimInfo, show_post_quit_message: bool=False, update_ui_after_remove: bool=True, include_career_callback: Callable[[Career], bool]=None) -> None:
@@ -804,7 +805,7 @@ class CommonSimCareerUtils(HasClassLog):
         defer_first_assignment: bool=False,
         schedule_init_only: bool=False,
         allow_outfit_generation: bool=True
-    ) -> TestResult:
+    ) -> CommonExecutionResult:
         (new_level, new_user_level, current_track) = career.get_career_entry_data(career_history=career_history, user_level_override=user_level_override, career_level_override=career_level_override)
         if defer_rewards:
             career.defer_player_rewards()
@@ -844,7 +845,7 @@ class CommonSimCareerUtils(HasClassLog):
             career.send_career_message(join_career_notification, first_work_time)
         career.add_coworker_relationship_bit()
         career._add_career_knowledge()
-        return TestResult.TRUE
+        return CommonExecutionResult.TRUE
 
     @classmethod
     def determine_entry_level_into_career_for_sim(cls, sim_info: SimInfo, career: Career, use_career_history: bool=True) -> Tuple[Union[int, None], Union[int, None], Union[TunableCareerTrack, None]]:

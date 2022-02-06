@@ -8,7 +8,6 @@ Copyright (c) COLONOLNUTTY
 import inspect
 import os
 from typing import Tuple, Any, Union, List, Set, Iterator
-from event_testing.results import TestResult
 from interactions import ParticipantType
 from interactions.constraints import Constraint
 from interactions.context import InteractionContext
@@ -26,7 +25,6 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from singletons import DEFAULT
 
-# ReadTheDocs
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
@@ -64,6 +62,8 @@ class CommonInteraction(Interaction, HasClassLog):
     .. warning:: Due to an issue with how Read The Docs functions, the base classes of this class will have different namespaces in the docs than they do in the source code!
     """
 
+    __slots__ = {'context'}
+
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(cls) -> Union[CommonModIdentity, None]:
@@ -74,10 +74,11 @@ class CommonInteraction(Interaction, HasClassLog):
         HasClassLog.__init__(self)
 
     @classmethod
-    def _test(cls, target: Any, context: InteractionContext, **kwargs) -> TestResult:
+    def _test(cls, target: Any, context: InteractionContext, **kwargs) -> CommonTestResult:
+        from event_testing.results import TestResult
+        from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
         log = cls.get_log()
         verbose_log = cls.get_verbose_log()
-        from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
         stop_watch = CommonStopWatch()
         stop_watch.start()
         try:
@@ -120,12 +121,12 @@ class CommonInteraction(Interaction, HasClassLog):
                 )
                 super_test_result: TestResult = super()._test(target, context, **kwargs)
                 verbose_log.format_with_message('Super Test Result (CommonInteraction)', super_test_result=super_test_result)
+
+                if super_test_result is not None and (isinstance(test_result, TestResult) and not super_test_result.result):
+                    return CommonTestResult.convert_from_vanilla(super_test_result)
             except Exception as ex:
                 log.error('Error occurred while running CommonInteraction \'{}\' super()._test.'.format(cls.__name__), exception=ex)
                 return cls.create_test_result(False, f'An error occurred {ex}. See the log for more details. "The Sims 4/mod_logs/<mod_name>_Exceptions.txt"')
-
-            if super_test_result is not None and (isinstance(test_result, TestResult) and not super_test_result.result):
-                return super_test_result
 
             try:
                 verbose_log.format_with_message(
@@ -356,7 +357,6 @@ class CommonInteraction(Interaction, HasClassLog):
         return super().setup_asm_default(asm, *args, **kwargs)
 
     def _run_interaction_gen(self, timeline: Timeline):
-        yield from super()._run_interaction_gen(timeline)
         try:
             self.verbose_log.format_with_message(
                 'Running on_run.',
@@ -368,6 +368,7 @@ class CommonInteraction(Interaction, HasClassLog):
             self.on_run(self.sim, self.target, timeline)
         except Exception as ex:
             self.log.error('Error occurred while running CommonInteraction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
+        yield from super()._run_interaction_gen(timeline)
 
     @classmethod
     def _constraint_gen(cls, sim: Sim, target: Any, participant_type: ParticipantType=ParticipantType.Actor, interaction: 'CommonInteraction'=None) -> Constraint:
@@ -439,7 +440,7 @@ class CommonInteraction(Interaction, HasClassLog):
         tooltip_tokens: Iterator[Any]=(),
         icon=None,
         influence_by_active_mood: bool=False
-    ) -> TestResult:
+    ) -> CommonTestResult:
         """create_test_result(\
             result,\
             reason=None,\
@@ -468,13 +469,13 @@ class CommonInteraction(Interaction, HasClassLog):
         :type icon: CommonResourceKey, optional
         :param influence_by_active_mood: If true, the Test Result will be influenced by the active mood.
         :type influence_by_active_mood: bool, optional
-        :return: The desired outcome for a call of :func:`~on_test`, default is `CommonTestResult.NONE`
+        :return: The desired outcome for a call of :func:`~on_test`.
         :rtype: CommonTestResult
         """
         try:
             return CommonTestResult(
                 result,
-                reason.format(*text_tokens) if reason is not None else reason,
+                reason=reason.format(*text_tokens) if reason is not None else reason,
                 tooltip_text=tooltip,
                 tooltip_tokens=tooltip_tokens,
                 icon=icon,
@@ -716,7 +717,7 @@ class CommonInteraction(Interaction, HasClassLog):
 class _ExampleInteraction(CommonInteraction):
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
-    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> TestResult:
+    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, **kwargs) -> CommonTestResult:
         result = 1 + 1
         if result == 2:
             # Interaction will be displayed, but disabled, it will also have a tooltip that displays on hover with the text "Test Tooltip"
@@ -725,9 +726,9 @@ class _ExampleInteraction(CommonInteraction):
             # return cls.create_test_result(False, reason="No Reason", tooltip=CommonLocalizationUtils.create_localized_tooltip("Test Tooltip"))
         if result == 3:
             # Interaction will be hidden completely.
-            return TestResult.NONE
+            return CommonTestResult.NONE
         # Interaction will display and be enabled.
-        return TestResult.TRUE
+        return CommonTestResult.TRUE
 
     # noinspection PyMissingOrEmptyDocstring
     def on_started(self, interaction_sim: Sim, interaction_target: Any) -> CommonExecutionResult:
