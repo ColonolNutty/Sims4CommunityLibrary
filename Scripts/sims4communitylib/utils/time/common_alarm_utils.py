@@ -15,10 +15,7 @@ from sims4communitylib.utils.common_time_utils import CommonTimeUtils
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-if not ON_RTD:
-    from scheduling import Timeline
-    from date_and_time import TimeSpan
-else:
+if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class Timeline:
         pass
@@ -26,6 +23,10 @@ else:
     # noinspection PyMissingOrEmptyDocstring
     class TimeSpan:
         pass
+
+if not ON_RTD:
+    from scheduling import Timeline
+    from date_and_time import TimeSpan
 
 
 class CommonAlarmUtils(HasClassLog):

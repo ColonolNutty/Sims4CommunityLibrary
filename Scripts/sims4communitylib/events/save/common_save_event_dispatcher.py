@@ -16,12 +16,13 @@ from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-if not ON_RTD:
-    from services.persistence_service import SaveGameData
-else:
+if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class SaveGameData:
         pass
+
+if not ON_RTD:
+    from services.persistence_service import SaveGameData
 
 
 class CommonSaveEventDispatcher(CommonService):

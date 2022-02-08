@@ -114,12 +114,13 @@ class CommonChooseResponseDialog(CommonDialog):
     :type mod_identity: CommonModIdentity, optional
     """
     # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
+    if ON_RTD:
+        _NEXT_BUTTON_ID = 10001
+        _PREVIOUS_BUTTON_ID = 10002
+
     if not ON_RTD:
         _NEXT_BUTTON_ID: int = int(ButtonType.DIALOG_RESPONSE_OK)
         _PREVIOUS_BUTTON_ID: int = int(ButtonType.DIALOG_RESPONSE_CANCEL)
-    else:
-        _NEXT_BUTTON_ID = 10001
-        _PREVIOUS_BUTTON_ID = 10002
 
     # noinspection PyMissingOrEmptyDocstring
     @property

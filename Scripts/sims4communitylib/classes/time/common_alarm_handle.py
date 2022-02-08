@@ -15,11 +15,7 @@ from typing import Any, Callable
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-if not ON_RTD:
-    from scheduling import Timeline
-    from alarms import AlarmHandle
-    from date_and_time import DateAndTime, TimeSpan
-else:
+if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class AlarmHandle:
         def cancel(self) -> Any:
@@ -36,6 +32,11 @@ else:
     # noinspection PyMissingOrEmptyDocstring
     class Timeline:
         pass
+
+if not ON_RTD:
+    from scheduling import Timeline
+    from alarms import AlarmHandle
+    from date_and_time import DateAndTime, TimeSpan
 
 
 class CommonAlarmHandle(AlarmHandle):
@@ -64,9 +65,8 @@ class CommonAlarmHandle(AlarmHandle):
         )
 
 
-if not ON_RTD:
-    @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.print_current_time', 'Prints the current time.')
-    def _s4clib_print_current_time(output: CommonConsoleCommandOutput):
-        output('Current time')
-        output('Hour {} Minute {}'.format(CommonTimeUtils.get_current_date_and_time().hour(), CommonTimeUtils.get_current_date_and_time().minute()))
-        output('Abs Hour {} Abs Minute {}'.format(CommonTimeUtils.get_current_date_and_time().absolute_hours(), CommonTimeUtils.get_current_date_and_time().absolute_minutes()))
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.print_current_time', 'Prints the current time.')
+def _s4clib_print_current_time(output: CommonConsoleCommandOutput):
+    output('Current time')
+    output('Hour {} Minute {}'.format(CommonTimeUtils.get_current_date_and_time().hour(), CommonTimeUtils.get_current_date_and_time().minute()))
+    output('Abs Hour {} Abs Minute {}'.format(CommonTimeUtils.get_current_date_and_time().absolute_hours(), CommonTimeUtils.get_current_date_and_time().absolute_minutes()))

@@ -23,9 +23,7 @@ from sims4communitylib.services.commands.common_console_command_output import Co
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-if not ON_RTD:
-    from buffs.appearance_modifier.appearance_modifier import AppearanceModifier
-else:
+if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class AppearanceModifier:
         # noinspection PyMissingOrEmptyDocstring
@@ -34,6 +32,9 @@ else:
             @classmethod
             def TunableFactory(cls) -> Any:
                 pass
+
+if not ON_RTD:
+    from buffs.appearance_modifier.appearance_modifier import AppearanceModifier
 
 
 class CommonAttachCASPartsAppearanceModifier(AppearanceModifier.BaseAppearanceModification, HasLog):

@@ -21,7 +21,7 @@ class CommonInteractionOverrideName(HasClassLog):
 
     An inheritable class that provides a way to override the :func:`~get_name` function of :class:`.CommonInteraction`.
 
-    .. warning:: This class is to be used in conjunction with :class:`.CommonInteraction`. Inheriting from this class will do nothing for class that does not also inherit from :class:`.CommonInteraction`.
+    .. warning:: This class is obsolete. All interaction types come with their own :func:`~get_name` function. This class is to be used in conjunction with :class:`.CommonInteraction`. Inheriting from this class will do nothing for class that does not also inherit from :class:`.CommonInteraction`.
     """
 
     # noinspection PyMissingOrEmptyDocstring
@@ -35,7 +35,7 @@ class CommonInteractionOverrideName(HasClassLog):
 
     # noinspection PyMethodParameters,PyMissingOrEmptyDocstring
     @flexmethod
-    def get_name(cls, inst: Interaction, target: Any=None, context: InteractionContext=None, **interaction_parameters) -> Union[LocalizedString, None]:
+    def get_name(cls, inst: Interaction, target: Any=None, context: InteractionContext=None, **interaction_parameters) -> LocalizedString:
         inst_or_cls = inst or cls
         try:
             context_inst_or_cls = context or inst_or_cls
@@ -61,7 +61,10 @@ class CommonInteractionOverrideName(HasClassLog):
                 return override_name
         except Exception as ex:
             cls.get_log().error('An error occurred while running get_name of CommonInteractionOverrideName {}'.format(cls.__name__), exception=ex)
-        return super(Interaction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+        result = super(Interaction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+        if result is None:
+            cls.get_log().error(f'Missing a name for interaction {cls.__name__}', throw=True)
+        return result
 
     # noinspection PyUnusedLocal
     @classmethod

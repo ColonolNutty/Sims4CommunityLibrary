@@ -17,9 +17,7 @@ from sims4communitylib.classes.testing.common_test_result import CommonTestResul
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-if not ON_RTD:
-    from objects.terrain import TravelMixin, TerrainInteractionMixin
-else:
+if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class MockClass(object):
         # noinspection PyMissingTypeHints,PyUnusedLocal
@@ -37,6 +35,9 @@ else:
     # noinspection PyMissingOrEmptyDocstring
     class TerrainInteractionMixin(MockClass):
         pass
+
+if not ON_RTD:
+    from objects.terrain import TravelMixin, TerrainInteractionMixin
 
 
 class CommonTerrainInteraction(TravelMixin, TerrainInteractionMixin, CommonImmediateSuperInteraction):

@@ -217,7 +217,7 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
             categories=categories,
             object_delivery_method=object_delivery_method
         )
-        if _dialog:
+        if not _dialog:
             raise AssertionError('Failed to create the purchase objects dialog.')
         self.log.debug('Showing dialog.')
         _dialog.show_dialog()

@@ -11,11 +11,7 @@ from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-if not ON_RTD:
-    # noinspection PyUnresolvedReferences
-    from _resourceman import Key
-    from sims4.resources import Types, Groups
-else:
+if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class Types(CommonInt):
         pass
@@ -44,6 +40,11 @@ else:
         # noinspection PyUnusedLocal
         def __init__(self, res_type: int, res_instance: int, *args, **kwargs):
             pass
+
+if not ON_RTD:
+    # noinspection PyUnresolvedReferences
+    from _resourceman import Key
+    from sims4.resources import Types, Groups
 
 
 class CommonResourceKey:

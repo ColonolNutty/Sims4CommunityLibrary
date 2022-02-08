@@ -26,12 +26,7 @@ from singletons import DEFAULT
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-if not ON_RTD:
-    from interactions.base.super_interaction import SuperInteraction
-    from scheduling import Timeline
-    from sims4.utils import flexmethod
-    from sims.sim import Sim
-else:
+if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class MockClass(object):
         # noinspection PyMissingTypeHints,PyUnusedLocal
@@ -59,6 +54,12 @@ else:
     # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring,SpellCheckingInspection
     def flexmethod(*_, **__):
         pass
+
+if not ON_RTD:
+    from interactions.base.super_interaction import SuperInteraction
+    from scheduling import Timeline
+    from sims4.utils import flexmethod
+    from sims.sim import Sim
 
 
 class CommonBaseSuperInteraction(SuperInteraction, HasClassLog):
@@ -247,7 +248,7 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
 
     # noinspection PyMethodParameters,PyMissingOrEmptyDocstring
     @flexmethod
-    def get_name(cls, inst: 'CommonSuperInteraction', target: Any=DEFAULT, context: InteractionContext=DEFAULT, **interaction_parameters) -> Union[LocalizedString, None]:
+    def get_name(cls, inst: 'CommonSuperInteraction', target: Any=DEFAULT, context: InteractionContext=DEFAULT, **interaction_parameters) -> LocalizedString:
         inst_or_cls = inst or cls
         try:
             context_inst_or_cls = context or inst_or_cls
@@ -273,7 +274,10 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
                 return override_name
         except Exception as ex:
             cls.get_log().error('An error occurred while running get_name of CommonSuperInteraction {}'.format(cls.__name__), exception=ex)
-        return super(CommonSuperInteraction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+        result = super(CommonSuperInteraction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+        if result is None:
+            cls.get_log().error(f'Missing a name for interaction {cls.__name__}', throw=True)
+        return result
 
     def _trigger_interaction_start_event(self: 'CommonSuperInteraction'):
         try:
@@ -449,6 +453,13 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
             self.log.error('Error occurred while running CommonSuperInteraction \'{}\' on_run.'.format(self.__class__.__name__), exception=ex)
         yield from super()._run_interaction_gen(timeline)
 
+    @classmethod
+    def _tuning_loaded_callback(cls) -> Any:
+        if isinstance(cls.basic_content, str):
+            from interactions.base.basic import NoContent
+            cls.basic_content = NoContent(allow_holster=None, allow_with_unholsterable_object=False, route_to_location=None)
+        return super()._tuning_loaded_callback()
+
     # noinspection PyMethodParameters
     @flexmethod
     def _constraint_gen(cls, inst: 'CommonSuperInteraction', sim: Sim, target: Any, participant_type: ParticipantType=ParticipantType.Actor, **kwargs) -> Constraint:
@@ -456,7 +467,10 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
         try:
             replacement_results = cls.on_replacement_constraints_gen(inst_or_cls, sim or inst_or_cls.sim, inst_or_cls.get_constraint_target(target) or target or inst_or_cls.target)
             if replacement_results is not None:
-                yield from replacement_results
+                if inspect.isgenerator(replacement_results):
+                    yield from replacement_results
+                else:
+                    yield replacement_results
             else:
                 yield from super(CommonSuperInteraction, inst_or_cls)._constraint_gen(sim, target, participant_type=participant_type, **kwargs)
                 result = cls.on_constraint_gen(inst_or_cls, sim or inst_or_cls.sim, inst_or_cls.get_constraint_target(target) or target or inst_or_cls.target)
@@ -798,7 +812,7 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
 class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
     """An inheritable class that provides a way to create custom Super Interactions that provide custom constraints.
 
-    .. warning:: Due to an issue with how Read The Docs functions, the base classes of this class will have different namespaces than they do in the source code!
+    .. warning:: This class is obsolete. All interaction types come with their own :func:`~on_replacement_constraints_gen` and  :func:`~on_constraint_gen` functions. Due to an issue with how Read The Docs functions, the base classes of this class will have different namespaces than they do in the source code!
 
     """
 
@@ -906,7 +920,7 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
 
     # noinspection PyMethodParameters,PyMissingOrEmptyDocstring
     @flexmethod
-    def get_name(cls, inst: 'CommonConstrainedSuperInteraction', target: Any=DEFAULT, context: InteractionContext=DEFAULT, **interaction_parameters) -> Union[LocalizedString, None]:
+    def get_name(cls, inst: 'CommonConstrainedSuperInteraction', target: Any=DEFAULT, context: InteractionContext=DEFAULT, **interaction_parameters) -> LocalizedString:
         inst_or_cls = inst or cls
         try:
             context_inst_or_cls = context or inst_or_cls
@@ -932,7 +946,10 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
                 return override_name
         except Exception as ex:
             cls.get_log().error('An error occurred while running get_name of CommonConstrainedSuperInteraction {}'.format(cls.__name__), exception=ex)
-        return super(CommonConstrainedSuperInteraction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+        result = super(CommonConstrainedSuperInteraction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+        if result is None:
+            cls.get_log().error(f'Missing a name for interaction {cls.__name__}', throw=True)
+        return result
 
     def _trigger_interaction_start_event(self: 'CommonConstrainedSuperInteraction'):
         try:
@@ -1115,7 +1132,10 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
         try:
             replacement_results = cls.on_replacement_constraints_gen(inst_or_cls, sim or inst_or_cls.sim, inst_or_cls.get_constraint_target(target) or target or inst_or_cls.target)
             if replacement_results is not None:
-                yield from replacement_results
+                if inspect.isgenerator(replacement_results):
+                    yield from replacement_results
+                else:
+                    yield replacement_results
             else:
                 yield from super(CommonConstrainedSuperInteraction, inst_or_cls)._constraint_gen(sim, target, participant_type=participant_type, **kwargs)
                 result = cls.on_constraint_gen(inst_or_cls, sim or inst_or_cls.sim, inst_or_cls.get_constraint_target(target) or target or inst_or_cls.target)

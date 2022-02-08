@@ -25,17 +25,7 @@ from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-if not ON_RTD:
-    from autonomy.autonomy_component import AutonomyComponent
-    from event_testing.results import EnqueueResult
-    import routing
-    from routing import RoutingContext
-    import objects.terrain
-    from server.pick_info import PickType
-    from placement import FGLSearchFlagsDefault, FGLSearchFlag
-    from world.lot import Lot
-    from sims.sim_info import SimInfo
-else:
+if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class AutonomyComponent:
         pass
@@ -71,6 +61,17 @@ else:
     # noinspection PyMissingOrEmptyDocstring
     class SimInfo:
         pass
+
+if not ON_RTD:
+    from autonomy.autonomy_component import AutonomyComponent
+    from event_testing.results import EnqueueResult
+    import routing
+    from routing import RoutingContext
+    import objects.terrain
+    from server.pick_info import PickType
+    from placement import FGLSearchFlagsDefault, FGLSearchFlag
+    from world.lot import Lot
+    from sims.sim_info import SimInfo
 
 
 class CommonSimLocationUtils:

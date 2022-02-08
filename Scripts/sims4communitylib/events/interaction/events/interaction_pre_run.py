@@ -13,12 +13,13 @@ from sims4communitylib.events.event_handling.common_event import CommonEvent
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-if not ON_RTD:
-    from scheduling import Timeline
-else:
+if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class Timeline:
         pass
+
+if not ON_RTD:
+    from scheduling import Timeline
 
 
 class S4CLInteractionPreRunEvent(CommonEvent):

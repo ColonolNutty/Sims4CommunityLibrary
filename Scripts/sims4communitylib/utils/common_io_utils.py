@@ -63,8 +63,8 @@ class CommonIOUtils:
         return True
 
     @staticmethod
-    def write_to_file(file_path: str, data: str, buffering: int=1, encoding: str='utf-8', ignore_errors: bool=False) -> bool:
-        """write_to_file(file_path, data, buffering=1, encoding='utf-8', ignore_errors=False)
+    def write_to_file(file_path: str, data: str, buffering: int=1, encoding: str='utf-8', ignore_errors: bool=False, remove_if_exists: bool=False) -> bool:
+        """write_to_file(file_path, data, buffering=1, encoding='utf-8', ignore_errors=False, remove_if_exists=False)
 
         Write string data to a file.
 
@@ -78,12 +78,16 @@ class CommonIOUtils:
         :type encoding: str, optional
         :param ignore_errors: If True, any exceptions thrown will be ignored (Useful in preventing infinite loops)
         :type ignore_errors: bool, optional
+        :param remove_if_exists: If True and the File exists already, it will be deleted before writing the data. If False and the File exists already, the data will be appended to the end of it. Default is False.
+        :type remove_if_exists: bool, optional
         :return: True if successful. False if not.
         :rtype: bool
         """
         if file_path is None or data is None:
             return False
         try:
+            if remove_if_exists:
+                CommonIOUtils.delete_file(file_path, ignore_errors=ignore_errors)
             with open(file_path, mode='a', buffering=buffering, encoding=encoding) as opened_file:
                 opened_file.write(data)
                 opened_file.flush()

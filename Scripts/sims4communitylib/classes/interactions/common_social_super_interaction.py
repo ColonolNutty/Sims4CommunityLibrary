@@ -23,16 +23,7 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-# If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-if not ON_RTD:
-    from interactions.social.social_super_interaction import SocialSuperInteraction
-    from event_testing.results import TestResult
-    from interactions.context import InteractionContext
-    from native.animation import NativeAsm
-    from scheduling import Timeline
-    from sims.sim import Sim
-    from sims4.utils import flexmethod
-else:
+if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class MockClass(object):
         # noinspection PyMissingTypeHints,PyUnusedLocal
@@ -80,7 +71,17 @@ else:
     def classproperty(*_, **__):
         pass
 
+if not ON_RTD:
+    from interactions.social.social_super_interaction import SocialSuperInteraction
+    from event_testing.results import TestResult
+    from interactions.context import InteractionContext
+    from native.animation import NativeAsm
+    from scheduling import Timeline
+    from sims.sim import Sim
+    from sims4.utils import flexmethod
 
+
+# If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
 class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
     """CommonSocialSuperInteraction(*_, **__)
     
@@ -241,7 +242,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
 
     # noinspection PyMethodParameters,PyMissingOrEmptyDocstring
     @flexmethod
-    def get_name(cls, inst: 'CommonSocialSuperInteraction', target: Any=DEFAULT, context: InteractionContext=DEFAULT, **interaction_parameters) -> Union[LocalizedString, None]:
+    def get_name(cls, inst: 'CommonSocialSuperInteraction', target: Any=DEFAULT, context: InteractionContext=DEFAULT, **interaction_parameters) -> LocalizedString:
         inst_or_cls = inst or cls
         try:
             context_inst_or_cls = context or inst_or_cls
@@ -267,7 +268,10 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
                 return override_name
         except Exception as ex:
             cls.get_log().error('An error occurred while running get_name of CommonSocialSuperInteraction {}'.format(cls.__name__), exception=ex)
-        return super(CommonSocialSuperInteraction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+        result = super(CommonSocialSuperInteraction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+        if result is None:
+            cls.get_log().error(f'Missing a name for interaction {cls.__name__}', throw=True)
+        return result
 
     def _trigger_interaction_start_event(self: 'CommonSocialSuperInteraction'):
         try:
@@ -451,7 +455,10 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
         try:
             replacement_results = cls.on_replacement_constraints_gen(inst_or_cls, sim or inst_or_cls.sim, inst_or_cls.get_constraint_target(target) or target or inst_or_cls.target)
             if replacement_results is not None:
-                yield from replacement_results
+                if inspect.isgenerator(replacement_results):
+                    yield from replacement_results
+                else:
+                    yield replacement_results
             else:
                 yield from super(CommonSocialSuperInteraction, inst_or_cls)._constraint_gen(sim, target, participant_type=participant_type, **kwargs)
                 result = cls.on_constraint_gen(inst_or_cls, sim or inst_or_cls.sim, inst_or_cls.get_constraint_target(target) or target or inst_or_cls.target)

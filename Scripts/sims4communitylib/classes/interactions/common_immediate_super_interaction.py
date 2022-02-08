@@ -31,9 +31,7 @@ from singletons import DEFAULT
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-if not ON_RTD:
-    from interactions.base.immediate_interaction import ImmediateSuperInteraction
-else:
+if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class MockClass(object):
         # noinspection PyMissingTypeHints,PyUnusedLocal
@@ -47,6 +45,9 @@ else:
     # noinspection PyMissingOrEmptyDocstring
     class ImmediateSuperInteraction(MockClass):
         pass
+
+if not ON_RTD:
+    from interactions.base.immediate_interaction import ImmediateSuperInteraction
 
 
 class CommonImmediateSuperInteraction(ImmediateSuperInteraction, HasClassLog):
@@ -168,7 +169,7 @@ class CommonImmediateSuperInteraction(ImmediateSuperInteraction, HasClassLog):
 
     # noinspection PyMethodParameters,PyMissingOrEmptyDocstring
     @flexmethod
-    def get_name(cls, inst: 'CommonImmediateSuperInteraction', target: Any=DEFAULT, context: InteractionContext=DEFAULT, **interaction_parameters) -> Union[LocalizedString, None]:
+    def get_name(cls, inst: 'CommonImmediateSuperInteraction', target: Any=DEFAULT, context: InteractionContext=DEFAULT, **interaction_parameters) -> LocalizedString:
         inst_or_cls = inst or cls
         try:
             context_inst_or_cls = context or inst_or_cls
@@ -194,7 +195,10 @@ class CommonImmediateSuperInteraction(ImmediateSuperInteraction, HasClassLog):
                 return override_name
         except Exception as ex:
             cls.get_log().error('An error occurred while running get_name of CommonImmediateSuperInteraction {}'.format(cls.__name__), exception=ex)
-        return super(CommonImmediateSuperInteraction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+        result = super(CommonImmediateSuperInteraction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+        if result is None:
+            cls.get_log().error(f'Missing a name for interaction {cls.__name__}', throw=True)
+        return result
 
     def _trigger_interaction_start_event(self: 'CommonImmediateSuperInteraction'):
         try:

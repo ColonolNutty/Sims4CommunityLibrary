@@ -27,9 +27,7 @@ from singletons import DEFAULT
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-if not ON_RTD:
-    from interactions.base.mixer_interaction import MixerInteraction
-else:
+if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class MockClass(object):
         # noinspection PyMissingTypeHints,PyUnusedLocal
@@ -43,6 +41,9 @@ else:
     # noinspection PyMissingOrEmptyDocstring
     class MixerInteraction(MockClass):
         pass
+
+if not ON_RTD:
+    from interactions.base.mixer_interaction import MixerInteraction
 
 
 class CommonMixerInteraction(MixerInteraction, HasClassLog):
@@ -195,7 +196,7 @@ class CommonMixerInteraction(MixerInteraction, HasClassLog):
 
     # noinspection PyMethodParameters,PyMissingOrEmptyDocstring
     @flexmethod
-    def get_name(cls, inst: 'CommonMixerInteraction', target: Any=DEFAULT, context: InteractionContext=DEFAULT, **interaction_parameters) -> Union[LocalizedString, None]:
+    def get_name(cls, inst: 'CommonMixerInteraction', target: Any=DEFAULT, context: InteractionContext=DEFAULT, **interaction_parameters) -> LocalizedString:
         inst_or_cls = inst or cls
         try:
             context_inst_or_cls = context or inst_or_cls
@@ -221,7 +222,10 @@ class CommonMixerInteraction(MixerInteraction, HasClassLog):
                 return override_name
         except Exception as ex:
             cls.get_log().error('An error occurred while running get_name of CommonMixerInteraction {}'.format(cls.__name__), exception=ex)
-        return super(CommonMixerInteraction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+        result = super(CommonMixerInteraction, inst_or_cls).get_name(target=target, context=context, **interaction_parameters)
+        if result is None:
+            cls.get_log().error(f'Missing a name for interaction {cls.__name__}', throw=True)
+        return result
 
     def _trigger_interaction_start_event(self: 'CommonMixerInteraction'):
         try:
