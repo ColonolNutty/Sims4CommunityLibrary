@@ -9,13 +9,13 @@ import os
 from typing import Tuple, Union, Iterator
 
 from sims4communitylib.dtos.common_cas_part import CommonCASPart
+from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
-from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
@@ -37,13 +37,16 @@ if not ON_RTD:
     from sims.outfits.outfit_enums import OutfitCategory, BodyType
     from sims.sim_info import SimInfo
 
-log = CommonLogRegistry.get().register_log(ModInfo.get_identity(), 's4cl_common_cas_utils')
 
-
-class CommonCASUtils:
+class CommonCASUtils(_HasS4CLClassLog):
     """Utilities for manipulating the CAS parts of Sims.
 
     """
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_log_identifier(cls) -> str:
+        return 'common_cas_utils'
 
     @staticmethod
     def is_cas_part_loaded(cas_part_id: int) -> bool:
@@ -117,8 +120,8 @@ class CommonCASUtils:
             return CommonResourceUtils.get_enum_by_name(BodyType.value_to_name[value], BodyType, default_value=value)
         return value
 
-    @staticmethod
-    def attach_cas_parts_to_all_outfits_of_sim(sim_info: SimInfo, cas_parts: Iterator[CommonCASPart]):
+    @classmethod
+    def attach_cas_parts_to_all_outfits_of_sim(cls, sim_info: SimInfo, cas_parts: Iterator[CommonCASPart]) -> bool:
         """attach_cas_parts_to_all_outfits_of_sim(sim_info, cas_parts)
 
         Attach a collection of CAS Parts to a Sim.
@@ -128,8 +131,13 @@ class CommonCASUtils:
         :param cas_parts: A collection of CAS Parts to attach to the Sim.
         :type cas_parts: Iterator[CommonCASPart]
         """
-        cas_part_ids = [int(cas_part.cas_part_id) for cas_part in cas_parts]
+        _log = cls.get_log()
+        cas_parts_by_body_type = dict()
+        for cas_part in cas_parts:
+            cas_parts_by_body_type[int(cas_part.body_type)] = cas_part
         cas_part_body_types = [int(cas_part.body_type) for cas_part in cas_parts]
+        from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
+        current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
         from protocolbuffers import S4Common_pb2, Outfits_pb2
         saved_outfits = sim_info.save_outfits()
         for saved_outfit in saved_outfits.outfits:
@@ -137,17 +145,31 @@ class CommonCASUtils:
             saved_outfit_parts = dict(zip(list(saved_outfit.body_types_list.body_types), list(saved_outfit.parts.ids)))
             body_types = list()
             part_ids = list()
+            handled_body_types = list()
+            _log.format_with_message('Before modify parts.', outfit_category=saved_outfit.category, body_types=tuple(saved_outfit_parts.keys()), part_ids=tuple(saved_outfit_parts.values()))
             for (body_type, part_id) in saved_outfit_parts.items():
-                if int(body_type) in cas_part_body_types:
+                body_type_int = int(body_type)
+                if body_type_int in cas_parts_by_body_type:
                     # Remove the existing body types that match the ones we are replacing.
+                    handled_body_types.append(body_type_int)
+                    part = cas_parts_by_body_type[body_type_int]
+                    _log.format_with_message('Replacing body type with CAS Part', original_body_type=body_type, cas_part=part, original_part_id=part_id)
+                    body_types.append(part.body_type)
+                    part_ids.append(part.cas_part_id)
                     continue
+                _log.format_with_message('Keeping body type.', original_body_type=body_type, cas_part_body_types=cas_part_body_types, original_part_id=part_id)
                 body_types.append(body_type)
                 part_ids.append(part_id)
 
-            # Add the new cas parts and their body types.
-            for cas_part_id in cas_part_ids:
-                body_types.append(int(CommonCASUtils.get_body_type_of_cas_part(cas_part_id)))
-                part_ids.append(cas_part_id)
+            # Adding the rest of the CAS Parts.
+            _log.format_with_message('Adding the rest of the CAS Parts.', body_types=body_types, part_ids=part_ids, cas_parts_by_body_type=cas_parts_by_body_type, handled_body_types=handled_body_types)
+            for cas_part in cas_parts_by_body_type.values():
+                if int(cas_part.body_type) in handled_body_types:
+                    continue
+                body_types.append(cas_part.body_type)
+                part_ids.append(cas_part.cas_part_id)
+
+            _log.format_with_message('After modify parts.', outfit_category=saved_outfit.category, body_types=body_types, part_ids=part_ids)
 
             # Save the parts.
             saved_outfit.parts = S4Common_pb2.IdList()
@@ -155,11 +177,14 @@ class CommonCASUtils:
             saved_outfit.parts.ids.extend(part_ids)
             saved_outfit.body_types_list = Outfits_pb2.BodyTypesList()
             # noinspection PyUnresolvedReferences
-            saved_outfit.body_types_list.body_types.extend(body_types)
+            saved_outfit.body_types_list.body_types.extend([int(body_type) for body_type in body_types])
         sim_info._base.outfits = saved_outfits.SerializeToString()
+        sim_info._base.outfit_type_and_index = current_outfit
+        sim_info.resend_outfits()
+        return True
 
-    @staticmethod
-    def attach_cas_part_to_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None, mod_identity: CommonModIdentity=None, **__) -> bool:
+    @classmethod
+    def attach_cas_part_to_sim(cls, sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int]=BodyType.NONE, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None, mod_identity: CommonModIdentity=None, **__) -> bool:
         """attach_cas_part_to_sim(sim_info, cas_part_id, body_type=BodyType.NONE, outfit_category_and_index=None, mod_identity=None, **__)
 
         Add a CAS part at the specified BodyType to the Sims outfit.
@@ -180,13 +205,13 @@ class CommonCASUtils:
         from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
         if cas_part_id == -1 or cas_part_id is None:
             raise RuntimeError('No cas_part_id was provided.')
-        log.format_with_message('Attempting to attach CAS part to Sim', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
+        cls.get_log().format_with_message('Attempting to attach CAS part to Sim', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
         outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=outfit_category_and_index, mod_identity=mod_identity)
         outfit_io.attach_cas_part(cas_part_id, body_type=body_type)
         return outfit_io.apply(**__)
 
-    @staticmethod
-    def detach_cas_part_from_sim(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None]=None, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None, mod_identity: CommonModIdentity=None, **__) -> bool:
+    @classmethod
+    def detach_cas_part_from_sim(cls, sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None]=None, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None, mod_identity: CommonModIdentity=None, **__) -> bool:
         """detach_cas_part_from_sim(sim_info, cas_part_id, body_type=None, outfit_category_and_index=None, mod_identity=None, **__)
 
         Remove a CAS part at the specified BodyType from the Sims outfit.
@@ -207,7 +232,7 @@ class CommonCASUtils:
         from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
         if cas_part_id == -1 or cas_part_id is None:
             raise RuntimeError('No cas_part_id was provided.')
-        log.format_with_message('Attempting to remove CAS part from Sim', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
+        cls.get_log().format_with_message('Attempting to remove CAS part from Sim', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
         outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=outfit_category_and_index, mod_identity=mod_identity)
         if body_type is None:
             outfit_io.detach_cas_part(cas_part_id)
@@ -218,8 +243,8 @@ class CommonCASUtils:
             outfit_io.detach_body_type(body_type)
         return outfit_io.apply(**__)
 
-    @staticmethod
-    def has_cas_part_attached(sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None]=None, outfit_category_and_index: Tuple[OutfitCategory, int]=None, mod_identity: CommonModIdentity=None) -> bool:
+    @classmethod
+    def has_cas_part_attached(cls, sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None]=None, outfit_category_and_index: Tuple[OutfitCategory, int]=None, mod_identity: CommonModIdentity=None) -> bool:
         """has_cas_part_attached(sim_info, cas_part_id, body_type=None, outfit_category_and_index=None, mod_identity=None)
 
         Determine if a Sim has the specified CAS part attached to their outfit.
@@ -237,7 +262,7 @@ class CommonCASUtils:
         :return: True, if the Sims outfit contain the specified CAS part. False, if the Sims outfit does not contain the specified CAS part.
         :rtype: bool
         """
-        log.format_with_message('Checking if CAS part is attached to Sim.', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
+        cls.get_log().format_with_message('Checking if CAS part is attached to Sim.', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
         outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=outfit_category_and_index, mod_identity=mod_identity)
         if body_type is None:
             return outfit_io.is_cas_part_attached(cas_part_id)
@@ -264,8 +289,8 @@ class CommonCASUtils:
         """
         return CommonCASUtils.get_cas_part_id_at_body_type(sim_info, body_type, outfit_category_and_index=outfit_category_and_index, mod_identity=mod_identity) != -1
 
-    @staticmethod
-    def get_body_type_cas_part_is_attached_to(sim_info: SimInfo, cas_part_id: int, outfit_category_and_index: Tuple[OutfitCategory, int]=None, mod_identity: CommonModIdentity=None) -> Union[BodyType, int]:
+    @classmethod
+    def get_body_type_cas_part_is_attached_to(cls, sim_info: SimInfo, cas_part_id: int, outfit_category_and_index: Tuple[OutfitCategory, int]=None, mod_identity: CommonModIdentity=None) -> Union[BodyType, int]:
         """get_body_type_cas_part_is_attached_to(sim_info, cas_part_id, outfit_category_and_index=None, mod_identity=None)
 
         Retrieve the BodyType that a CAS part is attached to within a Sims outfit.
@@ -281,12 +306,12 @@ class CommonCASUtils:
         :return: The BodyType the specified CAS part id is attached to or BodyType.NONE if the CAS part is not found or the Sim does not have body parts for their outfit.
         :rtype: Union[BodyType, int]
         """
-        log.format_with_message('Retrieving BodyType for CAS part.', sim=sim_info, cas_part_id=cas_part_id, outfit_category_and_index=outfit_category_and_index)
+        cls.get_log().format_with_message('Retrieving BodyType for CAS part.', sim=sim_info, cas_part_id=cas_part_id, outfit_category_and_index=outfit_category_and_index)
         outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=outfit_category_and_index, mod_identity=mod_identity)
         return outfit_io.get_body_type_cas_part_is_attached_to(cas_part_id)
 
-    @staticmethod
-    def get_cas_part_id_at_body_type(sim_info: SimInfo, body_type: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int]=None, mod_identity: CommonModIdentity=None) -> int:
+    @classmethod
+    def get_cas_part_id_at_body_type(cls, sim_info: SimInfo, body_type: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int]=None, mod_identity: CommonModIdentity=None) -> int:
         """get_cas_part_id_at_body_type(sim_info, body_type, outfit_category_and_index=None, mod_identity=None)
 
         Retrieve the CAS part identifier attached to the specified BodyType within a Sims outfit.
@@ -302,7 +327,7 @@ class CommonCASUtils:
         :return: The CAS part identifier attached to the specified BodyType or -1 if the BodyType is not found.
         :rtype: int
         """
-        log.format_with_message('Checking if CAS part is attached to Sim.', sim=sim_info, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
+        cls.get_log().format_with_message('Checking if CAS part is attached to Sim.', sim=sim_info, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
         outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=outfit_category_and_index, mod_identity=mod_identity)
         return outfit_io.get_cas_part_at_body_type(body_type)
 
@@ -344,6 +369,55 @@ class CommonCASUtils:
         :type skin_tone: int
         """
         sim_info.skin_tone = skin_tone
+
+
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.attach_cas_part_to_all_outfits',
+    'Attach a CAS Part to all outfits of a Sim. This is a permanent change to all of their outfits!',
+    command_arguments=(
+        CommonConsoleCommandArgument('cas_part_id', 'Decimal Identifier', 'The decimal identifier of the CAS Part to attach.'),
+        CommonConsoleCommandArgument('body_type', 'Body Type Name or Number', 'The body type to attach the CAS Part to. If not specified the body type of the CAS Part itself will be used.', is_optional=True, default_value='CAS Part Default Body Type'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to attach the CAS Part to.', is_optional=True, default_value='Active Sim')
+    ),
+    command_aliases=(
+        's4clib.attachcasparttoalloutfits',
+    )
+)
+def _s4clib_attach_cas_part_to_all_outfits(output: CommonConsoleCommandOutput, cas_part_id: int, body_type_str: str='any', sim_info: SimInfo=None):
+    if sim_info is None:
+        return
+    if cas_part_id < 0:
+        output('ERROR: CAS Part must be a positive number.')
+        return
+    if not CommonCASUtils.is_cas_part_loaded(cas_part_id):
+        output(f'ERROR: No CAS Part was found with id: {cas_part_id}')
+        return
+    if body_type_str is None:
+        output('ERROR: No Body Type specified.')
+        return
+    if body_type_str == 'any':
+        body_type = BodyType.NONE
+    elif body_type_str.isnumeric():
+        try:
+            body_type = int(body_type_str)
+        except ValueError:
+            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
+            return
+    else:
+        body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
+        if body_type == BodyType.NONE:
+            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
+            return
+
+    output(f'Attempting to attach CAS Part \'{cas_part_id}\' to Sim {sim_info} at body location {body_type}')
+    cas_part = CommonCASPart(cas_part_id, body_type=body_type)
+    if CommonCASUtils.attach_cas_parts_to_all_outfits_of_sim(sim_info, (cas_part,)):
+        output(f'SUCCESS: CAS Part has been successfully attached to Sim {sim_info}.')
+    else:
+        output(f'FAILED: CAS Part failed to attach to Sim {sim_info}.')
+    output('Done attaching CAS Part to the Sim.')
 
 
 @CommonConsoleCommand(
@@ -484,7 +558,8 @@ def _s4clib_is_cas_part_available(output: CommonConsoleCommandOutput, cas_part_i
         return
     output(f'Checking if CAS Part with Id {cas_part_id} is available.')
     if CommonCASUtils.is_cas_part_loaded(cas_part_id):
-        output(f'SUCCESS: The CAS Part with id {cas_part_id} is available.')
+        body_type = CommonCASUtils.get_body_type_of_cas_part(cas_part_id)
+        output(f'SUCCESS: The CAS Part with id {cas_part_id} is available with body location {body_type}.')
     else:
         output(f'FAILED: The CAS Part with id {cas_part_id} is not available.')
 
