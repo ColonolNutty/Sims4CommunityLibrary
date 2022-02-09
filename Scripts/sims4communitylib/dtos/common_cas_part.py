@@ -38,3 +38,9 @@ class CommonCASPart:
     def body_type(self) -> Union[BodyType, int]:
         """The place on a Sims person the CAS Part gets applied to."""
         return self._body_type
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+    def __str__(self) -> str:
+        return f'<CommonCASPart cas_part: {self.cas_part_id} body_type: {self.body_type}>'

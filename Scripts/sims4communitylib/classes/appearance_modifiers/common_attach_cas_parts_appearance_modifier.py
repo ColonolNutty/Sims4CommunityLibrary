@@ -262,7 +262,7 @@ class CommonAttachCASPartsAppearanceModifier(AppearanceModifier.BaseAppearanceMo
                 self.log.format_with_message('No body types were returned. Assuming BodyTypeFlag is NONE', sim=original_unmodified_sim_info, cas_part_ids_and_body_types=cas_parts)
                 return BodyTypeFlag.NONE
             body_type_flags = BodyTypeFlag.make_body_type_flag(*body_types)
-            self.log.format_with_message('Done applying CAS Parts!', sim=original_unmodified_sim_info, cas_part_ids_and_body_types=cas_parts, body_type_flags=body_type_flags)
+            self.log.format_with_message('Done applying CAS Parts!', sim=original_unmodified_sim_info, cas_part_ids_and_body_types=cas_parts, body_type_flags=body_type_flags, body_types=body_types)
             return body_type_flags
         except Exception as ex:
             self.log.error('An error occurred while applying selected part.', exception=ex)
