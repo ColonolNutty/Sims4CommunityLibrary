@@ -91,6 +91,16 @@ class CommonModIdentity:
         from sims4communitylib.utils.misc.common_mod_identity_utils import CommonModIdentityUtils
         return CommonModIdentityUtils.determine_mod_name_from_identifier(mod_identifier)
 
+    def __eq__(self, other: 'CommonModIdentity') -> bool:
+        if isinstance(other, str):
+            return self.name == other
+        if not isinstance(other, CommonModIdentity):
+            return False
+        return self.name == other.name
+
+    def __hash__(self) -> int:
+        return hash(self.name)
+
     def __repr__(self) -> str:
         return 'mod_{}_version_{}_author_{}_namespace_{}'.format(self.name, self.version.replace('.', '_').replace('/', '_').replace('\\', '_'), self.author, self.base_namespace)
 

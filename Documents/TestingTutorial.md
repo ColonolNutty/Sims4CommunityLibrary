@@ -6,8 +6,33 @@ In this tutorial we will cover the basics of testing.
 ```Python
 from sims4communitylib.testing.common_assertion_utils import CommonAssertionUtils
 from sims4communitylib.testing.common_test_service import CommonTestService
+from sims4communitylib.mod_support.common_mod_info import CommonModInfo
 
-@CommonTestService.test_class('MyModName')
+
+class ModInfo(CommonModInfo):
+    _FILE_PATH: str = str(__file__)
+
+    @property
+    def _name(self) -> str:
+        return 'MyModName'
+
+    @property
+    def _author(self) -> str:
+        return 'MyName'
+
+    @property
+    def _base_namespace(self) -> str:
+        return 'mod_package_name'
+
+    @property
+    def _file_path(self) -> str:
+        return ModInfo._FILE_PATH
+
+    @property
+    def _version(self) -> str:
+        return 'v1.0'
+
+@CommonTestService.test_class(ModInfo.get_identity())
 class _ExampleTests:
     @staticmethod
     @CommonTestService.test()
@@ -21,7 +46,7 @@ class _ExampleTests:
 ```
 
 Let's break this down:
-- The argument being sent to the `CommonTestService.test_class` decorator is the name of your Mod, this will allow S4CL to group tests to a specific mod and know where it should store the results of the tests for example: `MyModName_Messages.txt`.
+- The argument being sent to the `CommonTestService.test_class` decorator is the identity of your Mod, this will allow S4CL to group tests to a specific mod and know where it should store the results of the tests for example: `MyModName_Messages.txt`.
 - `CommonAssertionUtils` is the utility used to assert values. (See the [docs](https://sims4communitylibrary.readthedocs.io/en/latest/sims4communitylib.testing.html#assertion-utils) for more details)
 - `CommonTestService.test` will accept any number of arguments and will send those arguments to the test function when the tests are run. This allows you to keep similar test code but provide different values to it. If no arguments are passed in to the decorator, then no arguments will be sent to your test.
 - Tests must ALWAYS be decorated with `@staticmethod`.
@@ -43,4 +68,4 @@ CommonTestService.get().run_tests()
   1. Run the game
   2. Open the console (CTRL + SHIFT + C)
   3. Type the following command `s4clib.run_tests`.
-  - The results will be displayed in a file within the `The Sims 4/` folder, with a name dependent on what you sent to the `test_class` decorator: `<ModName>_Messages.txt`
+  - The results will be displayed in a file within the `The Sims 4/mod_logs` folder, with a name dependent on what you sent to the `test_class` decorator: `<ModName>_Messages.txt`
