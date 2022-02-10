@@ -64,7 +64,7 @@ class CommonSimCurrencyUtils:
     def remove_simoleons_from_household(cls, sim_info: SimInfo, amount: int, reason: CommonCurrencyModifyReason, require_full_amount: bool=True, **kwargs) -> float:
         """remove_simoleons_from_household(sim_info, amount, reason, require_full_amount=True, **kwargs)
 
-        Add an amount of simoleons to the Household of a Sim.
+        Remove an amount of simoleons from the Household of a Sim.
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
