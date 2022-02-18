@@ -63,8 +63,6 @@ class CommonImmediateSuperInteraction(ImmediateSuperInteraction, HasClassLog):
     .. warning:: Due to an issue with how Read The Docs functions, the base classes of this class will have different namespaces than they do in the source code!
     """
 
-    __slots__ = {'context'}
-
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(cls) -> Union[CommonModIdentity, None]:
@@ -166,6 +164,67 @@ class CommonImmediateSuperInteraction(ImmediateSuperInteraction, HasClassLog):
                 verbose_log.format_with_message('Took {} seconds to return result from CommonImmediateSuperInteraction.'.format(stop_watch.stop()), class_name=cls.__name__)
             else:
                 stop_watch.stop()
+
+    # noinspection PyMissingOrEmptyDocstring,PyMethodParameters
+    @flexmethod
+    def get_participants(cls, inst, participant_type: ParticipantType, sim=DEFAULT, target=DEFAULT, carry_target=DEFAULT, **kwargs):
+        inst_or_cls = inst or cls
+        log = cls.get_log()
+        verbose_log = cls.get_verbose_log()
+        try:
+            verbose_log.format_with_message(
+                'Running get_custom_replacement_participants.',
+                class_name=cls.__name__,
+                participant_type=participant_type,
+                sim=sim,
+                target=target,
+                carry_target=carry_target,
+                kwargles=kwargs
+            )
+            custom_participants = cls.get_custom_replacement_participants(participant_type, sim, target, carry_target, interaction=inst, **kwargs)
+            if custom_participants is None:
+                verbose_log.debug('Get Custom Replacement Participants did not return values, using the Normal Result instead (CommonImmediateSuperInteraction)')
+            else:
+                verbose_log.format_with_message('Get Custom Participants Result (CommonImmediateSuperInteraction)', custom_participants=custom_participants)
+                return tuple(custom_participants)
+        except Exception as ex:
+            log.error('Error occurred while running CommonImmediateSuperInteraction \'{}\' get_custom_replacement_participants.'.format(cls.__name__), exception=ex)
+
+        try:
+            verbose_log.format_with_message(
+                'Running super().get_participants.',
+                class_name=cls.__name__,
+                participant_type=participant_type,
+                sim=sim,
+                target=target,
+                carry_target=carry_target,
+                kwargles=kwargs
+            )
+            result: Set[Any] = super(CommonImmediateSuperInteraction, inst_or_cls).get_participants(participant_type, sim=sim, target=target, carry_target=carry_target, **kwargs)
+            if result:
+                verbose_log.format_with_message('Super Get Participants Result (CommonImmediateSuperInteraction)', result=result)
+        except Exception as ex:
+            log.error('Error occurred while running CommonImmediateSuperInteraction \'{}\' super().get_participants.'.format(cls.__name__), exception=ex)
+            return tuple()
+
+        result = set(result)
+        try:
+            verbose_log.format_with_message(
+                'Running get_custom_participants.',
+                class_name=cls.__name__,
+                participant_type=participant_type,
+                sim=sim,
+                target=target,
+                carry_target=carry_target,
+                kwargles=kwargs
+            )
+            custom_participants = cls.get_custom_participants(participant_type, sim, target, carry_target, interaction=inst, **kwargs)
+            if custom_participants:
+                verbose_log.format_with_message('Get Custom Participants Result (CommonImmediateSuperInteraction)', custom_participants=custom_participants)
+            result.update(custom_participants)
+        except Exception as ex:
+            log.error('Error occurred while running CommonImmediateSuperInteraction \'{}\' get_custom_participants.'.format(cls.__name__), exception=ex)
+        return tuple(result)
 
     # noinspection PyMethodParameters,PyMissingOrEmptyDocstring
     @flexmethod
@@ -598,6 +657,50 @@ class CommonImmediateSuperInteraction(ImmediateSuperInteraction, HasClassLog):
         :type interaction_target: Any
         """
         pass
+
+    # noinspection PyUnusedLocal
+    @classmethod
+    def get_custom_replacement_participants(cls, participant_type: ParticipantType, sim: Union[Sim, None], target: Union[Sim, None], carry_target: Union[Any, None], interaction: 'CommonImmediateSuperInteraction'=None, **kwargs) -> Union[Tuple[Any], None]:
+        """get_custom_replacement_participants(participant_type, sim=None, target=None, carry_target=None, interaction=None, **kwargs)
+
+        A hook used to replace the result of the get_participants function with custom participants.
+
+        :param participant_type: The type of participant being searched for.
+        :type participant_type: ParticipantType
+        :param sim: The Source of the interaction.
+        :type sim: Union[Sim, None]
+        :param target: The Target of the interaction.
+        :type sim: Union[Sim, None]
+        :param carry_target: The target being carried while the interaction is being run.
+        :type carry_target: Union[Any, None]
+        :param interaction: An instance of the interaction, if get_participants was invoked using an instance or None if get_participants was invoked using the class. Default is None.
+        :type interaction: CommonImmediateSuperInteraction, optional
+        :return: A collection of custom participants to use as replacements for the normal result of get_participants. Return None to keep the original participants. Default return is None.
+        :rtype: Union[Tuple[Any], None]
+        """
+        return None
+
+    # noinspection PyUnusedLocal
+    @classmethod
+    def get_custom_participants(cls, participant_type: ParticipantType, sim: Union[Sim, None], target: Union[Sim, None], carry_target: Union[Any, None], interaction: 'CommonImmediateSuperInteraction'=None, **kwargs) -> Tuple[Any]:
+        """get_custom_participants(participant_type, sim=None, target=None, carry_target=None, interaction=None, **kwargs)
+
+        A hook used to add custom participants to the result of the get_participants function.
+
+        :param participant_type: The type of participant being searched for.
+        :type participant_type: ParticipantType
+        :param sim: The Source of the interaction.
+        :type sim: Union[Sim, None]
+        :param target: The Target of the interaction.
+        :type sim: Union[Sim, None]
+        :param carry_target: The target being carried while the interaction is being run.
+        :type carry_target: Union[Any, None]
+        :param interaction: An instance of the interaction, if get_participants was invoked using an instance or None if get_participants was invoked using the class. Default is None.
+        :type interaction: CommonImmediateSuperInteraction, optional
+        :return: A collection of custom participants to add to the normal result of get_participants.
+        :rtype: Tuple[Any]
+        """
+        return tuple()
 
     def modify_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT) -> Tuple[PostureState, ParticipantType, Sim]:
         """modify_posture_state(posture_state, participant_type=ParticipantType.Actor, sim=DEFAULT)
