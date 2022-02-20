@@ -136,7 +136,8 @@ class CommonChooseOutfitDialog(CommonChooseDialog):
         thumbnail_type: UiOutfitPicker._OutftiPickerThumbnailType=UiOutfitPicker._OutftiPickerThumbnailType.SIM_INFO,
         on_chosen: Callable[[Union[Tuple[OutfitCategory, int], None], CommonChoiceOutcome], None]=CommonFunctionUtils.noop,
         exclude_outfit_categories: Tuple[OutfitCategory]=(OutfitCategory.CURRENT_OUTFIT, OutfitCategory.BATHING, *HIDDEN_OUTFIT_CATEGORIES),
-        show_filter: bool=True
+        show_filter: bool=True,
+        allow_choose_current_outfit: bool=False
     ):
         """show(\
             sim_info,
@@ -144,7 +145,8 @@ class CommonChooseOutfitDialog(CommonChooseDialog):
             thumbnail_type=UiOutfitPicker._OutftiPickerThumbnailType.SIM_INFO,\
             on_chosen=CommonFunctionUtils.noop,\
             exclude_outfit_categories=(OutfitCategory.CURRENT_OUTFIT, OutfitCategory.BATHING, OutfitCategory.SPECIAL, OutfitCategory.CAREER, OutfitCategory.SITUATION, OutfitCategory.BATUU),\
-            show_filter=True\
+            show_filter=True,\
+            allow_choose_current_outfit=False\
         )
 
         Show the dialog and invoke the callbacks upon the player making a choice.
@@ -161,6 +163,8 @@ class CommonChooseOutfitDialog(CommonChooseDialog):
         :type exclude_outfit_categories: Tuple[OutfitCategory], optional
         :param show_filter: Whether or not to show the Outfit Category filters in the dialogue. Default is True.
         :type show_filter: bool, optional
+        :param allow_choose_current_outfit: If True, then the Outfit that is currently being worn will be allowed to be chosen. If False, the current outfit cannot be chosen. Default is False.
+        :type allow_choose_current_outfit: bool, optional
         """
         try:
             outfit_list = self._setup_outfit_list(outfit_list, exclude_outfit_categories)
@@ -169,7 +173,8 @@ class CommonChooseOutfitDialog(CommonChooseDialog):
                 outfit_list=outfit_list,
                 thumbnail_type=thumbnail_type,
                 on_chosen=on_chosen,
-                show_filter=show_filter
+                show_filter=show_filter,
+                allow_choose_current_outfit=allow_choose_current_outfit,
             )
         except Exception as ex:
             self.log.error('An error occurred while running \'{}\''.format(self.show.__name__), exception=ex)
@@ -197,7 +202,8 @@ class CommonChooseOutfitDialog(CommonChooseDialog):
         outfit_list: Iterator[Tuple[OutfitCategory, int]]=(),
         thumbnail_type: UiOutfitPicker._OutftiPickerThumbnailType=UiOutfitPicker._OutftiPickerThumbnailType.SIM_INFO,
         on_chosen: Callable[[Union[Tuple[OutfitCategory, int], None], CommonChoiceOutcome], None]=CommonFunctionUtils.noop,
-        show_filter: bool=True
+        show_filter: bool=True,
+        allow_choose_current_outfit: bool=False
     ):
         def _on_chosen(choice: Tuple[OutfitCategory, int], outcome: CommonChoiceOutcome) -> None:
             try:
@@ -213,7 +219,8 @@ class CommonChooseOutfitDialog(CommonChooseDialog):
             outfit_list=outfit_list,
             thumbnail_type=thumbnail_type,
             on_chosen=_on_chosen,
-            show_filter=show_filter
+            show_filter=show_filter,
+            allow_choose_current_outfit=allow_choose_current_outfit
         )
         self.log.debug('Showing dialog.')
         _dialog.show_dialog()
@@ -225,7 +232,8 @@ class CommonChooseOutfitDialog(CommonChooseDialog):
         outfit_list: Iterator[Tuple[OutfitCategory, int]]=(),
         thumbnail_type: UiOutfitPicker._OutftiPickerThumbnailType=UiOutfitPicker._OutftiPickerThumbnailType.SIM_INFO,
         on_chosen: Callable[[Union[Tuple[OutfitCategory, int], None], CommonChoiceOutcome], None]=CommonFunctionUtils.noop,
-        show_filter: bool=True
+        show_filter: bool=True,
+        allow_choose_current_outfit: bool=False
     ) -> Union[UiOutfitPicker, None]:
         self.log.format_with_message(
             'Attempting to build dialog.',
@@ -266,7 +274,8 @@ class CommonChooseOutfitDialog(CommonChooseDialog):
         self._setup_dialog_rows(
             sim_info,
             _dialog,
-            outfit_list=outfit_list
+            outfit_list=outfit_list,
+            allow_choose_current_outfit=allow_choose_current_outfit
         )
 
         self.log.debug('Adding listener.')
@@ -277,7 +286,8 @@ class CommonChooseOutfitDialog(CommonChooseDialog):
         self,
         sim_info: SimInfo,
         _dialog: UiOutfitPicker,
-        outfit_list: Iterator[Tuple[OutfitCategory, int]]=()
+        outfit_list: Iterator[Tuple[OutfitCategory, int]]=(),
+        allow_choose_current_outfit: bool=False
     ):
         self.log.debug('Adding rows.')
         sim_id = CommonSimUtils.get_sim_id(sim_info)
@@ -295,7 +305,7 @@ class CommonChooseOutfitDialog(CommonChooseDialog):
                     outfit_category,
                     outfit_index,
                     # For some reason the Outfit Picker uses "is_enable" to determine which outfit is currently selected, instead of the expected "is_selected".
-                    is_enable=(outfit_category, outfit_index) != current_outfit,
+                    is_enable=(outfit_category, outfit_index) != current_outfit if not allow_choose_current_outfit else True,
                     tag=(outfit_category, outfit_index)
                 )
             )
