@@ -6,7 +6,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import inspect
-import os
 from typing import Any, Union, Tuple, Iterator, List, Set
 from singletons import DEFAULT
 
@@ -21,25 +20,23 @@ from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 
-ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-if ON_RTD:
-    # noinspection PyMissingOrEmptyDocstring
-    class MockClass(object):
-        # noinspection PyMissingTypeHints,PyUnusedLocal
-        def __init__(self, *args, **kwargs):
-            super(MockClass, self).__init__()
-
-        # noinspection PyMissingTypeHints
-        def __call__(self, *args, **kwargs):
-            return None
-
+# noinspection PyBroadException
+try:
+    from interactions.social.social_super_interaction import SocialSuperInteraction
+    from event_testing.results import TestResult
+    from interactions.context import InteractionContext
+    from native.animation import NativeAsm
+    from scheduling import Timeline
+    from sims.sim import Sim
+    from sims4.utils import flexmethod
+except:
     # noinspection PyMissingOrEmptyDocstring
     class Sim:
         pass
 
     # noinspection PyMissingOrEmptyDocstring
-    class SocialSuperInteraction(MockClass):
+    class SocialSuperInteraction:
         # noinspection PyPropertyDefinition
         @property
         def sim(self) -> Sim:
@@ -81,15 +78,6 @@ if ON_RTD:
     # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring,SpellCheckingInspection
     def classproperty(*_, **__):
         pass
-
-if not ON_RTD:
-    from interactions.social.social_super_interaction import SocialSuperInteraction
-    from event_testing.results import TestResult
-    from interactions.context import InteractionContext
-    from native.animation import NativeAsm
-    from scheduling import Timeline
-    from sims.sim import Sim
-    from sims4.utils import flexmethod
 
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
@@ -274,22 +262,18 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
         except Exception as ex:
             log.error('Error occurred while running CommonSocialSuperInteraction \'{}\' get_custom_replacement_participants.'.format(cls.__name__), exception=ex)
 
-        try:
-            verbose_log.format_with_message(
-                'Running super().get_participants.',
-                class_name=cls.__name__,
-                participant_type=participant_type,
-                sim=sim,
-                target=target,
-                carry_target=carry_target,
-                kwargles=kwargs
-            )
-            result: Set[Any] = super(CommonSocialSuperInteraction, inst_or_cls).get_participants(participant_type, sim=sim, target=target, carry_target=carry_target, **kwargs)
-            if result:
-                verbose_log.format_with_message('Super Get Participants Result (CommonSocialSuperInteraction)', result=result)
-        except Exception as ex:
-            log.error('Error occurred while running CommonSocialSuperInteraction \'{}\' super().get_participants.'.format(cls.__name__), exception=ex)
-            return tuple()
+        verbose_log.format_with_message(
+            'Running super().get_participants.',
+            class_name=cls.__name__,
+            participant_type=participant_type,
+            sim=sim,
+            target=target,
+            carry_target=carry_target,
+            kwargles=kwargs
+        )
+        result: Set[Any] = super(CommonSocialSuperInteraction, inst_or_cls).get_participants(participant_type, sim=sim, target=target, carry_target=carry_target, **kwargs)
+        if result:
+            verbose_log.format_with_message('Super Get Participants Result (CommonSocialSuperInteraction)', result=result)
 
         result = set(result)
         try:

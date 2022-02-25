@@ -6,7 +6,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import inspect
-import os
 from typing import Any, Union, Tuple, List, Set, Iterator
 
 from interactions import ParticipantType
@@ -23,22 +22,15 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from singletons import DEFAULT
 
-ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
-
-# If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-if ON_RTD:
+# noinspection PyBroadException
+try:
+    from interactions.base.super_interaction import SuperInteraction
+    from scheduling import Timeline
+    from sims4.utils import flexmethod
+    from sims.sim import Sim
+except:
     # noinspection PyMissingOrEmptyDocstring
-    class MockClass(object):
-        # noinspection PyMissingTypeHints,PyUnusedLocal
-        def __init__(self, *args, **kwargs):
-            super(MockClass, self).__init__()
-
-        # noinspection PyMissingTypeHints
-        def __call__(self, *args, **kwargs):
-            return None
-
-    # noinspection PyMissingOrEmptyDocstring
-    class SuperInteraction(MockClass):
+    class SuperInteraction:
         pass
 
 
@@ -54,12 +46,6 @@ if ON_RTD:
     # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring,SpellCheckingInspection
     def flexmethod(*_, **__):
         pass
-
-if not ON_RTD:
-    from interactions.base.super_interaction import SuperInteraction
-    from scheduling import Timeline
-    from sims4.utils import flexmethod
-    from sims.sim import Sim
 
 
 class CommonBaseSuperInteraction(SuperInteraction, HasClassLog):
@@ -269,22 +255,18 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
         except Exception as ex:
             log.error('Error occurred while running CommonSuperInteraction \'{}\' get_custom_replacement_participants.'.format(cls.__name__), exception=ex)
 
-        try:
-            verbose_log.format_with_message(
-                'Running super().get_participants.',
-                class_name=cls.__name__,
-                participant_type=participant_type,
-                sim=sim,
-                target=target,
-                carry_target=carry_target,
-                kwargles=kwargs
-            )
-            result: Set[Any] = super(CommonSuperInteraction, inst_or_cls).get_participants(participant_type, sim=sim, target=target, carry_target=carry_target, **kwargs)
-            if result:
-                verbose_log.format_with_message('Super Get Participants Result (CommonSuperInteraction)', result=result)
-        except Exception as ex:
-            log.error('Error occurred while running CommonSuperInteraction \'{}\' super().get_participants.'.format(cls.__name__), exception=ex)
-            return tuple()
+        verbose_log.format_with_message(
+            'Running super().get_participants.',
+            class_name=cls.__name__,
+            participant_type=participant_type,
+            sim=sim,
+            target=target,
+            carry_target=carry_target,
+            kwargles=kwargs
+        )
+        result: Set[Any] = super(CommonSuperInteraction, inst_or_cls).get_participants(participant_type, sim=sim, target=target, carry_target=carry_target, **kwargs)
+        if result:
+            verbose_log.format_with_message('Super Get Participants Result (CommonSuperInteraction)', result=result)
 
         result = set(result)
         try:
@@ -1044,22 +1026,18 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
         except Exception as ex:
             log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' get_custom_replacement_participants.'.format(cls.__name__), exception=ex)
 
-        try:
-            verbose_log.format_with_message(
-                'Running super().get_participants.',
-                class_name=cls.__name__,
-                participant_type=participant_type,
-                sim=sim,
-                target=target,
-                carry_target=carry_target,
-                kwargles=kwargs
-            )
-            result: Set[Any] = super(CommonConstrainedSuperInteraction, inst_or_cls).get_participants(participant_type, sim=sim, target=target, carry_target=carry_target, **kwargs)
-            if result:
-                verbose_log.format_with_message('Super Get Participants Result (CommonConstrainedSuperInteraction)', result=result)
-        except Exception as ex:
-            log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' super().get_participants.'.format(cls.__name__), exception=ex)
-            return tuple()
+        verbose_log.format_with_message(
+            'Running super().get_participants.',
+            class_name=cls.__name__,
+            participant_type=participant_type,
+            sim=sim,
+            target=target,
+            carry_target=carry_target,
+            kwargles=kwargs
+        )
+        result: Set[Any] = super(CommonConstrainedSuperInteraction, inst_or_cls).get_participants(participant_type, sim=sim, target=target, carry_target=carry_target, **kwargs)
+        if result:
+            verbose_log.format_with_message('Super Get Participants Result (CommonConstrainedSuperInteraction)', result=result)
 
         result = set(result)
         try:

@@ -11,6 +11,7 @@ from cas.cas import OutfitData
 from protocolbuffers import S4Common_pb2, Outfits_pb2
 from sims.outfits.outfit_enums import OutfitCategory, BodyType
 from sims.sim_info import SimInfo
+from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
@@ -24,7 +25,7 @@ class CommonSimOutfitIO(HasLog):
     Make changes to an outfit of a Sim.
 
     :param sim_info: An instance of a Sim.
-    :type sim_info: SimInfo
+    :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
     :param outfit_category_and_index: The OutfitCategory and Index of the Outfit being written to or read from. Default is the current outfit of the Sim.
     :type outfit_category_and_index: Tuple[OutfitCategory, int], optional
     :param initial_outfit_parts: A library of body types and cas parts to use in place of the normal parts of their outfit. If set to None, OutfitParts will be loaded from the specified OutfitCategory and Index. Default is None.
@@ -42,11 +43,11 @@ class CommonSimOutfitIO(HasLog):
     def log_identifier(self) -> str:
         return 'common_sim_outfit_io'
 
-    def __init__(self, sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]=None, initial_outfit_parts: Dict[BodyType, int]=None, mod_identity: CommonModIdentity=None):
+    def __init__(self, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Tuple[OutfitCategory, int]=None, initial_outfit_parts: Dict[BodyType, int]=None, mod_identity: CommonModIdentity=None):
         super().__init__()
         self._mod_identity = mod_identity
         self.log.enable_logging_extra_sim_details()
-        self._sim_info: SimInfo = sim_info
+        self._sim_info = sim_info
         self._current_outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
         self._outfit_category_and_index: Tuple[OutfitCategory, int] = (CommonOutfitUtils.convert_value_to_outfit_category(outfit_category_and_index[0]), outfit_category_and_index[1]) if outfit_category_and_index is not None else self._current_outfit_category_and_index
         self._outfit_data: OutfitData = None
@@ -59,11 +60,11 @@ class CommonSimOutfitIO(HasLog):
         self._load(initial_outfit_parts=initial_outfit_parts)
 
     @property
-    def sim_info(self) -> SimInfo:
+    def sim_info(self) -> Union[SimInfo, SimInfoBaseWrapper]:
         """ The Sim to apply Outfit changes to.
 
         :return: An instance of a Sim.
-        :rtype: SimInfo
+        :rtype: Union[SimInfo, SimInfoBaseWrapper]
         """
         return self._sim_info
 

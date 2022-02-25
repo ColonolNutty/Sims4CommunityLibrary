@@ -445,6 +445,32 @@ commands_log.enable()
 # noinspection SpellCheckingInspection
 @CommonConsoleCommand(
     ModInfo.get_identity(),
+    's4clib.print_statistic_value',
+    'Print the value of a statistic on a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('statistic', 'Statistic Id or Tuning Name', 'The tuning name or decimal identifier of a Statistic.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to check.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.print_stat_value',
+        's4clib.printstatvalue',
+        's4clib.printstatisticvalue'
+    )
+)
+def _common_print_statistic_value(output: CommonConsoleCommandOutput, statistic: TunableInstanceParam(Types.STATISTIC), sim_info: SimInfo=None):
+    if statistic is None:
+        output('ERROR: No Statistic specified or the specified Statistic did not exist!')
+        return
+    if sim_info is None:
+        return
+    output(f'Attempting to get statistic {statistic} on Sim {sim_info}.')
+    statistic_value = CommonSimStatisticUtils.get_statistic_value(sim_info, CommonStatisticUtils.get_statistic_id(statistic))
+    output(f'Got statistic value of {statistic_value} of {statistic} on Sim {sim_info}.')
+
+
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
     's4clib.set_statistic_value',
     'Set the value of a statistic on a Sim.',
     command_arguments=(
@@ -499,6 +525,33 @@ def _common_set_statistic_user_value(output: CommonConsoleCommandOutput, statist
         output(f'SUCCESS: Successfully set statistic {statistic} on Sim {sim_info} to user level {level}.')
     else:
         output(f'FAILED: Failed to set statistic {statistic} on Sim {sim_info} to user level {level}.')
+
+
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.print_statistic_level',
+    'Print the user level of a statistic on a Sim (User level should be printed instead of the value for statistics that belong to a Sim, such as Motives or Skills).',
+    command_arguments=(
+        CommonConsoleCommandArgument('statistic', 'Statistic Id or Tuning Name', 'The tuning name or decimal identifier of a Statistic.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to check.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.print_statistic_user_value',
+        's4clib.print_stat_level',
+        's4clib.printstatlevel',
+        's4clib.printstatisticlevel'
+    )
+)
+def _common_print_statistic_user_value(output: CommonConsoleCommandOutput, statistic: TunableInstanceParam(Types.STATISTIC), sim_info: SimInfo=None):
+    if statistic is None:
+        output('ERROR: No Statistic specified or the specified Statistic did not exist!')
+        return
+    if sim_info is None:
+        return
+    output(f'Attempting to print statistic {statistic} on Sim {sim_info}.')
+    level = CommonSimStatisticUtils.get_statistic_level(sim_info, CommonStatisticUtils.get_statistic_id(statistic))
+    output(f'Got statistic level of {level} of {statistic} on Sim {sim_info}.')
 
 
 # noinspection SpellCheckingInspection

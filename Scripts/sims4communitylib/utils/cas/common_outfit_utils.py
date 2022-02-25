@@ -11,6 +11,7 @@ from buffs.appearance_modifier.appearance_tracker import ModifierInfo
 from cas.cas import OutfitData
 from sims.outfits.outfit_enums import OutfitCategory, BodyType, OutfitFilterFlag, BodyTypeFlag
 from sims.sim_info import SimInfo
+from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.tags_enum import CommonGameTag
@@ -234,182 +235,182 @@ class CommonOutfitUtils(HasClassLog):
         return tuple(OutfitCategory.values)
 
     @classmethod
-    def is_wearing_everyday_outfit(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_everyday_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """is_wearing_everyday_outfit(sim_info)
 
         Determine if a Sim is wearing an Everyday outfit.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the sim is wearing an everyday outfit. False, if not.
         :rtype: bool
         """
         return CommonOutfitUtils.is_every_day_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_formal_outfit(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_formal_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """is_wearing_formal_outfit(sim_info)
 
         Determine if a Sim is wearing a Formal outfit.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the sim is wearing a formal outfit. False, if not.
         :rtype: bool
         """
         return CommonOutfitUtils.is_formal_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_athletic_outfit(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_athletic_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """is_wearing_athletic_outfit(sim_info)
 
         Determine if a Sim is wearing an Athletic outfit.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the sim is wearing an athletic outfit. False, if not.
         :rtype: bool
         """
         return CommonOutfitUtils.is_athletic_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_sleep_outfit(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_sleep_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """is_wearing_sleep_outfit(sim_info)
 
         Determine if a Sim is wearing a Sleep outfit.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the sim is wearing a sleep outfit. False, if not.
         :rtype: bool
         """
         return CommonOutfitUtils.is_sleep_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_party_outfit(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_party_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """is_wearing_party_outfit(sim_info)
 
         Determine if a Sim is wearing a Party outfit.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the sim is wearing a party outfit. False, if not.
         :rtype: bool
         """
         return CommonOutfitUtils.is_party_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_bathing_outfit(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_bathing_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """is_wearing_bathing_outfit(sim_info)
 
         Determine if a Sim is wearing a Bathing outfit.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the sim is wearing their bathing/nude outfit. False, if not.
         :rtype: bool
         """
         return CommonOutfitUtils.is_bathing_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_career_outfit(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_career_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """is_wearing_career_outfit(sim_info)
 
         Determine if a Sim is wearing a Career outfit.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the sim is wearing a career outfit. False, if not.
         :rtype: bool
         """
         return CommonOutfitUtils.is_career_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_situation_outfit(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_situation_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """is_wearing_situation_outfit(sim_info)
 
         Determine if a Sim is wearing a Situation outfit.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the sim is wearing a situation outfit. False, if not.
         :rtype: bool
         """
         return CommonOutfitUtils.is_situation_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_special_outfit(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_special_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """is_wearing_special_outfit(sim_info)
 
         Determine if a Sim is wearing a Special outfit.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the sim is wearing a special outfit. False, if not.
         :rtype: bool
         """
         return CommonOutfitUtils.is_special_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_swimwear_outfit(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_swimwear_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """is_wearing_swimwear_outfit(sim_info)
 
         Determine if a Sim is wearing a Swimwear outfit.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the sim is wearing a swimwear outfit. False, if not.
         :rtype: bool
         """
         return CommonOutfitUtils.is_swimwear_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_hot_weather_outfit(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_hot_weather_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """is_wearing_hot_weather_outfit(sim_info)
 
         Determine if a Sim is wearing a Hot Weather outfit.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the sim is wearing a hot weather outfit. False, if not.
         :rtype: bool
         """
         return CommonOutfitUtils.is_hot_weather_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_cold_weather_outfit(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_cold_weather_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """is_wearing_cold_weather_outfit(sim_info)
 
         Determine if a Sim is wearing a Cold Weather outfit.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the sim is wearing a cold weather outfit. False, if not.
         :rtype: bool
         """
         return CommonOutfitUtils.is_cold_weather_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_batuu_outfit(cls, sim_info: SimInfo) -> bool:
+    def is_wearing_batuu_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """is_wearing_batuu_outfit(sim_info)
 
         Determine if a Sim is wearing a Batuu outfit.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the sim is wearing a batuu outfit. False, if not.
         :rtype: bool
         """
         return CommonOutfitUtils.is_batuu_category(CommonOutfitUtils.get_current_outfit_category(sim_info))
 
     @classmethod
-    def is_wearing_towel(cls, sim_info: SimInfo) -> CommonTestResult:
+    def is_wearing_towel(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> CommonTestResult:
         """is_wearing_towel(sim_info)
 
         Determine if a Sim is currently wearing a towel.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: The result of testing. True, if the sim is wearing a towel. False, if not.
         :rtype: CommonTestResult
         """
@@ -449,20 +450,20 @@ class CommonOutfitUtils(HasClassLog):
         return value
 
     @classmethod
-    def get_current_outfit_category(cls, sim_info: SimInfo) -> OutfitCategory:
+    def get_current_outfit_category(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> OutfitCategory:
         """get_current_outfit_category(sim_info)
 
         Retrieve the current OutfitCategory and Index of a Sim.
 
         :param sim_info: The Sim to get the outfit category of.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: The OutfitCategory of the current outfit a Sim is wearing.
         :rtype: OutfitCategory
         """
         return CommonOutfitUtils.get_current_outfit(sim_info)[0]
 
     @classmethod
-    def get_current_outfit_index(cls, sim_info: SimInfo) -> int:
+    def get_current_outfit_index(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> int:
         """get_current_outfit_index(sim_info)
 
         Retrieve the current OutfitCategory and Index of a Sim.
@@ -470,14 +471,14 @@ class CommonOutfitUtils(HasClassLog):
         .. note:: If a Sim has two Athletic outfits and they are wearing the second outfit, the index would be `1`.
 
         :param sim_info: The Sim to get the outfit index of.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: The index of their current outfit relative to the outfits a Sim has in the current OutfitCategory.
         :rtype: int
         """
         return CommonOutfitUtils.get_current_outfit(sim_info)[1]
 
     @classmethod
-    def get_current_outfit(cls, sim_info: SimInfo) -> Tuple[OutfitCategory, int]:
+    def get_current_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> Tuple[OutfitCategory, int]:
         """get_current_outfit(sim_info)
 
         Retrieve the current OutfitCategory and Index of the current sim.
@@ -485,7 +486,7 @@ class CommonOutfitUtils(HasClassLog):
         .. note:: If a Sim has two Athletic outfits and they are wearing the second outfit, the index would be `1`.
 
         :param sim_info: The Sim to get the current outfit of.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: The OutfitCategory and index of the current outfit a Sim is wearing.
         :rtype: Tuple[OutfitCategory, int]
         """
@@ -502,13 +503,13 @@ class CommonOutfitUtils(HasClassLog):
         return current_outfit_category, current_outfit[1]
 
     @classmethod
-    def get_appearance_modifiers_gen(cls, sim_info: SimInfo, appearance_modifier_type: AppearanceModifierType, include_appearance_modifier_callback: Callable[[ModifierInfo], bool]=None) -> Iterator[AppearanceModifier]:
+    def get_appearance_modifiers_gen(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], appearance_modifier_type: AppearanceModifierType, include_appearance_modifier_callback: Callable[[ModifierInfo], bool]=None) -> Iterator[AppearanceModifier]:
         """get_appearance_modifiers_gen(sim_info, appearance_modifier_type, include_appearance_modifier_callback=None)
 
         Retrieve the appearance modifiers of a Sim.
 
         :param sim_info: An instance of a Sim.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param appearance_modifier_type: The type of appearance modifiers to retrieve.
         :type appearance_modifier_type: AppearanceModifierType
         :param include_appearance_modifier_callback: If an appearance modifier matches this callback, then it will be returned. Default is None.
@@ -538,13 +539,13 @@ class CommonOutfitUtils(HasClassLog):
             yield modifier_info.modifier
 
     @classmethod
-    def get_outfit_data(cls, sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> OutfitData:
+    def get_outfit_data(cls, sim_info: Union[Union[SimInfo, SimInfoBaseWrapper], SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> OutfitData:
         """get_outfit_data(sim_info, outfit_category_and_index=None)
 
         Retrieve OutfitData for the specified OutfitCategory and Index of a Sim.
 
         :param sim_info: The Sim to retrieve outfit data of.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
         :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
         :return: Outfit Data for the specified outfit.
@@ -555,13 +556,13 @@ class CommonOutfitUtils(HasClassLog):
         return sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
 
     @classmethod
-    def has_cas_part_attached(cls, sim_info: SimInfo, cas_part_id: int, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    def has_cas_part_attached(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], cas_part_id: int, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
         """has_any_cas_parts_attached(sim_info, cas_part_id, outfit_category_and_index=None)
 
         Determine if any of the specified CAS Parts are attached to the Sim.
 
         :param sim_info: An instance of a Sim.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param cas_part_id: A CAS Part identifier.
         :type cas_part_id: int
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to check. Default is the current outfit.
@@ -572,13 +573,13 @@ class CommonOutfitUtils(HasClassLog):
         return CommonOutfitUtils.has_any_cas_parts_attached(sim_info, (cas_part_id, ), outfit_category_and_index=outfit_category_and_index)
 
     @classmethod
-    def has_any_cas_parts_attached(cls, sim_info: SimInfo, cas_part_ids: Tuple[int], outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    def has_any_cas_parts_attached(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], cas_part_ids: Tuple[int], outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
         """has_any_cas_parts_attached(sim_info, cas_part_ids, outfit_category_and_index=None)
 
         Determine if any of the specified CAS Parts are attached to the Sim.
 
         :param sim_info: An instance of a Sim.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param cas_part_ids: A collection of CAS Part identifiers.
         :type cas_part_ids: Tuple[int]
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to check. Default is the current outfit.
@@ -596,13 +597,13 @@ class CommonOutfitUtils(HasClassLog):
         return False
 
     @classmethod
-    def get_outfit_parts(cls, sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[Union[BodyType, int], int]:
+    def get_outfit_parts(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[Union[BodyType, int], int]:
         """get_outfit_parts(sim_info, outfit_category_and_index=None)
 
         Retrieve Outfit Parts for the specified OutfitCategory and Index of a Sim.
 
         :param sim_info: The Sim to retrieve outfit parts of.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
         :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
         :return: A dictionary of body types and cas parts in those body types for the outfit of a Sim.
@@ -616,47 +617,47 @@ class CommonOutfitUtils(HasClassLog):
         return dict(zip(list(outfit_data.body_types), list(outfit_data.part_ids)))
 
     @classmethod
-    def set_current_outfit(cls, sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]):
+    def set_current_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Tuple[OutfitCategory, int]):
         """set_current_outfit(sim_info, outfit_category_and_index)
 
         Set the current outfit of a Sim to the specified OutfitCategory and Index.
 
         :param sim_info: The Sim to change the outfit of.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param outfit_category_and_index: The OutfitCategory and index to change to.
         :type outfit_category_and_index: Tuple[OutfitCategory, int]
         """
         sim_info.try_set_current_outfit(outfit_category_and_index)
 
     @classmethod
-    def set_outfit_dirty(cls, sim_info: SimInfo, outfit_category: OutfitCategory):
+    def set_outfit_dirty(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category: OutfitCategory):
         """set_outfit_dirty(sim_info, outfit_category)
 
         Flag the specified OutfitCategory of a Sim as dirty.
         This will tell the game that it needs to be updated.
 
         :param sim_info: The Sim to flag the OutfitCategory for.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param outfit_category: The OutfitCategory being flagged.
         :type outfit_category: OutfitCategory
         """
         sim_info.set_outfit_dirty(outfit_category)
 
     @classmethod
-    def set_outfit_clean(cls, sim_info: SimInfo, outfit_category: OutfitCategory):
+    def set_outfit_clean(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category: OutfitCategory):
         """set_outfit_clean(sim_info, outfit_category)
 
         Flag the specified OutfitCategory of a Sim as clean.
 
         :param sim_info: The Sim to flag the OutfitCategory for.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param outfit_category: The OutfitCategory being flagged.
         :type outfit_category: OutfitCategory
         """
         sim_info.clear_outfit_dirty(outfit_category)
 
     @classmethod
-    def generate_outfit(cls, sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int], tag_list: Tuple[CommonGameTag]=(), outfit_filter_flag: OutfitFilterFlag=DEFAULT, body_type_flags: BodyTypeFlag=DEFAULT, **kwargs) -> bool:
+    def generate_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Tuple[OutfitCategory, int], tag_list: Tuple[CommonGameTag]=(), outfit_filter_flag: OutfitFilterFlag=DEFAULT, body_type_flags: BodyTypeFlag=DEFAULT, **kwargs) -> bool:
         """generate_outfit(sim_info, outfit_category_and_index, tag_list=(), outfit_filter_flag=DEFAULT, body_type_flags=DEFAULT, **kwargs)
 
         Generate an outfit for a Sim for the specified OutfitCategory and Index.
@@ -664,7 +665,7 @@ class CommonOutfitUtils(HasClassLog):
         .. note:: If an outfit exists in the specified OutfitCategory and Index, already, it will be overridden.
 
         :param sim_info: The Sim to generate an outfit for.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to generate.
         :type outfit_category_and_index: Tuple[OutfitCategory, int]
         :param tag_list: A collection of tags to match CAS Parts to. Default is any tag.
@@ -681,7 +682,7 @@ class CommonOutfitUtils(HasClassLog):
         return sim_info.generate_outfit(outfit_category, outfit_index=outfit_index, tag_list=tag_list, filter_flag=outfit_filter_flag, body_type_flags=body_type_flags, **kwargs)
 
     @classmethod
-    def regenerate_outfit(cls, sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]) -> None:
+    def regenerate_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Tuple[OutfitCategory, int]) -> None:
         """regenerate_outfit(sim_info, outfit_category_and_index)
 
         Delete and regenerate an outfit of a Sim.
@@ -689,7 +690,7 @@ class CommonOutfitUtils(HasClassLog):
         .. note:: If the Sim does not have the specified outfit to regenerate, it will be generated instead.
 
         :param sim_info: An instance of a Sim.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param outfit_category_and_index: The OutfitCategory and index to regenerate for the Sim.
         :type outfit_category_and_index: Tuple[OutfitCategory, int]
         """
@@ -710,13 +711,13 @@ class CommonOutfitUtils(HasClassLog):
         CommonOutfitUtils.set_current_outfit(sim_info, current_outfit)
 
     @classmethod
-    def regenerate_all_outfits(cls, sim_info: SimInfo) -> None:
+    def regenerate_all_outfits(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> None:
         """regenerate_all_outfits(sim_info)
 
         Delete and regenerate all outfits for a Sim.
 
         :param sim_info: An instance of a Sim.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         """
         current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
         outfit_flags = OutfitFilterFlag.USE_EXISTING_IF_APPROPRIATE & OutfitFilterFlag.USE_VALID_FOR_LIVE_RANDOM
@@ -740,13 +741,13 @@ class CommonOutfitUtils(HasClassLog):
         CommonOutfitUtils.set_current_outfit(sim_info, current_outfit)
 
     @classmethod
-    def resend_outfits(cls, sim_info: SimInfo) -> bool:
+    def resend_outfits(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """resend_outfits(sim_info)
 
         Resend outfit data to a Sim to refresh their outfits.
 
         :param sim_info: The Sim to resend the outfit for.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if outfits were resent successfully. False, if not.
         :rtype: bool
         """
@@ -770,13 +771,13 @@ class CommonOutfitUtils(HasClassLog):
         return get_maximum_outfits_for_category(outfit_category)
 
     @classmethod
-    def get_previous_outfit(cls, sim_info: SimInfo, default_outfit_category_and_index: Tuple[OutfitCategory, int]=(OutfitCategory.EVERYDAY, 0)) -> Tuple[OutfitCategory, int]:
+    def get_previous_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], default_outfit_category_and_index: Tuple[OutfitCategory, int]=(OutfitCategory.EVERYDAY, 0)) -> Tuple[OutfitCategory, int]:
         """get_previous_outfit(sim_info, default_outfit_category_and_index=(OutfitCategory.EVERYDAY, 0))
 
         Retrieve the previous outfit a Sim was wearing before their current outfit.
 
         :param sim_info: The Sim to get the previous outfit of.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param default_outfit_category_and_index: A default OutfitCategory and index if no previous outfit was found.
         :type default_outfit_category_and_index: Tuple[OutfitCategory, int], optional
         :return: The OutfitCategory and Index of the outfit a Sim was wearing before their current outfit or the default if none was found.
@@ -785,24 +786,24 @@ class CommonOutfitUtils(HasClassLog):
         return sim_info.get_previous_outfit() or default_outfit_category_and_index
 
     @classmethod
-    def remove_previous_outfit(cls, sim_info: SimInfo):
+    def remove_previous_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]):
         """remove_previous_outfit(sim_info)
 
         Remove the outfit a Sim was wearing before their current outfit, from the cache.
 
         :param sim_info: The Sim to remove the outfit from.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         """
         sim_info.set_previous_outfit(None, force=True)
 
     @classmethod
-    def has_outfit(cls, sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]) -> bool:
+    def has_outfit(cls, sim_info: Union[Union[SimInfo, SimInfoBaseWrapper], SimInfoBaseWrapper], outfit_category_and_index: Tuple[OutfitCategory, int]) -> bool:
         """has_outfit(sim_info, outfit_category_and_index)
 
         Determine if a Sim has an existing outfit in the specified OutfitCategory and Index.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[Union[SimInfo, SimInfoBaseWrapper], SimInfoBaseWrapper]
         :param outfit_category_and_index: The OutfitCategory and index to locate.
         :type outfit_category_and_index: Tuple[OutfitCategory, int], optional
         :return: True, if the Sim has the specified OutfitCategory and Index. False, if not.
@@ -811,13 +812,13 @@ class CommonOutfitUtils(HasClassLog):
         return sim_info.has_outfit(outfit_category_and_index)
 
     @classmethod
-    def update_outfits(cls, sim_info: SimInfo) -> bool:
+    def update_outfits(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> bool:
         """update_outfits(sim_info)
 
         Update all outfits of a Sim.
 
         :param sim_info: The Sim to update outfits for.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :return: True, if the outfits were updated successfully. False, if not.
         :rtype: bool
         """
@@ -827,13 +828,13 @@ class CommonOutfitUtils(HasClassLog):
         return True
 
     @classmethod
-    def has_tag_on_outfit(cls, sim_info: SimInfo, tag: Union[int, CommonGameTag], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+    def has_tag_on_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], tag: Union[int, CommonGameTag], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """has_tag_on_outfit(sim_info, tag, outfit_category_and_index=None)
 
         Determine if the Outfit of a Sim has the specified tag.
 
         :param sim_info: An instance of a Sim.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param tag: A tag to locate.
         :type tag: Union[int, CommonGameTag]
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
@@ -844,13 +845,13 @@ class CommonOutfitUtils(HasClassLog):
         return CommonOutfitUtils.has_any_tags_on_outfit(sim_info, (tag, ), outfit_category_and_index=outfit_category_and_index)
 
     @classmethod
-    def has_any_tags_on_outfit(cls, sim_info: SimInfo, tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+    def has_any_tags_on_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """has_any_tags_on_outfit(sim_info, tags, outfit_category_and_index=None)
 
         Determine if the Outfit of a Sim has any of the specified tags.
 
         :param sim_info: An instance of a Sim.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param tags: A collection of tags to locate.
         :type tags: Iterator[Union[int, CommonGameTag]]
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
@@ -869,13 +870,13 @@ class CommonOutfitUtils(HasClassLog):
         return False
 
     @classmethod
-    def has_all_tags_on_outfit(cls, sim_info: SimInfo, tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+    def has_all_tags_on_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
         """has_all_tags_on_outfit(sim_info, tags, outfit_category_and_index=None)
 
         Determine if the Outfit of a Sim has all of the specified tags.
 
         :param sim_info: An instance of a Sim.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param tags: A collection of tags to locate.
         :type tags: Iterator[Union[int, CommonGameTag]]
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
@@ -894,13 +895,13 @@ class CommonOutfitUtils(HasClassLog):
         return True
 
     @classmethod
-    def get_all_outfit_tags(cls, sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Tuple[CommonGameTag]:
+    def get_all_outfit_tags(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Tuple[CommonGameTag]:
         """get_all_outfit_tags(sim_info, outfit_category_and_index=None)
 
         Retrieve a collection of game tags that apply to the outfit of a Sim.
 
         :param sim_info: An instance of a Sim.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
         :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
         :return: A collection of Game Tags that apply to the outfit of a Sim.
@@ -916,13 +917,13 @@ class CommonOutfitUtils(HasClassLog):
         return tuple(combined_game_tags)
 
     @classmethod
-    def get_outfit_tags_by_cas_part_id(cls, sim_info: SimInfo, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[int, Set[CommonGameTag]]:
+    def get_outfit_tags_by_cas_part_id(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[int, Set[CommonGameTag]]:
         """get_outfit_tags_by_cas_part_id(sim_info, outfit_category_and_index=None)
 
         Retrieve the game tags of the outfit of a Sim grouped by CAS Part Id.
 
         :param sim_info: An instance of a Sim.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
         :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
         :return: A library of Game Tags grouped by CAS Part Id.

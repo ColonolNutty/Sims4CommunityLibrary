@@ -6,7 +6,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import inspect
-import os
 from singletons import DEFAULT
 from typing import Any, Union, Tuple, List, Set, Iterator
 
@@ -25,26 +24,14 @@ from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 
-ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-# If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-if ON_RTD:
-    # noinspection PyMissingOrEmptyDocstring
-    class MockClass(object):
-        # noinspection PyMissingTypeHints,PyUnusedLocal
-        def __init__(self, *args, **kwargs):
-            super(MockClass, self).__init__()
-
-        # noinspection PyMissingTypeHints
-        def __call__(self, *args, **kwargs):
-            return None
-
-    # noinspection PyMissingOrEmptyDocstring
-    class SocialMixerInteraction(MockClass):
-        pass
-
-if not ON_RTD:
+# noinspection PyBroadException
+try:
     from interactions.social.social_mixer_interaction import SocialMixerInteraction
+except:
+    # noinspection PyMissingOrEmptyDocstring
+    class SocialMixerInteraction:
+        pass
 
 
 class CommonSocialMixerInteraction(SocialMixerInteraction, HasClassLog):
@@ -224,22 +211,18 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, HasClassLog):
         except Exception as ex:
             log.error('Error occurred while running CommonSocialMixerInteraction \'{}\' get_custom_replacement_participants.'.format(cls.__name__), exception=ex)
 
-        try:
-            verbose_log.format_with_message(
-                'Running super().get_participants.',
-                class_name=cls.__name__,
-                participant_type=participant_type,
-                sim=sim,
-                target=target,
-                carry_target=carry_target,
-                kwargles=kwargs
-            )
-            result: Set[Any] = super(CommonSocialMixerInteraction, inst_or_cls).get_participants(participant_type, sim=sim, target=target, carry_target=carry_target, **kwargs)
-            if result:
-                verbose_log.format_with_message('Super Get Participants Result (CommonSocialMixerInteraction)', result=result)
-        except Exception as ex:
-            log.error('Error occurred while running CommonSocialMixerInteraction \'{}\' super().get_participants.'.format(cls.__name__), exception=ex)
-            return tuple()
+        verbose_log.format_with_message(
+            'Running super().get_participants.',
+            class_name=cls.__name__,
+            participant_type=participant_type,
+            sim=sim,
+            target=target,
+            carry_target=carry_target,
+            kwargles=kwargs
+        )
+        result: Set[Any] = super(CommonSocialMixerInteraction, inst_or_cls).get_participants(participant_type, sim=sim, target=target, carry_target=carry_target, **kwargs)
+        if result:
+            verbose_log.format_with_message('Super Get Participants Result (CommonSocialMixerInteraction)', result=result)
 
         result = set(result)
         try:
