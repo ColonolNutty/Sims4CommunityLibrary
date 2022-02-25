@@ -88,9 +88,9 @@ Sim Utilities
 `Outfits`
 ------------------------------------------------------
 
-*******************
+*************************
 `Appearance Modifiers`
-*******************
+*************************
 
 .. autoclass:: sims4communitylib.utils.sims.common_sim_appearance_modifier_utils.CommonSimAppearanceModifierUtils
    :members:

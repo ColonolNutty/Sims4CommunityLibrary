@@ -88,7 +88,7 @@ class CommonJSONIOUtils:
             encoding='utf-8',\
             decoder_class=None,\
             object_hook=None,\
-            on_file_read_failure=lambda *_, **__: True
+            on_file_read_failure=lambda \*_, \*\*__: True\
         )
 
         Deserialize objects from a folder containing JSON files.

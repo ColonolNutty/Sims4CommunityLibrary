@@ -42,8 +42,8 @@ class CommonChooseResponseDialog(CommonDialog):
         responses,\
         title_tokens=(),\
         description_tokens=(),\
-        next_button_text=CommonStringId.NEXT,
-        previous_button_text=CommonStringId.PREVIOUS,
+        next_button_text=CommonStringId.NEXT,\
+        previous_button_text=CommonStringId.PREVIOUS,\
     )
 
     Create a dialog that prompts the player to choose a response.
