@@ -22,14 +22,7 @@ from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from singletons import DEFAULT
-
-# noinspection PyBroadException
-try:
-    from interactions.base.mixer_interaction import MixerInteraction
-except:
-    # noinspection PyMissingOrEmptyDocstring
-    class MixerInteraction:
-        pass
+from interactions.base.mixer_interaction import MixerInteraction
 
 
 class CommonMixerInteraction(MixerInteraction, HasClassLog):

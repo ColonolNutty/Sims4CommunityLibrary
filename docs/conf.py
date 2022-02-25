@@ -83,7 +83,10 @@ autodoc_mock_imports = [
     'tunable_utils', 'visualization', 'zone_modifier', 'call_to_action', 'celebrity_fans', 'lot_decoration',
     'drama_scheduler', 'global_policies', 'server_commands', 'story_progression', 'conditional_layers',
     'household_calendar', 'game_effect_modifier', 'household_milestones', 'open_street_director',
-    'protocolbuffers', '_resourceman', 'enum', 'singletons', 'zone', 'clock', 'date_and_time', 'time_service'
+    'protocolbuffers', '_resourceman', 'enum', 'singletons', 'zone', 'clock', 'date_and_time', 'time_service',
+    'scheduling', 'interactions', 'sims', 'paths', 'alarms', 'interactions.base.super_interaction',
+    'interactions.base.immediate_interaction', 'interactions.base.interaction', 'interactions.base.mixer_interaction',
+    'interactions.social.social_mixer_interaction', 'interactions.social.social_super_interaction'
 ]
 
 add_module_names = False

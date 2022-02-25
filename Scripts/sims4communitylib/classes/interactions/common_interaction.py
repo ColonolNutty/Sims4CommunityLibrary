@@ -23,15 +23,7 @@ from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from singletons import DEFAULT
-
-
-# noinspection PyBroadException
-try:
-    from interactions.base.interaction import Interaction
-except:
-    # noinspection PyMissingOrEmptyDocstring
-    class Interaction:
-        pass
+from interactions.base.interaction import Interaction
 
 
 class CommonInteraction(Interaction, HasClassLog):

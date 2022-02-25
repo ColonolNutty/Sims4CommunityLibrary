@@ -25,14 +25,7 @@ from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from singletons import DEFAULT
-
-# noinspection PyBroadException
-try:
-    from interactions.base.immediate_interaction import ImmediateSuperInteraction
-except:
-    # noinspection PyMissingOrEmptyDocstring
-    class ImmediateSuperInteraction:
-        pass
+from interactions.base.immediate_interaction import ImmediateSuperInteraction
 
 
 class CommonImmediateSuperInteraction(ImmediateSuperInteraction, HasClassLog):

@@ -19,65 +19,12 @@ from sims4communitylib.classes.testing.common_test_result import CommonTestResul
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
-
-
-# noinspection PyBroadException
-try:
-    from interactions.social.social_super_interaction import SocialSuperInteraction
-    from event_testing.results import TestResult
-    from interactions.context import InteractionContext
-    from native.animation import NativeAsm
-    from scheduling import Timeline
-    from sims.sim import Sim
-    from sims4.utils import flexmethod
-except:
-    # noinspection PyMissingOrEmptyDocstring
-    class Sim:
-        pass
-
-    # noinspection PyMissingOrEmptyDocstring
-    class SocialSuperInteraction:
-        # noinspection PyPropertyDefinition
-        @property
-        def sim(self) -> Sim:
-            pass
-
-        # noinspection PyPropertyDefinition
-        @property
-        def target(self) -> Sim:
-            pass
-
-        # noinspection PyMissingTypeHints
-        def cancel(self, *_, **__):
-            pass
-
-
-    # noinspection PyMissingOrEmptyDocstring
-    class TestResult:
-        pass
-
-    # noinspection PyMissingOrEmptyDocstring
-    class Timeline:
-        pass
-
-
-    # noinspection PyMissingOrEmptyDocstring
-    class NativeAsm:
-        pass
-
-
-    # noinspection PyMissingOrEmptyDocstring
-    class InteractionContext:
-        pass
-
-
-    # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring,SpellCheckingInspection
-    def flexmethod(*_, **__):
-        pass
-
-    # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring,SpellCheckingInspection
-    def classproperty(*_, **__):
-        pass
+from interactions.social.social_super_interaction import SocialSuperInteraction
+from interactions.context import InteractionContext
+from native.animation import NativeAsm
+from scheduling import Timeline
+from sims.sim import Sim
+from sims4.utils import flexmethod
 
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.

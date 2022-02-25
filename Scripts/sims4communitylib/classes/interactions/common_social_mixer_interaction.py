@@ -23,15 +23,7 @@ from sims4communitylib.classes.testing.common_test_result import CommonTestResul
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
-
-
-# noinspection PyBroadException
-try:
-    from interactions.social.social_mixer_interaction import SocialMixerInteraction
-except:
-    # noinspection PyMissingOrEmptyDocstring
-    class SocialMixerInteraction:
-        pass
+from interactions.social.social_mixer_interaction import SocialMixerInteraction
 
 
 class CommonSocialMixerInteraction(SocialMixerInteraction, HasClassLog):

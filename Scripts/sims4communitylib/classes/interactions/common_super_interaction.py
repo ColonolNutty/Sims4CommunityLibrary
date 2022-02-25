@@ -21,31 +21,10 @@ from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from singletons import DEFAULT
-
-# noinspection PyBroadException
-try:
-    from interactions.base.super_interaction import SuperInteraction
-    from scheduling import Timeline
-    from sims4.utils import flexmethod
-    from sims.sim import Sim
-except:
-    # noinspection PyMissingOrEmptyDocstring
-    class SuperInteraction:
-        pass
-
-
-    # noinspection PyMissingOrEmptyDocstring
-    class Sim:
-        pass
-
-    # noinspection PyMissingOrEmptyDocstring
-    class Timeline:
-        pass
-
-
-    # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring,SpellCheckingInspection
-    def flexmethod(*_, **__):
-        pass
+from interactions.base.super_interaction import SuperInteraction
+from scheduling import Timeline
+from sims4.utils import flexmethod
+from sims.sim import Sim
 
 
 class CommonBaseSuperInteraction(SuperInteraction, HasClassLog):

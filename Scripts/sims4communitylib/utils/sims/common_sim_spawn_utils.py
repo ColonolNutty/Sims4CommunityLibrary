@@ -753,9 +753,9 @@ class CommonSimSpawnUtils:
                                  f'The spawned Sims will have this species. Valid species include: {CommonSpecies.get_comma_separated_names_string()}', is_optional=False),
     CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=1),
     CommonConsoleCommandArgument('gender', 'CommonGender',
-                                 f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name),
+                                 f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name if hasattr(CommonGender.MALE, 'name') else CommonGender.MALE),
     CommonConsoleCommandArgument('age', 'CommonAge',
-                                 f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name)
+                                 f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name if hasattr(CommonAge.ADULT, 'name') else CommonAge.ADULT)
 ))
 def _s4cl_spawn_sims(output: CommonConsoleCommandOutput, species: CommonSpecies, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
     if species is None:
@@ -786,9 +786,9 @@ def _s4cl_spawn_sims(output: CommonConsoleCommandOutput, species: CommonSpecies,
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.spawn_human_sims', 'Spawn Human Sims of a certain gender and age.', command_arguments=(
     CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=1),
     CommonConsoleCommandArgument('gender', 'CommonGender',
-                                 f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name),
+                                 f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name if hasattr(CommonGender.MALE, 'name') else CommonGender.MALE),
     CommonConsoleCommandArgument('age', 'CommonAge',
-                                 f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name)
+                                 f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name if hasattr(CommonAge.ADULT, 'name') else CommonAge.ADULT)
 ))
 def _s4cl_spawn_human_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
     return _s4cl_spawn_sims(output, CommonSpecies.HUMAN, count=count, gender=gender, age=age)
@@ -797,9 +797,9 @@ def _s4cl_spawn_human_sims(output: CommonConsoleCommandOutput, count: int=1, gen
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.spawn_large_dog_sims', 'Spawn Large Dog Sims of a certain gender and age.', command_arguments=(
     CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=1),
     CommonConsoleCommandArgument('gender', 'CommonGender',
-                                 f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name),
+                                 f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name if hasattr(CommonGender.MALE, 'name') else CommonGender.MALE),
     CommonConsoleCommandArgument('age', 'CommonAge',
-                                 f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name)
+                                 f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name if hasattr(CommonAge.ADULT, 'name') else CommonAge.ADULT)
 ))
 def _s4cl_spawn_large_dog_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
     return _s4cl_spawn_sims(output, CommonSpecies.LARGE_DOG, count=count, gender=gender, age=age)
@@ -808,9 +808,9 @@ def _s4cl_spawn_large_dog_sims(output: CommonConsoleCommandOutput, count: int=1,
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.spawn_small_dog_sims', 'Spawn Small Dog Sims of a certain gender and age.', command_arguments=(
     CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=1),
     CommonConsoleCommandArgument('gender', 'CommonGender',
-                                 f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name),
+                                 f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name if hasattr(CommonGender.MALE, 'name') else CommonGender.MALE),
     CommonConsoleCommandArgument('age', 'CommonAge',
-                                 f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name)
+                                 f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name if hasattr(CommonAge.ADULT, 'name') else CommonAge.ADULT)
 ))
 def _s4cl_spawn_small_dog_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
     return _s4cl_spawn_sims(output, CommonSpecies.SMALL_DOG, count=count, gender=gender, age=age)
@@ -819,9 +819,9 @@ def _s4cl_spawn_small_dog_sims(output: CommonConsoleCommandOutput, count: int=1,
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.spawn_cat_sims', 'Spawn Cat Sims of a certain gender and age.', command_arguments=(
     CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=1),
     CommonConsoleCommandArgument('gender', 'CommonGender',
-                                 f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name),
+                                 f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name if hasattr(CommonGender.MALE, 'name') else CommonGender.MALE),
     CommonConsoleCommandArgument('age', 'CommonAge',
-                                 f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name)
+                                 f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name if hasattr(CommonAge.ADULT, 'name') else CommonAge.ADULT)
 ))
 def _s4cl_spawn_cat_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
     return _s4cl_spawn_sims(output, CommonSpecies.CAT, count=count, gender=gender, age=age)
@@ -830,9 +830,9 @@ def _s4cl_spawn_cat_sims(output: CommonConsoleCommandOutput, count: int=1, gende
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.spawn_fox_sims', 'Spawn Fox Sims of a certain gender and age.', command_arguments=(
     CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=1),
     CommonConsoleCommandArgument('gender', 'CommonGender',
-                                 f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name),
+                                 f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name if hasattr(CommonGender.MALE, 'name') else CommonGender.MALE),
     CommonConsoleCommandArgument('age', 'CommonAge',
-                                 f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name)
+                                 f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name if hasattr(CommonAge.ADULT, 'name') else CommonAge.ADULT)
 ))
 def _s4cl_spawn_fox_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
     return _s4cl_spawn_sims(output, CommonSpecies.FOX, count=count, gender=gender, age=age)

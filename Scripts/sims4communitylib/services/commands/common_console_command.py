@@ -156,6 +156,7 @@ class CommonConsoleCommand(metaclass=_CommonConsoleCommandMetaclass):
 
     .. highlight:: python
     .. code-block:: python
+
         @CommonConsoleCommand(ModInfo.get_identity(), 's4clib_testing.example_command', 'Print an example message', command_aliases=('s4clib_testing.examplecommand',), command_arguments=(CommonConsoleCommandArgument('thing_to_print', 'Text or Num', 'If specified, this value will be printed to the console. Default is "24".'),))
         def _common_testing_do_example_command(output: Output, thing_to_print: str='24'):
             output(f'Here is what to print: {thing_to_print}')
@@ -369,9 +370,16 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
     # noinspection PyMissingTypeHints
     @classmethod
     def _command(cls, log: 'CommonLog', *aliases: str, command_type: CommandType=CommandType.DebugOnly, command_restrictions: CommandRestrictionFlags=CommandRestrictionFlags.UNRESTRICTED, pack: Pack=None, console_type: CommandType=None):
-        import sims4.common
-        import paths
-        import sims4.telemetry
+        # noinspection PyBroadException
+        try:
+            import sims4.common
+            import paths
+            import sims4.telemetry
+        except:
+            def _named_command(wrapped_func, original_func, help_command_name) -> Any:
+                return
+            return _named_command
+
         from sims4.commands import CommandType, \
             is_command_available, cheats_writer, TELEMETRY_FIELD_NAME, TELEMETRY_FIELD_ARGS, TELEMETRY_HOOK_COMMAND, CustomParam, \
             prettify_usage, register

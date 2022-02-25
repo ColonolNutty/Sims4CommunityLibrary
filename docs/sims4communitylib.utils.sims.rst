@@ -92,7 +92,7 @@ Sim Utilities
 `Appearance Modifiers`
 *******************
 
-.. autoclass:: sims4communitylib.utils.cas.common_sim_appearance_modifier_utils.CommonSimAppearanceModifierUtils
+.. autoclass:: sims4communitylib.utils.sims.common_sim_appearance_modifier_utils.CommonSimAppearanceModifierUtils
    :members:
    :undoc-members:
    :show-inheritance:

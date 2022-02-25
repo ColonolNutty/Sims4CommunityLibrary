@@ -6,12 +6,14 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import inspect
+import os
 from functools import wraps
 from typing import Any, Callable, TYPE_CHECKING
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 
 if TYPE_CHECKING:
     from sims4communitylib.utils.common_log_registry import CommonLog
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
 
 class CommonInjectionUtils:
@@ -84,6 +86,10 @@ class CommonInjectionUtils:
         :return: A wrapped function.
         :rtype: Callable
         """
+        if ON_RTD:
+            def _injected(wrap_function) -> Any:
+                return wrap_function
+            return _injected
 
         if handle_exceptions:
             def _function_wrapper(original_function, new_function: Callable[..., Any]) -> Any:

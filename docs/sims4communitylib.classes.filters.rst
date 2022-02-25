@@ -9,7 +9,7 @@ Filter Classes
 `Base Object Filter`
 *******************
 
-.. autoclass:: sims4communitylib.classes.filters.common_match_object_filter.CommonMatchObjectFilter
+.. autoclass:: sims4communitylib.classes.filters.common_match_object_filter.CommonMatchObjectFilterBase
    :members:
    :private-members:
    :show-inheritance:

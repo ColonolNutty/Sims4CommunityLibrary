@@ -94,7 +94,7 @@ Misc Utilities
 `Camera`
 *********************
 
-.. autoclass:: sims4communitylib.utils.sims.common_camera_utils.CommonCameraUtils
+.. autoclass:: sims4communitylib.utils.misc.common_camera_utils.CommonCameraUtils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -175,7 +175,7 @@ Misc Utilities
 `Rabbit Hole`
 *******************
 
-.. autoclass:: sims4communitylib.utils.common_rabbit_hole_utils.CommonRabbitHoleUtils
+.. autoclass:: sims4communitylib.utils.sims.common_rabbit_hole_utils.CommonRabbitHoleUtils
    :members:
    :undoc-members:
    :show-inheritance:

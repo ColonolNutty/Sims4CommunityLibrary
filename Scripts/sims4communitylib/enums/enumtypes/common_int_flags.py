@@ -5,7 +5,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from sims4.utils import classproperty
 from collections import OrderedDict
 from typing import Iterator, Union, Tuple, List
 
@@ -15,32 +14,69 @@ try:
     from enum import IntFlags
 except:
     # noinspection PyMissingOrEmptyDocstring
+    class _ClassPropertyDescriptor(object):
+
+        # noinspection PyMissingTypeHints,SpellCheckingInspection
+        def __init__(self, fget, fset=None):
+            self.fget = fget
+            self.fset = fset
+
+        # noinspection PyMissingTypeHints,SpellCheckingInspection
+        def __get__(self, obj, klass=None):
+            if klass is None:
+                # noinspection SpellCheckingInspection
+                klass = type(obj)
+            return self.fget.__get__(obj, klass)()
+
+        # noinspection PyMissingTypeHints
+        def __set__(self, obj, value):
+            if not self.fset:
+                raise AttributeError("can't set attribute")
+            type_ = type(obj)
+            return self.fset.__get__(obj, type_)(value)
+
+        # noinspection PyMissingTypeHints
+        def setter(self, func):
+            if not isinstance(func, (classmethod, staticmethod)):
+                func = classmethod(func)
+            # noinspection SpellCheckingInspection
+            self.fset = func
+            return self
+
+
+    # noinspection PyMissingTypeHints,SpellCheckingInspection
+    def _classproperty(func):
+        if not isinstance(func, (classmethod, staticmethod)):
+            func = classmethod(func)
+        return _ClassPropertyDescriptor(func)
+
+    # noinspection PyMissingOrEmptyDocstring
     class IntFlags:
         # From Int
         # noinspection PyPropertyDefinition
         @property
         def name(self) -> str:
-            pass
+            return ''
 
         # noinspection PyPropertyDefinition
         @property
         def value(self) -> int:
-            pass
+            return 0
 
         # noinspection PyPropertyDefinition,PyMethodParameters
-        @classproperty
+        @_classproperty
         def values(cls) -> Iterator[int]:
-            pass
+            return tuple()
 
         # noinspection PyPropertyDefinition,PyMethodParameters
-        @classproperty
+        @_classproperty
         def name_to_value(cls) -> OrderedDict:
-            pass
+            return OrderedDict()
 
         # noinspection PyPropertyDefinition,PyMethodParameters
-        @classproperty
+        @_classproperty
         def value_to_name(cls) -> OrderedDict:
-            pass
+            return OrderedDict()
 
         def __int__(self) -> int:
             pass
