@@ -7,6 +7,8 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Any, List, Union, Tuple, Callable, Dict
 
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.utils.common_collection_utils import CommonCollectionUtils
 
 
@@ -134,37 +136,45 @@ class CommonAssertionUtils:
         return True
 
     @staticmethod
-    def is_true(value: bool, message: str='') -> bool:
+    def is_true(value: Union[bool, CommonTestResult, CommonExecutionResult], message: str='') -> bool:
         """is_true(value, message='')
 
         Assert a value is True.
 
         :param value: The value being asserted.
-        :type value: bool
+        :type value: Union[bool, CommonTestResult, CommonExecutionResult]
         :param message: A custom message to include when the assertion fails. Default is Empty String.
         :type message: str, optional
         :return: True if the value is True.
         :rtype: bool
         :exception AssertionError: when the assertion fails.
         """
+        if isinstance(value, CommonTestResult) or isinstance(value, CommonExecutionResult):
+            if value is not True:
+                raise AssertionError(f'{message} {value.reason}: expected True, but was {value.result}')
+            return True
         if value is not True:
             raise AssertionError('{}: expected True, but was {}'.format(message, value))
         return True
 
     @staticmethod
-    def is_false(value: bool, message: str='') -> bool:
+    def is_false(value: Union[bool, CommonTestResult, CommonExecutionResult], message: str='') -> bool:
         """is_false(value, message='')
 
         Assert value is False.
 
         :param value: The value being asserted.
-        :type value: bool
+        :type value: Union[bool, CommonTestResult, CommonExecutionResult]
         :param message: A custom message to include when the assertion fails.
         :type message: str, optional
         :return: True if the value is False.
         :rtype: bool
         :exception AssertionError: when the assertion fails.
         """
+        if isinstance(value, CommonTestResult) or isinstance(value, CommonExecutionResult):
+            if value is not False:
+                raise AssertionError(f'{message} {value.reason}: expected False, but was {value.result}')
+            return True
         if value is not False:
             raise AssertionError('{}: expected False, but was {}'.format(message, value))
         return True
