@@ -411,7 +411,7 @@ class CommonLocationUtils:
         :return: True, if the current lot has the specified trait. False, if not.
         :rtype: bool
         """
-        return CommonLocationUtils.current_lot_has_all_traits((lot_trait_id,))
+        return CommonLocationUtils.lot_has_trait(CommonLocationUtils.get_current_zone_id(), lot_trait_id)
 
     @staticmethod
     def current_lot_has_any_traits(lot_trait_ids: Tuple[int]) -> bool:
@@ -424,11 +424,7 @@ class CommonLocationUtils:
         :return: True, if the current lot has any of the specified traits. False, if not.
         :rtype: bool
         """
-        current_lot_trait_ids = [getattr(current_lot_trait, 'guid64', None) for current_lot_trait in CommonLocationUtils.get_lot_traits_of_current_lot()]
-        for lot_trait_id in lot_trait_ids:
-            if lot_trait_id in current_lot_trait_ids:
-                return True
-        return False
+        return CommonLocationUtils.lot_has_any_traits(CommonLocationUtils.get_current_zone_id(), lot_trait_ids)
 
     @staticmethod
     def current_lot_has_all_traits(lot_trait_ids: Tuple[int]) -> bool:
@@ -441,11 +437,60 @@ class CommonLocationUtils:
         :return: True, if the current lot has all of the specified traits. False, if not.
         :rtype: bool
         """
-        current_lot_trait_ids = [getattr(current_lot_trait, 'guid64', None) for current_lot_trait in CommonLocationUtils.get_lot_traits_of_current_lot()]
-        if len(current_lot_trait_ids) == 0:
+        return CommonLocationUtils.lot_has_all_traits(CommonLocationUtils.get_current_zone_id(), lot_trait_ids)
+
+    @staticmethod
+    def lot_has_trait(zone_id: int, lot_trait_id: int) -> bool:
+        """lot_has_trait(zone_id, lot_trait_id)
+
+        Determine if a Lot has the specified Lot Trait.
+
+        :param zone_id: The identifier of the zone to check.
+        :type zone_id: int
+        :param lot_trait_id: The trait to look for.
+        :type lot_trait_id: int
+        :return: True, if the specified lot has the specified trait. False, if not.
+        :rtype: bool
+        """
+        return CommonLocationUtils.lot_has_all_traits(zone_id, (lot_trait_id,))
+
+    @staticmethod
+    def lot_has_any_traits(zone_id: int, lot_trait_ids: Tuple[int]) -> bool:
+        """lot_has_any_traits(zone_id, lot_trait_ids)
+
+        Determine if a Lot has any of the specified Lot Traits.
+
+        :param zone_id: The identifier of the zone to check.
+        :type zone_id: int
+        :param lot_trait_ids: A collection of traits to look for.
+        :type lot_trait_ids: Tuple[int]
+        :return: True, if the specified lot has any of the specified traits. False, if not.
+        :rtype: bool
+        """
+        target_lot_trait_ids = [getattr(lot_trait, 'guid64', None) for lot_trait in CommonLocationUtils.get_lot_traits(zone_id)]
+        for lot_trait_id in lot_trait_ids:
+            if lot_trait_id in target_lot_trait_ids:
+                return True
+        return False
+
+    @staticmethod
+    def lot_has_all_traits(zone_id: int, lot_trait_ids: Tuple[int]) -> bool:
+        """lot_has_all_traits(zone_id, lot_trait_ids)
+
+        Determine if a Lot has all of the specified Lot Traits.
+
+        :param zone_id: The identifier of the zone to check.
+        :type zone_id: int
+        :param lot_trait_ids: A collection of traits to look for.
+        :type lot_trait_ids: Tuple[int]
+        :return: True, if the specified lot has all of the specified traits. False, if not.
+        :rtype: bool
+        """
+        target_lot_trait_ids = [getattr(lot_trait, 'guid64', None) for lot_trait in CommonLocationUtils.get_lot_traits(zone_id)]
+        if not target_lot_trait_ids:
             return False
         for lot_trait_id in lot_trait_ids:
-            if lot_trait_id in current_lot_trait_ids:
+            if lot_trait_id in target_lot_trait_ids:
                 continue
             return False
         return True
