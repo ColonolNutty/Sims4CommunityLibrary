@@ -21,7 +21,6 @@ from sims4communitylib.classes.testing.common_execution_result import CommonExec
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
-from sims4communitylib.utils.common_log_registry import CommonLog
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from singletons import DEFAULT
 from interactions.base.super_interaction import SuperInteraction
@@ -217,53 +216,18 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
     def get_participants(cls, inst, participant_type: ParticipantType, sim=DEFAULT, target=DEFAULT, carry_target=DEFAULT, **kwargs):
         inst_or_cls = inst or cls
         log = cls.get_log()
-        participants_log = cls._get_participants_log()
         try:
-            participants_log.format_with_message(
-                'Running get_custom_replacement_participants.',
-                class_name=cls.__name__,
-                participant_type=participant_type,
-                sim=sim,
-                target=target,
-                carry_target=carry_target,
-                kwargles=kwargs
-            )
             custom_participants = cls.get_custom_replacement_participants(participant_type, sim, target, carry_target, interaction=inst, **kwargs)
-            if custom_participants is None:
-                participants_log.debug('Get Custom Replacement Participants did not return values, using the Normal Result instead (CommonSuperInteraction)')
-            else:
-                participants_log.format_with_message('Get Custom Participants Result (CommonSuperInteraction)', custom_participants=custom_participants)
+            if custom_participants is not None:
                 return tuple(custom_participants)
         except Exception as ex:
             log.error('Error occurred while running CommonSuperInteraction \'{}\' get_custom_replacement_participants.'.format(cls.__name__), exception=ex)
 
-        participants_log.format_with_message(
-            'Running super().get_participants.',
-            class_name=cls.__name__,
-            participant_type=participant_type,
-            sim=sim,
-            target=target,
-            carry_target=carry_target,
-            kwargles=kwargs
-        )
         result: Set[Any] = super(CommonSuperInteraction, inst_or_cls).get_participants(participant_type, sim=sim, target=target, carry_target=carry_target, **kwargs)
-        if result:
-            participants_log.format_with_message('Super Get Participants Result (CommonSuperInteraction)', result=result)
 
         result = set(result)
         try:
-            participants_log.format_with_message(
-                'Running get_custom_participants.',
-                class_name=cls.__name__,
-                participant_type=participant_type,
-                sim=sim,
-                target=target,
-                carry_target=carry_target,
-                kwargles=kwargs
-            )
             custom_participants = cls.get_custom_participants(participant_type, sim, target, carry_target, interaction=inst, **kwargs)
-            if custom_participants:
-                participants_log.format_with_message('Get Custom Participants Result (CommonSuperInteraction)', custom_participants=custom_participants)
             result.update(custom_participants)
         except Exception as ex:
             log.error('Error occurred while running CommonSuperInteraction \'{}\' get_custom_participants.'.format(cls.__name__), exception=ex)
@@ -505,18 +469,6 @@ class CommonSuperInteraction(CommonBaseSuperInteraction):
         except Exception as ex:
             cls.get_log().error('Error occurred while running CommonSuperInteraction \'{}\' _on_constraint_gen.'.format(cls.__name__), exception=ex)
 
-    @classmethod
-    def _get_participants_log(cls) -> CommonLog:
-        from sims4communitylib.utils.common_log_registry import CommonLogRegistry
-        if not hasattr(cls, '__get_participants_log') or getattr(cls, '__get_participants_log', None) is None:
-            mod_name = CommonModIdentity._get_mod_name(cls.get_mod_identity())
-            setattr(cls, '__get_participants_log', CommonLogRegistry().register_log(mod_name, cls._get_participants_log_identifier()))
-        return getattr(cls, '__get_participants_log', None)
-
-    @classmethod
-    def _get_participants_log_identifier(cls) -> str:
-        return f'{cls.get_log_identifier()}_get_participants'
-
 
 class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
     """An inheritable class that provides a way to create custom Super Interactions that provide custom constraints.
@@ -632,53 +584,18 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
     def get_participants(cls, inst, participant_type: ParticipantType, sim=DEFAULT, target=DEFAULT, carry_target=DEFAULT, **kwargs):
         inst_or_cls = inst or cls
         log = cls.get_log()
-        participants_log = cls._get_participants_log()
         try:
-            participants_log.format_with_message(
-                'Running get_custom_replacement_participants.',
-                class_name=cls.__name__,
-                participant_type=participant_type,
-                sim=sim,
-                target=target,
-                carry_target=carry_target,
-                kwargles=kwargs
-            )
             custom_participants = cls.get_custom_replacement_participants(participant_type, sim, target, carry_target, interaction=inst, **kwargs)
-            if custom_participants is None:
-                participants_log.debug('Get Custom Replacement Participants did not return values, using the Normal Result instead (CommonConstrainedSuperInteraction)')
-            else:
-                participants_log.format_with_message('Get Custom Participants Result (CommonConstrainedSuperInteraction)', custom_participants=custom_participants)
+            if custom_participants is not None:
                 return tuple(custom_participants)
         except Exception as ex:
             log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' get_custom_replacement_participants.'.format(cls.__name__), exception=ex)
 
-        participants_log.format_with_message(
-            'Running super().get_participants.',
-            class_name=cls.__name__,
-            participant_type=participant_type,
-            sim=sim,
-            target=target,
-            carry_target=carry_target,
-            kwargles=kwargs
-        )
         result: Set[Any] = super(CommonConstrainedSuperInteraction, inst_or_cls).get_participants(participant_type, sim=sim, target=target, carry_target=carry_target, **kwargs)
-        if result:
-            participants_log.format_with_message('Super Get Participants Result (CommonConstrainedSuperInteraction)', result=result)
 
         result = set(result)
         try:
-            participants_log.format_with_message(
-                'Running get_custom_participants.',
-                class_name=cls.__name__,
-                participant_type=participant_type,
-                sim=sim,
-                target=target,
-                carry_target=carry_target,
-                kwargles=kwargs
-            )
             custom_participants = cls.get_custom_participants(participant_type, sim, target, carry_target, interaction=inst, **kwargs)
-            if custom_participants:
-                participants_log.format_with_message('Get Custom Participants Result (CommonConstrainedSuperInteraction)', custom_participants=custom_participants)
             result.update(custom_participants)
         except Exception as ex:
             log.error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' get_custom_participants.'.format(cls.__name__), exception=ex)
@@ -912,15 +829,3 @@ class CommonConstrainedSuperInteraction(SuperInteraction, HasClassLog):
                         yield result
         except Exception as ex:
             cls.get_log().error('Error occurred while running CommonConstrainedSuperInteraction \'{}\' _on_constraint_gen.'.format(cls.__name__), exception=ex)
-
-    @classmethod
-    def _get_participants_log(cls) -> CommonLog:
-        from sims4communitylib.utils.common_log_registry import CommonLogRegistry
-        if not hasattr(cls, '__get_participants_log') or getattr(cls, '__get_participants_log', None) is None:
-            mod_name = CommonModIdentity._get_mod_name(cls.get_mod_identity())
-            setattr(cls, '__get_participants_log', CommonLogRegistry().register_log(mod_name, cls._get_participants_log_identifier()))
-        return getattr(cls, '__get_participants_log', None)
-
-    @classmethod
-    def _get_participants_log_identifier(cls) -> str:
-        return f'{cls.get_log_identifier()}_get_participants'

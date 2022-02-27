@@ -10,7 +10,6 @@ import inspect
 from postures.posture_state import PostureState
 from sims4communitylib.classes.interactions._common_interaction_custom_mixin import _CommonInteractionCustomMixin
 from sims4communitylib.classes.interactions._common_interaction_hooks_mixin import _CommonInteractionHooksMixin
-from sims4communitylib.utils.common_log_registry import CommonLog
 from singletons import DEFAULT
 from typing import Any, Union, Tuple, Set
 
@@ -188,53 +187,18 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, HasClassLog, _CommonI
     def get_participants(cls, inst, participant_type: ParticipantType, sim=DEFAULT, target=DEFAULT, carry_target=DEFAULT, **kwargs) -> Union[Tuple[Any], Set[Any]]:
         inst_or_cls = inst or cls
         log = cls.get_log()
-        participants_log = cls._get_participants_log()
         try:
-            participants_log.format_with_message(
-                'Running get_custom_replacement_participants.',
-                class_name=cls.__name__,
-                participant_type=participant_type,
-                sim=sim,
-                target=target,
-                carry_target=carry_target,
-                kwargles=kwargs
-            )
             custom_participants = cls.get_custom_replacement_participants(participant_type, sim, target, carry_target, interaction=inst, **kwargs)
-            if custom_participants is None:
-                participants_log.debug('Get Custom Replacement Participants did not return values, using the Normal Result instead (CommonSocialMixerInteraction)')
-            else:
-                participants_log.format_with_message('Get Custom Participants Result (CommonSocialMixerInteraction)', custom_participants=custom_participants)
+            if custom_participants is not None:
                 return tuple(custom_participants)
         except Exception as ex:
             log.error('Error occurred while running CommonSocialMixerInteraction \'{}\' get_custom_replacement_participants.'.format(cls.__name__), exception=ex)
 
-        participants_log.format_with_message(
-            'Running super().get_participants.',
-            class_name=cls.__name__,
-            participant_type=participant_type,
-            sim=sim,
-            target=target,
-            carry_target=carry_target,
-            kwargles=kwargs
-        )
         result: Set[Any] = super(CommonSocialMixerInteraction, inst_or_cls).get_participants(participant_type, sim=sim, target=target, carry_target=carry_target, **kwargs)
-        if result:
-            participants_log.format_with_message('Super Get Participants Result (CommonSocialMixerInteraction)', result=result)
 
         result = set(result)
         try:
-            participants_log.format_with_message(
-                'Running get_custom_participants.',
-                class_name=cls.__name__,
-                participant_type=participant_type,
-                sim=sim,
-                target=target,
-                carry_target=carry_target,
-                kwargles=kwargs
-            )
             custom_participants = cls.get_custom_participants(participant_type, sim, target, carry_target, interaction=inst, **kwargs)
-            if custom_participants:
-                participants_log.format_with_message('Get Custom Participants Result (CommonSocialMixerInteraction)', custom_participants=custom_participants)
             result.update(custom_participants)
         except Exception as ex:
             log.error('Error occurred while running CommonSocialMixerInteraction \'{}\' get_custom_participants.'.format(cls.__name__), exception=ex)
@@ -467,15 +431,3 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, HasClassLog, _CommonI
                         yield result
         except Exception as ex:
             cls.get_log().error('Error occurred while running CommonSocialMixerInteraction \'{}\' _on_constraint_gen.'.format(cls.__name__), exception=ex)
-
-    @classmethod
-    def _get_participants_log(cls) -> CommonLog:
-        from sims4communitylib.utils.common_log_registry import CommonLogRegistry
-        if not hasattr(cls, '__get_participants_log') or getattr(cls, '__get_participants_log', None) is None:
-            mod_name = CommonModIdentity._get_mod_name(cls.get_mod_identity())
-            setattr(cls, '__get_participants_log', CommonLogRegistry().register_log(mod_name, cls._get_participants_log_identifier()))
-        return getattr(cls, '__get_participants_log', None)
-
-    @classmethod
-    def _get_participants_log_identifier(cls) -> str:
-        return f'{cls.get_log_identifier()}_get_participants'
