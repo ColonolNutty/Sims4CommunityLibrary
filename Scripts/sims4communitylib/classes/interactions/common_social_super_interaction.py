@@ -6,7 +6,12 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import inspect
-from typing import Any, Union, Tuple, Iterator, List, Set
+from typing import Any, Union, Set
+
+from interactions.base.interaction import Interaction
+from sims4communitylib.classes.interactions._common_interaction_custom_mixin import _CommonInteractionCustomMixin
+from sims4communitylib.classes.interactions._common_interaction_hooks_mixin import _CommonInteractionHooksMixin
+from sims4communitylib.utils.common_log_registry import CommonLog
 from singletons import DEFAULT
 
 from interactions import ParticipantType
@@ -28,7 +33,7 @@ from sims4.utils import flexmethod
 
 
 # If on Read The Docs, create fake versions of extended objects to fix the error of inheriting from multiple MockObjects.
-class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
+class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog, _CommonInteractionHooksMixin, _CommonInteractionCustomMixin):
     """CommonSocialSuperInteraction(*_, **__)
     
     An inheritable class that provides a way to create Custom Social Super Interactions.
@@ -189,9 +194,9 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
     def get_participants(cls, inst, participant_type: ParticipantType, sim=DEFAULT, target=DEFAULT, carry_target=DEFAULT, **kwargs):
         inst_or_cls = inst or cls
         log = cls.get_log()
-        verbose_log = cls.get_verbose_log()
+        participants_log = cls._get_participants_log()
         try:
-            verbose_log.format_with_message(
+            participants_log.format_with_message(
                 'Running get_custom_replacement_participants.',
                 class_name=cls.__name__,
                 participant_type=participant_type,
@@ -202,14 +207,14 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
             )
             custom_participants = cls.get_custom_replacement_participants(participant_type, sim, target, carry_target, interaction=inst, **kwargs)
             if custom_participants is None:
-                verbose_log.debug('Get Custom Replacement Participants did not return values, using the Normal Result instead (CommonSocialSuperInteraction)')
+                participants_log.debug('Get Custom Replacement Participants did not return values, using the Normal Result instead (CommonSocialSuperInteraction)')
             else:
-                verbose_log.format_with_message('Get Custom Participants Result (CommonSocialSuperInteraction)', custom_participants=custom_participants)
+                participants_log.format_with_message('Get Custom Participants Result (CommonSocialSuperInteraction)', custom_participants=custom_participants)
                 return tuple(custom_participants)
         except Exception as ex:
             log.error('Error occurred while running CommonSocialSuperInteraction \'{}\' get_custom_replacement_participants.'.format(cls.__name__), exception=ex)
 
-        verbose_log.format_with_message(
+        participants_log.format_with_message(
             'Running super().get_participants.',
             class_name=cls.__name__,
             participant_type=participant_type,
@@ -220,11 +225,11 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
         )
         result: Set[Any] = super(CommonSocialSuperInteraction, inst_or_cls).get_participants(participant_type, sim=sim, target=target, carry_target=carry_target, **kwargs)
         if result:
-            verbose_log.format_with_message('Super Get Participants Result (CommonSocialSuperInteraction)', result=result)
+            participants_log.format_with_message('Super Get Participants Result (CommonSocialSuperInteraction)', result=result)
 
         result = set(result)
         try:
-            verbose_log.format_with_message(
+            participants_log.format_with_message(
                 'Running get_custom_participants.',
                 class_name=cls.__name__,
                 participant_type=participant_type,
@@ -235,7 +240,7 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
             )
             custom_participants = cls.get_custom_participants(participant_type, sim, target, carry_target, interaction=inst, **kwargs)
             if custom_participants:
-                verbose_log.format_with_message('Get Custom Participants Result (CommonSocialSuperInteraction)', custom_participants=custom_participants)
+                participants_log.format_with_message('Get Custom Participants Result (CommonSocialSuperInteraction)', custom_participants=custom_participants)
             result.update(custom_participants)
         except Exception as ex:
             log.error('Error occurred while running CommonSocialSuperInteraction \'{}\' get_custom_participants.'.format(cls.__name__), exception=ex)
@@ -475,102 +480,8 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def on_replacement_constraints_gen(cls, inst_or_cls: 'CommonSocialSuperInteraction', sim: Sim, target: Any) -> Union[Iterator[Constraint], None]:
-        """on_replacement_constraints_gen(inst_or_cls, sim, target)
-
-        A hook that occurs before the normal constraints of an interaction, these constraints will replace the normal constraints of the interaction.
-
-        .. note:: If None is returned, the normal constraints will be used. (Plus any additional constraints from on_constraint_gen)
-
-        :param inst_or_cls: An instance or the class of the interaction.
-        :type inst_or_cls: CommonSocialSuperInteraction
-        :param sim: The source Sim of the interaction.
-        :type sim: Sim
-        :param target: The target Object of the interaction.
-        :type target: Any
-        :return: An iterable of constraints to replace the normal constraints of the interaction or None if replacement constraints are not wanted.
-        :rtype: Union[Iterator[Constraint], None]
-        """
-        return None
-
-    # noinspection PyUnusedLocal
-    @classmethod
-    def on_constraint_gen(cls, inst_or_cls: 'CommonSocialSuperInteraction', sim: Sim, target: Any) -> Union[Iterator[Constraint], Constraint, None]:
-        """on_constraint_gen(inst_or_cls, sim, target)
-
-        A hook that occurs after generating the constraints of an interaction, this constraint will be returned in addition to the normal constraints of the interaction.
-
-        .. note:: Return None from this function to exclude any custom constraints.
-
-        :param inst_or_cls: An instance or the class of the interaction.
-        :type inst_or_cls: CommonSocialSuperInteraction
-        :param sim: The source Sim of the interaction.
-        :type sim: Sim
-        :param target: The target Object of the interaction.
-        :type target: Any
-        :return: A constraint or an iterable of constraints to return in addition to the normal constraints or None if no additional constraints should be added.
-        :rtype: Union[Iterator[Constraint], Constraint, None]
-        """
-        return None
-
-    @classmethod
-    def create_test_result(
-        cls,
-        result: bool,
-        reason: str=None,
-        text_tokens: Union[Tuple[Any], List[Any], Set[Any]]=(),
-        tooltip: Union[int, str, CommonLocalizationUtils.LocalizedTooltip]=None,
-        tooltip_tokens: Iterator[Any]=(),
-        icon=None,
-        influence_by_active_mood: bool=False
-    ) -> CommonTestResult:
-        """create_test_result(\
-            result,\
-            reason=None,\
-            text_tokens=(),\
-            tooltip=None,\
-            tooltip_tokens=(),\
-            icon=None,\
-            influence_by_active_mood=False\
-        )
-
-        Create a CommonTestResult with the specified information.
-
-        .. note:: CommonTestResult is an object used to disable, hide, or display tooltips on interactions. See :func:`~on_test` for more information.
-
-        :param result: The result of a test. True for passed, False for failed.
-        :type result: bool
-        :param reason: The reason for the Test Result (This is displayed as a tooltip to the player when the interaction is disabled).
-        :type reason: str, optional
-        :param text_tokens: Any text tokens to include format into the reason.
-        :type text_tokens: Union[Tuple[Any], List[Any], Set[Any]], optional
-        :param tooltip: The tooltip displayed when hovering the interaction while it is disabled.
-        :type tooltip: Union[int, str, LocalizedTooltip], optional
-        :param tooltip_tokens: A collection of objects to format into the localized tooltip. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few) Default is an empty collection.
-        :type tooltip_tokens: Iterable[Any], optional
-        :param icon: The icon of the outcome.
-        :type icon: CommonResourceKey, optional
-        :param influence_by_active_mood: If true, the Test Result will be influenced by the active mood.
-        :type influence_by_active_mood: bool, optional
-        :return: The desired outcome for a call of :func:`~on_test`.
-        :rtype: CommonTestResult
-        """
-        try:
-            return CommonTestResult(
-                result,
-                reason=reason.format(*text_tokens) if reason is not None else reason,
-                tooltip_text=tooltip,
-                tooltip_tokens=tooltip_tokens,
-                icon=icon,
-                influenced_by_active_mood=influence_by_active_mood
-            )
-        except Exception as ex:
-            cls.get_log().error('An error occurred while creating a test result for {}'.format(cls.__name__), exception=ex)
-
-    # noinspection PyUnusedLocal
-    @classmethod
-    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, interaction: 'CommonSocialSuperInteraction'=None, **kwargs) -> CommonTestResult:
-        """on_test(interaction_sim, interaction_target, interaction_context, interaction=None, **kwargs)
+    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, *args, interaction: 'Interaction'=None, **kwargs) -> CommonTestResult:
+        """on_test(interaction_sim, interaction_target, interaction_context, *args, interaction=None, **kwargs)
 
         A hook that occurs upon the interaction being tested for availability.
 
@@ -581,16 +492,16 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
         :param interaction_context: The context of the interaction.
         :type interaction_context: InteractionContext
         :param interaction: The interaction being tested or None. Default is None.
-        :type interaction: CommonSocialSuperInteraction, optional
+        :type interaction: Interaction, optional
         :return: The outcome of testing the availability of the interaction
         :rtype: CommonTestResult
         """
-        return CommonTestResult.TRUE
+        return super().on_test(interaction_sim, interaction_target, interaction_context, *args, interaction=interaction, **kwargs)
 
     # noinspection PyUnusedLocal
     @classmethod
-    def on_post_super_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, interaction: 'CommonSocialSuperInteraction'=None, **kwargs) -> CommonTestResult:
-        """on_post_super_test(interaction_sim, interaction_target, interaction_context, interaction=None, **kwargs)
+    def on_post_super_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, *args, interaction: 'Interaction'=None, **kwargs) -> CommonTestResult:
+        """on_post_super_test(interaction_sim, interaction_target, interaction_context, *args, interaction=None, **kwargs)
 
         A hook that occurs after the interaction being tested for availability by on_test and the super _test functions.
 
@@ -603,242 +514,20 @@ class CommonSocialSuperInteraction(SocialSuperInteraction, HasClassLog):
         :param interaction_context: The context of the interaction.
         :type interaction_context: InteractionContext
         :param interaction: The interaction being tested or None. Default is None.
-        :type interaction: CommonSocialSuperInteraction, optional
+        :type interaction: Interaction, optional
         :return: The outcome of testing the availability of the interaction
         :rtype: CommonTestResult
         """
-        return CommonTestResult.TRUE
-
-    # noinspection PyUnusedLocal
-    def on_started(self, interaction_sim: Sim, interaction_target: Any) -> CommonExecutionResult:
-        """on_started(interaction_sim, interaction_target)
-
-        A hook that occurs upon the interaction being started.
-
-        .. note:: If CommonExecutionResult.FALSE, CommonExecutionResult.NONE, or False is returned from here, then the interaction will be cancelled instead of starting.
-
-        :param interaction_sim: The source Sim of the interaction.
-        :type interaction_sim: Sim
-        :param interaction_target: The target Object of the interaction.
-        :type interaction_target: Any
-        :return: The result of running the start function. True, if the interaction hook was executed successfully. False, if the interaction hook was not executed successfully.
-        :rtype: CommonExecutionResult
-        """
-        return CommonExecutionResult.TRUE
-
-    # noinspection PyUnusedLocal
-    def on_killed(self, interaction_sim: Sim, interaction_target: Any) -> None:
-        """on_killed(interaction_sim, interaction_target)
-
-        A hook that occurs upon the interaction being killed.
-
-        :param interaction_sim: The source Sim of the interaction.
-        :type interaction_sim: Sim
-        :param interaction_target: The target Object of the interaction.
-        :type interaction_target: Any
-        :return: True, if the interaction hook was executed successfully. False, if the interaction hook was not executed successfully.
-        :rtype: bool
-        """
-        pass
-
-    def on_cancelled(self, interaction_sim: Sim, interaction_target: Any, finishing_type: FinishingType, cancel_reason_msg: str, **kwargs) -> None:
-        """on_cancelled(interaction_sim, interaction_target, finishing_type, cancel_reason_msg, **kwargs)
-
-        A hook that occurs upon the interaction being cancelled.
-
-        :param interaction_sim: The source Sim of the interaction.
-        :type interaction_sim: Sim
-        :param interaction_target: The target Object of the interaction.
-        :type interaction_target: Any
-        :param finishing_type: The type of cancellation of the interaction.
-        :type finishing_type: FinishingType
-        :param cancel_reason_msg: The reason the interaction was cancelled.
-        :type cancel_reason_msg: str
-        """
-        pass
-
-    def _on_reset(self, interaction_sim: Sim, interaction_target: Any) -> None:
-        """_on_reset(interaction_sim, interaction_target)
-
-        A hook that occurs upon the interaction being reset.
-
-        :param interaction_sim: The source Sim of the interaction.
-        :type interaction_sim: Sim
-        :param interaction_target: The target Object of the interaction.
-        :type interaction_target: Any
-        """
-        pass
-
-    def on_performed(self, interaction_sim: Sim, interaction_target: Any) -> None:
-        """on_performed(interaction_sim, interaction_target)
-
-        A hook that occurs after the interaction has been performed.
-
-        :param interaction_sim: The source Sim of the interaction.
-        :type interaction_sim: Sim
-        :param interaction_target: The target Object of the interaction.
-        :type interaction_target: Any
-        """
-        pass
+        return super().on_post_super_test(interaction_sim, interaction_target, interaction_context, *args, interaction=interaction, **kwargs)
 
     @classmethod
-    def get_custom_replacement_participants(cls, participant_type: ParticipantType, sim: Union[Sim, None], target: Union[Sim, None], carry_target: Union[Any, None], interaction: 'CommonSocialSuperInteraction'=None, **kwargs) -> Union[Tuple[Any], None]:
-        """get_custom_replacement_participants(participant_type, sim=None, target=None, carry_target=None, interaction=None, **kwargs)
-
-        A hook used to replace the result of the get_participants function with custom participants.
-
-        :param participant_type: The type of participant being searched for.
-        :type participant_type: ParticipantType
-        :param sim: The Source of the interaction.
-        :type sim: Union[Sim, None]
-        :param target: The Target of the interaction.
-        :type sim: Union[Sim, None]
-        :param carry_target: The target being carried while the interaction is being run.
-        :type carry_target: Union[Any, None]
-        :param interaction: An instance of the interaction, if get_participants was invoked using an instance or None if get_participants was invoked using the class. Default is None.
-        :type interaction: CommonSocialSuperInteraction, optional
-        :return: A collection of custom participants to use as replacements for the normal result of get_participants. Return None to keep the original participants. Default return is None.
-        :rtype: Union[Tuple[Any], None]
-        """
-        return None
+    def _get_participants_log(cls) -> CommonLog:
+        from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+        if not hasattr(cls, '__get_participants_log') or getattr(cls, '__get_participants_log', None) is None:
+            mod_name = CommonModIdentity._get_mod_name(cls.get_mod_identity())
+            setattr(cls, '__get_participants_log', CommonLogRegistry().register_log(mod_name, cls._get_participants_log_identifier()))
+        return getattr(cls, '__get_participants_log', None)
 
     @classmethod
-    def get_custom_participants(cls, participant_type: ParticipantType, sim: Union[Sim, None], target: Union[Sim, None], carry_target: Union[Any, None], interaction: 'CommonSocialSuperInteraction'=None, **kwargs) -> Tuple[Any]:
-        """get_custom_participants(participant_type, sim=None, target=None, carry_target=None, interaction=None, **kwargs)
-
-        A hook used to add custom participants to the result of the get_participants function.
-
-        :param participant_type: The type of participant being searched for.
-        :type participant_type: ParticipantType
-        :param sim: The Source of the interaction.
-        :type sim: Union[Sim, None]
-        :param target: The Target of the interaction.
-        :type sim: Union[Sim, None]
-        :param carry_target: The target being carried while the interaction is being run.
-        :type carry_target: Union[Any, None]
-        :param interaction: An instance of the interaction, if get_participants was invoked using an instance or None if get_participants was invoked using the class. Default is None.
-        :type interaction: CommonSocialSuperInteraction, optional
-        :return: A collection of custom participants to add to the normal result of get_participants.
-        :rtype: Tuple[Any]
-        """
-        return tuple()
-
-    def modify_posture_state(self, posture_state: PostureState, participant_type: ParticipantType=ParticipantType.Actor, sim: Sim=DEFAULT) -> Tuple[PostureState, ParticipantType, Sim]:
-        """modify_posture_state(posture_state, participant_type=ParticipantType.Actor, sim=DEFAULT)
-
-        A hook that allows modification of the posture state of the interactions participants.
-
-        :param posture_state: The posture state being modified.
-        :type posture_state: PostureState
-        :param participant_type: The position in the interaction that the `sim` is considered at. Example: `ParticipantType.Actor` represents the source Sim of the interaction.
-        :type participant_type: ParticipantType, optional
-        :param sim: The Sim the posture state is being applied to.
-        :type sim: Sim, optional
-        :return: Return a modified PostureState, ParticipantType, and Sim.
-        :rtype: Tuple[PostureState, ParticipantType, Sim]
-        """
-        return posture_state, participant_type, sim
-
-    @classmethod
-    def _create_override_display_name(
-        cls,
-        interaction_sim: Sim,
-        interaction_target: Any,
-        interaction: 'CommonSocialSuperInteraction'=None,
-        interaction_context: InteractionContext=None,
-        **interaction_parameters
-    ) -> Union[LocalizedString, None]:
-        """_create_override_display_name(\
-            interaction_sim,\
-            interaction_target,\
-            interaction=None,\
-            interaction_context=None,\
-            **interaction_parameters\
-        )
-
-        If overridden you may supply a custom name for the interaction to display.
-
-        .. warning:: The returned value from here replaces the original returned value. Return None from here to return the original value.
-
-        :param interaction_sim: The source Sim of the interaction.
-        :type interaction_sim: Sim
-        :param interaction_target: The target Object of the interaction.
-        :type interaction_target: Any
-        :param interaction: The interaction being performed or None.
-        :type interaction: CommonSocialSuperInteraction
-        :param interaction_context: The context of the interaction being performed or None.
-        :type interaction_context: InteractionContext
-        :param interaction_parameters: Parameters for the interaction.
-        :type interaction_parameters: Iterator[Any]
-        :return: The name to use in place of the original name of the interaction or None if you want the original name to be used.
-        :rtype: Union[LocalizedString, None]
-        """
-        pass
-
-    # noinspection PyUnusedLocal
-    def _setup_asm_default(self, interaction_sim: Sim, interaction_target: Any, interaction_asm: NativeAsm, *args, **kwargs) -> Union[bool, None]:
-        """_setup_asm_default(interaction_sim, interaction_target, asm, *args, **kwargs)
-
-        A hook that occurs upon the animation state machine being setup for the interaction.
-
-        .. warning:: The returned value from here replaces the original returned value. Return None from here to return the original value.
-
-        :param interaction_sim: The source Sim of the interaction.
-        :type interaction_sim: Sim
-        :param interaction_target: The target Object of the interaction.
-        :type interaction_target: Any
-        :param interaction_asm: An instance of an Animation State Machine
-        :type interaction_asm: NativeAsm
-        :return: True, if the ASM was setup properly. False, if not. or None to run through the original code.
-        :rtype: bool
-        """
-        return None
-
-    # noinspection PyUnusedLocal
-    def _send_current_progress(self, interaction_sim: Sim, interaction_target: Any, *args, **kwargs) -> Union[bool, None]:
-        """_send_current_progress(interaction_sim, interaction_target, *args, **kwargs)
-
-        A hook that occurs upon sending the current progress for the interaction.
-
-        .. warning:: The returned value from here replaces the original returned value.
-
-        :param interaction_sim: The source Sim of the interaction.
-        :type interaction_sim: Sim
-        :param interaction_target: The target Object of the interaction.
-        :type interaction_target: Any
-        :return: True, if progress was sent successfully. False, if not. Return None to run the original code.
-        :rtype: bool
-        """
-        return None
-
-    def set_current_progress_bar(self, percent: float, rate_change: float, start_message: bool=True):
-        """set_current_progress_bar(initial_value, progress_rate)
-
-        Set the current progress rate of the interaction.
-
-        :param percent: A percentage indicating the starting progress.
-        :type percent: float
-        :param rate_change: A value that indicates how fast progress will be made.
-        :type rate_change: float
-        :param start_message: If True, progress will begin changing immediately. If False, it will not. Default is True.
-        :type start_message: bool, optional
-        """
-        try:
-            self._send_progress_bar_update_msg(percent, rate_change, start_msg=start_message)
-        except Exception as ex:
-            self.log.error('Error occurred while running CommonSocialSuperInteraction \'{}\' set_current_progress_bar.'.format(self.__class__.__name__), exception=ex)
-
-    # noinspection PyUnusedLocal
-    def on_run(self, interaction_sim: Sim, interaction_target: Any, timeline: Timeline):
-        """on_run(interaction_sim, interaction_target, timeline)
-
-        A hook that occurs upon the interaction being run.
-
-        :param interaction_sim: The sim performing the interaction.
-        :type interaction_sim: Sim
-        :param interaction_target: The target of the interaction.
-        :type interaction_target: Any
-        :param timeline: The timeline the interaction is running on.
-        :type timeline: Timeline
-        """
-        pass
+    def _get_participants_log_identifier(cls) -> str:
+        return f'{cls.get_log_identifier()}_get_participants'
