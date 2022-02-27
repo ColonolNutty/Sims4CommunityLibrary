@@ -77,6 +77,8 @@ v1.76:
 - The result argument of CommonExecutionResult can now be set to a non bool value. This allows CommonExecutionResult to be used for other returned values.
 - Created CommonTestResult to be used as a bool representation of CommonExecutionResult. It should be returned when running functions that test things to allow tooltips and provide reasons for the True/False result.
 - Updated many of the statistic and motive utils to return CommonExecutionResult and CommonTestResult instead of just bool.
+- CommonAssertionUtils.is_true and is_false now accept CommonTestResult and CommonExecutionResult as values and will handle them appropriately when comparing.
+- Added functions to look at the lot traits of specific lots to CommonLocationUtils
 - Added many new trait ids to CommonTraitId
 - Added utilities for checking static commodities and retrieving pick info of interactions to CommonInteractionUtils
 - Added CommonSimRoutingUtils for doing things related to routing for Sims.
@@ -100,6 +102,8 @@ v1.76:
 - Fixed various issues with CommonSuperInteraction, CommonSocialSuperInteraction, CommonSocialMixerInteraction, CommonMixerInteraction, CommonInteraction, and CommonTerrainInteraction.
   - This unfortunately may lead to some weirdness in mods that have interactions containing things they didn't realize were in there (Because they were not working previously)
 - Added the ability to make the current outfit selectable within CommonChooseOutfitDialog
+- Many of the CommonOutfitUtils functions now accept a SimInfoBaseWrapper type in addition to SimInfo
+- Added functions to look at the lot traits of specific lots to CommonLocationUtils
 
 v1.75:
 - Added functions to convert CommonSpecies, CommonAge, and CommonGender into localized string ids
