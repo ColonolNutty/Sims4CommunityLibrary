@@ -21,8 +21,7 @@ from sims.sim_info import SimInfo
 from sims4.resources import Types
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
-from sims4communitylib.logging.has_class_log import HasClassLog
-from sims4communitylib.mod_support.mod_identity import CommonModIdentity
+from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
@@ -37,13 +36,8 @@ from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 from singletons import DEFAULT
 
 
-class CommonSimCareerUtils(HasClassLog):
+class CommonSimCareerUtils(_HasS4CLClassLog):
     """ Utilities for manipulating the Careers of Sims. """
-
-    # noinspection PyMissingOrEmptyDocstring
-    @classmethod
-    def get_mod_identity(cls) -> CommonModIdentity:
-        return ModInfo.get_identity()
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
@@ -92,7 +86,7 @@ class CommonSimCareerUtils(HasClassLog):
             yield career
 
     @classmethod
-    def has_career(cls, sim_info: SimInfo, career_identifier: Union[int, Career]) -> Union[Career, None]:
+    def has_career(cls, sim_info: SimInfo, career_identifier: Union[int, Career]) -> bool:
         """has_career_by_guid(sim_info, career)
 
         Determine if a Sim has a Career.
@@ -102,9 +96,9 @@ class CommonSimCareerUtils(HasClassLog):
         :param career_identifier: The Guid64 identifier of a Career, the decimal identifier of a Career, or a Career instance.
         :type career_identifier: Union[int, Career]
         :return: True, if the Sim has the specified Career. False, if not.
-        :rtype: Union[Career, None]
+        :rtype: bool
         """
-        return cls.get_career(sim_info, career_identifier)
+        return cls.get_career(sim_info, career_identifier) is not None
 
     @classmethod
     def get_career(cls, sim_info: SimInfo, career_identifier: Union[int, Career]) -> Union[Career, None]:
@@ -122,19 +116,23 @@ class CommonSimCareerUtils(HasClassLog):
         if sim_info is None or career_identifier is None:
             return None
         if not isinstance(career_identifier, Career):
+            cls.get_log().format_with_message('Identifier was not a Career instance. Attempting to load it now.', career_identifier=career_identifier)
             career_identifier = CommonCareerUtils.load_career_by_guid(career_identifier)
         career_guid = CommonCareerUtils.get_career_guid(career_identifier)
         career_id = CommonCareerUtils.get_career_id(career_identifier)
         if career_guid is None and career_id is None:
             return None
+        cls.get_log().format_with_message('Checking for career info.', career_identifier=career_identifier, career_guid=career_guid, career_id=career_id)
         career_tracker = cls.get_career_tracker(sim_info)
         if career_tracker is None:
             return None
         for career in cls.get_all_careers_for_sim_gen(sim_info):
-            if (career_guid is not None and CommonCareerUtils.get_career_guid(career) == career_guid)\
-                    or (career_id is not None and CommonCareerUtils.get_career_id(career) == career_id)\
+            if (career_guid is not None and career_guid != -1  and CommonCareerUtils.get_career_guid(career) == career_guid)\
+                    or (career_id is not None and career_id != -1 and CommonCareerUtils.get_career_id(career) == career_id)\
                     or career is career_identifier:
+                cls.get_log().format_with_message('Successfully found career.', career=career, career_identifier=career_identifier, career_guid=career_guid, career_id=career_id, checked_career_guid=CommonCareerUtils.get_career_guid(career), checked_career_id=CommonCareerUtils.get_career_id(career))
                 return career
+        cls.get_log().format_with_message('Failed to locate career.', career_identifier=career_identifier, career_guid=career_guid, career_id=career_id)
         return None
 
     @classmethod
@@ -318,6 +316,8 @@ class CommonSimCareerUtils(HasClassLog):
         :return: Tbe result of the action.
         :rtype: CommonExecutionResult
         """
+        if career is None:
+            raise AssertionError('career was None.')
         if not career.is_active:
             return CommonExecutionResult(False, reason='Career is not an active career.')
         if services.get_persistence_service().is_save_locked():
@@ -872,6 +872,29 @@ class CommonSimCareerUtils(HasClassLog):
         else:
             career_history = None
         return career.get_career_entry_level(career_history=career_history, resolver=SingleSimResolver(sim_info))
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.has_career',
+    'Check if a Sim has a career.',
+    command_arguments=(
+        CommonConsoleCommandArgument('career', 'Name or Decimal Id', 'The name or id of a career to check.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim.', is_optional=True, default_value='Active Sim'),
+    )
+)
+def _common_has_career(output: CommonConsoleCommandOutput, career: TunableInstanceParam(Types.CAREER), sim_info: SimInfo=None):
+    if sim_info is None:
+        return
+    output(f'Checking {sim_info} to see if they have career {career}')
+    if career is None:
+        output(f'Failed, Career does not exist.')
+        return False
+    if CommonSimCareerUtils.has_career(sim_info, career):
+        output(f'SUCCESS: Sim has the career.')
+    else:
+        output(f'FAILED: Sim does not have the career.')
+    return True
 
 
 @CommonConsoleCommand(
