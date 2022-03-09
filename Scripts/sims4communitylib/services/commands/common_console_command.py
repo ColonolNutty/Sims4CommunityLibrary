@@ -604,7 +604,11 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                             output(f'ERROR: {arg_value} is not a valid {arg_type_name}. Valid {arg_type_name}: {valid_values}')
                         return result
                 elif arg_type is int or arg_value.isnumeric():
-                    return int(arg_value, base=0)
+                    # noinspection PyBroadException
+                    try:
+                        return int(arg_value, base=0)
+                    except:
+                        return default_value
                 elif arg_type is str and not arg_value:
                     return default_value
                 elif inspect.isclass(arg_type) and ((isinstance(arg_type, type) and issubclass(arg_type, CustomParam)) or arg_type is SimInfo or issubclass(arg_type, SimInfo) or arg_type is GameObject or issubclass(arg_type, GameObject)):

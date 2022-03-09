@@ -299,7 +299,7 @@ class CommonSimOutfitIO(HasLog):
         outfit_to_apply_to_parts = CommonOutfitUtils.get_outfit_parts(self.sim_info, outfit_category_and_index=apply_to_outfit_category_and_index)
         outfit_to_apply_to_original_data: FrozenSet[int] = frozenset(outfit_to_apply_to_parts.items())
         saved_outfits = self.sim_info.save_outfits()
-        self.log.format_with_message('Applying Outfit IO Changes to outfits', sim=self.sim_info, outfits=saved_outfits.outfits)
+        self.log.format_with_message('Applying Outfit IO Changes to outfits', sim=self.sim_info, outfits=saved_outfits.outfits, outfit_part_ids=self._outfit_part_ids, outfit_body_types=self._outfit_body_types)
         for saved_outfit in saved_outfits.outfits:
             if int(saved_outfit.category) != int(apply_to_outfit_category_and_index[0]):
                 self.log.format_with_message('Ignoring saved outfit due to wrong category.', sim=self.sim_info, outfit_category=saved_outfit.category, expected_category=apply_to_outfit_category_and_index[0])
@@ -322,8 +322,11 @@ class CommonSimOutfitIO(HasLog):
             saved_outfit.body_types_list = Outfits_pb2.BodyTypesList()
             # noinspection PyUnresolvedReferences
             saved_outfit.body_types_list.body_types.extend([int(body_type) for body_type in self._outfit_body_types])
+            # noinspection PyUnresolvedReferences
+            saved_outfit_data = self._to_outfit_data(saved_outfit.body_types_list.body_types, saved_outfit.parts.ids)
+            self.log.format_with_message('Changes made.', saved_outfit_data=saved_outfit_data)
             if not apply_to_all_outfits_in_same_category:
-                self.log.format_with_message('Skipping the other outfit indexes, since we do not want to apply to all outfits in the same category.', sim=self.sim_info, outfit_category_and_index_applid_to=apply_to_outfit_category_and_index)
+                self.log.format_with_message('Skipping the other outfit indexes, since we do not want to apply to all outfits in the same category.', sim=self.sim_info, outfit_category_and_index_applied_to=apply_to_outfit_category_and_index)
                 break
 
         self.sim_info._base.outfits = saved_outfits.SerializeToString()

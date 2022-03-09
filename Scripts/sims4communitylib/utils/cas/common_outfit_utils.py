@@ -959,8 +959,8 @@ class CommonOutfitUtils(HasClassLog):
             else:
                 outfit_category_name = outfit_category
 
-            output(f'Outfit Info for outfit ({outfit_category_name}, {outfit_index}) of Sim {sim_info}{sim_info}')
-            log.debug(f'Outfit Info for outfit ({outfit_category_name}, {outfit_index}) of Sim {sim_info}{sim_info}')
+            output(f'Outfit Info for outfit ({outfit_category_name}, {outfit_index}) of Sim {sim_info}')
+            log.debug(f'Outfit Info for outfit ({outfit_category_name}, {outfit_index}) of Sim {sim_info}')
             outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=(outfit_category, outfit_index))
             output(f'------Outfit: ({outfit_category_name}, {outfit_index})------')
             log.debug(f'------Outfit: ({outfit_category_name}, {outfit_index})------')
