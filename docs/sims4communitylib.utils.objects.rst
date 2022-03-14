@@ -59,6 +59,15 @@ Object Utilities
    :show-inheritance:
 
 *************************
+`Slots`
+*************************
+
+.. autoclass:: sims4communitylib.utils.objects.common_object_slot_utils.CommonObjectSlotUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*************************
 `State`
 *************************
 

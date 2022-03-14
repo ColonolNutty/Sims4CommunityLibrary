@@ -27,6 +27,14 @@ Services
    :undoc-members:
    :show-inheritance:
 
+`Modify Clone of Sim in CAS`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.services.sim.cas.common_temporary_sim_clone_in_cas_service.CommonEditSimCloneInCASService
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 `Resource`
 ------------------------------------------------------

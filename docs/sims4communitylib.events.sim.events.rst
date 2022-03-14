@@ -1,10 +1,10 @@
 Sim Event Types
 ===========================================
 
-`Added Occult Type`
--------------------------------------------------------------------
+`Age Changed`
+------------------------------------------------------------
 
-.. autoclass:: sims4communitylib.events.sim.events.sim_added_occult_type.S4CLSimAddedOccultTypeEvent
+.. autoclass:: sims4communitylib.events.sim.events.sim_changed_age.S4CLSimChangedAgeEvent
    :members:
    :undoc-members:
    :show-inheritance:
@@ -25,15 +25,15 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`Changed Age`
-------------------------------------------------------------
+`Occult Added`
+-------------------------------------------------------------------
 
-.. autoclass:: sims4communitylib.events.sim.events.sim_changed_age.S4CLSimChangedAgeEvent
+.. autoclass:: sims4communitylib.events.sim.events.sim_added_occult_type.S4CLSimAddedOccultTypeEvent
    :members:
    :undoc-members:
    :show-inheritance:
 
-`Changed Occult Type`
+`Occult Changed`
 ---------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_changed_occult_type.S4CLSimChangedOccultTypeEvent
@@ -41,7 +41,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`Changing Occult Type`
+`Occult Changing`
 ---------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_changing_occult_type.S4CLSimChangingOccultTypeEvent
@@ -49,31 +49,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`Initialized`
------------------------------------------------------------
-
-.. autoclass:: sims4communitylib.events.sim.events.sim_initialized.S4CLSimInitializedEvent
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-`Leveled Up Skill`
------------------------------------------------------------
-
-.. autoclass:: sims4communitylib.events.sim.events.sim_skill_leveled_up.S4CLSimSkillLeveledUpEvent
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-`Loaded`
-------------------------------------------------------
-
-.. autoclass:: sims4communitylib.events.sim.events.sim_loaded.S4CLSimLoadedEvent
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-`Removed Occult Type`
+`Occult Removed`
 ---------------------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_removed_occult_type.S4CLSimRemovedOccultTypeEvent
@@ -81,7 +57,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`Set Outfit`
+`Outfit Changing`
 ------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_set_current_outfit.S4CLSimSetCurrentOutfitEvent
@@ -89,7 +65,7 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`After Set Outfit`
+`Outfit Changed`
 ------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_after_set_current_outfit.S4CLSimAfterSetCurrentOutfitEvent
@@ -97,10 +73,34 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-`Spawned Event`
+`Sim Initialized`
+-----------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_initialized.S4CLSimInitializedEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Sim Loaded`
+------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_loaded.S4CLSimLoadedEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Sim Spawned`
 -------------------------------------------------------
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_spawned.S4CLSimSpawnedEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Skill Leveled Up`
+-----------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_skill_leveled_up.S4CLSimSkillLeveledUpEvent
    :members:
    :undoc-members:
    :show-inheritance:
@@ -124,9 +124,9 @@ Sim Event Types
 `Gender Options`
 -------------------------------------------------------
 
-*********************
+*************************
 `Sim Changed Gender`
-*********************
+*************************
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_changed_gender.S4CLSimChangedGenderEvent
    :members:
@@ -138,6 +138,15 @@ Sim Event Types
 *************************
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_changed_gender_options_body_frame.S4CLSimChangedGenderOptionsBodyFrameEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*************************
+`Sim Changed Breasts`
+*************************
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_changed_gender_options_breasts.S4CLSimChangedGenderOptionsBreastsEvent
    :members:
    :undoc-members:
    :show-inheritance:
@@ -169,9 +178,9 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
-*********************************
+*************************************
 `Sim Changed Clothing Preference`
-*********************************
+*************************************
 
 .. autoclass:: sims4communitylib.events.sim.events.sim_changed_gender_options_clothing_preference.S4CLSimChangedGenderOptionsClothingPreferenceEvent
    :members:

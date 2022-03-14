@@ -19,6 +19,14 @@ Resource Utilities
    :undoc-members:
    :show-inheritance:
 
+`Game Pack`
+-------------------------------------------------------
+
+.. autoclass:: sims4communitylib.utils.resources.common_game_pack_utils.CommonGamePackUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Resources`
 ------------------------------------------------------
 
