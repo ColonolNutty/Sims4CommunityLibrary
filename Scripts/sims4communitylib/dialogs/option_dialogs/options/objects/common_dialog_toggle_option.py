@@ -5,8 +5,9 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any, Callable
+from typing import Any, Callable, Union
 
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.dialogs.option_dialogs.options.common_dialog_option_context import CommonDialogOptionContext
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.common_icon_utils import CommonIconUtils
@@ -34,11 +35,13 @@ class CommonDialogToggleOption(CommonDialogObjectOption):
     def __init__(
         self,
         option_identifier: DialogOptionIdentifierType,
-        value: bool,
+        value: Union[bool, CommonExecutionResult],
         context: CommonDialogOptionContext,
         on_chosen: Callable[[DialogOptionIdentifierType, bool], None]=CommonFunctionUtils.noop,
         always_visible: bool=False
     ):
+        if isinstance(value, CommonExecutionResult):
+            value = bool(value.result)
         super().__init__(option_identifier, value, context, on_chosen=on_chosen, always_visible=always_visible)
 
     # noinspection PyMissingOrEmptyDocstring

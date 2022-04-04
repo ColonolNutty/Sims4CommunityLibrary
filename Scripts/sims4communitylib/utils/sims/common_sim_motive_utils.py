@@ -84,13 +84,13 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
             return CommonExecutionResult(False, reason='sim_info was None.')
-        if not cls.has_motive(sim_info, motive_id):
-            cls.get_log().format_with_message('Sim did not have the motive.', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, reason=f'Sim did not have motive {motive_id}')
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
             return CommonExecutionResult(False, reason=f'Sim did not have motive {motive_id}')
+        if not cls.has_motive(sim_info, mapped_motive_id):
+            cls.get_log().format_with_message('Sim did not have the motive.', motive_id=mapped_motive_id, sim=sim_info)
+            return CommonExecutionResult(False, reason=f'Sim did not have motive {mapped_motive_id}')
         cls.get_log().format_with_message('Mapped motive id, setting the level for it on Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, level=level, sim=sim_info)
         return CommonSimStatisticUtils.set_statistic_value(sim_info, mapped_motive_id, level, add=True)
 
@@ -127,13 +127,13 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
             return CommonExecutionResult(False, reason='sim_info was None.')
-        if not cls.has_motive(sim_info, motive_id):
-            cls.get_log().format_with_message('Sim did not have the motive.', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, reason=f'Sim did not have the specified motive {motive_id}.')
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
             return CommonExecutionResult(False, reason=f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
+        if not cls.has_motive(sim_info, mapped_motive_id):
+            cls.get_log().format_with_message('Sim did not have the motive.', motive_id=motive_id, sim=sim_info)
+            return CommonExecutionResult(False, reason=f'Sim did not have the specified motive {mapped_motive_id}.')
         cls.get_log().format_with_message('Mapped motive id, Adding to it for Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, amount=amount, sim=sim_info)
         return CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount, add=True)
 
@@ -155,13 +155,13 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
             return CommonExecutionResult(False, reason='sim_info was None.')
-        if not cls.has_motive(sim_info, motive_id):
-            cls.get_log().format_with_message('Sim did not have the motive.', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, reason=f'Sim did not have the specified motive {motive_id}.')
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
             return CommonExecutionResult(False, reason=f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
+        if not cls.has_motive(sim_info, mapped_motive_id):
+            cls.get_log().format_with_message('Sim did not have the motive.', motive_id=mapped_motive_id, sim=sim_info)
+            return CommonExecutionResult(False, reason=f'Sim did not have the specified motive {mapped_motive_id}.')
         cls.get_log().format_with_message('Mapped motive id, Subtracting from it for Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, amount=amount, sim=sim_info)
         return CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount * -1.0, add=True)
 
@@ -573,7 +573,7 @@ def _common_print_motive_level(output: CommonConsoleCommandOutput, motive: Tunab
     if sim_info is None:
         output('Failed, no Sim was specified or the specified Sim was not found!')
         return
-    output(f'Setting motive {motive} to Sim {sim_info}')
+    output(f'Printing motive level of Motive {motive} for Sim {sim_info}')
     motive_level = CommonSimMotiveUtils.get_motive_level(sim_info, motive)
     output(f'Motive Level of {motive}: {motive_level}')
 

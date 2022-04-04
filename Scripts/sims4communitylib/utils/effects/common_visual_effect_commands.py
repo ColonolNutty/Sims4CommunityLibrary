@@ -8,7 +8,6 @@ Copyright (c) COLONOLNUTTY
 import clock
 from date_and_time import TimeSpan
 from objects.game_object import GameObject
-from server_commands.argument_helpers import OptionalTargetParam
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
 from sims4communitylib.events.zone_spin.events.zone_teardown import S4CLZoneTeardownEvent
 from sims4communitylib.modinfo import ModInfo
@@ -17,6 +16,8 @@ from sims4communitylib.services.commands.common_console_command import CommonCon
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.classes.effects.common_visual_effect import CommonVisualEffect
+from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class _CommonVisualEffectCommandService(CommonService):
@@ -50,14 +51,16 @@ class _CommonVisualEffectCommandService(CommonService):
         CommonConsoleCommandArgument('effect_name', 'Text', 'The name of an effect to play.'),
         CommonConsoleCommandArgument('joint_bone_name', 'Text', 'The name of the bone or joint to attach the effect to on the target object.', is_optional=True, default_value='b__Head__'),
         CommonConsoleCommandArgument('sim_minutes_until_end', 'Number', 'The number of Sim Minutes to play the effect for before it auto stops.', is_optional=True, default_value='Effect default length'),
-        CommonConsoleCommandArgument('opt_target', 'Instance Id of Object or Sim Id or Sim Name', 'The instance id of an Object or the instance id or name of a Sim to attach the VFX to.', is_optional=True, default_value='Active Sim'),
+        CommonConsoleCommandArgument('target_id', 'Instance Id of Object or Sim Id', 'The instance id of an Object or the instance id of a Sim to attach the VFX to.', is_optional=True, default_value='Active Sim'),
     }
 )
-def _common_play_visual_effect(output: CommonConsoleCommandOutput, effect_name: str, joint_bone_name: str= 'b__Head__', sim_minutes_until_end: int=None, opt_target: OptionalTargetParam=None):
-    from server_commands.argument_helpers import get_optional_target
-    target = get_optional_target(opt_target, output._context)
+def _common_play_visual_effect(output: CommonConsoleCommandOutput, effect_name: str, joint_bone_name: str= 'b__Root__', sim_minutes_until_end: int=None, target_id: int=None):
+    if target_id is not None:
+        target = CommonSimUtils.get_sim_instance(target_id) or CommonObjectUtils.get_game_object(target_id)
+    else:
+        target = CommonSimUtils.get_active_sim()
     if target is None:
-        output(f'Target {opt_target} did not exist')
+        output(f'Target {target_id} did not exist')
         return False
     output(f'Running VFX {effect_name} on Target {target}')
 

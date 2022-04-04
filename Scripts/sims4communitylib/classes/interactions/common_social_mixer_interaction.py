@@ -7,6 +7,8 @@ Copyright (c) COLONOLNUTTY
 """
 import inspect
 
+from event_testing.tests import TestList
+from interactions.base.interaction import Interaction
 from postures.posture_state import PostureState
 from sims4communitylib.classes.interactions._common_interaction_custom_mixin import _CommonInteractionCustomMixin
 from sims4communitylib.classes.interactions._common_interaction_hooks_mixin import _CommonInteractionHooksMixin
@@ -87,7 +89,7 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, HasClassLog, _CommonI
 
     # SocialMixerInteraction has a different signature for its _test function, so we override it in here.
     @classmethod
-    def _test(cls, target: Any, context: InteractionContext, *args, **kwargs) -> CommonTestResult:
+    def _test(cls, target: Any, context: InteractionContext, *args, super_interaction: 'Interaction'=None, skip_safe_tests: bool=False, **kwargs) -> CommonTestResult:
         from event_testing.results import TestResult
         from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
         log = cls.get_log()
@@ -102,10 +104,12 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, HasClassLog, _CommonI
                     interaction_sim=context.sim,
                     interaction_target=target,
                     interaction_context=context,
+                    super_interaction=super_interaction,
+                    skip_safe_tests=skip_safe_tests,
                     argles=args,
                     kwargles=kwargs
                 )
-                test_result = cls.on_test(context.sim, target, context, *args, **kwargs)
+                test_result = cls.on_test(context.sim, target, context, *args, super_interaction=super_interaction, skip_safe_tests=skip_safe_tests, **kwargs)
                 verbose_log.format_with_message('Test Result (CommonSocialMixerInteraction)', test_result=test_result)
             except Exception as ex:
                 log.error('Error occurred while running CommonSocialMixerInteraction \'{}\' on_test.'.format(cls.__name__), exception=ex)
@@ -131,11 +135,36 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, HasClassLog, _CommonI
                     interaction_sim=context.sim,
                     interaction_target=target,
                     interaction_context=context,
+                    super_interaction=super_interaction,
+                    skip_safe_tests=skip_safe_tests,
                     argles=args,
                     kwargles=kwargs
                 )
-                super_test_result: TestResult = super()._test(target, context, *args, **kwargs)
-                verbose_log.format_with_message('Super Test Result (CommonSocialMixerInteraction)', super_test_result=super_test_result)
+                super_test_result: TestResult = super()._test(target, context, *args, super_interaction=super_interaction, skip_safe_tests=skip_safe_tests, **kwargs)
+
+                if verbose_log.enabled:
+                    search_for_tooltip = context.source == context.SOURCE_PIE_MENU
+                    resolver = cls.get_resolver(target=target, context=context, super_interaction=super_interaction, search_for_tooltip=search_for_tooltip, **kwargs)
+                    global_result = cls.test_globals.run_tests(resolver, skip_safe_tests, search_for_tooltip=search_for_tooltip)
+                    local_result = cls.tests.run_tests(resolver, skip_safe_tests=skip_safe_tests, search_for_tooltip=search_for_tooltip)
+                    if cls._additional_tests:
+                        additional_tests = TestList(cls._additional_tests)
+                        additional_local_result = additional_tests.run_tests(resolver, skip_safe_tests=skip_safe_tests, search_for_tooltip=search_for_tooltip)
+                    else:
+                        additional_local_result = None
+                    if cls.test_autonomous:
+                        autonomous_result = cls.test_autonomous.run_tests(resolver, skip_safe_tests=skip_safe_tests, search_for_tooltip=False)
+                    else:
+                        autonomous_result = None
+                    if target is not None:
+                        tests = target.get_affordance_tests(cls)
+                        if tests is not None:
+                            target_result = tests.run_tests(resolver, skip_safe_tests=skip_safe_tests, search_for_tooltip=search_for_tooltip)
+                        else:
+                            target_result = None
+                    else:
+                        target_result = None
+                    verbose_log.format_with_message('Super Test Result (CommonSocialMixerInteraction)', super_test_result=super_test_result, global_result=global_result, local_result=local_result, additional_local_result=additional_local_result, autonomous_result=autonomous_result, target_result=target_result)
 
                 if super_test_result is not None and (isinstance(test_result, TestResult) and not super_test_result.result):
                     return CommonTestResult.convert_from_vanilla(super_test_result)
@@ -150,10 +179,12 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, HasClassLog, _CommonI
                     interaction_sim=context.sim,
                     interaction_target=target,
                     interaction_context=context,
+                    super_interaction=super_interaction,
+                    skip_safe_tests=skip_safe_tests,
                     argles=args,
                     kwargles=kwargs
                 )
-                post_super_test_result = cls.on_post_super_test(context.sim, target, context, *args, **kwargs)
+                post_super_test_result = cls.on_post_super_test(context.sim, target, context, *args, super_interaction=super_interaction, skip_safe_tests=skip_safe_tests, **kwargs)
                 verbose_log.format_with_message('Post Test Result (CommonSocialMixerInteraction)', post_super_test_result=post_super_test_result)
             except Exception as ex:
                 log.error('Error occurred while running CommonSocialMixerInteraction \'{}\' on_post_super_test.'.format(cls.__name__), exception=ex)

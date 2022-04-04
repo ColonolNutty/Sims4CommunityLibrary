@@ -256,11 +256,6 @@ class CommonMultiPaneChooseDialog(CommonDialog):
                 if not _dialog.accepted:
                     self.log.debug('Dialog cancelled.')
                     return on_submit(dict(), CommonChoiceOutcome.CANCEL)
-
-                made_choices: bool = CommonDialogUtils.get_chosen_items(_dialog)
-                if not made_choices:
-                    self.log.debug('No choices made. Cancelling dialog.')
-                    return on_submit(dict(), CommonChoiceOutcome.CANCEL)
                 self.log.debug('Choices made, combining choices.')
                 index = 0
                 dialog_choices: Dict[int, Tuple[Any]] = dict()
@@ -271,8 +266,11 @@ class CommonMultiPaneChooseDialog(CommonDialog):
                         sub_dialog_choices.append(choice)
                     dialog_choices[index] = tuple(sub_dialog_choices)
                     index += 1
+                if not dialog_choices:
+                    self.log.debug('No choices made. Cancelling dialog.')
+                    return on_submit(dict(), CommonChoiceOutcome.CANCEL)
 
-                self.log.format_with_message('Choices were made, submitting.', choice=made_choices)
+                self.log.format_with_message('Choices were made, submitting.', choice=dialog_choices)
                 result = on_submit(dialog_choices, CommonChoiceOutcome.CHOICE_MADE)
                 self.log.format_with_message('Finished handling choice.', result=result)
                 return result

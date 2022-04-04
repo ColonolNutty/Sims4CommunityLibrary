@@ -112,7 +112,7 @@ def _common_print_game_tags(output: CommonConsoleCommandOutput, game_object: Gam
         obj_tags_list.append(f'{obj_tag_name} ({int(obj_tag)})')
 
     obj_tags_list = sorted(obj_tags_list, key=lambda x: x)
-    obj_tag_list_names = ', '.join(obj_tags_list)
+    obj_tag_list_names = ',\n'.join(obj_tags_list)
     text = ''
     text += f'Object Tags:\n{obj_tag_list_names}\n\n'
     from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
