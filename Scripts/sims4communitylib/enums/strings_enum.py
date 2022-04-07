@@ -103,15 +103,38 @@ class CommonStringId(CommonInt):
     S4CL_LOG_ALL_INTERACTIONS: 'CommonStringId' = 3133049591
     # Tokens: {0.String}
     S4CL_DONE_LOGGING_ALL_INTERACTIONS: 'CommonStringId' = 207690817
+
+    # Sim Actions.
+    S4CL_OBJECT_IS_IN_USE = 0x7EC77EF6
     # Tokens: {0.SimFirstName}
-    S4CL_SIM_IS_NOT_PREGNANT: 'CommonStringId' = 1234364497
-    S4CL_YES: 'CommonStringId' = 979470758
-    S4CL_NO: 'CommonStringId' = 1668749452
-    S4CL_RANDOM: 'CommonStringId' = 3048058352
-    S4CL_CONFIRMATION: 'CommonStringId' = 2520436614
+    S4CL_SIM_NOT_ALLOWED_THERE = 0x48245F2A
+    # Tokens: {0.SimFirstName}
+    S4CL_SIM_CANNOT_REACH_THAT_SPOT = 0x6B324A52
+    # Tokens: {0.SimFirstName}
+    S4CL_NOT_ENOUGH_ROOM_FOR_SIM_HERE = 0x36EB7A72
+    # Tokens: {0.SimFirstName}
+    S4CL_SIM_IS_NOT_PREGNANT: 'CommonStringId' = 0x4992E851
+
+    S4CL_YES: 'CommonStringId' = 0x3A6189A6
+    S4CL_NO: 'CommonStringId' = 0x6377188C
+    S4CL_RANDOM: 'CommonStringId' = 0xB5ADADF0
+    S4CL_CONFIRMATION: 'CommonStringId' = 0x963ACF86
+    S4CL_GO_BACK = 0xD74B6B28
+    S4CL_NONE = 0x2CA33BDB
+    S4CL_DECLINED = 0x5FD633CB
+    S4CL_ACCEPTED = 0xB667ABF6
+    S4CL_ACCEPT = 0xD0F420D1
+    S4CL_DECLINE = 0xA60FC6F5
+    S4CL_DEFAULT = 0x2EA8FB98
+    S4CL_REMOVE_ALL = 0x5C6C2580
+    S4CL_REMOVE = 0x8B3681B1
+
+    # Species
+    S4CL_DOG: 'CommonStringId' = 0x20953C2D
+
+    # Separators
     # {0.String}{1.String}
     S4CL_COMBINE_TWO_STRINGS: 'CommonStringId' = 4217460952
-
     # Tokens: {0.String}: {1.String}
     STRING_COLON_SPACE_STRING = 0x6284ACBA
     # Tokens: {0.String}, {1.String}
@@ -124,3 +147,52 @@ class CommonStringId(CommonInt):
     STRING_NEWLINE_STRING = 0xCE1E042E
     # Tokens: {0.String}-{1.String}
     STRING_HYPHEN_STRING = 0x032A81F9
+    # Tokens: {0.String} are {1.String}
+    S4CL_STRING_ARE_STRING = 0x92AF2862
+    # Tokens: {0.String} is {1.String}
+    S4CL_STRING_IS_STRING = 0xC1166AC4
+
+    S4CL_PLEASE_WAIT = 0xF2237D1E
+    S4CL_RANDOMIZATION_COMPLETE = 0x8ABA94C5
+
+    S4CL_PREGNANCY = 0x3F70BCAA
+
+    S4CL_RESTART_REQUIRED = 0x955D0179
+    S4CL_CHANGES_MADE_RESTART_REQUIRED_DESCRIPTION = 0x6B5119FB
+    # (From Debug)
+    S4CL_BUFF_REASON_FROM_DEBUG = 0x38C2E6F7
+
+    # Purchase
+    S4CL_PURCHASE_SUCCESSFUL = 0xF3C59252
+    S4CL_YOUR_PURCHASED_ITEMS_ARE_ON_THE_WAY = 0x5A8D580D
+    S4CL_YOUR_PURCHASED_ITEMS_ARE_IN_YOUR_INVENTORY = 0xF33F9A95
+    S4CL_TOO_EXPENSIVE = 0x59F9C698
+
+    S4CL_THIS_FEATURE_IS_NOT_YET_IMPLEMENTED = 0x556801EE
+
+    # Sim Name
+    # Tokens: {0.SimFirstName} {0.SimLastName} (Sim One)
+    S4CL_SIM_NAME = 0xAC8F626F
+    # Tokens: {0.SimFirstName} {0.SimLastName} (Sim One) {1.SimFirstName} {1.SimLastName} (Sim Two)
+    S4CL_SIM_NAME_AND_SIM_NAME = 0xD8740FE4
+    # Tokens: {0.String} (A String) {1.SimFirstName} {1.SimLastName} (The Last Sim)
+    S4CL_STRING_COMMA_SPACE_AND_SIM_NAME = 0x2EACE203
+    # Tokens: {0.SimFirstName} {0.SimLastName} (The First Sim) {1.String} (A String)
+    S4CL_SIM_NAME_COMMA_SPACE_AND_STRING = 0x2A8148D8
+
+    # Tokens: {0.String}
+    S4CL_UID_STRING = 0x0313D2A0
+    # Tokens: {0.String} (Current)
+    S4CL_CURRENT_STRING = 0x860F13B5
+    # Tokens: {0.String} (Count)
+    S4CL_COUNT_STRING = 0x423122EB
+    # Tokens: {0.String} (Error Message)
+    S4CL_ERROR_STRING = 0xA1C925BC
+    # Tokens: {0.String} (Failed Message)
+    S4CL_FAILED_STRING = 0x0F818D6F
+    # Tokens: {0.String} (Failure Message)
+    S4CL_FAILURE_STRING = 0x33A94544
+    # Tokens: {0.String} (Success Message)
+    S4CL_SUCCESS_STRING = 0xC6D15497
+    # Tokens: {0.String} (String Message)
+    S4CL_EXCLAMATION_EXCLAMATION_STRING = 0xA07FA6C6

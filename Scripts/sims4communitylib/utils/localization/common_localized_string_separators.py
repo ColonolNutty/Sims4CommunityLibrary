@@ -23,6 +23,8 @@ class CommonLocalizedStringSeparator(CommonInt):
     SPACE_PARENTHESIS_SURROUNDED = "String (String)"
     NEWLINE = "String\nString"
     HYPHEN = "String-String"
+    ARE = "String are String"
+    IS = "String is String"
 
     """
     # {String}{String}
@@ -39,3 +41,7 @@ class CommonLocalizedStringSeparator(CommonInt):
     NEWLINE: 'CommonLocalizedStringSeparator' = CommonStringId.STRING_NEWLINE_STRING
     # {String}-{String}
     HYPHEN: 'CommonLocalizedStringSeparator' = CommonStringId.STRING_HYPHEN_STRING
+    # {String} are {String}
+    ARE: 'CommonLocalizedStringSeparator' = CommonStringId.S4CL_STRING_ARE_STRING
+    # {String} is {String}
+    IS: 'CommonLocalizedStringSeparator' = CommonStringId.S4CL_STRING_IS_STRING

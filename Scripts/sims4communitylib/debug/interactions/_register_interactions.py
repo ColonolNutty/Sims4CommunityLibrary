@@ -62,6 +62,7 @@ class _S4CLDebugEverywhereObjectInteractionHandler(CommonScriptObjectInteraction
     def interactions_to_add(self) -> Tuple[int]:
         result: Tuple[int] = (
             CommonInteractionId.S4CL_DEBUG_LOG_ALL_INTERACTIONS,
+            CommonInteractionId.S4CL_DEBUG_LOG_ALL_GAME_TAGS,
         )
         return result
 
@@ -88,6 +89,7 @@ class _S4CLDebugEverywhereOceanInteractionHandler(CommonInteractionHandler):
     def interactions_to_add(self) -> Tuple[int]:
         result: Tuple[int] = (
             CommonInteractionId.S4CL_DEBUG_LOG_ALL_INTERACTIONS,
+            CommonInteractionId.S4CL_DEBUG_LOG_ALL_GAME_TAGS,
         )
         return result
 

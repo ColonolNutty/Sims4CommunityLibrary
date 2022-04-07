@@ -77,6 +77,35 @@ class CommonObjectTagUtils:
         game_object.append_tags(set(tags), persist=persist)
         return True
 
+    @staticmethod
+    def _print_game_tags(game_object: GameObject) -> None:
+        obj_tags_list: List[str] = list()
+        for obj_tag in CommonObjectTagUtils.get_game_tags(game_object):
+            if not isinstance(obj_tag, CommonGameTag):
+                obj_tag = CommonResourceUtils.get_enum_by_int_value(obj_tag, CommonGameTag, default_value=obj_tag)
+
+            if hasattr(obj_tag, 'name'):
+                obj_tag_name = obj_tag.name
+            else:
+                obj_tag_name = 'Unknown'
+
+            obj_tags_list.append(f'{obj_tag_name} ({int(obj_tag)})')
+
+        obj_tags_list = sorted(obj_tags_list, key=lambda x: x)
+        obj_tag_list_names = ',\n'.join(obj_tags_list)
+        text = ''
+        text += f'Game Tags:\n{obj_tag_list_names}\n\n'
+        from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
+        game_object_id = CommonObjectUtils.get_object_id(game_object)
+        log.debug(f'Object {game_object} Tags ({game_object_id})')
+        log.debug(text)
+        CommonBasicNotification(
+            CommonLocalizationUtils.create_localized_string(f'Object {game_object} Tags ({game_object_id})'),
+            CommonLocalizationUtils.create_localized_string(text)
+        ).show(
+            icon=IconInfoData(obj_instance=game_object)
+        )
+
 
 log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_object_tag_utils')
 log.enable()
@@ -99,29 +128,5 @@ def _common_print_game_tags(output: CommonConsoleCommandOutput, game_object: Gam
         return
 
     output(f'Printing game tags of {game_object}')
-    obj_tags_list: List[str] = list()
-    for obj_tag in CommonObjectTagUtils.get_game_tags(game_object):
-        if not isinstance(obj_tag, CommonGameTag):
-            obj_tag = CommonResourceUtils.get_enum_by_int_value(obj_tag, CommonGameTag, default_value=obj_tag)
-
-        if hasattr(obj_tag, 'name'):
-            obj_tag_name = obj_tag.name
-        else:
-            obj_tag_name = 'Unknown'
-
-        obj_tags_list.append(f'{obj_tag_name} ({int(obj_tag)})')
-
-    obj_tags_list = sorted(obj_tags_list, key=lambda x: x)
-    obj_tag_list_names = ',\n'.join(obj_tags_list)
-    text = ''
-    text += f'Object Tags:\n{obj_tag_list_names}\n\n'
-    from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
-    game_object_id = CommonObjectUtils.get_object_id(game_object)
-    log.debug(f'Game Object {game_object} Tags ({game_object_id})')
-    log.debug(text)
-    CommonBasicNotification(
-        CommonLocalizationUtils.create_localized_string(f'Game Object {game_object} Tags ({game_object_id})'),
-        CommonLocalizationUtils.create_localized_string(text)
-    ).show(
-        icon=IconInfoData(obj_instance=game_object)
-    )
+    CommonObjectTagUtils._print_game_tags(game_object)
+    output('------------------------------------')
