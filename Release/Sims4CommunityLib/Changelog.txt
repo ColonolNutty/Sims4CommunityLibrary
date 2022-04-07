@@ -1,3 +1,14 @@
+v1.77:
+- Fixed an error that could occur when using commands that have an optional integer argument.
+- Added a couple fun commands to use.
+- On each interaction class, when the test function is run, the verbose log will now display the test result of each individual test part of the tuning. i.e. test_globals, _additional_tests, test_autonomous, and affordance tests.
+- Updated the command `s4clib.play_visual_effect`, some of the arguments were shifted. sim_info was moved to be the second argument. joint_bone_name was moved to be the last argument.
+- Added a new command to play visual effects on objects. `s4clib.play_visual_effect_object`.
+- Added an interaction to be able to log all of the game tags of an object. `Log All Game Tags`
+- Added new strings to the string tables
+- Added new separators to CommonLocalizedStringSeparator `ARE` and `IS`
+- Fixed an error when choosing options in a Multipane dialog where it would not correctly determine values to be selected.
+
 v1.76:
 - Fixed an error when converting a Location to a CommonLocation where the parent_ref did not have a provided_routing_surface property
 - Fixed an issue where the Cheat menu would be visible without Cheats being enabled when holding the SHIFT key.
