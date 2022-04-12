@@ -25,6 +25,7 @@ class CommonLocalizedStringSeparator(CommonInt):
     HYPHEN = "String-String"
     ARE = "String are String"
     IS = "String is String"
+    PLUS = "String+String"
 
     """
     # {String}{String}
@@ -45,3 +46,5 @@ class CommonLocalizedStringSeparator(CommonInt):
     ARE: 'CommonLocalizedStringSeparator' = CommonStringId.S4CL_STRING_ARE_STRING
     # {String} is {String}
     IS: 'CommonLocalizedStringSeparator' = CommonStringId.S4CL_STRING_IS_STRING
+    # {String}+{String}
+    PLUS: 'CommonLocalizedStringSeparator' = CommonStringId.S4CL_STRING_PLUS_STRING

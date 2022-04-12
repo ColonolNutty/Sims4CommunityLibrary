@@ -29,6 +29,7 @@ class S4CLConfiguration(HasLog, CommonService):
             'enable_extra_shift_click_menus': True,
             'persist_mod_data_per_save_slot': False,
             'create_combined_json': False,
+            'max_output_file_size_in_bytes': 524288000,
             'enable_logs': {
                 'example_log_that_is_enabled': ['DEBUG', 'WARN']
             }
@@ -81,6 +82,13 @@ class S4CLConfiguration(HasLog, CommonService):
         if self._config_data is None or not self._config_data:
             return False
         return self._config_data.get('enable_vanilla_logging', False)
+
+    @property
+    def max_output_file_size_in_bytes(self) -> int:
+        """ The maximum size a file created by S4CL can be in bytes. """
+        if self._config_data is None or not self._config_data:
+            return False
+        return self._config_data.get('max_output_file_size_in_bytes', 524288000)
 
     @property
     def enable_extra_shift_click_menus(self) -> bool:

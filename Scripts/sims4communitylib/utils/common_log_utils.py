@@ -15,8 +15,6 @@ class CommonLogUtils:
     """Utilities for retrieving the paths used for logging.
 
     """
-    # 10 MB
-    _MAX_FILE_SIZE = 1048576
 
     @staticmethod
     def get_exceptions_file_path(mod_identifier: Union[str, CommonModIdentity], custom_file_path: str=None) -> str:
@@ -184,4 +182,5 @@ class CommonLogUtils:
 
     @staticmethod
     def _file_is_too_big(file_path: str) -> bool:
-        return os.path.getsize(file_path) > CommonLogUtils._MAX_FILE_SIZE
+        from sims4communitylib.s4cl_configuration import S4CLConfiguration
+        return os.path.getsize(file_path) > S4CLConfiguration().max_output_file_size_in_bytes
