@@ -39,7 +39,7 @@ class CommonAssertionUtils:
         if CommonCollectionUtils.is_collection(value_one) or CommonCollectionUtils.is_collection(value_two):
             return CommonAssertionUtils.lists_are_equal(value_one, value_two, message=message)
         if value_one != value_two:
-            raise AssertionError('{}: expected\n  {}\n  to be equal to\n  {}'.format(message, value_one, value_two))
+            raise AssertionError(f'{message}: expected\n  {value_one}\n  to be equal to\n  {value_two}')
         return True
 
     @staticmethod
@@ -65,7 +65,7 @@ class CommonAssertionUtils:
         if CommonCollectionUtils.is_collection(value_one) or CommonCollectionUtils.is_collection(value_two):
             return CommonAssertionUtils.list_contents_are_same(value_one, value_two, message=message)
         if value_one != value_two:
-            raise AssertionError('{}: expected\n  {}\n  to be similar to\n  {}'.format(message, value_one, value_two))
+            raise AssertionError(f'{message}: expected\n  {value_one}\n  to be similar to\n  {value_two}')
         return True
 
     @staticmethod
@@ -87,11 +87,11 @@ class CommonAssertionUtils:
         :exception AssertionError: when the assertion fails.
         """
         if not CommonCollectionUtils.is_collection(list_one):
-            raise AssertionError('{}: expected\n  {}\n  to be equal to\n  {}'.format(message, list_one, list_two))
+            raise AssertionError(f'{message}: expected\n  {list_one}\n  to be equal to\n  {list_two}')
         if not CommonCollectionUtils.is_collection(list_two):
-            raise AssertionError('{}: expected\n  {}\n  to be equal to\n  {}'.format(message, list_one, list_two))
+            raise AssertionError(f'{message}: expected\n  {list_one}\n  to be equal to\n  {list_two}')
         if len(list_one) != len(list_two):
-            raise AssertionError('{}: expected\n  {}\n  to be equal to\n  {}'.format(message, list_one, list_two))
+            raise AssertionError(f'{message}: expected\n  {list_one}\n  to be equal to\n  {list_two}')
         if isinstance(list_one, set) or isinstance(list_two, set):
             return list_one == list_two
         current_idx = 0
@@ -99,7 +99,7 @@ class CommonAssertionUtils:
             item_one = list_one[current_idx]
             item_two = list_two[current_idx]
             if item_one != item_two:
-                raise AssertionError('{}:  expected\n  {}\n  to be equal to\n  {}\n  Difference:\n  {}\n  should be\n  {}\n  at index {}'.format(message, list_one, list_two, item_one, item_two, current_idx))
+                raise AssertionError(f'{message}:  expected\n  {list_one}\n  to be equal to\n  {list_two}\n  Difference:\n  {item_one}\n  should be\n  {item_two}\n  at index {current_idx}')
             current_idx += 1
         return True
 
@@ -122,17 +122,17 @@ class CommonAssertionUtils:
         :exception AssertionError: when the assertion fails.
         """
         if not CommonCollectionUtils.is_collection(list_one):
-            raise AssertionError('{}: {} is not a collection'.format(message, list_one))
+            raise AssertionError(f'{message}: {list_one} is not a collection')
         if not CommonCollectionUtils.is_collection(list_two):
-            raise AssertionError('{}: {} is not a collection'.format(message, list_two))
+            raise AssertionError(f'{message}: {list_two} is not a collection')
         if len(list_one) != len(list_two):
-            raise AssertionError('{}: expected\n  {}\n  to be equal to\n  {}'.format(message, list_one, list_two))
+            raise AssertionError(f'{message}: expected\n  {list_one}\n  to be equal to\n  {list_two}')
         for item_one in list_one:
             if item_one not in list_two:
-                raise AssertionError('{}: expected\n  {}\n  contents to be equal to\n  {}\n  {} not found in\n  {}'.format(message, list_one, list_two, item_one, list_two))
+                raise AssertionError(f'{message}: expected\n  {list_one}\n  contents to be equal to\n  {list_two}\n  {item_one} not found in\n  {list_two}')
         for item_one in list_two:
             if item_one not in list_one:
-                raise AssertionError('{}: expected\n  {}\n  contents to be equal to\n  {}\n  {} not found in\n  {}'.format(message, list_one, list_two, item_one, list_one))
+                raise AssertionError(f'{message}: expected\n  {list_one}\n  contents to be equal to\n  {list_two}\n  {item_one} not found in\n  {list_one}')
         return True
 
     @staticmethod
@@ -150,11 +150,11 @@ class CommonAssertionUtils:
         :exception AssertionError: when the assertion fails.
         """
         if isinstance(value, CommonTestResult) or isinstance(value, CommonExecutionResult):
-            if value is not True:
+            if value.result is not True:
                 raise AssertionError(f'{message} {value.reason}: expected True, but was {value.result}')
             return True
         if value is not True:
-            raise AssertionError('{}: expected True, but was {}'.format(message, value))
+            raise AssertionError(f'{message}: expected True, but was {value}')
         return True
 
     @staticmethod
@@ -172,11 +172,11 @@ class CommonAssertionUtils:
         :exception AssertionError: when the assertion fails.
         """
         if isinstance(value, CommonTestResult) or isinstance(value, CommonExecutionResult):
-            if value is not False:
+            if value.result is not False:
                 raise AssertionError(f'{message} {value.reason}: expected False, but was {value.result}')
             return True
         if value is not False:
-            raise AssertionError('{}: expected False, but was {}'.format(message, value))
+            raise AssertionError(f'{message}: expected False, but was {value}')
         return True
 
     @staticmethod
@@ -196,9 +196,9 @@ class CommonAssertionUtils:
         :exception AssertionError: when the assertion fails.
         """
         if not CommonCollectionUtils.is_collection(value):
-            raise AssertionError('{}: expected collection {} to have length {}, but was not a collection'.format(message, value, expected_length))
+            raise AssertionError(f'{message}: expected collection {value} to have length {expected_length}, but was not a collection')
         if len(value) != expected_length:
-            raise AssertionError('{}: expected collection {} to have length {}, but was {}'.format(message, value, expected_length, len(value)))
+            raise AssertionError(f'{message}: expected collection {value} to have length {expected_length}, but was {len(value)}')
         return True
 
     @staticmethod
@@ -213,12 +213,32 @@ class CommonAssertionUtils:
         :type value: Any
         :param message: A custom message to include when the assertion fails. Default is Empty String.
         :type message: str, optional
-        :return: True if the value is contained within the collection.
+        :return: True, if the value is contained within the collection. False, if it is not.
         :rtype: bool
         :exception AssertionError: when the assertion fails.
         """
         if value not in collection:
-            raise AssertionError('{}: expected {} to contain {}, but it did not'.format(message, collection, value))
+            raise AssertionError(f'{message}: expected {collection} to contain {value}, but it did not.')
+        return True
+
+    @staticmethod
+    def not_contains(collection: Union[Tuple[Any], List[Any], Dict[Any, Any]], value: Any, message: str='') -> bool:
+        """not_contains(collection, value, message='')
+
+        Assert a value is NOT contained within a collection
+
+        :param collection: The collection being checked (Any collection that works with `len()` can be used)
+        :type collection: Union[Tuple[Any], List[Any], Dict[Any, Any]]
+        :param value: The value being located.
+        :type value: Any
+        :param message: A custom message to include when the assertion fails. Default is Empty String.
+        :type message: str, optional
+        :return: True, if the value is NOT contained within the collection. False, if it is.
+        :rtype: bool
+        :exception AssertionError: when the assertion fails.
+        """
+        if value in collection:
+            raise AssertionError(f'{message}: expected {collection} to not contain {value}, but it did.')
         return True
 
     @staticmethod
@@ -239,7 +259,7 @@ class CommonAssertionUtils:
             callback()
         except Exception as ex:
             return ex
-        raise AssertionError('{}: expected function to throw an exception, but it did not.'.format(message))
+        raise AssertionError(f'{message}: expected function to throw an exception, but it did not.')
 
     @staticmethod
     def not_throws(callback: Callable[..., Any], message: str='') -> bool:
@@ -258,5 +278,5 @@ class CommonAssertionUtils:
         try:
             callback()
         except Exception as ex:
-            raise AssertionError('{}: expected function to not throw an exception, but it did. Exception: {}'.format(message, ex))
+            raise AssertionError(f'{message}: expected function to not throw an exception, but it did. Exception: {ex}')
         return True

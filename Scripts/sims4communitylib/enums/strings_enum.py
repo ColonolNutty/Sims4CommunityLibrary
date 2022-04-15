@@ -147,6 +147,8 @@ class CommonStringId(CommonInt):
     STRING_SPACE_PARENTHESIS_SURROUNDED_STRING = 0x1A406429
     # Tokens: {0.String}\n{1.String}
     STRING_NEWLINE_STRING = 0xCE1E042E
+    # Tokens: {0.String}\n\n{1.String}
+    STRING_NEWLINE_NEWLINE_STRING = 0xBA331D00
     # Tokens: {0.String}-{1.String}
     STRING_HYPHEN_STRING = 0x032A81F9
     # Tokens: {0.String} are {1.String}
@@ -155,6 +157,14 @@ class CommonStringId(CommonInt):
     S4CL_STRING_IS_STRING = 0xC1166AC4
     # Tokens: {0.String}+{1.String}
     S4CL_STRING_PLUS_STRING = 0x82ED46EB
+    # Tokens: {0.String} or {1.String}
+    S4CL_STRING_OR_STRING = 0x1DC61DF5
+    # Tokens: {0.String}, or {1.String}
+    S4CL_STRING_COMMA_SPACE_OR_STRING = 0x34E0269D
+    # Tokens: {0.String} and {1.String}
+    S4CL_STRING_AND_STRING = 0xCFB35A51
+    # Tokens: {0.String}, and {1.String}
+    S4CL_STRING_COMMA_SPACE_AND_STRING = 0x419E6969
 
     S4CL_PLEASE_WAIT = 0xF2237D1E
     S4CL_RANDOMIZATION_COMPLETE = 0x8ABA94C5
