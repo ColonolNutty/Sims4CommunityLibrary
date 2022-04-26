@@ -106,6 +106,7 @@ class CommonLocalizationUtils:
         :param separator: The separator to use when combining the strings. Default is to combine all of the strings by no separator, i.e. an empty space.
         :type separator: CommonLocalizedStringSeparator, optional
         :return: A localized string with all Localized Strings combined by the specified separator.
+        :rtype: LocalizedString
         """
         localized = None
         for identifier in identifier_list:
@@ -114,6 +115,60 @@ class CommonLocalizationUtils:
             else:
                 localized = CommonLocalizationUtils.create_localized_string(separator, tokens=(localized, identifier))
         return localized
+
+    @staticmethod
+    def combine_localized_strings_with_comma_space_and(identifier_list: Iterator[Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator]]) -> LocalizedString:
+        """combine_localized_strings_with_comma_space_and(identifier_list)
+
+        Combine multiple localized strings and formulate a string that is of format "{0.String}", "{0.String} and {1.String}", or "{0.String}, and {1.String}". With {0.String} being the first strings in the collection and {1.String} being the last string in the collection.
+
+        .. note:: Example: ['one'] will turn into "one". ['one', 'two'] will turn into "one and two". ['one', 'two', 'three'] will turn into "one, two, and three".
+
+        :param identifier_list: A collection of identifiers to combine.
+        :type identifier_list: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator]
+        :return: A localized string with all Localized Strings combined with a "comma space and" separator.
+        :rtype: LocalizedString
+        """
+        identifier_list = tuple(identifier_list)
+        if not identifier_list:
+            return CommonStringId.S4CL_NONE
+
+        if len(identifier_list) <= 1:
+            return CommonLocalizationUtils.combine_localized_strings(identifier_list, separator=CommonLocalizedStringSeparator.COMMA_SPACE)
+
+        last_tag_text = identifier_list[-1]
+        combined_tags_text = CommonLocalizationUtils.combine_localized_strings(identifier_list[:-1], separator=CommonLocalizedStringSeparator.COMMA_SPACE)
+        if len(identifier_list) == 2:
+            return CommonLocalizationUtils.combine_localized_strings((combined_tags_text, last_tag_text), separator=CommonLocalizedStringSeparator.AND)
+        else:
+            return CommonLocalizationUtils.combine_localized_strings((combined_tags_text, last_tag_text), separator=CommonLocalizedStringSeparator.COMMA_SPACE_AND)
+
+    @staticmethod
+    def combine_localized_strings_with_comma_space_or(identifier_list: Iterator[Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator]]) -> LocalizedString:
+        """combine_localized_strings_with_comma_space_or(identifier_list)
+
+        Combine multiple localized strings and formulate a string that is of format "{0.String}", "{0.String} or {1.String}", or "{0.String}, or {1.String}". With {0.String} being the first strings in the collection and {1.String} being the last string in the collection.
+
+        .. note:: Example: ['one'] will turn into "one". ['one', 'two'] will turn into "one or two". ['one', 'two', 'three'] will turn into "one, two, or three".
+
+        :param identifier_list: A collection of identifiers to combine.
+        :type identifier_list: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator]
+        :return: A localized string with all Localized Strings combined with a "comma space or" separator.
+        :rtype: LocalizedString
+        """
+        identifier_list = tuple(identifier_list)
+        if not identifier_list:
+            return CommonStringId.S4CL_NONE
+
+        if len(identifier_list) <= 1:
+            return CommonLocalizationUtils.combine_localized_strings(identifier_list, separator=CommonLocalizedStringSeparator.COMMA_SPACE)
+
+        last_tag_text = identifier_list[-1]
+        combined_tags_text = CommonLocalizationUtils.combine_localized_strings(identifier_list[:-1], separator=CommonLocalizedStringSeparator.COMMA_SPACE)
+        if len(identifier_list) == 2:
+            return CommonLocalizationUtils.combine_localized_strings((combined_tags_text, last_tag_text), separator=CommonLocalizedStringSeparator.OR)
+        else:
+            return CommonLocalizationUtils.combine_localized_strings((combined_tags_text, last_tag_text), separator=CommonLocalizedStringSeparator.COMMA_SPACE_OR)
 
     @staticmethod
     def create_from_string(string_text: str) -> LocalizedString:

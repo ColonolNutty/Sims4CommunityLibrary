@@ -166,6 +166,10 @@ class CommonStringId(CommonInt):
     # Tokens: {0.String}, and {1.String}
     S4CL_STRING_COMMA_SPACE_AND_STRING = 0x419E6969
 
+    # String Modifiers
+    # Tokens: ({0.String})
+    S4CL_PARENTHESIS_SURROUNDED_STRING = 0xD7FDCAF5
+
     S4CL_PLEASE_WAIT = 0xF2237D1E
     S4CL_RANDOMIZATION_COMPLETE = 0x8ABA94C5
 

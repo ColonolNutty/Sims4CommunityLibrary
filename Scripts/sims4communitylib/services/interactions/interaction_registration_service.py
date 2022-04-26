@@ -13,8 +13,7 @@ from services.terrain_service import TerrainService
 from sims.sim import Sim
 from sims4.resources import Types
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
-from sims4communitylib.logging.has_log import HasLog
-from sims4communitylib.mod_support.mod_identity import CommonModIdentity
+from sims4communitylib.logging._has_s4cl_log import _HasS4CLLog
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
@@ -113,17 +112,12 @@ class CommonScriptObjectInteractionHandler(CommonInteractionHandler):
         raise NotImplementedError()
 
 
-class CommonInteractionRegistry(CommonService, HasLog):
+class CommonInteractionRegistry(CommonService, _HasS4CLLog):
     """Manage the registration of interactions to script objects, terrain, sims, etc.
 
     .. note:: Take a look at :class:`.CommonScriptObjectInteractionHandler` for more info and an example of usage.
 
     """
-
-    # noinspection PyMissingOrEmptyDocstring
-    @property
-    def mod_identity(self) -> CommonModIdentity:
-        return ModInfo.get_identity()
 
     # noinspection PyMissingOrEmptyDocstring
     @property
