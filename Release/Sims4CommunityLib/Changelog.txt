@@ -4,10 +4,16 @@ v1.77:
 - On each interaction class, when the test function is run, the verbose log will now display the test result of each individual test part of the tuning. i.e. test_globals, _additional_tests, test_autonomous, and affordance tests.
 - Updated the command `s4clib.play_visual_effect`, some of the arguments were shifted. sim_info was moved to be the second argument. joint_bone_name was moved to be the last argument.
 - Added a new command to play visual effects on objects. `s4clib.play_visual_effect_object`.
-- Added an interaction to be able to log all of the game tags of an object. `Log All Game Tags`
-- Added new strings to the string tables
-- Added new separators to CommonLocalizedStringSeparator `ARE` and `IS`
+- Added an interaction to be able to log all of the game tags of an object. `Log All Game Tags`.
+- Added many new strings.
+- Added new CommonLocalizedStringSeparator values `OR`, `COMMA_SPACE_OR`, `AND`, `COMMA_SPACE_AND`, `NEWLINE_NEWLINE`, `STRING_PLUS_STRING`, `ARE`, `IS`
 - Fixed an error when choosing options in a Multipane dialog where it would not correctly determine values to be selected.
+- Fixed some type hint issues within CommonGameObjectDataStorage and CommonSimDataStorage.
+- Added the ability to choose to hide the tooltip for CommonTestResult and CommonExecutionResult via a new init argument `hide_tooltip`.
+- Added CommonTunedInstanceRegistry, used to modify tunings as they load into the game.
+- Added a tuned instance modification handler for adding interactions to affordance lists.
+- Added functions to CommonCombinedSpecies to convert it to a short name, enum xml, and to check if a value is an animal value.
+- The maximum size files can be when created by S4CL is now configurable via the sims4communitylib.config file. It has also been increased to about 500 MB instead of the previous 10 MB.
 
 v1.76:
 - Fixed an error when converting a Location to a CommonLocation where the parent_ref did not have a provided_routing_surface property
