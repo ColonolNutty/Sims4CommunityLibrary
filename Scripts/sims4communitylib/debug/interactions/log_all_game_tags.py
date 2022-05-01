@@ -15,7 +15,6 @@ from sims4communitylib.classes.testing.common_execution_result import CommonExec
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.objects.common_object_tag_utils import CommonObjectTagUtils
 from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils

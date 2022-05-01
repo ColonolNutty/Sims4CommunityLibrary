@@ -23,6 +23,7 @@ class CommonTestResult(CommonExecutionResult):
         tooltip_tokens=(),\
         icon=None,\
         influenced_by_active_mood=False,\
+        hide_tooltip=False,\
     )
 
     The result of testing something.
@@ -41,6 +42,8 @@ class CommonTestResult(CommonExecutionResult):
     :type icon: Any, optional
     :param influenced_by_active_mood: Indicate whether or not the result was influenced by a Sims active mood. Default is False.
     :type influenced_by_active_mood: bool, optional
+    :param hide_tooltip: If True, no tooltip will be shown to the Player, even if a tooltip is specified. If False, a tooltip will be shown to the Player and if not specified, will be created from the reason  (Assuming a reason is specified). Default is False.
+    :type hide_tooltip: bool, optional
     """
     TRUE = None
     FALSE = None
@@ -53,9 +56,10 @@ class CommonTestResult(CommonExecutionResult):
         tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator, CommonLocalizationUtils.LocalizedTooltip]=None,
         tooltip_tokens: Iterator[Any]=(),
         icon: Any=None,
-        influenced_by_active_mood: bool=False
+        influenced_by_active_mood: bool=False,
+        hide_tooltip: bool=False
     ) -> None:
-        super().__init__(result, reason=reason, success_override=result, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influenced_by_active_mood)
+        super().__init__(result, reason=reason, success_override=result, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influenced_by_active_mood, hide_tooltip=hide_tooltip)
 
     @classmethod
     def convert_from_vanilla(cls, test_result: TestResult) -> 'CommonTestResult':
@@ -140,6 +144,6 @@ class CommonTestResult(CommonExecutionResult):
         return self.__class__(result, reason, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influence_by_active_mood)
 
 
-CommonTestResult.TRUE = CommonTestResult(True, reason='Success Generic')
-CommonTestResult.FALSE = CommonTestResult(False, reason='Failure Unknown')
-CommonTestResult.NONE = CommonTestResult(False)
+CommonTestResult.TRUE = CommonTestResult(True, hide_tooltip=True)
+CommonTestResult.FALSE = CommonTestResult(False, reason='Failure Unknown', hide_tooltip=True)
+CommonTestResult.NONE = CommonTestResult(False, hide_tooltip=True)

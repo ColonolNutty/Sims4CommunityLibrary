@@ -20,7 +20,7 @@ from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtil
 class _CommonGameObjectDataStorageMetaclass(type):
     _game_object_storage_instances: Dict[str, Dict[int, '_CommonGameObjectDataStorageMetaclass']] = dict()
 
-    def __call__(cls, game_object: GameObject) -> Union['_CommonGameObjectDataStorageMetaclass', None]:
+    def __call__(cls, game_object: GameObject):
         mod_identity = cls.get_mod_identity()
         game_object_id = CommonObjectUtils.get_object_id(game_object)
         mod_name = mod_identity.name

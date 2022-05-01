@@ -23,6 +23,7 @@ class CommonExecutionResult(TestResult):
         tooltip_tokens=(),\
         icon=None,\
         influenced_by_active_mood=False,\
+        hide_tooltip=False,\
     )
 
     The result of executing something.
@@ -43,6 +44,8 @@ class CommonExecutionResult(TestResult):
     :type icon: Any, optional
     :param influenced_by_active_mood: Indicate whether or not the result was influenced by a Sims active mood. Default is False.
     :type influenced_by_active_mood: bool, optional
+    :param hide_tooltip: If True, no tooltip will be shown to the Player, even if a tooltip is specified. If False, a tooltip will be shown to the Player and if not specified, will be created from the reason  (Assuming a reason is specified). Default is False.
+    :type hide_tooltip: bool, optional
     """
     TRUE = None
     FALSE = None
@@ -56,16 +59,17 @@ class CommonExecutionResult(TestResult):
         tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator, CommonLocalizationUtils.LocalizedTooltip]=None,
         tooltip_tokens: Iterator[Any]=(),
         icon: Any=None,
-        influenced_by_active_mood: bool=False
+        influenced_by_active_mood: bool=False,
+        hide_tooltip: bool=False
     ) -> None:
-        self._tooltip_text = tooltip_text
-        self._tooltip_tokens = tooltip_tokens
-        if tooltip_text is not None:
-            tooltip = CommonLocalizationUtils.create_localized_tooltip(tooltip_text, tooltip_tokens=tooltip_tokens)
-        elif reason is not None:
-            tooltip = CommonLocalizationUtils.create_localized_tooltip(reason, tooltip_tokens=tooltip_tokens)
-        else:
-            tooltip = None
+        tooltip = None
+        if not hide_tooltip:
+            self._tooltip_text = tooltip_text
+            self._tooltip_tokens = tooltip_tokens
+            if tooltip_text is not None:
+                tooltip = CommonLocalizationUtils.create_localized_tooltip(tooltip_text, tooltip_tokens=tooltip_tokens)
+            elif reason is not None:
+                tooltip = CommonLocalizationUtils.create_localized_tooltip(reason, tooltip_tokens=tooltip_tokens)
         super().__init__(result, reason, tooltip=tooltip, icon=icon, influence_by_active_mood=influenced_by_active_mood)
         self._success_override = success_override
         if success_override is None:
@@ -175,6 +179,6 @@ class CommonExecutionResult(TestResult):
         return CommonExecutionResult(result, reason=reason, success_override=is_success, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influence_by_active_mood)
 
 
-CommonExecutionResult.TRUE = CommonExecutionResult(True, reason='Success Generic')
-CommonExecutionResult.FALSE = CommonExecutionResult(False, reason='Failure Unknown')
-CommonExecutionResult.NONE = CommonExecutionResult(False)
+CommonExecutionResult.TRUE = CommonExecutionResult(True, hide_tooltip=True)
+CommonExecutionResult.FALSE = CommonExecutionResult(False, reason='Failure Unknown', hide_tooltip=True)
+CommonExecutionResult.NONE = CommonExecutionResult(False, hide_tooltip=True)

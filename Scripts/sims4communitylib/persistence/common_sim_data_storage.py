@@ -20,7 +20,7 @@ from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 class _CommonSimDataStorageMetaclass(type):
     _sim_storage_instances: Dict[str, Dict[int, '_CommonSimDataStorageMetaclass']] = {}
 
-    def __call__(cls, sim_info: SimInfo) -> Union['_CommonSimDataStorageMetaclass', None]:
+    def __call__(cls, sim_info: SimInfo):
         mod_identity = cls.get_mod_identity()
         sim_id = CommonSimUtils.get_sim_id(sim_info)
         mod_name = mod_identity.name

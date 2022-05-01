@@ -12,7 +12,7 @@ class CommonEnumMetaclass(type):
     """A metaclass that converts the properties of a class into enum objects and allows iteration of those properties.
 
     """
-    def __new__(mcs, cls: Any, bases: Any, class_dict: Any) -> Any:
+    def __new__(mcs, cls: Any, bases: Any, class_dict: Any):
         obj_attrs = set(dir(type(cls, (object,), {})))
         enum_cls = super().__new__(mcs, cls, bases, class_dict)
         member_names = set(class_dict.keys()) - obj_attrs
@@ -33,7 +33,7 @@ class CommonEnumMetaclass(type):
 
         return enum_cls
 
-    def __call__(cls, val: Any) -> Any:
+    def __call__(cls, val: Any):
         for (enum_name, enum_value) in cls._members_.items():
             if val == enum_name or val == enum_value:
                 return getattr(cls, enum_name)
