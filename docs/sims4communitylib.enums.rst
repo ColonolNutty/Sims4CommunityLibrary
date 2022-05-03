@@ -422,6 +422,62 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Weather Cloud Types`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_cloud_type.CommonCloudType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Weather Ground Cover Types`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_ground_cover_type.CommonGroundCoverType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Weather Precipitation Types`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_precipitation_type.CommonPrecipitationType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Weather Temperature`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_temperature.CommonTemperature
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Weather Events`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_weather_event_ids.CommonWeatherEventId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Weather Types`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_weather_type.CommonWeatherType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Weather Effect Types`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_weather_effect_type.CommonWeatherEffectType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Whim Sets`
 ------------------------------------------
 

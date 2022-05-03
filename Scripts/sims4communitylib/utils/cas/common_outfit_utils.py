@@ -21,7 +21,6 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
-from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 from singletons import DEFAULT
@@ -724,6 +723,7 @@ class CommonOutfitUtils(HasClassLog):
         :return: True, if CAS Parts were copied successfully. False, if not.
         :rtype: bool
         """
+        from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
         outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=from_outfit_category_and_index, mod_identity=mod_identity)
         return outfit_io.apply(change_sim_to_outfit_after_apply=change_sim_to_outfit_after_apply, apply_to_all_outfits_in_same_category=False, apply_to_outfit_category_and_index=to_outfit_category_and_index)
 
