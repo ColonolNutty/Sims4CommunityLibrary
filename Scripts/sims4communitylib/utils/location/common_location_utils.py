@@ -10,9 +10,11 @@ import services
 from typing import Tuple, Union, Any, Dict, List
 
 import build_buy
+from civic_policies.street_civic_policy_service import StreetService
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
+from world.street import Street
 
 try:
     import _buildbuy
@@ -495,8 +497,8 @@ class CommonLocationUtils:
             return False
         return True
 
-    @staticmethod
-    def get_current_venue_type() -> VenueTypes:
+    @classmethod
+    def get_current_venue_type(cls) -> VenueTypes:
         """get_current_venue_type()
 
         Retrieve the type of the current venue.
@@ -504,10 +506,10 @@ class CommonLocationUtils:
         :return: The VenueType of the current lot.
         :rtype: VenueTypes
         """
-        return build_buy.get_current_venue(CommonLocationUtils.get_current_zone_id())
+        return cls.get_venue_type_by_zone_id(CommonLocationUtils.get_current_zone_id())
 
-    @staticmethod
-    def get_venue_of_current_lot() -> Venue:
+    @classmethod
+    def get_venue_of_current_lot(cls) -> Venue:
         """get_venue_of_current_lot()
 
         Retrieve a Venue for the current lot.
@@ -515,7 +517,31 @@ class CommonLocationUtils:
         :return: The Venue of the current lot.
         :rtype: Venue
         """
-        return CommonResourceUtils.load_instance(Types.VENUE, CommonLocationUtils.get_current_venue_type())
+        return cls.get_venue_by_zone_id(CommonLocationUtils.get_current_zone_id())
+
+    @classmethod
+    def get_venue_type_by_zone_id(cls, zone_id: int) -> VenueTypes:
+        """get_venue_type_by_zone_id()
+
+        Retrieve the Venue type of a Zone.
+
+        :return: The VenueType of the specified Zone.
+        :rtype: VenueTypes
+        """
+        return build_buy.get_current_venue(zone_id)
+
+    @classmethod
+    def get_venue_by_zone_id(cls, zone_id: int) -> Venue:
+        """get_venue_by_zone_id(zone_id)
+
+        Retrieve the Venue for a Zone.
+
+        :param zone_id: The identifier of a Zone.
+        :type zone_id: int
+        :return: The Venue instance for the specified Zone.
+        :rtype: Venue
+        """
+        return CommonResourceUtils.load_instance(Types.VENUE, cls.get_venue_type_by_zone_id(zone_id))
 
     @staticmethod
     def is_current_venue_residential() -> bool:
@@ -688,3 +714,77 @@ class CommonLocationUtils:
         surface_identifier = CommonSurfaceIdentifier.from_surface_identifier(surface_identifier)
         position = CommonVector3(position.x, CommonLocationUtils.get_surface_height_at(position.x, position.z, surface_identifier), position.z)
         return CommonVector3.from_vector3(position)
+
+    @classmethod
+    def get_current_world_id(cls) -> int:
+        """get_current_world_id()
+
+        Retrieve the identifier of the World which the current Zone is in.
+
+        :return: The identifier of the World which the current Zone is in.
+        :rtype: int
+        """
+        return cls.get_world_id_by_zone_id(CommonLocationUtils.get_current_zone_id())
+
+    @classmethod
+    def get_world_id_by_zone_id(cls, zone_id: int) -> int:
+        """get_world_id_by_zone_id(zone_id)
+
+        Retrieve the identifier of the World which a Zone is in.
+
+        :param zone_id: The identifier of the zone to use.
+        :type zone_id: int
+        :return: The identifier of the World which a Zone is in.
+        :rtype: int
+        """
+        return services.get_persistence_service().get_world_id_from_zone(zone_id)
+
+    @classmethod
+    def get_street_service(cls) -> StreetService:
+        """get_street_service()
+
+        Retrieve an instance of the street service.
+
+        :return: An instance of the street service.
+        :rtype: StreetService
+        """
+        return services.street_service()
+
+    @classmethod
+    def get_street_of_current_zone(cls) -> Street:
+        """get_street_from_current_zone()
+
+        Retrieve a Street instance using the current Zone.
+
+        :return: The Street instance for the current Zone.
+        :rtype: Street
+        """
+        return cls.get_street_by_zone_id(CommonLocationUtils.get_current_zone_id())
+
+    @classmethod
+    def get_street_by_zone_id(cls, zone_id: int) -> Street:
+        """get_street_by_zone_id(zone_id)
+
+        Retrieve the Street instance for a Zone.
+
+        :param zone_id: The identifier of the Zone to use.
+        :type zone_id: int
+        :return: The Street instance of the specified zone.
+        :rtype: Street
+        """
+        from world.street import get_street_instance_from_zone_id
+        return get_street_instance_from_zone_id(zone_id)
+
+    @classmethod
+    def get_street_by_world_id(cls, world_id: int) -> Street:
+        """get_street_by_world_id(world_id)
+
+        Retrieve a Street instance using a World Id.
+
+        :param world_id: The identifier of the World to use.
+        :type world_id: int
+        :return: The Street instance of the specified World.
+        :rtype: Street
+        """
+        from world.street import get_street_instance_from_world_id
+        return get_street_instance_from_world_id(world_id)

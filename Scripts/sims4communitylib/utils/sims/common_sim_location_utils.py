@@ -9,6 +9,7 @@ import os
 
 from typing import Union
 
+from objects.game_object import GameObject
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_quaternion import CommonQuaternion
 from sims4communitylib.classes.math.common_routing_location import CommonRoutingLocation
@@ -333,6 +334,26 @@ class CommonSimLocationUtils:
             routing_surface
         )
         return CommonSimLocationUtils.can_route_to_location(sim_info, location)
+
+    @staticmethod
+    def can_route_to_object(sim_info: SimInfo, game_object: GameObject) -> bool:
+        """can_route_to_object(sim_info, game_object)
+
+        Determine if a Sim can route to an Object.
+
+        .. note:: This function will account for locked doors as well.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param game_object: The Object to check.
+        :type game_object: GameObject
+        :return: True, if the Sim can route to the Object. False, if not.
+        :rtype: bool
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return False
+        return game_object.is_connected(sim)
 
     @staticmethod
     def is_within_range_of_position(sim_info: SimInfo, position: CommonVector3, distance_in_squares: float) -> bool:

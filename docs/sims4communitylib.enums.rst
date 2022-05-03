@@ -78,6 +78,38 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Civic Policies (Street)`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_street_civic_policy_ids.CommonStreetCivicPolicyId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Civic Policies (Venue)`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_venue_civic_policy_ids.CommonVenueCivicPolicyId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Civic Policy Status Type`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_civic_policy_status_type.CommonCivicPolicyStatusType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Civic Policy Type`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_civic_policy_type.CommonCivicPolicyType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Currency Modify Reasons`
 ------------------------------------------
 
@@ -218,6 +250,14 @@ Resource Identifiers
 ------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.common_occult_type.CommonOccultType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Postures`
+--------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_posture_id.CommonPostureId
    :members:
    :undoc-members:
    :show-inheritance:

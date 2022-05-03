@@ -27,6 +27,8 @@ from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from situations.situation_goal import SituationGoal
 from situations.situation_goal_targeted_sim import SituationGoalTargetedSim
 from situations.situation_goal_tracker import SituationGoalTracker
+from situations.situation_guest_list import SituationInvitationPurpose, SituationGuestList, SituationGuestInfo
+from situations.situation_job import SituationJob
 from whims.whim_set import WhimSetBaseMixin
 
 
@@ -279,6 +281,59 @@ class CommonSimSituationUtils(HasClassLog):
         if sim is None:
             return
         services.get_zone_situation_manager().create_visit_situation(sim, duration_override=duration_override_in_sim_seconds, visit_type_override=visit_situation_override)
+
+    @staticmethod
+    def create_situation_for_sim(
+        sim_info: SimInfo,
+        situation_type: Type[Situation],
+        creation_source: str,
+        invite_only: bool=True,
+        user_facing: bool=False,
+        situation_job: SituationJob=None,
+        purpose: SituationInvitationPurpose=SituationInvitationPurpose.INVITED,
+        **__
+    ) -> int:
+        """create_situation_for_sim(\
+            sim_info,\
+            situation_type,\
+            creation_source,\
+            invite_only=True,\
+            user_facing=False,\
+            situation_job=None,\
+            purpose=SituationInvitationPurpose.INVITED,\
+            **__\
+        )
+
+        Create a situation and put a Sim in it.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param situation_type: The type of situation to create.
+        :type situation_type: Type[Situation]
+        :param invite_only: If True, the situation will be invitation only. Default is True.
+        :type invite_only: bool, optional
+        :param user_facing: If True, the situation will be visible to the player (Like an Active Situation would be). If False, it will not be visible. Default is False.
+        :type user_facing: bool, optional
+        :param situation_job: The Situation Job to assign to the Sim upon situation creation. Default is whatever the situation specifies as the default job.
+        :type situation_job: SituationJob, optional
+        :param creation_source: The source of creation.
+        :type creation_source: str
+        :param purpose: The purpose of the situation. Default is SituationInvitationPurpose.INVITED.
+        :type purpose: SituationInvitationPurpose, optional
+        :return: The identifier of the situation that was created or 0 if an error occurs.
+        :rtype: int
+        """
+        if sim_info is None:
+            raise AssertionError('sim_info was None!')
+        from sims4communitylib.utils.resources.common_situation_utils import CommonSituationUtils
+        situation_manager = CommonSituationUtils.get_situation_manager_for_zone()
+        guest_list = SituationGuestList(invite_only=invite_only)
+        guest_info = SituationGuestInfo.construct_from_purpose(CommonSimUtils.get_sim_id(sim_info), situation_job or situation_type.default_job(), purpose)
+        guest_list.add_guest_info(guest_info)
+        situation_id = situation_manager.create_situation(situation_type, guest_list=guest_list, user_facing=user_facing, creation_source=creation_source, **__)
+        if not situation_id:
+            return 0
+        return situation_id
 
     @staticmethod
     def complete_situation_goal(sim_info: SimInfo, situation_goal_id: int, target_sim_info: SimInfo=None, score_override: int=None, start_cooldown: bool=True):

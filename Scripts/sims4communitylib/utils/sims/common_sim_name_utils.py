@@ -17,6 +17,7 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
+from sims4communitylib.utils.misc.common_text_utils import CommonTextUtils
 
 
 class CommonSimNameUtils:
@@ -191,9 +192,11 @@ def _common_randomize_name(output: CommonConsoleCommandOutput, sim_info: SimInfo
     gender = CommonGender.get_gender(sim_info)
     species = CommonSpecies.get_species(sim_info)
     first_name = CommonSimNameUtils.create_random_first_name(gender, species=species, sim_name_type=sim_name_type)
+    first_name = CommonTextUtils.capitalize(first_name)
     output(f'Setting the first name of Sim {sim_info} to {first_name}')
     CommonSimNameUtils.set_first_name(sim_info, first_name)
     last_name = CommonSimNameUtils.create_random_last_name(gender, species=species, sim_name_type=sim_name_type)
+    last_name = CommonTextUtils.capitalize(last_name)
     output(f'Setting the last name of Sim {sim_info} to {last_name}')
     CommonSimNameUtils.set_last_name(sim_info, last_name)
 
@@ -204,7 +207,12 @@ def _common_randomize_name(output: CommonConsoleCommandOutput, sim_info: SimInfo
 ))
 def _common_set_first_name(output: CommonConsoleCommandOutput, first_name: str, sim_info: SimInfo=None):
     if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
+    if not first_name:
+        output(f'Failed, \'{first_name}\' is not a valid first name.')
+        return
+    first_name = CommonTextUtils.capitalize(first_name)
     output(f'Setting the first name of Sim {sim_info} to {first_name}')
     CommonSimNameUtils.set_first_name(sim_info, first_name)
 
@@ -215,10 +223,12 @@ def _common_set_first_name(output: CommonConsoleCommandOutput, first_name: str, 
 ))
 def _common_randomize_first_name(output: CommonConsoleCommandOutput, sim_info: SimInfo=None, sim_name_type: CommonSimNameType=CommonSimNameType.DEFAULT):
     if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
     gender = CommonGender.get_gender(sim_info)
     species = CommonSpecies.get_species(sim_info)
     first_name = CommonSimNameUtils.create_random_first_name(gender, species=species, sim_name_type=sim_name_type)
+    first_name = CommonTextUtils.capitalize(first_name)
     output(f'Setting the first name of Sim {sim_info} to {first_name}')
     CommonSimNameUtils.set_first_name(sim_info, first_name)
 
@@ -231,6 +241,7 @@ def _common_set_last_name(output: CommonConsoleCommandOutput, last_name: str, si
     if sim_info is None:
         output('Failed, no Sim was specified or the specified Sim was not found!')
         return
+    last_name = CommonTextUtils.capitalize(last_name)
     output(f'Setting the last name of Sim {sim_info} to {last_name}')
     CommonSimNameUtils.set_last_name(sim_info, last_name)
 
@@ -241,10 +252,12 @@ def _common_set_last_name(output: CommonConsoleCommandOutput, last_name: str, si
 ))
 def _common_randomize_last_name(output: CommonConsoleCommandOutput, sim_info: SimInfo=None, sim_name_type: CommonSimNameType=CommonSimNameType.DEFAULT):
     if sim_info is None:
+        output('Failed, no Sim was specified or the specified Sim was not found!')
         return
     gender = CommonGender.get_gender(sim_info)
     species = CommonSpecies.get_species(sim_info)
     last_name = CommonSimNameUtils.create_random_last_name(gender, species=species, sim_name_type=sim_name_type)
+    last_name = CommonTextUtils.capitalize(last_name)
     output(f'Setting the last name of Sim {sim_info} to {last_name}')
     CommonSimNameUtils.set_last_name(sim_info, last_name)
 
@@ -255,14 +268,17 @@ def _common_randomize_last_name(output: CommonConsoleCommandOutput, sim_info: Si
     CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to change the first and last name of.'),
 ))
 def _common_set_name(output: CommonConsoleCommandOutput, first_name: str, last_name: str, sim_info: SimInfo=None):
-    if not first_name:
-        output(f'Failed, {first_name} is not a valid first name.')
-        return
-    if last_name is None:
-        output(f'Failed, {last_name} is not a valid last name.')
-        return
     if sim_info is None:
         output('Failed, no Sim was specified or the specified Sim was not found!')
         return
+    if not first_name:
+        output(f'Failed, \'{first_name}\' is not a valid first name.')
+        return
+    if not last_name:
+        output(f'Failed, \'{last_name}\' is not a valid last name.')
+        return
+    first_name = CommonTextUtils.capitalize(first_name)
+    last_name = CommonTextUtils.capitalize(last_name)
+    output(f'Setting the name of Sim {sim_info} to {first_name} {last_name}')
     CommonSimNameUtils.set_first_name(sim_info, first_name)
     CommonSimNameUtils.set_last_name(sim_info, last_name)

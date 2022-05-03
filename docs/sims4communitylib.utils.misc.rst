@@ -87,7 +87,7 @@ Misc Utilities
    :undoc-members:
    :show-inheritance:
 
-`Misc`
+`Resources`
 --------------------------------------------------------
 
 *********************
@@ -181,19 +181,19 @@ Misc Utilities
    :show-inheritance:
 
 *******************
-`Types`
+`Text`
 *******************
 
-.. autoclass:: sims4communitylib.utils.common_type_utils.CommonTypeUtils
+.. autoclass:: sims4communitylib.utils.common_text_utils.CommonTextUtils
    :members:
    :undoc-members:
    :show-inheritance:
 
 *******************
-`Weathers`
+`Types`
 *******************
 
-.. autoclass:: sims4communitylib.utils.common_weather_utils.CommonWeatherUtils
+.. autoclass:: sims4communitylib.utils.common_type_utils.CommonTypeUtils
    :members:
    :undoc-members:
    :show-inheritance:

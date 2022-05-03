@@ -9,5 +9,7 @@ Utilities
    sims4communitylib.utils.resources
    sims4communitylib.utils.sims
    sims4communitylib.utils.time
+   sims4communitylib.utils.math
    sims4communitylib.utils.misc
+   sims4communitylib.utils.environment
    sims4communitylib.utils.whims

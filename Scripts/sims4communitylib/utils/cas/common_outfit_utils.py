@@ -21,6 +21,7 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
+from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 from singletons import DEFAULT
@@ -657,8 +658,25 @@ class CommonOutfitUtils(HasClassLog):
         sim_info.clear_outfit_dirty(outfit_category)
 
     @classmethod
-    def generate_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Tuple[OutfitCategory, int], tag_list: Tuple[CommonGameTag]=(), outfit_filter_flag: OutfitFilterFlag=DEFAULT, body_type_flags: BodyTypeFlag=DEFAULT, **kwargs) -> bool:
-        """generate_outfit(sim_info, outfit_category_and_index, tag_list=(), outfit_filter_flag=DEFAULT, body_type_flags=DEFAULT, **kwargs)
+    def generate_outfit(
+        cls,
+        sim_info: Union[SimInfo, SimInfoBaseWrapper],
+        outfit_category_and_index: Tuple[OutfitCategory, int],
+        tag_list: Tuple[CommonGameTag]=(),
+        outfit_filter_flag: OutfitFilterFlag=DEFAULT,
+        body_type_flags: BodyTypeFlag=DEFAULT,
+        ignore_if_exists: bool=False,
+        **kwargs
+    ) -> bool:
+        """generate_outfit(\
+            sim_info,\
+            outfit_category_and_index,\
+            tag_list=(),\
+            outfit_filter_flag=DEFAULT,\
+            body_type_flags=DEFAULT,\
+            ignore_if_exists=False,\
+            **kwargs\
+        )
 
         Generate an outfit for a Sim for the specified OutfitCategory and Index.
 
@@ -674,12 +692,40 @@ class CommonOutfitUtils(HasClassLog):
         :type outfit_filter_flag: OutfitFilterFlag, optional
         :param body_type_flags: Flags to filter CAS Parts with. Default is no flags.
         :type body_type_flags: BodyTypeFlag, optional
+        :param ignore_if_exists: If set to True, the outfit will not be generated if an outfit already exists at the specified Outfit Category and Index.
         :return: True, if an outfit was generated successfully. False, if not.
         :rtype: bool
         """
+
+        if ignore_if_exists and CommonOutfitUtils.has_outfit(sim_info, outfit_category_and_index):
+            cls.get_log().format_with_message('Outfit already existed, no need to generate it!', sim=sim_info, outfit_category_and_index=outfit_category_and_index)
+            return False
+
         outfit_category = outfit_category_and_index[0]
         outfit_index = outfit_category_and_index[1]
         return sim_info.generate_outfit(outfit_category, outfit_index=outfit_index, tag_list=tag_list, filter_flag=outfit_filter_flag, body_type_flags=body_type_flags, **kwargs)
+
+    @classmethod
+    def copy_outfit(cls, mod_identity: CommonModIdentity, sim_info: SimInfo, from_outfit_category_and_index: Tuple[OutfitCategory, int], to_outfit_category_and_index: Tuple[OutfitCategory, int], change_sim_to_outfit_after_apply: bool=False) -> bool:
+        """copy_outfit(mod_identity, sim_info, from_outfit_category_and_index, to_outfit_category_and_index, change_sim_to_outfit_after_apply=False)
+
+        Copy one Outfit of a Sim to another Outfit of the same Sim.
+
+        :param mod_identity: The identity of the mod copying the outfit.
+        :type mod_identity: CommonModIdentity
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param from_outfit_category_and_index: The Outfit Category and Index to copy CAS Parts from.
+        :type from_outfit_category_and_index: Tuple[OutfitCategory, int]
+        :param to_outfit_category_and_index: The Outfit Category and Index to copy CAS Parts to.
+        :type to_outfit_category_and_index: Tuple[OutfitCategory, int]
+        :param change_sim_to_outfit_after_apply: Set to True to change the Sim to the outfit after the changes are applied. Default is False.
+        :type change_sim_to_outfit_after_apply: bool, optional
+        :return: True, if CAS Parts were copied successfully. False, if not.
+        :rtype: bool
+        """
+        outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=from_outfit_category_and_index, mod_identity=mod_identity)
+        return outfit_io.apply(change_sim_to_outfit_after_apply=change_sim_to_outfit_after_apply, apply_to_all_outfits_in_same_category=False, apply_to_outfit_category_and_index=to_outfit_category_and_index)
 
     @classmethod
     def regenerate_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Tuple[OutfitCategory, int]) -> None:
@@ -795,6 +841,30 @@ class CommonOutfitUtils(HasClassLog):
         :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         """
         sim_info.set_previous_outfit(None, force=True)
+
+    @classmethod
+    def get_all_outfit_category_and_indexes(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], include_outfit_categories: Tuple[OutfitCategory]=()) -> Tuple[Tuple[OutfitCategory, int]]:
+        """get_all_outfit_category_and_indexes(sim_info, include_outfit_categories=())
+
+        Retrieve a collection of outfit category and index for each outfit available to a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
+        :param include_outfit_categories: A collection of outfit categories to include. If empty, all outfit categories will be included. Default is empty.
+        :type include_outfit_categories: Tuple[OutfitCategory], optional
+        :return: A collection of outfit category and index for each outfit available to a Sim.
+        :rtype: Tuple[Tuple[OutfitCategory, int]]
+        """
+        outfits = sim_info.get_outfits()
+        outfit_list = list()
+        for (outfit_category, _outfit_list) in outfits.get_all_outfits():
+            outfit_category: OutfitCategory = outfit_category
+            if include_outfit_categories and outfit_category not in include_outfit_categories:
+                continue
+            for (outfit_index, _) in enumerate(_outfit_list):
+                outfit_index: int = outfit_index
+                outfit_list.append((outfit_category, outfit_index))
+        return tuple(outfit_list)
 
     @classmethod
     def has_outfit(cls, sim_info: Union[Union[SimInfo, SimInfoBaseWrapper], SimInfoBaseWrapper], outfit_category_and_index: Tuple[OutfitCategory, int]) -> bool:

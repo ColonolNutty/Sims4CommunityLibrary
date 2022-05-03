@@ -346,6 +346,15 @@ Sim Utilities
    :undoc-members:
    :show-inheritance:
 
+*******************
+`Posture`
+*******************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_posture_utils.CommonSimPostureUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 *********************
 `Pregnancy`
 *********************
