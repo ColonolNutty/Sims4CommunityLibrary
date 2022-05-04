@@ -11,6 +11,10 @@ from sims.sim_info import SimInfo
 from sims.sim_info_types import Gender
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.traits_enum import CommonTraitId
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
 from sims4communitylib.utils.sims.common_sim_voice_utils import CommonSimVoiceUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
@@ -203,3 +207,24 @@ class CommonGenderUtils:
         :rtype: bool
         """
         return CommonGenderUtils.is_male_gender(CommonGenderUtils.get_gender(sim_info))
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.swap_gender',
+    'Swap the gender of a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('update_gender_options', 'True or False', 'If True, gender options will be updated to vanilla gender options for the gender they are swapping to.', is_optional=True, default_value='True'),
+        CommonConsoleCommandArgument('update_voice', 'True or False', 'If True, voice of the Sim will be updated to a default voice for the gender they are swapping to.', is_optional=True, default_value='True'),
+        CommonConsoleCommandArgument('update_outfits', 'True or False', 'If True, outfits of the Sim will be regenerated to reflect the gender they are swapping to.', is_optional=True, default_value='True'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or decimal identifier of the Sim to use.', is_optional=True, default_value='Active Sim'),
+    )
+)
+def _dd_swap_gender(output: CommonConsoleCommandOutput, sim_info: SimInfo=None, update_gender_options: bool=True, update_voice: bool=True, update_outfits: bool=True):
+    output(f'Swapping the gender of Sim {sim_info}.')
+    result = CommonGenderUtils.swap_gender(sim_info, update_gender_options=update_gender_options, update_voice=update_voice, update_outfits=update_outfits)
+    if result:
+        output('Success!')
+    else:
+        output('Failed!')
+    return True
