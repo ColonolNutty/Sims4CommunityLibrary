@@ -14,6 +14,11 @@ v1.77:
 - Added a tuned instance modification handler for adding interactions to affordance lists.
 - Added functions to CommonCombinedSpecies to convert it to a short name, enum xml, and to check if a value is an animal value.
 - The maximum size files can be when created by S4CL is now configurable via the sims4communitylib.config file. It has also been increased to about 500 MB instead of the previous 10 MB.
+- Added new utilities for Civic Policies, Bitwise operations, Businesses, Attach/Detach CAS Parts, Locations, Text, Sim Location, Sim Name, Sim Posture, and Sim Situations.
+- Added new enums for Civic Policy Status, Civic Policy Types, Street Civic Policies, Venue Civic Policies, and Postures.
+- When setting the first or last names of Sims via the S4CL commands, the first character of the entered names will now properly be capitalized.
+- Added a function to change the weather
+- Added fun commands to play with lightning strikes
 
 v1.76:
 - Fixed an error when converting a Location to a CommonLocation where the parent_ref did not have a provided_routing_surface property
