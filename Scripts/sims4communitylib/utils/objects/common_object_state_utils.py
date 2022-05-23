@@ -459,8 +459,6 @@ class CommonObjectStateUtils(_HasS4CLClassLog):
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         result = CommonResourceUtils.load_instance(Types.OBJECT_STATE, object_state)
-        if not isinstance(result, ObjectState):
-            return None
         return result
 
     @classmethod
@@ -487,8 +485,6 @@ class CommonObjectStateUtils(_HasS4CLClassLog):
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         result = CommonResourceUtils.load_instance(Types.OBJECT_STATE, object_state_value)
-        if not isinstance(result, ObjectState):
-            return None
         return result
 
 
