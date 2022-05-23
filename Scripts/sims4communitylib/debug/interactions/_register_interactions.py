@@ -68,6 +68,7 @@ class _S4CLDebugEverywhereObjectInteractionHandler(CommonScriptObjectInteraction
         result: Tuple[int] = (
             CommonInteractionId.S4CL_DEBUG_LOG_ALL_INTERACTIONS,
             CommonInteractionId.S4CL_DEBUG_LOG_ALL_GAME_TAGS,
+            CommonInteractionId.S4CL_DEBUG_CHANGE_OBJECT_STATES,
         )
         return result
 
@@ -95,6 +96,7 @@ class _S4CLDebugEverywhereOceanInteractionHandler(CommonInteractionHandler):
         result: Tuple[int] = (
             CommonInteractionId.S4CL_DEBUG_LOG_ALL_INTERACTIONS,
             CommonInteractionId.S4CL_DEBUG_LOG_ALL_GAME_TAGS,
+            CommonInteractionId.S4CL_DEBUG_CHANGE_OBJECT_STATES,
         )
         return result
 
@@ -145,7 +147,8 @@ class _S4CLAddDebugInteractionsToAffordanceWhitelist(CommonAddInteractionsToAffo
             CommonInteractionId.S4CL_DEBUG_OBJECT_FIX,
             CommonInteractionId.S4CL_DEBUG_OBJECT_MAKE_DIRTY,
             CommonInteractionId.S4CL_DEBUG_OBJECT_MAKE_CLEAN,
-            CommonInteractionId.S4CL_DEBUG_LOG_ALL_GAME_TAGS
+            CommonInteractionId.S4CL_DEBUG_LOG_ALL_GAME_TAGS,
+            CommonInteractionId.S4CL_DEBUG_CHANGE_OBJECT_STATES,
         )
         return result
 

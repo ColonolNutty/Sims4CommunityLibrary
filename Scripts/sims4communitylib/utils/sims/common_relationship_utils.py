@@ -7,6 +7,8 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Iterator, Union
 
+from relationships.relationship import Relationship
+from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
 from sims4.resources import Types
 from sims4communitylib.enums.relationship_bits_enum import CommonRelationshipBitId
@@ -311,6 +313,22 @@ class CommonRelationshipUtils:
         return True
 
     @staticmethod
+    def get_relationships_gen(sim_info: SimInfo) -> Iterator[Relationship]:
+        """get_relationships_gen(sim_info)
+
+        Retrieve all relationships a Sim has with other Sims.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: An iterable of Relationships a Sim has with other Sims.
+        :rtype: Iterator[Relationship]
+        """
+        if not hasattr(sim_info, 'relationship_tracker') or not sim_info.relationship_tracker:
+            return tuple()
+        for relationship in sim_info.relationship_tracker:
+            yield relationship
+
+    @staticmethod
     def add_relationship_bit(
         sim_info: SimInfo,
         target_sim_info: SimInfo,
@@ -380,6 +398,42 @@ class CommonRelationshipUtils:
             return False
         target_sim_id = CommonSimUtils.get_sim_id(target_sim_info)
         sim_info.relationship_tracker.remove_relationship_bit(target_sim_id, relationship_bit_instance)
+        return True
+
+    @staticmethod
+    def remove_relationship_bit_from_all(
+        sim_info: SimInfo,
+        relationship_bit_id: Union[int, CommonRelationshipBitId]
+    ) -> bool:
+        """remove_relationship_bit_from_all(sim_info, relationship_bit_id)
+
+        Remove a relationship bit between a Sim and all other Sims.
+
+        .. note::
+
+            If the relationship bit is UNIDIRECTIONAL, it will only be removed from sim_info in the direction of the Target.
+            i.e. Sim will have no longer have relationship bit towards Target, but Target will still have relationship bit towards Sim.
+
+            One example is the Caregiver relationship:
+
+            - Sim is caregiver of Target.
+            - Target is being cared for by Sim.
+
+        :param sim_info: The source Sim of the Relationship Bit.
+        :type sim_info: SimInfo
+        :param relationship_bit_id: The identifier of the Relationship Bit to remove.
+        :type relationship_bit_id: Union[int, CommonRelationshipBitId]
+        :return: True, if the relationship bit was removed successfully. False, if not.
+        :rtype: bool
+        """
+        relationship_bit_instance = CommonResourceUtils.load_instance(Types.RELATIONSHIP_BIT, relationship_bit_id)
+        if relationship_bit_instance is None:
+            return False
+        sim_id_a = CommonSimUtils.get_sim_id(sim_info)
+        for relationship in CommonRelationshipUtils.get_relationships_gen(sim_info):
+            sim_id_b = relationship.get_other_sim_id(sim_id_a)
+            if relationship.has_bit(sim_id_a, relationship_bit_instance):
+                relationship.remove_bit(sim_id_a, sim_id_b, relationship_bit_instance)
         return True
 
     @staticmethod
@@ -540,6 +594,81 @@ log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'common_relations
 log.enable()
 
 
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.add_relationship_bit',
+    'Add a relationship bit between two Sims.',
+    command_arguments=(
+        CommonConsoleCommandArgument('relationship_bit', 'Relationship Bit Id or Tuning Name', 'The decimal identifier or Tuning Name of the Relationship Bit to add.'),
+        CommonConsoleCommandArgument('target_sim_info', 'Sim Id or Name', 'The instance id or name of the Sim to add the relationship bit to.'),
+        CommonConsoleCommandArgument('source_sim_info', 'Sim Id or Name', 'The instance id or name of the Sim to add the relationship bit from.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.add_rel_bit',
+    )
+)
+def _common_add_relationship_bit(
+    output: CommonConsoleCommandOutput,
+    relationship_bit: TunableInstanceParam(Types.RELATIONSHIP_BIT),
+    target_sim_info: SimInfo,
+    source_sim_info: SimInfo = None
+):
+    if isinstance(relationship_bit, str):
+        output(f'ERROR: Invalid relationship bit specified \'{relationship_bit}\' or it was not found.')
+        return False
+    if target_sim_info is None:
+        output('ERROR: No Target was specified!')
+        return False
+    if source_sim_info is target_sim_info:
+        output('ERROR: Cannot add a relationship bit to the same Sim.')
+        return False
+    output(f'Attempting to add relationship bit {relationship_bit} between {source_sim_info} and {target_sim_info}')
+    if not CommonRelationshipUtils.add_relationship_bit(source_sim_info, target_sim_info, relationship_bit):
+        output(f'FAILURE: Failed to add relationship bit {relationship_bit} between {source_sim_info} and {target_sim_info}.')
+        return False
+    output(f'SUCCESS: Successfully added relationship bit {relationship_bit} between {source_sim_info} and {target_sim_info}.')
+    return True
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.remove_relationship_bit',
+    'Remove a relationship bit from a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('relationship_bit', 'Relationship Bit Id or Tuning Name', 'The decimal identifier or Tuning Name of the Relationship Bit to remove.'),
+        CommonConsoleCommandArgument('source_sim_info', 'Sim Id or Name', 'The instance id or name of the Sim to remove the relationship bit from as the source.', is_optional=True, default_value='Active Sim'),
+        CommonConsoleCommandArgument('target_sim_info', 'Sim Id or Name', 'The instance id or name of the Sim to remove the relationship bit from as the target of the relationship bit. If not specified, the relationship bit will be removed regardless of target.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.remove_rel_bit',
+    )
+)
+def _common_remove_relationship_bit(
+    output: CommonConsoleCommandOutput,
+    relationship_bit: TunableInstanceParam(Types.RELATIONSHIP_BIT),
+    source_sim_info: SimInfo = None,
+    target_sim_info: SimInfo = None,
+):
+    if isinstance(relationship_bit, str):
+        output(f'ERROR: Invalid relationship bit specified \'{relationship_bit}\' or it was not found.')
+        return False
+    if target_sim_info is None:
+        output('ERROR: No Target was specified!')
+        return False
+    if source_sim_info is target_sim_info:
+        output(f'Attempting to remove relationship bit {relationship_bit} between {source_sim_info} for all other Sims.')
+        if not CommonRelationshipUtils.remove_relationship_bit_from_all(source_sim_info, relationship_bit):
+            output(f'FAILURE: Failed to remove relationship bit {relationship_bit} between {source_sim_info} for all other Sims.')
+            return False
+    else:
+        output(f'Attempting to remove relationship bit {relationship_bit} between {source_sim_info} and {target_sim_info}')
+        if not CommonRelationshipUtils.add_relationship_bit(source_sim_info, target_sim_info, relationship_bit):
+            output(f'FAILURE: Failed to remove relationship bit {relationship_bit} between {source_sim_info} and {target_sim_info}.')
+            return False
+    output(f'SUCCESS: Successfully removed relationship bit {relationship_bit} between {source_sim_info} and {target_sim_info}.')
+    return True
+
+
 # noinspection SpellCheckingInspection
 @CommonConsoleCommand(
     ModInfo.get_identity(),
@@ -554,7 +683,7 @@ log.enable()
         's4clib_testing.printrelbits'
     )
 )
-def _common_print_relationship_bits(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_print_relationship_bits(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         return
     output(f'Printing relationship bits of Sim {sim_info} with other Sims.')
@@ -594,3 +723,23 @@ def _common_print_relationship_bits(output: CommonConsoleCommandOutput, sim_info
             log.format_error_with_message('Failed to print relationships', sim_info=sim_info, sim_info_b=sim_info_b, relationship=relationship, exception=ex)
     log.debug(text)
     output('Done')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.meet_everyone',
+    'Add the Has Met Relationship bit between every Sim on the current lot.'
+)
+def _common_meet_everyone(output: CommonConsoleCommandOutput):
+    output('Attempting to make everyone meet everyone on the current lot.')
+    sim_pair_count = 0
+    for sim_info in CommonSimUtils.get_instanced_sim_info_for_all_sims_generator():
+        for target_sim_info in CommonSimUtils.get_instanced_sim_info_for_all_sims_generator():
+            if sim_info is target_sim_info:
+                continue
+            if CommonRelationshipUtils.has_met(sim_info, target_sim_info):
+                continue
+            sim_pair_count += 1
+            CommonRelationshipUtils.add_relationship_bit(sim_info, target_sim_info, CommonRelationshipBitId.HAS_MET)
+            CommonRelationshipUtils.add_relationship_bit(target_sim_info, sim_info, CommonRelationshipBitId.HAS_MET)
+    output(f'Done updating {sim_pair_count} Sim pair(s) with the Has Met relationship bit, on the current lot.')

@@ -112,16 +112,17 @@ class CommonSimSpawnUtils:
 
     """
 
-    @staticmethod
+    @classmethod
     def create_sim_info(
+        cls,
         species: CommonSpecies,
-        gender: CommonGender=None,
-        age: CommonAge=None,
-        first_name: str=None,
-        last_name: str=None,
-        trait_ids: Tuple[int]=(),
-        household: Household=None,
-        source: str='testing'
+        gender: CommonGender = None,
+        age: CommonAge = None,
+        first_name: str = None,
+        last_name: str = None,
+        trait_ids: Tuple[int] = (),
+        household: Household = None,
+        source: str = 'testing'
     ) -> Union[SimInfo, None]:
         """create_sim_info(\
             species,\
@@ -155,17 +156,27 @@ class CommonSimSpawnUtils:
         :return: The SimInfo of the created Sim or None if the Sim failed to be created.
         :rtype: SimInfo
         """
-        return CommonSimSpawnUtils._create_sim_info(species, gender=gender, age=age, first_name=first_name, last_name=last_name, trait_ids=trait_ids, household=household, source=source)
+        return cls._create_sim_info(
+            species,
+            gender=gender,
+            age=age,
+            first_name=first_name,
+            last_name=last_name,
+            trait_ids=trait_ids,
+            household=household,
+            source=source
+        )
 
-    @staticmethod
+    @classmethod
     def create_human_sim_info(
-        gender: CommonGender=None,
-        age: CommonAge=None,
-        first_name: str=None,
-        last_name: str=None,
-        trait_ids: Tuple[int]=(),
-        household: Household=None,
-        source: str='testing'
+        cls,
+        gender: CommonGender = None,
+        age: CommonAge = None,
+        first_name: str = None,
+        last_name: str = None,
+        trait_ids: Tuple[int] = (),
+        household: Household = None,
+        source: str = 'testing'
     ) -> Union[SimInfo, None]:
         """create_human_sim_info(\
             gender=None,\
@@ -196,17 +207,27 @@ class CommonSimSpawnUtils:
         :return: The SimInfo of the created Sim or None if the Sim failed to be created.
         :rtype: SimInfo
         """
-        return CommonSimSpawnUtils._create_sim_info(CommonSpecies.HUMAN, gender=gender, age=age, first_name=first_name, last_name=last_name, trait_ids=trait_ids, household=household, source=source)
+        return cls._create_sim_info(
+            CommonSpecies.HUMAN,
+            gender=gender,
+            age=age,
+            first_name=first_name,
+            last_name=last_name,
+            trait_ids=trait_ids,
+            household=household,
+            source=source
+        )
 
-    @staticmethod
+    @classmethod
     def create_large_dog_sim_info(
-        gender: CommonGender=None,
-        age: CommonAge=None,
-        first_name: str=None,
-        last_name: str=None,
-        trait_ids: Tuple[int]=(),
-        household: Household=None,
-        source: str='testing'
+        cls,
+        gender: CommonGender = None,
+        age: CommonAge = None,
+        first_name: str = None,
+        last_name: str = None,
+        trait_ids: Tuple[int] = (),
+        household: Household = None,
+        source: str = 'testing'
     ) -> Union[SimInfo, None]:
         """create_large_dog_sim_info(\
             gender=None,\
@@ -237,17 +258,27 @@ class CommonSimSpawnUtils:
         :return: The SimInfo of the created Sim or None if the Sim failed to be created.
         :rtype: SimInfo
         """
-        return CommonSimSpawnUtils._create_sim_info(CommonSpecies.LARGE_DOG, gender=gender, age=age, first_name=first_name, last_name=last_name, trait_ids=trait_ids, household=household, source=source)
+        return cls._create_sim_info(
+            CommonSpecies.LARGE_DOG,
+            gender=gender,
+            age=age,
+            first_name=first_name,
+            last_name=last_name,
+            trait_ids=trait_ids,
+            household=household,
+            source=source
+        )
 
-    @staticmethod
+    @classmethod
     def create_small_dog_sim_info(
-        gender: CommonGender=None,
-        age: CommonAge=None,
-        first_name: str=None,
-        last_name: str=None,
-        trait_ids: Tuple[int]=(),
-        household: Household=None,
-        source: str='testing'
+        cls,
+        gender: CommonGender = None,
+        age: CommonAge = None,
+        first_name: str = None,
+        last_name: str = None,
+        trait_ids: Tuple[int] = (),
+        household: Household = None,
+        source: str = 'testing'
     ) -> Union[SimInfo, None]:
         """create_small_dog_sim_info(\
             gender=None,\
@@ -278,17 +309,27 @@ class CommonSimSpawnUtils:
         :return: The SimInfo of the created Sim or None if the Sim failed to be created.
         :rtype: SimInfo
         """
-        return CommonSimSpawnUtils._create_sim_info(CommonSpecies.SMALL_DOG, gender=gender, age=age, first_name=first_name, last_name=last_name, trait_ids=trait_ids, household=household, source=source)
+        return cls._create_sim_info(
+            CommonSpecies.SMALL_DOG,
+            gender=gender,
+            age=age,
+            first_name=first_name,
+            last_name=last_name,
+            trait_ids=trait_ids,
+            household=household,
+            source=source
+        )
 
-    @staticmethod
+    @classmethod
     def create_cat_sim_info(
-        gender: CommonGender=None,
-        age: CommonAge=None,
-        first_name: str=None,
-        last_name: str=None,
-        trait_ids: Tuple[int]=(),
-        household: Household=None,
-        source: str='testing'
+        cls,
+        gender: CommonGender = None,
+        age: CommonAge = None,
+        first_name: str = None,
+        last_name: str = None,
+        trait_ids: Tuple[int] = (),
+        household: Household = None,
+        source: str = 'testing'
     ) -> Union[SimInfo, None]:
         """create_cat_sim_info(\
             gender=None,\
@@ -319,17 +360,27 @@ class CommonSimSpawnUtils:
         :return: The SimInfo of the created Sim or None if the Sim failed to be created.
         :rtype: SimInfo
         """
-        return CommonSimSpawnUtils._create_sim_info(CommonSpecies.CAT, gender=gender, age=age, first_name=first_name, last_name=last_name, trait_ids=trait_ids, household=household, source=source)
+        return cls._create_sim_info(
+            CommonSpecies.CAT,
+            gender=gender,
+            age=age,
+            first_name=first_name,
+            last_name=last_name,
+            trait_ids=trait_ids,
+            household=household,
+            source=source
+        )
 
-    @staticmethod
+    @classmethod
     def create_fox_sim_info(
-        gender: CommonGender=None,
-        age: CommonAge=None,
-        first_name: str=None,
-        last_name: str=None,
-        trait_ids: Tuple[int]=(),
-        household: Household=None,
-        source: str='testing'
+        cls,
+        gender: CommonGender = None,
+        age: CommonAge = None,
+        first_name: str = None,
+        last_name: str = None,
+        trait_ids: Tuple[int] = (),
+        household: Household = None,
+        source: str = 'testing'
     ) -> Union[SimInfo, None]:
         """create_fox_sim_info(\
             gender=None,\
@@ -360,18 +411,28 @@ class CommonSimSpawnUtils:
         :return: The SimInfo of the created Sim or None if the Sim failed to be created.
         :rtype: SimInfo
         """
-        return CommonSimSpawnUtils._create_sim_info(CommonSpecies.FOX, gender=gender, age=age, first_name=first_name, last_name=last_name, trait_ids=trait_ids, household=household, source=source)
+        return cls._create_sim_info(
+            CommonSpecies.FOX,
+            gender=gender,
+            age=age,
+            first_name=first_name,
+            last_name=last_name,
+            trait_ids=trait_ids,
+            household=household,
+            source=source
+        )
 
-    @staticmethod
+    @classmethod
     def _create_sim_info(
+        cls,
         species: CommonSpecies,
-        gender: CommonGender=None,
-        age: CommonAge=None,
-        first_name: str=None,
-        last_name: str=None,
-        trait_ids: Tuple[int]=(),
-        household: Household=None,
-        source: str='testing'
+        gender: CommonGender = None,
+        age: CommonAge = None,
+        first_name: str = None,
+        last_name: str = None,
+        trait_ids: Tuple[int] = (),
+        household: Household = None,
+        source: str = 'testing'
     ) -> Union[SimInfo, None]:
         from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
         household = household or CommonHouseholdUtils.create_empty_household(as_hidden_household=True)
@@ -383,14 +444,27 @@ class CommonSimSpawnUtils:
         first_name = first_name or CommonSimNameUtils.create_random_first_name(gender, species=species)
         last_name = last_name or CommonSimNameUtils.create_random_last_name(gender, species=species)
         traits = tuple([CommonTraitUtils.load_trait_by_id(trait_id) for trait_id in trait_ids if CommonTraitUtils.load_trait_by_id(trait_id) is not None])
-        sim_creator = SimCreator(gender=vanilla_gender, age=vanilla_age, species=vanilla_species, first_name=first_name or SimSpawner.get_random_first_name(vanilla_gender, species=vanilla_species), last_name=last_name, traits=traits)
+        sim_creator = SimCreator(
+            gender=vanilla_gender,
+            age=vanilla_age,
+            species=vanilla_species,
+            first_name=first_name,
+            last_name=last_name,
+            traits=traits
+        )
         (sim_info_list, _) = SimSpawner.create_sim_infos((sim_creator,), household=household, generate_deterministic_sim=True, creation_source=source)
         if not sim_info_list:
             return None
         return sim_info_list[0]
 
-    @staticmethod
-    def spawn_sim(sim_info: SimInfo, location: CommonLocation=None, position: CommonVector3=None, **kwargs) -> bool:
+    @classmethod
+    def spawn_sim(
+        cls,
+        sim_info: SimInfo,
+        location: CommonLocation = None,
+        position: CommonVector3 = None,
+        **kwargs
+    ) -> bool:
         """spawn_sim(sim_info, location=None, position=None, **kwargs)
 
         Spawn a Sim.
@@ -409,8 +483,12 @@ class CommonSimSpawnUtils:
         SimSpawner.spawn_sim(sim_info, sim_location=location, sim_position=position, **kwargs)
         return True
 
-    @staticmethod
-    def spawn_sim_at_active_sim_location(sim_info: SimInfo, **kwargs) -> bool:
+    @classmethod
+    def spawn_sim_at_active_sim_location(
+        cls,
+        sim_info: SimInfo,
+        **kwargs
+    ) -> bool:
         """spawn_sim_at_active_sim_location(sim_info, **kwargs)
 
         Spawn a Sim at the location of the Active Sim.
@@ -427,10 +505,15 @@ class CommonSimSpawnUtils:
         active_position = None
         if active_location is None:
             active_position = CommonSimLocationUtils.get_position(active_sim_info)
-        return CommonSimSpawnUtils.spawn_sim(sim_info, location=active_location, position=active_position, **kwargs)
+        return cls.spawn_sim(sim_info, location=active_location, position=active_position, **kwargs)
 
-    @staticmethod
-    def clone_sim(source_sim_info: SimInfo, add_to_household: bool=True, household_override: Household=None) -> Union[SimInfo, None]:
+    @classmethod
+    def clone_sim(
+        cls,
+        source_sim_info: SimInfo,
+        add_to_household: bool = True,
+        household_override: Household = None
+    ) -> Union[SimInfo, None]:
         """clone_sim(source_sim_info, add_to_household=True, household_override=None)
 
         Clone a Sim and add them to the household of source_sim_info.
@@ -458,7 +541,7 @@ class CommonSimSpawnUtils:
         species = CommonSpecies.get_species(source_sim_info)
         gender = CommonGender.get_gender(source_sim_info)
         vanilla_gender = CommonGender.convert_to_vanilla(gender)
-        clone_sim_info = CommonSimSpawnUtils.create_sim_info(
+        clone_sim_info = cls.create_sim_info(
             species=species,
             gender=gender,
             age=CommonAge.get_age(source_sim_info),
@@ -513,12 +596,18 @@ class CommonSimSpawnUtils:
                 clone_sim_info.request_lod(SimInfoLODLevel.BASE)
             clone_sim_info.resend_physical_attributes()
         except Exception as ex:
-            CommonSimSpawnUtils.delete_sim(clone_sim_info)
+            cls.delete_sim(clone_sim_info)
             raise ex
         return clone_sim_info
 
-    @staticmethod
-    def despawn_sim(sim_info: SimInfo, source: str=None, cause: str=None, **kwargs) -> bool:
+    @classmethod
+    def despawn_sim(
+        cls,
+        sim_info: SimInfo,
+        source: str = None,
+        cause: str = None,
+        **kwargs
+    ) -> bool:
         """despawn_sim(sim_info, source=None, cause=None, **kwargs)
 
         Despawn a Sim.
@@ -539,12 +628,19 @@ class CommonSimSpawnUtils:
         if sim is None:
             return True
         cause = cause or 'Sim despawned.'
-        if CommonSimSpawnUtils.hard_reset(sim_info, reset_reason=ResetReason.BEING_DESTROYED, source='S4CL', cause='S4CL Despawn'):
+        if cls.hard_reset(sim_info, reset_reason=ResetReason.BEING_DESTROYED, source=cls, cause='S4CL Despawn'):
             sim.destroy(source=source, cause=cause, **kwargs)
         return True
 
-    @staticmethod
-    def schedule_sim_for_despawn(sim_info: SimInfo, source: str=None, cause: str=None, on_despawn: Callable[[], None]=None, **kwargs) -> bool:
+    @classmethod
+    def schedule_sim_for_despawn(
+        cls,
+        sim_info: SimInfo,
+        source: str = None,
+        cause: str = None,
+        on_despawn: Callable[[], None] = None,
+        **kwargs
+    ) -> bool:
         """schedule_sim_for_despawn(sim_info, source=None, cause=None, on_despawn=None, **kwargs)
 
         Schedule a Sim to be despawned.
@@ -572,8 +668,8 @@ class CommonSimSpawnUtils:
         sim.schedule_destroy_asap(post_delete_func=on_despawn, source=source, cause=cause, **kwargs)
         return True
 
-    @staticmethod
-    def delete_sim(sim_info: SimInfo, source: str=None, cause: str=None, **kwargs) -> bool:
+    @classmethod
+    def delete_sim(cls, sim_info: SimInfo, source: str = None, cause: str = None, **kwargs) -> bool:
         """delete_sim(sim_info, source=None, cause=None, **kwargs)
 
         Delete a Sim.
@@ -587,7 +683,7 @@ class CommonSimSpawnUtils:
         :return: True, if the Sim was deleted successfully. False, if not.
         :rtype: bool
         """
-        if not CommonSimSpawnUtils.despawn_sim(sim_info, source=source, cause=cause, **kwargs):
+        if not cls.despawn_sim(sim_info, source=source, cause=cause, **kwargs):
             return False
         client = services.client_manager().get_first_client()
         if sim_info.household is not None and hasattr(sim_info.household, 'refresh_aging_updates'):
@@ -595,9 +691,22 @@ class CommonSimSpawnUtils:
         sim_info.remove_permanently()
         return True
 
-    @staticmethod
-    def soft_reset(sim_info: SimInfo, reset_reason: ResetReason=ResetReason.RESET_EXPECTED, hard_reset_on_exception: bool=False, source: Any=None, cause: Any='S4CL Soft Reset') -> bool:
-        """soft_reset(sim_info, reset_reason=ResetReason.RESET_EXPECTED, hard_reset_on_exception=False, source=None, cause=None)
+    @classmethod
+    def soft_reset(
+        cls,
+        sim_info: SimInfo,
+        reset_reason: ResetReason = ResetReason.RESET_EXPECTED,
+        hard_reset_on_exception: bool = False,
+        source: Any = None,
+        cause: str = 'S4CL Soft Reset'
+    ) -> bool:
+        """soft_reset(\
+            sim_info,\
+            reset_reason=ResetReason.RESET_EXPECTED,\
+            hard_reset_on_exception=False,\
+            source=None,\
+            cause='S4CL Soft Reset'\
+        )
 
         Perform a soft reset on a Sim.
 
@@ -605,12 +714,13 @@ class CommonSimSpawnUtils:
         :type sim_info: SimInfo
         :param reset_reason: The reason for the reset. Default is ResetReason.RESET_EXPECTED.
         :type reset_reason: ResetReason, optional
-        :param hard_reset_on_exception: If set to True, a hard reset of the Object will be attempted upon an error occurring. If set to False, nothing will occur if the reset failed. Default is False.
+        :param hard_reset_on_exception: If set to True, a hard reset of the Object will be attempted upon an error occurring.\
+            If set to False, nothing will occur if the reset failed. Default is False.
         :type hard_reset_on_exception: bool, optional
         :param source: The source of the reset. Default is the GameObject.
         :type source: Any, optional
-        :param cause: The cause of the reset. Default is 'S4CL Soft Reset'.
-        :type cause: Any, optional
+        :param cause: Text indicating the cause of the reset. Default is 'S4CL Hard Reset'.
+        :type cause: str, optional
         :return: True, if the reset was successful. False, if not.
         :rtype: bool
         """
@@ -676,12 +786,23 @@ class CommonSimSpawnUtils:
             return True
         except:
             if hard_reset_on_exception:
-                return CommonSimSpawnUtils.hard_reset(sim_info, reset_reason, source=source, cause=cause)
+                return cls.hard_reset(sim_info, reset_reason, source=source, cause=cause)
         return False
 
-    @staticmethod
-    def hard_reset(sim_info: SimInfo, reset_reason: ResetReason=ResetReason.RESET_EXPECTED, source: Any=None, cause: Any='S4CL Hard Reset') -> bool:
-        """hard_reset(sim_info, reset_reason=ResetReason.RESET_EXPECTED, source=None, cause=None)
+    @classmethod
+    def hard_reset(
+        cls,
+        sim_info: SimInfo,
+        reset_reason: ResetReason = ResetReason.RESET_EXPECTED,
+        source: Any = None,
+        cause: str = 'S4CL Hard Reset'
+    ) -> bool:
+        """hard_reset(
+            sim_info,\
+            reset_reason=ResetReason.RESET_EXPECTED,\
+            source=None,\
+            cause='S4CL Hard Reset'\
+        )
 
         Perform a hard reset on a SimInfo.
 
@@ -689,10 +810,10 @@ class CommonSimSpawnUtils:
         :type sim_info: SimInfo
         :param reset_reason: The reason for the reset. Default is ResetReason.RESET_EXPECTED.
         :type reset_reason: ResetReason, optional
-        :param source: The source of the reset. Default is the SimInfo.
+        :param source: The source of the reset. Default is None.
         :type source: Any, optional
-        :param cause: The cause of the reset. Default is 'S4CL Hard Reset'.
-        :type cause: Any, optional
+        :param cause: Text indicating the cause of the reset. Default is 'S4CL Hard Reset'.
+        :type cause: str, optional
         :return: True, if the reset was successful. False, if not.
         :rtype: bool
         """
@@ -707,9 +828,15 @@ class CommonSimSpawnUtils:
         except:
             return False
 
-    @staticmethod
-    def fade_in(sim_info: SimInfo, fade_duration: float=1.0, immediate: bool=False, additional_channels: Iterator[Tuple[int, int, int]]=None):
-        """fade_in(sim_info, fade_duration=1.0)
+    @classmethod
+    def fade_in(
+        cls,
+        sim_info: SimInfo,
+        fade_duration: float = 1.0,
+        immediate: bool = False,
+        additional_channels: Iterator[Tuple[int, int, int]] = None
+    ):
+        """fade_in(sim_info, fade_duration=1.0, immediate=False, additional_channels=None)
 
         Fade a Sim to become visible.
 
@@ -727,8 +854,14 @@ class CommonSimSpawnUtils:
             return
         sim.fade_in(fade_duration=fade_duration, immediate=immediate, additional_channels=additional_channels)
 
-    @staticmethod
-    def fade_out(sim_info: SimInfo, fade_duration: float=1.0, immediate: bool=False, additional_channels: Iterator[Tuple[int, int, int]]=None):
+    @classmethod
+    def fade_out(
+        cls,
+        sim_info: SimInfo,
+        fade_duration: float = 1.0,
+        immediate: bool = False,
+        additional_channels: Iterator[Tuple[int, int, int]] = None
+    ):
         """fade_out(sim_info, fade_duration=1.0, immediate=False, additional_channels=None)
 
         Fade a Sim to become invisible.
@@ -757,7 +890,7 @@ class CommonSimSpawnUtils:
     CommonConsoleCommandArgument('age', 'CommonAge',
                                  f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name if hasattr(CommonAge.ADULT, 'name') else CommonAge.ADULT)
 ))
-def _s4cl_spawn_sims(output: CommonConsoleCommandOutput, species: CommonSpecies, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
+def _s4cl_spawn_sims(output: CommonConsoleCommandOutput, species: CommonSpecies, count: int = 1, gender: CommonGender = CommonGender.MALE, age: CommonAge = CommonAge.ADULT):
     if species is None:
         return
     if gender == CommonGender.INVALID:
@@ -790,7 +923,7 @@ def _s4cl_spawn_sims(output: CommonConsoleCommandOutput, species: CommonSpecies,
     CommonConsoleCommandArgument('age', 'CommonAge',
                                  f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name if hasattr(CommonAge.ADULT, 'name') else CommonAge.ADULT)
 ))
-def _s4cl_spawn_human_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
+def _s4cl_spawn_human_sims(output: CommonConsoleCommandOutput, count: int = 1, gender: CommonGender = CommonGender.MALE, age: CommonAge = CommonAge.ADULT):
     return _s4cl_spawn_sims(output, CommonSpecies.HUMAN, count=count, gender=gender, age=age)
 
 
@@ -801,7 +934,7 @@ def _s4cl_spawn_human_sims(output: CommonConsoleCommandOutput, count: int=1, gen
     CommonConsoleCommandArgument('age', 'CommonAge',
                                  f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name if hasattr(CommonAge.ADULT, 'name') else CommonAge.ADULT)
 ))
-def _s4cl_spawn_large_dog_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
+def _s4cl_spawn_large_dog_sims(output: CommonConsoleCommandOutput, count: int = 1, gender: CommonGender = CommonGender.MALE, age: CommonAge = CommonAge.ADULT):
     return _s4cl_spawn_sims(output, CommonSpecies.LARGE_DOG, count=count, gender=gender, age=age)
 
 
@@ -812,7 +945,7 @@ def _s4cl_spawn_large_dog_sims(output: CommonConsoleCommandOutput, count: int=1,
     CommonConsoleCommandArgument('age', 'CommonAge',
                                  f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name if hasattr(CommonAge.ADULT, 'name') else CommonAge.ADULT)
 ))
-def _s4cl_spawn_small_dog_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
+def _s4cl_spawn_small_dog_sims(output: CommonConsoleCommandOutput, count: int = 1, gender: CommonGender = CommonGender.MALE, age: CommonAge = CommonAge.ADULT):
     return _s4cl_spawn_sims(output, CommonSpecies.SMALL_DOG, count=count, gender=gender, age=age)
 
 
@@ -823,7 +956,7 @@ def _s4cl_spawn_small_dog_sims(output: CommonConsoleCommandOutput, count: int=1,
     CommonConsoleCommandArgument('age', 'CommonAge',
                                  f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name if hasattr(CommonAge.ADULT, 'name') else CommonAge.ADULT)
 ))
-def _s4cl_spawn_cat_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
+def _s4cl_spawn_cat_sims(output: CommonConsoleCommandOutput, count: int = 1, gender: CommonGender = CommonGender.MALE, age: CommonAge = CommonAge.ADULT):
     return _s4cl_spawn_sims(output, CommonSpecies.CAT, count=count, gender=gender, age=age)
 
 
@@ -834,14 +967,14 @@ def _s4cl_spawn_cat_sims(output: CommonConsoleCommandOutput, count: int=1, gende
     CommonConsoleCommandArgument('age', 'CommonAge',
                                  f'The spawned Large Dog Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name if hasattr(CommonAge.ADULT, 'name') else CommonAge.ADULT)
 ))
-def _s4cl_spawn_fox_sims(output: CommonConsoleCommandOutput, count: int=1, gender: CommonGender=CommonGender.MALE, age: CommonAge=CommonAge.ADULT):
+def _s4cl_spawn_fox_sims(output: CommonConsoleCommandOutput, count: int = 1, gender: CommonGender = CommonGender.MALE, age: CommonAge = CommonAge.ADULT):
     return _s4cl_spawn_sims(output, CommonSpecies.FOX, count=count, gender=gender, age=age)
 
 
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.spawn_random_sims', 'Spawn a random number of Sims.', command_arguments=(
     CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=5),
 ))
-def _s4clib_spawn_random_sims(output: CommonConsoleCommandOutput, count: int=5):
+def _s4clib_spawn_random_sims(output: CommonConsoleCommandOutput, count: int = 5):
     _s4cl_spawn_human_sims(output, count=count, gender=CommonGender.MALE, age=CommonAge.TODDLER)
     _s4cl_spawn_human_sims(output, count=count, gender=CommonGender.MALE, age=CommonAge.CHILD)
     _s4cl_spawn_human_sims(output, count=count, gender=CommonGender.MALE, age=CommonAge.ADULT)
@@ -873,16 +1006,25 @@ def _s4clib_spawn_random_sims(output: CommonConsoleCommandOutput, count: int=5):
     _s4cl_spawn_fox_sims(output, count=count, gender=CommonGender.FEMALE, age=CommonAge.ADULT)
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.purge_self', 'Delete the active Sim. WARNING: Not recommended in single Sim households, since you cannot do interactions without an active Sim!')
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.purge_self',
+    'Delete the active Sim. WARNING: Not recommended in single Sim households, since you cannot do interactions without an active Sim!'
+)
 def _s4cl_purge_self(output: CommonConsoleCommandOutput):
     active_sim_info = CommonSimUtils.get_active_sim_info()
     output(f'Purging the active Sim ({active_sim_info}) from existence.')
     return CommonSimSpawnUtils.delete_sim(active_sim_info)
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.purge_sim', 'Purge a Sim, essentially deleting them.', command_arguments=(
-    CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to purge.', is_optional=False),
-))
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.purge_sim',
+    'Purge a Sim, essentially deleting them.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to purge.', is_optional=False),
+    )
+)
 def _s4cl_purge_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo):
     if sim_info is None:
         return
@@ -893,7 +1035,11 @@ def _s4cl_purge_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo):
     CommonSimSpawnUtils.delete_sim(sim_info, source='Player', cause='Command Purged')
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.be_alone', 'Purge all Sims except the active Sim from the neighborhood.')
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.be_alone',
+    'Purge all Sims except the active Sim from the neighborhood.'
+)
 def _s4cl_be_alone(output: CommonConsoleCommandOutput):
     active_sim_info = CommonSimUtils.get_active_sim_info()
     output('Purging everyone but your active Sim.')
@@ -907,12 +1053,34 @@ def _s4cl_be_alone(output: CommonConsoleCommandOutput):
     output(f'Purged {sim_count} Sims')
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.purge_neighborhood', 'Purge all Sims including the active Sim from the neighborhood, essentially making your neighborhood a ghost town. WARNING: Only use this for fun, since you cannot do interactions without an active Sim!')
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.purge_neighborhood',
+    'Purge all Sims including the active Sim from the neighborhood, essentially making your neighborhood a ghost town. WARNING: Only use this for fun, since you cannot do interactions without an active Sim!'
+)
 def _s4cl_purge_neighborhood(output: CommonConsoleCommandOutput):
     output('Purging all Sims')
     sim_count = 0
     sim_info_list = tuple(CommonSimUtils.get_sim_info_for_all_sims_generator())
     for sim_info in sim_info_list:
+        CommonSimSpawnUtils.delete_sim(sim_info, source='Player', cause='Command Purged')
+        sim_count += 1
+    output(f'Purged {sim_count} Sims')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.purge_non_household',
+    'Purge all Sims outside of the active household.'
+)
+def _s4cl_purge_non_household(output: CommonConsoleCommandOutput):
+    output('Purging all Sims outside of the Active Household.')
+    sim_count = 0
+    sim_info_list = tuple(CommonSimUtils.get_sim_info_for_all_sims_generator())
+    from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
+    for sim_info in sim_info_list:
+        if CommonHouseholdUtils.is_part_of_active_household(sim_info):
+            continue
         CommonSimSpawnUtils.delete_sim(sim_info, source='Player', cause='Command Purged')
         sim_count += 1
     output(f'Purged {sim_count} Sims')

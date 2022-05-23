@@ -10,6 +10,7 @@ import os
 from typing import Union
 
 from objects.game_object import GameObject
+from objects.script_object import ScriptObject
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_quaternion import CommonQuaternion
 from sims4communitylib.classes.math.common_routing_location import CommonRoutingLocation
@@ -310,7 +311,7 @@ class CommonSimLocationUtils:
         return routing.test_connectivity_pt_pt(sim_routing_location, CommonRoutingLocation.from_location(location), sim_routing_context)
 
     @staticmethod
-    def can_route_to_position(sim_info: SimInfo, position: CommonVector3, routing_surface: CommonSurfaceIdentifier, orientation: CommonQuaternion=CommonQuaternion.empty()) -> bool:
+    def can_route_to_position(sim_info: SimInfo, position: CommonVector3, routing_surface: CommonSurfaceIdentifier, orientation: CommonQuaternion = CommonQuaternion.empty()) -> bool:
         """can_route_to_position(sim_info, position, routing_surface)
 
         Determine if a Sim can route to a Location.
@@ -336,7 +337,7 @@ class CommonSimLocationUtils:
         return CommonSimLocationUtils.can_route_to_location(sim_info, location)
 
     @staticmethod
-    def can_route_to_object(sim_info: SimInfo, game_object: GameObject) -> bool:
+    def can_route_to_object(sim_info: SimInfo, script_object: ScriptObject) -> bool:
         """can_route_to_object(sim_info, game_object)
 
         Determine if a Sim can route to an Object.
@@ -345,15 +346,38 @@ class CommonSimLocationUtils:
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :param game_object: The Object to check.
-        :type game_object: GameObject
+        :param script_object: The Object to check.
+        :type script_object: ScriptObject
         :return: True, if the Sim can route to the Object. False, if not.
         :rtype: bool
         """
+        if sim_info is None or script_object is None:
+            return False
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return False
-        return game_object.is_connected(sim)
+        return script_object.is_connected(sim)
+
+    # noinspection PyUnusedLocal
+    @staticmethod
+    def can_route_to_sim(sim_info_a: SimInfo, sim_info_b: SimInfo) -> bool:
+        """can_route_to_sim(sim_info, game_object)
+
+        Determine if Sim A can route to Sim B.
+
+        :param sim_info_a: The Sim that would be routing to Sim B.
+        :type sim_info_a: SimInfo
+        :param sim_info_b: The Sim that Sim A would be routing to.
+        :type sim_info_b: SimInfo
+        :return: True, if Sim A can route to Sim B. False, if not.
+        :rtype: bool
+        """
+        if sim_info_a is None or sim_info_b is None:
+            return False
+        sim_b = CommonSimUtils.get_sim_instance(sim_info_b)
+        if sim_b is None:
+            return False
+        return CommonSimLocationUtils.can_route_to_object(sim_info_a, sim_b)
 
     @staticmethod
     def is_within_range_of_position(sim_info: SimInfo, position: CommonVector3, distance_in_squares: float) -> bool:
@@ -457,7 +481,7 @@ class CommonSimLocationUtils:
         return sim.on_home_lot or (CommonLocationUtils.get_current_zone_id() == CommonHouseholdUtils.get_household_zone_id(sim_info) and CommonSimLocationUtils.is_on_current_lot(sim_info))
 
     @staticmethod
-    def send_to_position(sim_info: SimInfo, position: CommonVector3, level: int, go_here_interaction_id: int=None) -> EnqueueResult:
+    def send_to_position(sim_info: SimInfo, position: CommonVector3, level: int, go_here_interaction_id: int = None) -> EnqueueResult:
         """send_to_position(sim_info, position, level, go_here_interaction_id=None)
 
         Send a Sim to the specified position.
@@ -486,7 +510,7 @@ class CommonSimLocationUtils:
         return sim.push_super_affordance(CommandTuning.TERRAIN_GOHERE_AFFORDANCE, target, context)
 
     @staticmethod
-    def send_near_position(sim_info: SimInfo, position: CommonVector3, level: int, go_here_interaction_id: int=None, position_search_flags: FGLSearchFlag=FGLSearchFlag.STAY_IN_CURRENT_BLOCK) -> EnqueueResult:
+    def send_near_position(sim_info: SimInfo, position: CommonVector3, level: int, go_here_interaction_id: int = None, position_search_flags: FGLSearchFlag = FGLSearchFlag.STAY_IN_CURRENT_BLOCK) -> EnqueueResult:
         """send_near_position(sim_info, position, level, go_here_interaction_id=None, position_search_flags=FGLSearchFlag.STAY_IN_CURRENT_BLOCK)
 
         Send a Sim near the specified position.
@@ -512,7 +536,7 @@ class CommonSimLocationUtils:
         return CommonSimLocationUtils.send_near_location(sim_info, location, go_here_interaction_id=go_here_interaction_id, location_search_flags=position_search_flags)
 
     @staticmethod
-    def send_to_location(sim_info: SimInfo, location: CommonLocation, go_here_interaction_id: int=None) -> EnqueueResult:
+    def send_to_location(sim_info: SimInfo, location: CommonLocation, go_here_interaction_id: int = None) -> EnqueueResult:
         """send_to_location(sim_info, location, go_here_interaction_id=None)
 
         Send a Sim to the specified location.
@@ -534,7 +558,7 @@ class CommonSimLocationUtils:
         return CommonSimLocationUtils.send_to_position(sim_info, position, level, go_here_interaction_id=go_here_interaction_id)
 
     @staticmethod
-    def send_near_location(sim_info: SimInfo, location: CommonLocation, go_here_interaction_id: int=None, location_search_flags: FGLSearchFlag=FGLSearchFlag.STAY_IN_CURRENT_BLOCK) -> EnqueueResult:
+    def send_near_location(sim_info: SimInfo, location: CommonLocation, go_here_interaction_id: int = None, location_search_flags: FGLSearchFlag = FGLSearchFlag.STAY_IN_CURRENT_BLOCK) -> EnqueueResult:
         """send_near_location(sim_info, location, go_here_interaction_id=None, location_search_flags=FGLSearchFlag.STAY_IN_CURRENT_BLOCK)
 
         Send a Sim near the specified location.
@@ -594,6 +618,7 @@ class CommonSimLocationUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return False
+        # noinspection PyTypeChecker
         autonomy_component: AutonomyComponent = CommonComponentUtils.get_component(sim, CommonComponentType.AUTONOMY)
         if autonomy_component is None or not hasattr(autonomy_component, 'active_roles'):
             return False

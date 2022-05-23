@@ -7,14 +7,19 @@ Copyright (c) COLONOLNUTTY
 """
 import services
 from io import BytesIO
-from typing import ItemsView, Any, Union, Tuple, Type, ValuesView, Dict
+from typing import ItemsView, Any, Union, Tuple, Type, ValuesView, Dict, TypeVar
 from sims4.resources import ResourceLoader, Types
 from sims4.tuning.instance_manager import InstanceManager
 from sims4.tuning.merged_tuning_manager import get_manager
+# noinspection PyUnresolvedReferences
 from sims4.tuning.serialization import ETreeTuningLoader
 from sims4.tuning.tunable_base import LoadingTags
 from sims4communitylib.classes.common_resource_key import CommonResourceKey
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
+from sims4communitylib.enums.enumtypes.common_int_flags import CommonIntFlags
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
+
+CommonEnumTypeValueType = TypeVar('CommonEnumTypeValueType', CommonInt, CommonIntFlags)
 
 
 class CommonResourceUtils:
@@ -202,7 +207,7 @@ class CommonResourceUtils:
         return tuple(instances)
 
     @staticmethod
-    def get_enum_by_name(name: str, enum_type: Any, default_value: Any=None) -> Any:
+    def get_enum_by_name(name: str, enum_type: Type[CommonEnumTypeValueType], default_value: CommonEnumTypeValueType = None) -> CommonEnumTypeValueType:
         """get_enum_by_name(name, enum_type, default_value=None)
 
         Retrieve an enum value by its name.
@@ -218,14 +223,19 @@ class CommonResourceUtils:
         """
         if hasattr(enum_type, name):
             return getattr(enum_type, name)
-        if name in enum_type:
-            return enum_type[name]
+        # noinspection PyBroadException
+        try:
+            # noinspection PyTypeChecker
+            if name in enum_type:
+                return enum_type[name]
+        except:
+            pass
         if hasattr(enum_type, 'name_to_value') and name in enum_type.name_to_value:
             return enum_type.name_to_value.get(name)
         return default_value
 
     @staticmethod
-    def get_enum_by_int_value(value: int, enum_type: Any, default_value: Any=None) -> Any:
+    def get_enum_by_int_value(value: int, enum_type: Type[CommonEnumTypeValueType], default_value: CommonEnumTypeValueType = None) -> CommonEnumTypeValueType:
         """get_enum_by_int_value(value, enum_type, default_value=None)
 
         Retrieve an enum value by its value.
@@ -244,7 +254,7 @@ class CommonResourceUtils:
         return default_value
 
     @staticmethod
-    def convert_str_to_fnv32(text: str, seed: int=2166136261, high_bit: bool=True) -> int:
+    def convert_str_to_fnv32(text: str, seed: int = 2166136261, high_bit: bool = True) -> int:
         """convert_str_to_fnv32(text, seed=2166136261, high_bit=True)
 
         Convert a text string into an FNV32 decimal identifier.
@@ -264,7 +274,7 @@ class CommonResourceUtils:
         return fnv_hash
 
     @staticmethod
-    def convert_str_to_fnv64(text: str, seed: int=14695981039346656037, high_bit: bool=True) -> int:
+    def convert_str_to_fnv64(text: str, seed: int = 14695981039346656037, high_bit: bool = True) -> int:
         """convert_str_to_fnv64(text, seed=14695981039346656037, high_bit=True)
 
         Convert a text string into an FNV64 decimal identifier.
@@ -310,7 +320,7 @@ class CommonResourceUtils:
             mtg._tuning_resources[res_ext][tuning_instance_key.instance] = tuning_loader.root
         else:
             cls = tuning_loader.module
-            tuning_manage = services.get_instance_manager(tuning_type)
+            tuning_manage = CommonResourceUtils.get_instance_manager(tuning_type)
             tuning_manage.register_tuned_class(cls, tuning_instance_key)
 
     @staticmethod
@@ -323,7 +333,7 @@ class CommonResourceUtils:
         return hash_value
 
     @staticmethod
-    def load_resource_bytes(resource_key: CommonResourceKey, silent_fail: bool=True) -> BytesIO:
+    def load_resource_bytes(resource_key: CommonResourceKey, silent_fail: bool = True) -> BytesIO:
         """load_resource_bytes(resource_key, silent_fail=True)
 
         Retrieve the bytes of a resource.
@@ -338,7 +348,7 @@ class CommonResourceUtils:
         return ResourceLoader(resource_key).load(silent_fail=silent_fail)
 
     @staticmethod
-    def load_resource_bytes_by_name(resource_type: Types, resource_name: str, has_fnv64_identifier: bool=True, has_high_bit_identifier: bool=False) -> Union[BytesIO, None]:
+    def load_resource_bytes_by_name(resource_type: Types, resource_name: str, has_fnv64_identifier: bool = True, has_high_bit_identifier: bool = False) -> Union[BytesIO, None]:
         """load_resource_bytes_by_name(resource_type, resource_name, fnv64=True, high_bit=False)
 
         Load the bytes of a resource into a Bytes Reader.

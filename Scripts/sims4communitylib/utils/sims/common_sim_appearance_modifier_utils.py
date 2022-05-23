@@ -116,7 +116,7 @@ class CommonSimAppearanceModifierUtils:
         yield from CommonSimAppearanceModifierUtils.get_appearance_modifiers_gen(sim_info, include_appearance_modifier=_matches)
 
     @staticmethod
-    def get_appearance_modifiers_gen(sim_info: SimInfo, include_appearance_modifier: Callable[[CommonAppearanceModifierType, ModifierInfo], bool]=None) -> Iterator[ModifierInfo]:
+    def get_appearance_modifiers_gen(sim_info: SimInfo, include_appearance_modifier: Callable[[CommonAppearanceModifierType, ModifierInfo], bool] = None) -> Iterator[ModifierInfo]:
         """get_appearance_modifiers_gen(sim_info, include_appearance_modifier=None)
 
         Retrieve the appearance modifiers applied to a Sim.
@@ -145,10 +145,10 @@ class CommonSimAppearanceModifierUtils:
         sim_info: SimInfo,
         modifier: AppearanceModifier.BaseAppearanceModification,
         modifier_guid: int,
-        priority: CommonAppearanceModifierPriority=CommonAppearanceModifierPriority.TRANSFORMED,
-        apply_to_all_outfits: bool=True,
-        additional_flags: OutfitOverrideOptionFlags=OutfitOverrideOptionFlags.DEFAULT,
-        source: Any=None
+        priority: CommonAppearanceModifierPriority = CommonAppearanceModifierPriority.TRANSFORMED,
+        apply_to_all_outfits: bool = True,
+        additional_flags: OutfitOverrideOptionFlags = OutfitOverrideOptionFlags.DEFAULT,
+        source: Any = None
     ) -> None:
         """add_appearance_modifier(\
             sim_info,\
@@ -186,7 +186,7 @@ class CommonSimAppearanceModifierUtils:
         appearance_tracker.add_appearance_modifier(modifier, modifier_guid, priority, apply_to_all_outfits, source=source, additional_flags=additional_flags)
 
     @staticmethod
-    def remove_appearance_modifiers_by_guid(sim_info: SimInfo, modifier_guid: int, source: str='S4CL Removal') -> None:
+    def remove_appearance_modifiers_by_guid(sim_info: SimInfo, modifier_guid: int, source: str = 'S4CL Removal') -> None:
         """remove_appearance_modifiers_by_guid(sim_info, modifier_guid, source='S4CL Removal')
 
         Remove appearance modifiers from a Sim by their GUID.

@@ -15,13 +15,12 @@ from sims4communitylib.classes.testing.common_execution_result import CommonExec
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.utils.objects.common_object_tag_utils import CommonObjectTagUtils
 from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
-class S4CLDebugLogAllGameTagsInteraction(CommonImmediateSuperInteraction):
-    """ Log All Game Tags of a Target. """
+class S4CLDebugChangeObjectStatesInteraction(CommonImmediateSuperInteraction):
+    """ Change States of an Object. """
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
@@ -31,7 +30,7 @@ class S4CLDebugLogAllGameTagsInteraction(CommonImmediateSuperInteraction):
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_log_identifier(cls) -> str:
-        return 's4cl_debug_log_all_game_tags'
+        return 's4cl_debug_change_object_states'
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
@@ -65,5 +64,7 @@ class S4CLDebugLogAllGameTagsInteraction(CommonImmediateSuperInteraction):
                 else:
                     self.log.format_with_message('Had Sim Instance.', new_target=new_target)
                     interaction_target = new_target
-        CommonObjectTagUtils._print_game_tags(interaction_target)
+
+        from sims4communitylib.debug.dialogs.common_change_object_state_dialog import CommonChangeObjectStateDialog
+        CommonChangeObjectStateDialog(interaction_target).open()
         return CommonExecutionResult.TRUE

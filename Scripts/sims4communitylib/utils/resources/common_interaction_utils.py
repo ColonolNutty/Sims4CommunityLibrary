@@ -7,9 +7,15 @@ Copyright (c) COLONOLNUTTY
 """
 import services
 from typing import Union, Iterator, Any, Tuple, List
+
+from interactions.base.immediate_interaction import ImmediateSuperInteraction
 from interactions.base.interaction import Interaction
+from interactions.base.mixer_interaction import MixerInteraction
+from interactions.base.super_interaction import SuperInteraction
 from interactions.context import InteractionContext
 from interactions.interaction_instance_manager import InteractionInstanceManager
+from interactions.social.social_mixer_interaction import SocialMixerInteraction
+from interactions.social.social_super_interaction import SocialSuperInteraction
 from protocolbuffers.Localization_pb2 import LocalizedString
 from server.pick_info import PickInfo
 from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
@@ -177,6 +183,20 @@ class CommonInteractionUtils:
         return getattr(interaction_identifier, 'guid64', None)
 
     @staticmethod
+    def is_mixer_interaction(interaction: Interaction) -> bool:
+        """is_mixer_interaction(interaction)
+
+        Determine if an interaction is a Mixer interaction.
+
+        :param interaction: An instance of an Interaction.
+        :type interaction: Interaction
+        :return: True, if the interaction is a Mixer interaction. False, if not.
+        """
+        if interaction is None:
+            return False
+        return isinstance(interaction, MixerInteraction)
+
+    @staticmethod
     def is_social_mixer_interaction(interaction: Interaction) -> bool:
         """is_social_mixer_interaction(interaction)
 
@@ -187,6 +207,10 @@ class CommonInteractionUtils:
         :return: True, if the interaction is a Social Mixer interaction. False, if not.
         """
         if interaction is None:
+            return False
+        if isinstance(interaction, SocialMixerInteraction):
+            return True
+        if not hasattr(interaction, 'is_social'):
             return False
         return interaction.is_social
 
@@ -202,10 +226,42 @@ class CommonInteractionUtils:
         """
         if interaction is None:
             return False
+        if isinstance(interaction, SuperInteraction):
+            return True
+        if not hasattr(interaction, 'is_super'):
+            return False
         return interaction.is_super
 
     @staticmethod
-    def get_interaction_display_name(interaction: Interaction, tokens: Iterator[Any]=()) -> Union[LocalizedString, None]:
+    def is_immediate_super_interaction(interaction: Interaction) -> bool:
+        """is_immediate_super_interaction(interaction)
+
+        Determine if an interaction is an Immediate Super interaction.
+
+        :param interaction: An instance of an Interaction.
+        :type interaction: Interaction
+        :return: True, if the interaction is an Immediate Super interaction. False, if not.
+        """
+        if interaction is None:
+            return False
+        return isinstance(interaction, ImmediateSuperInteraction)
+
+    @staticmethod
+    def is_social_super_interaction(interaction: Interaction) -> bool:
+        """is_social_super_interaction(interaction)
+
+        Determine if an interaction is a Social Super interaction.
+
+        :param interaction: An instance of an Interaction.
+        :type interaction: Interaction
+        :return: True, if the interaction is a Social Super interaction. False, if not.
+        """
+        if interaction is None:
+            return False
+        return isinstance(interaction, SocialSuperInteraction)
+
+    @staticmethod
+    def get_interaction_display_name(interaction: Interaction, tokens: Iterator[Any] = ()) -> Union[LocalizedString, None]:
         """get_interaction_display_name(interaction, tokens=())
 
         Retrieve the display name of an interaction.
@@ -262,7 +318,7 @@ class CommonInteractionUtils:
         """
         if interactions is None or not interactions:
             return tuple()
-        short_names: List[str] = []
+        short_names: List[str] = list()
         for interaction in interactions:
             # noinspection PyBroadException
             try:
@@ -291,6 +347,7 @@ class CommonInteractionUtils:
         try:
             interaction_id: int = int(interaction_id)
         except:
+            # noinspection PyTypeChecker
             interaction_id: Interaction = interaction_id
             return interaction_id
 
@@ -308,4 +365,6 @@ class CommonInteractionUtils:
         :rtype: InteractionInstanceManager
         """
         from sims4.resources import Types
-        return services.get_instance_manager(Types.INTERACTION)
+        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+        # noinspection PyTypeChecker
+        return CommonResourceUtils.get_instance_manager(Types.INTERACTION)

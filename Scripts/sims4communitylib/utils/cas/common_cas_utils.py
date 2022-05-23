@@ -445,7 +445,6 @@ class CommonCASUtils(_HasS4CLClassLog):
         :return: True if the CAS part was successfully detached from the Sim. False if the CAS part was not successfully detached from the Sim.
         :rtype: bool
         """
-        from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
         if cas_part_id == -1 or cas_part_id is None:
             raise RuntimeError('No cas_part_id was provided.')
         cas_part = CommonCASPart(cas_part_id, body_type=body_type if body_type != BodyType.NONE else None)

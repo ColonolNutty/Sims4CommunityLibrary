@@ -220,7 +220,7 @@ class CommonGenderUtils:
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or decimal identifier of the Sim to use.', is_optional=True, default_value='Active Sim'),
     )
 )
-def _dd_swap_gender(output: CommonConsoleCommandOutput, sim_info: SimInfo=None, update_gender_options: bool=True, update_voice: bool=True, update_outfits: bool=True):
+def _common_swap_gender(output: CommonConsoleCommandOutput, sim_info: SimInfo = None, update_gender_options: bool = True, update_voice: bool = True, update_outfits: bool = True) -> bool:
     output(f'Swapping the gender of Sim {sim_info}.')
     result = CommonGenderUtils.swap_gender(sim_info, update_gender_options=update_gender_options, update_voice=update_voice, update_outfits=update_outfits)
     if result:

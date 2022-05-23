@@ -263,7 +263,7 @@ class CommonSimSituationUtils(HasClassLog):
         return True
 
     @staticmethod
-    def create_visit_situation(sim_info: SimInfo, duration_override_in_sim_seconds: int=None, visit_situation_override: Situation=None):
+    def create_visit_situation(sim_info: SimInfo, duration_override_in_sim_seconds: int = None, visit_situation_override: Situation = None):
         """create_visit_situation(sim_info, duration_override_in_sim_seconds=None, visit_situation_override=None)
 
         Create a visit situation for a Sim.
@@ -287,10 +287,10 @@ class CommonSimSituationUtils(HasClassLog):
         sim_info: SimInfo,
         situation_type: Type[Situation],
         creation_source: str,
-        invite_only: bool=True,
-        user_facing: bool=False,
-        situation_job: SituationJob=None,
-        purpose: SituationInvitationPurpose=SituationInvitationPurpose.INVITED,
+        invite_only: bool = True,
+        user_facing: bool = False,
+        situation_job: SituationJob = None,
+        purpose: SituationInvitationPurpose = SituationInvitationPurpose.INVITED,
         **__
     ) -> int:
         """create_situation_for_sim(\
@@ -336,7 +336,7 @@ class CommonSimSituationUtils(HasClassLog):
         return situation_id
 
     @staticmethod
-    def complete_situation_goal(sim_info: SimInfo, situation_goal_id: int, target_sim_info: SimInfo=None, score_override: int=None, start_cooldown: bool=True):
+    def complete_situation_goal(sim_info: SimInfo, situation_goal_id: int, target_sim_info: SimInfo = None, score_override: int = None, start_cooldown: bool = True):
         """complete_situation_goal(sim_info, situation_goal_id, target_sim_info=None, score_override=None, start_cooldown=True)
 
         Complete a situation goal for a Sim using the specified Target Sim.
@@ -385,7 +385,7 @@ class CommonSimSituationUtils(HasClassLog):
         return tuple(situation_guids)
 
     @staticmethod
-    def get_situations(sim_info: SimInfo, include_situation_callback: Callable[[Situation], bool]=None) -> Iterator[Situation]:
+    def get_situations(sim_info: SimInfo, include_situation_callback: Callable[[Situation], bool] = None) -> Iterator[Situation]:
         """get_situations(sim_info, include_situation_callback=None)
 
         Retrieve all Situations that a Sim is currently involved in.
@@ -577,7 +577,7 @@ class CommonSimSituationUtils(HasClassLog):
         's4clib_testing.printsituations',
     )
 )
-def _common_show_running_situations(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_show_running_situations(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         return
     log = CommonSimSituationUtils.get_log()

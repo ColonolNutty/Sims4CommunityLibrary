@@ -9,6 +9,7 @@ from typing import Union
 
 from sims4communitylib.enums.statistics_enum import CommonStatisticId
 from statistics.base_statistic import BaseStatistic
+from statistics.statistic_instance_manager import StatisticInstanceManager
 
 
 class CommonStatisticUtils:
@@ -99,9 +100,24 @@ class CommonStatisticUtils:
         try:
             statistic_id: int = int(statistic_id)
         except:
+            # noinspection PyTypeChecker
             statistic_id: BaseStatistic = statistic_id
             return statistic_id
 
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.load_instance(Types.STATISTIC, statistic_id) or CommonResourceUtils.load_instance(Types.STATIC_COMMODITY, statistic_id)
+
+    @staticmethod
+    def get_statistic_instance_manager() -> StatisticInstanceManager:
+        """get_statistic_instance_manager()
+
+        Retrieve the manager that manages all Statistics.
+
+        :return: The manager that manages all Statistics.
+        :rtype: StatisticInstanceManager
+        """
+        from sims4.resources import Types
+        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+        # noinspection PyTypeChecker
+        return CommonResourceUtils.get_instance_manager(Types.STATISTIC)

@@ -12,3 +12,6 @@ class CommonObjectStateValueId(CommonInt):
     """Identifier for object state values."""
     MURPHY_BED_OPEN = 228113
     MURPHY_BED_CLOSED = 228114
+    COMPUTER_GAME_MARIA_SISTERS = 32922
+    COMPUTER_SPACE_WOOHOO = 96857
+    COMPUTER_OFF = 15106

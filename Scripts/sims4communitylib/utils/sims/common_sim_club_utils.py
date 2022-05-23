@@ -58,7 +58,7 @@ class CommonSimClubUtils:
         return club_service.sims_to_gatherings_map.get(sim)
 
     @staticmethod
-    def get_clubs_gen(sim_info: SimInfo, include_club_callback: Callable[[Club], bool]=lambda *_, **__: True) -> Iterator[Club]:
+    def get_clubs_gen(sim_info: SimInfo, include_club_callback: Callable[[Club], bool] = lambda *_, **__: True) -> Iterator[Club]:
         """get_clubs_gen(sim_info, include_club_callback=lambda *_, **__: True)
 
         Retrieve all Clubs a Sim is a part of.
@@ -81,7 +81,7 @@ class CommonSimClubUtils:
             yield club
 
     @staticmethod
-    def get_clubs_currently_gathering_gen(sim_info: SimInfo, include_club_callback: Callable[[Club], bool]=lambda *_, **__: True) -> Iterator[Club]:
+    def get_clubs_currently_gathering_gen(sim_info: SimInfo, include_club_callback: Callable[[Club], bool] = lambda *_, **__: True) -> Iterator[Club]:
         """get_clubs_currently_gathering_gen(include_club_callback=lambda *_, **__: True)
 
         Retrieve all Clubs the Sim is in that are currently hosting a gathering.
@@ -90,7 +90,7 @@ class CommonSimClubUtils:
         :type sim_info: SimInfo
         :param include_club_callback: If the result of this callback is True, the Club will be included in the results. The default callback will allow all.
         :type include_club_callback: Callable[[Club], bool], optional
-        :return: An iterable of all Clubs the Sim is in that are currently gathering and that pass the include callback filter.
+        :return: An iterable of all Clubs the Sim is in that are currently gathering and that pass the include_club_callback filter.
         :rtype: Iterator[Club]
         """
         if sim_info is None:

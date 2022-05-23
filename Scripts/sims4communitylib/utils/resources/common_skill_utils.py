@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, Iterator, Tuple, List
+from typing import Union, Iterator, Tuple, List, Callable
 from sims4communitylib.enums.skills_enum import CommonSkillId
 from statistics.skill import Skill
 
@@ -75,6 +75,28 @@ class CommonSkillUtils:
         return tuple(short_names)
 
     @staticmethod
+    def get_all_skills_gen(include_skill_callback: Callable[[Skill], bool] = None) -> Iterator[Skill]:
+        """get_all_skills_gen(include_skill_callback=None)
+
+        Retrieve all Skills.
+
+        :param include_skill_callback: If the result of this callback is True, the Skill will be included in the results. If set to None, All Skills will be included.
+        :type include_skill_callback: Callable[[Skill], bool], optional
+        :return: An iterable of Skills that pass the specified include_skill_callback.
+        :rtype: Iterator[Skill]
+        """
+        from sims4communitylib.utils.resources.common_statistic_utils import CommonStatisticUtils
+        statistic_manager = CommonStatisticUtils.get_statistic_instance_manager()
+        for skill in statistic_manager.get_ordered_types(only_subclasses_of=Skill):
+            skill: Skill = skill
+            skill_id = CommonSkillUtils.get_skill_id(skill)
+            if skill_id is None:
+                continue
+            if include_skill_callback is not None and not include_skill_callback(skill):
+                continue
+            yield skill
+
+    @staticmethod
     def load_skill_by_id(skill_id: Union[int, CommonSkillId, Skill]) -> Union[Skill, None]:
         """load_skill_by_id(skill_id)
 
@@ -91,6 +113,7 @@ class CommonSkillUtils:
         try:
             skill_id: int = int(skill_id)
         except:
+            # noinspection PyTypeChecker
             skill_id: Skill = skill_id
             return skill_id
 

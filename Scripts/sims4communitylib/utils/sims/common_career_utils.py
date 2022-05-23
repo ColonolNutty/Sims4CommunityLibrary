@@ -7,7 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Union, Iterator, Callable, Tuple, List
 
-import services
 from careers.career_location import CareerLocation
 from careers.career_tuning import Career, TunableCareerTrack, CareerLevel
 from sims4.tuning.instance_manager import InstanceManager
@@ -16,7 +15,7 @@ from sims4.tuning.instance_manager import InstanceManager
 class CommonCareerUtils:
     """ Utilities for manipulating Careers. """
     @classmethod
-    def get_career_levels(cls, career: Career, include_branches: bool=False) -> Tuple[CareerLevel]:
+    def get_career_levels(cls, career: Career, include_branches: bool = False) -> Tuple[CareerLevel]:
         """get_career_levels(career, include_branches=False)
 
         Retrieve Career Levels available for a Career.
@@ -137,33 +136,34 @@ class CommonCareerUtils:
         return career_location.get_zone_id()
 
     @staticmethod
-    def load_career_by_guid(career_identifier: Union[int, Career]) -> Union[Career, None]:
-        """load_career_by_guid(career_identifier)
+    def load_career_by_guid(career: Union[int, Career]) -> Union[Career, None]:
+        """load_career_by_guid(career)
 
         Load an instance of a Career by its identifier.
 
-        :param career_identifier: The identifier of a Career.
-        :type career_identifier: Union[int, Career]
+        :param career: The identifier of a Career.
+        :type career: Union[int, Career]
         :return: An instance of a Career matching the decimal identifier or None if not found.
         :rtype: Union[Career, None]
         """
-        if career_identifier is None:
+        if career is None:
             return None
-        if isinstance(career_identifier, Career):
-            return career_identifier
+        if isinstance(career, Career):
+            return career
         # noinspection PyBroadException
         try:
-            career_identifier: int = int(career_identifier)
+            career: int = int(career)
         except:
-            career_identifier: Career = career_identifier
-            return career_identifier
+            # noinspection PyTypeChecker
+            career: Career = career
+            return career
 
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-        return CommonResourceUtils.load_instance(Types.CAREER, career_identifier)
+        return CommonResourceUtils.load_instance(Types.CAREER, career)
 
     @staticmethod
-    def get_all_careers_generator(include_career_callback: Callable[[Career], bool]=None) -> Iterator[Career]:
+    def get_all_careers_generator(include_career_callback: Callable[[Career], bool] = None) -> Iterator[Career]:
         """get_all_careers_generator(include_career_callback=None)
 
         Retrieve all Careers.
@@ -239,4 +239,5 @@ class CommonCareerUtils:
         :rtype: InteractionInstanceManager
         """
         from sims4.resources import Types
-        return services.get_instance_manager(Types.CAREER)
+        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+        return CommonResourceUtils.get_instance_manager(Types.CAREER)

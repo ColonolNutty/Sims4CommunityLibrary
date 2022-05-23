@@ -21,6 +21,7 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
+from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 from singletons import DEFAULT
@@ -1091,6 +1092,10 @@ class CommonOutfitUtils(HasClassLog):
         return outfit_category_and_index
 
 
+outfit_commands_log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_outfit_commands')
+outfit_commands_log.enable()
+
+
 @CommonConsoleCommand(
     ModInfo.get_identity(),
     's4clib_testing.print_all_outfit_categories',
@@ -1119,10 +1124,11 @@ def _s4clib_testing_print_outfit_tags(output: CommonConsoleCommandOutput, outfit
     if sim_info is None:
         return
     outfit_category_and_index = CommonOutfitUtils._parse_outfit_category_and_index_from_str(output, outfit_category_str=outfit_category_str, outfit_index=outfit_index, sim_info=sim_info)
-    if outfit_category_and_index is not None:
-        output(f'Attempting to print all game tags of outfit ({outfit_category_and_index[0].name}, {outfit_category_and_index[1]}) for Sim {sim_info}.')
-    else:
-        output(f'Attempting to print all game tags of the current outfit of Sim {sim_info}.')
+    if outfit_category_and_index is None:
+        outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+
+    output(f'Attempting to print all game tags of outfit ({outfit_category_and_index[0].name}, {outfit_category_and_index[1]}) for Sim {sim_info}.')
+    outfit_commands_log.debug(f'-------Game Tags For Outfit Category:  ({outfit_category_and_index[0].name}, {outfit_category_and_index[1]})-------')
     tag_values = CommonOutfitUtils.get_all_outfit_tags(sim_info, outfit_category_and_index=outfit_category_and_index)
     cleaned_tag_names = list()
     for tag_value in tag_values:
@@ -1132,8 +1138,12 @@ def _s4clib_testing_print_outfit_tags(output: CommonConsoleCommandOutput, outfit
             tag = CommonResourceUtils.get_enum_by_int_value(int(tag_value), CommonGameTag, default_value=str(tag_value))
         cleaned_tag_names.append(tag.name if hasattr(tag, 'name') else str(tag))
 
-    tags_str = ', '.join(sorted(cleaned_tag_names))
+    sorted_tag_names = sorted(cleaned_tag_names)
+    tags_str = ', '.join(sorted_tag_names)
     output(f'Game Tags: {tags_str}')
+    for sorted_tag_name in sorted_tag_names:
+        outfit_commands_log.debug(str(sorted_tag_name))
+    outfit_commands_log.debug(f'--------------------------------')
 
 
 @CommonConsoleCommand(
@@ -1154,10 +1164,10 @@ def _s4clib_testing_print_outfit_tags_by_cas_part(output: CommonConsoleCommandOu
     if sim_info is None:
         return
     outfit_category_and_index = CommonOutfitUtils._parse_outfit_category_and_index_from_str(output, outfit_category_str=outfit_category_str, outfit_index=outfit_index, sim_info=sim_info)
-    if outfit_category_and_index is not None:
-        output(f'Attempting to print game tags for each CAS Part in outfit ({outfit_category_and_index[0].name}, {outfit_category_and_index[1]}) for Sim {sim_info}.')
-    else:
-        output(f'Attempting to print game tags for each CAS Part in the current outfit of Sim {sim_info}.')
+    if outfit_category_and_index is None:
+        outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+    output(f'Attempting to print game tags for each CAS Part in outfit ({outfit_category_and_index[0].name}, {outfit_category_and_index[1]}) for Sim {sim_info}.')
+    outfit_commands_log.debug(f'-------Game Tags For CAS Parts of Outfit Category:  ({outfit_category_and_index[0].name}, {outfit_category_and_index[1]})-------')
     tags_by_cas_part_id = CommonOutfitUtils.get_outfit_tags_by_cas_part_id(sim_info, outfit_category_and_index=outfit_category_and_index)
     for (cas_part_id, tag_values) in tags_by_cas_part_id.items():
         output(f'CAS Part Id: {cas_part_id}')
@@ -1172,8 +1182,16 @@ def _s4clib_testing_print_outfit_tags_by_cas_part(output: CommonConsoleCommandOu
             else:
                 tag = CommonResourceUtils.get_enum_by_int_value(int(tag_value), CommonGameTag, default_value=str(tag_value))
             cleaned_tag_names.append(tag.name if hasattr(tag, 'name') else str(tag))
-        tags_str = ', '.join(sorted(cleaned_tag_names))
+        sorted_tag_names = sorted(cleaned_tag_names)
+        tags_str = ', '.join(sorted_tag_names)
         output(f'Game Tags: {tags_str}')
+        outfit_commands_log.debug(
+            f'---ID: {cas_part_id} (BodyType: {body_type_str})---')
+        for sorted_tag_name in sorted_tag_names:
+            outfit_commands_log.debug(str(sorted_tag_name))
+        outfit_commands_log.debug(f'---------')
+
+    outfit_commands_log.debug(f'--------------------------------')
 
 
 @CommonConsoleCommand(

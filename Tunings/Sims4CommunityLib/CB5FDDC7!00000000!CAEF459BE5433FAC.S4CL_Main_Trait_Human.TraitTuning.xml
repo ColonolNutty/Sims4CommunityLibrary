@@ -26,6 +26,7 @@
     <T>2108116777929577381<!--S4CL_Debug_Show_Traits--></T>
     <T>10355438442708473961<!--S4CL_Debug_Show_Running_Situations--></T>
     <T>13483495329565765760<!--S4CL_Interaction_Debug_Log_All_Game_Tags--></T>
+    <T>15058010603771996272<!--S4CL_Interaction_Debug_Change_Object_States--></T>
   </L>
   <T n="buffs_add_on_spawn_only">False</T>
   <T n="display_name">0x857FAADC<!--S4CL Main Trait--></T>

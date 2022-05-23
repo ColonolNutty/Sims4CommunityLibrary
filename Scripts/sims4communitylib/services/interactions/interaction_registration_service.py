@@ -5,13 +5,11 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import services
 from typing import Tuple, Iterator, Callable, Any
 from interactions.base.interaction import Interaction
 from objects.script_object import ScriptObject
 from services.terrain_service import TerrainService
 from sims.sim import Sim
-from sims4.resources import Types
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 from sims4communitylib.logging._has_s4cl_log import _HasS4CLLog
 from sims4communitylib.modinfo import ModInfo
@@ -53,7 +51,8 @@ class CommonInteractionHandler:
             yield from self._cached_interactions_to_add
         else:
             cached_interactions = list()
-            affordance_manager = services.get_instance_manager(Types.INTERACTION)
+            from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
+            affordance_manager = CommonInteractionUtils.get_instance_manager()
             for affordance_id in self.interactions_to_add:
                 affordance_instance = affordance_manager.get(affordance_id)
                 if affordance_instance is None:

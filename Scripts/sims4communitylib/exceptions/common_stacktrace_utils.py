@@ -55,9 +55,9 @@ class CommonStacktraceUtil:
         """Like sys.exc_info, but includes the full traceback.
 
         """
-        exec_type, exec_value, exec_traceback = sys.exc_info()
-        full_traceback = CommonStacktraceUtil._extend_traceback(exec_traceback, CommonStacktraceUtil.current_stack(1))
-        return exec_type, exec_value, full_traceback
+        exception_type, exception_value, exception_traceback = sys.exc_info()
+        full_traceback = CommonStacktraceUtil._extend_traceback(exception_traceback, CommonStacktraceUtil.current_stack(1))
+        return exception_type, exception_value, full_traceback
 
     @staticmethod
     def get_full_stack_trace() -> List[str]:

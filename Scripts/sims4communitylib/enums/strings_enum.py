@@ -114,6 +114,8 @@ class CommonStringId(CommonInt):
     S4CL_NOT_ENOUGH_ROOM_FOR_SIM_HERE = 0x36EB7A72
     # Tokens: {0.SimFirstName}
     S4CL_SIM_IS_NOT_PREGNANT: 'CommonStringId' = 0x4992E851
+    # Tokens: {0.SimFirstName} {0.SimLastName} (Sim)
+    S4CL_SIM_CANNOT_BE_PICKED_UP = 0xAB3DD412
 
     S4CL_YES: 'CommonStringId' = 0x3A6189A6
     S4CL_NO: 'CommonStringId' = 0x6377188C

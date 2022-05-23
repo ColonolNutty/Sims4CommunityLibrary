@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union
+from typing import Union, Iterator
 
 from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
@@ -40,7 +40,7 @@ class CommonSimSkillUtils:
 
     # noinspection PyUnusedLocal
     @staticmethod
-    def set_current_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], level: float, add: bool=True) -> bool:
+    def set_current_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], level: float, add: bool = True) -> bool:
         """set_current_skill_level(sim_info, skill, level, add=True)
 
         Set the current skill level of a Sim.
@@ -82,7 +82,7 @@ class CommonSimSkillUtils:
         return CommonSimSkillUtils.set_current_skill_level(sim_info, skill, skill.max_level)
 
     @staticmethod
-    def get_current_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], use_effective_skill_level: bool=True) -> float:
+    def get_current_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], use_effective_skill_level: bool = True) -> float:
         """get_current_skill_level(\
             sim_info,\
             skill,\
@@ -111,7 +111,7 @@ class CommonSimSkillUtils:
         return skill_level
 
     @staticmethod
-    def is_at_max_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], use_effective_skill_level: bool=True) -> bool:
+    def is_at_max_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], use_effective_skill_level: bool = True) -> bool:
         """is_at_max_skill_level(\
             sim_info,\
             skill,\
@@ -161,7 +161,7 @@ class CommonSimSkillUtils:
         return True
 
     @staticmethod
-    def set_progress_toward_max_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], value: float, add: bool=True) -> bool:
+    def set_progress_toward_max_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], value: float, add: bool = True) -> bool:
         """set_progress_toward_max_skill_level(sim_info, skill, value, add=True)
 
         Set the amount of progress a Sim has made toward the max level of a Skill.
@@ -184,7 +184,7 @@ class CommonSimSkillUtils:
         return True
 
     @staticmethod
-    def get_progress_toward_max_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], add: bool=True) -> float:
+    def get_progress_toward_max_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], add: bool = True) -> float:
         """get_progress_toward_max_skill_level(sim_info, skill, add=True)
 
         Retrieve the amount of progress a Sim has made toward the max level of a Skill.
@@ -205,7 +205,7 @@ class CommonSimSkillUtils:
         return True
 
     @staticmethod
-    def change_progress_toward_max_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], value: float, add: bool=True) -> bool:
+    def change_progress_toward_max_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], value: float, add: bool = True) -> bool:
         """change_progress_toward_max_skill_level(sim_info, skill, value, add=True)
 
         Modify the amount of progress a Sim has made toward the max level of a Skill.
@@ -228,7 +228,7 @@ class CommonSimSkillUtils:
         return True
 
     @staticmethod
-    def change_progress_toward_next_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], value: float, add: bool=True) -> bool:
+    def change_progress_toward_next_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], value: float, add: bool = True) -> bool:
         """change_progress_toward_next_skill_level(sim_info, skill, value, add=True)
 
         Modify the amount of progress a Sim has made toward the next level of a Skill.
@@ -247,7 +247,7 @@ class CommonSimSkillUtils:
         return CommonSimSkillUtils.change_progress_toward_max_skill_level(sim_info, skill, value, add=add)
 
     @staticmethod
-    def get_progress_toward_next_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], add: bool=False) -> float:
+    def get_progress_toward_next_skill_level(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], add: bool = False) -> float:
         """get_progress_toward_next_skill_level(sim_info, skill, add=False)
 
         Retrieve the amount of progress a Sim has made toward the next level of a Skill.
@@ -273,7 +273,7 @@ class CommonSimSkillUtils:
         return 0.0
 
     @staticmethod
-    def translate_skill_progress(sim_info: SimInfo, skill_from: Union[int, CommonSkillId, Skill], skill_to: Union[int, CommonSkillId, Skill], add: bool=True) -> bool:
+    def translate_skill_progress(sim_info: SimInfo, skill_from: Union[int, CommonSkillId, Skill], skill_to: Union[int, CommonSkillId, Skill], add: bool = True) -> bool:
         """translate_skill_progress(sim_info, skill_from, skill_to, add=True)
 
         Translate the total progress of one Skill to the total progress of another Skill for the specified Sim.
@@ -300,7 +300,7 @@ class CommonSimSkillUtils:
         return CommonSimSkillUtils.set_progress_toward_max_skill_level(sim_info, skill_to, level_of_new_skill)
 
     @staticmethod
-    def get_skill(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], add: bool=True) -> Union[Skill, None]:
+    def get_skill(sim_info: SimInfo, skill: Union[int, CommonSkillId, Skill], add: bool = True) -> Union[Skill, None]:
         """get_skill(sim_info, skill, add=True)
 
         Retrieve a Skill for the specified Sim.
@@ -319,6 +319,27 @@ class CommonSimSkillUtils:
             return None
         return sim_info.get_statistic(skill, add=add)
 
+    @staticmethod
+    def get_all_skills_available_for_sim_gen(sim_info: SimInfo) -> Iterator[Skill]:
+        """get_all_skills_available_for_sim_gen(sim_info)
+
+        Retrieve all Skills available to a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: An iterable of Skills that are available for the specified Sim.
+        :rtype: Iterator[Skill]
+        """
+        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return tuple()
+
+        def _is_skill_available_for_sim(skill: Skill) -> bool:
+            return skill.can_add(sim)
+
+        yield from CommonSkillUtils.get_all_skills_gen(include_skill_callback=_is_skill_available_for_sim)
+
 
 @CommonConsoleCommand(
     ModInfo.get_identity(),
@@ -330,7 +351,7 @@ class CommonSimSkillUtils:
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to check.', is_optional=True, default_value='Active Sim'),
     )
 )
-def _common_get_skill_level(output: CommonConsoleCommandOutput, skill: TunableInstanceParam(Types.STATISTIC), use_effective_skill_level: bool=True, sim_info: SimInfo=None):
+def _common_get_skill_level(output: CommonConsoleCommandOutput, skill: TunableInstanceParam(Types.STATISTIC), use_effective_skill_level: bool = True, sim_info: SimInfo = None):
     if skill is None:
         output('ERROR: Failed, Skill not specified or Skill did not exist!')
         return
@@ -350,7 +371,7 @@ def _common_get_skill_level(output: CommonConsoleCommandOutput, skill: TunableIn
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to change.', is_optional=True, default_value='Active Sim'),
     )
 )
-def _common_set_skill_level(output: CommonConsoleCommandOutput, skill: TunableInstanceParam(Types.STATISTIC), level: int, sim_info: SimInfo=None):
+def _common_set_skill_level(output: CommonConsoleCommandOutput, skill: TunableInstanceParam(Types.STATISTIC), level: int, sim_info: SimInfo = None):
     if sim_info is None:
         return
     if skill is None:
@@ -375,7 +396,7 @@ def _common_set_skill_level(output: CommonConsoleCommandOutput, skill: TunableIn
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to change.', is_optional=True, default_value='Active Sim'),
     )
 )
-def _common_remove_skill(output: CommonConsoleCommandOutput, skill: TunableInstanceParam(Types.STATISTIC), sim_info: SimInfo=None):
+def _common_remove_skill(output: CommonConsoleCommandOutput, skill: TunableInstanceParam(Types.STATISTIC), sim_info: SimInfo = None):
     if skill is None:
         output('ERROR: Skill not specified or the specified Skill did not exist!')
         return

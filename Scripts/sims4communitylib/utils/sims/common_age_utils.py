@@ -12,7 +12,6 @@ import services
 from event_testing.test_events import TestEvent
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Age
-from sims4.resources import Types
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
@@ -25,7 +24,7 @@ class CommonAgeUtils:
 
     """
     @staticmethod
-    def get_age(sim_info: SimInfo, exact_age: bool=False) -> Union[Age, int, None]:
+    def get_age(sim_info: SimInfo, exact_age: bool = False) -> Union[Age, int, None]:
         """get_age(sim_info, exact_age=False)
 
         Retrieve the Age of a Sim.
@@ -39,7 +38,7 @@ class CommonAgeUtils:
         """
         if sim_info is None:
             return None
-        age: Age = None
+        age: Union[Age, None] = None
         if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age') and exact_age:
             age = sim_info.sim_info._base.age
         elif hasattr(sim_info, '_base') and hasattr(sim_info._base, 'age'):
@@ -186,6 +185,8 @@ class CommonAgeUtils:
         :return: True, if the Age was set successfully. False, if not.
         :rtype: bool
         """
+        from sims4.resources import Types
+        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         age = CommonAgeUtils.convert_to_approximate_age(age)
         if age is None:
             return False
@@ -204,7 +205,7 @@ class CommonAgeUtils:
         if sim_info.is_npc:
             if sim_info.is_child or sim_info.is_teen:
                 available_aspirations = []
-                aspiration_track_manager = services.get_instance_manager(Types.ASPIRATION_TRACK)
+                aspiration_track_manager = CommonResourceUtils.get_instance_manager(Types.ASPIRATION_TRACK)
                 aspiration_tracker = sim_info.aspiration_tracker
                 for aspiration_track in aspiration_track_manager.types.values():
                     track_available = not aspiration_track.is_hidden_unlockable
@@ -247,7 +248,7 @@ class CommonAgeUtils:
         return int(CommonAgeUtils.get_age(sim_info)) == int(CommonAgeUtils.get_age(other_sim_info))
 
     @staticmethod
-    def is_younger_than(sim_info: SimInfo, age: Union[CommonAge, Age, int], or_equal: bool=False) -> bool:
+    def is_younger_than(sim_info: SimInfo, age: Union[CommonAge, Age, int], or_equal: bool = False) -> bool:
         """is_younger_than(sim_info, age, or_equal=False)
 
         Determine if a Sim is younger than the specified Age.
@@ -268,7 +269,7 @@ class CommonAgeUtils:
         return sim_age < age
 
     @staticmethod
-    def is_older_than(sim_info: SimInfo, age: Union[CommonAge, Age, int], or_equal: bool=False) -> bool:
+    def is_older_than(sim_info: SimInfo, age: Union[CommonAge, Age, int], or_equal: bool = False) -> bool:
         """is_older_than(sim_info, age, or_equal=False)
 
         Determine if a Sim is older than the specified Age.
@@ -790,7 +791,7 @@ class CommonAgeUtils:
             return False
 
     @staticmethod
-    def has_age(sim_info: SimInfo, age: Union[CommonAge, Age, int], exact_age: bool=False) -> bool:
+    def has_age(sim_info: SimInfo, age: Union[CommonAge, Age, int], exact_age: bool = False) -> bool:
         """has_age(sim_info, age, exact_age=False)
 
         Determine if a Sim has a matching Age.
@@ -823,7 +824,7 @@ class CommonAgeUtils:
         's4clib.setageprogresspercentage',
     )
 )
-def _common_set_age_progress_percentage(output: CommonConsoleCommandOutput, progress_percentage: float, sim_info: SimInfo=None):
+def _common_set_age_progress_percentage(output: CommonConsoleCommandOutput, progress_percentage: float, sim_info: SimInfo = None):
     if sim_info is None:
         output('ERROR: No Sim was specified or the specified Sim was not found!')
         return
@@ -847,7 +848,7 @@ def _common_set_age_progress_percentage(output: CommonConsoleCommandOutput, prog
         's4clib.randomizeageprogress',
     )
 )
-def _common_randomize_age_progress(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_randomize_age_progress(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         output('ERROR: No Sim was specified or the specified Sim was not found!')
         return
@@ -872,7 +873,7 @@ def _common_randomize_age_progress(output: CommonConsoleCommandOutput, sim_info:
         's4clib.setage',
     )
 )
-def _common_set_age(output: CommonConsoleCommandOutput, age: CommonAge, sim_info: SimInfo=None):
+def _common_set_age(output: CommonConsoleCommandOutput, age: CommonAge, sim_info: SimInfo = None):
     if age is None:
         return
     if sim_info is None:
@@ -899,7 +900,7 @@ def _common_set_age(output: CommonConsoleCommandOutput, age: CommonAge, sim_info
         's4clib.printsimage',
     )
 )
-def _common_print_sim_age(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_print_sim_age(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         output('ERROR: No Sim was specified or the specified Sim was not found!')
         return

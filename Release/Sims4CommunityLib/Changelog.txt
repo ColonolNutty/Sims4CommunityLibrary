@@ -1,3 +1,16 @@
+v1.78:
+- Add a command to swap the gender of a Sim. `s4clib.swap_gender`
+- Added a fix for the vanilla `Sim.can_see` function where `los_constraint` property was attempting to be used while it was None. (Thus throwing an error). This fix checks for the property to be None before continuing the rest of said function.
+- Added a new SHIFT+CLICK interaction to all objects. This interaction will let you change the various states of those objects.
+  - For example, you can change the image on a computer monitor to one of the many images the game uses.
+- Added a debug dialog for changing the state of an object.
+- Added a couple more values to `CommonObjectStateValueId`
+- The `CommonOutfitUtils` commands now logs the things it prints to the log file in addition to the console window.
+- Added new functions to `CommonObjectStateUtils` for loading object state values, setting object state, checking the current states of an object, and retrieve all state items of an object.
+- Added a function to `CommonRelationshipUtils` to retrieve all relationships of a Sim.
+- Added a couple commands for adding and removing relationship bits to/from Sims.
+- Added a command to delete all Sims except the Active Household Sims.
+
 v1.77:
 - Fixed an error that could occur when using commands that have an optional integer argument.
 - Added a couple fun commands to use.

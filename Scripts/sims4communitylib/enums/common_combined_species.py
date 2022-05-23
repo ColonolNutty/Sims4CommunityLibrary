@@ -55,13 +55,13 @@ class CommonCombinedSpecies(CommonInt):
         :rtype: Tuple[str]
         """
         if combined_species == CommonCombinedSpecies.ANIMAL:
-            result: Tuple[str] = (*cls.convert_to_enum_xml(CommonCombinedSpecies.DOG), *cls.convert_to_enum_xml(CommonCombinedSpecies.CAT), *cls.convert_to_enum_xml(CommonCombinedSpecies.FOX))
+            result: Tuple[str, ...] = (*cls.convert_to_enum_xml(CommonCombinedSpecies.DOG), *cls.convert_to_enum_xml(CommonCombinedSpecies.CAT), *cls.convert_to_enum_xml(CommonCombinedSpecies.FOX))
             return result
         if combined_species == CommonCombinedSpecies.PET:
-            result: Tuple[str] = (*cls.convert_to_enum_xml(CommonCombinedSpecies.DOG), *cls.convert_to_enum_xml(CommonCombinedSpecies.CAT))
+            result: Tuple[str, ...] = (*cls.convert_to_enum_xml(CommonCombinedSpecies.DOG), *cls.convert_to_enum_xml(CommonCombinedSpecies.CAT))
             return result
         if combined_species == CommonCombinedSpecies.NON_PET:
-            result: Tuple[str] = (*cls.convert_to_enum_xml(CommonCombinedSpecies.HUMAN),)
+            result: Tuple[str, ...] = (*cls.convert_to_enum_xml(CommonCombinedSpecies.HUMAN),)
             return result
 
         mapping = {
