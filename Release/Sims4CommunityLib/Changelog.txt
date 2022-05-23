@@ -8,8 +8,16 @@ v1.78:
 - The `CommonOutfitUtils` commands now logs the things it prints to the log file in addition to the console window.
 - Added new functions to `CommonObjectStateUtils` for loading object state values, setting object state, checking the current states of an object, and retrieve all state items of an object.
 - Added a function to `CommonRelationshipUtils` to retrieve all relationships of a Sim.
+- Added a function to `CommonRelationshipUtils` to remove a relationship bit of a Sim from all other Sims.
 - Added a couple commands for adding and removing relationship bits to/from Sims.
 - Added a command to delete all Sims except the Active Household Sims.
+- Added a fix for the vanilla `AwayActionTracker.remove_on_away_action_ended_callback` where it would blow up if the callback being removed did not exist in the `_on_away_action_ended` property.
+- Added a fix for the vanilla `AwayActionTracker.remove_on_away_action_started_callback` where it would blow up if the callback being removed did not exist in the `_on_away_action_started property`.
+- Added functions to check if a Sim can be picked up.
+- Added a function to retrieve all Skills available to a Sim.
+- Added a function to retrieve all Skills.
+- Added a function to check if a Sim can route to another Sim.
+- Added a command to set all Sims as having met each other other.
 
 v1.77:
 - Fixed an error that could occur when using commands that have an optional integer argument.
