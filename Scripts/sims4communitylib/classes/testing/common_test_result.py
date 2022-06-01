@@ -67,9 +67,9 @@ class CommonTestResult(CommonExecutionResult):
 
         Convert a vanilla TestResult into a CommonTestResult.
 
-        :param test_result: An instance of a TestResult
+        :param test_result: An instance of TestResult
         :type test_result: TestResult
-        :return: The specified TestResult translated to a CommonTestResult.
+        :return: The specified TestResult translated to CommonTestResult.
         :rtype: CommonTestResult
         """
         return CommonTestResult(test_result.result, reason=test_result.reason, tooltip_text=test_result.tooltip, icon=test_result.icon, influenced_by_active_mood=test_result.influence_by_active_mood)

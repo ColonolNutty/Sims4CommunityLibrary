@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from typing import Union, Iterator
 
 from distributor.shared_messages import IconInfoData
+from game_effect_modifier.continuous_statistic_modifier import ContinuousStatisticModifier
 from objects.components.statistic_component import StatisticComponent
 from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
@@ -331,7 +332,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def add_statistic_modifier(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> Union[int, None]:
+    def add_statistic_modifier(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True):
         """add_statistic_modifier(sim_info, statistic, value, add_dynamic=True, add=True)
 
         Add a Modifier to the specified Statistic for the specified Sim.
@@ -346,8 +347,6 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         :type add_dynamic: bool, optional
         :param add: Whether or not to add the statistic to the Sim.
         :type add: bool, optional
-        :return: The handle id for the statistic modifier or None if the modifier failed to apply.
-        :rtype: Union[int, None]
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', statistic=statistic, sim=sim_info)
@@ -356,7 +355,11 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         if statistic is None:
             cls.get_log().format_with_message('No statistic found on Sim.', statistic=statistic, sim=sim_info)
             return None
-        return sim_info.add_statistic_modifier(statistic, value)
+        stat = sim_info.get_statistic(statistic)
+        if stat is None:
+            return
+        stat.add_statistic_modifier(value)
+        return None
 
     # noinspection PyUnusedLocal
     @classmethod

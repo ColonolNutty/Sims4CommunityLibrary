@@ -28,13 +28,13 @@ class CommonOccultType(CommonInt):
     WITCH: 'CommonOccultType' = 9
 
     @classmethod
-    def get_all(cls, exclude_occult_types: Iterator['CommonOccultType']=()) -> Tuple['CommonOccultType']:
+    def get_all(cls, exclude_occult_types: Iterator['CommonOccultType'] = ()) -> Tuple['CommonOccultType']:
         """get_all(exclude_occult_types=())
 
         Retrieve a collection of all CommonOccultType, excluding CommonOccultType.NONE.
 
-        :param exclude_occult_types: An iterable of occult types to exclude from the result.
-        :type exclude_occult_types: CommonOccultType
+        :param exclude_occult_types: An iterable of occult types to exclude from the result. Default is to exclude none of them.
+        :type exclude_occult_types: Iterator[CommonOccultType], optional
         :return: A collection of all CommonOccultType, without CommonOccultType.NONE.
         :rtype: Tuple[CommonOccultType]
         """
@@ -105,9 +105,9 @@ class CommonOccultType(CommonInt):
 
         .. note:: Not all CommonOccultTypes have an OccultType to convert to! They will return None in those cases! (Ghost, Plant Sim, Robot, Skeleton)
 
-        :param occult_type: An instance of a CommonOccultType
+        :param occult_type: An instance of CommonOccultType
         :type occult_type: CommonOccultType
-        :return: The specified CommonOccultType translated to a OccultType or None if the CommonOccultType could not be translated.
+        :return: The specified CommonOccultType translated to OccultType, or None if the value could not be translated.
         :rtype: Union[OccultType, None]
         """
         from sims4communitylib.utils.sims.common_sim_occult_type_utils import CommonSimOccultTypeUtils

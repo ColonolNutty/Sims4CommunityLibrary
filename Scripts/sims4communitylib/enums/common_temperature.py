@@ -44,11 +44,11 @@ class CommonTemperature(CommonInt):
     def convert_to_vanilla(value: 'CommonTemperature') -> Union[Temperature, None]:
         """convert_to_vanilla(value)
 
-        Convert a CommonTemperature into the vanilla Temperature enum.
+        Convert a CommonTemperature into Temperature.
 
-        :param value: An instance of a CommonTemperature
+        :param value: An instance of CommonTemperature
         :type value: CommonTemperature
-        :return: The specified CommonTemperature translated to a Temperature or None if a vanilla Temperature is not found.
+        :return: The specified CommonTemperature translated to Temperature, or None if the value could not be translated.
         :rtype: Union[Temperature, None]
         """
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
@@ -58,12 +58,12 @@ class CommonTemperature(CommonInt):
     def convert_from_vanilla(value: Temperature) -> Union['CommonTemperature', None]:
         """convert_from_vanilla(value)
 
-        Convert a vanilla Temperature into a CommonTemperature enum.
+        Convert a vanilla Temperature into CommonTemperature.
 
-        :param value: An instance of a CommonTemperature
-        :type value: CommonTemperature
-        :return: The specified Temperature translated to a Temperature or None if a CommonTemperature is not found.
-        :rtype: Union[Temperature, None]
+        :param value: An instance of Temperature
+        :type value: Temperature
+        :return: The specified Temperature translated to CommonTemperature, or None if the value could not be translated.
+        :rtype: Union[CommonTemperature, None]
         """
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.get_enum_by_int_value(int(value), CommonTemperature, default_value=None)

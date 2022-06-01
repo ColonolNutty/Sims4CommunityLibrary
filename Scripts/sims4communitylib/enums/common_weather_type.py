@@ -52,11 +52,11 @@ class CommonWeatherType(CommonInt):
     def convert_to_vanilla(value: 'CommonWeatherType') -> Union[WeatherType, None]:
         """convert_to_vanilla(value)
 
-        Convert a CommonWeatherType into the vanilla WeatherType enum.
+        Convert a CommonWeatherType into WeatherType.
 
-        :param value: An instance of a CommonWeatherType
+        :param value: An instance of CommonWeatherType
         :type value: CommonWeatherType
-        :return: The specified CommonWeatherType translated to a WeatherType or None if a vanilla WeatherType is not found.
+        :return: The specified CommonWeatherType translated to WeatherType, or None if the value could not be translated.
         :rtype: Union[WeatherType, None]
         """
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
@@ -66,12 +66,12 @@ class CommonWeatherType(CommonInt):
     def convert_from_vanilla(value: WeatherType) -> Union['CommonWeatherType', None]:
         """convert_from_vanilla(value)
 
-        Convert a vanilla WeatherType into a CommonWeatherType enum.
+        Convert a vanilla WeatherType into CommonWeatherType.
 
-        :param value: An instance of a CommonWeatherType
-        :type value: CommonWeatherType
-        :return: The specified WeatherType translated to a CommonWeatherType or None if a weather type is not found.
-        :rtype: Union[WeatherType, None]
+        :param value: An instance of WeatherType
+        :type value: WeatherType
+        :return: The specified WeatherType translated to CommonWeatherType, or None if the value could not be translated.
+        :rtype: Union[CommonWeatherType, None]
         """
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.get_enum_by_int_value(int(value), CommonWeatherType, default_value=None)

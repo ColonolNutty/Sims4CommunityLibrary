@@ -51,11 +51,11 @@ class CommonWeatherEffectType(CommonInt):
     def convert_to_vanilla(value: 'CommonWeatherEffectType') -> Union[WeatherEffectType, None]:
         """convert_to_vanilla(value)
 
-        Convert a CommonWeatherEffectType into the vanilla WeatherEffectType enum.
+        Convert a CommonWeatherEffectType into WeatherEffectType.
 
-        :param value: An instance of a CommonWeatherEffectType
+        :param value: An instance of CommonWeatherEffectType
         :type value: CommonWeatherEffectType
-        :return: The specified CommonWeatherEffectType translated to a WeatherEffectType or None if a vanilla WeatherEffectType is not found.
+        :return: The specified CommonWeatherEffectType translated to WeatherEffectType, or None if the value could not be translated.
         :rtype: Union[WeatherEffectType, None]
         """
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
@@ -65,12 +65,12 @@ class CommonWeatherEffectType(CommonInt):
     def convert_from_vanilla(value: WeatherEffectType) -> Union['CommonWeatherEffectType', None]:
         """convert_from_vanilla(value)
 
-        Convert a vanilla WeatherEffectType into a CommonWeatherEffectType enum.
+        Convert a vanilla WeatherEffectType into CommonWeatherEffectType.
 
-        :param value: An instance of a CommonWeatherEffectType
-        :type value: CommonWeatherEffectType
-        :return: The specified WeatherEffectType translated to a WeatherEffectType or None if a CommonWeatherEffectType is not found.
-        :rtype: Union[WeatherEffectType, None]
+        :param value: An instance of WeatherEffectType
+        :type value: WeatherEffectType
+        :return: The specified WeatherEffectType translated to CommonWeatherEffectType, or None if the value could not be translated.
+        :rtype: Union[CommonWeatherEffectType, None]
         """
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.get_enum_by_int_value(int(value), CommonWeatherEffectType, default_value=None)

@@ -84,9 +84,9 @@ class CommonSimNameType(CommonInt):
 
         Convert a CommonSimNameType into the vanilla SimNameType enum.
 
-        :param sim_name_type: An instance of a CommonSimNameType.
+        :param sim_name_type: An instance of CommonSimNameType.
         :type sim_name_type: CommonSimNameType
-        :return: The specified CommonSimNameType translated to a SimNameType or SimNameType.DEFAULT if the CommonSimNameType could not be translated.
+        :return: The specified CommonSimNameType translated to SimNameType or DEFAULT if the CommonSimNameType could not be translated.
         :rtype: SimNameType
         """
         return CommonResourceUtils.get_enum_by_int_value(int(sim_name_type), SimNameType, default_value=SimNameType.DEFAULT)
@@ -97,9 +97,9 @@ class CommonSimNameType(CommonInt):
 
         Convert a vanilla SimNameType into a CommonSimNameType enum.
 
-        :param sim_name_type: An instance of a SimNameType.
+        :param sim_name_type: An instance of SimNameType.
         :type sim_name_type: SimNameType
-        :return: The specified SimNameType translated to a CommonSimNameType or CommonSimNameType.DEFAULT if the SimNameType could not be translated.
+        :return: The specified SimNameType translated to CommonSimNameType or DEFAULT if the SimNameType could not be translated.
         :rtype: CommonSimNameType
         """
         return CommonResourceUtils.get_enum_by_int_value(int(sim_name_type), CommonSimNameType, default_value=CommonSimNameType.DEFAULT)

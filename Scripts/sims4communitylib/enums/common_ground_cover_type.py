@@ -42,9 +42,9 @@ class CommonGroundCoverType(CommonInt):
 
         Convert a CommonGroundCoverType into the vanilla GroundCoverType enum.
 
-        :param value: An instance of a CommonGroundCoverType
+        :param value: An instance of CommonGroundCoverType
         :type value: CommonGroundCoverType
-        :return: The specified CommonGroundCoverType translated to a GroundCoverType or None if a vanilla GroundCoverType is not found.
+        :return: The specified CommonGroundCoverType translated to GroundCoverType, or None if the value could not be translated.
         :rtype: Union[GroundCoverType, None]
         """
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
@@ -56,10 +56,10 @@ class CommonGroundCoverType(CommonInt):
 
         Convert a vanilla GroundCoverType into a CommonGroundCoverType enum.
 
-        :param value: An instance of a CommonGroundCoverType
-        :type value: CommonGroundCoverType
-        :return: The specified GroundCoverType translated to a GroundCoverType or None if a CommonGroundCoverType is not found.
-        :rtype: Union[GroundCoverType, None]
+        :param value: An instance of GroundCoverType
+        :type value: GroundCoverType
+        :return: The specified GroundCoverType translated to CommonGroundCoverType, or None if the value could not be translated.
+        :rtype: Union[CommonGroundCoverType, None]
         """
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.get_enum_by_int_value(int(value), CommonGroundCoverType, default_value=None)

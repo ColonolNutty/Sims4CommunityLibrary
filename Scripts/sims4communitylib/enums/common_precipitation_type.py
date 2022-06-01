@@ -40,11 +40,11 @@ class CommonPrecipitationType(CommonInt):
     def convert_to_vanilla(value: 'CommonPrecipitationType') -> Union[PrecipitationType, None]:
         """convert_to_vanilla(value)
 
-        Convert a CommonPrecipitationType into the vanilla PrecipitationType enum.
+        Convert a CommonPrecipitationType into PrecipitationType.
 
-        :param value: An instance of a CommonPrecipitationType
+        :param value: An instance of CommonPrecipitationType
         :type value: CommonPrecipitationType
-        :return: The specified CommonPrecipitationType translated to a PrecipitationType or None if a vanilla PrecipitationType is not found.
+        :return: The specified CommonPrecipitationType translated to PrecipitationType, or None if the value could not be translated.
         :rtype: Union[PrecipitationType, None]
         """
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
@@ -54,12 +54,12 @@ class CommonPrecipitationType(CommonInt):
     def convert_from_vanilla(value: PrecipitationType) -> Union['CommonPrecipitationType', None]:
         """convert_from_vanilla(value)
 
-        Convert a vanilla PrecipitationType into a CommonPrecipitationType enum.
+        Convert a vanilla PrecipitationType into CommonPrecipitationType.
 
-        :param value: An instance of a CommonPrecipitationType
-        :type value: CommonPrecipitationType
-        :return: The specified PrecipitationType translated to a PrecipitationType or None if a CommonPrecipitationType is not found.
-        :rtype: Union[PrecipitationType, None]
+        :param value: An instance of PrecipitationType
+        :type value: PrecipitationType
+        :return: The specified PrecipitationType translated to CommonPrecipitationType, or None if the value could not be translated.
+        :rtype: Union[CommonPrecipitationType, None]
         """
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.get_enum_by_int_value(int(value), CommonPrecipitationType, default_value=None)

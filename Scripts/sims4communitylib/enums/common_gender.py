@@ -29,7 +29,8 @@ class CommonGender(CommonInt):
         :return: A collection of all CommonGender, without CommonGender.INVALID.
         :rtype: Tuple[CommonGender]
         """
-        value_list: Tuple[CommonGender] = tuple([value for value in cls.values if value != cls.INVALID])
+        # noinspection PyTypeChecker
+        value_list: Tuple[CommonGender, ...] = tuple([value for value in cls.values if value != cls.INVALID])
         return value_list
 
     @classmethod
@@ -74,59 +75,59 @@ class CommonGender(CommonInt):
         return CommonGender.INVALID
 
     @staticmethod
-    def convert_to_vanilla(gender: 'CommonGender') -> Union[Gender, None]:
-        """convert_to_vanilla(gender)
+    def convert_to_vanilla(value: 'CommonGender') -> Union[Gender, None]:
+        """convert_to_vanilla(value)
 
         Convert a CommonGender into the vanilla Gender enum.
 
-        :param gender: An instance of a CommonGender
-        :type gender: CommonGender
-        :return: The specified CommonGender translated to a Gender or None if the CommonGender could not be translated.
+        :param value: An instance of CommonGender
+        :type value: CommonGender
+        :return: The specified CommonGender translated to Gender or None if the CommonGender could not be translated.
         :rtype: Union[Gender, None]
         """
-        if gender is None or gender == CommonGender.INVALID:
+        if value is None or value == CommonGender.INVALID:
             return None
-        if isinstance(gender, Gender):
-            return gender
+        if isinstance(value, Gender):
+            return value
         conversion_mapping: Dict[CommonGender, Gender] = {
             CommonGender.MALE: Gender.MALE,
             CommonGender.FEMALE: Gender.FEMALE
         }
-        return conversion_mapping.get(gender, None)
+        return conversion_mapping.get(value, None)
 
     @staticmethod
-    def convert_from_vanilla(gender: Gender) -> 'CommonGender':
-        """convert_from_vanilla(gender)
+    def convert_from_vanilla(value: Gender) -> 'CommonGender':
+        """convert_from_vanilla(value)
 
         Convert a vanilla Gender into a CommonGender enum.
 
-        :param gender: An instance of a Gender
-        :type gender: Gender
-        :return: The specified Gender translated to a CommonGender or CommonGender.INVALID if the Gender could not be translated.
+        :param value: An instance of Gender
+        :type value: Gender
+        :return: The specified Gender translated to CommonGender or INVALID if the Gender could not be translated.
         :rtype: Union[Gender, None]
         """
-        if gender is None:
+        if value is None:
             return CommonGender.INVALID
-        if isinstance(gender, CommonGender):
-            return gender
+        if isinstance(value, CommonGender):
+            return value
         conversion_mapping: Dict[int, CommonGender] = {
             int(Gender.MALE): CommonGender.MALE,
             int(Gender.FEMALE): CommonGender.FEMALE
         }
-        gender = int(gender)
-        if gender not in conversion_mapping:
+        value = int(value)
+        if value not in conversion_mapping:
             return CommonGender.INVALID
-        return conversion_mapping[gender]
+        return conversion_mapping[value]
 
     @staticmethod
-    def convert_to_localized_string_id(gender: 'CommonGender') -> Union[int, str]:
-        """convert_to_localized_string_id(gender)
+    def convert_to_localized_string_id(value: 'CommonGender') -> Union[int, str]:
+        """convert_to_localized_string_id(value)
 
         Convert a CommonGender into a Localized String identifier.
 
-        :param gender: An instance of a CommonGender
-        :type gender: CommonGender
-        :return: The specified CommonGender translated to a localized string identifier or the name property of the value, if no localized string id is found.
+        :param value: An instance of a CommonGender
+        :type value: CommonGender
+        :return: The specified CommonGender translated to a localized string identifier. If no localized string id is found, the name property of the value will be used instead.
         :rtype: Union[int, str]
         """
         from sims4communitylib.enums.strings_enum import CommonStringId
@@ -134,4 +135,4 @@ class CommonGender(CommonInt):
             CommonGender.MALE: CommonStringId.MALE,
             CommonGender.FEMALE: CommonStringId.FEMALE
         }
-        return display_name_mapping.get(gender, gender.name)
+        return display_name_mapping.get(value, value.name)

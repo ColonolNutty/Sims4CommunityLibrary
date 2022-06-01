@@ -51,9 +51,9 @@ class CommonCloudType(CommonInt):
 
         Convert a CommonCloudType into the vanilla CloudType enum.
 
-        :param value: An instance of a CommonCloudType
+        :param value: An instance of CommonCloudType
         :type value: CommonCloudType
-        :return: The specified CommonCloudType translated to a CloudType or None if a vanilla CloudType is not found.
+        :return: The specified CommonCloudType translated to CloudType or None if a vanilla CloudType is not found.
         :rtype: Union[CloudType, None]
         """
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
@@ -65,9 +65,9 @@ class CommonCloudType(CommonInt):
 
         Convert a vanilla CloudType into a CommonCloudType enum.
 
-        :param value: An instance of a CommonCloudType
+        :param value: An instance of CommonCloudType
         :type value: CommonCloudType
-        :return: The specified CloudType translated to a CloudType or None if a CommonCloudType is not found.
+        :return: The specified CloudType translated to CloudType or None if the value could not be translated.
         :rtype: Union[CloudType, None]
         """
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils

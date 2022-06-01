@@ -9,6 +9,7 @@ from typing import Iterator, Union, Dict, Callable
 
 from sims.occult.occult_enums import OccultType
 from sims.sim_info import SimInfo
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.common_occult_type import CommonOccultType
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
@@ -38,9 +39,7 @@ class CommonSimOccultTypeUtils:
         if sim_info is None:
             return tuple()
         yield CommonOccultType.NON_OCCULT
-        for occult_type in CommonOccultType.values:
-            if occult_type in (CommonOccultType.NONE, CommonOccultType.NON_OCCULT):
-                continue
+        for occult_type in CommonOccultType.get_all(exclude_occult_types=(CommonOccultType.NONE, CommonOccultType.NON_OCCULT)):
             if CommonSimOccultTypeUtils.is_occult_type(sim_info, occult_type):
                 yield occult_type
 
@@ -62,7 +61,7 @@ class CommonSimOccultTypeUtils:
         return False
 
     @staticmethod
-    def is_occult_type(sim_info: SimInfo, occult_type: CommonOccultType) -> bool:
+    def is_occult_type(sim_info: SimInfo, occult_type: CommonOccultType) -> CommonTestResult:
         """is_occult_type(sim_info, occult_type)
 
         Determine if a Sim is an Occult Type.
@@ -73,16 +72,16 @@ class CommonSimOccultTypeUtils:
         :type sim_info: SimInfo
         :param occult_type: The Occult Type to check.
         :type occult_type: OccultType
-        :return: True, if the Sim is the specified Occult Type. False, if not.
-        :rtype: bool
+        :return: The result of the test. True, if the Sim is the specified Occult Type. False, if not.
+        :rtype: CommonTestResult
         """
         if occult_type == CommonOccultType.NONE:
             raise AssertionError('Cannot check if Sim is a NONE occult!'.format(CommonSimNameUtils.get_full_name(sim_info)))
         if occult_type == CommonOccultType.NON_OCCULT:
             # Every Sim is always a Non-Occult
-            return True
+            return CommonTestResult.TRUE
         from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
-        occult_type_mappings: Dict[CommonOccultType, Callable[[SimInfo], bool]] = {
+        occult_type_mappings: Dict[CommonOccultType, Callable[[SimInfo], CommonTestResult]] = {
             CommonOccultType.ALIEN: CommonOccultUtils.is_alien,
             CommonOccultType.MERMAID: CommonOccultUtils.is_mermaid,
             CommonOccultType.ROBOT: CommonOccultUtils.is_robot,
@@ -93,11 +92,11 @@ class CommonSimOccultTypeUtils:
             CommonOccultType.GHOST: CommonOccultUtils.is_ghost
         }
         if occult_type not in occult_type_mappings:
-            return False
+            return CommonTestResult(False, reason=f'A check for the specified occult type was not found. {occult_type}.')
         return occult_type_mappings[occult_type](sim_info)
 
     @staticmethod
-    def is_currently_occult_type(sim_info: SimInfo, occult_type: CommonOccultType) -> bool:
+    def is_currently_occult_type(sim_info: SimInfo, occult_type: CommonOccultType) -> CommonTestResult:
         """is_currently_occult_type(sim_info, occult_type)
 
         Determine if a Sim is currently an Occult Type.
@@ -114,7 +113,7 @@ class CommonSimOccultTypeUtils:
         if occult_type == CommonOccultType.NONE:
             raise AssertionError('Cannot check if Sim is currently a NONE occult!'.format(CommonSimNameUtils.get_full_name(sim_info)))
         from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
-        occult_type_mappings: Dict[CommonOccultType, Callable[[SimInfo], bool]] = {
+        occult_type_mappings: Dict[CommonOccultType, Callable[[SimInfo], CommonTestResult]] = {
             CommonOccultType.ALIEN: CommonOccultUtils.is_currently_an_alien,
             CommonOccultType.MERMAID: CommonOccultUtils.is_currently_a_mermaid,
             CommonOccultType.ROBOT: CommonOccultUtils.is_currently_a_robot,
@@ -125,7 +124,7 @@ class CommonSimOccultTypeUtils:
             CommonOccultType.GHOST: CommonOccultUtils.is_currently_a_ghost
         }
         if occult_type not in occult_type_mappings:
-            return False
+            return CommonTestResult(False, reason=f'A check for the specified occult type was not found. {occult_type}.')
         return occult_type_mappings[occult_type](sim_info)
 
     @staticmethod
@@ -190,16 +189,31 @@ class CommonSimOccultTypeUtils:
         return CommonOccultType.NON_OCCULT
 
     @staticmethod
-    def convert_custom_type_to_vanilla(occult_type: 'CommonOccultType') -> Union[OccultType, None]:
-        """convert_custom_type_to_vanilla(occult_type)
+    def convert_to_vanilla(occult_type: 'CommonOccultType') -> Union[OccultType, None]:
+        """convert_to_vanilla(occult_type)
 
-        Convert a CommonOccultType into the vanilla OccultType enum.
+        Convert CommonOccultType into OccultType.
 
         .. note:: Not all CommonOccultTypes have an OccultType to convert to! They will return None in those cases! (Ghost, Plant Sim, Robot, Skeleton)
 
         :param occult_type: An instance of a CommonOccultType
         :type occult_type: CommonOccultType
-        :return: The specified CommonOccultType translated to a OccultType or None if the CommonOccultType could not be translated.
+        :return: The specified CommonOccultType translated to OccultType, or None if the value could not be translated.
+        :rtype: Union[OccultType, None]
+        """
+        return CommonOccultType.convert_to_vanilla(occult_type)
+
+    @staticmethod
+    def convert_custom_type_to_vanilla(occult_type: 'CommonOccultType') -> Union[OccultType, None]:
+        """convert_custom_type_to_vanilla(occult_type)
+
+        Convert a CommonOccultType into OccultType.
+
+        .. note:: Not all CommonOccultType values have a matching OccultType! None will be returned in these cases! (Ghost, Plant Sim, Robot, Skeleton)
+
+        :param occult_type: An instance of a CommonOccultType
+        :type occult_type: CommonOccultType
+        :return: The specified CommonOccultType translated to OccultType, or None if the value could not be translated.
         :rtype: Union[OccultType, None]
         """
         if occult_type is None or occult_type == CommonOccultType.NONE:
@@ -228,7 +242,7 @@ class CommonSimOccultTypeUtils:
         's4clib.printcustomoccults',
     )
 )
-def _common_print_custom_occult_types_for_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_print_custom_occult_types_for_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         return
     occult_types_str = ', '.join([occult_type.name if hasattr(occult_type, 'name') else str(occult_type) for occult_type in CommonSimOccultTypeUtils.get_all_occult_types_for_sim_gen(sim_info)])

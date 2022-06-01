@@ -265,7 +265,7 @@ class CommonOccultUtils:
         is_alien_result = CommonOccultUtils.is_alien(sim_info)
         if is_alien_result:
             return is_alien_result
-        loot_action_ids: Tuple[int] = (
+        loot_action_ids: Tuple[int, ...] = (
             # loot_Occult_AlienAdd
             103256,
             # loot_Occult_AlienSwitch
@@ -383,7 +383,7 @@ class CommonOccultUtils:
         is_mermaid_result = CommonOccultUtils.is_mermaid(sim_info)
         if not is_mermaid_result:
             return is_mermaid_result.reverse_result()
-        traits: Tuple[int] = (
+        traits: Tuple[Union[int, CommonTraitId], ...] = (
             CommonTraitId.OCCULT_MERMAID_MERMAID_FORM,
             CommonTraitId.OCCULT_MERMAID_DISCOVERED,
             CommonTraitId.OCCULT_MERMAID_TEMPORARY_DISCOVERED,
@@ -572,7 +572,7 @@ class CommonOccultUtils:
         is_vampire_result = CommonOccultUtils.is_vampire(sim_info)
         if not is_vampire_result:
             is_vampire_result.reverse_result()
-        loot_action_ids: Tuple[int] = (
+        loot_action_ids: Tuple[int, ...] = (
             # loot_VampireCure_RemoveVampirism
             150170,
             # loot_Life_ResetProgress
@@ -705,7 +705,7 @@ class CommonOccultUtils:
         return CommonExecutionResult.TRUE
 
     @staticmethod
-    def is_vampire(sim_info: SimInfo) -> CommonExecutionResult:
+    def is_vampire(sim_info: SimInfo) -> CommonTestResult:
         """is_vampire(sim_info)
 
         Determine if a Sim is a Vampire.
@@ -723,7 +723,7 @@ class CommonOccultUtils:
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_VAMPIRE) or CommonOccultUtils.has_occult_type(sim_info, OccultType.VAMPIRE)
 
     @staticmethod
-    def is_alien(sim_info: SimInfo) -> CommonExecutionResult:
+    def is_alien(sim_info: SimInfo) -> CommonTestResult:
         """is_alien(sim_info)
 
         Determine if a Sim is an Alien.
@@ -1361,7 +1361,7 @@ class CommonOccultUtils:
         's4clib.switchocculttype'
     )
 )
-def _common_switch_sim_to_occult(output: CommonConsoleCommandOutput, occult_type: CommonOccultType, sim_info: SimInfo=None):
+def _common_switch_sim_to_occult(output: CommonConsoleCommandOutput, occult_type: CommonOccultType, sim_info: SimInfo = None):
     if sim_info is None:
         return
     if occult_type is None:
@@ -1391,7 +1391,7 @@ def _common_switch_sim_to_occult(output: CommonConsoleCommandOutput, occult_type
         's4clib.addalloccultstype',
     )
 )
-def _common_add_all_occults_to_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_add_all_occults_to_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         return
     output(f'Attempting to add all occults to Sim {sim_info}')
@@ -1418,7 +1418,7 @@ def _common_add_all_occults_to_sim(output: CommonConsoleCommandOutput, sim_info:
         's4clib.removealloccultstype',
     )
 )
-def _common_remove_all_occults_from_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_remove_all_occults_from_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         return
     output(f'Attempting to remove all occults from Sim {sim_info}')
@@ -1446,7 +1446,7 @@ def _common_remove_all_occults_from_sim(output: CommonConsoleCommandOutput, sim_
         's4clib.addocculttype',
     )
 )
-def _common_add_occult_to_sim(output: CommonConsoleCommandOutput, occult_type: CommonOccultType, sim_info: SimInfo=None):
+def _common_add_occult_to_sim(output: CommonConsoleCommandOutput, occult_type: CommonOccultType, sim_info: SimInfo = None):
     if sim_info is None:
         return
     if occult_type is None:
@@ -1477,7 +1477,7 @@ def _common_add_occult_to_sim(output: CommonConsoleCommandOutput, occult_type: C
         's4clib.removeocculttype',
     )
 )
-def _common_remove_occult_from_sim(output: CommonConsoleCommandOutput, occult_type: CommonOccultType, sim_info: SimInfo=None):
+def _common_remove_occult_from_sim(output: CommonConsoleCommandOutput, occult_type: CommonOccultType, sim_info: SimInfo = None):
     if sim_info is None:
         return
     if occult_type is None:
@@ -1507,7 +1507,7 @@ def _common_remove_occult_from_sim(output: CommonConsoleCommandOutput, occult_ty
         's4clib.removeallocculttypes',
     )
 )
-def _common_remove_all_occults_from_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_remove_all_occults_from_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         return
     output(f'Attempting to remove all occult types from Sim {sim_info}.')
@@ -1531,7 +1531,7 @@ def _common_remove_all_occults_from_sim(output: CommonConsoleCommandOutput, sim_
     ),
     show_with_help_command=False
 )
-def _s4clib_testing_print_vanilla_occult_types_for_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _s4clib_testing_print_vanilla_occult_types_for_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         return
     occult_types_str = ', '.join([occult_type.name if hasattr(occult_type, 'name') else str(occult_type) for occult_type in CommonOccultUtils._get_occult_types(sim_info)])
@@ -1552,7 +1552,7 @@ def _s4clib_testing_print_vanilla_occult_types_for_sim(output: CommonConsoleComm
         's4clib_testing.printoccultsiminfos',
     )
 )
-def _common_print_occult_sim_infos(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_print_occult_sim_infos(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         return
     output(f'Attempting to print Occult Information for Sim {sim_info}')

@@ -707,7 +707,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         's4clib.attachcasparttoalloutfits',
     )
 )
-def _s4clib_attach_cas_part_to_all_outfits(output: CommonConsoleCommandOutput, cas_part_id: int, body_type_str: str='any', sim_info: SimInfo=None):
+def _s4clib_attach_cas_part_to_all_outfits(output: CommonConsoleCommandOutput, cas_part_id: int, body_type: str = 'any', sim_info: SimInfo = None):
     if sim_info is None:
         return
     if cas_part_id < 0:
@@ -716,25 +716,25 @@ def _s4clib_attach_cas_part_to_all_outfits(output: CommonConsoleCommandOutput, c
     if not CommonCASUtils.is_cas_part_loaded(cas_part_id):
         output(f'ERROR: No CAS Part was found with id: {cas_part_id}')
         return
-    if body_type_str is None:
+    if body_type is None:
         output('ERROR: No Body Type specified.')
         return
-    if body_type_str == 'any':
-        body_type = BodyType.NONE
-    elif body_type_str.isnumeric():
+    if body_type == 'any':
+        body_type_value = BodyType.NONE
+    elif body_type.isnumeric():
         try:
-            body_type = int(body_type_str)
+            body_type_value = int(body_type)
         except ValueError:
-            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
+            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
             return
     else:
-        body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
-        if body_type == BodyType.NONE:
-            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
+        body_type_value = CommonResourceUtils.get_enum_by_name(body_type.upper(), BodyType, default_value=BodyType.NONE)
+        if body_type_value == BodyType.NONE:
+            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
             return
 
-    output(f'Attempting to attach CAS Part \'{cas_part_id}\' to Sim {sim_info} at body location {body_type}')
-    cas_part = CommonCASPart(cas_part_id, body_type=body_type)
+    output(f'Attempting to attach CAS Part \'{cas_part_id}\' to Sim {sim_info} at body location {body_type_value}')
+    cas_part = CommonCASPart(cas_part_id, body_type=body_type_value)
     if CommonCASUtils.attach_cas_parts_to_all_outfits_of_sim(sim_info, (cas_part,)):
         output(f'SUCCESS: CAS Part has been successfully attached to Sim {sim_info}.')
     else:
@@ -755,7 +755,7 @@ def _s4clib_attach_cas_part_to_all_outfits(output: CommonConsoleCommandOutput, c
         's4clib.attachcaspart',
     )
 )
-def _s4clib_attach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int, body_type_str: str='any', sim_info: SimInfo=None):
+def _s4clib_attach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int, body_type: str = 'any', sim_info: SimInfo = None):
     if sim_info is None:
         return
     if cas_part_id < 0:
@@ -764,25 +764,25 @@ def _s4clib_attach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int
     if not CommonCASUtils.is_cas_part_loaded(cas_part_id):
         output(f'ERROR: No CAS Part was found with id: {cas_part_id}')
         return
-    if body_type_str is None:
+    if body_type is None:
         output('ERROR: No Body Type specified.')
         return
-    if body_type_str == 'any':
-        body_type = BodyType.NONE
-    elif body_type_str.isnumeric():
+    if body_type == 'any':
+        body_type_value = BodyType.NONE
+    elif body_type.isnumeric():
         try:
-            body_type = int(body_type_str)
+            body_type_value = int(body_type)
         except ValueError:
-            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
+            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
             return
     else:
-        body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
-        if body_type == BodyType.NONE:
-            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
+        body_type_value = CommonResourceUtils.get_enum_by_name(body_type.upper(), BodyType, default_value=BodyType.NONE)
+        if body_type_value == BodyType.NONE:
+            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
             return
 
-    output(f'Attempting to attach CAS Part \'{cas_part_id}\' to Sim {sim_info} at body location {body_type}')
-    if CommonCASUtils.attach_cas_part_to_sim(sim_info, cas_part_id, body_type=body_type):
+    output(f'Attempting to attach CAS Part \'{cas_part_id}\' to Sim {sim_info} at body location {body_type_value}')
+    if CommonCASUtils.attach_cas_part_to_sim(sim_info, cas_part_id, body_type=body_type_value):
         output(f'SUCCESS: CAS Part has been successfully attached to Sim {sim_info}.')
     else:
         output(f'FAILED: CAS Part failed to attach to Sim {sim_info}.')
@@ -802,7 +802,7 @@ def _s4clib_attach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int
         's4clib.detachcaspart',
     )
 )
-def _s4clib_detach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int, body_type_str: str='all', sim_info: SimInfo=None):
+def _s4clib_detach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int, body_type: str = 'all', sim_info: SimInfo = None):
     if sim_info is None:
         return
     if cas_part_id < 0:
@@ -811,24 +811,24 @@ def _s4clib_detach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int
     if not CommonCASUtils.is_cas_part_loaded(cas_part_id):
         output(f'ERROR: No CAS Part was found with id: {cas_part_id}')
         return
-    if body_type_str is None:
+    if body_type is None:
         output('ERROR: No Body Type was specified.')
         return
-    if body_type_str == 'all':
-        body_type = None
-    elif body_type_str.isnumeric():
+    if body_type == 'all':
+        body_type_value = None
+    elif body_type.isnumeric():
         try:
-            body_type = int(body_type_str)
+            body_type_value = int(body_type)
         except ValueError:
-            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
+            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
             return
     else:
-        body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
-        if body_type == BodyType.NONE:
-            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
+        body_type_value = CommonResourceUtils.get_enum_by_name(body_type.upper(), BodyType, default_value=BodyType.NONE)
+        if body_type_value == BodyType.NONE:
+            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
             return
-    output(f'Attempting to detach CAS Part \'{cas_part_id}\' from Sim {sim_info} at Body Type(s) {body_type_str}')
-    if CommonCASUtils.detach_cas_part_from_sim(sim_info, cas_part_id, body_type=body_type):
+    output(f'Attempting to detach CAS Part \'{cas_part_id}\' from Sim {sim_info} at Body Type(s) {body_type}')
+    if CommonCASUtils.detach_cas_part_from_sim(sim_info, cas_part_id, body_type=body_type_value):
         output(f'SUCCESS: CAS Part has been successfully detached from Sim {sim_info}.')
     else:
         output(f'FAILED: CAS Part failed to detach from Sim {sim_info}.')
@@ -844,26 +844,26 @@ def _s4clib_detach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The Sim to check.', is_optional=True, default_value='Active Sim')
     )
 )
-def _s4clib_print_cas_part_at_body_type(output: CommonConsoleCommandOutput, body_type_str: str, sim_info: SimInfo=None):
+def _s4clib_print_cas_part_at_body_type(output: CommonConsoleCommandOutput, body_type: str, sim_info: SimInfo = None):
     if sim_info is None:
         return
-    if body_type_str is None:
+    if body_type is None:
         output('ERROR: No Body Type was specified.')
         return
-    if not body_type_str.isnumeric():
-        body_type = CommonResourceUtils.get_enum_by_name(body_type_str.upper(), BodyType, default_value=BodyType.NONE)
-        if body_type == BodyType.NONE:
-            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
+    if not body_type.isnumeric():
+        body_type_value = CommonResourceUtils.get_enum_by_name(body_type.upper(), BodyType, default_value=BodyType.NONE)
+        if body_type_value == BodyType.NONE:
+            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
             return
     else:
         try:
-            body_type = int(body_type_str)
+            body_type_value = int(body_type)
         except ValueError:
-            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type_str}')
+            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
             return
-    output(f'Attempting to Print the ID of the CAS Part located at body type {body_type_str} on the outfit of {sim_info}.')
-    cas_part_id = CommonCASUtils.get_cas_part_id_at_body_type(sim_info, body_type)
-    output(f'Finished locating CAS Part Id. Sim: {sim_info} Body Type: {body_type_str}: CAS Part Id: {cas_part_id}')
+    output(f'Attempting to Print the ID of the CAS Part located at body type {body_type} on the outfit of {sim_info}.')
+    cas_part_id = CommonCASUtils.get_cas_part_id_at_body_type(sim_info, body_type_value)
+    output(f'Finished locating CAS Part Id. Sim: {sim_info} Body Type: {body_type}: CAS Part Id: {cas_part_id}')
 
 
 @CommonConsoleCommand(

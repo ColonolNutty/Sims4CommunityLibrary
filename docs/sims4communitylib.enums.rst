@@ -230,10 +230,26 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Object Quality`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_object_quality.CommonObjectQuality
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Object Slot Names`
 ------------------------------------------
 
 .. autoclass:: sims4communitylib.enums.common_object_slot_name_ids.CommonObjectSlotNameId
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Object States`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_object_state_ids.CommonObjectStateId
    :members:
    :undoc-members:
    :show-inheritance:

@@ -34,16 +34,17 @@ class CommonAge(CommonInt):
         :return: A collection of all CommonAge, without CommonAge.INVALID.
         :rtype: Tuple[CommonAge]
         """
-        value_list: Tuple[CommonAge] = tuple([value for value in cls.values if value != cls.INVALID])
+        # noinspection PyTypeChecker
+        value_list: Tuple[CommonAge, ...] = tuple([value for value in cls.values if value != cls.INVALID])
         return value_list
 
     @classmethod
     def get_all_names(cls) -> Tuple[str]:
         """get_all_names()
 
-        Retrieve a collection of the names of all CommonAge, excluding CommonAge.INVALID.
+        Retrieve a collection of the names of all CommonAge, excluding INVALID.
 
-        :return: A collection of the names of all CommonAge, without CommonAge.INVALID.
+        :return: A collection of the names of all CommonAge, without INVALID.
         :rtype: Tuple[str]
         """
         name_list: Tuple[str] = tuple([value.name for value in cls.get_all()])
@@ -53,9 +54,9 @@ class CommonAge(CommonInt):
     def get_comma_separated_names_string(cls) -> str:
         """get_comma_separated_names_string()
 
-        Create a string containing all names of all CommonAge values (excluding CommonAge.INVALID), separated by a comma.
+        Create a string containing all names of all CommonAge values (excluding INVALID), separated by a comma.
 
-        :return: A string containing all names of all CommonAge values (excluding CommonAge.INVALID), separated by a comma.
+        :return: A string containing all names of all CommonAge values (excluding INVALID), separated by a comma.
         :rtype: str
         """
         return ', '.join(cls.get_all_names())
@@ -68,7 +69,7 @@ class CommonAge(CommonInt):
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :return: The CommonAge that represents what age a Sim is or CommonAge.INVALID if their age cannot be determined.
+        :return: The CommonAge that represents what age a Sim is or INVALID if their age cannot be determined.
         :rtype: CommonAge
         """
         from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
@@ -89,20 +90,20 @@ class CommonAge(CommonInt):
         return CommonAge.INVALID
 
     @staticmethod
-    def convert_to_vanilla(age: 'CommonAge') -> Union[Age, None]:
-        """convert_to_vanilla(age)
+    def convert_to_vanilla(value: 'CommonAge') -> Union[Age, None]:
+        """convert_to_vanilla(value)
 
         Convert a CommonAge into the vanilla Age enum.
 
-        :param age: An instance of a CommonAge
-        :type age: CommonAge
-        :return: The specified CommonAge translated to an Age or None if the CommonAge could not be translated.
+        :param value: An instance of CommonAge
+        :type value: CommonAge
+        :return: The specified CommonAge translated to Age or None if the value could not be translated.
         :rtype: Union[Age, None]
         """
-        if age is None or age == CommonAge.INVALID:
+        if value is None or value == CommonAge.INVALID:
             return None
-        if isinstance(age, Age):
-            return age
+        if isinstance(value, Age):
+            return value
         age_conversion_mapping: Dict[CommonAge, Age] = {
             CommonAge.BABY: Age.BABY,
             CommonAge.TODDLER: Age.TODDLER,
@@ -112,23 +113,23 @@ class CommonAge(CommonInt):
             CommonAge.ADULT: Age.ADULT,
             CommonAge.ELDER: Age.ELDER
         }
-        return age_conversion_mapping.get(age, None)
+        return age_conversion_mapping.get(value, None)
 
     @staticmethod
-    def convert_from_vanilla(age: Age) -> 'CommonAge':
-        """convert_from_age(age)
+    def convert_from_vanilla(value: Age) -> 'CommonAge':
+        """convert_from_vanilla(value)
 
         Convert a vanilla Age to a CommonAge.
 
-        :param age: An instance of an Age
-        :type age: Age
-        :return: The specified Age translated to a CommonAge or CommonAge.INVALID if the Age could not be translated.
+        :param value: An instance of Age
+        :type value: Age
+        :return: The specified Age translated to CommonAge or INVALID if the value could not be translated.
         :rtype: CommonAge
         """
-        if age is None:
+        if value is None:
             return CommonAge.INVALID
-        if isinstance(age, CommonAge):
-            return age
+        if isinstance(value, CommonAge):
+            return value
         age_conversion_mapping: Dict[int, CommonAge] = {
             int(Age.BABY): CommonAge.BABY,
             int(Age.TODDLER): CommonAge.TODDLER,
@@ -138,20 +139,20 @@ class CommonAge(CommonInt):
             int(Age.ADULT): CommonAge.ADULT,
             int(Age.ELDER): CommonAge.ELDER
         }
-        age = int(age)
-        if age not in age_conversion_mapping:
+        value = int(value)
+        if value not in age_conversion_mapping:
             return CommonAge.INVALID
-        return age_conversion_mapping[age]
+        return age_conversion_mapping[value]
 
     @staticmethod
-    def convert_to_localized_string_id(age: 'CommonAge') -> Union[int, str]:
-        """convert_to_localized_string_id(age)
+    def convert_to_localized_string_id(value: 'CommonAge') -> Union[int, str]:
+        """convert_to_localized_string_id(value)
 
         Convert a CommonAge into a Localized String identifier.
 
-        :param age: An instance of a CommonAge
-        :type age: CommonAge
-        :return: The specified CommonAge translated to a localized string identifier or the name property of the value, if no localized string id is found.
+        :param value: An instance of a CommonAge
+        :type value: CommonAge
+        :return: The specified CommonAge translated to a localized string identifier. If no localized string id is found, the name property of the value will be used instead.
         :rtype: Union[int, str]
         """
         from sims4communitylib.enums.strings_enum import CommonStringId
@@ -164,4 +165,4 @@ class CommonAge(CommonInt):
             CommonAge.ADULT: CommonStringId.ADULT,
             CommonAge.ELDER: CommonStringId.ELDER
         }
-        return display_name_mapping.get(age, age.name)
+        return display_name_mapping.get(value, value.name)

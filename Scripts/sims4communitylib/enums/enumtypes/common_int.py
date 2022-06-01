@@ -13,6 +13,7 @@ try:
     # noinspection PyUnresolvedReferences
     from enum import Int
 except:
+    # Created from example provided at https://stackoverflow.com/questions/5189699/how-to-make-a-class-property
     # noinspection PyMissingOrEmptyDocstring
     class _ClassPropertyDescriptor(object):
 
@@ -42,7 +43,6 @@ except:
             # noinspection SpellCheckingInspection
             self.fset = func
             return self
-
 
     # noinspection PyMissingTypeHints,SpellCheckingInspection
     def _classproperty(func):

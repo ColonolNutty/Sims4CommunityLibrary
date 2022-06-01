@@ -88,9 +88,6 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
             return CommonExecutionResult(False, reason=f'Sim did not have motive {motive_id}')
-        if not cls.has_motive(sim_info, mapped_motive_id):
-            cls.get_log().format_with_message('Sim did not have the motive.', motive_id=mapped_motive_id, sim=sim_info)
-            return CommonExecutionResult(False, reason=f'Sim did not have motive {mapped_motive_id}')
         cls.get_log().format_with_message('Mapped motive id, setting the level for it on Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, level=level, sim=sim_info)
         return CommonSimStatisticUtils.set_statistic_value(sim_info, mapped_motive_id, level, add=True)
 
@@ -131,9 +128,6 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
             return CommonExecutionResult(False, reason=f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
-        if not cls.has_motive(sim_info, mapped_motive_id):
-            cls.get_log().format_with_message('Sim did not have the motive.', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, reason=f'Sim did not have the specified motive {mapped_motive_id}.')
         cls.get_log().format_with_message('Mapped motive id, Adding to it for Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, amount=amount, sim=sim_info)
         return CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount, add=True)
 
@@ -159,9 +153,6 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
             return CommonExecutionResult(False, reason=f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
-        if not cls.has_motive(sim_info, mapped_motive_id):
-            cls.get_log().format_with_message('Sim did not have the motive.', motive_id=mapped_motive_id, sim=sim_info)
-            return CommonExecutionResult(False, reason=f'Sim did not have the specified motive {mapped_motive_id}.')
         cls.get_log().format_with_message('Mapped motive id, Subtracting from it for Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, amount=amount, sim=sim_info)
         return CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount * -1.0, add=True)
 
@@ -566,7 +557,7 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to check.', is_optional=True, default_value='Active Sim'),
     )
 )
-def _common_print_motive_level(output: CommonConsoleCommandOutput, motive: TunableInstanceParam(Types.STATISTIC), sim_info: SimInfo=None):
+def _common_print_motive_level(output: CommonConsoleCommandOutput, motive: TunableInstanceParam(Types.STATISTIC), sim_info: SimInfo = None):
     if motive is None:
         output('ERROR: No Motive specified or Motive did not exist!')
         return
@@ -588,7 +579,7 @@ def _common_print_motive_level(output: CommonConsoleCommandOutput, motive: Tunab
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to change.', is_optional=True, default_value='Active Sim'),
     )
 )
-def _common_set_motive_level(output: CommonConsoleCommandOutput, motive: TunableInstanceParam(Types.STATISTIC), level: float, sim_info: SimInfo=None):
+def _common_set_motive_level(output: CommonConsoleCommandOutput, motive: TunableInstanceParam(Types.STATISTIC), level: float, sim_info: SimInfo = None):
     if motive is None:
         output('ERROR: Failed, Motive not specified or Motive did not exist! s4clib.set_motive_level <motive_name_or_id> <level> [opt_sim=None]')
         return
@@ -609,7 +600,7 @@ def _common_set_motive_level(output: CommonConsoleCommandOutput, motive: Tunable
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to change.', is_optional=True, default_value='Active Sim'),
     )
 )
-def _common_max_all_motives(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_max_all_motives(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         return
     CommonSimMotiveUtils.set_all_motives_max(sim_info)

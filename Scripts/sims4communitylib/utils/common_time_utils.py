@@ -468,6 +468,22 @@ class CommonTimeUtils:
         return create_date_and_time(days=days, hours=hours, minutes=minutes)
 
     @staticmethod
+    def convert_milliseconds_to_seconds(milliseconds: int) -> float:
+        """convert_milliseconds_to_seconds(milliseconds)
+
+        Convert Milliseconds to Seconds.
+
+        :param milliseconds: The value to convert.
+        :type milliseconds: int
+        :return: The converted value in seconds.
+        :rtype: float
+        """
+        from date_and_time import MILLISECONDS_PER_SECOND
+        if MILLISECONDS_PER_SECOND <= 0:
+            return milliseconds/1000
+        return milliseconds/MILLISECONDS_PER_SECOND
+
+    @staticmethod
     def is_sun_out() -> bool:
         """is_sun_out()
 
