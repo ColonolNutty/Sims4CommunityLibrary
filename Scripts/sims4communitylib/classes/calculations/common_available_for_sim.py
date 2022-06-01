@@ -160,20 +160,10 @@ class CommonAvailableForSim:
     def everything() -> 'CommonAvailableForSim':
         """ Create an Available For instance that applies to everything. """
         return CommonAvailableForSim(
-            genders=(CommonGender.MALE, CommonGender.FEMALE),
-            ages=(CommonAge.BABY, CommonAge.TODDLER, CommonAge.CHILD, CommonAge.TEEN, CommonAge.YOUNGADULT, CommonAge.ADULT, CommonAge.ELDER),
-            species=(CommonSpecies.HUMAN, CommonSpecies.SMALL_DOG, CommonSpecies.LARGE_DOG, CommonSpecies.CAT),
-            occult_types=(
-                CommonOccultType.NON_OCCULT,
-                CommonOccultType.ALIEN,
-                CommonOccultType.GHOST,
-                CommonOccultType.MERMAID,
-                CommonOccultType.PLANT_SIM,
-                CommonOccultType.ROBOT,
-                CommonOccultType.SKELETON,
-                CommonOccultType.VAMPIRE,
-                CommonOccultType.WITCH
-            )
+            genders=CommonGender.get_all(),
+            ages=CommonAge.get_all(),
+            species=CommonSpecies.get_all(),
+            occult_types=CommonOccultType.get_all()
         )
 
     def __repr__(self) -> str:

@@ -33,6 +33,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_SMALL_DOG_ROBOT: CommonSimType.CHILD_DOG_ROBOT,
         CommonSimType.CHILD_SMALL_DOG_SKELETON: CommonSimType.CHILD_DOG_SKELETON,
         CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: CommonSimType.CHILD_DOG_PLANT_SIM,
+        CommonSimType.CHILD_SMALL_DOG_WEREWOLF: CommonSimType.CHILD_DOG_WEREWOLF,
 
         CommonSimType.CHILD_LARGE_DOG: CommonSimType.CHILD_DOG,
         CommonSimType.CHILD_LARGE_DOG_VAMPIRE: CommonSimType.CHILD_DOG_VAMPIRE,
@@ -42,7 +43,8 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_LARGE_DOG_WITCH: CommonSimType.CHILD_DOG_WITCH,
         CommonSimType.CHILD_LARGE_DOG_ROBOT: CommonSimType.CHILD_DOG_ROBOT,
         CommonSimType.CHILD_LARGE_DOG_SKELETON: CommonSimType.CHILD_DOG_SKELETON,
-        CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: CommonSimType.CHILD_DOG_PLANT_SIM
+        CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: CommonSimType.CHILD_DOG_PLANT_SIM,
+        CommonSimType.CHILD_LARGE_DOG_WEREWOLF: CommonSimType.CHILD_DOG_WEREWOLF,
     }
 
     _SIM_TO_SIM_TYPE_MAPPING: Dict[CommonSpecies, Dict[CommonAge, Dict[CommonOccultType, CommonSimType]]] = {
@@ -56,7 +58,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ELDER_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_HUMAN_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ELDER_HUMAN_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ELDER_HUMAN_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ELDER_HUMAN_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ELDER_HUMAN_WEREWOLF,
             },
             CommonAge.ADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_HUMAN,
@@ -67,7 +70,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_HUMAN_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ADULT_HUMAN_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_HUMAN_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_HUMAN_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ADULT_HUMAN_WEREWOLF,
             },
             CommonAge.YOUNGADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.YOUNG_ADULT_HUMAN,
@@ -78,7 +82,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.YOUNG_ADULT_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.YOUNG_ADULT_HUMAN_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.YOUNG_ADULT_HUMAN_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.YOUNG_ADULT_HUMAN_WEREWOLF,
             },
             CommonAge.TEEN: {
                 CommonOccultType.NON_OCCULT: CommonSimType.TEEN_HUMAN,
@@ -89,7 +94,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.TEEN_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.TEEN_HUMAN_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.TEEN_HUMAN_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.TEEN_HUMAN_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.TEEN_HUMAN_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.TEEN_HUMAN_WEREWOLF,
             },
             CommonAge.CHILD: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_HUMAN,
@@ -100,7 +106,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_HUMAN_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.CHILD_HUMAN_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_HUMAN_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_HUMAN_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.CHILD_HUMAN_WEREWOLF,
             },
             CommonAge.TODDLER: {
                 CommonOccultType.NON_OCCULT: CommonSimType.TODDLER_HUMAN,
@@ -111,7 +118,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.TODDLER_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.TODDLER_HUMAN_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.TODDLER_HUMAN_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.TODDLER_HUMAN_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.TODDLER_HUMAN_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.TODDLER_HUMAN_WEREWOLF,
             },
             CommonAge.BABY: {
                 CommonOccultType.NON_OCCULT: CommonSimType.BABY_HUMAN,
@@ -122,7 +130,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.BABY_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.BABY_HUMAN_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.BABY_HUMAN_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.BABY_HUMAN_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.BABY_HUMAN_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.BABY_HUMAN_WEREWOLF,
             }
         },
         CommonSpecies.SMALL_DOG: {
@@ -135,7 +144,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ELDER_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_SMALL_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ELDER_SMALL_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ELDER_SMALL_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ELDER_SMALL_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ELDER_SMALL_DOG_WEREWOLF,
             },
             CommonAge.ADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_SMALL_DOG,
@@ -146,7 +156,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_SMALL_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ADULT_SMALL_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_SMALL_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_SMALL_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ADULT_SMALL_DOG_WEREWOLF,
             },
             CommonAge.YOUNGADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_SMALL_DOG,
@@ -157,7 +168,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_SMALL_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ADULT_SMALL_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_SMALL_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_SMALL_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ADULT_SMALL_DOG_WEREWOLF,
             },
             CommonAge.TEEN: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_SMALL_DOG,
@@ -168,7 +180,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_SMALL_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ADULT_SMALL_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_SMALL_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_SMALL_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ADULT_SMALL_DOG_WEREWOLF,
             },
             CommonAge.CHILD: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_SMALL_DOG,
@@ -179,7 +192,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_SMALL_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.CHILD_SMALL_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_SMALL_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_SMALL_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.CHILD_SMALL_DOG_WEREWOLF,
             },
             CommonAge.TODDLER: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_SMALL_DOG,
@@ -190,7 +204,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_SMALL_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.CHILD_SMALL_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_SMALL_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_SMALL_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.CHILD_SMALL_DOG_WEREWOLF,
             },
             CommonAge.BABY: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_SMALL_DOG,
@@ -201,7 +216,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_SMALL_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.CHILD_SMALL_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_SMALL_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_SMALL_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.CHILD_SMALL_DOG_WEREWOLF,
             }
         },
         CommonSpecies.LARGE_DOG: {
@@ -214,7 +230,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ELDER_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_LARGE_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ELDER_LARGE_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ELDER_LARGE_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ELDER_LARGE_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ELDER_LARGE_DOG_WEREWOLF,
             },
             CommonAge.ADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_LARGE_DOG,
@@ -225,7 +242,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_LARGE_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ADULT_LARGE_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_LARGE_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_LARGE_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ADULT_LARGE_DOG_WEREWOLF,
             },
             CommonAge.YOUNGADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_LARGE_DOG,
@@ -236,7 +254,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_LARGE_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ADULT_LARGE_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_LARGE_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_LARGE_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ADULT_LARGE_DOG_WEREWOLF,
             },
             CommonAge.TEEN: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_LARGE_DOG,
@@ -247,7 +266,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_LARGE_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ADULT_LARGE_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_LARGE_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_LARGE_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ADULT_LARGE_DOG_WEREWOLF,
             },
             CommonAge.CHILD: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_LARGE_DOG,
@@ -258,7 +278,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_LARGE_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.CHILD_LARGE_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_LARGE_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_LARGE_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.CHILD_LARGE_DOG_WEREWOLF,
             },
             CommonAge.TODDLER: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_LARGE_DOG,
@@ -269,7 +290,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_LARGE_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.CHILD_LARGE_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_LARGE_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_LARGE_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.CHILD_LARGE_DOG_WEREWOLF,
             },
             CommonAge.BABY: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_LARGE_DOG,
@@ -280,7 +302,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_LARGE_DOG_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.CHILD_LARGE_DOG_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_LARGE_DOG_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_LARGE_DOG_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.CHILD_LARGE_DOG_WEREWOLF,
             }
         },
         CommonSpecies.CAT: {
@@ -293,7 +316,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ELDER_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_CAT_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ELDER_CAT_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ELDER_CAT_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ELDER_CAT_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ELDER_CAT_WEREWOLF,
             },
             CommonAge.ADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_CAT,
@@ -304,7 +328,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_CAT_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ADULT_CAT_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_CAT_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_CAT_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ADULT_CAT_WEREWOLF,
             },
             CommonAge.YOUNGADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_CAT,
@@ -315,7 +340,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_CAT_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ADULT_CAT_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_CAT_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_CAT_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ADULT_CAT_WEREWOLF,
             },
             CommonAge.TEEN: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_CAT,
@@ -326,7 +352,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_CAT_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ADULT_CAT_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_CAT_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_CAT_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ADULT_CAT_WEREWOLF,
             },
             CommonAge.CHILD: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_CAT,
@@ -337,7 +364,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_CAT_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.CHILD_CAT_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_CAT_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_CAT_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.CHILD_CAT_WEREWOLF,
             },
             CommonAge.TODDLER: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_CAT,
@@ -348,7 +376,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_CAT_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.CHILD_CAT_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_CAT_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_CAT_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.CHILD_CAT_WEREWOLF,
             },
             CommonAge.BABY: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_CAT,
@@ -359,7 +388,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_CAT_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.CHILD_CAT_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_CAT_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_CAT_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.CHILD_CAT_WEREWOLF,
             }
         },
         CommonSpecies.FOX: {
@@ -372,7 +402,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ELDER_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_FOX_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ELDER_FOX_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ELDER_FOX_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ELDER_FOX_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ELDER_FOX_WEREWOLF,
             },
             CommonAge.ADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_FOX,
@@ -383,7 +414,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_FOX_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ADULT_FOX_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_FOX_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_FOX_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ADULT_FOX_WEREWOLF,
             },
             CommonAge.YOUNGADULT: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_FOX,
@@ -394,7 +426,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_FOX_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ADULT_FOX_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_FOX_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_FOX_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ADULT_FOX_WEREWOLF,
             },
             CommonAge.TEEN: {
                 CommonOccultType.NON_OCCULT: CommonSimType.ADULT_FOX,
@@ -405,7 +438,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.ADULT_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_FOX_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.ADULT_FOX_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_FOX_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.ADULT_FOX_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.ADULT_FOX_WEREWOLF,
             },
             CommonAge.CHILD: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_FOX,
@@ -416,7 +450,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_FOX_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.CHILD_FOX_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_FOX_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_FOX_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.CHILD_FOX_WEREWOLF,
             },
             CommonAge.TODDLER: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_FOX,
@@ -427,7 +462,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_FOX_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.CHILD_FOX_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_FOX_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_FOX_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.CHILD_FOX_WEREWOLF,
             },
             CommonAge.BABY: {
                 CommonOccultType.NON_OCCULT: CommonSimType.CHILD_FOX,
@@ -438,7 +474,8 @@ class CommonSimTypeUtils:
                 CommonOccultType.WITCH: CommonSimType.CHILD_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_FOX_ROBOT,
                 CommonOccultType.SKELETON: CommonSimType.CHILD_FOX_SKELETON,
-                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_FOX_PLANT_SIM
+                CommonOccultType.PLANT_SIM: CommonSimType.CHILD_FOX_PLANT_SIM,
+                CommonOccultType.WEREWOLF: CommonSimType.CHILD_FOX_WEREWOLF,
             }
         }
     }
@@ -454,6 +491,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HUMAN_ROBOT: 'ElHuRo',
         CommonSimType.ELDER_HUMAN_SKELETON: 'ElHuSk',
         CommonSimType.ELDER_HUMAN_PLANT_SIM: 'ElHuPls',
+        CommonSimType.ELDER_HUMAN_WEREWOLF: 'ElHuWerWlf',
         # Adult
         CommonSimType.ADULT_HUMAN: 'AdHu',
         CommonSimType.ADULT_HUMAN_VAMPIRE: 'AdHuVa',
@@ -464,6 +502,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HUMAN_ROBOT: 'AdHuRo',
         CommonSimType.ADULT_HUMAN_SKELETON: 'AdHuSk',
         CommonSimType.ADULT_HUMAN_PLANT_SIM: 'AdHuPls',
+        CommonSimType.ADULT_HUMAN_WEREWOLF: 'AdHuWerWlf',
         # Young Adult
         CommonSimType.YOUNG_ADULT_HUMAN: 'YadHu',
         CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE: 'YadHuVa',
@@ -474,6 +513,7 @@ class CommonSimTypeUtils:
         CommonSimType.YOUNG_ADULT_HUMAN_ROBOT: 'YadHuRo',
         CommonSimType.YOUNG_ADULT_HUMAN_SKELETON: 'YadHuSk',
         CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM: 'YadHuPls',
+        CommonSimType.YOUNG_ADULT_HUMAN_WEREWOLF: 'YadHuWerWlf',
         # Teen
         CommonSimType.TEEN_HUMAN: 'TnHu',
         CommonSimType.TEEN_HUMAN_VAMPIRE: 'TnHuVa',
@@ -484,6 +524,7 @@ class CommonSimTypeUtils:
         CommonSimType.TEEN_HUMAN_ROBOT: 'TnHuRo',
         CommonSimType.TEEN_HUMAN_SKELETON: 'TnHuSk',
         CommonSimType.TEEN_HUMAN_PLANT_SIM: 'TnHuPls',
+        CommonSimType.TEEN_HUMAN_WEREWOLF: 'TnHuWerWlf',
         # Child
         CommonSimType.CHILD_HUMAN: 'ChldHu',
         CommonSimType.CHILD_HUMAN_VAMPIRE: 'ChldHuVa',
@@ -494,6 +535,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HUMAN_ROBOT: 'ChldHuRo',
         CommonSimType.CHILD_HUMAN_SKELETON: 'ChldHuSk',
         CommonSimType.CHILD_HUMAN_PLANT_SIM: 'ChldHuPls',
+        CommonSimType.CHILD_HUMAN_WEREWOLF: 'ChldHuWerWlf',
         # Toddler
         CommonSimType.TODDLER_HUMAN: 'TdlrHu',
         CommonSimType.TODDLER_HUMAN_VAMPIRE: 'TdlrHuVa',
@@ -504,6 +546,7 @@ class CommonSimTypeUtils:
         CommonSimType.TODDLER_HUMAN_ROBOT: 'TdlrHuRo',
         CommonSimType.TODDLER_HUMAN_SKELETON: 'TdlrHuSk',
         CommonSimType.TODDLER_HUMAN_PLANT_SIM: 'TdlrHuPls',
+        CommonSimType.TODDLER_HUMAN_WEREWOLF: 'TdlrHuWerWlf',
         # Baby
         CommonSimType.BABY_HUMAN: 'BbyHu',
         CommonSimType.BABY_HUMAN_VAMPIRE: 'BbyHuVa',
@@ -514,6 +557,7 @@ class CommonSimTypeUtils:
         CommonSimType.BABY_HUMAN_ROBOT: 'BbyHuRo',
         CommonSimType.BABY_HUMAN_SKELETON: 'BbyHuSk',
         CommonSimType.BABY_HUMAN_PLANT_SIM: 'BbyHuPls',
+        CommonSimType.BABY_HUMAN_WEREWOLF: 'BbyHuWerWlf',
 
         # Child Dog
         CommonSimType.CHILD_DOG: 'ChldDg',
@@ -525,6 +569,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_DOG_ROBOT: 'ChldDgRo',
         CommonSimType.CHILD_DOG_SKELETON: 'ChldDgSk',
         CommonSimType.CHILD_DOG_PLANT_SIM: 'ChldDgPls',
+        CommonSimType.CHILD_DOG_WEREWOLF: 'ChldDgWerWlf',
 
         # Small Dog
         # Elder
@@ -537,6 +582,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_SMALL_DOG_ROBOT: 'ElSdRo',
         CommonSimType.ELDER_SMALL_DOG_SKELETON: 'ElSdSk',
         CommonSimType.ELDER_SMALL_DOG_PLANT_SIM: 'ElSdPls',
+        CommonSimType.ELDER_SMALL_DOG_WEREWOLF: 'ElSdWerWlf',
         # Adult
         CommonSimType.ADULT_SMALL_DOG: 'AdSd',
         CommonSimType.ADULT_SMALL_DOG_VAMPIRE: 'AdSdVa',
@@ -547,6 +593,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_SMALL_DOG_ROBOT: 'AdSdRo',
         CommonSimType.ADULT_SMALL_DOG_SKELETON: 'AdSdSk',
         CommonSimType.ADULT_SMALL_DOG_PLANT_SIM: 'AdSdPls',
+        CommonSimType.ADULT_SMALL_DOG_WEREWOLF: 'AdSdWerWlf',
         # Child
         CommonSimType.CHILD_SMALL_DOG: 'ChldSd',
         CommonSimType.CHILD_SMALL_DOG_VAMPIRE: 'ChldSdVa',
@@ -557,6 +604,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_SMALL_DOG_ROBOT: 'ChldSdRo',
         CommonSimType.CHILD_SMALL_DOG_SKELETON: 'ChldSdSk',
         CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: 'ChldSdPls',
+        CommonSimType.CHILD_SMALL_DOG_WEREWOLF: 'ChldSdWerWlf',
 
         # Large Dog
         # Elder
@@ -569,6 +617,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_LARGE_DOG_ROBOT: 'ElLdRo',
         CommonSimType.ELDER_LARGE_DOG_SKELETON: 'ElLdSk',
         CommonSimType.ELDER_LARGE_DOG_PLANT_SIM: 'ElLdPls',
+        CommonSimType.ELDER_LARGE_DOG_WEREWOLF: 'ElLdWerWlf',
         # Adult
         CommonSimType.ADULT_LARGE_DOG: 'AdLd',
         CommonSimType.ADULT_LARGE_DOG_VAMPIRE: 'AdLdVa',
@@ -579,6 +628,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_LARGE_DOG_ROBOT: 'AdLdRo',
         CommonSimType.ADULT_LARGE_DOG_SKELETON: 'AdLdSk',
         CommonSimType.ADULT_LARGE_DOG_PLANT_SIM: 'AdLdPls',
+        CommonSimType.ADULT_LARGE_DOG_WEREWOLF: 'AdLdWerWlf',
         # Child
         CommonSimType.CHILD_LARGE_DOG: 'ChldLd',
         CommonSimType.CHILD_LARGE_DOG_VAMPIRE: 'ChldLdVa',
@@ -589,6 +639,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_LARGE_DOG_ROBOT: 'ChldLdRo',
         CommonSimType.CHILD_LARGE_DOG_SKELETON: 'ChldLdSk',
         CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: 'ChldLdPls',
+        CommonSimType.CHILD_LARGE_DOG_WEREWOLF: 'ChldLdWerWlf',
 
         # Cat
         # Elder
@@ -601,6 +652,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_CAT_ROBOT: 'ElCatRo',
         CommonSimType.ELDER_CAT_SKELETON: 'ElCatSk',
         CommonSimType.ELDER_CAT_PLANT_SIM: 'ElCatPls',
+        CommonSimType.ELDER_CAT_WEREWOLF: 'ElCatWerWlf',
         # Adult
         CommonSimType.ADULT_CAT: 'AdCat',
         CommonSimType.ADULT_CAT_VAMPIRE: 'AdCatVa',
@@ -611,6 +663,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_CAT_ROBOT: 'AdCatRo',
         CommonSimType.ADULT_CAT_SKELETON: 'AdCatSk',
         CommonSimType.ADULT_CAT_PLANT_SIM: 'AdCatPls',
+        CommonSimType.ADULT_CAT_WEREWOLF: 'AdCatWerWlf',
         # Child
         CommonSimType.CHILD_CAT: 'ChldCat',
         CommonSimType.CHILD_CAT_VAMPIRE: 'ChldCatVa',
@@ -621,6 +674,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_ROBOT: 'ChldCatRo',
         CommonSimType.CHILD_CAT_SKELETON: 'ChldCatSk',
         CommonSimType.CHILD_CAT_PLANT_SIM: 'ChldCatPls',
+        CommonSimType.CHILD_CAT_WEREWOLF: 'ChldCatWerWlf',
 
         # Fox
         # Elder
@@ -633,6 +687,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_FOX_ROBOT: 'ElFoxRo',
         CommonSimType.ELDER_FOX_SKELETON: 'ElFoxSk',
         CommonSimType.ELDER_FOX_PLANT_SIM: 'ElFoxPls',
+        CommonSimType.ELDER_FOX_WEREWOLF: 'ElFoxWerWlf',
         # Adult
         CommonSimType.ADULT_FOX: 'AdFox',
         CommonSimType.ADULT_FOX_VAMPIRE: 'AdFoxVa',
@@ -643,6 +698,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_FOX_ROBOT: 'AdFoxRo',
         CommonSimType.ADULT_FOX_SKELETON: 'AdFoxSk',
         CommonSimType.ADULT_FOX_PLANT_SIM: 'AdFoxPls',
+        CommonSimType.ADULT_FOX_WEREWOLF: 'AdFoxWerWlf',
         # Child
         CommonSimType.CHILD_FOX: 'ChldFox',
         CommonSimType.CHILD_FOX_VAMPIRE: 'ChldFoxVa',
@@ -652,7 +708,8 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_FOX_WITCH: 'ChldFoxWi',
         CommonSimType.CHILD_FOX_ROBOT: 'ChldFoxRo',
         CommonSimType.CHILD_FOX_SKELETON: 'ChldFoxSk',
-        CommonSimType.CHILD_FOX_PLANT_SIM: 'ChldFoxPls'
+        CommonSimType.CHILD_FOX_PLANT_SIM: 'ChldFoxPls',
+        CommonSimType.CHILD_FOX_WEREWOLF: 'ChldFoxWerWlf',
     }
 
     _OCCULT_SIM_TYPE_TO_NON_OCCULT_SIM_TYPE_MAPPING: Dict[CommonSimType, CommonSimType] = {
@@ -667,6 +724,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HUMAN_ROBOT: CommonSimType.ELDER_HUMAN,
         CommonSimType.ELDER_HUMAN_SKELETON: CommonSimType.ELDER_HUMAN,
         CommonSimType.ELDER_HUMAN_PLANT_SIM: CommonSimType.ELDER_HUMAN,
+        CommonSimType.ELDER_HUMAN_WEREWOLF: CommonSimType.ELDER_HUMAN,
         # Adult
         CommonSimType.ADULT_HUMAN: CommonSimType.ADULT_HUMAN,
         CommonSimType.ADULT_HUMAN_VAMPIRE: CommonSimType.ADULT_HUMAN,
@@ -677,6 +735,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HUMAN_ROBOT: CommonSimType.ADULT_HUMAN,
         CommonSimType.ADULT_HUMAN_SKELETON: CommonSimType.ADULT_HUMAN,
         CommonSimType.ADULT_HUMAN_PLANT_SIM: CommonSimType.ADULT_HUMAN,
+        CommonSimType.ADULT_HUMAN_WEREWOLF: CommonSimType.ADULT_HUMAN,
         # Young Adult
         CommonSimType.YOUNG_ADULT_HUMAN: CommonSimType.YOUNG_ADULT_HUMAN,
         CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE: CommonSimType.YOUNG_ADULT_HUMAN,
@@ -687,6 +746,7 @@ class CommonSimTypeUtils:
         CommonSimType.YOUNG_ADULT_HUMAN_ROBOT: CommonSimType.YOUNG_ADULT_HUMAN,
         CommonSimType.YOUNG_ADULT_HUMAN_SKELETON: CommonSimType.YOUNG_ADULT_HUMAN,
         CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM: CommonSimType.YOUNG_ADULT_HUMAN,
+        CommonSimType.YOUNG_ADULT_HUMAN_WEREWOLF: CommonSimType.YOUNG_ADULT_HUMAN,
         # Teen
         CommonSimType.TEEN_HUMAN: CommonSimType.TEEN_HUMAN,
         CommonSimType.TEEN_HUMAN_VAMPIRE: CommonSimType.TEEN_HUMAN,
@@ -697,6 +757,7 @@ class CommonSimTypeUtils:
         CommonSimType.TEEN_HUMAN_ROBOT: CommonSimType.TEEN_HUMAN,
         CommonSimType.TEEN_HUMAN_SKELETON: CommonSimType.TEEN_HUMAN,
         CommonSimType.TEEN_HUMAN_PLANT_SIM: CommonSimType.TEEN_HUMAN,
+        CommonSimType.TEEN_HUMAN_WEREWOLF: CommonSimType.TEEN_HUMAN,
         # Child
         CommonSimType.CHILD_HUMAN: CommonSimType.CHILD_HUMAN,
         CommonSimType.CHILD_HUMAN_VAMPIRE: CommonSimType.CHILD_HUMAN,
@@ -707,6 +768,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HUMAN_ROBOT: CommonSimType.CHILD_HUMAN,
         CommonSimType.CHILD_HUMAN_SKELETON: CommonSimType.CHILD_HUMAN,
         CommonSimType.CHILD_HUMAN_PLANT_SIM: CommonSimType.CHILD_HUMAN,
+        CommonSimType.CHILD_HUMAN_WEREWOLF: CommonSimType.CHILD_HUMAN,
         # Toddler
         CommonSimType.TODDLER_HUMAN: CommonSimType.TODDLER_HUMAN,
         CommonSimType.TODDLER_HUMAN_VAMPIRE: CommonSimType.TODDLER_HUMAN,
@@ -717,6 +779,7 @@ class CommonSimTypeUtils:
         CommonSimType.TODDLER_HUMAN_ROBOT: CommonSimType.TODDLER_HUMAN,
         CommonSimType.TODDLER_HUMAN_SKELETON: CommonSimType.TODDLER_HUMAN,
         CommonSimType.TODDLER_HUMAN_PLANT_SIM: CommonSimType.TODDLER_HUMAN,
+        CommonSimType.TODDLER_HUMAN_WEREWOLF: CommonSimType.TODDLER_HUMAN,
         # Baby
         CommonSimType.BABY_HUMAN: CommonSimType.BABY_HUMAN,
         CommonSimType.BABY_HUMAN_VAMPIRE: CommonSimType.BABY_HUMAN,
@@ -727,6 +790,7 @@ class CommonSimTypeUtils:
         CommonSimType.BABY_HUMAN_ROBOT: CommonSimType.BABY_HUMAN,
         CommonSimType.BABY_HUMAN_SKELETON: CommonSimType.BABY_HUMAN,
         CommonSimType.BABY_HUMAN_PLANT_SIM: CommonSimType.BABY_HUMAN,
+        CommonSimType.BABY_HUMAN_WEREWOLF: CommonSimType.BABY_HUMAN,
 
         # Dog
         # Child
@@ -739,6 +803,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_DOG_ROBOT: CommonSimType.CHILD_DOG,
         CommonSimType.CHILD_DOG_SKELETON: CommonSimType.CHILD_DOG,
         CommonSimType.CHILD_DOG_PLANT_SIM: CommonSimType.CHILD_DOG,
+        CommonSimType.CHILD_DOG_WEREWOLF: CommonSimType.CHILD_DOG,
 
         # Small Dog
         # Elder
@@ -751,6 +816,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_SMALL_DOG_ROBOT: CommonSimType.ELDER_SMALL_DOG,
         CommonSimType.ELDER_SMALL_DOG_SKELETON: CommonSimType.ELDER_SMALL_DOG,
         CommonSimType.ELDER_SMALL_DOG_PLANT_SIM: CommonSimType.ELDER_SMALL_DOG,
+        CommonSimType.ELDER_SMALL_DOG_WEREWOLF: CommonSimType.ELDER_SMALL_DOG,
         # Adult
         CommonSimType.ADULT_SMALL_DOG: CommonSimType.ADULT_SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_VAMPIRE: CommonSimType.ADULT_SMALL_DOG,
@@ -761,6 +827,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_SMALL_DOG_ROBOT: CommonSimType.ADULT_SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_SKELETON: CommonSimType.ADULT_SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_PLANT_SIM: CommonSimType.ADULT_SMALL_DOG,
+        CommonSimType.ADULT_SMALL_DOG_WEREWOLF: CommonSimType.ADULT_SMALL_DOG,
         # Child
         CommonSimType.CHILD_SMALL_DOG: CommonSimType.CHILD_SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonSimType.CHILD_SMALL_DOG,
@@ -771,6 +838,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_SMALL_DOG_ROBOT: CommonSimType.CHILD_SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_SKELETON: CommonSimType.CHILD_SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: CommonSimType.CHILD_SMALL_DOG,
+        CommonSimType.CHILD_SMALL_DOG_WEREWOLF: CommonSimType.CHILD_SMALL_DOG,
 
         # Large Dog
         # Elder
@@ -783,6 +851,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_LARGE_DOG_ROBOT: CommonSimType.ELDER_LARGE_DOG,
         CommonSimType.ELDER_LARGE_DOG_SKELETON: CommonSimType.ELDER_LARGE_DOG,
         CommonSimType.ELDER_LARGE_DOG_PLANT_SIM: CommonSimType.ELDER_LARGE_DOG,
+        CommonSimType.ELDER_LARGE_DOG_WEREWOLF: CommonSimType.ELDER_LARGE_DOG,
         # Adult
         CommonSimType.ADULT_LARGE_DOG: CommonSimType.ADULT_LARGE_DOG,
         CommonSimType.ADULT_LARGE_DOG_VAMPIRE: CommonSimType.ADULT_LARGE_DOG,
@@ -793,6 +862,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_LARGE_DOG_ROBOT: CommonSimType.ADULT_LARGE_DOG,
         CommonSimType.ADULT_LARGE_DOG_SKELETON: CommonSimType.ADULT_LARGE_DOG,
         CommonSimType.ADULT_LARGE_DOG_PLANT_SIM: CommonSimType.ADULT_LARGE_DOG,
+        CommonSimType.ADULT_LARGE_DOG_WEREWOLF: CommonSimType.ADULT_LARGE_DOG,
         # Child
         CommonSimType.CHILD_LARGE_DOG: CommonSimType.CHILD_LARGE_DOG,
         CommonSimType.CHILD_LARGE_DOG_VAMPIRE: CommonSimType.CHILD_LARGE_DOG,
@@ -803,6 +873,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_LARGE_DOG_ROBOT: CommonSimType.CHILD_LARGE_DOG,
         CommonSimType.CHILD_LARGE_DOG_SKELETON: CommonSimType.CHILD_LARGE_DOG,
         CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: CommonSimType.CHILD_LARGE_DOG,
+        CommonSimType.CHILD_LARGE_DOG_WEREWOLF: CommonSimType.CHILD_LARGE_DOG,
 
         # Cat
         # Elder
@@ -815,6 +886,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_CAT_ROBOT: CommonSimType.ELDER_CAT,
         CommonSimType.ELDER_CAT_SKELETON: CommonSimType.ELDER_CAT,
         CommonSimType.ELDER_CAT_PLANT_SIM: CommonSimType.ELDER_CAT,
+        CommonSimType.ELDER_CAT_WEREWOLF: CommonSimType.ELDER_CAT,
         # Adult
         CommonSimType.ADULT_CAT: CommonSimType.ADULT_CAT,
         CommonSimType.ADULT_CAT_VAMPIRE: CommonSimType.ADULT_CAT,
@@ -825,6 +897,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_CAT_ROBOT: CommonSimType.ADULT_CAT,
         CommonSimType.ADULT_CAT_SKELETON: CommonSimType.ADULT_CAT,
         CommonSimType.ADULT_CAT_PLANT_SIM: CommonSimType.ADULT_CAT,
+        CommonSimType.ADULT_CAT_WEREWOLF: CommonSimType.ADULT_CAT,
         # Child
         CommonSimType.CHILD_CAT: CommonSimType.CHILD_CAT,
         CommonSimType.CHILD_CAT_VAMPIRE: CommonSimType.CHILD_CAT,
@@ -835,6 +908,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_ROBOT: CommonSimType.CHILD_CAT,
         CommonSimType.CHILD_CAT_SKELETON: CommonSimType.CHILD_CAT,
         CommonSimType.CHILD_CAT_PLANT_SIM: CommonSimType.CHILD_CAT,
+        CommonSimType.CHILD_CAT_WEREWOLF: CommonSimType.CHILD_CAT,
 
         # Fox
         # Elder
@@ -847,6 +921,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_FOX_ROBOT: CommonSimType.ELDER_FOX,
         CommonSimType.ELDER_FOX_SKELETON: CommonSimType.ELDER_FOX,
         CommonSimType.ELDER_FOX_PLANT_SIM: CommonSimType.ELDER_FOX,
+        CommonSimType.ELDER_FOX_WEREWOLF: CommonSimType.ELDER_FOX,
         # Adult
         CommonSimType.ADULT_FOX: CommonSimType.ADULT_FOX,
         CommonSimType.ADULT_FOX_VAMPIRE: CommonSimType.ADULT_FOX,
@@ -857,6 +932,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_FOX_ROBOT: CommonSimType.ADULT_FOX,
         CommonSimType.ADULT_FOX_SKELETON: CommonSimType.ADULT_FOX,
         CommonSimType.ADULT_FOX_PLANT_SIM: CommonSimType.ADULT_FOX,
+        CommonSimType.ADULT_FOX_WEREWOLF: CommonSimType.ADULT_FOX,
         # Child
         CommonSimType.CHILD_FOX: CommonSimType.CHILD_FOX,
         CommonSimType.CHILD_FOX_VAMPIRE: CommonSimType.CHILD_FOX,
@@ -867,6 +943,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_FOX_ROBOT: CommonSimType.CHILD_FOX,
         CommonSimType.CHILD_FOX_SKELETON: CommonSimType.CHILD_FOX,
         CommonSimType.CHILD_FOX_PLANT_SIM: CommonSimType.CHILD_FOX,
+        CommonSimType.CHILD_FOX_WEREWOLF: CommonSimType.CHILD_FOX,
     }
 
     _OCCULT_SIM_TYPE_TO_OCCULT_TYPE_MAPPING: Dict[CommonSimType, CommonOccultType] = {
@@ -881,6 +958,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HUMAN_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.ELDER_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ELDER_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.ELDER_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
         # Adult
         CommonSimType.ADULT_HUMAN: CommonOccultType.NON_OCCULT,
         CommonSimType.ADULT_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -891,6 +969,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HUMAN_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.ADULT_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ADULT_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.ADULT_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
         # Young Adult
         CommonSimType.YOUNG_ADULT_HUMAN: CommonOccultType.NON_OCCULT,
         CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -901,6 +980,7 @@ class CommonSimTypeUtils:
         CommonSimType.YOUNG_ADULT_HUMAN_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.YOUNG_ADULT_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.YOUNG_ADULT_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
         # Teen
         CommonSimType.TEEN_HUMAN: CommonOccultType.NON_OCCULT,
         CommonSimType.TEEN_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -911,6 +991,7 @@ class CommonSimTypeUtils:
         CommonSimType.TEEN_HUMAN_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.TEEN_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.TEEN_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.TEEN_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
         # Child
         CommonSimType.CHILD_HUMAN: CommonOccultType.NON_OCCULT,
         CommonSimType.CHILD_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -921,6 +1002,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HUMAN_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.CHILD_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.CHILD_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
         # Toddler
         CommonSimType.TODDLER_HUMAN: CommonOccultType.NON_OCCULT,
         CommonSimType.TODDLER_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -931,6 +1013,7 @@ class CommonSimTypeUtils:
         CommonSimType.TODDLER_HUMAN_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.TODDLER_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.TODDLER_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.TODDLER_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
         # Baby
         CommonSimType.BABY_HUMAN: CommonOccultType.NON_OCCULT,
         CommonSimType.BABY_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -941,6 +1024,7 @@ class CommonSimTypeUtils:
         CommonSimType.BABY_HUMAN_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.BABY_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.BABY_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.BABY_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
 
         # Dog
         # Child
@@ -953,6 +1037,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_DOG_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.CHILD_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.CHILD_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
 
         # Small Dog
         # Elder
@@ -965,6 +1050,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_SMALL_DOG_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.ELDER_SMALL_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ELDER_SMALL_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.ELDER_SMALL_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
         # Adult
         CommonSimType.ADULT_SMALL_DOG: CommonOccultType.NON_OCCULT,
         CommonSimType.ADULT_SMALL_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -975,6 +1061,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_SMALL_DOG_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.ADULT_SMALL_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ADULT_SMALL_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.ADULT_SMALL_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
         # Child
         CommonSimType.CHILD_SMALL_DOG: CommonOccultType.NON_OCCULT,
         CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -985,6 +1072,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_SMALL_DOG_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.CHILD_SMALL_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.CHILD_SMALL_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
 
         # Large Dog
         # Elder
@@ -997,6 +1085,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_LARGE_DOG_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.ELDER_LARGE_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ELDER_LARGE_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.ELDER_LARGE_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
         # Adult
         CommonSimType.ADULT_LARGE_DOG: CommonOccultType.NON_OCCULT,
         CommonSimType.ADULT_LARGE_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1007,6 +1096,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_LARGE_DOG_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.ADULT_LARGE_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ADULT_LARGE_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.ADULT_LARGE_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
         # Child
         CommonSimType.CHILD_LARGE_DOG: CommonOccultType.NON_OCCULT,
         CommonSimType.CHILD_LARGE_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1017,6 +1107,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_LARGE_DOG_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.CHILD_LARGE_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.CHILD_LARGE_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
 
         # Cat
         # Elder
@@ -1029,6 +1120,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_CAT_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.ELDER_CAT_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ELDER_CAT_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.ELDER_CAT_WEREWOLF: CommonOccultType.WEREWOLF,
         # Adult
         CommonSimType.ADULT_CAT: CommonOccultType.NON_OCCULT,
         CommonSimType.ADULT_CAT_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1039,6 +1131,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_CAT_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.ADULT_CAT_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ADULT_CAT_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.ADULT_CAT_WEREWOLF: CommonOccultType.WEREWOLF,
         # Child
         CommonSimType.CHILD_CAT: CommonOccultType.NON_OCCULT,
         CommonSimType.CHILD_CAT_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1049,6 +1142,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.CHILD_CAT_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_CAT_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.CHILD_CAT_WEREWOLF: CommonOccultType.WEREWOLF,
 
         # Fox
         # Elder
@@ -1061,6 +1155,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_FOX_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.ELDER_FOX_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ELDER_FOX_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.ELDER_FOX_WEREWOLF: CommonOccultType.WEREWOLF,
         # Adult
         CommonSimType.ADULT_FOX: CommonOccultType.NON_OCCULT,
         CommonSimType.ADULT_FOX_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1071,6 +1166,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_FOX_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.ADULT_FOX_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ADULT_FOX_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.ADULT_FOX_WEREWOLF: CommonOccultType.WEREWOLF,
         # Child
         CommonSimType.CHILD_FOX: CommonOccultType.NON_OCCULT,
         CommonSimType.CHILD_FOX_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1081,6 +1177,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_FOX_ROBOT: CommonOccultType.ROBOT,
         CommonSimType.CHILD_FOX_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_FOX_PLANT_SIM: CommonOccultType.PLANT_SIM,
+        CommonSimType.CHILD_FOX_WEREWOLF: CommonOccultType.WEREWOLF,
     }
 
     _OCCULT_SIM_TYPE_TO_AGE_MAPPING: Dict[CommonSimType, CommonAge] = {
@@ -1095,6 +1192,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HUMAN_ROBOT: CommonAge.ELDER,
         CommonSimType.ELDER_HUMAN_SKELETON: CommonAge.ELDER,
         CommonSimType.ELDER_HUMAN_PLANT_SIM: CommonAge.ELDER,
+        CommonSimType.ELDER_HUMAN_WEREWOLF: CommonAge.ELDER,
         # Adult
         CommonSimType.ADULT_HUMAN: CommonAge.ADULT,
         CommonSimType.ADULT_HUMAN_VAMPIRE: CommonAge.ADULT,
@@ -1105,6 +1203,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HUMAN_ROBOT: CommonAge.ADULT,
         CommonSimType.ADULT_HUMAN_SKELETON: CommonAge.ADULT,
         CommonSimType.ADULT_HUMAN_PLANT_SIM: CommonAge.ADULT,
+        CommonSimType.ADULT_HUMAN_WEREWOLF: CommonAge.ADULT,
         # Young Adult
         CommonSimType.YOUNG_ADULT_HUMAN: CommonAge.YOUNGADULT,
         CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE: CommonAge.YOUNGADULT,
@@ -1115,6 +1214,7 @@ class CommonSimTypeUtils:
         CommonSimType.YOUNG_ADULT_HUMAN_ROBOT: CommonAge.YOUNGADULT,
         CommonSimType.YOUNG_ADULT_HUMAN_SKELETON: CommonAge.YOUNGADULT,
         CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM: CommonAge.YOUNGADULT,
+        CommonSimType.YOUNG_ADULT_HUMAN_WEREWOLF: CommonAge.YOUNGADULT,
         # Teen
         CommonSimType.TEEN_HUMAN: CommonAge.TEEN,
         CommonSimType.TEEN_HUMAN_VAMPIRE: CommonAge.TEEN,
@@ -1125,6 +1225,7 @@ class CommonSimTypeUtils:
         CommonSimType.TEEN_HUMAN_ROBOT: CommonAge.TEEN,
         CommonSimType.TEEN_HUMAN_SKELETON: CommonAge.TEEN,
         CommonSimType.TEEN_HUMAN_PLANT_SIM: CommonAge.TEEN,
+        CommonSimType.TEEN_HUMAN_WEREWOLF: CommonAge.TEEN,
         # Child
         CommonSimType.CHILD_HUMAN: CommonAge.CHILD,
         CommonSimType.CHILD_HUMAN_VAMPIRE: CommonAge.CHILD,
@@ -1135,6 +1236,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HUMAN_ROBOT: CommonAge.CHILD,
         CommonSimType.CHILD_HUMAN_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_HUMAN_PLANT_SIM: CommonAge.CHILD,
+        CommonSimType.CHILD_HUMAN_WEREWOLF: CommonAge.CHILD,
         # Toddler
         CommonSimType.TODDLER_HUMAN: CommonAge.TODDLER,
         CommonSimType.TODDLER_HUMAN_VAMPIRE: CommonAge.TODDLER,
@@ -1145,6 +1247,7 @@ class CommonSimTypeUtils:
         CommonSimType.TODDLER_HUMAN_ROBOT: CommonAge.TODDLER,
         CommonSimType.TODDLER_HUMAN_SKELETON: CommonAge.TODDLER,
         CommonSimType.TODDLER_HUMAN_PLANT_SIM: CommonAge.TODDLER,
+        CommonSimType.TODDLER_HUMAN_WEREWOLF: CommonAge.TODDLER,
         # Baby
         CommonSimType.BABY_HUMAN: CommonAge.BABY,
         CommonSimType.BABY_HUMAN_VAMPIRE: CommonAge.BABY,
@@ -1155,6 +1258,7 @@ class CommonSimTypeUtils:
         CommonSimType.BABY_HUMAN_ROBOT: CommonAge.BABY,
         CommonSimType.BABY_HUMAN_SKELETON: CommonAge.BABY,
         CommonSimType.BABY_HUMAN_PLANT_SIM: CommonAge.BABY,
+        CommonSimType.BABY_HUMAN_WEREWOLF: CommonAge.BABY,
 
         # Dog
         # Child
@@ -1167,6 +1271,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_DOG_ROBOT: CommonAge.CHILD,
         CommonSimType.CHILD_DOG_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_DOG_PLANT_SIM: CommonAge.CHILD,
+        CommonSimType.CHILD_DOG_WEREWOLF: CommonAge.CHILD,
 
         # Small Dog
         # Elder
@@ -1179,6 +1284,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_SMALL_DOG_ROBOT: CommonAge.ELDER,
         CommonSimType.ELDER_SMALL_DOG_SKELETON: CommonAge.ELDER,
         CommonSimType.ELDER_SMALL_DOG_PLANT_SIM: CommonAge.ELDER,
+        CommonSimType.ELDER_SMALL_DOG_WEREWOLF: CommonAge.ELDER,
         # Adult
         CommonSimType.ADULT_SMALL_DOG: CommonAge.ADULT,
         CommonSimType.ADULT_SMALL_DOG_VAMPIRE: CommonAge.ADULT,
@@ -1189,6 +1295,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_SMALL_DOG_ROBOT: CommonAge.ADULT,
         CommonSimType.ADULT_SMALL_DOG_SKELETON: CommonAge.ADULT,
         CommonSimType.ADULT_SMALL_DOG_PLANT_SIM: CommonAge.ADULT,
+        CommonSimType.ADULT_SMALL_DOG_WEREWOLF: CommonAge.ADULT,
         # Child
         CommonSimType.CHILD_SMALL_DOG: CommonAge.CHILD,
         CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonAge.CHILD,
@@ -1199,6 +1306,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_SMALL_DOG_ROBOT: CommonAge.CHILD,
         CommonSimType.CHILD_SMALL_DOG_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: CommonAge.CHILD,
+        CommonSimType.CHILD_SMALL_DOG_WEREWOLF: CommonAge.CHILD,
 
         # Large Dog
         # Elder
@@ -1211,6 +1319,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_LARGE_DOG_ROBOT: CommonAge.ELDER,
         CommonSimType.ELDER_LARGE_DOG_SKELETON: CommonAge.ELDER,
         CommonSimType.ELDER_LARGE_DOG_PLANT_SIM: CommonAge.ELDER,
+        CommonSimType.ELDER_LARGE_DOG_WEREWOLF: CommonAge.ELDER,
         # Adult
         CommonSimType.ADULT_LARGE_DOG: CommonAge.ADULT,
         CommonSimType.ADULT_LARGE_DOG_VAMPIRE: CommonAge.ADULT,
@@ -1221,6 +1330,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_LARGE_DOG_ROBOT: CommonAge.ADULT,
         CommonSimType.ADULT_LARGE_DOG_SKELETON: CommonAge.ADULT,
         CommonSimType.ADULT_LARGE_DOG_PLANT_SIM: CommonAge.ADULT,
+        CommonSimType.ADULT_LARGE_DOG_WEREWOLF: CommonAge.ADULT,
         # Child
         CommonSimType.CHILD_LARGE_DOG: CommonAge.CHILD,
         CommonSimType.CHILD_LARGE_DOG_VAMPIRE: CommonAge.CHILD,
@@ -1231,6 +1341,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_LARGE_DOG_ROBOT: CommonAge.CHILD,
         CommonSimType.CHILD_LARGE_DOG_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: CommonAge.CHILD,
+        CommonSimType.CHILD_LARGE_DOG_WEREWOLF: CommonAge.CHILD,
 
         # Cat
         # Elder
@@ -1243,6 +1354,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_CAT_ROBOT: CommonAge.ELDER,
         CommonSimType.ELDER_CAT_SKELETON: CommonAge.ELDER,
         CommonSimType.ELDER_CAT_PLANT_SIM: CommonAge.ELDER,
+        CommonSimType.ELDER_CAT_WEREWOLF: CommonAge.ELDER,
         # Adult
         CommonSimType.ADULT_CAT: CommonAge.ADULT,
         CommonSimType.ADULT_CAT_VAMPIRE: CommonAge.ADULT,
@@ -1253,6 +1365,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_CAT_ROBOT: CommonAge.ADULT,
         CommonSimType.ADULT_CAT_SKELETON: CommonAge.ADULT,
         CommonSimType.ADULT_CAT_PLANT_SIM: CommonAge.ADULT,
+        CommonSimType.ADULT_CAT_WEREWOLF: CommonAge.ADULT,
         # Child
         CommonSimType.CHILD_CAT: CommonAge.CHILD,
         CommonSimType.CHILD_CAT_VAMPIRE: CommonAge.CHILD,
@@ -1263,6 +1376,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_ROBOT: CommonAge.CHILD,
         CommonSimType.CHILD_CAT_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_CAT_PLANT_SIM: CommonAge.CHILD,
+        CommonSimType.CHILD_CAT_WEREWOLF: CommonAge.CHILD,
 
         # Fox
         # Elder
@@ -1275,6 +1389,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_FOX_ROBOT: CommonAge.ELDER,
         CommonSimType.ELDER_FOX_SKELETON: CommonAge.ELDER,
         CommonSimType.ELDER_FOX_PLANT_SIM: CommonAge.ELDER,
+        CommonSimType.ELDER_FOX_WEREWOLF: CommonAge.ELDER,
         # Adult
         CommonSimType.ADULT_FOX: CommonAge.ADULT,
         CommonSimType.ADULT_FOX_VAMPIRE: CommonAge.ADULT,
@@ -1285,6 +1400,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_FOX_ROBOT: CommonAge.ADULT,
         CommonSimType.ADULT_FOX_SKELETON: CommonAge.ADULT,
         CommonSimType.ADULT_FOX_PLANT_SIM: CommonAge.ADULT,
+        CommonSimType.ADULT_FOX_WEREWOLF: CommonAge.ADULT,
         # Child
         CommonSimType.CHILD_FOX: CommonAge.CHILD,
         CommonSimType.CHILD_FOX_VAMPIRE: CommonAge.CHILD,
@@ -1295,6 +1411,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_FOX_ROBOT: CommonAge.CHILD,
         CommonSimType.CHILD_FOX_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_FOX_PLANT_SIM: CommonAge.CHILD,
+        CommonSimType.CHILD_FOX_WEREWOLF: CommonAge.CHILD,
     }
 
     _OCCULT_SIM_TYPE_TO_SPECIES_MAPPING: Dict[CommonSimType, CommonSpecies] = {
@@ -1309,6 +1426,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HUMAN_ROBOT: CommonSpecies.HUMAN,
         CommonSimType.ELDER_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.ELDER_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+        CommonSimType.ELDER_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
         # Adult
         CommonSimType.ADULT_HUMAN: CommonSpecies.HUMAN,
         CommonSimType.ADULT_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
@@ -1319,6 +1437,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HUMAN_ROBOT: CommonSpecies.HUMAN,
         CommonSimType.ADULT_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.ADULT_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+        CommonSimType.ADULT_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
         # Young Adult
         CommonSimType.YOUNG_ADULT_HUMAN: CommonSpecies.HUMAN,
         CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
@@ -1329,6 +1448,7 @@ class CommonSimTypeUtils:
         CommonSimType.YOUNG_ADULT_HUMAN_ROBOT: CommonSpecies.HUMAN,
         CommonSimType.YOUNG_ADULT_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+        CommonSimType.YOUNG_ADULT_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
         # Teen
         CommonSimType.TEEN_HUMAN: CommonSpecies.HUMAN,
         CommonSimType.TEEN_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
@@ -1339,6 +1459,7 @@ class CommonSimTypeUtils:
         CommonSimType.TEEN_HUMAN_ROBOT: CommonSpecies.HUMAN,
         CommonSimType.TEEN_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.TEEN_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+        CommonSimType.TEEN_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
         # Child
         CommonSimType.CHILD_HUMAN: CommonSpecies.HUMAN,
         CommonSimType.CHILD_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
@@ -1349,6 +1470,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HUMAN_ROBOT: CommonSpecies.HUMAN,
         CommonSimType.CHILD_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.CHILD_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+        CommonSimType.CHILD_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
         # Toddler
         CommonSimType.TODDLER_HUMAN: CommonSpecies.HUMAN,
         CommonSimType.TODDLER_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
@@ -1359,6 +1481,7 @@ class CommonSimTypeUtils:
         CommonSimType.TODDLER_HUMAN_ROBOT: CommonSpecies.HUMAN,
         CommonSimType.TODDLER_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.TODDLER_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+        CommonSimType.TODDLER_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
         # Baby
         CommonSimType.BABY_HUMAN: CommonSpecies.HUMAN,
         CommonSimType.BABY_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
@@ -1369,6 +1492,7 @@ class CommonSimTypeUtils:
         CommonSimType.BABY_HUMAN_ROBOT: CommonSpecies.HUMAN,
         CommonSimType.BABY_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.BABY_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
+        CommonSimType.BABY_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
 
         # Dog
         # Small Dog
@@ -1382,6 +1506,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_SMALL_DOG_ROBOT: CommonSpecies.SMALL_DOG,
         CommonSimType.ELDER_SMALL_DOG_SKELETON: CommonSpecies.SMALL_DOG,
         CommonSimType.ELDER_SMALL_DOG_PLANT_SIM: CommonSpecies.SMALL_DOG,
+        CommonSimType.ELDER_SMALL_DOG_WEREWOLF: CommonSpecies.SMALL_DOG,
         # Adult
         CommonSimType.ADULT_SMALL_DOG: CommonSpecies.SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_VAMPIRE: CommonSpecies.SMALL_DOG,
@@ -1392,6 +1517,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_SMALL_DOG_ROBOT: CommonSpecies.SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_SKELETON: CommonSpecies.SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_PLANT_SIM: CommonSpecies.SMALL_DOG,
+        CommonSimType.ADULT_SMALL_DOG_WEREWOLF: CommonSpecies.SMALL_DOG,
         # Child
         CommonSimType.CHILD_SMALL_DOG: CommonSpecies.SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonSpecies.SMALL_DOG,
@@ -1402,6 +1528,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_SMALL_DOG_ROBOT: CommonSpecies.SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_SKELETON: CommonSpecies.SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: CommonSpecies.SMALL_DOG,
+        CommonSimType.CHILD_SMALL_DOG_WEREWOLF: CommonSpecies.SMALL_DOG,
 
         # Large Dog
         # Elder
@@ -1414,6 +1541,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_LARGE_DOG_ROBOT: CommonSpecies.LARGE_DOG,
         CommonSimType.ELDER_LARGE_DOG_SKELETON: CommonSpecies.LARGE_DOG,
         CommonSimType.ELDER_LARGE_DOG_PLANT_SIM: CommonSpecies.LARGE_DOG,
+        CommonSimType.ELDER_LARGE_DOG_WEREWOLF: CommonSpecies.LARGE_DOG,
         # Adult
         CommonSimType.ADULT_LARGE_DOG: CommonSpecies.LARGE_DOG,
         CommonSimType.ADULT_LARGE_DOG_VAMPIRE: CommonSpecies.LARGE_DOG,
@@ -1424,6 +1552,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_LARGE_DOG_ROBOT: CommonSpecies.LARGE_DOG,
         CommonSimType.ADULT_LARGE_DOG_SKELETON: CommonSpecies.LARGE_DOG,
         CommonSimType.ADULT_LARGE_DOG_PLANT_SIM: CommonSpecies.LARGE_DOG,
+        CommonSimType.ADULT_LARGE_DOG_WEREWOLF: CommonSpecies.LARGE_DOG,
         # Child
         CommonSimType.CHILD_LARGE_DOG: CommonSpecies.LARGE_DOG,
         CommonSimType.CHILD_LARGE_DOG_VAMPIRE: CommonSpecies.LARGE_DOG,
@@ -1434,6 +1563,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_LARGE_DOG_ROBOT: CommonSpecies.LARGE_DOG,
         CommonSimType.CHILD_LARGE_DOG_SKELETON: CommonSpecies.LARGE_DOG,
         CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_LARGE_DOG_WEREWOLF: CommonSpecies.LARGE_DOG,
 
         # Cat
         # Elder
@@ -1446,6 +1576,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_CAT_ROBOT: CommonSpecies.CAT,
         CommonSimType.ELDER_CAT_SKELETON: CommonSpecies.CAT,
         CommonSimType.ELDER_CAT_PLANT_SIM: CommonSpecies.CAT,
+        CommonSimType.ELDER_CAT_WEREWOLF: CommonSpecies.CAT,
         # Adult
         CommonSimType.ADULT_CAT: CommonSpecies.CAT,
         CommonSimType.ADULT_CAT_VAMPIRE: CommonSpecies.CAT,
@@ -1456,6 +1587,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_CAT_ROBOT: CommonSpecies.CAT,
         CommonSimType.ADULT_CAT_SKELETON: CommonSpecies.CAT,
         CommonSimType.ADULT_CAT_PLANT_SIM: CommonSpecies.CAT,
+        CommonSimType.ADULT_CAT_WEREWOLF: CommonSpecies.CAT,
         # Child
         CommonSimType.CHILD_CAT: CommonSpecies.CAT,
         CommonSimType.CHILD_CAT_VAMPIRE: CommonSpecies.CAT,
@@ -1466,6 +1598,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_ROBOT: CommonSpecies.CAT,
         CommonSimType.CHILD_CAT_SKELETON: CommonSpecies.CAT,
         CommonSimType.CHILD_CAT_PLANT_SIM: CommonSpecies.CAT,
+        CommonSimType.CHILD_CAT_WEREWOLF: CommonSpecies.CAT,
 
         # Fox
         # Elder
@@ -1478,6 +1611,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_FOX_ROBOT: CommonSpecies.FOX,
         CommonSimType.ELDER_FOX_SKELETON: CommonSpecies.FOX,
         CommonSimType.ELDER_FOX_PLANT_SIM: CommonSpecies.FOX,
+        CommonSimType.ELDER_FOX_WEREWOLF: CommonSpecies.FOX,
         # Adult
         CommonSimType.ADULT_FOX: CommonSpecies.FOX,
         CommonSimType.ADULT_FOX_VAMPIRE: CommonSpecies.FOX,
@@ -1488,6 +1622,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_FOX_ROBOT: CommonSpecies.FOX,
         CommonSimType.ADULT_FOX_SKELETON: CommonSpecies.FOX,
         CommonSimType.ADULT_FOX_PLANT_SIM: CommonSpecies.FOX,
+        CommonSimType.ADULT_FOX_WEREWOLF: CommonSpecies.FOX,
         # Child
         CommonSimType.CHILD_FOX: CommonSpecies.FOX,
         CommonSimType.CHILD_FOX_VAMPIRE: CommonSpecies.FOX,
@@ -1498,6 +1633,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_FOX_ROBOT: CommonSpecies.FOX,
         CommonSimType.CHILD_FOX_SKELETON: CommonSpecies.FOX,
         CommonSimType.CHILD_FOX_PLANT_SIM: CommonSpecies.FOX,
+        CommonSimType.CHILD_FOX_WEREWOLF: CommonSpecies.FOX,
     }
 
     @staticmethod

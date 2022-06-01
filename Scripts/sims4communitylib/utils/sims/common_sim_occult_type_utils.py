@@ -89,7 +89,8 @@ class CommonSimOccultTypeUtils:
             CommonOccultType.VAMPIRE: CommonOccultUtils.is_vampire,
             CommonOccultType.WITCH: CommonOccultUtils.is_witch,
             CommonOccultType.PLANT_SIM: CommonOccultUtils.is_plant_sim,
-            CommonOccultType.GHOST: CommonOccultUtils.is_ghost
+            CommonOccultType.GHOST: CommonOccultUtils.is_ghost,
+            CommonOccultType.WEREWOLF: CommonOccultUtils.is_werewolf
         }
         if occult_type not in occult_type_mappings:
             return CommonTestResult(False, reason=f'A check for the specified occult type was not found. {occult_type}.')
@@ -121,7 +122,8 @@ class CommonSimOccultTypeUtils:
             CommonOccultType.VAMPIRE: CommonOccultUtils.is_currently_a_vampire,
             CommonOccultType.WITCH: CommonOccultUtils.is_currently_a_witch,
             CommonOccultType.PLANT_SIM: CommonOccultUtils.is_currently_a_plant_sim,
-            CommonOccultType.GHOST: CommonOccultUtils.is_currently_a_ghost
+            CommonOccultType.GHOST: CommonOccultUtils.is_currently_a_ghost,
+            CommonOccultType.WEREWOLF: CommonOccultUtils.is_currently_a_werewolf
         }
         if occult_type not in occult_type_mappings:
             return CommonTestResult(False, reason=f'A check for the specified occult type was not found. {occult_type}.')
@@ -155,6 +157,8 @@ class CommonSimOccultTypeUtils:
             return CommonOccultType.VAMPIRE
         elif CommonOccultUtils.is_witch(sim_info):
             return CommonOccultType.WITCH
+        elif CommonOccultUtils.is_werewolf(sim_info):
+            return CommonOccultType.WEREWOLF
         return CommonOccultType.NON_OCCULT
 
     @staticmethod
@@ -176,6 +180,8 @@ class CommonSimOccultTypeUtils:
             return CommonOccultType.ROBOT
         elif CommonOccultUtils.is_currently_a_vampire(sim_info):
             return CommonOccultType.VAMPIRE
+        elif CommonOccultUtils.is_werewolf(sim_info):
+            return CommonOccultType.WEREWOLF
         elif CommonOccultUtils.is_currently_a_witch(sim_info):
             return CommonOccultType.WITCH
         elif CommonOccultUtils.is_currently_an_alien(sim_info):
@@ -225,7 +231,8 @@ class CommonSimOccultTypeUtils:
             CommonOccultType.ALIEN: OccultType.ALIEN,
             CommonOccultType.MERMAID: OccultType.MERMAID if hasattr(OccultType, 'MERMAID') else None,
             CommonOccultType.VAMPIRE: OccultType.VAMPIRE,
-            CommonOccultType.WITCH: OccultType.WITCH if hasattr(OccultType, 'WITCH') else None
+            CommonOccultType.WITCH: OccultType.WITCH if hasattr(OccultType, 'WITCH') else None,
+            CommonOccultType.WEREWOLF: OccultType.WEREWOLF if hasattr(OccultType, 'WEREWOLF') else None
         }
         return conversion_mapping.get(occult_type, None)
 
