@@ -24,7 +24,11 @@ v1.78:
 - Added extra arguments to `CommonSimCraftingUtils.create_from_recipe`
 - Removed the checks for `has_motive` from various `CommonSimMotiveUtils` functions.
 - Fixed an issue within `CommonSimStatisticUtils.add_statistic_modifier` where it was essentially not working properly.
-- Added placeholder support for werewolves, the contents of which to be updated when the game pack is released, `CommonOccultType`, `CommonSimType`, `CommonOccultUtils`, `CommonSimOccultUtils`, `CommonSimOccultTypeUtils`, etc.
+- Added support for werewolves, related classes are `CommonOccultType`, `CommonSimType`, `CommonOccultUtils`, `CommonSimOccultUtils`, `CommonSimOccultTypeUtils`, etc.
+- Updated CommonTraitId and CommonBuffId with new traits and buffs.
+- Fixed an issue with Animal Sims spawned in with the spawn commands, where they did not have a breed entered for them.
+- CommonAlarmHandles now have an `is_active` property that can be checked to determine in the alarm handle is still active.
+- Added a function to remove Game Tags from objects.
 
 v1.77:
 - Fixed an error that could occur when using commands that have an optional integer argument.
