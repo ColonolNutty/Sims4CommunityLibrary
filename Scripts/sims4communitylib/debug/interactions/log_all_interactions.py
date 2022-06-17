@@ -42,7 +42,7 @@ class S4CLDebugLogAllInteractionsInteraction(CommonImmediateSuperInteraction):
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
-    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, picked_item_ids: Tuple[int]=(), **kwargs) -> CommonTestResult:
+    def on_test(cls, interaction_sim: Sim, interaction_target: Any, interaction_context: InteractionContext, picked_item_ids: Tuple[int] = (), **kwargs) -> CommonTestResult:
         if interaction_target is None and not picked_item_ids:
             cls.get_log().debug('Failed, No Target was found.')
             return cls.create_test_result(False)
@@ -80,14 +80,25 @@ class S4CLDebugLogAllInteractionsInteraction(CommonImmediateSuperInteraction):
                     self.log.format_with_message('Had Sim Instance.', new_target=new_target)
                     interaction_target = new_target
         object_id = CommonObjectUtils.get_object_id(interaction_target) if interaction_target is not None else -1
+        object_tuning_name = None
         definition_id = -1
         if CommonTypeUtils.is_sim_or_sim_info(interaction_target):
+            target_sim_info = CommonSimUtils.get_sim_info(interaction_target)
             object_id = CommonSimUtils.get_sim_id(interaction_target)
+            target_sim = CommonSimUtils.get_sim_instance(interaction_target)
+            object_tuning_name = target_sim.__name__ if hasattr(target_sim, '__name__') else target_sim.__class__.__name__
+            rig_hash64 = target_sim.rig.hash64
+            rig_instance = target_sim.rig.instance
+            self.log.format_with_message('All things on rig', rig64=rig_hash64, rig_instance=rig_instance, target_rig_key=target_sim_info.rig_key)
+            definition = CommonObjectUtils.get_game_object_definition(target_sim)
+            if definition is not None:
+                definition_id = definition.id
         elif CommonTypeUtils.is_game_object(interaction_target):
+            object_tuning_name = interaction_target.__name__ if hasattr(interaction_target, '__name__') else interaction_target.__class__.__name__
             definition = CommonObjectUtils.get_game_object_definition(interaction_target)
             if definition is not None:
                 definition_id = definition.id
-        self.log.debug('Interactions that can be performed on \'{}\' id:{} def_id:{}:'.format(interaction_target, object_id, definition_id))
+        self.log.debug(f'Interactions that can be performed on \'{interaction_target}\' id:{object_id} def_id:{definition_id} tuning_name:{object_tuning_name}:')
         interactions = CommonObjectInteractionUtils.get_all_interactions_registered_to_object_gen(interaction_target)
         interaction_target: GameObject = interaction_target
         interaction_short_names: List[str] = list()

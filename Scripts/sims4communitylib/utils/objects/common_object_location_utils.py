@@ -21,6 +21,7 @@ from sims4communitylib.services.commands.common_console_command_output import Co
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
 from sims4communitylib.utils.objects.common_object_type_utils import CommonObjectTypeUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from world.lot import Lot
 
 
@@ -345,7 +346,7 @@ class CommonObjectLocationUtils:
         's4clib.moveobjecttosim',
     )
 )
-def _common_move_object_to_sim(output: CommonConsoleCommandOutput, game_object: GameObject, sim_info: SimInfo=None):
+def _common_move_object_to_sim(output: CommonConsoleCommandOutput, game_object: GameObject, sim_info: SimInfo = None):
     if sim_info is None:
         output('ERROR: No Sim was specified or the specified Sim was not found!')
         return
@@ -359,3 +360,30 @@ def _common_move_object_to_sim(output: CommonConsoleCommandOutput, game_object: 
     else:
         output(f'FAILED: Object {game_object} failed to move to Sim {sim_info}')
     output(f'Done moving object {game_object}.')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.print_bone_position_on_sim',
+    'Print the position of a bone on a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('bone_name', 'Text', 'The name of a bone on the rig.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.printbonepositiononsim',
+    )
+)
+def _common_print_bone_position(output: CommonConsoleCommandOutput, bone_name: str, sim_info: SimInfo = None):
+    if sim_info is None:
+        output('ERROR: No Sim was specified or the specified Sim was not found!')
+        return
+    if bone_name is None:
+        output('ERROR: No bone name was specified.')
+        return
+    sim = CommonSimUtils.get_sim_instance(sim_info)
+    bone_position = CommonObjectLocationUtils.get_bone_position(sim, bone_name)
+    if bone_position is None:
+        output(f'Bone {bone_name} not found on Sim {sim_info}.')
+    else:
+        output(f'Got bone position. X: {bone_position.x} Y: {bone_position.y} Z: {bone_position.z}')
