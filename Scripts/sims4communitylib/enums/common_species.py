@@ -126,4 +126,11 @@ class CommonSpecies(CommonInt):
             CommonSpecies.CAT: CommonStringId.CAT,
             CommonSpecies.FOX: CommonStringId.FOX
         }
-        return display_name_mapping.get(value, value.name)
+        if isinstance(value, int) and not isinstance(value, CommonSpecies):
+            from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+            # noinspection PyTypeChecker
+            val = CommonResourceUtils.get_enum_by_int_value(value, SpeciesExtended, default_value=None)
+            if val is None:
+                return str(value)
+            value = val
+        return display_name_mapping.get(value, value.name if hasattr(value, 'name') else str(value))

@@ -96,7 +96,7 @@ class CommonGender(CommonInt):
         return conversion_mapping.get(value, None)
 
     @staticmethod
-    def convert_from_vanilla(value: Gender) -> 'CommonGender':
+    def convert_from_vanilla(value: Union[int, Gender]) -> 'CommonGender':
         """convert_from_vanilla(value)
 
         Convert a vanilla Gender into a CommonGender enum.
@@ -135,4 +135,6 @@ class CommonGender(CommonInt):
             CommonGender.MALE: CommonStringId.MALE,
             CommonGender.FEMALE: CommonStringId.FEMALE
         }
-        return display_name_mapping.get(value, value.name)
+        if isinstance(value, int) and not isinstance(value, CommonGender):
+            value = CommonGender.convert_from_vanilla(value)
+        return display_name_mapping.get(value, value.name if hasattr(value, 'name') else str(value))

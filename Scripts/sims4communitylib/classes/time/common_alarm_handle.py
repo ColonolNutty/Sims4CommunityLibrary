@@ -34,7 +34,7 @@ if ON_RTD:
         pass
 
 if not ON_RTD:
-    from scheduling import Timeline
+    from scheduling import Timeline, ElementHandle
     from alarms import AlarmHandle
     from date_and_time import DateAndTime, TimeSpan
 
@@ -63,6 +63,15 @@ class CommonAlarmHandle(AlarmHandle):
             accurate_repeat=accurate_repeat,
             cross_zone=persist_across_zone_loads
         )
+
+    @property
+    def is_active(self) -> bool:
+        """True, if the Alarm Handle is currently active and scheduled. False, if not."""
+        if self._element_handle is None:
+            return False
+        element_handle: ElementHandle = self._element_handle
+        # noinspection PyPropertyAccess
+        return element_handle.is_active and element_handle.is_scheduled
 
 
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib.print_current_time', 'Prints the current time.')

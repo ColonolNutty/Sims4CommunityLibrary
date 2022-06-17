@@ -180,7 +180,7 @@ class CommonSimOccultTypeUtils:
             return CommonOccultType.ROBOT
         elif CommonOccultUtils.is_currently_a_vampire(sim_info):
             return CommonOccultType.VAMPIRE
-        elif CommonOccultUtils.is_werewolf(sim_info):
+        elif CommonOccultUtils.is_currently_a_werewolf(sim_info):
             return CommonOccultType.WEREWOLF
         elif CommonOccultUtils.is_currently_a_witch(sim_info):
             return CommonOccultType.WITCH

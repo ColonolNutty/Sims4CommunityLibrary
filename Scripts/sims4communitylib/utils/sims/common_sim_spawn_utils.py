@@ -439,18 +439,21 @@ class CommonSimSpawnUtils:
         vanilla_gender = CommonGender.convert_to_vanilla(gender)
         vanilla_age = CommonAge.convert_to_vanilla(age)
         vanilla_species = CommonSpecies.convert_to_vanilla(species)
-        if species is None:
+        if vanilla_species is None:
             raise AssertionError(f'Invalid species specified for SimInfo creation! {species}')
         first_name = first_name or CommonSimNameUtils.create_random_first_name(gender, species=species)
         last_name = last_name or CommonSimNameUtils.create_random_last_name(gender, species=species)
         traits = tuple([CommonTraitUtils.load_trait_by_id(trait_id) for trait_id in trait_ids if CommonTraitUtils.load_trait_by_id(trait_id) is not None])
+        from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
         sim_creator = SimCreator(
             gender=vanilla_gender,
             age=vanilla_age,
             species=vanilla_species,
             first_name=first_name,
             last_name=last_name,
-            traits=traits
+            traits=traits,
+            breed_name='Custom Breed' if CommonSpeciesUtils.is_animal_species(vanilla_species) else '',
+            breed_name_key=0x599432EA if CommonSpeciesUtils.is_animal_species(vanilla_species) else 0,
         )
         (sim_info_list, _) = SimSpawner.create_sim_infos((sim_creator,), household=household, generate_deterministic_sim=True, creation_source=source)
         if not sim_info_list:
@@ -893,14 +896,14 @@ class CommonSimSpawnUtils:
 def _s4cl_spawn_sims(output: CommonConsoleCommandOutput, species: CommonSpecies, count: int = 1, gender: CommonGender = CommonGender.MALE, age: CommonAge = CommonAge.ADULT):
     if species is None:
         return
-    if gender == CommonGender.INVALID:
-        output(f'{gender} is not a valid gender. Valid Genders: ({CommonGender.get_comma_separated_names_string()})')
+    if gender == CommonGender.INVALID or not isinstance(gender, CommonGender):
+        output(f'ERROR: {gender} is not a valid gender. Valid Genders: ({CommonGender.get_comma_separated_names_string()})')
         return
-    if age == CommonAge.INVALID:
-        output(f'{age} is not a valid age. Valid Ages: ({CommonAge.get_comma_separated_names_string()})')
+    if age == CommonAge.INVALID or not isinstance(age, CommonAge):
+        output(f'ERROR: {age} is not a valid age. Valid Ages: ({CommonAge.get_comma_separated_names_string()})')
         return
     if count <= 0:
-        output('Please enter a count above zero.')
+        output('ERROR: Please enter a count above zero.')
         return
     output(f'Spawning {count} {species.name} Sim(s) of Gender: {gender.name} and Age: {age.name}.')
     try:

@@ -18,6 +18,13 @@ v1.78:
 - Added a function to retrieve all Skills.
 - Added a function to check if a Sim can route to another Sim.
 - Added a command to set all Sims as having met each other other.
+- Cleaned up some doc strings in various enums
+- Added `CommonObjectQuality` and `CommonObjectStateId` enums
+- Added some functions for setting and getting object quality to `CommonObjectStateUtils`
+- Added extra arguments to `CommonSimCraftingUtils.create_from_recipe`
+- Removed the checks for `has_motive` from various `CommonSimMotiveUtils` functions.
+- Fixed an issue within `CommonSimStatisticUtils.add_statistic_modifier` where it was essentially not working properly.
+- Added placeholder support for werewolves, the contents of which to be updated when the game pack is released, `CommonOccultType`, `CommonSimType`, `CommonOccultUtils`, `CommonSimOccultUtils`, `CommonSimOccultTypeUtils`, etc.
 
 v1.77:
 - Fixed an error that could occur when using commands that have an optional integer argument.

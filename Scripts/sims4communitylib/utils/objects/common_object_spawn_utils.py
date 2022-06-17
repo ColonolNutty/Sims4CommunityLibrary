@@ -14,6 +14,7 @@ from typing import Any, Callable, Union, Tuple, Iterator
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_transform import CommonTransform
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
+from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
 from carry.carry_postures import CarryingObject
 from objects.game_object import GameObject
@@ -23,10 +24,16 @@ from sims4communitylib.services.commands.common_console_command import CommonCon
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 
 
-class CommonObjectSpawnUtils:
+class CommonObjectSpawnUtils(_HasS4CLClassLog):
     """Utilities for creating, spawning, and despawning Objects.
 
     """
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_log_identifier(cls) -> str:
+        return 'common_object_spawn_utils'
+
     @staticmethod
     def spawn_object_on_lot(
         object_definition_id: int,
@@ -309,10 +316,38 @@ def _common_spawn_object(output: CommonConsoleCommandOutput, object_definition_i
     game_object = CommonObjectSpawnUtils.spawn_object_on_lot(object_definition_id, sim_location)
     if game_object is not None:
         game_object_id = CommonObjectUtils.get_object_id(game_object)
+        CommonObjectSpawnUtils.get_log().enable()
+        CommonObjectSpawnUtils.get_log().debug(f'Object {game_object} spawned successfully. Can you see it? Object Id: {game_object_id}')
+        CommonObjectSpawnUtils.get_log().disable()
         output(f'SUCCESS: Object {game_object} spawned successfully. Can you see it? Object Id: {game_object_id}')
     else:
         output(f'ERROR: Failed to spawn object with definition id {object_definition_id}.')
     output(f'Done spawning object {game_object}.')
+
+
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.fade_in_object',
+    'Fade In an object.',
+    command_arguments=(
+        CommonConsoleCommandArgument('game_object', 'Game Object Instance Id', 'The instance id of a game object to fade in.'),
+    ),
+    command_aliases=(
+        's4clib.fadeinobject',
+    )
+)
+def _common_fade_in_object(output: CommonConsoleCommandOutput, game_object: GameObject):
+    if game_object is None:
+        return
+    game_object_str = str(game_object)
+    output(f'Attempting to fade in object \'{game_object_str}\'.')
+
+    if CommonObjectSpawnUtils.fade_in(game_object, immediate=True):
+        output('Successfully faded in object.')
+    else:
+        output('Failed to fade in object.')
+    return True
 
 
 # noinspection SpellCheckingInspection

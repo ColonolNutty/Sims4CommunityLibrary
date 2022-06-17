@@ -653,7 +653,11 @@ class CommonOccultUtils:
         is_werewolf_result = CommonOccultUtils.is_werewolf(sim_info)
         if is_werewolf_result:
             return is_werewolf_result
-        return CommonExecutionResult(False, reason=f'{sim_info} did not become a werewolf because full support has not yet been added to S4CL for werewolves.')
+        # loot_Werewolf_AddOccultTrait
+        add_loot_id = 290058
+        if CommonSimLootActionUtils.apply_loot_actions_by_id_to_sim(add_loot_id, sim_info):
+            return CommonExecutionResult.TRUE
+        return CommonExecutionResult.FALSE
 
     @staticmethod
     def remove_werewolf_occult(sim_info: SimInfo) -> CommonExecutionResult:
@@ -674,13 +678,17 @@ class CommonOccultUtils:
         is_werewolf_result = CommonOccultUtils.is_werewolf(sim_info)
         if not is_werewolf_result:
             return is_werewolf_result.reverse_result()
-        return CommonExecutionResult(True, reason=f'{sim_info} was never a werewolf because full support has not yet been added to S4CL for werewolves.')
+        # loot_WerewolfCreation_WerewolfCure
+        remove_loot_id = 291816
+        if CommonSimLootActionUtils.apply_loot_actions_by_id_to_sim(remove_loot_id, sim_info):
+            return CommonExecutionResult.TRUE
+        return CommonExecutionResult.FALSE
 
     @staticmethod
     def add_all_occults(sim_info: SimInfo) -> CommonExecutionResult:
         """add_all_occults(sim_info)
 
-        Add all Occult Types to a Sim. i.e. Make them a Alien, Vampire, Witch, etc.
+        Add all Occult Types to a Sim. i.e. Make them an Alien, a Vampire, a Witch, etc.
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
@@ -889,7 +897,14 @@ class CommonOccultUtils:
         """
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
-        return CommonTestResult(False, reason=f'{sim_info} is not a werewolf because full support has not yet been added to S4CL for werewolves.')
+        is_werewolf_available_result = CommonOccultUtils.is_werewolf_occult_available()
+        if not is_werewolf_available_result:
+            return is_werewolf_available_result
+        if CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_WEREWOLF):
+            return CommonTestResult(True, reason=f'Sim had the Werewolf occult trait.')
+        if CommonOccultUtils.has_occult_type(sim_info, OccultType.WEREWOLF):
+            return CommonTestResult(True, reason=f'Sim had the Werewolf occult type.')
+        return CommonTestResult(False, reason=f'Sim ')
 
     @staticmethod
     def is_witch(sim_info: SimInfo) -> CommonTestResult:
@@ -1152,7 +1167,7 @@ class CommonOccultUtils:
         """
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
-        return CommonOccultUtils.is_werewolf(sim_info)
+        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_WEREWOLF_WEREFORM)
 
     @staticmethod
     def is_currently_a_witch(sim_info: SimInfo) -> CommonTestResult:
@@ -1368,7 +1383,11 @@ class CommonOccultUtils:
         :return: The result of testing. True, if the Werewolf Occult is available.. False, if not.
         :rtype: CommonTestResult
         """
-        return CommonTestResult(False, reason='Werewolves are not available because full support has not yet been added to S4CL for werewolves.')
+        if not hasattr(OccultType, 'WEREWOLF'):
+            return CommonTestResult(False, reason='Werewolves do not exist. They are a myth! (At least in this persons game, OccultType did not contain WEREWOLF)')
+        if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_WEREWOLF):
+            return CommonTestResult(False, reason='The Werewolf trait is not available.')
+        return CommonTestResult.TRUE
 
     @staticmethod
     def is_ghost_occult_available() -> CommonTestResult:

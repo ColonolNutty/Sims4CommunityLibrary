@@ -58,7 +58,7 @@ class CommonObjectTagUtils:
         return game_object.get_tags()
 
     @staticmethod
-    def add_game_tags(game_object: GameObject, tags: Tuple[int], persist: bool=False) -> bool:
+    def add_game_tags(game_object: GameObject, tags: Tuple[Union[int, CommonGameTag]], persist: bool = False) -> bool:
         """add_game_tags(game_object, tags, persist=False)
 
         Add tags to an Object.
@@ -66,7 +66,7 @@ class CommonObjectTagUtils:
         :param game_object: An instance of an Object.
         :type game_object: GameObject
         :param tags: A collection of Game Tags to add.
-        :type tags: Tuple[int]
+        :type tags: Tuple[Union[int, CommonGameTag]]
         :param persist: If True, the Tags will persist to all instances of the Object. If False, the Tags will persist only to the specified Object. Default is False.
         :type persist: bool, optional
         :return: True, if the Tags were successfully added. False, if not.
@@ -78,10 +78,29 @@ class CommonObjectTagUtils:
         return True
 
     @staticmethod
+    def remove_game_tags(game_object: GameObject, tags: Tuple[Union[int, CommonGameTag]]) -> bool:
+        """remove_game_tags(game_object, tags)
+
+        Remove tags from an Object.
+
+        :param game_object: An instance of an Object.
+        :type game_object: GameObject
+        :param tags: A collection of Game Tags to remove.
+        :type tags: Tuple[Union[int, CommonGameTag]]
+        :return: True, if the Tags were successfully removed. False, if not.
+        :rtype: bool
+        """
+        if game_object is None:
+            return False
+        game_object.remove_dynamic_tags(set(tags))
+        return True
+
+    @staticmethod
     def _print_game_tags(game_object: GameObject) -> None:
         obj_tags_list: List[str] = list()
         for obj_tag in CommonObjectTagUtils.get_game_tags(game_object):
             if not isinstance(obj_tag, CommonGameTag):
+                # noinspection PyTypeChecker
                 obj_tag = CommonResourceUtils.get_enum_by_int_value(obj_tag, CommonGameTag, default_value=obj_tag)
 
             if hasattr(obj_tag, 'name'):

@@ -116,7 +116,7 @@ class CommonAge(CommonInt):
         return age_conversion_mapping.get(value, None)
 
     @staticmethod
-    def convert_from_vanilla(value: Age) -> 'CommonAge':
+    def convert_from_vanilla(value: Union[int, Age]) -> 'CommonAge':
         """convert_from_vanilla(value)
 
         Convert a vanilla Age to a CommonAge.
@@ -145,7 +145,7 @@ class CommonAge(CommonInt):
         return age_conversion_mapping[value]
 
     @staticmethod
-    def convert_to_localized_string_id(value: 'CommonAge') -> Union[int, str]:
+    def convert_to_localized_string_id(value: Union[int, 'CommonAge']) -> Union[int, str]:
         """convert_to_localized_string_id(value)
 
         Convert a CommonAge into a Localized String identifier.
@@ -165,4 +165,6 @@ class CommonAge(CommonInt):
             CommonAge.ADULT: CommonStringId.ADULT,
             CommonAge.ELDER: CommonStringId.ELDER
         }
-        return display_name_mapping.get(value, value.name)
+        if isinstance(value, int) and not isinstance(value, CommonAge):
+            value = CommonAge.convert_from_vanilla(value)
+        return display_name_mapping.get(value, value.name if hasattr(value, 'name') else str(value))
