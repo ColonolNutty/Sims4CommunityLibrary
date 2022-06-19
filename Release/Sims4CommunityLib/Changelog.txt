@@ -1,5 +1,6 @@
 v1.79:
 - Fixed an issue with the order of commands when a command is used with quotations.
+- Fixed an issue when setting certains Object States on objects.
 
 v1.78:
 - Add a command to swap the gender of a Sim. `s4clib.swap_gender`
