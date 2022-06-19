@@ -552,7 +552,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                         continue
                     kwarg_values = ()
                 else:
-                    kwarg_values = unassigned_cleaned_args.pop().split(' ')
+                    kwarg_values = unassigned_cleaned_args.pop(0).split(' ')
             else:
                 kwarg_values = cleaned_kwargs[kwarg_name].split(' ')
 
