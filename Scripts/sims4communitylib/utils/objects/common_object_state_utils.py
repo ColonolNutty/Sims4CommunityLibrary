@@ -430,9 +430,22 @@ class CommonObjectStateUtils(_HasS4CLClassLog):
                 return False
         return True
 
-    @staticmethod
-    def get_object_state_value_guid(object_state_value: ObjectStateValue) -> Union[int, None]:
-        """get_object_state_value_guid(state_value)
+    @classmethod
+    def get_object_state_guid(cls, object_state: ObjectState) -> Union[int, None]:
+        """get_object_state_guid(object_state)
+
+        Retrieve the GUID of an object state. (Not to be confused with the instance id)
+
+        :param object_state: An instance of an object state.
+        :type object_state: ObjectState
+        :return: The GUID of the state or None if no identifier is found.
+        :rtype: Union[int, None]
+        """
+        return cls.get_object_state_value_guid(object_state)
+
+    @classmethod
+    def get_object_state_value_guid(cls, object_state_value: ObjectStateValue) -> Union[int, None]:
+        """get_object_state_value_guid(object_state_value)
 
         Retrieve the GUID of an object state. (Not to be confused with the instance id)
 
@@ -494,21 +507,14 @@ class CommonObjectStateUtils(_HasS4CLClassLog):
         if object_state_identifier is None:
             cls.get_log().format_with_message('Specified object state identifier was None.', game_object=game_object, object_state_identifier=object_state_identifier)
             return False
-        # noinspection PyTypeChecker
-        state_component: StateComponent = CommonObjectStateUtils.get_object_state_component(game_object)
-        if state_component is None:
-            cls.get_log().format_with_message('Object did not have a state component.', game_object=game_object, object_state_identifier=object_state_identifier)
-            return False
+        object_states = cls.get_object_state_items(game_object)
         object_state = cls.load_object_state_by_id(object_state_identifier)
-        if object_state is not None:
-            cls.get_log().format_with_message('Checking if object has state.', target=game_object, state=object_state)
-            return state_component.has_state(object_state)
         object_state_value = cls.load_object_state_value_by_id(object_state_identifier)
-        if object_state_value is None:
-            cls.get_log().format_with_message('Failed to locate object state value.', game_object=game_object, object_state_identifier=object_state_identifier)
-            return False
-        cls.get_log().format_with_message('Checking if object has state value.', target=game_object, state=object_state_value.state, state_value=object_state_value)
-        return state_component.has_state(object_state_value.state)
+        if object_state is None and object_state_value is not None:
+            object_state = object_state_value.state
+        else:
+            object_state = object_state.state
+        return object_state in object_states
 
     @classmethod
     def has_object_state_value(cls, game_object: GameObject, object_state_value_identifier: Union[int, CommonObjectStateValueId, ObjectStateValue]) -> bool:
@@ -550,6 +556,9 @@ class CommonObjectStateUtils(_HasS4CLClassLog):
         :param object_state_value: The state to set.
         :type object_state_value: Union[int, CommonObjectStateValueId, ObjectStateValue]
         """
+        if not cls.has_object_state(game_object, object_state_value):
+            cls.get_log().format_with_message('Object did not have the required state.')
+            return None
         # noinspection PyTypeChecker
         state_component: StateComponent = CommonObjectStateUtils.get_object_state_component(game_object)
         if state_component is None:
