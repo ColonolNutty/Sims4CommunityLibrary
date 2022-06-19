@@ -550,9 +550,6 @@ class CommonObjectStateUtils(_HasS4CLClassLog):
         :param object_state_value: The state to set.
         :type object_state_value: Union[int, CommonObjectStateValueId, ObjectStateValue]
         """
-        if not cls.has_object_state(game_object, object_state_value):
-            cls.get_log().format_with_message('Object did not have the required state.')
-            return None
         # noinspection PyTypeChecker
         state_component: StateComponent = CommonObjectStateUtils.get_object_state_component(game_object)
         if state_component is None:
