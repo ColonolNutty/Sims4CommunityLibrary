@@ -1,3 +1,6 @@
+v1.79:
+- Fixed an issue with the order of commands when a command is used with quotations.
+
 v1.78:
 - Add a command to swap the gender of a Sim. `s4clib.swap_gender`
 - Added a fix for the vanilla `Sim.can_see` function where `los_constraint` property was attempting to be used while it was None. (Thus throwing an error). This fix checks for the property to be None before continuing the rest of said function.
