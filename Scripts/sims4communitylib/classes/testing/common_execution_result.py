@@ -62,6 +62,9 @@ class CommonExecutionResult(TestResult):
         influenced_by_active_mood: bool=False,
         hide_tooltip: bool=False
     ) -> None:
+        self._tooltip_text = None
+        self._tooltip_tokens = None
+        self._hide_tooltip = hide_tooltip
         tooltip = None
         if not hide_tooltip:
             self._tooltip_text = tooltip_text

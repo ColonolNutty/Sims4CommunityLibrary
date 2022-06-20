@@ -7,7 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Any, Callable, Iterator
 
-from event_testing.results import EnqueueResult
+from sims4communitylib.classes.testing.common_enqueue_result import CommonEnqueueResult
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.common_log_registry import CommonLog
 
@@ -29,15 +29,17 @@ class CommonFunctionUtils:
         pass
 
     @staticmethod
-    def noop_enqueue(*_, **__) -> EnqueueResult:
+    def noop_enqueue(*_, **__) -> CommonEnqueueResult:
         """noop_enqueue(*_, **__)
 
-        An empty function that does nothing but return :func:`EnqueueResult.NONE`. Useful when you need something to do nothing.
+        An empty function that does nothing but return :func:`CommonEnqueueResult.NONE`. Useful when you need something to do nothing.
 
         .. note:: Use this when you want something to do nothing.
 
+        :return: CommonEnqueueResult.NONE
+        :rtype: CommonEnqueueResult
         """
-        return EnqueueResult.NONE
+        return CommonEnqueueResult.NONE
 
     @staticmethod
     def print_arguments(log: CommonLog, func_identifier: str='NO_IDENTIFIER_SPECIFIED') -> Callable[..., Any]:

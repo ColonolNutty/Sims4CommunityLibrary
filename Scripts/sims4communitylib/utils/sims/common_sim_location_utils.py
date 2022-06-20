@@ -9,7 +9,6 @@ import os
 
 from typing import Union
 
-from objects.game_object import GameObject
 from objects.script_object import ScriptObject
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_quaternion import CommonQuaternion
@@ -17,6 +16,8 @@ from sims4communitylib.classes.math.common_routing_location import CommonRouting
 from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
 from sims4communitylib.classes.math.common_transform import CommonTransform
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
+from sims4communitylib.classes.testing.common_enqueue_result import CommonEnqueueResult
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
 from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
@@ -30,10 +31,6 @@ ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class AutonomyComponent:
-        pass
-
-    # noinspection PyMissingOrEmptyDocstring
-    class EnqueueResult:
         pass
 
     # noinspection PyMissingOrEmptyDocstring
@@ -66,7 +63,6 @@ if ON_RTD:
 
 if not ON_RTD:
     from autonomy.autonomy_component import AutonomyComponent
-    from event_testing.results import EnqueueResult
     import routing
     from routing import RoutingContext
     import objects.terrain
@@ -481,7 +477,7 @@ class CommonSimLocationUtils:
         return sim.on_home_lot or (CommonLocationUtils.get_current_zone_id() == CommonHouseholdUtils.get_household_zone_id(sim_info) and CommonSimLocationUtils.is_on_current_lot(sim_info))
 
     @staticmethod
-    def send_to_position(sim_info: SimInfo, position: CommonVector3, level: int, go_here_interaction_id: int = None) -> EnqueueResult:
+    def send_to_position(sim_info: SimInfo, position: CommonVector3, level: int, go_here_interaction_id: int = None) -> CommonEnqueueResult:
         """send_to_position(sim_info, position, level, go_here_interaction_id=None)
 
         Send a Sim to the specified position.
@@ -495,14 +491,14 @@ class CommonSimLocationUtils:
         :param go_here_interaction_id: If supplied, this interaction will be used instead of the vanilla Go Here interaction. Default is None.
         :type go_here_interaction_id: int, optional
         :return: The result of sending the Sim to the specified position.
-        :rtype: EnqueueResult
+        :rtype: CommonEnqueueResult
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return EnqueueResult(CommonTestResult(False, reason='No Sim was specified to be sent.'), None)
+            return CommonEnqueueResult(CommonTestResult(False, reason='No Sim was specified to be sent.'), CommonExecutionResult.NONE)
         from server_commands.sim_commands import _build_terrain_interaction_target_and_context, CommandTuning
         if position is None:
-            return EnqueueResult(CommonTestResult(False, reason='No Position specified to send the Sim to!'), None)
+            return CommonEnqueueResult(CommonTestResult(False, reason='No Position specified to send the Sim to!'), CommonExecutionResult.NONE)
         routing_surface = CommonSurfaceIdentifier.empty(secondary_id=level)
         (target, context) = _build_terrain_interaction_target_and_context(sim, position, routing_surface, PickType.PICK_TERRAIN, objects.terrain.TerrainPoint)
         if go_here_interaction_id is not None:
@@ -510,7 +506,7 @@ class CommonSimLocationUtils:
         return sim.push_super_affordance(CommandTuning.TERRAIN_GOHERE_AFFORDANCE, target, context)
 
     @staticmethod
-    def send_near_position(sim_info: SimInfo, position: CommonVector3, level: int, go_here_interaction_id: int = None, position_search_flags: FGLSearchFlag = FGLSearchFlag.STAY_IN_CURRENT_BLOCK) -> EnqueueResult:
+    def send_near_position(sim_info: SimInfo, position: CommonVector3, level: int, go_here_interaction_id: int = None, position_search_flags: FGLSearchFlag = FGLSearchFlag.STAY_IN_CURRENT_BLOCK) -> CommonEnqueueResult:
         """send_near_position(sim_info, position, level, go_here_interaction_id=None, position_search_flags=FGLSearchFlag.STAY_IN_CURRENT_BLOCK)
 
         Send a Sim near the specified position.
@@ -526,17 +522,17 @@ class CommonSimLocationUtils:
         :param position_search_flags: Flags used when locating a nearby position. Default is FGLSearchFlag.STAY_IN_CURRENT_BLOCK, which will limit the search to the current Room.
         :type position_search_flags: FGLSearchFlag, optional
         :return: The result of sending the Sim near the specified position.
-        :rtype: EnqueueResult
+        :rtype: CommonEnqueueResult
         """
         if position is None:
-            return EnqueueResult(CommonTestResult(False, reason='No Position specified to send the Sim to!'), None)
+            return CommonEnqueueResult(CommonTestResult(False, reason='No Position specified to send the Sim to!'), CommonExecutionResult.NONE)
 
         transform = CommonTransform(position, CommonQuaternion.empty())
         location = CommonLocation(transform, CommonSurfaceIdentifier.empty(secondary_id=level))
         return CommonSimLocationUtils.send_near_location(sim_info, location, go_here_interaction_id=go_here_interaction_id, location_search_flags=position_search_flags)
 
     @staticmethod
-    def send_to_location(sim_info: SimInfo, location: CommonLocation, go_here_interaction_id: int = None) -> EnqueueResult:
+    def send_to_location(sim_info: SimInfo, location: CommonLocation, go_here_interaction_id: int = None) -> CommonEnqueueResult:
         """send_to_location(sim_info, location, go_here_interaction_id=None)
 
         Send a Sim to the specified location.
@@ -548,17 +544,17 @@ class CommonSimLocationUtils:
         :param go_here_interaction_id: If supplied, this interaction will be used instead of the vanilla Go Here interaction. Default is None.
         :type go_here_interaction_id: int, optional
         :return: The result of sending the Sim to the specified location.
-        :rtype: EnqueueResult
+        :rtype: CommonEnqueueResult
         """
         if location is None:
-            return EnqueueResult(CommonTestResult(False, reason='No Location specified to send the Sim to!'), None)
+            return CommonEnqueueResult(CommonTestResult(False, reason='No Location specified to send the Sim to!'), CommonExecutionResult.NONE)
 
         position = location.transform.translation
         level = location.routing_surface.secondary_id
         return CommonSimLocationUtils.send_to_position(sim_info, position, level, go_here_interaction_id=go_here_interaction_id)
 
     @staticmethod
-    def send_near_location(sim_info: SimInfo, location: CommonLocation, go_here_interaction_id: int = None, location_search_flags: FGLSearchFlag = FGLSearchFlag.STAY_IN_CURRENT_BLOCK) -> EnqueueResult:
+    def send_near_location(sim_info: SimInfo, location: CommonLocation, go_here_interaction_id: int = None, location_search_flags: FGLSearchFlag = FGLSearchFlag.STAY_IN_CURRENT_BLOCK) -> CommonEnqueueResult:
         """send_near_location(sim_info, location, go_here_interaction_id=None, location_search_flags=FGLSearchFlag.STAY_IN_CURRENT_BLOCK)
 
         Send a Sim near the specified location.
@@ -572,13 +568,13 @@ class CommonSimLocationUtils:
         :param location_search_flags: Flags used when locating a nearby location. Default is FGLSearchFlag.STAY_IN_CURRENT_BLOCK, which will limit the search to the current Room.
         :type location_search_flags: FGLSearchFlag, optional
         :return: The result of sending the Sim near the specified location.
-        :rtype: EnqueueResult
+        :rtype: CommonEnqueueResult
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return EnqueueResult(CommonTestResult(False, reason='No Sim was specified to be sent.'), None)
+            return CommonEnqueueResult(CommonTestResult(False, reason='No Sim was specified to be sent.'), CommonExecutionResult.NONE)
         if location is None:
-            return EnqueueResult(CommonTestResult(False, reason='No Location specified to send the Sim to!'), None)
+            return CommonEnqueueResult(CommonTestResult(False, reason='No Location specified to send the Sim to!'), CommonExecutionResult.NONE)
         from placement import find_good_location, create_starting_location, create_fgl_context_for_sim
         routing_surface = location.routing_surface
         starting_location = create_starting_location(transform=location.transform, routing_surface=routing_surface)
