@@ -11,15 +11,16 @@ from typing import ItemsView, Any, Union, Tuple, Type, ValuesView, Dict, TypeVar
 from sims4.resources import ResourceLoader, Types
 from sims4.tuning.instance_manager import InstanceManager
 from sims4.tuning.merged_tuning_manager import get_manager
+from sims4.tuning.dynamic_enum import DynamicEnumLocked, DynamicEnum
 # noinspection PyUnresolvedReferences
 from sims4.tuning.serialization import ETreeTuningLoader
 from sims4.tuning.tunable_base import LoadingTags
 from sims4communitylib.classes.common_resource_key import CommonResourceKey
-from sims4communitylib.enums.enumtypes.common_int import CommonInt
+from sims4communitylib.enums.enumtypes.common_int import Int, CommonInt
 from sims4communitylib.enums.enumtypes.common_int_flags import CommonIntFlags
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 
-CommonEnumTypeValueType = TypeVar('CommonEnumTypeValueType', CommonInt, CommonIntFlags)
+CommonEnumTypeValueType = TypeVar('CommonEnumTypeValueType', CommonInt, CommonIntFlags, Int, DynamicEnum, DynamicEnumLocked)
 
 
 class CommonResourceUtils:

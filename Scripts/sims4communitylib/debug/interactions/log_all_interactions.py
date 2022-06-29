@@ -97,7 +97,7 @@ class S4CLDebugLogAllInteractionsInteraction(CommonImmediateSuperInteraction):
             object_tuning_name = interaction_target.__name__ if hasattr(interaction_target, '__name__') else interaction_target.__class__.__name__
             rig_hash64 = interaction_target.rig.hash64
             rig_instance = interaction_target.rig.instance
-            self.log.format_with_message('All things on rig', rig64=rig_hash64, rig_instance=rig_instance, target_rig_key=interaction_target.rig_key)
+            self.log.format_with_message('All things on rig', rig64=rig_hash64, rig_instance=rig_instance)
             definition = CommonObjectUtils.get_game_object_definition(interaction_target)
             if definition is not None:
                 definition_id = definition.id

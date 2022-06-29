@@ -8,8 +8,9 @@ Copyright (c) COLONOLNUTTY
 from typing import Dict, Type, Tuple, List, Union
 
 from sims4.resources import Types
-from sims4.tuning.dynamic_enum import DynamicEnumLocked
-from sims4communitylib.enums.enumtypes.common_int import Int
+from sims4.tuning.dynamic_enum import DynamicEnumLocked, DynamicEnum
+from sims4communitylib.enums.enumtypes.common_int import Int, CommonInt
+from sims4communitylib.enums.enumtypes.common_int_flags import CommonIntFlags
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
@@ -33,17 +34,17 @@ class _S4CLEnumValueUpdateUtils(HasLog):
         super().__init__()
         self.log.enable()
 
-    def _read_values_from_enum(self, vanilla_enum_type: Union[Int, DynamicEnumLocked], name_to_cleaned_name_mappings: Dict[str, str], enum_type: Type, skip_not_found: bool=False) -> Tuple[Tuple[str, int]]:
+    def _read_values_from_enum(self, vanilla_enum_type: Type[Union[Int, DynamicEnum, DynamicEnumLocked]], name_to_cleaned_name_mappings: Dict[str, str], enum_type: Type[Union[CommonInt, CommonIntFlags, Int, DynamicEnum, DynamicEnumLocked]], skip_not_found: bool = False) -> Tuple[Tuple[str, int]]:
         """_read_values_from_enum(vanilla_enum_type, name_to_cleaned_name_mappings, enum_type, skip_not_found=False)
 
         Read the values and return the ones not found.
 
         :param vanilla_enum_type: The enum to sift through.
-        :type vanilla_enum_type: Union[Int, DynamicEnumLocked]
+        :type vanilla_enum_type: Union[Int, DynamicEnum, DynamicEnumLocked]
         :param name_to_cleaned_name_mappings: A mapping of names to cleaned names, these cleaned names will be used for the Enum names in the output, instead of the default names.
         :type name_to_cleaned_name_mappings: Dict[str, str]
         :param enum_type: The type of the enum being created. This is used when putting type hints on the output values.
-        :type enum_type: Type
+        :type enum_type: Type[Union[CommonInt, CommonIntFlags, Int, DynamicEnum, DynamicEnumLocked]]
         :param skip_not_found: If True, any values not found in the conversion mapping will not be output. If False, any values not found in the conversion mapping will be output.
         :return: A collection of value names that were not found within the provided value name conversions.
         :rtype: Tuple[str]
@@ -54,6 +55,7 @@ class _S4CLEnumValueUpdateUtils(HasLog):
         conversion_table: Dict[str, str] = dict()
         values: List[Tuple[str, int]] = list()
         not_found_values: List[Tuple[str, int]] = list()
+        # noinspection PyUnresolvedReferences
         for (value_name, value_value) in vanilla_enum_type.name_to_value.items():
             original_name = value_name.strip().upper()
             val_name = original_name
@@ -86,7 +88,7 @@ class _S4CLEnumValueUpdateUtils(HasLog):
         self.log.format_with_message('---------------------------------------------------------------------------------')
         return tuple(not_found_values)
 
-    def _read_values_from_instances(self, instance_type: Types, name_to_cleaned_name_mappings: Dict[str, str], enum_type: Type, skip_not_found: bool=False) -> Tuple[Tuple[str, int]]:
+    def _read_values_from_instances(self, instance_type: Types, name_to_cleaned_name_mappings: Dict[str, str], enum_type: Type[Union[CommonInt, CommonIntFlags, Int, DynamicEnum, DynamicEnumLocked]], skip_not_found: bool = False) -> Tuple[Tuple[str, int]]:
         """_read_values_from_instances(instance_type, name_to_cleaned_name_mappings, enum_type, skip_not_found=False)
 
         Read the values and return the ones not found.
@@ -96,7 +98,7 @@ class _S4CLEnumValueUpdateUtils(HasLog):
         :param name_to_cleaned_name_mappings: A mapping of names to cleaned names, these cleaned names will be used for the Enum names in the output, instead of the default names.
         :type name_to_cleaned_name_mappings: Dict[str, str]
         :param enum_type: The type of the enum being created. This is used when putting type hints on the output values.
-        :type enum_type: Type
+        :type enum_type: Type[Union[CommonInt, CommonIntFlags, Int, DynamicEnum, DynamicEnumLocked]]
         :param skip_not_found: If True, any values not found in the conversion mapping will not be output. If False, any values not found in the conversion mapping will be output. Default is False.
         :type skip_not_found: bool, optional
         :return: A collection of value names that were not found within the provided value name conversions.
