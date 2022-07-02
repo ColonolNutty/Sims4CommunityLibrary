@@ -1,6 +1,9 @@
 v1.79:
 - Fixed an issue with the order of commands when a command is used with quotations.
-- Fixed an issue when setting certains Object States on objects.
+- Fixed an issue when setting certain Object States on objects.
+- Fixed an issue when checking if an object has a state.
+- Added more details when an interaction fails to queue or fails its tests.
+- Added CommonEnqueueResult to be used as a replacement for EnqueueResult (and add more functionality to it too)
 
 v1.78:
 - Add a command to swap the gender of a Sim. `s4clib.swap_gender`
