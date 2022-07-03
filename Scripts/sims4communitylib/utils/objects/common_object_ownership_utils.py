@@ -56,7 +56,7 @@ class CommonObjectOwnershipUtils:
         return game_object.get_household_owner_id()
 
     @staticmethod
-    def set_owning_sim(game_object: GameObject, sim_info: SimInfo, make_sim_sole_owner: bool=True) -> bool:
+    def set_owning_sim(game_object: GameObject, sim_info: SimInfo, make_sim_sole_owner: bool = True) -> bool:
         """set_owning_sim(game_object, sim_info, make_sim_sole_owner=True)
 
         Change the ownership of an Object to become owned by the household of a Sim and optional by the Sim themselves.
@@ -126,7 +126,7 @@ class CommonObjectOwnershipUtils:
         's4clib.changeownership',
     )
 )
-def _common_change_ownership(output: CommonConsoleCommandOutput, game_object: GameObject, sim_info: SimInfo=None):
+def _common_change_ownership(output: CommonConsoleCommandOutput, game_object: GameObject, sim_info: SimInfo = None):
     if sim_info is None:
         output('ERROR: No Sim was specified or the specified Sim was not found!')
         return

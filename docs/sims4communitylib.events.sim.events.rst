@@ -25,6 +25,22 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
+`Game Object Added To Sim Inventory`
+------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.game_object_added_to_sim_inventory.S4CLGameObjectAddedToSimInventoryEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Game Object Pre Removed From Sim Inventory`
+------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.game_object_pre_removed_from_sim_inventory.S4CLGameObjectPreRemovedFromSimInventoryEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Occult Added`
 -------------------------------------------------------------------
 

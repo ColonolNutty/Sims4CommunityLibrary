@@ -9,10 +9,13 @@ from typing import Any, Tuple
 
 from buffs.buff import Buff
 from objects.components.buff_component import BuffComponent
+from objects.game_object import GameObject
+from objects.script_object import ScriptObject
 from sims.aging.aging_mixin import AgingMixin
 from sims.occult.occult_enums import OccultType
 from sims.occult.occult_tracker import OccultTracker
 from sims.outfits.outfit_enums import OutfitCategory
+from sims.sim import Sim
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Age
 from sims.sim_spawner import SimSpawner
@@ -39,6 +42,8 @@ from sims4communitylib.events.sim.events.sim_changed_gender_options_toilet_usage
 from sims4communitylib.events.sim.events.sim_changing_occult_type import S4CLSimChangingOccultTypeEvent
 from sims4communitylib.events.sim.events.sim_initialized import S4CLSimInitializedEvent
 from sims4communitylib.events.sim.events.sim_loaded import S4CLSimLoadedEvent
+from sims4communitylib.events.sim.events.game_object_added_to_sim_inventory import S4CLGameObjectAddedToSimInventoryEvent
+from sims4communitylib.events.sim.events.game_object_pre_removed_from_sim_inventory import S4CLGameObjectPreRemovedFromSimInventoryEvent
 from sims4communitylib.events.sim.events.sim_removed_occult_type import S4CLSimRemovedOccultTypeEvent
 from sims4communitylib.events.sim.events.sim_set_current_outfit import S4CLSimSetCurrentOutfitEvent
 from sims4communitylib.events.sim.events.sim_skill_leveled_up import S4CLSimSkillLeveledUpEvent
@@ -146,6 +151,12 @@ class CommonSimEventDispatcherService(CommonService):
             return
         CommonEventRegistry.get().dispatch(S4CLSimBuffAddedEvent(sim_info, buff))
 
+    def _on_sim_buff_removed(self, buff: Buff, sim_id: int) -> None:
+        sim_info = CommonSimUtils.get_sim_info(sim_id)
+        if sim_info is None:
+            return
+        CommonEventRegistry.get().dispatch(S4CLSimBuffRemovedEvent(sim_info, buff))
+
     def _on_sim_set_current_outfit(self, sim_info: SimInfo, outfit_category_and_index: Tuple[OutfitCategory, int]) -> None:
         from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
         CommonEventRegistry.get().dispatch(S4CLSimSetCurrentOutfitEvent(sim_info, CommonOutfitUtils.get_current_outfit(sim_info), outfit_category_and_index))
@@ -153,17 +164,23 @@ class CommonSimEventDispatcherService(CommonService):
     def _after_sim_set_current_outfit(self, sim_info: SimInfo, previous_outfit_category_and_index: Tuple[OutfitCategory, int], outfit_category_and_index: Tuple[OutfitCategory, int]) -> None:
         CommonEventRegistry.get().dispatch(S4CLSimAfterSetCurrentOutfitEvent(sim_info, previous_outfit_category_and_index, outfit_category_and_index))
 
-    def _on_sim_buff_removed(self, buff: Buff, sim_id: int) -> None:
-        sim_info = CommonSimUtils.get_sim_info(sim_id)
-        if sim_info is None:
-            return
-        CommonEventRegistry.get().dispatch(S4CLSimBuffRemovedEvent(sim_info, buff))
-
     def _on_skill_leveled_up(self, skill: Skill, old_skill_level: int, new_skill_level: int) -> None:
         if skill.tracker is None or skill.tracker._owner is None:
             return
         sim_info = CommonSimUtils.get_sim_info(skill.tracker._owner)
         CommonEventRegistry.get().dispatch(S4CLSimSkillLeveledUpEvent(sim_info, skill, old_skill_level, new_skill_level))
+
+    def _on_object_added_to_sim_inventory(self, sim: Sim, added_game_object: GameObject) -> None:
+        sim_info = CommonSimUtils.get_sim_info(sim)
+        if sim_info is None:
+            return
+        CommonEventRegistry.get().dispatch(S4CLGameObjectAddedToSimInventoryEvent(sim_info, added_game_object))
+
+    def _on_object_removed_from_sim_inventory(self, sim: Sim, removed_game_object: GameObject) -> None:
+        sim_info = CommonSimUtils.get_sim_info(sim)
+        if sim_info is None:
+            return
+        CommonEventRegistry.get().dispatch(S4CLGameObjectPreRemovedFromSimInventoryEvent(sim_info, removed_game_object))
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.__init__.__name__, handle_exceptions=False)
@@ -264,3 +281,19 @@ def _common_register_buff_added_or_removed_on_sim_spawned(event_data: S4CLSimSpa
     if dispatcher_service._on_sim_buff_removed not in buff_component.on_buff_removed:
         buff_component.on_buff_removed.append(dispatcher_service._on_sim_buff_removed)
     return True
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Sim, Sim.on_object_added_to_inventory.__name__, handle_exceptions=False)
+def _common_on_object_added_to_sim_inventory(original, self: Sim, obj: ScriptObject, *args, **kwargs):
+    result = original(self, obj, *args, **kwargs)
+    if isinstance(obj, GameObject):
+        CommonSimEventDispatcherService.get()._on_object_added_to_sim_inventory(self, obj)
+    return result
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Sim, Sim.on_object_removed_from_inventory.__name__, handle_exceptions=False)
+def _common_on_object_removed_from_sim_inventory(original, self: Sim, obj: ScriptObject, *args, **kwargs):
+    if isinstance(obj, GameObject):
+        CommonSimEventDispatcherService.get()._on_object_removed_from_sim_inventory(self, obj)
+    result = original(self, obj, *args, **kwargs)
+    return result

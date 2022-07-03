@@ -308,10 +308,10 @@ class CommonSimInventoryUtils:
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to add the object to.', is_optional=True, default_value='Active Sim'),
     ),
     command_aliases=(
-        's4clib.add_object_to_inventory',
+        's4clib.addtosim',
     )
 )
-def _s4clib_testing_add_object_to_inventory(output: CommonConsoleCommandOutput, object_definition_id: int, count: int=1, sim_info: SimInfo=None):
+def _s4clib_testing_add_object_to_inventory(output: CommonConsoleCommandOutput, object_definition_id: int, count: int = 1, sim_info: SimInfo = None):
     if object_definition_id < 0:
         output('ERROR: Object Definition Id must be a positive number.')
         return
