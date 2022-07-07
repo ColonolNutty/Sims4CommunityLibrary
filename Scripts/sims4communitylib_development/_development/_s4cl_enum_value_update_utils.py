@@ -18,7 +18,7 @@ from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
 
 class _S4CLEnumValueUpdateUtils(HasLog):
-    """Utilities used when I ColonolNutty go to update various different Enums by adding new values to them. This should not be used under normal circumstances when making mods."""
+    """Utilities used to update various different Enums by adding new values to them. This should not be used under normal circumstances when making mods."""
 
     # noinspection PyMissingOrEmptyDocstring
     @property

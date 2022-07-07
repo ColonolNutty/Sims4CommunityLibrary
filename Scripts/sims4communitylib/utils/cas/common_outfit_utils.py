@@ -5,6 +5,8 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import os
+
 from buffs.appearance_modifier.appearance_modifier import AppearanceModifier
 from buffs.appearance_modifier.appearance_modifier_type import AppearanceModifierType
 from buffs.appearance_modifier.appearance_tracker import ModifierInfo
@@ -12,6 +14,7 @@ from cas.cas import OutfitData
 from sims.outfits.outfit_enums import OutfitCategory, BodyType, OutfitFilterFlag, BodyTypeFlag
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
+from sims4.utils import classproperty
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.tags_enum import CommonGameTag
@@ -26,6 +29,40 @@ from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 from singletons import DEFAULT
 from typing import Tuple, Union, Dict, Callable, Iterator, Set
+
+ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+if ON_RTD:
+    # noinspection PyMissingOrEmptyDocstring
+    class OutfitCategory:
+
+        @classproperty
+        def value_to_name(self) -> Dict['OutfitCategory', str]:
+            pass
+
+        @classproperty
+        def name_to_value(self) -> Dict[str, 'OutfitCategory']:
+            pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    class BodyType:
+        NONE = 0
+
+        @classproperty
+        def value_to_name(self) -> Dict['BodyType', str]:
+            pass
+
+        @classproperty
+        def name_to_value(self) -> Dict[str, 'BodyType']:
+            pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    class SimInfo:
+        pass
+
+if not ON_RTD:
+    from sims.outfits.outfit_enums import OutfitCategory, BodyType
+    from sims.sim_info import SimInfo
 
 
 class CommonOutfitUtils(HasClassLog):
@@ -418,7 +455,7 @@ class CommonOutfitUtils(HasClassLog):
         return CommonBuffUtils.has_buff(sim_info, CommonBuffId.IS_WEARING_TOWEL)
 
     @classmethod
-    def get_outfit_category_by_name(cls, name: str, default_category: Union[OutfitCategory, None]=OutfitCategory.CURRENT_OUTFIT) -> OutfitCategory:
+    def get_outfit_category_by_name(cls, name: str, default_category: Union[OutfitCategory, None] = OutfitCategory.CURRENT_OUTFIT) -> OutfitCategory:
         """get_outfit_category_by_name(name, default_value=OutfitCategory.CURRENT_OUTFIT)
 
         Retrieve an OutfitCategory by name.
@@ -504,7 +541,7 @@ class CommonOutfitUtils(HasClassLog):
         return current_outfit_category, current_outfit[1]
 
     @classmethod
-    def get_appearance_modifiers_gen(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], appearance_modifier_type: AppearanceModifierType, include_appearance_modifier_callback: Callable[[ModifierInfo], bool]=None) -> Iterator[AppearanceModifier]:
+    def get_appearance_modifiers_gen(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], appearance_modifier_type: AppearanceModifierType, include_appearance_modifier_callback: Callable[[ModifierInfo], bool] = None) -> Iterator[AppearanceModifier]:
         """get_appearance_modifiers_gen(sim_info, appearance_modifier_type, include_appearance_modifier_callback=None)
 
         Retrieve the appearance modifiers of a Sim.
@@ -540,7 +577,7 @@ class CommonOutfitUtils(HasClassLog):
             yield modifier_info.modifier
 
     @classmethod
-    def get_outfit_data(cls, sim_info: Union[Union[SimInfo, SimInfoBaseWrapper], SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> OutfitData:
+    def get_outfit_data(cls, sim_info: Union[Union[SimInfo, SimInfoBaseWrapper], SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None) -> OutfitData:
         """get_outfit_data(sim_info, outfit_category_and_index=None)
 
         Retrieve OutfitData for the specified OutfitCategory and Index of a Sim.
@@ -557,7 +594,7 @@ class CommonOutfitUtils(HasClassLog):
         return sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
 
     @classmethod
-    def has_cas_part_attached(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], cas_part_id: int, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    def has_cas_part_attached(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], cas_part_id: int, outfit_category_and_index: Tuple[OutfitCategory, int] = None) -> bool:
         """has_any_cas_parts_attached(sim_info, cas_part_id, outfit_category_and_index=None)
 
         Determine if any of the specified CAS Parts are attached to the Sim.
@@ -574,7 +611,7 @@ class CommonOutfitUtils(HasClassLog):
         return CommonOutfitUtils.has_any_cas_parts_attached(sim_info, (cas_part_id, ), outfit_category_and_index=outfit_category_and_index)
 
     @classmethod
-    def has_any_cas_parts_attached(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], cas_part_ids: Tuple[int], outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    def has_any_cas_parts_attached(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], cas_part_ids: Tuple[int], outfit_category_and_index: Tuple[OutfitCategory, int] = None) -> bool:
         """has_any_cas_parts_attached(sim_info, cas_part_ids, outfit_category_and_index=None)
 
         Determine if any of the specified CAS Parts are attached to the Sim.
@@ -598,7 +635,7 @@ class CommonOutfitUtils(HasClassLog):
         return False
 
     @classmethod
-    def get_outfit_parts(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[Union[BodyType, int], int]:
+    def get_outfit_parts(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None) -> Dict[Union[BodyType, int], int]:
         """get_outfit_parts(sim_info, outfit_category_and_index=None)
 
         Retrieve Outfit Parts for the specified OutfitCategory and Index of a Sim.
@@ -662,10 +699,10 @@ class CommonOutfitUtils(HasClassLog):
         cls,
         sim_info: Union[SimInfo, SimInfoBaseWrapper],
         outfit_category_and_index: Tuple[OutfitCategory, int],
-        tag_list: Tuple[CommonGameTag]=(),
-        outfit_filter_flag: OutfitFilterFlag=DEFAULT,
-        body_type_flags: BodyTypeFlag=DEFAULT,
-        ignore_if_exists: bool=False,
+        tag_list: Tuple[CommonGameTag] = (),
+        outfit_filter_flag: OutfitFilterFlag = DEFAULT,
+        body_type_flags: BodyTypeFlag = DEFAULT,
+        ignore_if_exists: bool = False,
         **kwargs
     ) -> bool:
         """generate_outfit(\
@@ -706,7 +743,7 @@ class CommonOutfitUtils(HasClassLog):
         return sim_info.generate_outfit(outfit_category, outfit_index=outfit_index, tag_list=tag_list, filter_flag=outfit_filter_flag, body_type_flags=body_type_flags, **kwargs)
 
     @classmethod
-    def copy_outfit(cls, mod_identity: CommonModIdentity, sim_info: SimInfo, from_outfit_category_and_index: Tuple[OutfitCategory, int], to_outfit_category_and_index: Tuple[OutfitCategory, int], change_sim_to_outfit_after_apply: bool=False) -> bool:
+    def copy_outfit(cls, mod_identity: CommonModIdentity, sim_info: SimInfo, from_outfit_category_and_index: Tuple[OutfitCategory, int], to_outfit_category_and_index: Tuple[OutfitCategory, int], change_sim_to_outfit_after_apply: bool = False) -> bool:
         """copy_outfit(mod_identity, sim_info, from_outfit_category_and_index, to_outfit_category_and_index, change_sim_to_outfit_after_apply=False)
 
         Copy one Outfit of a Sim to another Outfit of the same Sim.
@@ -818,7 +855,7 @@ class CommonOutfitUtils(HasClassLog):
         return get_maximum_outfits_for_category(outfit_category)
 
     @classmethod
-    def get_previous_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], default_outfit_category_and_index: Tuple[OutfitCategory, int]=(OutfitCategory.EVERYDAY, 0)) -> Tuple[OutfitCategory, int]:
+    def get_previous_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], default_outfit_category_and_index: Tuple[OutfitCategory, int] = (OutfitCategory.EVERYDAY, 0)) -> Tuple[OutfitCategory, int]:
         """get_previous_outfit(sim_info, default_outfit_category_and_index=(OutfitCategory.EVERYDAY, 0))
 
         Retrieve the previous outfit a Sim was wearing before their current outfit.
@@ -844,7 +881,7 @@ class CommonOutfitUtils(HasClassLog):
         sim_info.set_previous_outfit(None, force=True)
 
     @classmethod
-    def get_all_outfit_category_and_indexes(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], include_outfit_categories: Tuple[OutfitCategory]=()) -> Tuple[Tuple[OutfitCategory, int]]:
+    def get_all_outfit_category_and_indexes(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], include_outfit_categories: Tuple[OutfitCategory] = ()) -> Tuple[Tuple[OutfitCategory, int]]:
         """get_all_outfit_category_and_indexes(sim_info, include_outfit_categories=())
 
         Retrieve a collection of outfit category and index for each outfit available to a Sim.
@@ -899,7 +936,7 @@ class CommonOutfitUtils(HasClassLog):
         return True
 
     @classmethod
-    def has_tag_on_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], tag: Union[int, CommonGameTag], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+    def has_tag_on_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], tag: Union[int, CommonGameTag], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None) -> bool:
         """has_tag_on_outfit(sim_info, tag, outfit_category_and_index=None)
 
         Determine if the Outfit of a Sim has the specified tag.
@@ -916,7 +953,7 @@ class CommonOutfitUtils(HasClassLog):
         return CommonOutfitUtils.has_any_tags_on_outfit(sim_info, (tag, ), outfit_category_and_index=outfit_category_and_index)
 
     @classmethod
-    def has_any_tags_on_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+    def has_any_tags_on_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None) -> bool:
         """has_any_tags_on_outfit(sim_info, tags, outfit_category_and_index=None)
 
         Determine if the Outfit of a Sim has any of the specified tags.
@@ -941,7 +978,7 @@ class CommonOutfitUtils(HasClassLog):
         return False
 
     @classmethod
-    def has_all_tags_on_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> bool:
+    def has_all_tags_on_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], tags: Iterator[Union[int, CommonGameTag]], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None) -> bool:
         """has_all_tags_on_outfit(sim_info, tags, outfit_category_and_index=None)
 
         Determine if the Outfit of a Sim has all of the specified tags.
@@ -966,7 +1003,7 @@ class CommonOutfitUtils(HasClassLog):
         return True
 
     @classmethod
-    def get_all_outfit_tags(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Tuple[CommonGameTag]:
+    def get_all_outfit_tags(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None) -> Tuple[CommonGameTag]:
         """get_all_outfit_tags(sim_info, outfit_category_and_index=None)
 
         Retrieve a collection of game tags that apply to the outfit of a Sim.
@@ -988,7 +1025,7 @@ class CommonOutfitUtils(HasClassLog):
         return tuple(combined_game_tags)
 
     @classmethod
-    def get_outfit_tags_by_cas_part_id(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None) -> Dict[int, Set[CommonGameTag]]:
+    def get_outfit_tags_by_cas_part_id(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None) -> Dict[int, Set[CommonGameTag]]:
         """get_outfit_tags_by_cas_part_id(sim_info, outfit_category_and_index=None)
 
         Retrieve the game tags of the outfit of a Sim grouped by CAS Part Id.
@@ -1120,7 +1157,7 @@ def _s4clib_testing_print_all_outfit_categories(output: CommonConsoleCommandOutp
         's4clib_testing.printoutfittags',
     )
 )
-def _s4clib_testing_print_outfit_tags(output: CommonConsoleCommandOutput, outfit_category: str=None, outfit_index: int=1, sim_info: SimInfo=None):
+def _s4clib_testing_print_outfit_tags(output: CommonConsoleCommandOutput, outfit_category: str = None, outfit_index: int = 1, sim_info: SimInfo = None):
     if sim_info is None:
         return
     outfit_category_and_index = CommonOutfitUtils._parse_outfit_category_and_index_from_str(output, outfit_category=outfit_category, outfit_index=outfit_index, sim_info=sim_info)
@@ -1135,7 +1172,7 @@ def _s4clib_testing_print_outfit_tags(output: CommonConsoleCommandOutput, outfit
         if isinstance(tag_value, CommonGameTag):
             tag = tag_value
         else:
-            tag = CommonResourceUtils.get_enum_by_int_value(int(tag_value), CommonGameTag, default_value=str(tag_value))
+            tag = CommonResourceUtils.get_enum_by_int_value(int(tag_value), CommonGameTag, default_value=tag_value)
         cleaned_tag_names.append(tag.name if hasattr(tag, 'name') else str(tag))
 
     sorted_tag_names = sorted(cleaned_tag_names)
@@ -1209,7 +1246,7 @@ def _s4clib_testing_print_outfit_tags_by_cas_part(output: CommonConsoleCommandOu
         's4clib.printpreviousoutfit',
     )
 )
-def _s4clib_print_previous_outfit(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _s4clib_print_previous_outfit(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         output('ERROR: Failed, no Sim was specified or the specified Sim was not found!')
         return
@@ -1236,7 +1273,7 @@ def _s4clib_print_previous_outfit(output: CommonConsoleCommandOutput, sim_info: 
         's4clib.printoutfit',
     )
 )
-def _s4clib_print_outfit(output: CommonConsoleCommandOutput, outfit_category: str=None, outfit_index: int=1, sim_info: SimInfo=None):
+def _s4clib_print_outfit(output: CommonConsoleCommandOutput, outfit_category: str = None, outfit_index: int = 1, sim_info: SimInfo = None):
     if sim_info is None:
         output('Failed, no Sim was specified or the specified Sim was not found!')
         return
@@ -1258,7 +1295,7 @@ def _s4clib_print_outfit(output: CommonConsoleCommandOutput, outfit_category: st
         's4clib.printoutfits',
     )
 )
-def _s4clib_print_outfits(output: CommonConsoleCommandOutput, show_missing_outfit_info: bool=False, sim_info: SimInfo=None):
+def _s4clib_print_outfits(output: CommonConsoleCommandOutput, show_missing_outfit_info: bool = False, sim_info: SimInfo = None):
     if sim_info is None:
         output('ERROR: no Sim was specified or the specified Sim was not found!')
         return

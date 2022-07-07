@@ -4306,7 +4306,7 @@ class _S4CLReaderForUpdate:
 def _common_log_game_tags_ready_for_update(output: CommonConsoleCommandOutput) -> None:
     output('Logging Game Tags to Messages.txt')
     from sims4communitylib.enums.tags_enum import CommonGameTag
-    from sims4communitylib.utils.misc._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
+    from sims4communitylib_development._development._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
     # noinspection PyTypeChecker
     not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_enum(Tag, _S4CLReaderForUpdate.CONVERSIONS, CommonGameTag)
     output(f'Finished logging Game Tags. {len(not_found_values)} values were not found.')

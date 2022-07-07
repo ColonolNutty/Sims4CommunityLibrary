@@ -95,6 +95,14 @@ except:
 class CommonQuaternion:
     """ A class that contains orientation data. """
     def __init__(self, x: float, y: float, z: float, w: Any) -> None:
+        if x is None:
+            x = 0.0
+        if y is None:
+            y = 0.0
+        if z is None:
+            z = 0.0
+        if w is None:
+            w = 0.0
         self._x = x
         self._y = y
         self._z = z
@@ -149,6 +157,14 @@ class CommonQuaternion:
         self._w = value
 
     def __new__(cls, x: float, y: float, z: float, w: Any) -> 'CommonQuaternion':
+        if x is None:
+            x = 0.0
+        if y is None:
+            y = 0.0
+        if z is None:
+            z = 0.0
+        if w is None:
+            w = 0.0
         # noinspection PyTypeChecker
         return Quaternion(x, y, z, w)
 

@@ -5,11 +5,13 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, Tuple, Iterator
+from typing import Union, Tuple, Iterator, Dict
 
+from protocolbuffers.Localization_pb2 import LocalizedString
 from sims.occult.occult_enums import OccultType
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
+from sims4communitylib.enums.strings_enum import CommonStringId
 
 
 class CommonOccultType(CommonInt):
@@ -29,42 +31,45 @@ class CommonOccultType(CommonInt):
     WITCH: 'CommonOccultType' = ...
 
     @classmethod
-    def get_all(cls, exclude_occult_types: Iterator['CommonOccultType'] = ()) -> Tuple['CommonOccultType']:
-        """get_all(exclude_occult_types=())
+    def get_all(cls, exclude_occult_types: Iterator['CommonOccultType'] = None) -> Tuple['CommonOccultType']:
+        """get_all(exclude_occult_types=None)
 
-        Retrieve a collection of all CommonOccultType, excluding CommonOccultType.NONE.
+        Get a collection of all values.
 
-        :param exclude_occult_types: An iterable of occult types to exclude from the result. Default is to exclude none of them.
+        :param exclude_occult_types: These values will be excluded. If set to None, NONE will be excluded automatically. Default is None.
         :type exclude_occult_types: Iterator[CommonOccultType], optional
         :return: A collection of all CommonOccultType, without CommonOccultType.NONE.
         :rtype: Tuple[CommonOccultType]
         """
-        value_list: Tuple[CommonOccultType] = tuple([value for value in cls.values if value != cls.NONE and (not exclude_occult_types or value not in exclude_occult_types)])
+        if exclude_occult_types is None:
+            exclude_occult_types = (cls.NONE,)
+        # noinspection PyTypeChecker
+        value_list: Tuple[CommonOccultType] = tuple([value for value in cls.values if value not in exclude_occult_types])
         return value_list
 
     @classmethod
-    def get_all_names(cls, exclude_occult_types: Iterator['CommonOccultType']=()) -> Tuple[str]:
-        """get_all_names(exclude_occult_types=())
+    def get_all_names(cls, exclude_occult_types: Iterator['CommonOccultType'] = None) -> Tuple[str]:
+        """get_all_names(exclude_occult_types=None)
 
-        Retrieve a collection of the names of all CommonOccultType, excluding CommonOccultType.NONE.
+        Retrieve a collection of the names of all values.
 
-        :param exclude_occult_types: An iterable of occult types to exclude from the result.
-        :type exclude_occult_types: CommonOccultType
-        :return: A collection of the names of all CommonOccultType, without CommonOccultType.NONE.
+        :param exclude_occult_types: These values will be excluded. If set to None, NONE will be excluded automatically. Default is None.
+        :type exclude_occult_types: Iterator[CommonOccultType], optional
+        :return: A collection of the names of all values.
         :rtype: Tuple[str]
         """
         name_list: Tuple[str] = tuple([value.name for value in cls.get_all(exclude_occult_types=exclude_occult_types)])
         return name_list
 
     @classmethod
-    def get_comma_separated_names_string(cls, exclude_occult_types: Iterator['CommonOccultType']=()) -> str:
-        """get_comma_separated_names_string(exclude_occult_types=())
+    def get_comma_separated_names_string(cls, exclude_occult_types: Iterator['CommonOccultType'] = None) -> str:
+        """get_comma_separated_names_string(exclude_occult_types=None)
 
-        Create a string containing all names of all CommonOccultType values (excluding CommonOccultType.NONE), separated by a comma.
+        Create a string containing all names of all values, separated by a comma.
 
-        :param exclude_occult_types: An iterable of occult types to exclude from the result.
-        :type exclude_occult_types: CommonOccultType
-        :return: A string containing all names of all CommonOccultType values (excluding CommonOccultType.NONE), separated by a comma.
+        :param exclude_occult_types: These values will be excluded. If set to None, NONE will be excluded automatically. Default is None.
+        :type exclude_occult_types: Iterator[CommonOccultType], optional
+        :return: A string containing all names of all values, separated by a comma.
         :rtype: str
         """
         return ', '.join(cls.get_all_names(exclude_occult_types=exclude_occult_types))
@@ -113,3 +118,30 @@ class CommonOccultType(CommonInt):
         """
         from sims4communitylib.utils.sims.common_sim_occult_type_utils import CommonSimOccultTypeUtils
         return CommonSimOccultTypeUtils.convert_custom_type_to_vanilla(occult_type)
+
+    @staticmethod
+    def convert_to_localized_string_id(value: 'CommonOccultType') -> Union[int, str, CommonStringId, LocalizedString]:
+        """convert_to_localized_string_id(value)
+
+        Convert a CommonOccultType into a Localized String identifier.
+
+        :param value: An instance of a CommonOccultType
+        :type value: CommonOccultType
+        :return: The specified CommonOccultType translated to a localized string identifier. If no localized string id is found, the name property of the value will be used instead.
+        :rtype: Union[int, str, CommonStringId, LocalizedString]
+        """
+        mapping: Dict[CommonOccultType, CommonStringId] = {
+            CommonOccultType.NONE: CommonStringId.S4CL_NONE,
+            CommonOccultType.ALIEN: CommonStringId.S4CL_ALIEN,
+            CommonOccultType.MERMAID: CommonStringId.S4CL_MERMAID,
+            CommonOccultType.ROBOT: CommonStringId.S4CL_ROBOT,
+            CommonOccultType.SKELETON: CommonStringId.S4CL_SKELETON,
+            CommonOccultType.VAMPIRE: CommonStringId.S4CL_VAMPIRE,
+            CommonOccultType.WITCH: CommonStringId.S4CL_WITCH,
+            CommonOccultType.PLANT_SIM: CommonStringId.S4CL_PLANT_SIM,
+            CommonOccultType.GHOST: CommonStringId.S4CL_GHOST,
+            CommonOccultType.WEREWOLF: CommonStringId.S4CL_WEREWOLF,
+            CommonOccultType.NON_OCCULT: CommonStringId.S4CL_NON_OCCULT,
+        }
+
+        return mapping.get(value, value.name if hasattr(value, 'name') else str(value))

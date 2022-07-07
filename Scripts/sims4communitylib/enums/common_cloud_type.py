@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Tuple, Union
+from typing import Tuple, Union, Iterator
 
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
@@ -33,16 +33,18 @@ class CommonCloudType(CommonInt):
     SKY_BOX_INDUSTRIAL: 'CommonCloudType' = 2010
 
     @classmethod
-    def get_all(cls) -> Tuple['CommonCloudType']:
-        """get_all()
+    def get_all(cls, exclude_values: Iterator['CommonCloudType'] = ()) -> Tuple['CommonCloudType']:
+        """get_all(exclude_values=())
 
-        Retrieve a collection of all CommonCloudType
+        Get a collection of all values.
 
-        :return: A collection of all CommonCloudType
+        :param exclude_values: These values will be excluded. Default is an empty collection.
+        :type exclude_values: Iterator[CommonCloudType], optional
+        :return: A collection of all values.
         :rtype: Tuple[CommonCloudType]
         """
         # noinspection PyTypeChecker
-        value_list: Tuple[CommonCloudType, ...] = tuple([value for value in cls.values])
+        value_list: Tuple[CommonCloudType, ...] = tuple([value for value in cls.values if value not in exclude_values])
         return value_list
 
     @staticmethod

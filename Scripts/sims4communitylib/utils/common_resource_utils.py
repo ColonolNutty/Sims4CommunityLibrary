@@ -20,7 +20,7 @@ from sims4communitylib.enums.enumtypes.common_int import Int, CommonInt
 from sims4communitylib.enums.enumtypes.common_int_flags import CommonIntFlags
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 
-CommonEnumTypeValueType = TypeVar('CommonEnumTypeValueType', CommonInt, CommonIntFlags, Int, DynamicEnum, DynamicEnumLocked)
+CommonEnumTypeValueType = TypeVar('CommonEnumTypeValueType', int, CommonInt, CommonIntFlags, Int, DynamicEnum, DynamicEnumLocked)
 
 
 class CommonResourceUtils:

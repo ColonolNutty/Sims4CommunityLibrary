@@ -599,10 +599,16 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
                         result = CommonResourceUtils.get_enum_by_name(arg_value.upper(), arg_type, default_value=default_value)
                         if result is None:
-                            # noinspection PyUnresolvedReferences
+                            # noinspection PyUnresolvedReferences,PyTypeChecker
                             valid_values = ', '.join([val.name for val in arg_type.values])
                             output(f'ERROR: {arg_value} is not a valid {arg_type_name}. Valid {arg_type_name}: {valid_values}')
                         return result
+                elif arg_type is float:
+                    # noinspection PyBroadException
+                    try:
+                        return float(arg_value)
+                    except:
+                        return default_value
                 elif arg_type is int or arg_value.isnumeric():
                     # noinspection PyBroadException
                     try:

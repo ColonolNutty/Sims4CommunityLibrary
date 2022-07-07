@@ -108,7 +108,7 @@ class CommonObjectInventoryUtils:
         return success
 
     @staticmethod
-    def remove_from_inventory_by_id(game_object: GameObject, object_id: int, count: int=1) -> bool:
+    def remove_from_inventory_by_id(game_object: GameObject, object_id: int, count: int = 1) -> bool:
         """remove_from_inventory_by_id(game_object, object_id, count=1)
 
         Remove a number of Objects by their Id from the inventory of an Object.
@@ -127,7 +127,7 @@ class CommonObjectInventoryUtils:
         return inventory_component.try_remove_object_by_id(object_id, count=count)
 
     @staticmethod
-    def remove_from_inventory_by_definition(game_object: GameObject, object_definition: ObjectDefinition, count: int=1) -> bool:
+    def remove_from_inventory_by_definition(game_object: GameObject, object_definition: ObjectDefinition, count: int = 1) -> bool:
         """remove_from_inventory(game_object, object_id, count=1)
 
         Remove a number of Objects from the inventory of an Object.

@@ -12,6 +12,7 @@ from postures.posture_state import PostureState
 from sims.sim_info import SimInfo
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.common_posture_id import CommonPostureId
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
@@ -25,7 +26,7 @@ class CommonSimPostureUtils(_HasS4CLClassLog):
         return 'common_sim_posture_utils'
 
     @classmethod
-    def has_posture(cls, sim_info: SimInfo, posture: Union[int, CommonPostureId, Posture]) -> CommonTestResult:
+    def has_posture(cls, sim_info: SimInfo, posture: Union[int, CommonPostureId, Posture, CommonInt]) -> CommonTestResult:
         """has_posture(sim_info, posture)
 
         Determine if a Sim has a posture.
@@ -33,7 +34,7 @@ class CommonSimPostureUtils(_HasS4CLClassLog):
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param posture: The identifier of the posture to check.
-        :type posture: Union[int, CommonPostureId, Posture]
+        :type posture: Union[int, CommonPostureId, Posture, CommonInt]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
@@ -47,7 +48,7 @@ class CommonSimPostureUtils(_HasS4CLClassLog):
         return CommonTestResult(False, reason=f'{sim_info} does not have posture {posture_instance}.')
 
     @classmethod
-    def has_posture_with_sim(cls, sim_info: SimInfo, target_sim_info: SimInfo, posture: Union[int, CommonPostureId, Posture]) -> CommonTestResult:
+    def has_posture_with_sim(cls, sim_info: SimInfo, target_sim_info: SimInfo, posture: Union[int, CommonPostureId, Posture, CommonInt]) -> CommonTestResult:
         """has_posture_with_sim(sim_info, target_sim_info, posture)
 
         Determine if a Sim has a posture with another Sim.
@@ -57,7 +58,7 @@ class CommonSimPostureUtils(_HasS4CLClassLog):
         :param target_sim_info: An instance of another Sim.
         :type target_sim_info: SimInfo
         :param posture: The identifier of the posture to check.
-        :type posture: Union[int, CommonPostureId, Posture]
+        :type posture: Union[int, CommonPostureId, Posture, CommonInt]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
@@ -99,7 +100,7 @@ class CommonSimPostureUtils(_HasS4CLClassLog):
         return CommonTestResult(False, reason=f'{sim_info} cannot be picked up.', tooltip_text=CommonStringId.S4CL_SIM_CANNOT_BE_PICKED_UP, tooltip_tokens=(sim_info,))
 
     @classmethod
-    def is_on_container_supporting_posture(cls, sim_info: SimInfo, posture: Union[int, CommonPostureId, Posture]) -> CommonTestResult:
+    def is_on_container_supporting_posture(cls, sim_info: SimInfo, posture: Union[int, CommonPostureId, Posture, CommonInt]) -> CommonTestResult:
         """is_on_container_supporting_posture(sim_info, posture)
 
         Determine if the container a Sim is interacting with has a posture.
@@ -107,7 +108,7 @@ class CommonSimPostureUtils(_HasS4CLClassLog):
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param posture: The identifier of the posture to check.
-        :type posture: Union[int, CommonPostureId, Posture]
+        :type posture: Union[int, CommonPostureId, Posture, CommonInt]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
@@ -127,7 +128,7 @@ class CommonSimPostureUtils(_HasS4CLClassLog):
         return CommonTestResult(False, reason=f'Posture container {container} does not support {posture_instance}')
 
     @classmethod
-    def is_on_container_supporting_posture_with_sim(cls, sim_info: SimInfo, target_sim_info: SimInfo, posture: Union[int, CommonPostureId, Posture]) -> CommonTestResult:
+    def is_on_container_supporting_posture_with_sim(cls, sim_info: SimInfo, target_sim_info: SimInfo, posture: Union[int, CommonPostureId, Posture, CommonInt]) -> CommonTestResult:
         """is_on_container_supporting_posture(sim_info, target_sim_info, posture)
 
         Determine if the container a Sim is interacting with has a posture that supports another Sim.
@@ -137,7 +138,7 @@ class CommonSimPostureUtils(_HasS4CLClassLog):
         :param target_sim_info: An instance of another Sim.
         :type target_sim_info: SimInfo
         :param posture: The identifier of the posture to check.
-        :type posture: Union[int, CommonPostureId, Posture]
+        :type posture: Union[int, CommonPostureId, Posture, CommonInt]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
@@ -231,13 +232,13 @@ class CommonSimPostureUtils(_HasS4CLClassLog):
         return sim.posture_state
 
     @classmethod
-    def load_posture_by_id(cls, posture: Union[int, CommonPostureId, Posture]) -> Union[Posture, None]:
+    def load_posture_by_id(cls, posture: Union[int, CommonPostureId, Posture, CommonInt]) -> Union[Posture, None]:
         """load_posture_by_id(posture)
 
         Load an instance of a Posture by its identifier.
 
         :param posture: The identifier of a Posture.
-        :type posture: Union[int, CommonPostureId, Posture]
+        :type posture: Union[int, CommonPostureId, Posture, CommonInt]
         :return: An instance of a Posture matching the decimal identifier or None if not found.
         :rtype: Union[Posture, None]
         """

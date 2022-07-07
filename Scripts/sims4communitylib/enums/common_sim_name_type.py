@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Tuple
+from typing import Tuple, Iterator
 
 from sims.sim_spawner_enums import SimNameType
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
@@ -14,69 +14,78 @@ from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
 class CommonSimNameType(CommonInt):
     """Types of names."""
-    DEFAULT = 0
-    JAPANESE = 1
-    MOROCCAN = 2
-    INDIAN = 3
-    CAT = 4
-    DOG = 5
-    SKELETON = 6
-    LATIN = 7
-    ISLANDER = 8
-    CHINESE = 9
-    FAMILIAR_DRAGON = 10
-    FAMILIAR_BUNNERFLY = 11
-    FAMILIAR_FAIRY = 12
-    FAMILIAR_FROG = 13
-    FAMILIAR_OWL = 14
-    FAMILIAR_PHOENIX = 15
-    FAMILIAR_RAVEN = 16
-    FAMILIAR_SKULL = 17
-    FAMILIAR_VOID_CRITTER = 18
-    FAMILIAR_VOODOO_DOLL = 19
-    FAMILIAR_BAT = 20
-    HUMANOID_ROBOT = 21
-    HUMANOID_ROBOT_GENERIC = 22
-    MARKETPLACE_NAME = 23
-    STAR_WARS_GENERAL = 24
-    STAR_WARS_FIRST_ORDER = 25
-    STAR_WARS_STORM_TROOPER = 26
-    FOX = 27
+    DEFAULT: 'CommonSimNameType' = 0
+    JAPANESE: 'CommonSimNameType' = 1
+    MOROCCAN: 'CommonSimNameType' = 2
+    INDIAN: 'CommonSimNameType' = 3
+    CAT: 'CommonSimNameType' = 4
+    DOG: 'CommonSimNameType' = 5
+    SKELETON: 'CommonSimNameType' = 6
+    LATIN: 'CommonSimNameType' = 7
+    ISLANDER: 'CommonSimNameType' = 8
+    CHINESE: 'CommonSimNameType' = 9
+    FAMILIAR_DRAGON: 'CommonSimNameType' = 10
+    FAMILIAR_BUNNERFLY: 'CommonSimNameType' = 11
+    FAMILIAR_FAIRY: 'CommonSimNameType' = 12
+    FAMILIAR_FROG: 'CommonSimNameType' = 13
+    FAMILIAR_OWL: 'CommonSimNameType' = 14
+    FAMILIAR_PHOENIX: 'CommonSimNameType' = 15
+    FAMILIAR_RAVEN: 'CommonSimNameType' = 16
+    FAMILIAR_SKULL: 'CommonSimNameType' = 17
+    FAMILIAR_VOID_CRITTER: 'CommonSimNameType' = 18
+    FAMILIAR_VOODOO_DOLL: 'CommonSimNameType' = 19
+    FAMILIAR_BAT: 'CommonSimNameType' = 20
+    HUMANOID_ROBOT: 'CommonSimNameType' = 21
+    HUMANOID_ROBOT_GENERIC: 'CommonSimNameType' = 22
+    MARKETPLACE_NAME: 'CommonSimNameType' = 23
+    STAR_WARS_GENERAL: 'CommonSimNameType' = 24
+    STAR_WARS_FIRST_ORDER: 'CommonSimNameType' = 25
+    STAR_WARS_STORM_TROOPER: 'CommonSimNameType' = 26
+    FOX: 'CommonSimNameType' = 27
 
     @classmethod
-    def get_all(cls) -> Tuple['CommonSimNameType']:
-        """get_all()
+    def get_all(cls, exclude_values: Iterator['CommonSimNameType'] = None) -> Tuple['CommonSimNameType']:
+        """get_all(exclude_values=None)
 
-        Retrieve a collection of all CommonSimNameType, excluding CommonSimNameType.DEFAULT.
+        Get a collection of all values.
 
-        :return: A collection of all CommonSimNameType, without CommonSimNameType.DEFAULT.
+        :param exclude_values: These values will be excluded. If set to None, DEFAULT will be excluded automatically. Default is None.
+        :type exclude_values: Iterator[CommonSimNameType], optional
+        :return: A collection of all values.
         :rtype: Tuple[CommonSimNameType]
         """
-        value_list: Tuple[CommonSimNameType] = tuple([value for value in cls.values if value != cls.DEFAULT])
+        if exclude_values is None:
+            exclude_values = (cls.DEFAULT,)
+        # noinspection PyTypeChecker
+        value_list: Tuple[CommonSimNameType] = tuple([value for value in cls.values if value not in exclude_values])
         return value_list
 
     @classmethod
-    def get_all_names(cls) -> Tuple[str]:
-        """get_all_names()
+    def get_all_names(cls, exclude_values: Iterator['CommonSimNameType'] = None) -> Tuple[str]:
+        """get_all_names(exclude_values=None)
 
-        Retrieve a collection of the names of all CommonSimNameType, excluding CommonSimNameType.DEFAULT.
+        Retrieve a collection of the names of all values.
 
-        :return: A collection of the names of all CommonSimNameType, without CommonSimNameType.DEFAULT.
+        :param exclude_values: These values will be excluded. If set to None, DEFAULT will be excluded automatically. Default is None.
+        :type exclude_values: Iterator[CommonSimNameType], optional
+        :return: A collection of the names of all values.
         :rtype: Tuple[str]
         """
-        name_list: Tuple[str] = tuple([value.name for value in cls.get_all()])
+        name_list: Tuple[str] = tuple([value.name for value in cls.get_all(exclude_values=exclude_values)])
         return name_list
 
     @classmethod
-    def get_comma_separated_names_string(cls) -> str:
-        """get_comma_separated_names_string()
+    def get_comma_separated_names_string(cls, exclude_values: Iterator['CommonSimNameType'] = None) -> str:
+        """get_comma_separated_names_string(exclude_values=None)
 
-        Create a string containing all names of all CommonSimNameType values (excluding CommonSimNameType.DEFAULT), separated by a comma.
+        Create a string containing all names of all values, separated by a comma.
 
-        :return: A string containing all names of all CommonSimNameType values (excluding CommonSimNameType.DEFAULT), separated by a comma.
+        :param exclude_values: These values will be excluded. If set to None, DEFAULT will be excluded automatically. Default is None.
+        :type exclude_values: Iterator[CommonSimNameType], optional
+        :return: A string containing all names of all values, separated by a comma.
         :rtype: str
         """
-        return ', '.join(cls.get_all_names())
+        return ', '.join(cls.get_all_names(exclude_values=exclude_values))
 
     @staticmethod
     def convert_to_vanilla(sim_name_type: 'CommonSimNameType') -> SimNameType:

@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Tuple
+from typing import Tuple, Iterator
 
 from sims4communitylib.enums.enumtypes.common_int_flags import CommonIntFlags
 
@@ -234,9 +234,9 @@ class CommonSimType(CommonIntFlags):
     CHILD_FOX_PLANT_SIM: 'CommonSimType' = ...
     CHILD_FOX_WEREWOLF: 'CommonSimType' = ...
 
-    @staticmethod
-    def get_all(include_teen_young_adult_and_elder: bool = False, include_baby: bool = False, include_separate_child_dog_types: bool = False) -> Tuple['CommonSimType']:
-        """get_all(include_teen_young_adult_and_elder=False, include_baby=False, include_separate_child_dog_types=False)
+    @classmethod
+    def get_all(cls, include_teen_young_adult_and_elder: bool = False, include_baby: bool = False, include_separate_child_dog_types: bool = False, exclude_values: Iterator['CommonSimType'] = None) -> Tuple['CommonSimType']:
+        """get_all(include_teen_young_adult_and_elder=False, include_baby=False, include_separate_child_dog_types=False, exclude_values=None)
 
         Retrieve a collection of all Sim Types.
 
@@ -246,9 +246,13 @@ class CommonSimType(CommonIntFlags):
         :type include_baby: bool, optional
         :param include_separate_child_dog_types: If set to True, the Child Dog Sim Types (CHILD_LARGE_DOG, CHILD_SMALL_DOG, etc.) will be included in the result. If False, they will not be included. Default is False.
         :type include_separate_child_dog_types: bool, optional
+        :param exclude_values: These values will be excluded. If set to None, NONE will be excluded automatically. Default is None.
+        :type exclude_values: Iterator[CommonSimType], optional
         :return: A collection of all Sim Types.
         :rtype: Tuple[CommonSimType]
         """
+        if exclude_values is None:
+            exclude_values = (cls.NONE,)
         sim_types: Tuple[CommonSimType, ...] = (
             CommonSimType.ADULT_HUMAN,
             CommonSimType.ADULT_HUMAN_VAMPIRE,
@@ -479,4 +483,6 @@ class CommonSimType(CommonIntFlags):
                 CommonSimType.CHILD_LARGE_DOG_PLANT_SIM,
                 CommonSimType.CHILD_LARGE_DOG_WEREWOLF,
             )
-        return sim_types
+        # noinspection PyTypeChecker
+        value_list: Tuple[CommonSimType] = tuple([value for value in sim_types if value not in exclude_values])
+        return value_list

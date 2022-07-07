@@ -1823,7 +1823,7 @@ class _S4CLReaderForUpdate:
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib_dev.log_traits', 'Logs a list of traits and trait ids for easy transfer to CommonTraitId', show_with_help_command=False)
 def _common_log_traits_ready_for_update(output: CommonConsoleCommandOutput) -> None:
     output('Logging Traits')
-    from sims4communitylib.utils.misc._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
+    from sims4communitylib_development._development._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
     from sims4communitylib.enums.traits_enum import CommonTraitId
     not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instances(Types.TRAIT, _S4CLReaderForUpdate.CONVERSIONS, CommonTraitId, skip_not_found=True)
     output(f'Finished logging Traits. {len(not_found_values)} values were not found.')

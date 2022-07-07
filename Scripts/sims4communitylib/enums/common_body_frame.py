@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Tuple
+from typing import Tuple, Iterator
 
 from sims.sim_info import SimInfo
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
@@ -22,27 +22,34 @@ class CommonBodyFrame(CommonInt):
     FEMININE: 'CommonBodyFrame' = 2
 
     @classmethod
-    def get_all(cls) -> Tuple['CommonBodyFrame']:
-        """get_all()
+    def get_all(cls, exclude_values: Iterator['CommonBodyFrame'] = None) -> Tuple['CommonBodyFrame']:
+        """get_all(exclude_values=None)
 
-        Retrieve a collection of all CommonBodyFrame, excluding CommonBodyFrame.INVALID.
+        Get a collection of all values.
 
-        :return: A collection of all CommonBodyFrame, without CommonBodyFrame.INVALID.
+        :param exclude_values: These values will be excluded. If set to None, INVALID will be excluded automatically. Default is None.
+        :type exclude_values: Iterator[CommonBodyFrame], optional
+        :return: A collection of all values.
         :rtype: Tuple[CommonBodyFrame]
         """
-        value_list: Tuple[CommonBodyFrame] = tuple([value for value in cls.values if value != cls.INVALID])
+        if exclude_values is None:
+            exclude_values = (cls.INVALID,)
+        # noinspection PyTypeChecker
+        value_list: Tuple[CommonBodyFrame] = tuple([value for value in cls.values if value not in exclude_values])
         return value_list
 
     @classmethod
-    def get_all_names(cls) -> Tuple[str]:
-        """get_all_names()
+    def get_all_names(cls, exclude_values: Iterator['CommonBodyFrame'] = None) -> Tuple[str]:
+        """get_all_names(exclude_values=None)
 
-        Retrieve a collection of the names of all CommonBodyFrame, excluding CommonBodyFrame.INVALID.
+        Retrieve a collection of the names of all values.
 
-        :return: A collection of the names of all CommonBodyFrame, without CommonBodyFrame.INVALID.
+        :param exclude_values: These values will be excluded. If set to None, INVALID will be excluded automatically. Default is None.
+        :type exclude_values: Iterator[CommonBodyFrame], optional
+        :return: A collection of the names of all values.
         :rtype: Tuple[str]
         """
-        name_list: Tuple[str] = tuple([value.name for value in cls.get_all()])
+        name_list: Tuple[str] = tuple([value.name for value in cls.get_all(exclude_values=exclude_values)])
         return name_list
 
     @staticmethod
@@ -53,7 +60,7 @@ class CommonBodyFrame(CommonInt):
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :return: The body frame of the Sim or CommonBodyFrame.INVALID if their current body frame cannot be determined.
+        :return: The body frame of the Sim or INVALID if their current body frame cannot be determined.
         :rtype: CommonBodyFrame
         """
         from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils

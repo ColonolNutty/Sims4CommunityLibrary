@@ -700,7 +700,7 @@ class CommonOccultUtils:
         switch_to_non_occult_form_result = CommonOccultUtils.switch_to_occult_form(sim_info, OccultType.HUMAN)
         if not switch_to_non_occult_form_result:
             return switch_to_non_occult_form_result
-        for occult_type in CommonOccultType.get_all(exclude_occult_types=(CommonOccultType.NON_OCCULT, CommonOccultType.GHOST, CommonOccultType.PLANT_SIM)):
+        for occult_type in CommonOccultType.get_all(exclude_occult_types=(CommonOccultType.NON_OCCULT, CommonOccultType.GHOST, CommonOccultType.PLANT_SIM, CommonOccultType.ROBOT, CommonOccultType.SKELETON)):
             if not CommonOccultUtils.is_occult_available(occult_type):
                 continue
             add_result = CommonOccultUtils.add_occult(sim_info, occult_type)
@@ -728,6 +728,16 @@ class CommonOccultUtils:
             if not CommonOccultUtils.is_occult_available(occult_type):
                 continue
             remove_result = CommonOccultUtils.remove_occult(sim_info, occult_type)
+            if not remove_result:
+                return remove_result
+
+        if CommonOccultUtils.is_occult_available(CommonOccultType.GHOST):
+            remove_result = CommonOccultUtils.remove_occult(sim_info, CommonOccultType.GHOST)
+            if not remove_result:
+                return remove_result
+
+        if CommonOccultUtils.is_occult_available(CommonOccultType.PLANT_SIM):
+            remove_result = CommonOccultUtils.remove_occult(sim_info, CommonOccultType.PLANT_SIM)
             if not remove_result:
                 return remove_result
         return CommonExecutionResult.TRUE

@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Tuple, Union
+from typing import Tuple, Union, Iterator
 
 from sims4communitylib.enums.common_temperature import CommonTemperature
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
@@ -36,16 +36,20 @@ class CommonWeatherType(CommonInt):
     STRUCK_BY_LIGHTNING: 'CommonWeatherType' = 16
 
     @classmethod
-    def get_all(cls) -> Tuple['CommonWeatherType']:
-        """get_all()
+    def get_all(cls, exclude_values: Iterator['CommonWeatherType'] = None) -> Tuple['CommonWeatherType']:
+        """get_all(exclude_values=None)
 
-        Retrieve a collection of all CommonWeatherType, excluding UNDEFINED
+        Get a collection of all values.
 
-        :return: A collection of all CommonWeatherType, without UNDEFINED
+        :param exclude_values: These values will be excluded. If set to None, UNDEFINED will be excluded automatically. Default is None.
+        :type exclude_values: Iterator[CommonWeatherType], optional
+        :return: A collection of all values.
         :rtype: Tuple[CommonWeatherType]
         """
+        if exclude_values is None:
+            exclude_values = (cls.UNDEFINED,)
         # noinspection PyTypeChecker
-        value_list: Tuple[CommonWeatherType, ...] = tuple([value for value in cls.values if value != CommonWeatherType.UNDEFINED])
+        value_list: Tuple[CommonWeatherType, ...] = tuple([value for value in cls.values if value not in exclude_values])
         return value_list
 
     @staticmethod

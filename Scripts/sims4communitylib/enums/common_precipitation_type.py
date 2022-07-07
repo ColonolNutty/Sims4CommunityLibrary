@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Tuple, Union
+from typing import Tuple, Union, Iterator
 
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
@@ -24,16 +24,18 @@ class CommonPrecipitationType(CommonInt):
     SNOW: 'CommonPrecipitationType' = 1001
 
     @classmethod
-    def get_all(cls) -> Tuple['CommonPrecipitationType']:
-        """get_all()
+    def get_all(cls, exclude_values: Iterator['CommonPrecipitationType'] = ()) -> Tuple['CommonPrecipitationType']:
+        """get_all(exclude_values=())
 
-        Retrieve a collection of all CommonPrecipitationType
+        Get a collection of all values.
 
-        :return: A collection of all CommonPrecipitationType
+        :param exclude_values: These values will be excluded. Default is an empty collection.
+        :type exclude_values: Iterator[CommonPrecipitationType], optional
+        :return: A collection of all values.
         :rtype: Tuple[CommonPrecipitationType]
         """
         # noinspection PyTypeChecker
-        value_list: Tuple[CommonPrecipitationType, ...] = tuple([value for value in cls.values])
+        value_list: Tuple[CommonPrecipitationType, ...] = tuple([value for value in cls.values if value not in exclude_values])
         return value_list
 
     @staticmethod

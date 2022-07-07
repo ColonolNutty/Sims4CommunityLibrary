@@ -11,6 +11,7 @@ import services
 from clubs.club import Club
 from clubs.club_gathering_situation import ClubGatheringSituation
 from sims.sim_info import SimInfo
+from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -58,8 +59,8 @@ class CommonSimClubUtils:
         return club_service.sims_to_gatherings_map.get(sim)
 
     @staticmethod
-    def get_clubs_gen(sim_info: SimInfo, include_club_callback: Callable[[Club], bool] = lambda *_, **__: True) -> Iterator[Club]:
-        """get_clubs_gen(sim_info, include_club_callback=lambda *_, **__: True)
+    def get_clubs_gen(sim_info: SimInfo, include_club_callback: Callable[[Club], bool] = CommonFunctionUtils.noop_true) -> Iterator[Club]:
+        """get_clubs_gen(sim_info, include_club_callback=CommonFunctionUtils.noop_true)
 
         Retrieve all Clubs a Sim is a part of.
 
@@ -81,8 +82,8 @@ class CommonSimClubUtils:
             yield club
 
     @staticmethod
-    def get_clubs_currently_gathering_gen(sim_info: SimInfo, include_club_callback: Callable[[Club], bool] = lambda *_, **__: True) -> Iterator[Club]:
-        """get_clubs_currently_gathering_gen(include_club_callback=lambda *_, **__: True)
+    def get_clubs_currently_gathering_gen(sim_info: SimInfo, include_club_callback: Callable[[Club], bool] = CommonFunctionUtils.noop_true) -> Iterator[Club]:
+        """get_clubs_currently_gathering_gen(include_club_callback=CommonFunctionUtils.noop_true)
 
         Retrieve all Clubs the Sim is in that are currently hosting a gathering.
 

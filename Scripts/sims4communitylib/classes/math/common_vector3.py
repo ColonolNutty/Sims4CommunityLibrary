@@ -71,6 +71,12 @@ except:
 class CommonVector3:
     """ A class that contains positional data with three coordinates. """
     def __init__(self, x: float, y: float, z: float):
+        if x is None:
+            x = 0.0
+        if y is None:
+            y = 0.0
+        if z is None:
+            z = 0.0
         self._x = x
         self._y = y
         self._z = z
@@ -115,6 +121,12 @@ class CommonVector3:
         self._z = value
 
     def __new__(cls, x: float, y: float, z: float) -> 'CommonVector3':
+        if x is None:
+            x = 0.0
+        if y is None:
+            y = 0.0
+        if z is None:
+            z = 0.0
         # noinspection PyTypeChecker
         return Vector3(x, y, z)
 

@@ -8,6 +8,8 @@ Copyright (c) COLONOLNUTTY
 from typing import Any, Callable, Iterator
 
 from sims4communitylib.classes.testing.common_enqueue_result import CommonEnqueueResult
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.common_log_registry import CommonLog
 
@@ -29,20 +31,72 @@ class CommonFunctionUtils:
         pass
 
     @staticmethod
+    def noop_execution_result(*_, **__) -> CommonExecutionResult:
+        """noop_execution_result(*_, **__)
+
+        An empty function that does nothing but return :func:`CommonExecutionResult.NONE`. Useful when you need something to simply return CommonExecutionResult.NONE.
+
+        .. note:: Use this when you want something to simply return CommonExecutionResult.NONE.
+
+        :return: Returns CommonExecutionResult.NONE.
+        :rtype: CommonExecutionResult
+        """
+        return CommonExecutionResult.NONE
+
+    @staticmethod
+    def noop_test_result(*_, **__) -> CommonTestResult:
+        """noop_test_result(*_, **__)
+
+        An empty function that does nothing but return :func:`CommonTestResult.NONE`. Useful when you need something to simply return CommonTestResult.NONE.
+
+        .. note:: Use this when you want something to simply return CommonTestResult.NONE.
+
+        :return: Returns CommonTestResult.NONE.
+        :rtype: CommonTestResult
+        """
+        return CommonTestResult.NONE
+
+    @staticmethod
     def noop_enqueue(*_, **__) -> CommonEnqueueResult:
         """noop_enqueue(*_, **__)
 
-        An empty function that does nothing but return :func:`CommonEnqueueResult.NONE`. Useful when you need something to do nothing.
+        An empty function that does nothing but return :func:`CommonEnqueueResult.NONE`. Useful when you need something to simply return CommonEnqueueResult.NONE.
 
-        .. note:: Use this when you want something to do nothing.
+        .. note:: Use this when you want something to simply return CommonEnqueueResult.NONE.
 
-        :return: CommonEnqueueResult.NONE
+        :return: Returns CommonEnqueueResult.NONE.
         :rtype: CommonEnqueueResult
         """
         return CommonEnqueueResult.NONE
 
     @staticmethod
-    def print_arguments(log: CommonLog, func_identifier: str='NO_IDENTIFIER_SPECIFIED') -> Callable[..., Any]:
+    def noop_true(*_, **__) -> bool:
+        """noop_true(*_, **__)
+
+        An empty function that does nothing but return True. Useful when you need something to simply return True.
+
+        .. note:: Use this when you want something to simply return True.
+
+        :return: Returns True.
+        :rtype: bool
+        """
+        return True
+
+    @staticmethod
+    def noop_false(*_, **__) -> bool:
+        """noop_false(*_, **__)
+
+        An empty function that does nothing but return False. Useful when you need something to simply return False.
+
+        .. note:: Use this when you want something to simply return False.
+
+        :return: Returns False.
+        :rtype: bool
+        """
+        return False
+
+    @staticmethod
+    def print_arguments(log: CommonLog, func_identifier: str = 'NO_IDENTIFIER_SPECIFIED') -> Callable[..., Any]:
         """print_arguments(log, func_identifier='NO_IDENTIFIER_SPECIFIED')
 
         Create a function that will log the arguments and keyword arguments it receives
@@ -57,7 +111,7 @@ class CommonFunctionUtils:
 
         def _print_arguments(*_: Any, **__: Any):
             log.enable()
-            log.format_with_message('print_arguments invoked for identifier \'{}\':'.format(func_identifier), argles=_, kwargles=__)
+            log.format_with_message(f'print_arguments invoked for identifier \'{func_identifier}\':', argles=_, kwargles=__)
             log.disable()
 
         return _print_arguments
@@ -91,8 +145,11 @@ class CommonFunctionUtils:
             # noinspection PyBroadException
             try:
                 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
-                CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while running \'{}\''
-                                                            .format(primary_function.__name__), exception=ex)
+                CommonExceptionHandler.log_exception(
+                    mod_identity,
+                    f'Error occurred while running \'{primary_function.__name__}\'',
+                    exception=ex
+                )
             except Exception:
                 pass
             # noinspection PyBroadException
@@ -104,7 +161,7 @@ class CommonFunctionUtils:
                 pass
 
     @staticmethod
-    def run_predicates_as_one(predicate_functions: Iterator[Callable[..., bool]], all_must_pass: bool=True) -> Callable[..., bool]:
+    def run_predicates_as_one(predicate_functions: Iterator[Callable[..., bool]], all_must_pass: bool = True) -> Callable[..., bool]:
         """run_predicates_as_one(predicate_functions, all_must_pass=True)
 
         Wrap all predicate functions into a single predicate function. (See returned value for more information).
@@ -123,7 +180,7 @@ class CommonFunctionUtils:
 
         :param predicate_functions: The predicate functions to run as one.
         :type predicate_functions: Iterator[Callable[..., bool]]
-        :param all_must_pass: If True, all of the predicates must return a True value. If False, only some of the predicates must return a True value.
+        :param all_must_pass: If True, all the predicates must return a True value. If False, any of the predicates must return a True value.
         :type all_must_pass: bool, optional
         :return: The result of running all functions.
         :rtype: bool

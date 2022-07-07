@@ -5,27 +5,29 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, Tuple
+from typing import Union, Tuple, TypeVar
 
 from sims4communitylib.enums.enumtypes.common_int_flags import CommonIntFlags
 from sims4communitylib.utils.common_collection_utils import CommonCollectionUtils
+
+CommonEnumFlagsTypeValueType = TypeVar('CommonEnumFlagsTypeValueType', int, CommonIntFlags)
 
 
 class CommonBitwiseUtils:
     """Utilities for performing bitwise operations, so you do not have to remember how they are done."""
 
     @staticmethod
-    def add_flags(value: Union[CommonIntFlags, int], flags: Union[CommonIntFlags, int, Tuple[Union[CommonIntFlags, int]]]) -> Union[CommonIntFlags, int]:
+    def add_flags(value: CommonEnumFlagsTypeValueType, flags: Union[CommonEnumFlagsTypeValueType, Tuple[CommonEnumFlagsTypeValueType]]) -> CommonEnumFlagsTypeValueType:
         """add_flags(value, flags)
 
         Add Flags to a value.
 
         :param value: A flags enum or an integer.
-        :type value: Union[CommonIntFlags, int]
+        :type value: CommonEnumFlagsTypeValueType
         :param flags: A flags enum, an integer, or a collection of flags enums or integers.
-        :type flags: Union[CommonIntFlags, int, Tuple[Union[CommonIntFlags, int]]]
+        :type flags: Union[CommonIntFlags, int, Tuple[CommonEnumFlagsTypeValueType]]
         :return: The new value.
-        :rtype: Union[CommonIntFlags, int]
+        :rtype: CommonEnumFlagsTypeValueType
         """
         if CommonCollectionUtils.is_collection(value):
             for _flags in flags:
@@ -34,17 +36,17 @@ class CommonBitwiseUtils:
         return value | flags
 
     @staticmethod
-    def remove_flags(value: Union[CommonIntFlags, int], flags: Union[CommonIntFlags, int, Tuple[Union[CommonIntFlags, int]]]) -> Union[CommonIntFlags, int]:
+    def remove_flags(value: CommonEnumFlagsTypeValueType, flags: Union[CommonIntFlags, int, Tuple[CommonEnumFlagsTypeValueType]]) -> CommonEnumFlagsTypeValueType:
         """remove_flags(value, flags)
 
         Remove Flags from a value.
 
         :param value: A flags enum or an integer.
-        :type value: Union[CommonIntFlags, int]
+        :type value: CommonEnumFlagsTypeValueType
         :param flags: A flags enum, an integer, or a collection of flags enums or integers.
-        :type flags: Union[CommonIntFlags, int, Tuple[Union[CommonIntFlags, int]]]
+        :type flags: Union[CommonIntFlags, int, Tuple[CommonEnumFlagsTypeValueType]]
         :return: The new value.
-        :rtype: Union[CommonIntFlags, int]
+        :rtype: CommonEnumFlagsTypeValueType
         """
         if CommonCollectionUtils.is_collection(flags):
             for _flags in flags:
@@ -53,15 +55,15 @@ class CommonBitwiseUtils:
         return value & ~flags
 
     @staticmethod
-    def contains_all_flags(value: Union[CommonIntFlags, int], flags: Union[CommonIntFlags, int, Tuple[Union[CommonIntFlags, int]]]) -> bool:
+    def contains_all_flags(value: CommonEnumFlagsTypeValueType, flags: Union[CommonIntFlags, int, Tuple[CommonEnumFlagsTypeValueType]]) -> bool:
         """contains_all_flags(value, flags)
 
         Determine if all of the Flags are found within a value.
 
         :param value: A flags enum or an integer.
-        :type value: Union[CommonIntFlags, int]
+        :type value: CommonEnumFlagsTypeValueType
         :param flags: A flags enum, an integer, or a collection of flags enums or integers.
-        :type flags: Union[CommonIntFlags, int, Tuple[Union[CommonIntFlags, int]]]
+        :type flags: Union[CommonIntFlags, int, Tuple[CommonEnumFlagsTypeValueType]]
         :return: True, if all of the specified Flags are found within the value. False, if not.
         :rtype: bool
         """
@@ -73,15 +75,15 @@ class CommonBitwiseUtils:
         return flags == (flags & value)
 
     @staticmethod
-    def contains_any_flags(value: Union[CommonIntFlags, int], flags: Union[CommonIntFlags, int, Tuple[Union[CommonIntFlags, int]]]) -> bool:
+    def contains_any_flags(value: CommonEnumFlagsTypeValueType, flags: Union[CommonIntFlags, int, Tuple[CommonEnumFlagsTypeValueType]]) -> bool:
         """contains_any_flags(value, flags)
 
         Determine if any of the Flags are found within a value.
 
         :param value: A flags enum or an integer.
-        :type value: Union[CommonIntFlags, int]
+        :type value: CommonEnumFlagsTypeValueType
         :param flags: A flags enum, an integer, or a collection of flags enums or integers.
-        :type flags: Union[CommonIntFlags, int, Tuple[Union[CommonIntFlags, int]]]
+        :type flags: Union[CommonIntFlags, int, Tuple[CommonEnumFlagsTypeValueType]]
         :return: True, if any of the specified Flags are found within the value. False, if not.
         :rtype: bool
         """
@@ -93,15 +95,15 @@ class CommonBitwiseUtils:
         return (flags & value) != 0
 
     @staticmethod
-    def contains_no_flags(value: Union[CommonIntFlags, int], flags: Union[CommonIntFlags, int, Tuple[Union[CommonIntFlags, int]]]) -> bool:
+    def contains_no_flags(value: CommonEnumFlagsTypeValueType, flags: Union[CommonIntFlags, int, Tuple[CommonEnumFlagsTypeValueType]]) -> bool:
         """contains_no_flags(value, flags)
 
         Determine if none of the Flags are found within a value.
 
         :param value: A flags enum or an integer.
-        :type value: Union[CommonIntFlags, int]
+        :type value: CommonEnumFlagsTypeValueType
         :param flags: A flags enum, an integer, or a collection of flags enums or integers.
-        :type flags: Union[CommonIntFlags, int, Tuple[Union[CommonIntFlags, int]]]
+        :type flags: Union[CommonIntFlags, int, Tuple[CommonEnumFlagsTypeValueType]]
         :return: True, if none of the specified Flags are found within the value. False, if not.
         :rtype: bool
         """

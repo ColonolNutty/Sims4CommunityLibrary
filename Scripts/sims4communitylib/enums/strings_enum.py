@@ -65,6 +65,17 @@ class CommonStringId(CommonInt):
     CAT: 'CommonStringId' = 1720023562
     FOX: 'CommonStringId' = 0xCE739947
 
+    S4CL_ALIEN: 'CommonStringId' = 0x340EA312
+    S4CL_GHOST: 'CommonStringId' = 0xEFCD14BE
+    S4CL_MERMAID: 'CommonStringId' = 0x9E3A9746
+    S4CL_NON_OCCULT: 'CommonStringId' = 0x2763B1A0
+    S4CL_PLANT_SIM: 'CommonStringId' = 0x64E66FA1
+    S4CL_ROBOT: 'CommonStringId' = 0x730D2277
+    S4CL_SKELETON: 'CommonStringId' = 0xCF5256A8
+    S4CL_VAMPIRE: 'CommonStringId' = 0x760EC7C9
+    S4CL_WEREWOLF: 'CommonStringId' = 0xA3E400E6
+    S4CL_WITCH: 'CommonStringId' = 0x2D55956A
+
     # Pregnancy
     GET_PREGNANT: 'CommonStringId' = 3694037554
     GET_OTHER_PREGNANT: 'CommonStringId' = 3780444441

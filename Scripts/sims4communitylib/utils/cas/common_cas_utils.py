@@ -6,8 +6,9 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-from typing import Tuple, Union, Iterator
+from typing import Tuple, Union, Iterator, Dict
 
+from sims4.utils import classproperty
 from sims4communitylib.dtos.common_cas_part import CommonCASPart
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
@@ -23,11 +24,22 @@ ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class OutfitCategory:
-        pass
+
+        @classproperty
+        def value_to_name(self) -> Dict['OutfitCategory', str]:
+            pass
 
     # noinspection PyMissingOrEmptyDocstring
     class BodyType:
         NONE = 0
+
+        @classproperty
+        def value_to_name(self) -> Dict['BodyType', str]:
+            pass
+
+        @classproperty
+        def name_to_value(self) -> Dict[str, 'BodyType']:
+            pass
 
     # noinspection PyMissingOrEmptyDocstring
     class SimInfo:
@@ -88,7 +100,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return body_type
 
     @staticmethod
-    def get_body_type_by_name(name: str, default_body_type: Union[BodyType, None]=BodyType.NONE) -> BodyType:
+    def get_body_type_by_name(name: str, default_body_type: Union[BodyType, None] = BodyType.NONE) -> BodyType:
         """get_body_type_by_name(name, default_value=BodyType.NONE)
 
         Retrieve an BodyType by name.
@@ -200,7 +212,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return True
 
     @classmethod
-    def attach_cas_part_to_outfit_of_sim(cls, sim_info: SimInfo, cas_part: CommonCASPart, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    def attach_cas_part_to_outfit_of_sim(cls, sim_info: SimInfo, cas_part: CommonCASPart, outfit_category_and_index: Tuple[OutfitCategory, int] = None) -> bool:
         """attach_cas_part_to_outfit_of_sim(sim_info, cas_part, outfit_category_and_index=None)
 
         Attach a CAS part to an outfit of a Sim.
@@ -218,7 +230,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return cls.attach_cas_parts_to_outfit_of_sim(sim_info, (cas_part,), outfit_category_and_index=outfit_category_and_index)
 
     @classmethod
-    def attach_cas_parts_to_outfit_of_sim(cls, sim_info: SimInfo, cas_parts: Iterator[CommonCASPart], outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    def attach_cas_parts_to_outfit_of_sim(cls, sim_info: SimInfo, cas_parts: Iterator[CommonCASPart], outfit_category_and_index: Tuple[OutfitCategory, int] = None) -> bool:
         """attach_cas_parts_to_outfit_of_sim(sim_info, cas_parts, outfit_category_and_index=None)
 
         Attach CAS parts to an outfit of a Sim.
@@ -312,10 +324,8 @@ class CommonCASUtils(_HasS4CLClassLog):
             saved_outfit_parts = dict(zip(list(saved_outfit.body_types_list.body_types), list(saved_outfit.parts.ids)))
             body_types = list()
             part_ids = list()
-            handled_body_types = list()
             _log.format_with_message('Before modify parts.', outfit_category=saved_outfit.category, body_types=tuple(saved_outfit_parts.keys()), part_ids=tuple(saved_outfit_parts.values()))
             for (body_type, part_id) in saved_outfit_parts.items():
-                body_type_int = int(body_type)
                 if part_id in cas_part_ids:
                     # Remove cas_part_ids
                     continue
@@ -338,7 +348,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return True
 
     @classmethod
-    def detach_cas_part_from_outfit_of_sim(cls, sim_info: SimInfo, cas_part: CommonCASPart, outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    def detach_cas_part_from_outfit_of_sim(cls, sim_info: SimInfo, cas_part: CommonCASPart, outfit_category_and_index: Tuple[OutfitCategory, int] = None) -> bool:
         """detach_cas_part_from_outfit_of_sim(sim_info, cas_part, outfit_category_and_index=None)
 
         Detach a CAS part from an outfit of a Sim.
@@ -355,7 +365,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return cls.detach_cas_parts_from_outfit_of_sim(sim_info, (cas_part,), outfit_category_and_index=outfit_category_and_index)
 
     @classmethod
-    def detach_cas_parts_from_outfit_of_sim(cls, sim_info: SimInfo, cas_parts: Iterator[CommonCASPart], outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    def detach_cas_parts_from_outfit_of_sim(cls, sim_info: SimInfo, cas_parts: Iterator[CommonCASPart], outfit_category_and_index: Tuple[OutfitCategory, int] = None) -> bool:
         """detach_cas_parts_from_outfit_of_sim(sim_info, cas_parts, outfit_category_and_index=None)
 
         Detach CAS parts from an outfit of a Sim.
@@ -404,7 +414,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return True
 
     @classmethod
-    def attach_cas_part_to_sim(cls, sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int]=None, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None, **__) -> bool:
+    def attach_cas_part_to_sim(cls, sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int] = None, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None, **__) -> bool:
         """attach_cas_part_to_sim(sim_info, cas_part_id, body_type=None, outfit_category_and_index=None, **__)
 
         Add a CAS part at the specified BodyType to the Sims outfit.
@@ -429,7 +439,7 @@ class CommonCASUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def detach_cas_part_from_sim(cls, sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None]=None, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None]=None, **__) -> bool:
+    def detach_cas_part_from_sim(cls, sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None] = None, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None, **__) -> bool:
         """detach_cas_part_from_sim(sim_info, cas_part_id, body_type=None, outfit_category_and_index=None, **__)
 
         Remove a CAS part at the specified BodyType from the Sims outfit.
@@ -500,7 +510,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         sim_info._base.outfits = saved_outfits.SerializeToString()
 
     @classmethod
-    def detach_body_type_from_outfit_of_sim(cls, sim_info: SimInfo, body_type_to_remove: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    def detach_body_type_from_outfit_of_sim(cls, sim_info: SimInfo, body_type_to_remove: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int] = None) -> bool:
         """detach_body_type_from_outfit_of_sim(sim_info, body_type_to_remove, outfit_category_and_index=None)
 
         Detach the CAS Part at a specific body type from an outfit of a Sim.
@@ -517,7 +527,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return cls.detach_body_types_from_outfit_of_sim(sim_info, (body_type_to_remove,), outfit_category_and_index=outfit_category_and_index)
 
     @classmethod
-    def detach_body_types_from_outfit_of_sim(cls, sim_info: SimInfo, body_types_to_remove: Iterator[Union[BodyType, int]], outfit_category_and_index: Tuple[OutfitCategory, int]=None) -> bool:
+    def detach_body_types_from_outfit_of_sim(cls, sim_info: SimInfo, body_types_to_remove: Iterator[Union[BodyType, int]], outfit_category_and_index: Tuple[OutfitCategory, int] = None) -> bool:
         """detach_body_types_from_outfit_of_sim(sim_info, body_types_to_remove, outfit_category_and_index=None)
 
         Detach any CAS Parts at specific body types from an outfit of a Sim.
@@ -566,7 +576,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return True
 
     @classmethod
-    def has_cas_part_attached(cls, sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None]=None, outfit_category_and_index: Tuple[OutfitCategory, int]=None, mod_identity: CommonModIdentity=None) -> bool:
+    def has_cas_part_attached(cls, sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int, None] = None, outfit_category_and_index: Tuple[OutfitCategory, int] = None, mod_identity: CommonModIdentity = None) -> bool:
         """has_cas_part_attached(sim_info, cas_part_id, body_type=None, outfit_category_and_index=None, mod_identity=None)
 
         Determine if a Sim has the specified CAS part attached to their outfit.
@@ -593,7 +603,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return outfit_io.get_cas_part_at_body_type(body_type) == cas_part_id
 
     @staticmethod
-    def has_any_cas_part_attached_to_body_type(sim_info: SimInfo, body_type: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int]=None, mod_identity: CommonModIdentity=None) -> bool:
+    def has_any_cas_part_attached_to_body_type(sim_info: SimInfo, body_type: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int] = None, mod_identity: CommonModIdentity = None) -> bool:
         """has_any_cas_part_attached_to_body_type(sim_info, body_type, outfit_category_and_index=None, mod_identity=None)
 
         Determine if a Sim has a CAS Part attached to a BodyType.
@@ -612,7 +622,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return CommonCASUtils.get_cas_part_id_at_body_type(sim_info, body_type, outfit_category_and_index=outfit_category_and_index, mod_identity=mod_identity) != -1
 
     @classmethod
-    def get_body_type_cas_part_is_attached_to(cls, sim_info: SimInfo, cas_part_id: int, outfit_category_and_index: Tuple[OutfitCategory, int]=None, mod_identity: CommonModIdentity=None) -> Union[BodyType, int]:
+    def get_body_type_cas_part_is_attached_to(cls, sim_info: SimInfo, cas_part_id: int, outfit_category_and_index: Tuple[OutfitCategory, int] = None, mod_identity: CommonModIdentity = None) -> Union[BodyType, int]:
         """get_body_type_cas_part_is_attached_to(sim_info, cas_part_id, outfit_category_and_index=None, mod_identity=None)
 
         Retrieve the BodyType that a CAS part is attached to within a Sims outfit.
@@ -633,7 +643,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return outfit_io.get_body_type_cas_part_is_attached_to(cas_part_id)
 
     @classmethod
-    def get_cas_part_id_at_body_type(cls, sim_info: SimInfo, body_type: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int]=None, mod_identity: CommonModIdentity=None) -> int:
+    def get_cas_part_id_at_body_type(cls, sim_info: SimInfo, body_type: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int] = None, mod_identity: CommonModIdentity = None) -> int:
         """get_cas_part_id_at_body_type(sim_info, body_type, outfit_category_and_index=None, mod_identity=None)
 
         Retrieve the CAS part identifier attached to the specified BodyType within a Sims outfit.
@@ -897,7 +907,7 @@ def _s4clib_is_cas_part_available(output: CommonConsoleCommandOutput, cas_part_i
         's4clib.printskintone',
     )
 )
-def _common_print_skin_tone(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_print_skin_tone(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         output('ERROR: Failed, no Sim was specified or the specified Sim was not found!')
         return
@@ -921,7 +931,7 @@ def _common_print_skin_tone(output: CommonConsoleCommandOutput, sim_info: SimInf
         's4clib.setskintone',
     )
 )
-def _common_set_skin_tone(output: CommonConsoleCommandOutput, skin_tone_id: int, sim_info: SimInfo=None):
+def _common_set_skin_tone(output: CommonConsoleCommandOutput, skin_tone_id: int, sim_info: SimInfo = None):
     if sim_info is None:
         output('ERROR: Failed, no Sim was specified or the specified Sim was not found!')
         return

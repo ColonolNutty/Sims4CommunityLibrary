@@ -137,7 +137,7 @@ class _S4CLReaderForUpdate:
 @CommonConsoleCommand(ModInfo.get_identity(), 's4clib_dev.log_careers', 'Logs a list of careers and career ids for easy transfer to CommonCareerId', show_with_help_command=False)
 def _common_log_careers_ready_for_update(output: CommonConsoleCommandOutput) -> None:
     output('Logging Careers')
-    from sims4communitylib.utils.misc._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
+    from sims4communitylib_development._development._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
     from sims4communitylib.enums.common_career_ids import CommonCareerId
     not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instances(Types.CAREER, _S4CLReaderForUpdate.CONVERSIONS, CommonCareerId, skip_not_found=True)
     output(f'Finished logging Careers. {len(not_found_values)} values were not found.')

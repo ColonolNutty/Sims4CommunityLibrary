@@ -21,3 +21,9 @@ Unpyc3PythonCompiler.compile_mod(
     names_of_modules_include=('s4cl_tests',),
     output_ts4script_name='sims4communitylib_tests'
 )
+
+Unpyc3PythonCompiler.compile_mod(
+    folder_path_to_output_ts4script_to=f'{release_dir}Development',
+    names_of_modules_include=('sims4communitylib_development',),
+    output_ts4script_name='sims4communitylib_development'
+)

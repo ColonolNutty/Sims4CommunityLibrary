@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union, Dict, Tuple
+from typing import Union, Dict, Tuple, Iterator
 
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Species, SpeciesExtended
@@ -24,40 +24,48 @@ class CommonSpecies(CommonInt):
     FOX: 'CommonSpecies' = 5
 
     @classmethod
-    def get_all(cls) -> Tuple['CommonSpecies']:
-        """get_all()
+    def get_all(cls, exclude_values: Iterator['CommonSpecies'] = None) -> Tuple['CommonSpecies']:
+        """get_all(exclude_values=None)
 
-        Retrieve a collection of all CommonSpecies, excluding INVALID.
+        Get a collection of all values.
 
-        :return: A collection of all CommonSpecies, without INVALID.
+        :param exclude_values: These values will be excluded. If set to None, INVALID will be excluded automatically. Default is None.
+        :type exclude_values: Iterator[CommonSpecies], optional
+        :return: A collection of all values.
         :rtype: Tuple[CommonSpecies]
         """
+        if exclude_values is None:
+            exclude_values = (cls.INVALID,)
         # noinspection PyTypeChecker
-        value_list: Tuple[CommonSpecies, ...] = tuple([value for value in cls.values if value != cls.INVALID])
+        value_list: Tuple[CommonSpecies, ...] = tuple([value for value in cls.values if value not in exclude_values])
         return value_list
 
     @classmethod
-    def get_all_names(cls) -> Tuple[str]:
-        """get_all_names()
+    def get_all_names(cls, exclude_values: Iterator['CommonSpecies'] = None) -> Tuple[str]:
+        """get_all_names(exclude_values=None)
 
-        Retrieve a collection of the names of all CommonSpecies, excluding INVALID.
+        Retrieve a collection of the names of all values.
 
-        :return: A collection of the names of all CommonSpecies, without INVALID.
+        :param exclude_values: These values will be excluded. If set to None, INVALID will be excluded automatically. Default is None.
+        :type exclude_values: Iterator[CommonSpecies], optional
+        :return: A collection of the names of all values.
         :rtype: Tuple[str]
         """
-        name_list: Tuple[str] = tuple([value.name for value in cls.get_all()])
+        name_list: Tuple[str] = tuple([value.name for value in cls.get_all(exclude_values=exclude_values)])
         return name_list
 
     @classmethod
-    def get_comma_separated_names_string(cls) -> str:
-        """get_comma_separated_names_string()
+    def get_comma_separated_names_string(cls, exclude_values: Iterator['CommonSpecies'] = None) -> str:
+        """get_comma_separated_names_string(exclude_values=None)
 
-        Create a string containing all names of all CommonSpecies values (excluding INVALID), separated by a comma.
+        Create a string containing all names of all values, separated by a comma.
 
-        :return: A string containing all names of all CommonSpecies values (excluding INVALID), separated by a comma.
+        :param exclude_values: These values will be excluded. If set to None, INVALID will be excluded automatically. Default is None.
+        :type exclude_values: Iterator[CommonSpecies], optional
+        :return: A string containing all names of all values, separated by a comma.
         :rtype: str
         """
-        return ', '.join(cls.get_all_names())
+        return ', '.join(cls.get_all_names(exclude_values=exclude_values))
 
     @staticmethod
     def get_species(sim_info: SimInfo) -> 'CommonSpecies':

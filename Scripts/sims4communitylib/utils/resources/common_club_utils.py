@@ -11,14 +11,15 @@ import services
 from clubs.club import Club
 from clubs.club_tuning import ClubRule
 from sims.sim_info import SimInfo
+from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 
 
 class CommonClubUtils:
     """ Utilities for manipulating Clubs. """
 
     @staticmethod
-    def get_clubs_currently_gathering_gen(include_club_callback: Callable[[Club], bool]=lambda *_, **__: True) -> Iterator[Club]:
-        """get_clubs_currently_gathering_gen(include_club_callback=lambda *_, **__: True)
+    def get_clubs_currently_gathering_gen(include_club_callback: Callable[[Club], bool] = CommonFunctionUtils.noop_true) -> Iterator[Club]:
+        """get_clubs_currently_gathering_gen(include_club_callback=CommonFunctionUtils.noop_true)
 
         Retrieve all Clubs that are currently hosting a gathering.
 
@@ -37,8 +38,8 @@ class CommonClubUtils:
             yield club
 
     @staticmethod
-    def get_club_members_gen(club: Club, include_club_member_callback: Callable[[SimInfo], bool]=lambda *_, **__: True) -> Iterator[SimInfo]:
-        """get_club_members_gen(club, include_club_member_callback=lambda *_, **__: True)
+    def get_club_members_gen(club: Club, include_club_member_callback: Callable[[SimInfo], bool] = CommonFunctionUtils.noop_true) -> Iterator[SimInfo]:
+        """get_club_members_gen(club, include_club_member_callback=CommonFunctionUtils.noop_true)
 
         Retrieve the SimInfo of all members who are a part of a Club.
 
@@ -57,8 +58,8 @@ class CommonClubUtils:
             yield sim_info
 
     @staticmethod
-    def get_club_rules_gen(club: Club, include_club_rule_callback: Callable[[SimInfo], bool]=lambda *_, **__: True) -> Iterator[ClubRule]:
-        """get_club_rules_gen(club, include_club_rule_callback=lambda *_, **__: True)
+    def get_club_rules_gen(club: Club, include_club_rule_callback: Callable[[SimInfo], bool] = CommonFunctionUtils.noop_true) -> Iterator[ClubRule]:
+        """get_club_rules_gen(club, include_club_rule_callback=CommonFunctionUtils.noop_true)
 
         Retrieve all Club Rules of a Club.
 

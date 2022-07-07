@@ -6,8 +6,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import random
-
-import objects.system
 from objects.object_enums import ItemLocation
 from sims.sim_info import SimInfo
 from typing import Any, Callable, Union, Tuple, Iterator
@@ -22,6 +20,7 @@ from objects.object_enums import ResetReason
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
 class CommonObjectSpawnUtils(_HasS4CLClassLog):
@@ -34,23 +33,65 @@ class CommonObjectSpawnUtils(_HasS4CLClassLog):
     def get_log_identifier(cls) -> str:
         return 'common_object_spawn_utils'
 
-    @staticmethod
+    @classmethod
+    def create_object(
+        cls,
+        object_definition_id: int,
+        on_object_initialize_callback: Callable[[GameObject], Any] = None,
+        post_object_spawned_callback: Callable[[GameObject], Any] = None,
+        location_type: ItemLocation = ItemLocation.ON_LOT,
+        **kwargs
+    ) -> Union[GameObject, None]:
+        """create_object(\
+            object_definition_id,\
+            on_object_initialize_callback=None,\
+            post_object_spawned_callback=None,\
+            location_type=ItemLocation.ON_LOT,\
+            **kwargs\
+        )
+
+        Create an Object.
+
+        :param object_definition_id: The decimal identifier of the definition of an Object.
+        :type object_definition_id: int
+        :param on_object_initialize_callback: Called when initializing the Object.
+        :type on_object_initialize_callback: Callable[[GameObject], Any], optional
+        :param post_object_spawned_callback: Called after the Object was added.
+        :type post_object_spawned_callback: Callable[[GameObject], Any], optional
+        :param location_type: The location the object is intended to be spawned at. Default is on the lot.
+        :type location_type: ItemLocation, optional
+        :return: An instance of the created Object or None if not successfully created.
+        :rtype: GameObject
+        """
+        from objects.system import create_object
+        return create_object(
+            object_definition_id,
+            init=on_object_initialize_callback,
+            post_add=post_object_spawned_callback,
+            loc_type=location_type,
+            **kwargs
+        )
+
+    @classmethod
     def spawn_object_on_lot(
+        cls,
         object_definition_id: int,
         location: CommonLocation,
-        on_object_initialize_callback: Callable[[GameObject], Any]=None,
-        post_object_spawned_callback: Callable[[GameObject], Any]=None
+        on_object_initialize_callback: Callable[[GameObject], Any] = None,
+        post_object_spawned_callback: Callable[[GameObject], Any] = None,
+        **kwargs
     ) -> Union[GameObject, None]:
         """spawn_object_on_lot(\
             object_definition_id,\
             location,\
             on_object_initialize_callback=None,\
-            post_object_spawned_callback=None\
+            post_object_spawned_callback=None,\
+            **kwargs\
         )
 
         Spawn an Object on the current lot.
 
-        :param object_definition_id: The decimal identifier of an Object.
+        :param object_definition_id: The decimal identifier of the definition of an Object.
         :type object_definition_id: int
         :param location: The location to spawn the Object at.
         :type location: CommonLocation
@@ -62,36 +103,40 @@ class CommonObjectSpawnUtils(_HasS4CLClassLog):
         :rtype: GameObject
         """
         from sims4communitylib.utils.objects.common_object_location_utils import CommonObjectLocationUtils
-        game_object = objects.system.create_object(
+        game_object = cls.create_object(
             object_definition_id,
-            init=on_object_initialize_callback,
-            post_add=post_object_spawned_callback,
-            loc_type=ItemLocation.ON_LOT
+            on_object_initialize_callback=on_object_initialize_callback,
+            post_object_spawned_callback=post_object_spawned_callback,
+            location_type=ItemLocation.ON_LOT,
+            **kwargs
         )
         if game_object is None:
             return None
         CommonObjectLocationUtils.set_location(game_object, location)
         return game_object
 
-    @staticmethod
+    @classmethod
     def spawn_object_near_location(
+        cls,
         object_definition_id: int,
         location: CommonLocation,
-        radius: int=1,
-        on_object_initialize_callback: Callable[[GameObject], Any]=None,
-        post_object_spawned_callback: Callable[[GameObject], Any]=None
+        radius: int = 1,
+        on_object_initialize_callback: Callable[[GameObject], Any] = None,
+        post_object_spawned_callback: Callable[[GameObject], Any] = None,
+        **kwargs
     ) -> GameObject:
         """spawn_object_on_lot(\
             object_definition_id,\
             location,\
             radius=1,\
             on_object_initialize_callback=None,\
-            post_object_spawned_callback=None\
+            post_object_spawned_callback=None,\
+            **kwargs
         )
 
         Spawn an Object near a location.
 
-        :param object_definition_id: The decimal identifier of an Object.
+        :param object_definition_id: The decimal identifier of the definition of an Object.
         :type object_definition_id: int
         :param location: The location to spawn the Object at.
         :type location: CommonLocation
@@ -132,11 +177,12 @@ class CommonObjectSpawnUtils(_HasS4CLClassLog):
             object_definition_id,
             new_location,
             on_object_initialize_callback=on_object_initialize_callback,
-            post_object_spawned_callback=post_object_spawned_callback
+            post_object_spawned_callback=post_object_spawned_callback,
+            **kwargs
         )
 
-    @staticmethod
-    def destroy_object(game_object: GameObject, source: str=None, cause: str=None, **kwargs) -> bool:
+    @classmethod
+    def destroy_object(cls, game_object: GameObject, source: Any = None, cause: str = None, **kwargs) -> bool:
         """destroy_object(game_object, source=None, cause=None, **kwargs)
 
         Destroy an Object.
@@ -152,11 +198,27 @@ class CommonObjectSpawnUtils(_HasS4CLClassLog):
         """
         if game_object is None:
             return False
-        game_object.destroy(source=source, cause=cause, **kwargs)
+        if game_object.is_in_inventory():
+            inventory = game_object.get_inventory()
+            if inventory is None or inventory.owner is None:
+                game_object.destroy(source=source, cause=cause, **kwargs)
+            else:
+                from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
+                object_id = CommonObjectUtils.get_object_id(game_object)
+                if game_object.is_in_sim_inventory():
+                    sim_info = CommonSimUtils.get_sim_info(inventory.owner)
+                    from sims4communitylib.utils.sims.common_sim_inventory_utils import CommonSimInventoryUtils
+                    CommonSimInventoryUtils.remove_from_inventory(sim_info, object_id, count=1)
+                else:
+                    inventory_game_object = CommonObjectUtils.get_game_object(inventory.owner)
+                    from sims4communitylib.utils.objects.common_object_inventory_utils import CommonObjectInventoryUtils
+                    CommonObjectInventoryUtils.remove_from_inventory_by_id(inventory_game_object, object_id, count=1)
+        else:
+            game_object.destroy(source=source, cause=cause, **kwargs)
         return True
 
-    @staticmethod
-    def schedule_object_for_destroy(game_object: GameObject, source: str=None, cause: str=None, on_destroyed: Callable[[], None]=None, **kwargs) -> bool:
+    @classmethod
+    def schedule_object_for_destroy(cls, game_object: GameObject, source: Any = None, cause: str = None, on_destroyed: Callable[[], None] = None, **kwargs) -> bool:
         """schedule_object_for_destroy(game_object, source=None, cause=None, on_destroyed=None, **kwargs)
 
         Schedule an Object to be destroyed.
@@ -174,16 +236,33 @@ class CommonObjectSpawnUtils(_HasS4CLClassLog):
         """
         if game_object is None:
             return False
-        game_object.schedule_destroy_asap(post_delete_func=on_destroyed, source=source, cause=cause, **kwargs)
+        if game_object.is_in_inventory():
+            inventory = game_object.get_inventory()
+            if inventory is None or inventory.owner is None:
+                game_object.schedule_destroy_asap(post_delete_func=on_destroyed, source=source, cause=cause, **kwargs)
+            else:
+                from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
+                object_id = CommonObjectUtils.get_object_id(game_object)
+                if game_object.is_in_sim_inventory():
+                    sim_info = CommonSimUtils.get_sim_info(inventory.owner)
+                    from sims4communitylib.utils.sims.common_sim_inventory_utils import CommonSimInventoryUtils
+                    CommonSimInventoryUtils.remove_from_inventory(sim_info, object_id, count=1)
+                else:
+                    inventory_game_object = CommonObjectUtils.get_game_object(inventory.owner)
+                    from sims4communitylib.utils.objects.common_object_inventory_utils import CommonObjectInventoryUtils
+                    CommonObjectInventoryUtils.remove_from_inventory_by_id(inventory_game_object, object_id, count=1)
+        else:
+            game_object.schedule_destroy_asap(post_delete_func=on_destroyed, source=source, cause=cause, **kwargs)
         return True
 
-    @staticmethod
+    @classmethod
     def soft_reset(
+        cls,
         game_object: GameObject,
-        reset_reason: ResetReason=ResetReason.RESET_EXPECTED,
-        hard_reset_on_exception: bool=False,
-        source: Any=None,
-        cause: Any='S4CL Soft Reset'
+        reset_reason: ResetReason = ResetReason.RESET_EXPECTED,
+        hard_reset_on_exception: bool = False,
+        source: Any = None,
+        cause: str = 'S4CL Soft Reset'
     ) -> bool:
         """soft_reset(game_object, reset_reason=ResetReason.RESET_EXPECTED, hard_reset_on_exception=False, source=None, cause=None)
 
@@ -228,8 +307,8 @@ class CommonObjectSpawnUtils(_HasS4CLClassLog):
                 return CommonObjectSpawnUtils.hard_reset(game_object, reset_reason=reset_reason, source=source, cause=cause)
         return False
 
-    @staticmethod
-    def hard_reset(game_object: GameObject, reset_reason: ResetReason=ResetReason.RESET_EXPECTED, source: Any=None, cause: Any='S4CL Hard Reset') -> bool:
+    @classmethod
+    def hard_reset(cls, game_object: GameObject, reset_reason: ResetReason = ResetReason.RESET_EXPECTED, source: Any = None, cause: str = 'S4CL Hard Reset') -> bool:
         """hard_reset(game_object, reset_reason=ResetReason.RESET_EXPECTED, source=None, cause=None)
 
         Perform a hard reset on an Object.
@@ -254,8 +333,8 @@ class CommonObjectSpawnUtils(_HasS4CLClassLog):
         except:
             return False
 
-    @staticmethod
-    def fade_in(game_object: GameObject, fade_duration: float=1.0, immediate: bool=False, additional_channels: Iterator[Tuple[int, int, int]]=None):
+    @classmethod
+    def fade_in(cls, game_object: GameObject, fade_duration: float = 1.0, immediate: bool = False, additional_channels: Iterator[Tuple[int, int, int]] = None):
         """fade_in(game_object, fade_duration=1.0, immediate=False, additional_channels=None)
 
         Change the opacity of an Object from invisible to visible.
@@ -273,8 +352,8 @@ class CommonObjectSpawnUtils(_HasS4CLClassLog):
             return
         game_object.fade_in(fade_duration=fade_duration, immediate=immediate, additional_channels=additional_channels)
 
-    @staticmethod
-    def fade_out(game_object: GameObject, fade_duration: float=1.0, immediate: bool=False, additional_channels: Iterator[Tuple[int, int, int]]=None):
+    @classmethod
+    def fade_out(cls, game_object: GameObject, fade_duration: float = 1.0, immediate: bool = False, additional_channels: Iterator[Tuple[int, int, int]] = None):
         """fade_out(game_object, fade_duration=1.0, immediate=False, additional_channels=None)
 
         Change the opacity of an Object from visible to invisible.
@@ -305,7 +384,7 @@ class CommonObjectSpawnUtils(_HasS4CLClassLog):
         's4clib.spawnobject',
     )
 )
-def _common_spawn_object(output: CommonConsoleCommandOutput, object_definition_id: int, sim_info: SimInfo=None):
+def _common_spawn_object(output: CommonConsoleCommandOutput, object_definition_id: int, sim_info: SimInfo = None):
     if object_definition_id <= 0:
         output('ERROR: object_definition_id must be a positive number above zero.')
         return
