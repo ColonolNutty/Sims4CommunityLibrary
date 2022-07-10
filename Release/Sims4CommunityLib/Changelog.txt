@@ -4,6 +4,32 @@ v1.79:
 - Fixed an issue when checking if an object has a state.
 - Added more details when an interaction fails to queue or fails its tests.
 - Added CommonEnqueueResult to be used as a replacement for EnqueueResult (and add more functionality to it too)
+- Added new Game Object events
+  - Game Object Added To Inventory
+  - Game Object Added To Game Object Inventory
+  - Initialized
+  - Loaded
+  - Spawned
+  - Pre Deleted
+  - Pre Despawned
+  - Game Object Pre Removed From Inventory
+  - Game Object Pre Removed From Game Object Inventory
+- Added new Sim events
+  - Game Object Added To Sim Inventory
+  - Game Object Pre Removed From Sim Inventory
+- Added an alias to the `s4clib.add_object_to_inventory` command called `s4clib.addtosim`
+- Added exclude_values arguments to many of the enums get_all functions.
+- Added a function to create objects to CommonObjectSpawnUtils.
+- Added arguments to specify target actor id and target joint bone name to CommonVisualEffect
+- Updated the Visual Effect commands to allow specifying target joint bone names.
+- Added a function to convert occult types into localized string ids.
+- Added new enums CommonFundType, CommonPuddleLiquid, CommonPuddleSize, CommonSkillEffectiveness
+- Added new strings, one for each occult type.
+- CommonConsoleCommand can now handle float values.
+- Updated the destroy object and schedule object for destruction functions of CommonObjectSpawnUtils to better handle objects located in the inventory of the a Sim or an Object. Instead of deleting the entire stack of the same object, they will now properly delete the single instances of the object we intended to destroy.
+- The remove all occults function will now remove Ghost and Plant Sim occults.
+- The add all occults function will no longer add Robot and Skeleton occult types.
+- Moved many of the development centric code to its own script so as not to clutter the main script with it.
 
 v1.78:
 - Add a command to swap the gender of a Sim. `s4clib.swap_gender`
