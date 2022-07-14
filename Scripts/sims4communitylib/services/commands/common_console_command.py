@@ -354,9 +354,9 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                         __['_account'] = _account
                     if '_connection' in full_arg_spec.args or '_connection' in full_arg_spec.kwonlyargs:
                         __['_connection'] = _connection
-                    output(f'Running command "{command_name}"')
+                    # output(f'Running command "{command_name}"')
                     command_result = func(output, *_, **__)
-                    output(f'Command "{command_name}" finished running.')
+                    # output(f'Command "{command_name}" finished running.')
                     return command_result
                 except Exception as ex:
                     log.error(f'An exception occurred while running command. {func.__name__}', exception=ex)

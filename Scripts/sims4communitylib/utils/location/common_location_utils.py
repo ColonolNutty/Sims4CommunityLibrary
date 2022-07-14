@@ -41,7 +41,7 @@ class CommonLocationUtils:
     def get_lot_corners(lot: Lot) -> Tuple[Any]:
         """get_lot_corners(lot)
 
-        Retrieve the lot corners of the specified Lot.
+        Retrieve the corners of a Lot.
 
         :return: A collection of corners of the specified Lot.
         :rtype: Tuple[Any]
@@ -52,7 +52,7 @@ class CommonLocationUtils:
     def get_lot_corners_of_current_lot() -> Tuple[Any]:
         """get_lot_corners_of_current_lot()
 
-        Retrieve the lot corners of the current Lot.
+        Retrieve the corners of the current Lot.
 
         :return: A collection of corners on the current Lot.
         :rtype: Tuple[Any]
@@ -73,7 +73,7 @@ class CommonLocationUtils:
         return zone.id
 
     @staticmethod
-    def get_zone(zone_id: int, allow_unloaded_zones: bool=False) -> Zone:
+    def get_zone(zone_id: int, allow_unloaded_zones: bool = False) -> Zone:
         """get_zone(zone_id, allow_unloaded_zones=False)
 
         Retrieve the Zone matching an identifier.
@@ -95,7 +95,7 @@ class CommonLocationUtils:
 
         :param zone: An instance of a Zone.
         :type zone: Zone
-        :return: The Lot belonging to the specified Zone or None if a problem occurs.
+        :return: The Lot within the specified Zone or None if a problem occurs.
         :rtype: Union[Lot, None]
         """
         if zone is None:
@@ -110,7 +110,7 @@ class CommonLocationUtils:
 
         .. note:: A plex id is basically a Room location.
 
-        :return: The decimal identifier of the current zone or 0 if the current zone does not have a plex id.
+        :return: The ID of the current zone plex or 0 if the current zone does not have a plex id.
         :rtype: int
         """
         from services import get_plex_service
@@ -122,7 +122,7 @@ class CommonLocationUtils:
 
         Retrieve the plex id for a Zone.
 
-        :return: The Plex Id of the specified zone or -1 if it was not found.
+        :return: The Plex ID of the specified zone or -1 if it was not found.
         :rtype: int
         """
         zone_id = CommonLocationUtils.get_zone_id(zone)
@@ -134,24 +134,26 @@ class CommonLocationUtils:
 
         Retrieve the plex id of a Zone.
 
-        :return: The Plex Id of the specified zone or -1 if it was not found.
+        :return: The Plex ID of the specified zone or 0 if it was not found.
         :rtype: int
         """
         plex_service = services.get_plex_service()
         if zone_id not in plex_service._zone_to_master_map:
             return 0
         (_, plex_id) = plex_service._zone_to_master_map[zone_id]
+        if plex_id == -1:
+            return 0
         return plex_id
 
     @staticmethod
     def get_all_block_ids(zone_id: int) -> Tuple[int]:
         """get_all_block_ids(zone_id)
 
-        Retrieve a collection of all Block Identifiers for a Zone.
+        Retrieve a collection of all Block ids for a Zone.
 
-        :param zone_id: The decimal identifier of the Zone to retrieve the block ids of.
+        :param zone_id: The id of the Zone to retrieve the block ids of.
         :type zone_id: int
-        :return: A collection of block identifiers.
+        :return: A collection of block ids.
         :rtype: Tuple[int]
         """
         plex_id = CommonLocationUtils.get_plex_id(zone_id)
@@ -161,16 +163,41 @@ class CommonLocationUtils:
         return tuple(_buildbuy.get_all_block_polygons(zone_id, plex_id).keys())
 
     @staticmethod
+    def get_block_id_in_zone(zone_id: int, position: CommonVector3, surface_level: int) -> int:
+        """get_block_id_in_zone(zone_id, position, level)
+
+        Retrieve the id of the block containing the position within a specified Zone.
+
+        .. note:: A Block is the same thing as a Room. This information can be used to determine which Room something is located in as well.
+
+        .. note:: The entirety of Outside has a room id of 0.
+
+        :param zone_id: The zone to search.
+        :type zone_id: int
+        :param position: An instance of a vector.
+        :type position: CommonVector3
+        :param surface_level: The surface level of the position.
+        :type surface_level: int
+        :return: The id of the block containing the position.
+        :rtype: int
+        """
+        return CommonLocationUtils.get_block_id(zone_id, position, surface_level)
+
+    @staticmethod
     def get_block_id_in_current_zone(position: CommonVector3, surface_level: int) -> int:
         """get_block_id_in_current_zone(position, level)
 
-        Retrieve the decimal identifier of the block containing the position.
+        Retrieve the id of the block containing the position.
+
+        .. note:: A Block is the same thing as a Room. This information can be used to determine which Room something is located in as well.
+
+        .. note:: The entirety of Outside has a room id of 0.
 
         :param position: An instance of a vector.
         :type position: CommonVector3
         :param surface_level: The surface level of the position.
         :type surface_level: int
-        :return: A decimal identifier of the block containing the position.
+        :return: The id of the block containing the position.
         :rtype: int
         """
         return CommonLocationUtils.get_block_id(CommonLocationUtils.get_current_zone_id(), position, surface_level)

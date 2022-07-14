@@ -683,6 +683,32 @@ class CommonLogRegistry(CommonService):
         return True
 
     # noinspection PyUnusedLocal
+    def enable_all_logs(self, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
+        """enable_all_logs(mod_identifier=None)
+
+        Enable all logs from logging
+
+        :param mod_identifier: The name or identity of the mod to enable logs for. Default is None.
+        :type mod_identifier: Union[str, CommonModIdentity], optional
+        :return: True, if successful. False, if not.
+        :rtype: bool
+        """
+        if self._registered_logs is None:
+            self._registered_logs = dict()
+        if mod_identifier is None:
+            for log_mod_name in self._registered_logs:
+                for log_name in self._registered_logs[log_mod_name]:
+                    self._registered_logs[log_mod_name][log_name].enable()
+        else:
+            mod_name = CommonModIdentity._get_mod_name(mod_identifier)
+            mod_name = mod_name.lower()
+            if mod_name not in self._registered_logs:
+                return False
+            for log_name in self._registered_logs[mod_name]:
+                self._registered_logs[mod_name][log_name].enable()
+        return True
+
+    # noinspection PyUnusedLocal
     def disable_all_logs(self, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
         """disable_all_logs(mod_identifier=None)
 

@@ -19,6 +19,10 @@ from sims4communitylib.classes.math.common_vector3 import CommonVector3
 from sims4communitylib.classes.testing.common_enqueue_result import CommonEnqueueResult
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
 from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
 from sims4communitylib.utils.sims.common_sim_interaction_utils import CommonSimInteractionUtils
@@ -625,3 +629,56 @@ class CommonSimLocationUtils:
             elif role_state_instance._portal_disallowance_tags:
                 return False
         return True
+
+    @classmethod
+    def get_current_room_id(cls, sim_info: SimInfo) -> int:
+        """get_current_room_id(sim_info)
+
+        Retrieve the id of the room a Sim is currently in.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The id of the room the Sim is currently in or -1 if their room is not found.
+        :rtype: int
+        """
+        if sim_info is None:
+            return -1
+        return CommonLocationUtils.get_block_id_in_current_zone(
+            CommonSimLocationUtils.get_position(sim_info),
+            CommonSimLocationUtils.get_surface_level(sim_info)
+        )
+
+    @classmethod
+    def are_in_same_room(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> bool:
+        """are_in_same_room(sim_info_a, sim_info_b)
+
+        Determine if two Sims are in the same room.
+
+        .. note:: The entirety of "Outside" is considered the same "Room", so if both Sims are outside, this function will return True.
+
+        :param sim_info_a: An instance of a Sim.
+        :type sim_info_a: SimInfo
+        :param sim_info_b: An instance of a Sim.
+        :type sim_info_b: SimInfo
+        :return: True, if Sim A is in the same room as Sim B. False, if not.
+        :rtype: bool
+        """
+        if sim_info_a is None or sim_info_b is None:
+            return False
+        source_block_id = cls.get_current_room_id(sim_info_a)
+        target_block_id = cls.get_current_room_id(sim_info_b)
+        return source_block_id == target_block_id
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.print_room_id',
+    'Print the id of the room the Sim is currently in.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to check.', is_optional=True, default_value='Active Sim'),
+    ),
+    show_with_help_command=False
+)
+def _common_print_room_id(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
+    room_id = CommonSimLocationUtils.get_current_room_id(sim_info)
+    output(f'The current room id of {sim_info} is: {room_id}')

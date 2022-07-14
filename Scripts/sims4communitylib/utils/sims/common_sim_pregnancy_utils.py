@@ -62,7 +62,26 @@ class CommonSimPregnancyUtils(HasClassLog):
         return pregnancy_tracker.is_pregnant
 
     @classmethod
-    def start_pregnancy(cls, sim_info: SimInfo, partner_sim_info: SimInfo, pregnancy_origin: PregnancyOrigin=PregnancyOrigin.DEFAULT) -> bool:
+    def get_pregnancy_partner(cls, sim_info: SimInfo) -> Union[SimInfo, None]:
+        """get_pregnancy_partner(sim_info)
+
+        Retrieve the Sim that caused a Sim to become pregnant.
+
+        :param sim_info: The Sim to get the partner of.
+        :type sim_info: SimInfo
+        :return: The Sim that impregnated the specified Sim or None if not found.
+        :rtype: Union[SimInfo, None]
+        """
+        pregnancy_tracker = cls._get_pregnancy_tracker(sim_info)
+        if pregnancy_tracker is None:
+            return None
+        partner_sim = pregnancy_tracker.get_partner()
+        if partner_sim is None:
+            return None
+        return CommonSimUtils.get_sim_info(partner_sim)
+
+    @classmethod
+    def start_pregnancy(cls, sim_info: SimInfo, partner_sim_info: SimInfo, pregnancy_origin: PregnancyOrigin = PregnancyOrigin.DEFAULT) -> bool:
         """start_pregnancy(sim_info, partner_sim_info, pregnancy_origin=PregnancyOrigin.DEFAULT)
 
         Start a pregnancy between a Sim and a Partner Sim.
@@ -374,6 +393,25 @@ class CommonSimPregnancyUtils(HasClassLog):
         elif CommonSpeciesUtils.is_fox(sim_info):
             return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_FOX
         return None
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.print_pregnancy_partner',
+    'Print the Sim that got a Sim pregnant. If they are pregnant.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to change.', is_optional=True, default_value='Active Sim'),
+    ),
+)
+def _common_print_pregnancy_partner(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
+    if sim_info is None:
+        return
+    output(f'Attempting to print the pregnancy partner of {sim_info}.')
+    partner_sim_info = CommonSimPregnancyUtils.get_pregnancy_partner(sim_info)
+    if partner_sim_info is None:
+        output(f'No Sim found to have impregnated {sim_info}.')
+    else:
+        output(f'{partner_sim_info} is the Sim that impregnated {sim_info}.')
 
 
 @CommonConsoleCommand(

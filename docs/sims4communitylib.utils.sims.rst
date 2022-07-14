@@ -85,6 +85,15 @@ Sim Utilities
    :undoc-members:
    :show-inheritance:
 
+****************
+`Walkstyles`
+****************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_walkstyle_utils.CommonSimWalkstyleUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Outfits`
 ------------------------------------------------------
 

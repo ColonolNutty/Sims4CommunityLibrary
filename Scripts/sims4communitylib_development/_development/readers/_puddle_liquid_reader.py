@@ -19,8 +19,8 @@ class _S4CLReaderForUpdate:
     }
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib_dev.log_puddle_liquids', 'Logs a list of puddle liquids and game tag values for easy transfer to CommonPuddleLiquid', show_with_help_command=False)
-def _common_log_game_tags_ready_for_update(output: CommonConsoleCommandOutput) -> None:
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib_dev.log_puddle_liquids', 'Logs a list of puddle liquids for easy transfer to CommonPuddleLiquid', show_with_help_command=False)
+def _common_log_ready_for_update(output: CommonConsoleCommandOutput) -> None:
     output('Logging Puddle Liquids to Messages.txt')
     from sims4communitylib_development._development._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
     from sims4communitylib.enums.common_puddle_liquid import CommonPuddleLiquid

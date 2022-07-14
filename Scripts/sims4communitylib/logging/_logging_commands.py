@@ -113,6 +113,29 @@ def _common_command_disable_all_logs(output: CommonConsoleCommandOutput, mod_nam
 
 @CommonConsoleCommand(
     ModInfo.get_identity(),
+    's4clib.enablealllogs',
+    'Enable all logs.',
+    command_arguments=(
+        CommonConsoleCommandArgument('mod_name', 'Text', 'The name of the mod to enable logs for. If not specified, then logs will be enabled for all mods.', is_optional=True, default_value='All Mods'),
+    ),
+    command_aliases=(
+        's4clib.enablealllogs',
+    )
+)
+def _common_command_enable_all_logs(output: CommonConsoleCommandOutput, mod_name: str=None):
+    if mod_name is None:
+        output(f'Attempting to enable all logs.')
+    else:
+        output(f'Attempting to enable log for mod \'{mod_name}\'.')
+    CommonLogRegistry.get().disable_all_logs(mod_identifier=mod_name)
+    if mod_name is None:
+        output(f'SUCCESS: All logs successfully enabled.')
+    else:
+        output(f'SUCCESS: All logs for mod \'{mod_name}\' successfully enabled.')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
     's4clib.logs',
     'Print a list of all available logs.',
     command_arguments=(
