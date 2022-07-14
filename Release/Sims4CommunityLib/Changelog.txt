@@ -30,6 +30,16 @@ v1.79:
 - The remove all occults function will now remove Ghost and Plant Sim occults.
 - The add all occults function will no longer add Robot and Skeleton occult types.
 - Moved many of the development centric code to its own script so as not to clutter the main script with it.
+- Updated the type hints in CommonSerializable so the return types of sub functions is more accurate.
+- Added a bunch of new values to CommonPostureId
+- Added a command to enable all logs registered to S4CL `s4clib.enablealllogs` DO NOT USE THIS COMMAND LIGHTLY!
+- Added a function to retrieve the block id in a specific zone.
+- Added functions to return the id of the current room a Sim is in as well as whether or not two Sims are in the same room.
+- Added a function to the pregnancy utils to determine the Sim that caused another Sim to become pregnant.
+- Added a command to check which Sim got a Sim pregnant. `s4clib.print_pregnancy_partner`
+- Added new utilities for retrieving the default and current walkstyles of a Sim.
+
+
 
 v1.78:
 - Add a command to swap the gender of a Sim. `s4clib.swap_gender`
