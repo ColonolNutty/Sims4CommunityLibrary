@@ -146,3 +146,40 @@ Systems
    :members:
    :undoc-members:
    :show-inheritance:
+
+
+`Settings`
+------------------------------------------------------
+
+
+`Setting Utils`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.systems.settings.common_setting_utils.CommonSettingUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Settings Data Manager`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.systems.settings.common_settings_data_manager.CommonSettingsDataManager
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Settings Data Manager Utils`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.systems.settings.common_settings_data_manager_utils.CommonSettingsDataManagerUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Settings Data Store`
+-------------------------------------------------
+
+.. autoclass:: sims4communitylib.systems.settings.common_settings_data_store.CommonSettingsDataStore
+   :members:
+   :undoc-members:
+   :show-inheritance:

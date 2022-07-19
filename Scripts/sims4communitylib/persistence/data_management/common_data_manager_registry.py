@@ -61,7 +61,7 @@ class CommonDataManagerRegistry(CommonService, HasClassLog):
                 result: Tuple[CommonPersistenceService] = (
                     # Having this will result in the data being saved to a hidden household.
                     CommonHiddenHouseholdPersistenceService(),
-                    # Having this will result in the data also being saved to a file at saves\mod_name\do_not_remove_mod_name_author_I_am_unique_id_1234_guid_5435.json (Notice that "I_am_unique" becomes a part of the file name because it was specified as the identifier)
+                    # Having this will result in the data also being saved to a file at saves\\mod_name\\do_not_remove_mod_name_author_I_am_unique_id_1234_guid_5435.json (Notice that "I_am_unique" becomes a part of the file name because it was specified as the identifier)
                     CommonFilePersistenceService()
                 )
                 return result
@@ -83,7 +83,7 @@ class CommonDataManagerRegistry(CommonService, HasClassLog):
         self._data_managers: Dict[str, CommonDataManager] = dict()
 
     @staticmethod
-    def common_data_manager(identifier: str=None) -> Callable[[Type[CommonDataManager]], Any]:
+    def common_data_manager(identifier: str = None) -> Callable[[Type[CommonDataManager]], Any]:
         """common_data_manager(identifier=None)
 
         An attribute that will register the decorated data manager to the registry.
@@ -92,11 +92,17 @@ class CommonDataManagerRegistry(CommonService, HasClassLog):
         :type identifier: str, optional
         """
         def _inner_test_class(cls: Type[CommonDataManager]) -> Any:
+            nonlocal identifier
+            if identifier is None:
+                if hasattr(cls, 'get_identifier'):
+                    identifier = cls.get_identifier()
+                else:
+                    identifier = str(cls.__name__)
             CommonDataManagerRegistry()._register_data_manager(cls(identifier=identifier), identifier=identifier)
             return cls
         return _inner_test_class
 
-    def _register_data_manager(self, data_manager: CommonDataManager, identifier: str=None):
+    def _register_data_manager(self, data_manager: CommonDataManager, identifier: str = None):
         self.log.format_with_message('Registering data store.', data_store=data_manager)
         formatted_identifier = self._format_identifier(data_manager.mod_identity, identifier=identifier)
         if formatted_identifier not in self._data_managers:
@@ -144,7 +150,7 @@ class CommonDataManagerRegistry(CommonService, HasClassLog):
                 self.log.format_error_with_message('Failed to clear data manager. An error occurred.', data_manager=data_manager, exception=ex)
         self.log.debug('Done clearing data managers.')
 
-    def locate_data_manager(self, mod_identity: CommonModIdentity, identifier: str=None) -> Union[CommonDataManager, None]:
+    def locate_data_manager(self, mod_identity: CommonModIdentity, identifier: str = None) -> Union[CommonDataManager, None]:
         """locate_data_manager(mod_identity, identifier=None)
 
         Locate a data manager for a mod.
@@ -159,12 +165,12 @@ class CommonDataManagerRegistry(CommonService, HasClassLog):
         formatted_identifier = self._format_identifier(mod_identity, identifier=identifier)
         self.log.format_with_message('Attempting to locate data manager.', identifier=formatted_identifier)
         if formatted_identifier not in self._data_managers:
-            self.log.format_with_message('Data manager not registered for mod \'{}\', adding the default data manager.'.format(mod_identity.name))
+            self.log.format_with_message(f'Data manager not registered for mod \'{mod_identity.name}\', adding the default data manager.')
             return None
         self.log.debug('Located data manager.')
         return self._data_managers[formatted_identifier]
 
-    def _format_identifier(self, mod_identity: CommonModIdentity, identifier: str=None) -> str:
+    def _format_identifier(self, mod_identity: CommonModIdentity, identifier: str = None) -> str:
         if identifier is None:
             return repr(mod_identity)
         else:

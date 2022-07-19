@@ -23,15 +23,15 @@ class CommonDataStore:
     @classmethod
     def get_identifier(cls) -> str:
         """ The identifier of the data store. """
-        raise NotImplementedError('Missing get_identifier class method in \'{}\'.'.format(cls.__name__))
+        raise NotImplementedError(f'Missing get_identifier class method in \'{cls.__name__}\'.')
 
     @property
     def _version(self) -> int:
-        raise NotImplementedError('Missing _version property in \'{}\'.'.format(self.__class__.__name__))
+        raise NotImplementedError(f'Missing _version property in \'{self.__class__.__name__}\'.')
 
     @property
     def _default_data(self) -> Dict[str, Any]:
-        raise NotImplementedError('Missing _default_data property in \'{}\''.format(self.__class__.__name__))
+        raise NotImplementedError(f'Missing _default_data property in \'{self.__class__.__name__}\'')
 
     @property
     def _storage(self) -> Dict[str, Any]:
