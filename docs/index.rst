@@ -34,6 +34,7 @@ To see the readme and the actual code, take a look at the repository on `Github`
    sims4communitylib.notifications
    sims4communitylib.persistence
    sims4communitylib.services
+   sims4communitylib.systems
    sims4communitylib.testing
    sims4communitylib.utils
 

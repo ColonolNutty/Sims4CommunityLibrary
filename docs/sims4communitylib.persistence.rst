@@ -113,6 +113,16 @@ Persistence
 
 
 ********************
+`Individual Folder`
+********************
+
+.. autoclass:: sims4communitylib.persistence.persistence_services.common_individual_folder_persistence_service.CommonIndividualFolderPersistenceService
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+
+********************
 `Hidden Household`
 ********************
 

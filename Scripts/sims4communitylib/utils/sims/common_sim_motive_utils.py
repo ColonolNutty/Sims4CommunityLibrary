@@ -473,6 +473,24 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         return CommonSimStatisticUtils.get_statistic_value(sim_info, mapped_motive_id)
 
     @classmethod
+    def get_motive_id_for_sim(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int]) -> Union[CommonMotiveId, CommonInt, int]:
+        """get_motive_id_for_sim(sim_info, motive_id)
+
+        Translate a motive ID to one that the Sim would have.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param motive_id: The motive to translate.
+        :type motive_id: Union[CommonMotiveId, CommonInt, int]
+        :return: The mapped motive id.
+        :rtype: Union[CommonMotiveId, CommonInt, int]
+        """
+        result = cls._map_motive_id(sim_info, motive_id)
+        if result == -1:
+            return motive_id
+        return result
+
+    @classmethod
     def _map_motive_id(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int]) -> Union[CommonMotiveId, CommonInt, int]:
         motive_mappings = CommonSimMotiveUtils._get_motive_mappings()
         if motive_id not in motive_mappings:
