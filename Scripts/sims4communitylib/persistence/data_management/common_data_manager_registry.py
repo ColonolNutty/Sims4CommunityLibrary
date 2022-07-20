@@ -96,8 +96,6 @@ class CommonDataManagerRegistry(CommonService, HasClassLog):
             if identifier is None:
                 if hasattr(cls, 'get_identifier'):
                     identifier = cls.get_identifier()
-                else:
-                    identifier = str(cls.__name__)
             CommonDataManagerRegistry()._register_data_manager(cls(identifier=identifier), identifier=identifier)
             return cls
         return _inner_test_class

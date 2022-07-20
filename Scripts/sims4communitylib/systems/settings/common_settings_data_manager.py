@@ -16,6 +16,8 @@ class CommonSettingsDataManager(CommonDataManager):
     @classmethod
     def get_identifier(cls) -> str:
         """Retrieve the identifier of the data manager. This identifier is used in the name of the settings file."""
+        if hasattr(cls, 'IDENTIFIER'):
+            return cls.IDENTIFIER
         raise NotImplementedError()
 
     # noinspection PyMissingOrEmptyDocstring
