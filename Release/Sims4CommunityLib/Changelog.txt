@@ -1,3 +1,12 @@
+v1.80:
+- Added an entire item query system. It can be used to quickly setup a library of objects that can be queried.
+- Added a serializable cache system. It can be used to quickly setup a caching system.
+- Added an invidual folder persistence service.
+- Added a vanilla fix for missing postures when Sims attempt to perform interactions.
+- Added a vanilla fix for missing recipes when a recipe to make an object is removed, but the object itself still exists on the lot.
+- Added classes used to store setting data as well as access Settings.
+- Added CommonRunnable and CommonRunnableContext classes. These can be used to quickly setup an instance that will run over a period of time. It handles setup, updates, and teardown of it as well.
+
 v1.79:
 - Fixed an issue with the order of commands when a command is used with quotations.
 - Fixed an issue when setting certain Object States on objects.
