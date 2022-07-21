@@ -42,11 +42,12 @@ class CommonSerializableObjectCacheService(Generic[CommonSerializableObjectCache
         super().__init__()
         self._cache = None
 
-    def cache_needs_update(self, snippet_name: str, snippet_id: int, new_checksum: int) -> bool:
+    def cache_needs_update(self, new_checksum_data: Any) -> bool:
         """Determine if the cache needs to be updated or not."""
         cache = self.load_from_cache()
         if cache is None or not cache.cached_checksums:
             return False
+        (snippet_name, snippet_id, new_checksum) = new_checksum_data
         checksums = cache.cached_checksums
         key = f'{snippet_name}-{snippet_id}'
         if checksums.get(key, -1) != new_checksum:
@@ -93,7 +94,7 @@ class CommonSerializableObjectCacheService(Generic[CommonSerializableObjectCache
     def _deserialize_cache(self, data: Union[str, Dict[str, Any]]) -> CommonSerializableObjectCacheType:
         return CommonSerializableObjectCacheType[CommonSerializable].deserialize(data)
 
-    def create_cache(self, objects: Tuple[CommonSerializable], checksums: Tuple[Tuple[str, int, int]]) -> CommonSerializableObjectCacheType:
+    def create_cache(self, objects: Tuple[CommonSerializable], checksums: Tuple[Any]) -> CommonSerializableObjectCacheType:
         """
         Create a new cache.
         """

@@ -38,7 +38,7 @@ class CommonLoadedItemCacheService(Generic[CommonLoadedItemCacheType], CommonSer
         raise NotImplementedError()
 
     # noinspection PyMissingOrEmptyDocstring
-    def create_cache(self, objects: Tuple[CommonLoadedItem], checksums: Tuple[Tuple[str, int, int]]) -> CommonLoadedItemCacheType:
+    def create_cache(self, objects: Tuple[CommonLoadedItem], checksums: Tuple[Any]) -> CommonLoadedItemCacheType:
         checksum_data = dict()
         for (snippet_name, snippet_id, checksum_value) in checksums:
             checksum_data[f'{snippet_name}-{snippet_id}'] = checksum_value

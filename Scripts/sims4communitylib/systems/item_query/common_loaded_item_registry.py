@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from threading import Thread
-from typing import Iterator, Dict, List, Union, TypeVar, Generic, Tuple
+from typing import Iterator, Dict, List, Union, TypeVar, Generic, Tuple, Any
 
 from sims4communitylib.systems.item_query.persistence.common_loaded_item_cache import CommonLoadedItemCache
 from sims4communitylib.systems.item_query.persistence.common_loaded_item_cache_service import \
@@ -232,11 +232,11 @@ class CommonLoadedItemRegistry(Generic[CommonLoadedItemType], CommonService, Has
             return None
         return self.loaded_items.get(identifier, None)
 
-    def _get_checksums(self) -> Tuple[Tuple[str, int, int]]:
-        checksums: List[Tuple[str, int, int]] = list()
+    def _get_checksums(self) -> Tuple[Any]:
+        checksums: List[Any] = list()
         for item_loader in self.item_loaders:
-            for (snippet_name, snippet_id, checksum_value) in item_loader.get_checksum_data_gen():
-                checksums.append((snippet_name, snippet_id, checksum_value))
+            for new_checksum_data in item_loader.get_checksum_data_gen():
+                checksums.append(new_checksum_data)
         return tuple(checksums)
 
     def _update_cache(self) -> bool:
@@ -245,9 +245,9 @@ class CommonLoadedItemRegistry(Generic[CommonLoadedItemType], CommonService, Has
             self.log.debug(f'No cache service found. {self.__class__.__name__}')
             return False
         for item_loader in self.item_loaders:
-            for (snippet_name, snippet_id, checksum_value) in item_loader.get_checksum_data_gen():
-                if cache_service.cache_needs_update(snippet_name, snippet_id, checksum_value):
-                    self.log.debug(f'Found a checksum that was different. {self.__class__.__name__} {snippet_name}, {snippet_id}')
+            for new_checksum_data in item_loader.get_checksum_data_gen():
+                if cache_service.cache_needs_update(new_checksum_data):
+                    self.log.debug(f'Found a checksum that was different. {self.__class__.__name__} {new_checksum_data}')
                     return True
         self.log.debug(f'Cache does not need update. {self.__class__.__name__}')
         return False
