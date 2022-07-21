@@ -18,6 +18,7 @@ from sims4communitylib.systems.item_query.dtos.common_loaded_item import CommonL
 from sims4communitylib.systems.item_query.common_loaded_item_query_registry import CommonLoadedItemQueryRegistry
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
+from sims4communitylib.systems.item_query.query.common_loaded_item_filter_request import CommonLoadedItemFilterRequest
 
 CommonLoadedItemType = TypeVar('CommonLoadedItemType', bound=CommonLoadedItem)
 
@@ -47,6 +48,15 @@ class CommonLoadedItemQueryUtils(Generic[CommonLoadedItemType], HasLog):
         """ Locate a CAS Part by its identifier. """
         return self._query_registry._registry.locate_by_identifier(identifier)
 
+    def create_filter_request(
+        self,
+        item_filters: Tuple[CommonLoadedItemFilter],
+        item_tests: Iterator[CommonLoadedItemTest],
+        query_type: CommonQueryMethodType = CommonQueryMethodType.ALL_INTERSECT_ANY
+    ) -> CommonLoadedItemFilterRequest:
+        """ Create a filter request for items. """
+        return CommonLoadedItemFilterRequest(item_filters, item_tests, query_type=query_type)
+
     def has_for_filters(
         self,
         item_filters: Tuple[CommonLoadedItemFilter],
@@ -54,8 +64,8 @@ class CommonLoadedItemQueryUtils(Generic[CommonLoadedItemType], HasLog):
         query_type: CommonQueryMethodType = CommonQueryMethodType.ALL_INTERSECT_ANY
     ) -> bool:
         """Determine if any items are available that match filters."""
-        query = self._query_registry.create_query(item_filters, query_type=query_type)
-        return self._query_registry.has_items((query, ), item_tests)
+        filter_request = self.create_filter_request(item_filters, item_tests, query_type=query_type)
+        return self._query_registry.has_items((filter_request, ))
 
     def get_for_filters_gen(
         self,
@@ -70,8 +80,8 @@ class CommonLoadedItemQueryUtils(Generic[CommonLoadedItemType], HasLog):
             item_tests=item_tests,
             query_type=query_type
         )
-        query = self._query_registry.create_query(item_filters, query_type=query_type)
-        query_result = self._query_registry.get_items_gen((query,), item_tests)
+        filter_request = self.create_filter_request(item_filters, item_tests, query_type=query_type)
+        query_result = self._query_registry.get_items_gen((filter_request,))
         had_items = False
         for item in query_result:
             had_items = True

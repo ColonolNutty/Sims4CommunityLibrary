@@ -104,30 +104,22 @@ class CommonLoadedItemQueryRegistry(Generic[CommonLoadedItemType], CommonService
         """ Add an item organizer. """
         self._item_organizers.append(item_organizer_init(key_type))
 
-    def create_query(
-        self,
-        item_filters: Tuple[CommonLoadedItemFilter],
-        query_type: CommonQueryMethodType = CommonQueryMethodType.ALL_INTERSECT_ANY
-    ) -> CommonLoadedItemFilterRequest:
-        """ Create a query for items. """
-        return CommonLoadedItemFilterRequest(item_filters, query_type=query_type)
-
-    def has_items(self, requests: Tuple[CommonLoadedItemFilterRequest], item_tests: Iterator[CommonLoadedItemTest]) -> bool:
+    def has_items(self, requests: Tuple[CommonLoadedItemFilterRequest]) -> bool:
         """ Determine if items exist for queries. """
         if self.log.enabled:
             self.log.format_with_message(f'Checking if has {self._item_name}s', queries=requests)
-        for _ in self.get_items_gen(requests, item_tests):
+        for _ in self.get_items_gen(requests):
             return True
         return False
 
-    def get_items_gen(self, requests: Tuple[CommonLoadedItemFilterRequest], item_tests: Iterator[CommonLoadedItemTest]) -> Iterator[CommonLoadedItemType]:
+    def get_items_gen(self, requests: Tuple[CommonLoadedItemFilterRequest]) -> Iterator[CommonLoadedItemType]:
         """ Retrieve items matching the requests. """
         if self.log.enabled:
-            self.log.format_with_message(f'Getting {self._item_name}s', queries=requests, item_tests=item_tests)
+            self.log.format_with_message(f'Getting {self._item_name}s', requests=requests)
         if self._collecting:
             return tuple()
-        for query in requests:
-            yield from self._query_items(query, item_tests)
+        for request in requests:
+            yield from self._query_items(request, request.item_tests)
         if self.verbose_log.enabled:
             self.verbose_log.debug(f'Finished locating {self._item_name}s')
 

@@ -5,14 +5,18 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Tuple, Union, Any
+from typing import Tuple, Union, TypeVar, Generic
 
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
+from sims4communitylib.enums.enumtypes.common_int_flags import CommonIntFlags
 from sims4communitylib.systems.item_query.query.common_loaded_item_key import CommonLoadedItemKey
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 
+ItemKeyType = TypeVar('ItemKeyType', int, CommonInt, CommonIntFlags)
 
-class CommonLoadedItemFilter(HasLog):
+
+class CommonLoadedItemFilter(Generic[ItemKeyType], HasLog):
     """ A filter for use when querying loaded items. """
 
     # noinspection PyMissingOrEmptyDocstring
@@ -30,7 +34,7 @@ class CommonLoadedItemFilter(HasLog):
         match_all: bool,
         match_at_least_one: bool = False,
         exclude: bool = False,
-        key_type: Any = None
+        key_type: ItemKeyType = None
     ):
         super().__init__()
         self._match_all = match_all
@@ -50,7 +54,7 @@ class CommonLoadedItemFilter(HasLog):
         return match_text
 
     @property
-    def key_type(self) -> Union[Any, None]:
+    def key_type(self) -> Union[ItemKeyType, None]:
         """ The type of keys produced by this filter. """
         return self._key_type
 

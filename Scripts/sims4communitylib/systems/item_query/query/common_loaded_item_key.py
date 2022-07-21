@@ -5,18 +5,23 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any, Tuple
+from typing import Any, Tuple, TypeVar, Generic
+
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
+from sims4communitylib.enums.enumtypes.common_int_flags import CommonIntFlags
+
+ItemKeyType = TypeVar('ItemKeyType', int, CommonInt, CommonIntFlags)
 
 
-class CommonLoadedItemKey:
+class CommonLoadedItemKey(Generic[ItemKeyType]):
     """ A key for a loaded item. """
-    def __init__(self, key_type: Any, value: Any):
+    def __init__(self, key_type: ItemKeyType, value: Any):
         self._key_type = key_type
         self._value = value
         self._key = (key_type, value)
 
     @property
-    def key_type(self) -> Any:
+    def key_type(self) -> ItemKeyType:
         """ The type of key. """
         return self._key_type
 
@@ -26,7 +31,7 @@ class CommonLoadedItemKey:
         return self._value
 
     @property
-    def key(self) -> Tuple[Any, Any]:
+    def key(self) -> Tuple[ItemKeyType, Any]:
         """ The combination of the type and value. """
         return self._key
 

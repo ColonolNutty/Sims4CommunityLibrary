@@ -7,18 +7,21 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Any, Tuple, Generic, TypeVar
 
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
+from sims4communitylib.enums.enumtypes.common_int_flags import CommonIntFlags
 from sims4communitylib.systems.item_query.dtos.common_loaded_item import CommonLoadedItem
 
+CommonLoadedItemKeyType = TypeVar('CommonLoadedItemKeyType', int, CommonInt, CommonIntFlags)
 CommonLoadedItemType = TypeVar('CommonLoadedItemType', bound=CommonLoadedItem)
 
 
-class CommonLoadedItemOrganizer(Generic[CommonLoadedItemType]):
+class CommonLoadedItemOrganizer(Generic[CommonLoadedItemKeyType, CommonLoadedItemType]):
     """ An organizer of items. """
-    def __init__(self, key_type: Any):
+    def __init__(self, key_type: CommonLoadedItemKeyType):
         self._key_type = key_type
 
     @property
-    def key_type(self) -> Any:
+    def key_type(self) -> CommonLoadedItemKeyType:
         """ The type of keys this organizer produces. """
         return self._key_type
 
