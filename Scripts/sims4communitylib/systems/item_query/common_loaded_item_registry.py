@@ -101,8 +101,6 @@ class CommonLoadedItemRegistry(Generic[CommonLoadedItemType], CommonService, Has
     @property
     def loaded_items(self) -> Dict[str, CommonLoadedItemType]:
         """A library of items organized by their identifiers."""
-        if self._loaded_items is None:
-            self.load()
         return self._loaded_items
 
     @loaded_items.setter
