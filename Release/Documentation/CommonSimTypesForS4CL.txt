@@ -1,0 +1,222 @@
+The following is a list of Common Sim Types used by various mods to uniquely identify the Age, Species, and Occult Type of a Sim.
+
+=Notes=
+* Please note that anything a Non-Occult Sim Type can use or be available for the appropriate Occult Sim Type. i.e. Something available for ADULT_HUMAN will also be available for ADULT_HUMAN_VAMPIRE, but something available for ADULT_HUMAN_VAMPIRE will not be available for ADULT_HUMAN.
+* Not all Sim Types are listed here, but they all match a similar pattern!
+** For Occult Sim Types the pattern is <Age>_<Species>_<OccultType>. CHILD_HUMAN_ALIEN, TEEN_HUMAN_SKELETON, ELDER_LARGE_DOG_VAMPIRE, etc.
+** For Non-Occult Sim Types, the pattern is <Age>_<Species>. For example, CHILD_HUMAN, TEEN_HUMAN, ADULT_LARGE_DOG, ADULT_SMALL_DOG, etc.
+
+=Ages=
+* BABY - Available for HUMAN only
+* TODDLER - Available for HUMAN only
+* CHILD - Available for HUMAN, LARGE_DOG, SMALL_DOG, CAT, and FOX (Foxes do not have a Child age in base game)
+* TEEN - Available for HUMAN only
+* YOUNG_ADULT - Available for HUMAN only
+* ADULT - Available for HUMAN, LARGE_DOG, SMALL_DOG, CAT, and FOX
+* ELDER - Available for HUMAN, LARGE_DOG, SMALL_DOG, CAT, and FOX
+
+=Species=
+* HUMAN
+* LARGE_DOG
+* SMALL_DOG
+* CAT
+* FOX
+
+=Occult Types=
+* ALIEN
+* GHOST
+* MERMAID
+* PLANT_SIM
+* ROBOT
+* SKELETON
+* VAMPIRE
+* WITCH
+* WEREWOLF
+
+=Human Sims=
+
+{| class="wikitable"
+!colspan="1"|Sim Type
+!colspan="1"|Description
+|-
+|ADULT_HUMAN
+|Indicates a Sim is an Adult Human Non-Occult.
+|-
+|ADULT_HUMAN_VAMPIRE
+|Indicates a Sim is an Adult Human Vampire.
+|-
+|ADULT_HUMAN_GHOST
+|Indicates a Sim is an Adult Human Ghost.
+|-
+|ADULT_HUMAN_ALIEN
+|Indicates a Sim is an Adult Human Alien.
+|-
+|ADULT_HUMAN_MERMAID
+|Indicates a Sim is an Adult Human Mermaid.
+|-
+|ADULT_HUMAN_WITCH
+|Indicates a Sim is an Adult Human Witch.
+|-
+|ADULT_HUMAN_ROBOT
+|Indicates a Sim is an Adult Human Robot.
+|-
+|ADULT_HUMAN_SKELETON
+|Indicates a Sim is an Adult Human Skeleton.
+|-
+|ADULT_HUMAN_PLANT_SIM
+|Indicates a Sim is an Adult Human Skeleton.
+|-
+|ADULT_HUMAN_WEREWOLF
+|Indicates a Sim is an Adult Human Werewolf.
+|}
+
+=Animal Sims=
+==Small Dog==
+
+{| class="wikitable"
+!colspan="1"|Sim Type
+!colspan="1"|Description
+|-
+|ADULT_SMALL_DOG
+|Indicates a Sim is an Adult Small Dog Non-Occult.
+|-
+|ADULT_SMALL_DOG_VAMPIRE
+|Indicates a Sim is an Adult Small Dog Vampire.
+|-
+|ADULT_SMALL_DOG_GHOST
+|Indicates a Sim is an Adult Small Dog Ghost.
+|-
+|ADULT_SMALL_DOG_ALIEN
+|Indicates a Sim is an Adult Small Dog Alien.
+|-
+|ADULT_SMALL_DOG_MERMAID
+|Indicates a Sim is an Adult Small Dog Mermaid.
+|-
+|ADULT_SMALL_DOG_WITCH
+|Indicates a Sim is an Adult Small Dog Witch.
+|-
+|ADULT_SMALL_DOG_ROBOT
+|Indicates a Sim is an Adult Small Dog Robot.
+|-
+|ADULT_SMALL_DOG_SKELETON
+|Indicates a Sim is an Adult Small Dog Skeleton.
+|-
+|ADULT_SMALL_DOG_PLANT_SIM
+|Indicates a Sim is an Adult Small Dog Plant Sim.
+|-
+|ADULT_SMALL_DOG_WEREWOLF
+|Indicates a Sim is an Adult Small Dog Werewolf.
+|}
+
+==Large Dog==
+
+{| class="wikitable"
+!colspan="1"|Sim Type
+!colspan="1"|Description
+|-
+|ADULT_LARGE_DOG
+|Indicates a Sim is an Adult Large Dog Non-Occult.
+|-
+|ADULT_LARGE_DOG_VAMPIRE
+|Indicates a Sim is an Adult Large Dog Vampire.
+|-
+|ADULT_LARGE_DOG_GHOST
+|Indicates a Sim is an Adult Large Dog Ghost.
+|-
+|ADULT_LARGE_DOG_ALIEN
+|Indicates a Sim is an Adult Large Dog Alien.
+|-
+|ADULT_LARGE_DOG_MERMAID
+|Indicates a Sim is an Adult Large Dog Mermaid.
+|-
+|ADULT_LARGE_DOG_WITCH
+|Indicates a Sim is an Adult Large Dog Witch.
+|-
+|ADULT_LARGE_DOG_ROBOT
+|Indicates a Sim is an Adult Large Dog Robot.
+|-
+|ADULT_LARGE_DOG_SKELETON
+|Indicates a Sim is an Adult Large Dog Skeleton.
+|-
+|ADULT_LARGE_DOG_PLANT_SIM
+|Indicates a Sim is an Adult Large Dog Plant Sim.
+|-
+|ADULT_LARGE_DOG_WEREWOLF
+|Indicates a Sim is an Adult Large Dog Werewolf.
+|}
+
+==Cat==
+
+{| class="wikitable"
+!colspan="1"|Sim Type
+!colspan="1"|Description
+|-
+|ADULT_CAT
+|Indicates a Sim is an Adult Cat Non-Occult.
+|-
+|ADULT_CAT_VAMPIRE
+|Indicates a Sim is an Adult Cat Vampire.
+|-
+|ADULT_CAT_GHOST
+|Indicates a Sim is an Adult Cat Ghost.
+|-
+|ADULT_CAT_ALIEN
+|Indicates a Sim is an Adult Cat Alien.
+|-
+|ADULT_CAT_MERMAID
+|Indicates a Sim is an Adult Cat Mermaid.
+|-
+|ADULT_CAT_WITCH
+|Indicates a Sim is an Adult Cat Witch.
+|-
+|ADULT_CAT_ROBOT
+|Indicates a Sim is an Adult Cat Robot.
+|-
+|ADULT_CAT_SKELETON
+|Indicates a Sim is an Adult Cat Skeleton.
+|-
+|ADULT_CAT_PLANT_SIM
+|Indicates a Sim is an Adult Cat Plant Sim.
+|-
+|ADULT_CAT_WEREWOLF
+|Indicates a Sim is an Adult Cat Werewolf.
+|}
+
+==Fox==
+
+{| class="wikitable"
+!colspan="1"|Sim Type
+!colspan="1"|Description
+|-
+|ADULT_FOX
+|Indicates a Sim is an Adult Fox Non-Occult.
+|-
+|ADULT_FOX_VAMPIRE
+|Indicates a Sim is an Adult Fox Vampire.
+|-
+|ADULT_FOX_GHOST
+|Indicates a Sim is an Adult Fox Ghost.
+|-
+|ADULT_FOX_ALIEN
+|Indicates a Sim is an Adult Fox Alien.
+|-
+|ADULT_FOX_MERMAID
+|Indicates a Sim is an Adult Fox Mermaid.
+|-
+|ADULT_FOX_WITCH
+|Indicates a Sim is an Adult Fox Witch.
+|-
+|ADULT_FOX_ROBOT
+|Indicates a Sim is an Adult Fox Robot.
+|-
+|ADULT_FOX_SKELETON
+|Indicates a Sim is an Adult Fox Skeleton.
+|-
+|ADULT_FOX_PLANT_SIM
+|Indicates a Sim is an Adult Fox Plant Sim.
+|-
+|ADULT_FOX_WEREWOLF
+|Indicates a Sim is an Adult Fox Werewolf.
+|}
+
+[[Category:Sims4CommunityLibrary]]
