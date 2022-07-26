@@ -13,6 +13,8 @@ v1.80:
 - Fixed an issue when saving the CommonSerializableObjectCache when the folder paths do not exist. It will now properly create all directories that lead to the cache save location.
 - Added a new function to apply pressure to the next interaction of a Sim. (CommonSimInteractionUtils)
 - Added an assertion to catch when a None location is sent to the CommonObjectSpawnUtils.spawn_object_near_location function
+- Updated many of the CommonSimGenderPreferenceUtils for the latest High School DLC patch.
+- Added commands to apply the default gender preferences to all Sims or a single Sim. `s4clib.apply_default_gender_pref_to_all_sims` and `s4clib.apply_default_gender_pref`
 - Fixed a couple errors caused by the high school DLC patch
 
 v1.79:
