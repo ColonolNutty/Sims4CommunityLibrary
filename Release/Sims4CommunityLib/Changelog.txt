@@ -6,6 +6,14 @@ v1.80:
 - Added a vanilla fix for missing recipes when a recipe to make an object is removed, but the object itself still exists on the lot.
 - Added classes used to store setting data as well as access Settings.
 - Added CommonRunnable and CommonRunnableContext classes. These can be used to quickly setup an instance that will run over a period of time. It handles setup, updates, and teardown of it as well.
+- Added new utility CommonSimDemographicTypeUtils
+- Added new enum CommonSimDemographicTypes
+- Added new dialog CommonChooseSimDemographicTypesDialog
+- Added new enum types CommonVersionedInt and CommonVersionedIntFlags
+- Fixed an issue when saving the CommonSerializableObjectCache when the folder paths do not exist. It will now properly create all directories that lead to the cache save location.
+- Added a new function to apply pressure to the next interaction of a Sim. (CommonSimInteractionUtils)
+- Added an assertion to catch when a None location is sent to the CommonObjectSpawnUtils.spawn_object_near_location function
+- Fixed a couple errors caused by the high school DLC patch
 
 v1.79:
 - Fixed an issue with the order of commands when a command is used with quotations.
