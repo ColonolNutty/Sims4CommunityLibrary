@@ -342,6 +342,14 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Sim Demographics`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_sim_demographic_types.CommonSimDemographicType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Sim Type`
 ----------------------------------------------------------------------
 

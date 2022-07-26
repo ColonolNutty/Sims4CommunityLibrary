@@ -36,7 +36,7 @@ class CommonSimRabbitHoleUtils:
         return rabbit_hole_id
 
     @classmethod
-    def put_sim_into_rabbit_hole(cls, sim_info: SimInfo, rabbit_hole: Union[RabbitHole, int], on_exit_rabbit_hole_callback: Callable[[SimInfo, bool], None]=None) -> CommonTestResult:
+    def put_sim_into_rabbit_hole(cls, sim_info: SimInfo, rabbit_hole: Union[RabbitHole, int], on_exit_rabbit_hole_callback: Callable[[SimInfo, bool], None] = None) -> CommonTestResult:
         """put_sim_into_rabbit_hole(sim_info, rabbit_hole_identifier, on_exit_rabbit_hole_callback=None)
 
         Put a Sim into a Rabbit Hole.
@@ -65,8 +65,8 @@ class CommonSimRabbitHoleUtils:
 
         if rabbit_hole_id is not None:
             if on_exit_rabbit_hole_callback is not None:
-                def _on_exit_rabbit_hole(canceled: bool=False):
-                    on_exit_rabbit_hole_callback(sim_info, cancelled=canceled)
+                def _on_exit_rabbit_hole(canceled: bool = False):
+                    on_exit_rabbit_hole_callback(sim_info, canceled)
                     rabbit_hole_service.remove_rabbit_hole_expiration_callback(sim_id, rabbit_hole_id, _on_exit_rabbit_hole)
 
                 rabbit_hole_service.set_rabbit_hole_expiration_callback(sim_id, rabbit_hole_id, _on_exit_rabbit_hole)
@@ -74,7 +74,7 @@ class CommonSimRabbitHoleUtils:
         return CommonTestResult(False, reason='Failed to put the Sim into the rabbit hole.')
 
     @classmethod
-    def try_remove_sim_from_rabbit_hole(cls, sim_info: SimInfo, on_remove_from_rabbit_hole_result_callback: Callable[[SimInfo, bool], None]=None) -> CommonTestResult:
+    def try_remove_sim_from_rabbit_hole(cls, sim_info: SimInfo, on_remove_from_rabbit_hole_result_callback: Callable[[SimInfo, bool], None] = None) -> CommonTestResult:
         """try_remove_sim_from_rabbit_hole(sim_info, on_remove_from_rabbit_hole_result_callback=None)
 
         Remove a Sim from a rabbit hole.

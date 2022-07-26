@@ -14,11 +14,13 @@ To see the readme and the actual code, take a look at the repository on `Github`
    sims4communitylib.classes.buffs
    sims4communitylib.classes.calculations
    sims4communitylib.classes.effects
+   sims4communitylib.classes.enums
    sims4communitylib.classes.filters
    sims4communitylib.classes.interactions
-   sims4communitylib.classes.options
    sims4communitylib.classes.math
    sims4communitylib.classes.misc
+   sims4communitylib.classes.options
+   sims4communitylib.classes.resolvers
    sims4communitylib.classes.runnables
    sims4communitylib.classes.serialization
    sims4communitylib.classes.test_based_scores

@@ -80,3 +80,27 @@ Custom Enum Types
    :members:
    :undoc-members:
    :show-inheritance:
+
+`Versioned Int`
+--------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.enumtypes.common_versioned_int.CommonVersionedInt
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Versioned Int Flags`
+--------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.enumtypes.common_versioned_int_flags.CommonVersionedIntFlags
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Versioned Values Mixin`
+--------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.enumtypes.common_versioned_values_mixin.CommonVersionedValuesMixin
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -110,6 +110,7 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         :return: The stored data.
         :rtype: Union[Any, None]
         """
+        # noinspection PyUnresolvedReferences
         key = key or str(sys._getframe(1).f_code.co_name)
         if key not in self._data:
             self.log.format_with_message('Key not found in data. Setting to default value.', sim=self.sim_info, key=key, data=self._data, default=default)
@@ -139,6 +140,7 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         :param encode: If specified, the data will be encoded using this function and the result will be the new data stored. Default is None.
         :type encode: Callable[[Any], Any], optional
         """
+        # noinspection PyUnresolvedReferences
         key = key or str(sys._getframe(1).f_code.co_name)
         if encode is not None:
             value = encode(value)
@@ -152,6 +154,7 @@ class _CommonSimDataStorage(HasClassLog, metaclass=_CommonSimDataStorageMetaclas
         :param key: The key for the data. If None, the name of the calling function will be used.
         :type key: str, optional
         """
+        # noinspection PyUnresolvedReferences
         key = key or str(sys._getframe(1).f_code.co_name)
         if key not in self._data:
             self.log.format_with_message('Key not found in data. Not removing it.', sim=self.sim_info, key=key, data=self._data)

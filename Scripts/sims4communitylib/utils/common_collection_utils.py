@@ -33,6 +33,38 @@ class CommonCollectionUtils:
                or isinstance(obj, dict)
 
     @staticmethod
+    def lists_are_equal(list_one: Union[Tuple[Any], List[Any]], list_two: Union[Tuple[Any], List[Any]]) -> bool:
+        """lists_are_equal(list_one, list_two)
+
+        Determine if two collections contain tbe exact same values.
+
+        .. note:: The order of the values in each collection will be asserted.
+
+        :param list_one: The first value. (Can be any collection type)
+        :type list_one: Union[Tuple[Any], List[Any]]
+        :param list_two: The second value. (Can be any collection type)
+        :type list_two: Union[Tuple[Any], List[Any]]
+        :return: True, if both lists are exactly the same. False, if not.
+        :rtype: bool
+        """
+        if not CommonCollectionUtils.is_collection(list_one):
+            return False
+        if not CommonCollectionUtils.is_collection(list_two):
+            return False
+        if len(list_one) != len(list_two):
+            return False
+        if isinstance(list_one, set) or isinstance(list_two, set):
+            return list_one == list_two
+        current_idx = 0
+        while current_idx < len(list_one):
+            item_one = list_one[current_idx]
+            item_two = list_two[current_idx]
+            if item_one != item_two:
+                return False
+            current_idx += 1
+        return True
+
+    @staticmethod
     def intersects(list_one: List[Any], *list_items: Any) -> bool:
         """intersects(list_one, *list_items)
 

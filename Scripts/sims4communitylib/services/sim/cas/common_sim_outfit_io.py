@@ -370,7 +370,9 @@ class CommonSimOutfitIO(HasLog):
             if cas_part_id == -1 or cas_part_id is None:
                 self.log.format_with_message('Ignoring body_type with negative or None cas_part_id.', sim=self.sim_info, outfit_category_and_index=self.outfit_category_and_index, body_type=body_type, cas_part_id=cas_part_id)
                 continue
+            # noinspection PyUnresolvedReferences
             if isinstance(body_type, int) and body_type in BodyType.value_to_name:
+                # noinspection PyUnresolvedReferences
                 new_body_type = CommonResourceUtils.get_enum_by_name(BodyType.value_to_name[body_type], BodyType, default_value=-1)
                 if new_body_type == -1:
                     new_body_type = body_type

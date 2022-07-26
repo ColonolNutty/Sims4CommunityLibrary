@@ -8,7 +8,6 @@ Copyright (c) COLONOLNUTTY
 from typing import Union, Iterator
 
 from distributor.shared_messages import IconInfoData
-from game_effect_modifier.continuous_statistic_modifier import ContinuousStatisticModifier
 from objects.components.statistic_component import StatisticComponent
 from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo

@@ -344,7 +344,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
         help_command_name = CommonConsoleCommandService()._help_command_name(mod_identity)
 
         def _wrapped_command(func) -> Any:
-            command_name = command_aliases[0]
+            # command_name = command_aliases[0]
             full_arg_spec = inspect.getfullargspec(func)
 
             @wraps(func)
@@ -376,6 +376,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
             import paths
             import sims4.telemetry
         except:
+            # noinspection PyUnusedLocal
             def _named_command(wrapped_func, original_func, help_command_name) -> Any:
                 return
             return _named_command

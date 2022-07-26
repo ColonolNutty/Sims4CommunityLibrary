@@ -125,7 +125,7 @@ class CommonObjectSpawnUtils(_HasS4CLClassLog):
         post_object_spawned_callback: Callable[[GameObject], Any] = None,
         **kwargs
     ) -> GameObject:
-        """spawn_object_on_lot(\
+        """spawn_object_near_location(\
             object_definition_id,\
             location,\
             radius=1,\
@@ -149,6 +149,8 @@ class CommonObjectSpawnUtils(_HasS4CLClassLog):
         :return: An instance of the spawned Object or None if not successfully spawned.
         :rtype: GameObject
         """
+        if location is None:
+            raise AssertionError('location was found to be None!')
         current_translation = location.transform.translation
         x = int(current_translation.x)
         min_x = x - radius

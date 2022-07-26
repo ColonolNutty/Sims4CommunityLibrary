@@ -41,6 +41,15 @@ Sim Utilities
    :show-inheritance:
 
 *******************
+`Demographic Types`
+*******************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_demographic_type_utils.CommonSimDemographicTypeUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*******************
 `Gender`
 *******************
 

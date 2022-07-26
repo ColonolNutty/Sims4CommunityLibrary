@@ -29,6 +29,7 @@ class CommonCareerTrackUtils:
         if career_track is None:
             return tuple()
         if include_sub_branches:
+            # noinspection PyUnresolvedReferences
             if hasattr(career_track, 'branches') and career_track.branches is not None:
                 career_track_branches: List[TunableCareerTrack] = list(career_track.branches)
                 for sub_career_track in career_track_branches:
@@ -38,6 +39,7 @@ class CommonCareerTrackUtils:
                     career_track_branches.extend(sub_branches)
                 return tuple(career_track_branches)
         else:
+            # noinspection PyUnresolvedReferences
             if hasattr(career_track, 'branches') and career_track.branches is not None:
                 return tuple(career_track.branches)
         return tuple()
@@ -58,6 +60,7 @@ class CommonCareerTrackUtils:
         if career_track is None:
             return tuple()
         if include_branches:
+            # noinspection PyUnresolvedReferences
             if hasattr(career_track, 'career_levels') and career_track.career_levels is not None:
                 career_levels: List[CareerLevel] = list(career_track.career_levels)
                 branches = cls.get_branches(career_track)
@@ -68,6 +71,7 @@ class CommonCareerTrackUtils:
                     career_levels.extend(sub_career_levels)
                 return tuple(career_levels)
         else:
+            # noinspection PyUnresolvedReferences
             if hasattr(career_track, 'career_levels') and career_track.career_levels is not None:
                 return tuple(career_track.career_levels)
         return tuple()

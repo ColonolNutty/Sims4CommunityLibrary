@@ -62,7 +62,7 @@ class CommonSerializableObjectCacheService(Generic[CommonSerializableObjectCache
             CommonIOUtils.delete_file(file_path)
 
         if not os.path.exists(folder_path):
-            os.mkdir(folder_path)
+            os.makedirs(folder_path, exist_ok=True)
 
         CommonJSONIOUtils.write_to_file(file_path, cache.serialize())
         self._cache = cache

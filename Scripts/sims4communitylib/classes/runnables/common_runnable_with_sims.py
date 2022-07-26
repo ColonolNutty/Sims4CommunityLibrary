@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 
-from typing import Union, List, Tuple, Type, TypeVar, Generic
+from typing import Union, List, Tuple, TypeVar, Generic
 
 from sims.sim import Sim
 from sims4communitylib.classes.runnables.common_runnable import CommonRunnable

@@ -5,7 +5,6 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import services
 from typing import Union, Iterator, Any, Tuple, List
 
 from interactions.base.immediate_interaction import ImmediateSuperInteraction

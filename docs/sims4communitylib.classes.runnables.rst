@@ -48,3 +48,11 @@ Runnable Classes
    :members:
    :private-members:
    :show-inheritance:
+
+`Runnable State`
+--------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_runnable_state.CommonRunnableState
+   :members:
+   :undoc-members:
+   :show-inheritance:

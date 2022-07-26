@@ -113,6 +113,20 @@ class CommonSimInteractionUtils(HasClassLog):
         )
         return cls.has_interactions_running_or_queued(sim_info, interactions)
 
+    @staticmethod
+    def apply_pressure_to_next_interaction_of(sim_info: SimInfo):
+        """apply_pressure_to_next_interaction_of(sim_info)
+
+        Apply pressure to the interaction queue of a Sim for their next interaction.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None or sim.queue is None:
+            return
+        sim.queue._apply_next_pressure()
+
     @classmethod
     def get_swim_interaction(cls, sim_info: SimInfo) -> Union[int, CommonInteractionId]:
         """get_swim_interaction(sim_info)
@@ -483,6 +497,7 @@ class CommonSimInteractionUtils(HasClassLog):
         if sim.queue is None:
             log.format_with_message('No Queue found for Sim.', sim=sim_info)
             return CommonEnqueueResult(CommonTestResult(False, reason=f'No Queue found for Sim {sim_info}'), CommonExecutionResult.NONE)
+        # noinspection PyPropertyAccess
         if sim.posture_state is None:
             log.format_with_message('No Posture State found for Sim.', sim=sim_info)
             return CommonEnqueueResult(CommonTestResult(False, reason=f'No Posture State found for Sim {sim_info}'), CommonExecutionResult.NONE)
@@ -772,6 +787,7 @@ class CommonSimInteractionUtils(HasClassLog):
         if sim.queue is None:
             log.format_with_message('No Queue found for Sim.', sim=sim_info)
             return CommonEnqueueResult(CommonTestResult(False, reason=f'No Queue found for Sim {sim_info}'), CommonExecutionResult.NONE)
+        # noinspection PyPropertyAccess
         if sim.posture_state is None:
             log.format_with_message('No Posture State found for Sim.', sim=sim_info)
             return CommonEnqueueResult(CommonTestResult(False, reason=f'No Posture State found for Sim {sim_info}'), CommonExecutionResult.NONE)
@@ -875,6 +891,7 @@ class CommonSimInteractionUtils(HasClassLog):
         if sim.queue is None:
             log.format_with_message('No Queue found for Sim.', sim=sim_info)
             return CommonTestResult(False, reason=f'No Queue found for Sim {sim_info}')
+        # noinspection PyPropertyAccess
         if sim.posture_state is None:
             log.format_with_message('No Posture State found for Sim.', sim=sim_info)
             return CommonTestResult(False, reason=f'No Posture State found for Sim {sim_info}')

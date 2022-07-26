@@ -10,7 +10,6 @@ from typing import List, Dict, Any, Tuple, Set, Callable, Union, Iterator, TypeV
 
 from sims4communitylib.systems.item_query.item_tests.common_loaded_item_test import CommonLoadedItemTest
 from sims4communitylib.systems.item_query.query.common_loaded_item_filter_request import CommonLoadedItemFilterRequest
-from sims4communitylib.systems.item_query.query.common_loaded_item_filter import CommonLoadedItemFilter
 from sims4communitylib.systems.item_query.query.common_loaded_item_organizer import CommonLoadedItemOrganizer
 from sims4communitylib.systems.item_query.dtos.common_loaded_item import CommonLoadedItem
 from sims4communitylib.systems.item_query.common_loaded_item_registry import CommonLoadedItemRegistry
