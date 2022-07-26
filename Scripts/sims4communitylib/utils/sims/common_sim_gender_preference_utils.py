@@ -5,18 +5,19 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Tuple
+from typing import Tuple, Union
 
+from sims.global_gender_preference_tuning import GenderPreferenceType, GlobalGenderPreferenceTuning
 from sims.sim_info import SimInfo
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.enums.common_gender import CommonGender
-from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
-from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 
 
 class CommonSimGenderPreferenceUtils:
@@ -25,8 +26,51 @@ class CommonSimGenderPreferenceUtils:
     HIGH_PREFERENCE_THRESHOLD = 80
 
     @staticmethod
-    def set_gender_preference_amount(sim_info: SimInfo, gender: CommonGender, amount: int) -> bool:
-        """set_gender_preference_amount(sim_info, gender, amount)
+    def set_preference_for_gender(sim_info: SimInfo, gender: CommonGender, is_attracted_to_gender: Union[bool, None], preference_type: GenderPreferenceType = GenderPreferenceType.ROMANTIC) -> CommonExecutionResult:
+        """set_preference_for_gender(sim_info, gender, is_attracted_to_gender, preference_type=GenderPreferenceType.ROMANTIC)
+
+        Make a Sim prefer a gender.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param gender: An instance of a gender.
+        :type gender: CommonGender
+        :param is_attracted_to_gender: True, if you want the Sim to be attracted to the gender. False, if you want the Sim to NOT be attracted to the gender. None, if you want the Sim to have no preferences.
+        :type is_attracted_to_gender: Union[bool, None]
+        :param preference_type: The type of preference to use. Default is GenderPreferenceType.ROMANTIC.
+        :type preference_type: GenderPreferenceType, optional
+        :return: True, if successfully set. False, it not.
+        :rtype: CommonExecutionResult
+        """
+        if preference_type == GenderPreferenceType.ROMANTIC:
+            attraction_traits_map = GlobalGenderPreferenceTuning.ROMANTIC_PREFERENCE_TRAITS_MAPPING
+        else:
+            attraction_traits_map = GlobalGenderPreferenceTuning.WOOHOO_PREFERENCE_TRAITS_MAPPING
+        gender = CommonGender.convert_to_vanilla(gender)
+        if is_attracted_to_gender is None:
+            traits_to_remove = (
+                attraction_traits_map[gender].not_attracted_trait,
+                attraction_traits_map[gender].is_attracted_trait
+            )
+            return CommonTraitUtils.remove_traits(sim_info, traits_to_remove)
+
+        if is_attracted_to_gender:
+            trait_to_remove = attraction_traits_map[gender].not_attracted_trait
+            trait_to_add = attraction_traits_map[gender].is_attracted_trait
+        else:
+            trait_to_remove = attraction_traits_map[gender].is_attracted_trait
+            trait_to_add = attraction_traits_map[gender].not_attracted_trait
+        remove_result = CommonTraitUtils.remove_trait(sim_info, trait_to_remove)
+        if not remove_result:
+            return remove_result
+        add_result = CommonTraitUtils.add_trait(sim_info, trait_to_add)
+        if not add_result:
+            return add_result
+        return CommonExecutionResult.TRUE
+
+    @staticmethod
+    def set_gender_preference_amount(sim_info: SimInfo, gender: CommonGender, amount: int, preference_type: GenderPreferenceType = GenderPreferenceType.ROMANTIC) -> bool:
+        """set_gender_preference_amount(sim_info, gender, amount, preference_type=GenderPreferenceType.ROMANTIC)
 
         Set the amount a Sim prefers the specified gender.
 
@@ -36,23 +80,24 @@ class CommonSimGenderPreferenceUtils:
         :type gender: CommonGender
         :param amount: The amount the Sim prefers the specified gender.
         :type amount: int
+        :param preference_type: The type of preference to use. Default is GenderPreferenceType.ROMANTIC.
+        :type preference_type: GenderPreferenceType, optional
         :return: True, if successfully set. False, it not.
         :rtype: bool
         """
-        if not CommonComponentUtils.has_component(sim_info, CommonComponentType.STATISTIC):
-            return False
-        gender = CommonGender.convert_to_vanilla(gender)
-        if gender is None:
-            return False
-        gender_preference = sim_info.get_gender_preference(gender)
-        if gender_preference is None:
-            return False
-        gender_preference.set_value(amount)
-        return True
+        if amount > 0:
+            is_attracted_to_gender = True
+        elif amount < 0:
+            is_attracted_to_gender = False
+        else:
+            is_attracted_to_gender = None
+        if CommonSimGenderPreferenceUtils.set_preference_for_gender(sim_info, gender, is_attracted_to_gender, preference_type=preference_type):
+            return True
+        return False
 
     @staticmethod
-    def get_gender_preference_amount(sim_info: SimInfo, gender: CommonGender) -> int:
-        """get_gender_preference_value(sim_info, gender)
+    def get_gender_preference_amount(sim_info: SimInfo, gender: CommonGender, preference_type: GenderPreferenceType = GenderPreferenceType.ROMANTIC) -> int:
+        """get_gender_preference_value(sim_info, gender, preference_type=GenderPreferenceType.ROMANTIC)
 
         Retrieve the amount a Sim prefers the specified gender.
 
@@ -60,18 +105,14 @@ class CommonSimGenderPreferenceUtils:
         :type sim_info: SimInfo
         :param gender: An instance of a gender.
         :type gender: CommonGender
+        :param preference_type: The type of preference to use. Default is GenderPreferenceType.ROMANTIC.
+        :type preference_type: GenderPreferenceType, optional
         :return: The amount the Sim prefers the specified gender.
         :rtype: int
         """
-        if not CommonComponentUtils.has_component(sim_info, CommonComponentType.STATISTIC):
-            return 0
-        gender = CommonGender.convert_to_vanilla(gender)
-        if gender is None:
-            return False
-        gender_preference = sim_info.get_gender_preference(gender)
-        if gender_preference is None:
-            return 0
-        return gender_preference.get_value()
+        if CommonSimGenderPreferenceUtils.has_preference_for_gender(sim_info, gender, preference_type=preference_type):
+            return 100
+        return 0
 
     @staticmethod
     def get_default_preferred_genders(sim_info: SimInfo) -> Tuple[CommonGender]:
@@ -92,8 +133,8 @@ class CommonSimGenderPreferenceUtils:
         return CommonGender.MALE,
 
     @staticmethod
-    def has_preference_for_gender(sim_info: SimInfo, gender: CommonGender, like_threshold: int=None, love_threshold: int=None) -> bool:
-        """has_preference_for_gender(sim_info, gender, like_threshold=None, love_threshold=None)
+    def has_preference_for_gender(sim_info: SimInfo, gender: CommonGender, like_threshold: int = None, love_threshold: int = None, preference_type: GenderPreferenceType = GenderPreferenceType.ROMANTIC) -> bool:
+        """has_preference_for_gender(sim_info, gender, like_threshold=None, love_threshold=None, preference_type=GenderPreferenceType.ROMANTIC)
 
         Determine if a Sim has a preference for the specified gender.
 
@@ -101,23 +142,26 @@ class CommonSimGenderPreferenceUtils:
         :type sim_info: SimInfo
         :param gender: An instance of a CommonGender.
         :type gender: CommonGender
-        :param like_threshold: A value indicating a low amount of preference. Default is CommonSimGenderPreferenceUtils.LOW_PREFERENCE_THRESHOLD.
+        :param like_threshold: A value indicating a low amount of preference. Default is CommonSimGenderPreferenceUtils.LOW_PREFERENCE_THRESHOLD. (This argument is obsolete, do not use)
         :type like_threshold: int, optional
-        :param love_threshold: A value indicating a high amount of preference. Default is CommonSimGenderPreferenceUtils.HIGH_PREFERENCE_THRESHOLD.
+        :param love_threshold: A value indicating a high amount of preference. Default is CommonSimGenderPreferenceUtils.HIGH_PREFERENCE_THRESHOLD. (This argument is obsolete, do not use)
         :type love_threshold: int, optional
+        :param preference_type: The type of preference to use. Default is GenderPreferenceType.ROMANTIC.
+        :type preference_type: GenderPreferenceType, optional
         :return: True, if the Sim has a preference for the specified gender. False, if not.
         :rtype: bool
         """
         preferences = CommonSimGenderPreferenceUtils.determine_preferred_genders(
             sim_info,
             like_threshold=like_threshold,
-            love_threshold=love_threshold
+            love_threshold=love_threshold,
+            preference_type=preference_type,
         )
         return gender in preferences
 
     @staticmethod
-    def has_preference_for(sim_info: SimInfo, target_sim_info: SimInfo, like_threshold: int=None, love_threshold: int=None) -> bool:
-        """has_preference_for(sim_info, target_sim_info, like_threshold=None, love_threshold=None)
+    def has_preference_for(sim_info: SimInfo, target_sim_info: SimInfo, like_threshold: int = None, love_threshold: int = None, preference_type: GenderPreferenceType = GenderPreferenceType.ROMANTIC) -> bool:
+        """has_preference_for(sim_info, target_sim_info, like_threshold=None, love_threshold=None, preference_type=GenderPreferenceType.ROMANTIC)
 
         Determine if a Sim has a preference for another Sim.
 
@@ -125,10 +169,12 @@ class CommonSimGenderPreferenceUtils:
         :type sim_info: SimInfo
         :param target_sim_info: An instance of a Sim.
         :type target_sim_info: SimInfo
-        :param like_threshold: A value indicating a low amount of preference. Default is CommonSimGenderPreferenceUtils.LOW_PREFERENCE_THRESHOLD.
+        :param like_threshold: A value indicating a low amount of preference. Default is CommonSimGenderPreferenceUtils.LOW_PREFERENCE_THRESHOLD. (This argument is obsolete, do not use)
         :type like_threshold: int, optional
-        :param love_threshold: A value indicating a high amount of preference. Default is CommonSimGenderPreferenceUtils.HIGH_PREFERENCE_THRESHOLD.
+        :param love_threshold: A value indicating a high amount of preference. Default is CommonSimGenderPreferenceUtils.HIGH_PREFERENCE_THRESHOLD. (This argument is obsolete, do not use)
         :type love_threshold: int, optional
+        :param preference_type: The type of preference to use. Default is GenderPreferenceType.ROMANTIC.
+        :type preference_type: GenderPreferenceType, optional
         :return: True, if the Source Sim has a preference for the Target Sim. False, if not.
         :rtype: bool
         """
@@ -136,12 +182,14 @@ class CommonSimGenderPreferenceUtils:
             sim_info,
             CommonGender.get_gender(target_sim_info),
             like_threshold=like_threshold,
-            love_threshold=love_threshold
+            love_threshold=love_threshold,
+            preference_type=preference_type,
         )
 
+    # noinspection PyUnusedLocal
     @classmethod
-    def determine_preferred_genders(cls, sim_info: SimInfo, like_threshold: int=None, love_threshold: int=None) -> Tuple[CommonGender]:
-        """determine_preferred_genders(sim_info, like_threshold=None, love_threshold=None)
+    def determine_preferred_genders(cls, sim_info: SimInfo, like_threshold: int = None, love_threshold: int = None, preference_type: GenderPreferenceType = GenderPreferenceType.ROMANTIC) -> Tuple[CommonGender]:
+        """determine_preferred_genders(sim_info, like_threshold=None, love_threshold=None, preference_type=GenderPreferenceType.ROMANTIC)
 
         Determine which genders a Sim prefers.
 
@@ -156,30 +204,37 @@ class CommonSimGenderPreferenceUtils:
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :param like_threshold: A value indicating a low amount of preference. Default is cls.LOW_PREFERENCE_THRESHOLD.
+        :param like_threshold: A value indicating a low amount of preference. Default is cls.LOW_PREFERENCE_THRESHOLD. (This argument is obsolete, do not use)
         :type like_threshold: int, optional
-        :param love_threshold: A value indicating a high amount of preference. Default is cls.HIGH_PREFERENCE_THRESHOLD.
+        :param love_threshold: A value indicating a high amount of preference. Default is cls.HIGH_PREFERENCE_THRESHOLD. (This argument is obsolete, do not use)
         :type love_threshold: int, optional
+        :param preference_type: The type of preference to use. Default is GenderPreferenceType.ROMANTIC.
+        :type preference_type: GenderPreferenceType, optional
         :return: A collection of CommonGenders the specified Sim prefers.
         :rtype: Tuple[CommonGender]
         """
-        if like_threshold is None:
-            like_threshold = cls.LOW_PREFERENCE_THRESHOLD
-        if love_threshold is None:
-            love_threshold = cls.HIGH_PREFERENCE_THRESHOLD
-        male_preference = CommonSimGenderPreferenceUtils.get_gender_preference_amount(sim_info, CommonGender.MALE)
-        female_preference = CommonSimGenderPreferenceUtils.get_gender_preference_amount(sim_info, CommonGender.FEMALE)
-        if male_preference == female_preference and male_preference > 0:
-            result: Tuple[CommonGender] = (CommonGender.MALE, CommonGender.FEMALE)
-            return result
-        if male_preference < like_threshold and female_preference < like_threshold:
-            return CommonSimGenderPreferenceUtils.get_default_preferred_genders(sim_info)
-        if abs(male_preference - female_preference) <= love_threshold:
-            result: Tuple[CommonGender] = (CommonGender.MALE, CommonGender.FEMALE)
-            return result
-        if male_preference > female_preference:
-            return CommonGender.MALE,
-        return CommonGender.FEMALE,
+        preferred_genders = list()
+        for gender in sim_info.get_attracted_genders(preference_type):
+            preferred_genders.append(CommonGender.convert_from_vanilla(gender))
+        return tuple(preferred_genders)
+
+    @classmethod
+    def set_to_default_gender_preferences(cls, sim_info: SimInfo) -> None:
+        """set_to_default_gender_preferences(sim_info)
+
+        Set a Sim to the default gender preferences.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        """
+        default_attracted_to_genders = cls.get_default_preferred_genders(sim_info)
+        for gender in CommonGender.get_all():
+            if gender in default_attracted_to_genders:
+                cls.set_preference_for_gender(sim_info, gender, True, preference_type=GenderPreferenceType.ROMANTIC)
+                cls.set_preference_for_gender(sim_info, gender, True, preference_type=GenderPreferenceType.WOOHOO)
+            else:
+                cls.set_preference_for_gender(sim_info, gender, False, preference_type=GenderPreferenceType.ROMANTIC)
+                cls.set_preference_for_gender(sim_info, gender, False, preference_type=GenderPreferenceType.WOOHOO)
 
 
 # noinspection SpellCheckingInspection
@@ -189,7 +244,8 @@ class CommonSimGenderPreferenceUtils:
     'Set the gender preference amount of a Sim towards a Gender.',
     command_arguments=(
         CommonConsoleCommandArgument('gender', 'CommonGender', f'The gender to change the preference of the Sim for. Valid Values: {CommonGender.get_comma_separated_names_string()}'),
-        CommonConsoleCommandArgument('percentage', 'Number', 'The percentage of preference between 0 and 100 for the gender.'),
+        CommonConsoleCommandArgument('is_attracted_to_gender', 'True or False', 'If True, all Female Sims will be attracted to the specified Gender. If False, all Female Sims will no longer be attracted to the gender.'),
+        CommonConsoleCommandArgument('preference_type', 'ROMANTIC or WOOHOO', 'The type of preference being updated.', is_optional=True, default_value='ROMANTIC'),
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of the Sim to change.', is_optional=True, default_value='Active Sim'),
     ),
     command_aliases=(
@@ -198,22 +254,17 @@ class CommonSimGenderPreferenceUtils:
         's4clib.setgenderpreference',
     )
 )
-def _common_set_gender_pref(output: CommonConsoleCommandOutput, gender: CommonGender, percentage_amount: int, sim_info: SimInfo=None):
+def _common_set_gender_pref(output: CommonConsoleCommandOutput, gender: CommonGender, is_attracted_to_gender: bool, preference_type: GenderPreferenceType = GenderPreferenceType.ROMANTIC, sim_info: SimInfo = None):
     if gender is None:
         return
     if sim_info is None:
         return
-    if percentage_amount is None:
-        return
-    if percentage_amount > 100 or percentage_amount < 0:
-        output('ERROR: Please specify a percentage between 0 and 100.')
-        return
     gender_name = gender.name
-    output(f'Attempting to set the gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%')
-    if CommonSimGenderPreferenceUtils.set_gender_preference_amount(sim_info, gender, percentage_amount):
-        output(f'SUCCESS: Successfully set the gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%')
+    output(f'Attempting to set the {preference_type.name} gender preference of Sim {sim_info} for gender {gender_name} to {is_attracted_to_gender}')
+    if CommonSimGenderPreferenceUtils.set_preference_for_gender(sim_info, gender, is_attracted_to_gender, preference_type=preference_type):
+        output(f'SUCCESS: Successfully set the {preference_type.name} gender preference of Sim {sim_info} for gender {gender_name} to {is_attracted_to_gender}')
     else:
-        output(f'FAILED: Failed to set the gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%')
+        output(f'FAILED: Failed to set the {preference_type.name} gender preference of Sim {sim_info} for gender {gender_name} to {is_attracted_to_gender}')
 
 
 # noinspection SpellCheckingInspection
@@ -223,7 +274,8 @@ def _common_set_gender_pref(output: CommonConsoleCommandOutput, gender: CommonGe
     'Set the gender preference amount of all Sims towards a Gender.',
     command_arguments=(
         CommonConsoleCommandArgument('gender', 'CommonGender', f'The gender to change the preferences of the Sims for. Valid Values: {CommonGender.get_comma_separated_names_string()}'),
-        CommonConsoleCommandArgument('percentage', 'Number', 'The percentage of preference between 0 and 100 for the gender.')
+        CommonConsoleCommandArgument('is_attracted_to_gender', 'True or False', 'If True, all Female Sims will be attracted to the specified Gender. If False, all Female Sims will no longer be attracted to the gender.'),
+        CommonConsoleCommandArgument('preference_type', 'ROMANTIC or WOOHOO', 'The type of preference being updated.', is_optional=True, default_value='ROMANTIC')
     ),
     command_aliases=(
         's4clib.setgenderprefofallsims',
@@ -233,24 +285,19 @@ def _common_set_gender_pref(output: CommonConsoleCommandOutput, gender: CommonGe
         's4clib.setallgenderpreferences',
     )
 )
-def _common_set_gender_pref_of_all_sims(output: CommonConsoleCommandOutput, gender: CommonGender, percentage_amount: int):
+def _common_set_gender_pref_of_all_sims(output: CommonConsoleCommandOutput, gender: CommonGender, is_attracted_to_gender: bool, preference_type: GenderPreferenceType = GenderPreferenceType.ROMANTIC):
     if gender is None:
-        return
-    if percentage_amount is None:
-        return
-    if percentage_amount > 100 or percentage_amount < 0:
-        output('ERROR: Please specify a percentage between 0 and 100.')
         return
     gender_name = gender.name
     count_of_sims_changed = 0
-    output(f'Setting gender preference of all Sims for gender {gender_name} to {percentage_amount}%')
+    output(f'Setting {preference_type.name} gender preference of all Sims for gender {gender_name} to {is_attracted_to_gender}')
     for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
         try:
-            if CommonSimGenderPreferenceUtils.set_gender_preference_amount(sim_info, gender, percentage_amount):
+            if CommonSimGenderPreferenceUtils.set_preference_for_gender(sim_info, gender, is_attracted_to_gender, preference_type=preference_type):
                 count_of_sims_changed += 1
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), f'Failed to set gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%', exception=ex)
-            output(f'ERROR: Failed to set gender preference of Sim {sim_info} for gender {gender} to {percentage_amount}%. Exception: {ex}')
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), f'Failed to set {preference_type.name} gender preference of Sim {sim_info} for gender {gender_name} to {is_attracted_to_gender}', exception=ex)
+            output(f'ERROR: Failed to set {preference_type.name} gender preference of Sim {sim_info} for gender {gender} to {is_attracted_to_gender}. Exception: {ex}')
     output(f'Updated the Gender Preferences of {count_of_sims_changed} Sims.')
 
 
@@ -261,7 +308,8 @@ def _common_set_gender_pref_of_all_sims(output: CommonConsoleCommandOutput, gend
     'Set the gender preference amount of all Female Sims towards a Gender.',
     command_arguments=(
         CommonConsoleCommandArgument('gender', 'CommonGender', f'The gender to change the preferences of the Sims for. Valid Values: {CommonGender.get_comma_separated_names_string()}'),
-        CommonConsoleCommandArgument('percentage', 'Number', 'The percentage of preference between 0 and 100 for the gender.')
+        CommonConsoleCommandArgument('is_attracted_to_gender', 'True or False', 'If True, all Female Sims will be attracted to the specified Gender. If False, all Female Sims will no longer be attracted to the gender.'),
+        CommonConsoleCommandArgument('preference_type', 'ROMANTIC or WOOHOO', 'The type of preference being updated.', is_optional=True, default_value='ROMANTIC')
     ),
     command_aliases=(
         's4clib.setgenderprefofallfemalesims',
@@ -271,25 +319,20 @@ def _common_set_gender_pref_of_all_sims(output: CommonConsoleCommandOutput, gend
         's4clib.setallfemalegenderpreferences',
     )
 )
-def _common_set_gender_pref_of_all_female_sims(output: CommonConsoleCommandOutput, gender: CommonGender, percentage_amount: int):
+def _common_set_gender_pref_of_all_female_sims(output: CommonConsoleCommandOutput, gender: CommonGender, is_attracted_to_gender: bool, preference_type: GenderPreferenceType = GenderPreferenceType.ROMANTIC):
     if gender is None:
-        return
-    if percentage_amount is None:
-        return
-    if percentage_amount > 100 or percentage_amount < 0:
-        output('ERROR: Please specify a percentage between 0 and 100.')
         return
     gender_name = gender.name
     sim_count = 0
-    output(f'Setting gender preference of all Female Sims for gender {gender_name} to {percentage_amount}%')
+    output(f'Setting {preference_type.name} gender preference of all Female Sims for gender {gender_name} to {is_attracted_to_gender}')
     from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
     for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=CommonGenderUtils.is_female):
         try:
-            if CommonSimGenderPreferenceUtils.set_gender_preference_amount(sim_info, gender, percentage_amount):
+            if CommonSimGenderPreferenceUtils.set_preference_for_gender(sim_info, gender, is_attracted_to_gender, preference_type=preference_type):
                 sim_count += 1
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), f'Failed to set gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%.', exception=ex)
-            output(f'Failed to set gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%. Exception: {ex}')
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), f'Failed to set {preference_type.name} gender preference of Sim {sim_info} for gender {gender_name} to {is_attracted_to_gender}.', exception=ex)
+            output(f'Failed to set {preference_type.name} gender preference of Sim {sim_info} for gender {gender_name} to {is_attracted_to_gender}. Exception: {ex}')
     output(f'Updated Gender Preferences of {sim_count} Sims.')
 
 
@@ -297,10 +340,11 @@ def _common_set_gender_pref_of_all_female_sims(output: CommonConsoleCommandOutpu
 @CommonConsoleCommand(
     ModInfo.get_identity(),
     's4clib.set_gender_pref_of_all_male_sims',
-    'Set the gender preference amount of all Male Sims towards a Gender.',
+    'Set the gender preference of all Male Sims towards a Gender.',
     command_arguments=(
         CommonConsoleCommandArgument('gender', 'CommonGender', f'The gender to change the preferences of the Sims for. Valid Values: {CommonGender.get_comma_separated_names_string()}'),
-        CommonConsoleCommandArgument('percentage', 'Number', 'The percentage of preference between 0 and 100 for the gender.')
+        CommonConsoleCommandArgument('is_attracted_to_gender', 'True or False', 'If True, all Male Sims will be attracted to the specified Gender. If False, all Male Sims will no longer be attracted to the gender.'),
+        CommonConsoleCommandArgument('preference_type', 'ROMANTIC or WOOHOO', 'The type of preference being updated.', is_optional=True, default_value='ROMANTIC')
     ),
     command_aliases=(
         's4clib.setgenderprefofallmalesims',
@@ -310,25 +354,20 @@ def _common_set_gender_pref_of_all_female_sims(output: CommonConsoleCommandOutpu
         's4clib.setallmalegenderpreferences',
     )
 )
-def _common_set_gender_pref_of_all_male_sims(output: CommonConsoleCommandOutput, gender: CommonGender, percentage_amount: int):
+def _common_set_gender_pref_of_all_male_sims(output: CommonConsoleCommandOutput, gender: CommonGender, is_attracted_to_gender: bool, preference_type: GenderPreferenceType = GenderPreferenceType.ROMANTIC):
     if gender is None:
-        return
-    if percentage_amount is None:
-        return
-    if percentage_amount > 100 or percentage_amount < 0:
-        output('ERROR: Please specify a percentage between 0 and 100.')
         return
     gender_name = gender.name
     sim_count = 0
-    output(f'Setting gender preference of all Male Sims for gender {gender_name} to {percentage_amount}%')
+    output(f'Setting {preference_type.name} gender preference of all Male Sims for gender {gender_name} to {is_attracted_to_gender}')
     from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
     for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=CommonGenderUtils.is_male):
         try:
-            if CommonSimGenderPreferenceUtils.set_gender_preference_amount(sim_info, gender, percentage_amount):
+            if CommonSimGenderPreferenceUtils.set_preference_for_gender(sim_info, gender, is_attracted_to_gender, preference_type=preference_type):
                 sim_count += 1
         except Exception as ex:
-            CommonExceptionHandler.log_exception(ModInfo.get_identity(), f'Failed to set gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%.', exception=ex)
-            output(f'Failed to set gender preference of Sim {sim_info} for gender {gender_name} to {percentage_amount}%. Exception: {ex}')
+            CommonExceptionHandler.log_exception(ModInfo.get_identity(), f'Failed to set {preference_type.name} gender preference of Sim {sim_info} for gender {gender_name} to {is_attracted_to_gender}.', exception=ex)
+            output(f'Failed to set {preference_type.name} gender preference of Sim {sim_info} for gender {gender_name} to {is_attracted_to_gender}. Exception: {ex}')
     output(f'Updated Gender Preferences of {sim_count} Sims.')
 
 
@@ -339,6 +378,7 @@ def _common_set_gender_pref_of_all_male_sims(output: CommonConsoleCommandOutput,
     'Print the gender preference amount a Sim has towards a Gender.',
     command_arguments=(
         CommonConsoleCommandArgument('gender', 'CommonGender', f'The gender to change the preference of the Sim for. Valid Values: {CommonGender.get_comma_separated_names_string()}'),
+        CommonConsoleCommandArgument('preference_type', 'ROMANTIC or WOOHOO', 'The type of preference being checked.', is_optional=True, default_value='ROMANTIC'),
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of the Sim to change.', is_optional=True, default_value='Active Sim'),
     ),
     command_aliases=(
@@ -347,11 +387,72 @@ def _common_set_gender_pref_of_all_male_sims(output: CommonConsoleCommandOutput,
         's4clib.printgenderpreference',
     )
 )
-def _common_get_gender_pref(output: CommonConsoleCommandOutput, gender: CommonGender, sim_info: SimInfo=None):
+def _common_get_gender_pref(output: CommonConsoleCommandOutput, gender: CommonGender, preference_type: GenderPreferenceType = GenderPreferenceType.ROMANTIC, sim_info: SimInfo = None):
     if gender is None:
         return
     if sim_info is None:
         return
     gender_name = gender.name
-    preference_percentage_amount = CommonSimGenderPreferenceUtils.get_gender_preference_amount(sim_info, gender)
+    preference_percentage_amount = CommonSimGenderPreferenceUtils.get_gender_preference_amount(sim_info, gender, preference_type=preference_type)
     output(f'{sim_info} has a {preference_percentage_amount}% preference for gender {gender_name}')
+
+
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.print_preferred_genders',
+    'Print preferred genders a Sim is attracted to.',
+    command_arguments=(
+        CommonConsoleCommandArgument('preference_type', 'ROMANTIC or WOOHOO', 'The type of preference being checked.', is_optional=True, default_value='ROMANTIC'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of the Sim to change.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.printpreferredgenders',
+    )
+)
+def _common_get_gender_pref(output: CommonConsoleCommandOutput, preference_type: GenderPreferenceType = GenderPreferenceType.ROMANTIC, sim_info: SimInfo = None):
+    if sim_info is None:
+        return
+    preferred_genders = CommonSimGenderPreferenceUtils.determine_preferred_genders(sim_info, preference_type=preference_type)
+    output(f'{sim_info} has a {preference_type.name} gender preference for genders {preferred_genders}')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.apply_default_gender_pref',
+    'Apply the default Gender preferences for ROMANTIC and WOOHOO preference types to a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of the Sim to change.', is_optional=True, default_value='Active Sim'),
+    ),
+)
+def _s4clib_apply_default_gender_pref_to_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
+    if sim_info is None:
+        return
+    output(f'Attempting to update the gender preferences to their default values for {sim_info}.')
+    # noinspection PyBroadException
+    try:
+        CommonSimGenderPreferenceUtils.set_to_default_gender_preferences(sim_info)
+    except:
+        output(f'Failed to update Sim {sim_info}. They were most likely culled out or unavailable.')
+    return True
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.apply_default_gender_pref_to_all_sims',
+    'Apply the default Gender preference for ROMANTIC and WOOHOO preference types to all Sims using their Gender.'
+)
+def _s4clib_apply_default_gender_pref_to_all_sims(output: CommonConsoleCommandOutput):
+    output('Attempting to update the gender preferences to their default values for all Sims.')
+    sim_count = 0
+    for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
+        # noinspection PyBroadException
+        try:
+            if sim_info is None:
+                continue
+            CommonSimGenderPreferenceUtils.set_to_default_gender_preferences(sim_info)
+            sim_count += 1
+        except:
+            output(f'Failed to update Sim {sim_info}. They were most likely culled out or unavailable.')
+    output(f'Updated Gender Preferences of {sim_count} Sim(s).')
+    return True
