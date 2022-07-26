@@ -6,7 +6,15 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from rewards.reward import Reward
-from whims.whims_tracker import WhimsTracker
+
+try:
+    from satisfaction.satisfaction_tracker import SatisfactionTracker
+except:
+    from whims.whims_tracker import WhimsTracker
+
+    SatisfactionTracker = WhimsTracker
+    # noinspection PyUnresolvedReferences
+    setattr(SatisfactionTracker, 'SatisfactionAwardTypes', WhimsTracker.WhimAwardTypes)
 
 
 class CommonSatisfactionRewardStoreItem:
@@ -19,9 +27,9 @@ class CommonSatisfactionRewardStoreItem:
     :param reward_cost: The amount of Satisfaction Reward Points the Reward costs.
     :type reward_cost: int
     :param reward_type: The type of the Reward.
-    :type reward_type: WhimsTracker.WhimAwardTypes
+    :type reward_type: SatisfactionTracker.SatisfactionAwardTypes
     """
-    def __init__(self, reward: Reward, reward_cost: int, reward_type: WhimsTracker.WhimAwardTypes):
+    def __init__(self, reward: Reward, reward_cost: int, reward_type: SatisfactionTracker.SatisfactionAwardTypes):
         self.reward = reward
         self.reward_cost = reward_cost
         self.reward_type = reward_type

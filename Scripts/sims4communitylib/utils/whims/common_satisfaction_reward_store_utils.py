@@ -12,7 +12,15 @@ from rewards.reward import Reward
 from sims4.resources import Types
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.whims.common_satisfaction_reward_store_item import CommonSatisfactionRewardStoreItem
-from whims.whims_tracker import WhimsTracker
+
+try:
+    from satisfaction.satisfaction_tracker import SatisfactionTracker
+except:
+    from whims.whims_tracker import WhimsTracker
+
+    SatisfactionTracker = WhimsTracker
+    # noinspection PyUnresolvedReferences
+    SatisfactionTracker.SatisfactionAwardTypes = WhimsTracker.WhimAwardTypes
 
 
 class CommonSatisfactionRewardStoreUtils:
@@ -32,7 +40,7 @@ class CommonSatisfactionRewardStoreUtils:
         :return: True, if the Trait was added to the Rewards Store successfully. False, if not.
         :rtype: bool
         """
-        return CommonSatisfactionRewardStoreUtils._add_reward_to_rewards_store(reward_trait_definition_id, reward_point_cost, WhimsTracker.WhimAwardTypes.TRAIT)
+        return CommonSatisfactionRewardStoreUtils._add_reward_to_rewards_store(reward_trait_definition_id, reward_point_cost, SatisfactionTracker.SatisfactionAwardTypes.TRAIT)
 
     @staticmethod
     def add_reward_buff_to_rewards_store(reward_buff_definition_id: int, reward_point_cost: int) -> bool:
@@ -47,7 +55,7 @@ class CommonSatisfactionRewardStoreUtils:
         :return: True, if the Reward Buff was added to the Rewards Store successfully. False, if not.
         :rtype: bool
         """
-        return CommonSatisfactionRewardStoreUtils._add_reward_to_rewards_store(reward_buff_definition_id, reward_point_cost, WhimsTracker.WhimAwardTypes.BUFF)
+        return CommonSatisfactionRewardStoreUtils._add_reward_to_rewards_store(reward_buff_definition_id, reward_point_cost, SatisfactionTracker.SatisfactionAwardTypes.BUFF)
 
     @staticmethod
     def add_reward_object_to_rewards_store(reward_object_definition_id: int, reward_point_cost: int) -> bool:
@@ -62,7 +70,7 @@ class CommonSatisfactionRewardStoreUtils:
         :return: True, if the Reward Object was added to the Rewards Store successfully. False, if not.
         :rtype: bool
         """
-        return CommonSatisfactionRewardStoreUtils._add_reward_to_rewards_store(reward_object_definition_id, reward_point_cost, WhimsTracker.WhimAwardTypes.OBJECT)
+        return CommonSatisfactionRewardStoreUtils._add_reward_to_rewards_store(reward_object_definition_id, reward_point_cost, SatisfactionTracker.SatisfactionAwardTypes.OBJECT)
 
     @staticmethod
     def add_reward_cas_part_to_rewards_store(reward_cas_part_definition_id: int, reward_point_cost: int) -> bool:
@@ -77,7 +85,7 @@ class CommonSatisfactionRewardStoreUtils:
         :return: True, if the Reward CAS Part was added to the Rewards Store successfully. False, if not.
         :rtype: bool
         """
-        return CommonSatisfactionRewardStoreUtils._add_reward_to_rewards_store(reward_cas_part_definition_id, reward_point_cost, WhimsTracker.WhimAwardTypes.CASPART)
+        return CommonSatisfactionRewardStoreUtils._add_reward_to_rewards_store(reward_cas_part_definition_id, reward_point_cost, SatisfactionTracker.SatisfactionAwardTypes.CASPART)
 
     @staticmethod
     def remove_reward_from_rewards_store(reward_item_definition_id: int) -> bool:
@@ -106,7 +114,7 @@ class CommonSatisfactionRewardStoreUtils:
         :return: All items from the satisfaction reward store.
         :rtype: Iterator[CommonSatisfactionRewardStoreItem]
         """
-        satisfaction_reward_store_items: Dict[Reward, Tuple[int, WhimsTracker.WhimAwardTypes]] = dict(WhimsTracker.SATISFACTION_STORE_ITEMS)
+        satisfaction_reward_store_items: Dict[Reward, Tuple[int, SatisfactionTracker.SatisfactionAwardTypes]] = dict(SatisfactionTracker.SATISFACTION_STORE_ITEMS)
         for (reward, data) in satisfaction_reward_store_items:
             reward_cost = data[0]
             reward_type = data[1]
@@ -116,15 +124,15 @@ class CommonSatisfactionRewardStoreUtils:
             yield reward_store_item
 
     @staticmethod
-    def _add_reward_to_rewards_store(reward_definition_id: int, reward_point_cost: int, reward_type: WhimsTracker.WhimAwardTypes) -> bool:
+    def _add_reward_to_rewards_store(reward_definition_id: int, reward_point_cost: int, reward_type: SatisfactionTracker.SatisfactionAwardTypes) -> bool:
         sim_reward_instance = CommonSatisfactionRewardStoreUtils._load_reward_instance(reward_definition_id)
         if sim_reward_instance is None:
             return False
         sim_reward_data_immutable_slots_cls = sims4.collections.make_immutable_slots_class(['cost', 'award_type'])
         reward_data = sim_reward_data_immutable_slots_cls(dict(cost=reward_point_cost, award_type=reward_type))
-        store_items = dict(WhimsTracker.SATISFACTION_STORE_ITEMS)
+        store_items = dict(SatisfactionTracker.SATISFACTION_STORE_ITEMS)
         store_items[sim_reward_instance] = reward_data
-        WhimsTracker.SATISFACTION_STORE_ITEMS = sims4.collections.FrozenAttributeDict(store_items)
+        SatisfactionTracker.SATISFACTION_STORE_ITEMS = sims4.collections.FrozenAttributeDict(store_items)
         return True
 
     @staticmethod
@@ -132,10 +140,10 @@ class CommonSatisfactionRewardStoreUtils:
         sim_reward_instance = CommonSatisfactionRewardStoreUtils._load_reward_instance(reward_definition_id)
         if sim_reward_instance is None:
             return False
-        store_items = dict(WhimsTracker.SATISFACTION_STORE_ITEMS)
+        store_items = dict(SatisfactionTracker.SATISFACTION_STORE_ITEMS)
         if sim_reward_instance in store_items:
             del store_items[sim_reward_instance]
-            WhimsTracker.SATISFACTION_STORE_ITEMS = sims4.collections.FrozenAttributeDict(store_items)
+            SatisfactionTracker.SATISFACTION_STORE_ITEMS = sims4.collections.FrozenAttributeDict(store_items)
         return True
 
     @staticmethod
