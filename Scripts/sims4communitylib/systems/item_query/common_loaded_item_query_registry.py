@@ -256,13 +256,14 @@ class CommonLoadedItemQueryRegistry(Generic[CommonLoadedItemType], CommonService
             after_all_keys = len(found_item_identifiers) if found_item_identifiers is not None else 0
             self.log.debug(f'After all_keys {after_all_keys}')
         if self.verbose_log.enabled:
-            found_all_items: List[str] = list()
-            for anim_identifier in found_item_identifiers:
-                item = self._registry.locate_by_identifier(anim_identifier)
-                if item is None:
-                    continue
-                found_all_items.append(item.short_name)
-            self.verbose_log.format_with_message(f'Found {self._item_name}s via all keys', items=found_all_items)
+            if found_item_identifiers is not None:
+                found_all_items: List[str] = list()
+                for anim_identifier in found_item_identifiers:
+                    item = self._registry.locate_by_identifier(anim_identifier)
+                    if item is None:
+                        continue
+                    found_all_items.append(item.short_name)
+                self.verbose_log.format_with_message(f'Found {self._item_name}s via all keys', items=found_all_items)
 
         self.log.format_with_message('Using any_keys', any_keys=any_keys)
         found_items_via_any_keys = set()
