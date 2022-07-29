@@ -1,3 +1,9 @@
+v1.81:
+- Added new dto CommonOutfit
+- Added new enums:
+  - CommonBodySlot
+- Fixed an error that could occur after enabling the verbose log within Item Query Registry and trying to query for items.
+
 v1.80:
 - Added an entire item query system. It can be used to quickly setup a library of objects that can be queried.
 - Added a serializable cache system. It can be used to quickly setup a caching system.
