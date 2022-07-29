@@ -21,10 +21,10 @@ class CommonCASPart:
     :param cas_part_id: The decimal identifier of a CAS Part.
     :type cas_part_id: int
     :param body_type: The place on a Sims person the CAS Part gets applied to. If not specified, then the Body Type of the CAS Part itself will be used. Default is None.
-    :type body_type: Union[BodyType, int], None
+    :type body_type: Union[BodyType, int, None], optional
     """
 
-    def __init__(self, cas_part_id: int, body_type: Union[BodyType, int]=None) -> None:
+    def __init__(self, cas_part_id: int, body_type: Union[BodyType, int, None] = None) -> None:
         self._cas_part_id = cas_part_id
         from sims4communitylib.utils.cas.common_cas_utils import CommonCASUtils
         self._body_type = body_type or CommonCASUtils.get_body_type_of_cas_part(cas_part_id)
