@@ -3,6 +3,11 @@ v1.81:
 - Added new enums:
   - CommonBodySlot
 - Fixed an error that could occur after enabling the verbose log within Item Query Registry and trying to query for items.
+- Added new utilities, CommonSimSpellUtils, CommonSimBucksUtils, and CommonSimUnlockUtils
+- Added many new commands for adding and removing spells, perks, and bucks.
+- When the witch occult is removed, witch spells, witch perks, and witch perk points are also removed
+- When werewolf occult is removed, werewolf perks and werewolf perk points are removed.
+- When vampire occult is removed, vampire weakness and power perks and perk points are removed.
 
 v1.80:
 - Added an entire item query system. It can be used to quickly setup a library of objects that can be queried.
