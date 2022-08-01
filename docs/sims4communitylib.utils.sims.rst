@@ -136,11 +136,11 @@ Sim Utilities
 `Stats`
 ------------------------------------------------------
 
-*********************
-`Currency`
-*********************
+****************
+`Bucks`
+****************
 
-.. autoclass:: sims4communitylib.utils.sims.common_sim_currency_utils.CommonSimCurrencyUtils
+.. autoclass:: sims4communitylib.utils.sims.common_sim_bucks_utils.CommonSimBucksUtils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -150,6 +150,15 @@ Sim Utilities
 *******************
 
 .. autoclass:: sims4communitylib.utils.sims.common_buff_utils.CommonBuffUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
+`Currency`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_currency_utils.CommonSimCurrencyUtils
    :members:
    :undoc-members:
    :show-inheritance:
@@ -181,6 +190,15 @@ Sim Utilities
    :undoc-members:
    :show-inheritance:
 
+****************
+`Spells`
+****************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_spell_utils.CommonSimSpellUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 *********************
 `Traits`
 *********************
@@ -204,6 +222,15 @@ Sim Utilities
 *********************
 
 .. autoclass:: sims4communitylib.utils.sims.common_whim_utils.CommonWhimUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+****************
+`Unlocks`
+****************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_unlock_utils.CommonSimUnlockUtils
    :members:
    :undoc-members:
    :show-inheritance:

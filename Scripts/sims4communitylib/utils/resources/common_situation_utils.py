@@ -311,6 +311,14 @@ class CommonSituationUtils:
             return situation_guid
         # noinspection PyBroadException
         try:
+            # noinspection PyCallingNonCallable
+            situation_instance = situation_guid()
+            if isinstance(situation_instance, Situation):
+                return situation_guid
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
             situation_guid: int = int(situation_guid)
         except:
             situation_guid: Situation = situation_guid

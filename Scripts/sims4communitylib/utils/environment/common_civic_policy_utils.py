@@ -352,6 +352,14 @@ class CommonCivicPolicyUtils(_HasS4CLClassLog):
             return policy
         # noinspection PyBroadException
         try:
+            # noinspection PyCallingNonCallable
+            policy_instance = policy()
+            if isinstance(policy_instance, BaseCivicPolicy):
+                return policy
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
             policy: int = int(policy)
         except:
             # noinspection PyTypeChecker

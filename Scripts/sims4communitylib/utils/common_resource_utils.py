@@ -7,7 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 import services
 from io import BytesIO
-from typing import ItemsView, Any, Union, Tuple, Type, ValuesView, Dict, TypeVar
+from typing import ItemsView, Any, Union, Tuple, Type, ValuesView, Dict, TypeVar, List
 from sims4.resources import ResourceLoader, Types
 from sims4.tuning.instance_manager import InstanceManager
 from sims4.tuning.merged_tuning_manager import get_manager
@@ -22,14 +22,18 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 
 CommonEnumTypeValueType = TypeVar('CommonEnumTypeValueType', int, CommonInt, CommonIntFlags, Int, DynamicEnum, DynamicEnumLocked)
 
+CommonExpectedReturnType = TypeVar('CommonExpectedReturnType', bound=Any)
+
 
 class CommonResourceUtils:
     """Utilities for retrieving the Tuning files and instances of various resources. (Objects, Snippets, Statistics, etc.).
 
     """
+
+    # noinspection PyUnusedLocal
     @staticmethod
-    def load_instance(instance_type: Types, instance_id: int) -> Any:
-        """load_instance(instance_type, instance_id)
+    def load_instance(instance_type: Types, instance_id: int, return_type: Type[CommonExpectedReturnType] = Any) -> CommonExpectedReturnType:
+        """load_instance(instance_type, instance_id, return_type=Any)
 
         Load an instance of the specified type.
 
@@ -53,15 +57,18 @@ class CommonResourceUtils:
         :type instance_type: Types
         :param instance_id: The decimal identifier of an instance.
         :type instance_id: int
+        :param return_type: The type of the returned value. (This is to make type hinting more accurate). It is not actually used in the function. Default is Any.
+        :type return_type: Type[CommonExpectedReturnType], optional
         :return: An instance of the specified type or None if no instance was found.
         :rtype: Any
         """
         instance_manager = CommonResourceUtils.get_instance_manager(instance_type)
         return CommonResourceUtils.load_instance_from_manager(instance_manager, instance_id)
 
+    # noinspection PyUnusedLocal
     @staticmethod
-    def load_instance_from_manager(instance_manager: InstanceManager, instance_id: int) -> Any:
-        """load_instance_from_manager(instance_manager, instance_id)
+    def load_instance_from_manager(instance_manager: InstanceManager, instance_id: int, return_type: Type[CommonExpectedReturnType] = Any) -> CommonExpectedReturnType:
+        """load_instance_from_manager(instance_manager, instance_id, return_type=Any)
 
         Load an instance from the specified InstanceManager.
 
@@ -69,58 +76,72 @@ class CommonResourceUtils:
         :type instance_manager: InstanceManager
         :param instance_id: The decimal identifier of an instance.
         :type instance_id: int
+        :param return_type: The type of the returned value. (This is to make type hinting more accurate). It is not actually used in the function. Default is Any.
+        :type return_type: Type[CommonExpectedReturnType], optional
         :return: An instance of the specified type or None if no instance was found.
         :rtype: Any
         """
         return instance_manager.get(instance_id)
 
+    # noinspection PyUnusedLocal
     @staticmethod
-    def load_all_instances(instance_type: Types) -> ItemsView[str, Any]:
-        """load_all_instances(instance_type)
+    def load_all_instances(instance_type: Types, return_type: Type[CommonExpectedReturnType] = Any) -> ItemsView[str, CommonExpectedReturnType]:
+        """load_all_instances(instance_type, return_type=Any)
 
         Load all instances of the specified type.
 
         :param instance_type: The type of instances being loaded.
         :type instance_type: Types
+        :param return_type: The type of the returned value. (This is to make type hinting more accurate). It is not actually used in the function. Default is Any.
+        :type return_type: Type[CommonExpectedReturnType], optional
         :return: An items view of all instances of the specified type. (Resource Key, Instance)
         :rtype: ItemsView[str, Any]
         """
         return CommonResourceUtils.get_instance_manager(instance_type).types.items()
 
+    # noinspection PyUnusedLocal
     @staticmethod
-    def load_all_instances_as_guid_to_instance(instance_type: Types) -> Dict[int, Any]:
-        """load_all_instances_as_guid_to_instance(instance_type)
+    def load_all_instances_as_guid_to_instance(instance_type: Types, return_type: Type[CommonExpectedReturnType] = Any) -> Dict[int, CommonExpectedReturnType]:
+        """load_all_instances_as_guid_to_instance(instance_type, return_type=Any)
 
         Load all instances of the specified type and convert it to a dictionary mapping of GUID to Instance.
 
         :param instance_type: The type of instances being loaded.
         :type instance_type: Types
+        :param return_type: The type of the returned value. (This is to make type hinting more accurate). It is not actually used in the function. Default is Any.
+        :type return_type: Type[CommonExpectedReturnType], optional
         :return: A dictionary of instance GUID to instances of the specified type.
         :rtype: Dict[int, Any]
         """
         return dict([(value_key.instance, value) for (value_key, value) in CommonResourceUtils.load_all_instances(instance_type)])
 
+    # noinspection PyUnusedLocal
     @staticmethod
-    def load_all_instance_types(instance_type: Types) -> Dict[str, Any]:
-        """load_all_instance_types(instance_type)
+    def load_all_instance_types(instance_type: Types, return_type: Type[CommonExpectedReturnType] = Any) -> Dict[str, CommonExpectedReturnType]:
+        """load_all_instance_types(instance_type, return_type=Any)
 
         Load all instances of the specified type.
 
         :param instance_type: The type of instances being loaded.
         :type instance_type: Types
-        :return: A dictionary of resource keys to instances of the specified type.
+        :param return_type: The type of the returned value. (This is to make type hinting more accurate). It is not actually used in the function. Default is Any.
+        :type return_type: Type[CommonExpectedReturnType], optional
+        :return: A dictionary of resource keys to Instances of the specified type.
         :rtype: Dict[str, Any]
         """
         return CommonResourceUtils.get_instance_manager(instance_type).types
 
+    # noinspection PyUnusedLocal
     @staticmethod
-    def load_all_instance_values(instance_type: Types) -> ValuesView[Any]:
-        """load_all_instance_values(instance_type)
+    def load_all_instance_values(instance_type: Types, return_type: Type[CommonExpectedReturnType] = Any) -> ValuesView[CommonExpectedReturnType]:
+        """load_all_instance_values(instance_type, return_type=Any)
 
         Load all instance values of the specified type.
 
         :param instance_type: The type of instances being loaded.
         :type instance_type: Types
+        :param return_type: The type of the returned value. (This is to make type hinting more accurate). It is not actually used in the function. Default is Any.
+        :type return_type: Type[CommonExpectedReturnType], optional
         :return: All instance values of the specified type.
         :rtype: ValuesView[Any]
         """
@@ -180,8 +201,8 @@ class CommonResourceUtils:
         return result
 
     @staticmethod
-    def load_instances_with_any_tags(resource_type: Types, tags: Tuple[str]) -> Tuple[Any]:
-        """load_instances_with_any_tags(resource_type, tags)
+    def load_instances_with_any_tags(resource_type: Types, tags: Tuple[str], return_type: Type[CommonExpectedReturnType] = Any) -> Tuple[CommonExpectedReturnType]:
+        """load_instances_with_any_tags(resource_type, tags, return_type=Any)
 
         Retrieve all resources that contain the specified tag names within their tuning file.
 
@@ -195,11 +216,13 @@ class CommonResourceUtils:
         :type resource_type: Types
         :param tags: A collection of tag names to locate within a tuning file.
         :type tags: Tuple[str]
+        :param return_type: The type of the returned value. (This is to make type hinting more accurate). It is not actually used in the function. Default is Any.
+        :type return_type: Type[CommonExpectedReturnType], optional
         :return: A collection of resources that contain any of the specified tags.
         :rtype: Tuple[Any]
         """
-        instances = []
-        for (_, instance_class) in CommonResourceUtils.load_all_instances(resource_type):
+        instances: List[CommonExpectedReturnType] = []
+        for (_, instance_class) in CommonResourceUtils.load_all_instances(resource_type, return_type=return_type):
             for tag in tags:
                 if not hasattr(instance_class, tag):
                     continue

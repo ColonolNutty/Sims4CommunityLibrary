@@ -1530,6 +1530,18 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: CommonSpecies.SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_WEREWOLF: CommonSpecies.SMALL_DOG,
 
+        # Child
+        CommonSimType.CHILD_DOG: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_DOG_VAMPIRE: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_DOG_GHOST: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_DOG_ALIEN: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_DOG_MERMAID: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_DOG_WITCH: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_DOG_ROBOT: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_DOG_SKELETON: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_DOG_PLANT_SIM: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_DOG_WEREWOLF: CommonSpecies.LARGE_DOG,
+
         # Large Dog
         # Elder
         CommonSimType.ELDER_LARGE_DOG: CommonSpecies.LARGE_DOG,

@@ -246,6 +246,14 @@ class CommonSimPostureUtils(_HasS4CLClassLog):
             return posture
         # noinspection PyBroadException
         try:
+            # noinspection PyCallingNonCallable
+            posture_instance = posture()
+            if isinstance(posture_instance, Posture):
+                return posture
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
             posture: int = int(posture)
         except:
             # noinspection PyTypeChecker

@@ -9,8 +9,6 @@ from typing import Tuple, Dict, Callable, Iterator
 
 import sims4.collections
 from rewards.reward import Reward
-from sims4.resources import Types
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.whims.common_satisfaction_reward_store_item import CommonSatisfactionRewardStoreItem
 
 try:
@@ -148,4 +146,23 @@ class CommonSatisfactionRewardStoreUtils:
 
     @staticmethod
     def _load_reward_instance(reward_definition_id: int) -> Reward:
+        if isinstance(reward_definition_id, Reward):
+            return reward_definition_id
+        # noinspection PyBroadException
+        try:
+            # noinspection PyCallingNonCallable
+            reward_definition_id_instance = reward_definition_id()
+            if isinstance(reward_definition_id_instance, Reward):
+                return reward_definition_id
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
+            reward_definition_id: int = int(reward_definition_id)
+        except:
+            reward_definition_id: Reward = reward_definition_id
+            return reward_definition_id
+
+        from sims4.resources import Types
+        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.load_instance(Types.REWARD, reward_definition_id)

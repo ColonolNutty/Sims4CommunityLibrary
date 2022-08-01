@@ -1401,6 +1401,14 @@ class CommonTraitUtils(HasClassLog):
             return trait
         # noinspection PyBroadException
         try:
+            # noinspection PyCallingNonCallable
+            trait_instance = trait()
+            if isinstance(trait_instance, Trait):
+                return trait
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
             trait: int = int(trait)
         except:
             trait: Trait = trait

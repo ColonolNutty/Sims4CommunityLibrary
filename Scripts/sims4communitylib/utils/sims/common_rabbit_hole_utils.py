@@ -41,6 +41,14 @@ class CommonRabbitHoleUtils:
             return rabbit_hole
         # noinspection PyBroadException
         try:
+            # noinspection PyCallingNonCallable
+            rabbit_hole_instance = rabbit_hole()
+            if isinstance(rabbit_hole_instance, RabbitHole):
+                return rabbit_hole
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
             rabbit_hole: int = int(rabbit_hole)
         except:
             rabbit_hole: RabbitHole = rabbit_hole

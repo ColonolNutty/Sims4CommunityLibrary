@@ -87,6 +87,14 @@ class CommonLootActionUtils:
             return loot_actions_id
         # noinspection PyBroadException
         try:
+            # noinspection PyCallingNonCallable
+            loot_actions_instance = loot_actions_id()
+            if isinstance(loot_actions_instance, LootActions):
+                return loot_actions_id
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
             loot_actions_id: int = int(loot_actions_id)
         except:
             loot_actions_id: LootActions = loot_actions_id

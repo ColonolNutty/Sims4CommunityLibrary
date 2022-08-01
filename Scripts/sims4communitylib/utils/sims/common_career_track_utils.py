@@ -126,6 +126,14 @@ class CommonCareerTrackUtils:
             return career_track_identifier
         # noinspection PyBroadException
         try:
+            # noinspection PyCallingNonCallable
+            career_track_instance = career_track_identifier()
+            if isinstance(career_track_instance, TunableCareerTrack):
+                return career_track_identifier
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
             career_track_identifier: int = int(career_track_identifier)
         except:
             career_track_identifier: TunableCareerTrack = career_track_identifier

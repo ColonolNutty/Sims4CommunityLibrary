@@ -85,7 +85,7 @@ class CommonStatisticUtils:
 
     @staticmethod
     def load_statistic_by_id(statistic_id: Union[int, CommonStatisticId, BaseStatistic]) -> Union[BaseStatistic, None]:
-        """load_statistic(statistic_id)
+        """load_statistic_by_id(statistic_id)
 
         Load an instance of a Statistic by its decimal identifier.
 
@@ -96,6 +96,14 @@ class CommonStatisticUtils:
         """
         if isinstance(statistic_id, BaseStatistic):
             return statistic_id
+        # noinspection PyBroadException
+        try:
+            # noinspection PyCallingNonCallable
+            statistic_instance = statistic_id()
+            if isinstance(statistic_instance, BaseStatistic):
+                return statistic_id
+        except:
+            pass
         # noinspection PyBroadException
         try:
             statistic_id: int = int(statistic_id)

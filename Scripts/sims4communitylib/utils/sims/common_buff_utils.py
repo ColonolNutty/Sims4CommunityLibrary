@@ -460,6 +460,14 @@ class CommonBuffUtils(HasClassLog):
             return buff
         # noinspection PyBroadException
         try:
+            # noinspection PyCallingNonCallable
+            buff_instance = buff()
+            if isinstance(buff_instance, Buff):
+                return buff
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
             buff: int = int(buff)
         except:
             buff: Buff = buff
@@ -484,7 +492,7 @@ class CommonBuffUtils(HasClassLog):
     )
 )
 def _common_add_buff(output: CommonConsoleCommandOutput, buff: TunableInstanceParam(Types.BUFF), sim_info: SimInfo=None, buff_reason: str=None):
-    if buff is None:
+    if buff is None or isinstance(buff, str):
         return
     if sim_info is None:
         return

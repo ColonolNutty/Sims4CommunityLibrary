@@ -13,6 +13,7 @@ from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.buffs_enum import CommonBuffId
+from sims4communitylib.enums.common_bucks_types import CommonBucksType
 from sims4communitylib.enums.common_occult_type import CommonOccultType
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.modinfo import ModInfo
@@ -21,7 +22,9 @@ from sims4communitylib.services.commands.common_console_command import CommonCon
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
+from sims4communitylib.utils.sims.common_sim_bucks_utils import CommonSimBucksUtils
 from sims4communitylib.utils.sims.common_sim_loot_action_utils import CommonSimLootActionUtils
+from sims4communitylib.utils.sims.common_sim_spell_utils import CommonSimSpellUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 try:
@@ -580,7 +583,10 @@ class CommonOccultUtils:
             # loot_Life_ResetProgress
             31238
         )
-        if CommonSimLootActionUtils.apply_loot_actions_by_ids_to_sim(loot_action_ids, sim_info):
+        result = CommonSimLootActionUtils.apply_loot_actions_by_ids_to_sim(loot_action_ids, sim_info)
+        if result:
+            CommonSimBucksUtils.remove_all_perks(sim_info, CommonBucksType.VAMPIRE_POWER, reason='Vampire removed', remove_perk_points=True)
+            CommonSimBucksUtils.remove_all_perks(sim_info, CommonBucksType.VAMPIRE_WEAKNESS, reason='Vampire removed', remove_perk_points=True)
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 
@@ -630,7 +636,10 @@ class CommonOccultUtils:
             return is_witch_result.reverse_result()
         # loot_WitchOccult_RemoveOccult
         remove_loot_id = 215274
-        if CommonSimLootActionUtils.apply_loot_actions_by_id_to_duo_sims(remove_loot_id, sim_info, sim_info):
+        result = CommonSimLootActionUtils.apply_loot_actions_by_id_to_duo_sims(remove_loot_id, sim_info, sim_info)
+        if result:
+            CommonSimBucksUtils.remove_all_perks(sim_info, CommonBucksType.WITCH_PERK, reason='Witch removed', remove_perk_points=True)
+            CommonSimSpellUtils.remove_all_spells(sim_info)
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 
@@ -680,7 +689,9 @@ class CommonOccultUtils:
             return is_werewolf_result.reverse_result()
         # loot_WerewolfCreation_WerewolfCure
         remove_loot_id = 291816
-        if CommonSimLootActionUtils.apply_loot_actions_by_id_to_sim(remove_loot_id, sim_info):
+        result = CommonSimLootActionUtils.apply_loot_actions_by_id_to_sim(remove_loot_id, sim_info)
+        if result:
+            CommonSimBucksUtils.remove_all_perks(sim_info, CommonBucksType.WEREWOLF_ABILITY, reason='Werewolf removed', remove_perk_points=True)
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 

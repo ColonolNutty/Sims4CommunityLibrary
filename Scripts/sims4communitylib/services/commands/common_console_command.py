@@ -418,6 +418,8 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                     if not is_command_available(relevant_type):
                         return False
                     args = cls._parse_arguments(full_arg_spec, tuple(args), arg_names, kwarg_parameters_by_name, kwargs, output)
+                    if args is None:
+                        return False
                     if len(args) + len(kwargs) > num_of_arguments:
                         output('Too many arguments were passed in.')
                         output(f'Use the help command "{help_command_name} {name}" to see what arguments are needed!')
@@ -432,6 +434,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                         with sims4.telemetry.begin_hook(cheats_writer, TELEMETRY_HOOK_COMMAND) as hook:
                             hook.write_string(TELEMETRY_FIELD_NAME, name)
                             hook.write_string(TELEMETRY_FIELD_ARGS, str(args))
+                    cls.get_log().format_with_message('Invoking the command now.', command_name=name, with_args=args, with_kwargs=kwargs)
                     return wrapped_func(output, *args, **kwargs)
                 except Exception as ex:
                     output(f'ERROR: {ex}')
@@ -534,14 +537,20 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                     new_args.append(arg_value)
 
             elif arg_type is not None:
-                new_args.append(cls._parse_arg(arg_type, cleaned_arg_value, name, None, output))
+                parsed_arg = cls._parse_arg(arg_type, cleaned_arg_value, name, None, output)
+                if parsed_arg is None:
+                    return None
+                new_args.append(parsed_arg)
 
         if full_arg_spec.varargs is not None:
             arg_type = full_arg_spec.annotations.get(full_arg_spec.varargs)
             if arg_type is not None:
                 name = full_arg_spec.varargs
                 for arg_value in unassigned_cleaned_args:
-                    new_args.append(cls._parse_arg(arg_type, arg_value, name, None, output))
+                    parsed_arg = cls._parse_arg(arg_type, arg_value, name, None, output)
+                    if parsed_arg is None:
+                        return None
+                    new_args.append(parsed_arg)
 
         cls.get_log().format_with_message('Finished parsing arg values', unassigned_cleaned_args=unassigned_cleaned_args, kwargs_by_name=kwargs_by_name)
 
@@ -574,7 +583,10 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                     kwargs[kwarg_name] = kwarg_value
 
             elif kwarg_type is not None:
-                kwargs[kwarg_name] = cls._parse_arg(kwarg_type, ' '.join(kwarg_values), kwarg_name, kwarg_default_val, output)
+                parse_result = cls._parse_arg(kwarg_type, ' '.join(kwarg_values), kwarg_name, kwarg_default_val, output)
+                if parse_result is None:
+                    return None
+                kwargs[kwarg_name] = parse_result
         cls.get_log().format_with_message('Finished parsing arguments.', args=new_args, kwargs=kwargs)
         return new_args
 
@@ -603,19 +615,22 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                             # noinspection PyUnresolvedReferences,PyTypeChecker
                             valid_values = ', '.join([val.name for val in arg_type.values])
                             output(f'ERROR: {arg_value} is not a valid {arg_type_name}. Valid {arg_type_name}: {valid_values}')
+                            return None
                         return result
                 elif arg_type is float:
                     # noinspection PyBroadException
                     try:
                         return float(arg_value)
                     except:
-                        return default_value
+                        output(f'ERROR: Failed to parse value {arg_value} as {arg_type_name}. Value is not a {arg_type_name}.')
+                        return None
                 elif arg_type is int or arg_value.isnumeric():
                     # noinspection PyBroadException
                     try:
                         return int(arg_value, base=0)
                     except:
-                        return default_value
+                        output(f'ERROR: Failed to parse value {arg_value} as {arg_type_name}. Value is not an {arg_type_name}.')
+                        return None
                 elif arg_type is str and not arg_value:
                     return default_value
                 elif inspect.isclass(arg_type) and ((isinstance(arg_type, type) and issubclass(arg_type, CustomParam)) or arg_type is SimInfo or issubclass(arg_type, SimInfo) or arg_type is GameObject or issubclass(arg_type, GameObject)):
@@ -625,7 +640,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                         return arg_type(arg_value)
                     except ValueError as ex:
                         output(f'ERROR: Failed to parse value {arg_value} as {arg_type_name}: {ex}')
-                        return arg_value
+                        return None
                     except Exception as ex:
                         output(f'ERROR: Failed to parse value {arg_value} as {arg_type_name}: {ex}')
                         raise ex

@@ -30,6 +30,14 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Buck Types`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_bucks_types.CommonBucksType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Buffs`
 ------------------------------------------
 

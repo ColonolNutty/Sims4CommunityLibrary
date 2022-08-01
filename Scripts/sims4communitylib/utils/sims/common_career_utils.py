@@ -152,6 +152,14 @@ class CommonCareerUtils:
             return career
         # noinspection PyBroadException
         try:
+            # noinspection PyCallingNonCallable
+            career_instance = career()
+            if isinstance(career_instance, Career):
+                return career
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
             career: int = int(career)
         except:
             # noinspection PyTypeChecker

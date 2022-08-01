@@ -30,6 +30,14 @@ class CommonCareerLevelUtils:
             return career_level_identifier
         # noinspection PyBroadException
         try:
+            # noinspection PyCallingNonCallable
+            career_level_instance = career_level_identifier()
+            if isinstance(career_level_instance, CareerLevel):
+                return career_level_identifier
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
             career_level_identifier: int = int(career_level_identifier)
         except:
             career_level_identifier: CareerLevel = career_level_identifier

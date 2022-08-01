@@ -344,6 +344,14 @@ class CommonInteractionUtils:
             return interaction_id
         # noinspection PyBroadException
         try:
+            # noinspection PyCallingNonCallable
+            interaction_instance = interaction_id()
+            if isinstance(interaction_instance, Interaction):
+                return interaction_id
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
             interaction_id: int = int(interaction_id)
         except:
             # noinspection PyTypeChecker
