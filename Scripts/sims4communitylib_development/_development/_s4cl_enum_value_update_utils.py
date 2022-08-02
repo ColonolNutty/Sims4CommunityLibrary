@@ -69,7 +69,7 @@ class _S4CLEnumValueUpdateUtils(HasLog):
                     not_found_values.append((val_name, int(value_value)))
                     if skip_not_found:
                         continue
-            conversion_table[original_name] = val_name
+            conversion_table[original_name] = val_name.replace(' ', '_')
             values.append((val_name, int(value_value)))
         sorted_values = sorted(values, key=lambda x: x[0])
         for (value_name, value_value) in sorted_values:
