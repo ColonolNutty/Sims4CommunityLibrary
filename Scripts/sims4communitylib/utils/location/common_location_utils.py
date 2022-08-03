@@ -14,6 +14,9 @@ from civic_policies.street_civic_policy_service import StreetService
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
+from sims4communitylib.enums.common_region_id import CommonRegionId
+from world.region import Region
 from world.street import Street
 
 try:
@@ -36,6 +39,69 @@ class CommonLocationUtils:
     To manipulate the location of Objects, see :class:`.CommonObjectLocationUtils`.
 
     """
+
+    @classmethod
+    def get_current_region(cls) -> Region:
+        """get_current_region()
+
+        Retrieve the current region.
+
+        :return: The current region.
+        :rtype: Region
+        """
+        return services.current_region()
+
+    @classmethod
+    def is_current_region(cls, region: Union[int, CommonRegionId, Region]) -> bool:
+        """is_current_region(region)
+
+        Determine if a region is the current one.
+
+        :param region: The region to check.
+        :type region: Union[int, CommonRegionId, Region]
+        :return: True, if the specified region is the current one. False, if not.
+        :rtype: bool
+        """
+        region = cls.load_region_by_id(region)
+        if region is None:
+            return False
+        return region == cls.get_current_region()
+
+    @classmethod
+    def load_region_by_id(cls, region: Union[int, CommonRegionId, Region]) -> Union[Region, None]:
+        """load_region_by_id(region)
+
+        Load an instance of a Region by its identifier.
+
+        :param region: The identifier of a Region.
+        :type region: Union[int, CommonRegionId, Region]
+        :return: An instance of a Region matching the decimal identifier or None if not found.
+        :rtype: Union[Region, None]
+        """
+        if region is None:
+            return None
+        if isinstance(region, Region):
+            return region
+        # noinspection PyBroadException
+        try:
+            # noinspection PyCallingNonCallable
+            region_instance = region()
+            if isinstance(region_instance, Region):
+                # noinspection PyTypeChecker
+                return region
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
+            region: int = int(region)
+        except:
+            # noinspection PyTypeChecker
+            region: Region = region
+            return region
+
+        from sims4.resources import Types
+        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+        return CommonResourceUtils.load_instance(Types.REGION, region)
 
     @staticmethod
     def get_lot_corners(lot: Lot) -> Tuple[Any]:

@@ -13,6 +13,8 @@ from sims.sim import Sim
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims.sim_info_manager import SimInfoManager
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
@@ -170,14 +172,14 @@ class CommonSimUtils:
         return CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=_has_first_and_last_name)
 
     @staticmethod
-    def get_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None, allow_hidden_flags: HiddenReasonFlag=ALL_HIDDEN_REASONS) -> Iterator[Sim]:
+    def get_all_sims_generator(include_sim_callback: Callable[[SimInfo], Union[bool, CommonExecutionResult, CommonTestResult]] = None, allow_hidden_flags: HiddenReasonFlag = ALL_HIDDEN_REASONS) -> Iterator[Sim]:
         """get_all_sims_generator(include_sim_callback=None)
 
         Retrieve a Sim object for each and every Sim (including hidden Sims).
 
         :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. If set to None, All sims will be included.
         :type include_sim_callback: Callable[[SimInfo], bool], optional
-        :param allow_hidden_flags: Flags to indicate whether or not to consider types of hidden Sims as being instanced. Default is ALL_HIDDEN_REASONS.
+        :param allow_hidden_flags: Flags to indicate whether to consider types of hidden Sims as being instanced. Default is ALL_HIDDEN_REASONS.
         :type allow_hidden_flags: HiddenReasonFlag, optional
         :return: An iterable of all Sims matching the `include_sim_callback` filter.
         :rtype: Iterator[Sim]
@@ -189,7 +191,7 @@ class CommonSimUtils:
             yield sim_instance
 
     @staticmethod
-    def get_sim_info_for_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None) -> Iterator[SimInfo]:
+    def get_sim_info_for_all_sims_generator(include_sim_callback: Callable[[SimInfo], Union[bool, CommonExecutionResult, CommonTestResult]] = None) -> Iterator[SimInfo]:
         """get_sim_info_for_all_sims_generator(include_sim_callback=None)
 
         Retrieve a SimInfo object for each and every sim.
@@ -208,7 +210,7 @@ class CommonSimUtils:
             yield sim_info
 
     @staticmethod
-    def get_instanced_sim_info_for_all_sims_generator(include_sim_callback: Callable[[SimInfo], bool]=None, allow_hidden_flags: HiddenReasonFlag=ALL_HIDDEN_REASONS) -> Iterator[SimInfo]:
+    def get_instanced_sim_info_for_all_sims_generator(include_sim_callback: Callable[[SimInfo], Union[bool, CommonExecutionResult, CommonTestResult]] = None, allow_hidden_flags: HiddenReasonFlag=ALL_HIDDEN_REASONS) -> Iterator[SimInfo]:
         """get_instanced_sim_info_for_all_sims_generator(include_sim_callback=None, allow_hidden_flags=HiddenReasonFlag.NONE)
 
         Retrieve a SimInfo object for each and every sim.

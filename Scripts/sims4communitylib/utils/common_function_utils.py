@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any, Callable, Iterator
+from typing import Any, Callable, Iterator, Union
 
 from sims4communitylib.classes.testing.common_enqueue_result import CommonEnqueueResult
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
@@ -161,7 +161,7 @@ class CommonFunctionUtils:
                 pass
 
     @staticmethod
-    def run_predicates_as_one(predicate_functions: Iterator[Callable[..., bool]], all_must_pass: bool = True) -> Callable[..., bool]:
+    def run_predicates_as_one(predicate_functions: Iterator[Callable[..., Union[bool, CommonExecutionResult, CommonTestResult]]], all_must_pass: bool = True) -> Callable[..., Union[bool, CommonExecutionResult, CommonTestResult]]:
         """run_predicates_as_one(predicate_functions, all_must_pass=True)
 
         Wrap all predicate functions into a single predicate function. (See returned value for more information).
@@ -204,7 +204,7 @@ class CommonFunctionUtils:
         return _wrapper
 
     @staticmethod
-    def run_predicate_with_reversed_result(predicate_function: Callable[..., bool]) -> Callable[..., bool]:
+    def run_predicate_with_reversed_result(predicate_function: Callable[..., Union[bool, CommonExecutionResult, CommonTestResult]]) -> Callable[..., Union[bool, CommonExecutionResult, CommonTestResult]]:
         """run_predicate_with_reversed_result(predicate_function)
 
         Wrap the specified predicate function and reverse the result of it when the function is invoked.
@@ -217,7 +217,10 @@ class CommonFunctionUtils:
         def _wrapper(*_: Any, **__: Any) -> Any:
             if predicate_function is None:
                 return False
-            return not predicate_function(*_, **__)
+            result = predicate_function(*_, **__)
+            if isinstance(result, CommonExecutionResult) or isinstance(result, CommonTestResult):
+                return result.reverse_result()
+            return not result
         if predicate_function is not None:
             _wrapper.__name__ = predicate_function.__name__
         return _wrapper
