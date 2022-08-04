@@ -153,8 +153,8 @@ class CommonRelationshipUtils:
         """
         return (CommonRelationshipUtils.get_friendship_level(sim_info, target_sim_info) + CommonRelationshipUtils.get_romance_level(sim_info, target_sim_info)) / 2
 
-    @staticmethod
-    def has_permission_for_romantic_relationships(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def has_permission_for_romantic_relationships(cls, sim_info: SimInfo) -> CommonTestResult:
         """has_permission_for_romantic_relationships(sim_info)
 
         Determine if a Sim has permission to have romantic relationships with other Sims.
@@ -633,8 +633,8 @@ class CommonRelationshipUtils:
         for target_sim_info in CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, romance_relationship_ids, instanced_only=instanced_only):
             yield target_sim_info
 
-    @staticmethod
-    def get_friendship_relationship_track(sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, None]:
+    @classmethod
+    def get_friendship_relationship_track(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, None]:
         """get_friendship_relationship_track(sim_info_a, sim_info_b)
 
         Get an appropriate Friendship Relationship track between Sim A and Sim B.
@@ -658,8 +658,8 @@ class CommonRelationshipUtils:
                 return CommonRelationshipTrackId.SIM_TO_PET_FRIENDSHIP
         return None
 
-    @staticmethod
-    def get_romance_relationship_track(sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, None]:
+    @classmethod
+    def get_romance_relationship_track(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, None]:
         """get_romance_relationship_track(sim_info_a, sim_info_b)
 
         Get an appropriate Romance Relationship track between Sim A and Sim B.
