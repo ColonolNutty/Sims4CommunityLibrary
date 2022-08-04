@@ -9,6 +9,7 @@ import os
 
 from typing import Union, Tuple, Callable, Any, Iterator
 from sims.sim_info_lod import SimInfoLODLevel
+from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.common_species import CommonSpecies
@@ -483,7 +484,27 @@ class CommonSimSpawnUtils:
         :return: True, if the Sim was spawned successfully. False, if not.
         :rtype: bool
         """
-        SimSpawner.spawn_sim(sim_info, sim_location=location, sim_position=position, **kwargs)
+        if sim_info is None:
+            return False
+        if CommonSimUtils.get_sim_instance(sim_info) is not None:
+            return True
+        from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
+        if CommonAgeUtils.is_baby(sim_info):
+            # Sim is baby, they spawn differently.
+            from sims.baby.baby_utils import create_and_place_baby
+            position_to_spawn_at = None
+            routing_surface_to_spawn = None
+            if position is not None:
+                position_to_spawn_at = position
+                routing_surface_to_spawn = CommonSurfaceIdentifier.empty()
+            if location is not None:
+                position_to_spawn_at = location.transform.translation
+                routing_surface_to_spawn = location.routing_surface
+            if position_to_spawn_at is None or routing_surface_to_spawn is None:
+                return False
+            create_and_place_baby(sim_info, position=position_to_spawn_at, routing_surface=routing_surface_to_spawn)
+        else:
+            SimSpawner.spawn_sim(sim_info, sim_location=location, sim_position=position, **kwargs)
         return True
 
     @classmethod

@@ -26,6 +26,7 @@ from sims4communitylib.services.commands.common_console_command import CommonCon
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 from singletons import DEFAULT
 from typing import Tuple, Union, Dict, Callable, Iterator, Set
@@ -79,6 +80,23 @@ class CommonOutfitUtils(HasClassLog):
     @classmethod
     def get_log_identifier(cls) -> str:
         return 'common_outfit_utils'
+
+    @classmethod
+    def has_permission_to_change_to_nude(cls, sim_info: SimInfo) -> CommonTestResult:
+        """has_permission_to_change_to_nude(sim_info)
+
+        Determine if a Sim has permission to change to their Nude (Bathing) outfit.
+
+        .. note:: In the vanilla game, only Adult and Elder Sims have permission to change to Nude.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The result of the test. True, if the test passes. False, if the test fails.
+        :rtype: CommonTestResult
+        """
+        if not CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            return CommonTestResult(False, reason=f'{sim_info} does not have permission to change to Nude. They are neither an Adult nor Elder Sim.')
+        return CommonTestResult(True, reason=f'{sim_info} has permission to change to their Nude outfit.')
 
     @classmethod
     def is_every_day_category(cls, outfit_category: OutfitCategory) -> bool:

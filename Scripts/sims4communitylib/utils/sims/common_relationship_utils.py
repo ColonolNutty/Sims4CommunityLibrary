@@ -11,6 +11,7 @@ from relationships.relationship import Relationship
 from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
 from sims4.resources import Types
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.relationship_bits_enum import CommonRelationshipBitId
 from sims4communitylib.enums.relationship_tracks_enum import CommonRelationshipTrackId
 from sims4communitylib.modinfo import ModInfo
@@ -19,6 +20,7 @@ from sims4communitylib.services.commands.common_console_command import CommonCon
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 
@@ -93,6 +95,8 @@ class CommonRelationshipUtils:
 
         Retrieve the level of Friendship between two Sims.
 
+        .. note:: The return will be "0.0" if a friendship relationship track is not found.
+
         :param sim_info: The Sim to use.
         :type sim_info: SimInfo
         :param target_sim_info: The Target Sim to use.
@@ -100,9 +104,9 @@ class CommonRelationshipUtils:
         :return: The current level of friendship between two Sims.
         :rtype: float
         """
-        track_id = CommonRelationshipUtils._determine_friendship_track(sim_info, target_sim_info)
-        if track_id == -1:
-            return -1.0
+        track_id = CommonRelationshipUtils.get_friendship_relationship_track(sim_info, target_sim_info)
+        if track_id is None:
+            return 0.0
         return CommonRelationshipUtils.get_relationship_level_of_sims(sim_info, target_sim_info, track_id)
 
     @staticmethod
@@ -111,6 +115,8 @@ class CommonRelationshipUtils:
 
         Retrieve the level of Romance between two Sims.
 
+        .. note:: The return will be "0.0" if a romance relationship track is not found.
+
         :param sim_info: The Sim to use.
         :type sim_info: SimInfo
         :param target_sim_info: The Target Sim to use.
@@ -118,9 +124,9 @@ class CommonRelationshipUtils:
         :return: The current level of romance between two Sims.
         :rtype: float
         """
-        track_id = CommonRelationshipUtils._determine_romance_track(sim_info, target_sim_info)
-        if track_id == -1:
-            return -1.0
+        track_id = CommonRelationshipUtils.get_romance_relationship_track(sim_info, target_sim_info)
+        if track_id is None:
+            return 0.0
         return CommonRelationshipUtils.get_relationship_level_of_sims(sim_info, target_sim_info, track_id)
 
     @staticmethod
@@ -148,7 +154,65 @@ class CommonRelationshipUtils:
         return (CommonRelationshipUtils.get_friendship_level(sim_info, target_sim_info) + CommonRelationshipUtils.get_romance_level(sim_info, target_sim_info)) / 2
 
     @staticmethod
-    def has_relationship_bit_with_any_sims(sim_info: SimInfo, relationship_bit_id: Union[int, CommonRelationshipBitId], instanced_only: bool=True) -> bool:
+    def has_permission_for_romantic_relationships(sim_info: SimInfo) -> CommonTestResult:
+        """has_permission_for_romantic_relationships(sim_info)
+
+        Determine if a Sim has permission to have romantic relationships with other Sims.
+
+        .. note:: In the vanilla game, only Teen, Adult, and Elder Sims have permission for romantic relationships.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The result of the test. True, if the test passes. False, if the test fails.
+        :rtype: CommonTestResult
+        """
+        if not CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            return CommonTestResult(False, reason=f'{sim_info} does not have permission for romantic relationships. They are neither a Teen, Adult, nor Elder Sim.')
+        return CommonTestResult(True, reason=f'{sim_info} has permission for romantic relationships.')
+
+    @classmethod
+    def has_permission_for_romantic_relationship_with(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> CommonTestResult:
+        """Determine if two Sims are allowed to have a Romantic relationship together."""
+        sim_a_permission_result = cls.has_permission_for_romantic_relationships(sim_info_a)
+        if not sim_a_permission_result:
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_a_permission_result}')
+        sim_b_permission_result = cls.has_permission_for_romantic_relationships(sim_info_b)
+        if not sim_b_permission_result:
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_b_permission_result}')
+        if CommonRelationshipUtils.are_blood_relatives(sim_info_a, sim_info_b):
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} is a blood relative of {sim_info_b}.')
+        if not CommonSpeciesUtils.are_same_species(sim_info_a, sim_info_b):
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.')
+        if CommonAgeUtils.is_teen(sim_info_a) and CommonAgeUtils.is_teen(sim_info_b):
+            return CommonTestResult(True, reason=f'{sim_info_a} has permission for a romantic relationship with {sim_info_b}.')
+        if CommonAgeUtils.is_teen(sim_info_a):
+            if not CommonAgeUtils.is_teen(sim_info_b):
+                return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} is a Teen Sim and {sim_info_b} is an Adult or Elder Sim.')
+        elif CommonAgeUtils.is_teen(sim_info_b):
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} is an Adult or Elder Sim and {sim_info_b} is a Teen Sim.')
+        return CommonTestResult(True, reason=f'{sim_info_a} has permission for a romantic relationship with {sim_info_b}.')
+
+    @classmethod
+    def has_permission_to_be_blood_relative_of(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> CommonTestResult:
+        """has_permission_to_be_blood_relative_of(sim_info_a, sim_info_b)
+
+        Determine if Sim A has permission to be a Blood Relative of Sim B. (Such as Mother, Daughter, etc.)
+
+        .. note:: In the vanilla game, only Sims of the same species have permission to be Blood Relatives.
+
+        :param sim_info_a: An instance of a Sim.
+        :type sim_info_a: SimInfo
+        :param sim_info_b: An instance of a Sim.
+        :type sim_info_b: SimInfo
+        :return: The result of the test. True, if the test passes. False, if the test fails.
+        :rtype: CommonTestResult
+        """
+        if not CommonSpeciesUtils.are_same_species(sim_info_a, sim_info_b):
+            return CommonTestResult(False, reason=f'{sim_info_a} has permission to be a Blood Relative of {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.')
+        return CommonTestResult(True, reason=f'{sim_info_a} has permission to be a Blood Relative of {sim_info_b}.')
+
+    @staticmethod
+    def has_relationship_bit_with_any_sims(sim_info: SimInfo, relationship_bit_id: Union[int, CommonRelationshipBitId], instanced_only: bool = True) -> bool:
         """has_relationship_bit_with_any_sims(sim_info, relationship_bit_id, instance_only=True)
 
         Determine if a Sim has the specified relationship bit with any Sims.
@@ -165,7 +229,7 @@ class CommonRelationshipUtils:
         return any(CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bit_generator(sim_info, relationship_bit_id, instanced_only=instanced_only))
 
     @staticmethod
-    def has_relationship_bits_with_any_sims(sim_info: SimInfo, relationship_bit_ids: Iterator[int], instanced_only: bool=True) -> bool:
+    def has_relationship_bits_with_any_sims(sim_info: SimInfo, relationship_bit_ids: Iterator[int], instanced_only: bool = True) -> bool:
         """has_relationship_bits_with_any_sims(sim_info, relationship_bit_ids, instanced_only=True)
 
         Determine if a Sim has the specified relationship bits with any Sims.
@@ -437,7 +501,7 @@ class CommonRelationshipUtils:
         return True
 
     @staticmethod
-    def get_sim_info_of_all_sims_with_relationship_bit_generator(sim_info: SimInfo, relationship_bit_id: Union[int, CommonRelationshipBitId], instanced_only: bool=True) -> Iterator[SimInfo]:
+    def get_sim_info_of_all_sims_with_relationship_bit_generator(sim_info: SimInfo, relationship_bit_id: Union[int, CommonRelationshipBitId], instanced_only: bool = True) -> Iterator[SimInfo]:
         """get_sim_info_of_all_sims_with_relationship_bit_generator(sim_info, relationship_bit_id, instanced_only=True)
 
         Retrieve an Iterator of SimInfo for all Sims that have the specified relationship bit with the specified Sim.
@@ -464,7 +528,7 @@ class CommonRelationshipUtils:
         return CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, (relationship_bit_id, ), instanced_only=instanced_only)
 
     @staticmethod
-    def get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info: SimInfo, relationship_bit_ids: Iterator[Union[int, CommonRelationshipBitId]], instanced_only: bool=True) -> Iterator[SimInfo]:
+    def get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info: SimInfo, relationship_bit_ids: Iterator[Union[int, CommonRelationshipBitId]], instanced_only: bool = True) -> Iterator[SimInfo]:
         """get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, relationship_bit_ids, instanced_only=True)
 
         Retrieve an Iterator of SimInfo for all Sims that have the specified relationship bits with the specified Sim.
@@ -538,7 +602,7 @@ class CommonRelationshipUtils:
         ))
 
     @staticmethod
-    def get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info: SimInfo, instanced_only: bool=True) -> Iterator[SimInfo]:
+    def get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info: SimInfo, instanced_only: bool = True) -> Iterator[SimInfo]:
         """get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info, instanced_only=True)
 
         Retrieve a SimInfo object for all Sims romantically committed with the specified Sim.
@@ -570,7 +634,18 @@ class CommonRelationshipUtils:
             yield target_sim_info
 
     @staticmethod
-    def _determine_friendship_track(sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, int]:
+    def get_friendship_relationship_track(sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, None]:
+        """get_friendship_relationship_track(sim_info_a, sim_info_b)
+
+        Get an appropriate Friendship Relationship track between Sim A and Sim B.
+
+        :param sim_info_a: An instance of a Sim.
+        :type sim_info_a: SimInfo
+        :param sim_info_b: An instance of a Sim.
+        :type sim_info_b: SimInfo
+        :return: The decimal identifier of the Friendship Relationship Track appropriate for Sim A to have with Sim B or None if not found.
+        :rtype: Union[CommonRelationshipTrackId, None]
+        """
         if CommonSpeciesUtils.is_human(sim_info_a):
             if CommonSpeciesUtils.is_animal(sim_info_b):
                 return CommonRelationshipTrackId.SIM_TO_PET_FRIENDSHIP
@@ -578,16 +653,42 @@ class CommonRelationshipUtils:
                 return CommonRelationshipTrackId.FRIENDSHIP
         elif CommonSpeciesUtils.is_animal(sim_info_a):
             if CommonSpeciesUtils.is_animal(sim_info_b):
-                return -1
+                return None
             elif CommonSpeciesUtils.is_human(sim_info_b):
                 return CommonRelationshipTrackId.SIM_TO_PET_FRIENDSHIP
-        return -1
+        return None
+
+    @staticmethod
+    def get_romance_relationship_track(sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, None]:
+        """get_romance_relationship_track(sim_info_a, sim_info_b)
+
+        Get an appropriate Romance Relationship track between Sim A and Sim B.
+
+        :param sim_info_a: An instance of a Sim.
+        :type sim_info_a: SimInfo
+        :param sim_info_b: An instance of a Sim.
+        :type sim_info_b: SimInfo
+        :return: The decimal identifier of the Romance Relationship Track appropriate for Sim A to have with Sim B or None if not found.
+        :rtype: Union[CommonRelationshipTrackId, None]
+        """
+        if CommonSpeciesUtils.is_human(sim_info_a) and CommonSpeciesUtils.is_human(sim_info_b):
+            return CommonRelationshipTrackId.ROMANCE
+        return None
+
+    # These are here for backwards compatibility.
+    @staticmethod
+    def _determine_friendship_track(sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, int]:
+        result = CommonRelationshipUtils.get_friendship_relationship_track(sim_info_a, sim_info_b)
+        if result is None:
+            return -1
+        return result
 
     @staticmethod
     def _determine_romance_track(sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, int]:
-        if CommonSpeciesUtils.is_human(sim_info_a) and CommonSpeciesUtils.is_human(sim_info_b):
-            return CommonRelationshipTrackId.ROMANCE
-        return -1
+        result = CommonRelationshipUtils.get_romance_relationship_track(sim_info_a, sim_info_b)
+        if result is None:
+            return -1
+        return result
 
 
 log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'common_relationship_commands')

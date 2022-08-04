@@ -22,6 +22,8 @@ from sims4communitylib.services.commands.common_console_command import CommonCon
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
+from sims4communitylib.utils.sims.common_relationship_utils import CommonRelationshipUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
@@ -60,6 +62,53 @@ class CommonSimPregnancyUtils(HasClassLog):
         if pregnancy_tracker is None:
             return False
         return pregnancy_tracker.is_pregnant
+
+    @classmethod
+    def has_permission_for_pregnancies(cls, sim_info: SimInfo) -> CommonTestResult:
+        """has_permission_for_pregnancies(sim_info)
+
+        Determine if a Sim has the permissions to cause a Pregnancy or to become Pregnant. (Regardless of traits)
+
+        .. note:: In the vanilla game, only Adult and Elder Sims have permission for pregnancies.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The result of the test. True, if the test passes. False, if the test fails.
+        :rtype: CommonTestResult
+        """
+        if CommonAgeUtils.is_adult_or_elder(sim_info):
+            return CommonTestResult(True, reason=f'{sim_info} has permission to engage in pregnancy. They are either an Adult or an Elder Sim.')
+        return CommonTestResult(False, reason=f'{sim_info} does not have permission to engage in pregnancy. They are neither an Adult nor an Elder Sim.')
+
+    @classmethod
+    def has_permission_for_pregnancies_with(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> CommonTestResult:
+        """has_permission_for_pregnancies_with(sim_info_a, sim_info_b)
+
+        Determine if Sim A has the permissions to cause a Pregnancy with Sim B or to become pregnant from Sim B.
+
+        .. note:: In the vanilla game, only Adult and Elder Sims of the same species have permission for pregnancies with each other.
+
+        :param sim_info_a: An instance of a Sim. (Sim A)
+        :type sim_info_a: SimInfo
+        :param sim_info_b: An instance of a Sim. (Sim B)
+        :type sim_info_b: SimInfo
+        :return: The result of the test. True, if the test passes. False, if the test fails.
+        :rtype: CommonTestResult
+        """
+        sim_a_has_permission = cls.has_permission_for_pregnancies(sim_info_a)
+        if not sim_a_has_permission:
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for pregnancies with {sim_info_b}. {sim_a_has_permission}')
+        sim_b_has_permission = cls.has_permission_for_pregnancies(sim_info_b)
+        if not sim_b_has_permission:
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for pregnancies with {sim_info_b}. {sim_b_has_permission}')
+        if not CommonSpeciesUtils.are_same_species(sim_info_a, sim_info_b):
+            # If both Sims are dogs, that is an ok combination, even though their species do not match.
+            if not CommonSpeciesUtils.is_dog(sim_info_a) or not CommonSpeciesUtils.is_dog(sim_info_b):
+                return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for pregnancies with {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.')
+        romantic_relationships_result = CommonRelationshipUtils.has_permission_for_romantic_relationship_with(sim_info_a, sim_info_b)
+        if not romantic_relationships_result:
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for pregnancies with {sim_info_b}. {romantic_relationships_result}')
+        return CommonTestResult(False, reason=f'{sim_info_a} has permission for pregnancies with {sim_info_b}.')
 
     @classmethod
     def get_pregnancy_partner(cls, sim_info: SimInfo) -> Union[SimInfo, None]:

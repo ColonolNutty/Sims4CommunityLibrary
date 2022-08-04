@@ -12,6 +12,7 @@ from sims.sim_info import SimInfo
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.traits_enum import CommonTraitId
+from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
 from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
 from sims4communitylib.utils.sims.common_sim_voice_utils import CommonSimVoiceUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
