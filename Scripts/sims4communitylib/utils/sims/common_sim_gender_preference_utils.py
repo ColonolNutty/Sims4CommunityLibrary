@@ -29,7 +29,7 @@ class CommonSimGenderPreferenceUtils:
     def set_preference_for_gender(sim_info: SimInfo, gender: CommonGender, is_attracted_to_gender: Union[bool, None], preference_type: GenderPreferenceType = GenderPreferenceType.ROMANTIC) -> CommonExecutionResult:
         """set_preference_for_gender(sim_info, gender, is_attracted_to_gender, preference_type=GenderPreferenceType.ROMANTIC)
 
-        Make a Sim prefer a gender.
+        Set the preference a Sim has for a gender.
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo

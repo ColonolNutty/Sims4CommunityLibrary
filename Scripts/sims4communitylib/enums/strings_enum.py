@@ -91,6 +91,10 @@ class CommonStringId(CommonInt):
     # Gender Options
     TOILET_USE_STANDING: 'CommonStringId' = 3730566822
     TOILET_USE_SITTING: 'CommonStringId' = 4265081704
+    SEXUAL_ORIENTATION: 'CommonStringId' = 0xB4F0EDC8
+    THIS_SIM_IS_ROMANTICALLY_ATTRACTED_TO: 'CommonStringId' = 0xF808D0AB
+    THIS_SIM_IS_EXPLORING_ROMANTICALLY: 'CommonStringId' = 0x52609912
+    THIS_SIM_IS_INTERESTED_IN_WOOHOO_WITH: 'CommonStringId' = 0x4790F2DC
 
     # Misc Text
     CUSTOM_GENDER_SETTINGS: 'CommonStringId' = 2156245727

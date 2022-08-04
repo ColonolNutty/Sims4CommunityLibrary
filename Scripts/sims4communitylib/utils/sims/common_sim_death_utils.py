@@ -109,7 +109,7 @@ class CommonSimDeathUtils(_HasS4CLClassLog):
         sim_info: SimInfo,
         death_type: Union[CommonDeathType, DeathType]
     ) -> CommonExecutionResult:
-        """kill_sim(sim_info, death_type)
+        """kill_sim(sim_info, death_type, from_cheat=False)
 
         Kill a Sim.
 
