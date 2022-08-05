@@ -127,7 +127,13 @@ class CommonBuffUtils(HasClassLog):
         :return: The result of testing. True, if the Sim has the specified buff. False, if not.
         :rtype: CommonTestResult
         """
-        return cls.has_any_buffs(sim_info, buff)
+        for _buff in buff:
+            __buff = cls.load_buff_by_id(_buff)
+            if __buff is None:
+                continue
+            if sim_info.has_buff(__buff):
+                return CommonTestResult(True, reason=f'{sim_info} has buff {__buff}.')
+        return CommonTestResult(False, reason=f'{sim_info} does not have buff(s) {buff}')
 
     @classmethod
     def has_any_buffs(cls, sim_info: SimInfo, buffs: Iterator[Union[int, CommonBuffId, Buff]]) -> CommonTestResult:
@@ -148,12 +154,13 @@ class CommonBuffUtils(HasClassLog):
             return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
         if not buffs:
             return CommonTestResult(False, reason='No buffs were specified.')
-        sim_buff_ids = cls.get_buff_ids(sim_info)
         for buff in buffs:
-            buff_id = cls.get_buff_id(buff)
-            if buff_id in sim_buff_ids:
-                return CommonTestResult.TRUE
-        return CommonTestResult(False, reason=f'Sim did not have any of the specified buffs.')
+            _buff = cls.load_buff_by_id(buff)
+            if _buff is None:
+                continue
+            if sim_info.has_buff(_buff):
+                return CommonTestResult(True, reason=f'{sim_info} has buff {_buff}.')
+        return CommonTestResult(False, reason=f'{sim_info} does not have any buff(s) {buffs}.')
 
     @classmethod
     def has_all_buffs(cls, sim_info: SimInfo, buffs: Iterator[Union[int, CommonBuffId, Buff]]) -> CommonTestResult:
@@ -174,16 +181,13 @@ class CommonBuffUtils(HasClassLog):
             return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
         if not buffs:
             return CommonTestResult(False, reason='No buffs were specified.')
-        sim_buff_ids = cls.get_buff_ids(sim_info)
-        missing_buffs_list = list()
         for buff in buffs:
-            buff_id = cls.get_buff_id(buff)
-            if buff_id not in sim_buff_ids:
-                missing_buffs_list.append(buff)
-        if missing_buffs_list:
-            missing_buffs_list_str = ', '.join([cls.get_buff_name(buff) or str(buff) if isinstance(buff, Buff) else str(buff) for buff in missing_buffs_list])
-            return CommonTestResult(False, reason=f'Sim did not have all buffs. Missing Buffs: {missing_buffs_list_str}')
-        return CommonTestResult.TRUE
+            _buff = cls.load_buff_by_id(buff)
+            if _buff is None:
+                continue
+            if not sim_info.has_buff(_buff):
+                return CommonTestResult(False, reason=f'{sim_info} does not have buff {_buff}.')
+        return CommonTestResult(True, reason=f'{sim_info} does not have all buffs {buffs}.')
 
     @classmethod
     def get_buffs(cls, sim_info: SimInfo) -> List[Buff]:

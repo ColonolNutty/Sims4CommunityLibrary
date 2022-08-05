@@ -1005,7 +1005,13 @@ class CommonTraitUtils(HasClassLog):
         :return: The result of testing. True, if the Sim has the specified trait. False, if not.
         :rtype: CommonTestResult
         """
-        return cls.has_any_traits(sim_info, trait)
+        for _trait in trait:
+            __trait = cls.load_trait_by_id(_trait)
+            if __trait is None:
+                continue
+            if sim_info.has_trait(__trait):
+                return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.')
+        return CommonTestResult(False, reason=f'{sim_info} does not have trait(s) {trait}')
 
     @classmethod
     def has_any_traits(cls, sim_info: SimInfo, traits: Iterator[Union[int, CommonTraitId, Trait]]) -> CommonTestResult:
@@ -1024,12 +1030,13 @@ class CommonTraitUtils(HasClassLog):
             raise AssertionError('Argument sim_info was None')
         if not traits:
             return CommonTestResult(False, reason='No traits were specified.')
-        sim_trait_ids = cls.get_trait_ids(sim_info)
         for trait in traits:
-            trait_id = cls.get_trait_id(trait)
-            if trait_id in sim_trait_ids:
-                return CommonTestResult.TRUE
-        return CommonTestResult(False, reason=f'Sim did not have any of the specified traits.')
+            _trait = cls.load_trait_by_id(trait)
+            if _trait is None:
+                continue
+            if sim_info.has_trait(_trait):
+                return CommonTestResult(True, reason=f'{sim_info} has trait {_trait}.')
+        return CommonTestResult(False, reason=f'{sim_info} does not have any trait(s) {traits}.')
 
     @classmethod
     def has_all_traits(cls, sim_info: SimInfo, traits: Iterator[Union[int, CommonTraitId, Trait]]) -> CommonTestResult:
@@ -1048,16 +1055,13 @@ class CommonTraitUtils(HasClassLog):
             raise AssertionError('Argument sim_info was None')
         if not traits:
             return CommonTestResult(False, reason='No traits were specified.')
-        sim_trait_ids = cls.get_trait_ids(sim_info)
-        missing_traits_list = list()
         for trait in traits:
-            trait_id = cls.get_trait_id(trait)
-            if trait_id not in sim_trait_ids:
-                missing_traits_list.append(trait)
-        if missing_traits_list:
-            missing_traits_list_str = ', '.join([cls.get_trait_name(trait) or str(trait) if isinstance(trait, Trait) else str(trait) for trait in missing_traits_list])
-            return CommonTestResult(False, reason=f'Sim did not have all traits. Missing Buffs: {missing_traits_list_str}')
-        return CommonTestResult.TRUE
+            _trait = cls.load_trait_by_id(trait)
+            if _trait is None:
+                continue
+            if not sim_info.has_trait(_trait):
+                return CommonTestResult(False, reason=f'{sim_info} does not have trait {_trait}.')
+        return CommonTestResult(True, reason=f'{sim_info} has all traits {traits}.')
 
     @classmethod
     def is_conflicting_trait(cls, sim_info: SimInfo, trait_id: Union[int, CommonTraitId, Trait]) -> CommonTestResult:
@@ -1325,7 +1329,7 @@ class CommonTraitUtils(HasClassLog):
         return CommonExecutionResult(False, reason=f'Sim had neither Trait One {trait_id_one} nor Trait Two {trait_id_two}.')
 
     @classmethod
-    def add_trait_to_all_sims(cls, trait_id: Union[int, CommonTraitId, Trait], include_sim_callback: Callable[[SimInfo], bool]=None):
+    def add_trait_to_all_sims(cls, trait_id: Union[int, CommonTraitId, Trait], include_sim_callback: Callable[[SimInfo], bool] = None):
         """add_trait_to_all_sims(trait_id, include_sim_callback=None)
 
         Add a trait to all Sims that match the specified include filter.
@@ -1341,7 +1345,7 @@ class CommonTraitUtils(HasClassLog):
             cls.add_trait(sim_info, trait_id)
 
     @classmethod
-    def remove_trait_from_all_sims(cls, trait_id: Union[int, CommonTraitId, Trait], include_sim_callback: Callable[[SimInfo], bool]=None):
+    def remove_trait_from_all_sims(cls, trait_id: Union[int, CommonTraitId, Trait], include_sim_callback: Callable[[SimInfo], bool] = None):
         """remove_trait_from_all_sims(trait_id, include_sim_callback=None)
 
         Remove a trait from all Sims that match the specified include filter.
@@ -1404,6 +1408,7 @@ class CommonTraitUtils(HasClassLog):
             # noinspection PyCallingNonCallable
             trait_instance = trait()
             if isinstance(trait_instance, Trait):
+                # noinspection PyTypeChecker
                 return trait
         except:
             pass
@@ -1411,6 +1416,7 @@ class CommonTraitUtils(HasClassLog):
         try:
             trait: int = int(trait)
         except:
+            # noinspection PyTypeChecker
             trait: Trait = trait
             return trait
 
@@ -1429,7 +1435,7 @@ class CommonTraitUtils(HasClassLog):
         CommonConsoleCommandArgument('sim_info_b', 'Sim Id or Name', 'The instance id or name of a Sim to check.', is_optional=True, default_value='Active Sim'),
     )
 )
-def _common_print_known_traits(output: CommonConsoleCommandOutput, sim_info_a: SimInfo=None, sim_info_b: SimInfo=None):
+def _common_print_known_traits(output: CommonConsoleCommandOutput, sim_info_a: SimInfo = None, sim_info_b: SimInfo = None):
     if sim_info_a is None:
         return
     if sim_info_b is None:
@@ -1462,7 +1468,7 @@ def _common_print_known_traits(output: CommonConsoleCommandOutput, sim_info_a: S
         's4clib.addtrait',
     )
 )
-def _common_add_trait(output: CommonConsoleCommandOutput, trait: TunableInstanceParam(Types.TRAIT), sim_info: SimInfo=None):
+def _common_add_trait(output: CommonConsoleCommandOutput, trait: TunableInstanceParam(Types.TRAIT), sim_info: SimInfo = None):
     if trait is None:
         return
     if sim_info is None:
@@ -1488,7 +1494,7 @@ def _common_add_trait(output: CommonConsoleCommandOutput, trait: TunableInstance
         's4clib.removetrait',
     )
 )
-def _common_remove_trait(output: CommonConsoleCommandOutput, trait: TunableInstanceParam(Types.TRAIT), sim_info: SimInfo=None):
+def _common_remove_trait(output: CommonConsoleCommandOutput, trait: TunableInstanceParam(Types.TRAIT), sim_info: SimInfo = None):
     if trait is None:
         return
     if sim_info is None:
@@ -1513,7 +1519,7 @@ def _common_remove_trait(output: CommonConsoleCommandOutput, trait: TunableInsta
         's4clib_testing.printtraits',
     )
 )
-def _common_show_traits(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_show_traits(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         return
     log = CommonTraitUtils.get_log()
