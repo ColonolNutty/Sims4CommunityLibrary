@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 from typing import Any
 
 from sims4.log import Logger
+from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.s4cl_configuration import S4CLConfiguration
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
@@ -21,10 +22,12 @@ class _CommonVanillaLogOverride(CommonService):
     def __init__(self) -> None:
         self.logs_enabled = S4CLConfiguration().enable_vanilla_logging
         self.logs = list()
+        self.stop_watches = dict()
+        self.last_time = dict()
 
     def get_log(self, log_name: str) -> CommonLog:
         """ Get a log for a log name. """
-        _log = CommonLogRegistry().register_log('{}_S4CLVanillaLog'.format(log_name), 'log', 'vanilla_logs')
+        _log = CommonLogRegistry().register_log(f'{log_name}_S4CLVanillaLog', 'log', 'vanilla_logs')
         _log.enable()
         self.logs.append(_log)
         return _log
@@ -34,7 +37,7 @@ class _CommonVanillaLogOverride(CommonService):
         if args:
             to_log_message = to_log_message.format(*args)
         if owner:
-            to_log_message = '[{owner}] {}'.format(to_log_message, owner=owner)
+            to_log_message = f'[{owner}] {to_log_message}'
         return to_log_message
 
     def enable_logs(self) -> None:
@@ -48,13 +51,15 @@ class _CommonVanillaLogOverride(CommonService):
     def _log(self, log_name: str, message: str, *args, level, owner=None, **kwargs) -> Any:
         if not self.logs_enabled:
             return
+        message = self._append_time(log_name, message)
         _log = _CommonVanillaLogOverride().get_log(log_name)
         to_log_message = _CommonVanillaLogOverride()._format_message(message, *args, owner=owner, **kwargs)
-        _log.debug('{}: {}'.format(level, to_log_message))
+        _log.debug(f'{level}: {to_log_message}')
 
     def _debug(self, log_name: str, message: str, *args, owner=None, **kwargs) -> Any:
         if not self.logs_enabled:
             return
+        message = self._append_time(log_name, message)
         _log = _CommonVanillaLogOverride().get_log(log_name)
         to_log_message = _CommonVanillaLogOverride()._format_message(message, *args, owner=owner, **kwargs)
         _log.debug(to_log_message)
@@ -62,6 +67,7 @@ class _CommonVanillaLogOverride(CommonService):
     def _info(self, log_name: str, message: str, *args, owner=None, **kwargs) -> Any:
         if not self.logs_enabled:
             return
+        message = self._append_time(log_name, message)
         _log = _CommonVanillaLogOverride().get_log(log_name)
         to_log_message = _CommonVanillaLogOverride()._format_message(message, *args, owner=owner, **kwargs)
         _log.info(to_log_message)
@@ -69,6 +75,7 @@ class _CommonVanillaLogOverride(CommonService):
     def _warn(self, log_name: str, message: str, *args, owner=None, **kwargs) -> Any:
         if not self.logs_enabled:
             return
+        message = self._append_time(log_name, message)
         _log = _CommonVanillaLogOverride().get_log(log_name)
         to_log_message = _CommonVanillaLogOverride()._format_message(message, *args, owner=owner, **kwargs)
         _log.warn(to_log_message)
@@ -76,16 +83,47 @@ class _CommonVanillaLogOverride(CommonService):
     def _error(self, log_name: str, message: str, *args, owner=None, **kwargs) -> Any:
         if not self.logs_enabled:
             return
+        message = self._append_time(log_name, message)
         _log = _CommonVanillaLogOverride().get_log(log_name)
         to_log_message = _CommonVanillaLogOverride()._format_message(message, *args, owner=owner, **kwargs)
         _log.error(to_log_message + ' (This exception is not caused by S4CL, but rather caught)')
 
-    def _exception(self, log_name: str, message: str, *args, exc: Exception=None, owner=None, **kwargs) -> Any:
+    def _exception(self, log_name: str, message: str, *args, exc: Exception = None, owner=None, **kwargs) -> Any:
         if not self.logs_enabled:
             return
+        message = self._append_time(log_name, message)
         _log = _CommonVanillaLogOverride().get_log(log_name)
         to_log_message = _CommonVanillaLogOverride()._format_message(message, *args, owner=owner, **kwargs)
         _log.error(to_log_message + ' (This exception is not caused by S4CL, but rather caught)', exception=exc, throw=True)
+
+    def _append_time(self, log_name: str, message: str) -> str:
+        stop_watch = self._get_stop_watch(log_name)
+        interval = stop_watch.interval()
+        if log_name not in self.last_time:
+            self.last_time[log_name] = interval
+            compare_time = 0
+        else:
+            last_time = self.last_time[log_name]
+            compare_time = interval - last_time
+            self.last_time[log_name] = interval
+        interval_str = f'{1000*interval:.2f}ms'
+        compare_time_str = f'{1000*compare_time:.2f}ms'
+        return f'{interval_str} +{compare_time_str} {message}'
+
+    def _get_stop_watch(self, log_name: str) -> CommonStopWatch:
+        if log_name not in self.stop_watches:
+            stop_watch = CommonStopWatch()
+            stop_watch.start()
+            self.stop_watches[log_name] = stop_watch
+        return self.stop_watches[log_name]
+
+    def _clear_stop_watches(self) -> None:
+        stop_watches = list(self.stop_watches.values())
+        self.stop_watches.clear()
+        self.stop_watches.clear()
+        self.last_time.clear()
+        for stop_watch in stop_watches:
+            stop_watch.stop()
 
 
 @CommonConsoleCommand(
@@ -101,6 +139,7 @@ def _common_enable_vanilla_logs(output: CommonConsoleCommandOutput):
     if _CommonVanillaLogOverride().logs_enabled:
         output('The Vanilla Logs are already enabled.')
         return
+    _CommonVanillaLogOverride()._clear_stop_watches()
     _CommonVanillaLogOverride().enable_logs()
     output('Vanilla Logs are now enabled.')
 
@@ -119,6 +158,7 @@ def _common_disable_vanilla_logs(output: CommonConsoleCommandOutput):
         output('The Vanilla Logs are already disabled.')
         return
     _CommonVanillaLogOverride().disable_logs()
+    _CommonVanillaLogOverride()._clear_stop_watches()
     output('Vanilla Logs are now disabled.')
 
 
@@ -162,3 +202,9 @@ def _common_logger_exception(original, self, message, *args, exc=None, owner=Non
     log_name = self.group
     _CommonVanillaLogOverride()._exception(log_name, message, *args, exc=exc, owner=owner or self.default_owner, **kwargs)
     return original(self, message, *args, exc=exc, owner=owner, **kwargs)
+
+
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.clear_stop_watches', 'Clear the stop watches for the vanilla logs', show_with_help_command=False)
+def _common_clear_stop_watches(output: CommonConsoleCommandOutput):
+    output('Clearing stop watches.')
+    _CommonVanillaLogOverride()._clear_stop_watches()
