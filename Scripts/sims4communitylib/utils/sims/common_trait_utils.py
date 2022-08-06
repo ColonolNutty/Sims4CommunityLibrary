@@ -12,6 +12,7 @@ from relationships.relationship_tracker import RelationshipTracker
 from relationships.sim_knowledge import SimKnowledge
 from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
+from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4.resources import Types
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
@@ -1005,12 +1006,24 @@ class CommonTraitUtils(HasClassLog):
         :return: The result of testing. True, if the Sim has the specified trait. False, if not.
         :rtype: CommonTestResult
         """
-        for _trait in trait:
-            __trait = cls.load_trait_by_id(_trait)
-            if __trait is None:
-                continue
-            if sim_info.has_trait(__trait):
-                return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.')
+        if isinstance(sim_info, SimInfoBaseWrapper):
+            sim_info: SimInfoBaseWrapper = sim_info
+            any_traits = sim_info._get_trait_ids()
+            if not any_traits:
+                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.')
+            for _trait in trait:
+                __trait = cls.get_trait_id(_trait)
+                if __trait is None:
+                    continue
+                if _trait in any_traits:
+                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.')
+        else:
+            for _trait in trait:
+                __trait = cls.load_trait_by_id(_trait)
+                if __trait is None:
+                    continue
+                if sim_info.has_trait(__trait):
+                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.')
         return CommonTestResult(False, reason=f'{sim_info} does not have trait(s) {trait}')
 
     @classmethod
@@ -1030,12 +1043,24 @@ class CommonTraitUtils(HasClassLog):
             raise AssertionError('Argument sim_info was None')
         if not traits:
             return CommonTestResult(False, reason='No traits were specified.')
-        for trait in traits:
-            _trait = cls.load_trait_by_id(trait)
-            if _trait is None:
-                continue
-            if sim_info.has_trait(_trait):
-                return CommonTestResult(True, reason=f'{sim_info} has trait {_trait}.')
+        if isinstance(sim_info, SimInfoBaseWrapper):
+            sim_info: SimInfoBaseWrapper = sim_info
+            any_traits = sim_info._get_trait_ids()
+            if not any_traits:
+                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.')
+            for _trait in traits:
+                __trait = cls.get_trait_id(_trait)
+                if __trait is None:
+                    continue
+                if _trait in any_traits:
+                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.')
+        else:
+            for trait in traits:
+                _trait = cls.load_trait_by_id(trait)
+                if _trait is None:
+                    continue
+                if sim_info.has_trait(_trait):
+                    return CommonTestResult(True, reason=f'{sim_info} has trait {_trait}.')
         return CommonTestResult(False, reason=f'{sim_info} does not have any trait(s) {traits}.')
 
     @classmethod
@@ -1055,12 +1080,24 @@ class CommonTraitUtils(HasClassLog):
             raise AssertionError('Argument sim_info was None')
         if not traits:
             return CommonTestResult(False, reason='No traits were specified.')
-        for trait in traits:
-            _trait = cls.load_trait_by_id(trait)
-            if _trait is None:
-                continue
-            if not sim_info.has_trait(_trait):
-                return CommonTestResult(False, reason=f'{sim_info} does not have trait {_trait}.')
+        if isinstance(sim_info, SimInfoBaseWrapper):
+            sim_info: SimInfoBaseWrapper = sim_info
+            any_traits = sim_info._get_trait_ids()
+            if not any_traits:
+                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.')
+            for _trait in traits:
+                __trait = cls.get_trait_id(_trait)
+                if __trait is None:
+                    continue
+                if _trait not in any_traits:
+                    return CommonTestResult(False, reason=f'{sim_info} does not have trait {_trait}.')
+        else:
+            for trait in traits:
+                _trait = cls.load_trait_by_id(trait)
+                if _trait is None:
+                    continue
+                if not sim_info.has_trait(_trait):
+                    return CommonTestResult(False, reason=f'{sim_info} does not have trait {_trait}.')
         return CommonTestResult(True, reason=f'{sim_info} has all traits {traits}.')
 
     @classmethod
@@ -1094,6 +1131,8 @@ class CommonTraitUtils(HasClassLog):
         :return: A collection of Trait identifiers on a Sim.
         :rtype: List[int]
         """
+        if isinstance(sim_info, SimInfoBaseWrapper):
+            return list(sim_info._get_trait_ids())
         trait_ids = list()
         for trait in cls.get_traits(sim_info):
             trait_id = cls.get_trait_id(trait)
@@ -1113,6 +1152,8 @@ class CommonTraitUtils(HasClassLog):
         :return: A collection of Traits on a Sim.
         :rtype: List[int]
         """
+        if isinstance(sim_info, SimInfoBaseWrapper):
+            return [cls.load_trait_by_id(trait_id) for trait_id in cls.get_trait_ids(sim_info)]
         if not hasattr(sim_info, 'get_traits'):
             return list()
         traits = list(sim_info.get_traits())

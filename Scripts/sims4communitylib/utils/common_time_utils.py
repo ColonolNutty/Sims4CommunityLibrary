@@ -11,7 +11,8 @@ import services
 from clock import ClockSpeedMode, GameClock, ClockSpeedMultiplierType
 from date_and_time import DateAndTime, TimeSpan
 from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from time_service import TimeService
 
@@ -161,7 +162,7 @@ class CommonTimeUtils:
         CommonTimeUtils.get_game_clock().set_game_time(hours, minutes, seconds)
 
     @staticmethod
-    def advance_current_time(hours: int=0, minutes: int=0, seconds: int=0):
+    def advance_current_time(hours: int = 0, minutes: int = 0, seconds: int = 0):
         """advance_current_time(hours=0, minutes=0, seconds=0)
 
         Advance the current time by the specified amounts.
@@ -187,7 +188,7 @@ class CommonTimeUtils:
         return services.time_service().sim_now
     
     @staticmethod
-    def get_current_second(date_and_time: DateAndTime=None) -> int:
+    def get_current_second(date_and_time: DateAndTime = None) -> int:
         """get_current_second(date_and_time)
 
         Retrieve the current Sim second of the minute.
@@ -202,7 +203,7 @@ class CommonTimeUtils:
         return int(date_and_time.second())
     
     @staticmethod
-    def get_current_minute(date_and_time: DateAndTime=None) -> int:
+    def get_current_minute(date_and_time: DateAndTime = None) -> int:
         """get_current_minute(date_and_time)
 
         Retrieve the current Sim minute of the hour.
@@ -217,7 +218,7 @@ class CommonTimeUtils:
         return int(date_and_time.minute())
     
     @staticmethod
-    def get_current_hour(date_and_time: DateAndTime=None) -> int:
+    def get_current_hour(date_and_time: DateAndTime = None) -> int:
         """get_current_hour(date_and_time)
 
         Retrieve the current Sim hour of the day in military time.
@@ -232,7 +233,7 @@ class CommonTimeUtils:
         return int(date_and_time.hour())
 
     @staticmethod
-    def get_current_day(date_and_time: DateAndTime=None) -> int:
+    def get_current_day(date_and_time: DateAndTime = None) -> int:
         """get_current_day(date_and_time)
 
         Retrieve the current Sim day of the month.
@@ -247,7 +248,7 @@ class CommonTimeUtils:
         return int(date_and_time.day())
 
     @staticmethod
-    def get_current_week(date_and_time: DateAndTime=None) -> int:
+    def get_current_week(date_and_time: DateAndTime = None) -> int:
         """get_current_week(date_and_time)
 
         Retrieve the current Sim week of the month.
@@ -262,7 +263,7 @@ class CommonTimeUtils:
         return int(date_and_time.week())
     
     @staticmethod
-    def get_total_ticks(date_and_time: DateAndTime=None) -> int:
+    def get_total_ticks(date_and_time: DateAndTime = None) -> int:
         """get_total_ticks(date_and_time)
 
         Retrieve the total Sim ticks since the start of the day.
@@ -277,7 +278,7 @@ class CommonTimeUtils:
         return int(date_and_time.absolute_ticks())
 
     @staticmethod
-    def get_total_seconds(date_and_time: DateAndTime=None) -> float:
+    def get_total_seconds(date_and_time: DateAndTime = None) -> float:
         """get_total_seconds(date_and_time)
 
         Retrieve the total Sim seconds since the start of the day.
@@ -292,7 +293,7 @@ class CommonTimeUtils:
         return int(date_and_time.absolute_seconds())
 
     @staticmethod
-    def get_total_minutes(date_and_time: DateAndTime=None) -> float:
+    def get_total_minutes(date_and_time: DateAndTime = None) -> float:
         """get_total_minutes(date_and_time)
 
         Retrieve the total Sim minutes since the start of the day.
@@ -307,7 +308,7 @@ class CommonTimeUtils:
         return int(date_and_time.absolute_minutes())
 
     @staticmethod
-    def get_total_hours(date_and_time: DateAndTime=None) -> float:
+    def get_total_hours(date_and_time: DateAndTime = None) -> float:
         """get_total_hours(date_and_time)
 
         Retrieve the total Sim hours since the start of the day in military time.
@@ -322,7 +323,7 @@ class CommonTimeUtils:
         return int(date_and_time.absolute_hours())
 
     @staticmethod
-    def get_total_days(date_and_time: DateAndTime=None) -> float:
+    def get_total_days(date_and_time: DateAndTime = None) -> float:
         """get_total_days(date_and_time)
 
         Retrieve the total Sim days since the start of the season.
@@ -337,7 +338,7 @@ class CommonTimeUtils:
         return int(date_and_time.absolute_days())
 
     @staticmethod
-    def get_total_weeks(date_and_time: DateAndTime=None) -> float:
+    def get_total_weeks(date_and_time: DateAndTime = None) -> float:
         """get_total_weeks(date_and_time)
 
         Retrieve the total Sim weeks since the start of the season.
@@ -352,7 +353,7 @@ class CommonTimeUtils:
         return int(date_and_time.absolute_weeks())
 
     @staticmethod
-    def get_day_of_week(date_and_time: DateAndTime=None) -> int:
+    def get_day_of_week(date_and_time: DateAndTime = None) -> int:
         """get_day_of_week(date_and_time)
 
         Retrieve the current day of the week.
@@ -432,7 +433,7 @@ class CommonTimeUtils:
         return clock.interval_in_sim_weeks(weeks)
 
     @staticmethod
-    def create_time_span(minutes: int=0, hours: int=0, days: int=0) -> TimeSpan:
+    def create_time_span(minutes: int = 0, hours: int = 0, days: int = 0) -> TimeSpan:
         """create_time_span(minutes=0, hours=0, days=0)
 
         Create a time span that spans from the current Sim time to a number of Sim minutes, hours, or days in the future.
@@ -450,7 +451,7 @@ class CommonTimeUtils:
         return create_time_span(days=days, hours=hours, minutes=minutes)
 
     @staticmethod
-    def create_date_and_time(minutes: int=0, hours: int=0, days: int=0) -> DateAndTime:
+    def create_date_and_time(minutes: int = 0, hours: int = 0, days: int = 0) -> DateAndTime:
         """create_date_and_time(minutes=0, hours=0, days=0)
 
         Create a date and time that takes place a number of Sim minutes, hours, or days in the future.
@@ -468,13 +469,13 @@ class CommonTimeUtils:
         return create_date_and_time(days=days, hours=hours, minutes=minutes)
 
     @staticmethod
-    def convert_milliseconds_to_seconds(milliseconds: int) -> float:
+    def convert_milliseconds_to_seconds(milliseconds: float) -> float:
         """convert_milliseconds_to_seconds(milliseconds)
 
         Convert Milliseconds to Seconds.
 
         :param milliseconds: The value to convert.
-        :type milliseconds: int
+        :type milliseconds: float
         :return: The converted value in seconds.
         :rtype: float
         """
@@ -482,6 +483,22 @@ class CommonTimeUtils:
         if MILLISECONDS_PER_SECOND <= 0:
             return milliseconds/1000
         return milliseconds/MILLISECONDS_PER_SECOND
+
+    @staticmethod
+    def convert_seconds_to_milliseconds(seconds: float) -> float:
+        """convert_seconds_to_milliseconds(milliseconds)
+
+        Convert Seconds to Milliseconds.
+
+        :param seconds: The value to convert.
+        :type seconds: float
+        :return: The converted value in milliseconds.
+        :rtype: float
+        """
+        from date_and_time import MILLISECONDS_PER_SECOND
+        if MILLISECONDS_PER_SECOND <= 0:
+            return seconds * 1000
+        return seconds * MILLISECONDS_PER_SECOND
 
     @staticmethod
     def is_sun_out() -> bool:
@@ -495,7 +512,7 @@ class CommonTimeUtils:
         return CommonTimeUtils.get_time_service().is_sun_out()
 
     @staticmethod
-    def is_day_time(date_and_time: DateAndTime=None) -> bool:
+    def is_day_time(date_and_time: DateAndTime = None) -> bool:
         """is_day_time(date_and_time=None)
 
         Determine if it is currently Day Time.
@@ -508,7 +525,7 @@ class CommonTimeUtils:
         return CommonTimeUtils.get_time_service().is_day_time(time=date_and_time)
 
     @staticmethod
-    def is_night_time(date_and_time: DateAndTime=None) -> bool:
+    def is_night_time(date_and_time: DateAndTime = None) -> bool:
         """is_night_time(date_and_time=None)
 
         Determine if it is currently Night Time.
@@ -552,3 +569,24 @@ def _s4clib_pause_game(output: CommonConsoleCommandOutput):
     output('Attempting to pause the game.')
     CommonTimeUtils.pause_the_game()
     output('Game paused successfully.')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.advance_time',
+    'Advance the time in-game.',
+    command_arguments=(
+        CommonConsoleCommandArgument('seconds', 'Positive Number', 'The number of seconds to advance time by. Default is 0.', is_optional=True, default_value=0),
+        CommonConsoleCommandArgument('minutes', 'Positive Number', 'The number of minutes to advance time by. Default is 0.', is_optional=True, default_value=0),
+        CommonConsoleCommandArgument('hours', 'Positive Number', 'The number of hours to advance time by. Default is 0.', is_optional=True, default_value=0),
+    )
+)
+def _s4clib_advance_time(
+    output: CommonConsoleCommandOutput,
+    seconds: int = 0,
+    minutes: int = 0,
+    hours: int = 0
+):
+    output(f'Attempting to advance time by {hours}h {minutes}m {seconds}s')
+    CommonTimeUtils.advance_current_time(hours=hours, minutes=minutes, seconds=seconds)
+    output('Finished advancing time.')

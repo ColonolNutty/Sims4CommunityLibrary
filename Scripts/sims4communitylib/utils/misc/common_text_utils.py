@@ -38,3 +38,33 @@ class CommonTextUtils:
         if not hex_value:
             return hex_value
         return hex_value[:2] + hex_value[2:].upper()
+
+    @staticmethod
+    def convert_to_hex32_string(value: int) -> str:
+        """convert_to_hex32_string(value)
+
+        Convert a value into a 32 bit hexadecimal string. This function will keep any leading or trailing zeros.
+
+        :param value: The value to convert.
+        :type value: int
+        :return: The value as a Hexadecimal string.
+        :rtype: str
+        """
+        if value is None:
+            raise AssertionError('value was None!')
+        return f'0x{value:08X}'
+
+    @staticmethod
+    def to_truncated_decimal(value: float, num_of_decimal_points: int = 2) -> str:
+        """to_truncated_decimal(value, num_of_decimal_points=2)
+
+        Create a string of a float value with a number of decimal points truncated.
+
+        :param value: The value to truncate.
+        :type value: float
+        :param num_of_decimal_points: The number of decimal places to leave in the string. Default is 2.
+        :type num_of_decimal_points: int, optional
+        :return: A string representation of the value truncated to the number of decimal places.
+        :rtype: str
+        """
+        return f'{value:.{num_of_decimal_points}f}'

@@ -16,6 +16,7 @@ from sims4communitylib.services.commands.common_console_command_output import Co
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry, CommonLog
+from sims4communitylib.utils.misc.common_text_utils import CommonTextUtils
 
 
 class _CommonVanillaLogOverride(CommonService):
@@ -106,9 +107,9 @@ class _CommonVanillaLogOverride(CommonService):
             last_time = self.last_time[log_name]
             compare_time = interval - last_time
             self.last_time[log_name] = interval
-        interval_str = f'{1000*interval:.2f}ms'
-        compare_time_str = f'{1000*compare_time:.2f}ms'
-        return f'{interval_str} +{compare_time_str} {message}'
+        interval_str = CommonTextUtils.to_truncated_decimal(1000*interval)
+        compare_time_str = CommonTextUtils.to_truncated_decimal(1000*compare_time)
+        return f'{interval_str}ms +{compare_time_str}ms {message}'
 
     def _get_stop_watch(self, log_name: str) -> CommonStopWatch:
         if log_name not in self.stop_watches:
@@ -117,7 +118,7 @@ class _CommonVanillaLogOverride(CommonService):
             self.stop_watches[log_name] = stop_watch
         return self.stop_watches[log_name]
 
-    def _clear_stop_watches(self) -> None:
+    def _clear_log_times(self) -> None:
         stop_watches = list(self.stop_watches.values())
         self.stop_watches.clear()
         self.stop_watches.clear()
@@ -139,7 +140,7 @@ def _common_enable_vanilla_logs(output: CommonConsoleCommandOutput):
     if _CommonVanillaLogOverride().logs_enabled:
         output('The Vanilla Logs are already enabled.')
         return
-    _CommonVanillaLogOverride()._clear_stop_watches()
+    _CommonVanillaLogOverride()._clear_log_times()
     _CommonVanillaLogOverride().enable_logs()
     output('Vanilla Logs are now enabled.')
 
@@ -158,7 +159,7 @@ def _common_disable_vanilla_logs(output: CommonConsoleCommandOutput):
         output('The Vanilla Logs are already disabled.')
         return
     _CommonVanillaLogOverride().disable_logs()
-    _CommonVanillaLogOverride()._clear_stop_watches()
+    _CommonVanillaLogOverride()._clear_log_times()
     output('Vanilla Logs are now disabled.')
 
 
@@ -204,7 +205,7 @@ def _common_logger_exception(original, self, message, *args, exc=None, owner=Non
     return original(self, message, *args, exc=exc, owner=owner, **kwargs)
 
 
-@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.clear_stop_watches', 'Clear the stop watches for the vanilla logs', show_with_help_command=False)
-def _common_clear_stop_watches(output: CommonConsoleCommandOutput):
-    output('Clearing stop watches.')
-    _CommonVanillaLogOverride()._clear_stop_watches()
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib.clear_log_times', 'Clear the stop watches for the vanilla logs', show_with_help_command=False)
+def _common_clear_log_times(output: CommonConsoleCommandOutput):
+    output('Clearing Vanilla Logs log times.')
+    _CommonVanillaLogOverride()._clear_log_times()

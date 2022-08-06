@@ -13,6 +13,7 @@ from objects.components.buff_component import BuffComponent
 from protocolbuffers.Localization_pb2 import LocalizedString
 from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
+from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4.resources import Types
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
@@ -127,12 +128,15 @@ class CommonBuffUtils(HasClassLog):
         :return: The result of testing. True, if the Sim has the specified buff. False, if not.
         :rtype: CommonTestResult
         """
-        for _buff in buff:
-            __buff = cls.load_buff_by_id(_buff)
-            if __buff is None:
-                continue
-            if sim_info.has_buff(__buff):
-                return CommonTestResult(True, reason=f'{sim_info} has buff {__buff}.')
+        if isinstance(sim_info, SimInfoBaseWrapper):
+            return CommonTestResult(False, reason=f'{sim_info} is of type SimInfoBaseWrapper and does not have Buffs.')
+        else:
+            for _buff in buff:
+                __buff = cls.load_buff_by_id(_buff)
+                if __buff is None:
+                    continue
+                if sim_info.has_buff(__buff):
+                    return CommonTestResult(True, reason=f'{sim_info} has buff {__buff}.')
         return CommonTestResult(False, reason=f'{sim_info} does not have buff(s) {buff}')
 
     @classmethod
@@ -150,16 +154,19 @@ class CommonBuffUtils(HasClassLog):
         """
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
-        if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
-            return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
         if not buffs:
             return CommonTestResult(False, reason='No buffs were specified.')
-        for buff in buffs:
-            _buff = cls.load_buff_by_id(buff)
-            if _buff is None:
-                continue
-            if sim_info.has_buff(_buff):
-                return CommonTestResult(True, reason=f'{sim_info} has buff {_buff}.')
+        if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
+            return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
+        if isinstance(sim_info, SimInfoBaseWrapper):
+            return CommonTestResult(False, reason=f'{sim_info} is of type SimInfoBaseWrapper and does not have Buffs.')
+        else:
+            for buff in buffs:
+                _buff = cls.load_buff_by_id(buff)
+                if _buff is None:
+                    continue
+                if sim_info.has_buff(_buff):
+                    return CommonTestResult(True, reason=f'{sim_info} has buff {_buff}.')
         return CommonTestResult(False, reason=f'{sim_info} does not have any buff(s) {buffs}.')
 
     @classmethod
@@ -177,16 +184,19 @@ class CommonBuffUtils(HasClassLog):
         """
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
-        if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
-            return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
         if not buffs:
             return CommonTestResult(False, reason='No buffs were specified.')
-        for buff in buffs:
-            _buff = cls.load_buff_by_id(buff)
-            if _buff is None:
-                continue
-            if not sim_info.has_buff(_buff):
-                return CommonTestResult(False, reason=f'{sim_info} does not have buff {_buff}.')
+        if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
+            return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
+        if isinstance(sim_info, SimInfoBaseWrapper):
+            return CommonTestResult(False, reason=f'{sim_info} is of type SimInfoBaseWrapper and does not have Buffs.')
+        else:
+            for buff in buffs:
+                _buff = cls.load_buff_by_id(buff)
+                if _buff is None:
+                    continue
+                if not sim_info.has_buff(_buff):
+                    return CommonTestResult(False, reason=f'{sim_info} does not have buff {_buff}.')
         return CommonTestResult(True, reason=f'{sim_info} does not have all buffs {buffs}.')
 
     @classmethod

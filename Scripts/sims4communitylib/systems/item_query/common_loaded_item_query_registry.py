@@ -21,6 +21,8 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.systems.item_query.enums.common_query_method_type import CommonQueryMethodType
+from sims4communitylib.utils.common_time_utils import CommonTimeUtils
+from sims4communitylib.utils.misc.common_text_utils import CommonTextUtils
 
 CommonLoadedItemType = TypeVar('CommonLoadedItemType', bound=CommonLoadedItem)
 
@@ -349,7 +351,8 @@ class CommonLoadedItemQueryRegistry(Generic[CommonLoadedItemType], CommonService
         yield from _convert_found_items(found_item_identifiers)
 
         if self.log.enabled:
-            self.log.format_with_message(f'Finished running loaded item tests in {stop_watch.stop()}s')
+            time_taken = CommonTextUtils.to_truncated_decimal(CommonTimeUtils.convert_seconds_to_milliseconds(stop_watch.stop()))
+            self.log.format_with_message(f'Finished running loaded item tests in {time_taken}ms')
         else:
             stop_watch.stop()
 
@@ -455,7 +458,8 @@ class CommonLoadedItemQueryRegistry(Generic[CommonLoadedItemType], CommonService
             self._organize(self._all)
             self._collecting = False
             self.log.enable()
-            after_organize_time = '%.3f' % (stop_watch.stop())
+            time_taken = CommonTextUtils.to_truncated_decimal(CommonTimeUtils.convert_seconds_to_milliseconds(stop_watch.stop()))
+            after_organize_time = time_taken
             found_count = len(self._all)
             self.log.debug(f'Took {after_organize_time}s to organize {found_count} {self._item_name}s')
             if not enabled:

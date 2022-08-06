@@ -267,12 +267,12 @@ class CommonSimUtils:
         """
         if sim_identifier is None or isinstance(sim_identifier, SimInfo):
             return sim_identifier
+        if isinstance(sim_identifier, SimInfoBaseWrapper):
+            return sim_identifier.get_sim_info()
         if isinstance(sim_identifier, Sim):
             return sim_identifier.sim_info
         if isinstance(sim_identifier, int):
             return CommonSimUtils.get_sim_info_manager().get(sim_identifier)
-        if isinstance(sim_identifier, SimInfoBaseWrapper):
-            return sim_identifier.get_sim_info()
         return sim_identifier
 
     @staticmethod

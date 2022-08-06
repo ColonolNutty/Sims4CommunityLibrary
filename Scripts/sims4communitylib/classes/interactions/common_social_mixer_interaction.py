@@ -12,6 +12,8 @@ from interactions.base.interaction import Interaction
 from postures.posture_state import PostureState
 from sims4communitylib.classes.interactions._common_interaction_custom_mixin import _CommonInteractionCustomMixin
 from sims4communitylib.classes.interactions._common_interaction_hooks_mixin import _CommonInteractionHooksMixin
+from sims4communitylib.utils.common_time_utils import CommonTimeUtils
+from sims4communitylib.utils.misc.common_text_utils import CommonTextUtils
 from singletons import DEFAULT
 from typing import Any, Union, Tuple, Set
 
@@ -209,7 +211,8 @@ class CommonSocialMixerInteraction(SocialMixerInteraction, HasClassLog, _CommonI
             return cls.create_test_result(False, f'An error occurred {ex}. See the log for more details. "The Sims 4/mod_logs/<mod_name>_Exceptions.txt"')
         finally:
             if verbose_log.enabled:
-                verbose_log.format_with_message('Took {} seconds to return result from CommonSocialMixerInteraction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                time_taken = CommonTextUtils.to_truncated_decimal(CommonTimeUtils.convert_seconds_to_milliseconds(stop_watch.stop()))
+                verbose_log.format_with_message(f'Took {time_taken}ms to return result from CommonSocialMixerInteraction.', class_name=cls.__name__)
             else:
                 stop_watch.stop()
 

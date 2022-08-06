@@ -26,7 +26,9 @@ from sims4communitylib.classes.testing.common_execution_result import CommonExec
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
+from sims4communitylib.utils.common_time_utils import CommonTimeUtils
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
+from sims4communitylib.utils.misc.common_text_utils import CommonTextUtils
 from singletons import DEFAULT
 from interactions.base.mixer_interaction import MixerInteraction
 
@@ -91,7 +93,8 @@ class CommonMixerInteraction(MixerInteraction, HasClassLog, _CommonInteractionHo
         log = cls.get_log()
         verbose_log = cls.get_verbose_log()
         stop_watch = CommonStopWatch()
-        stop_watch.start()
+        if verbose_log.enabled:
+            stop_watch.start()
         try:
             try:
                 verbose_log.format_with_message(
@@ -202,7 +205,8 @@ class CommonMixerInteraction(MixerInteraction, HasClassLog, _CommonInteractionHo
             return cls.create_test_result(False, f'An error occurred {ex}. See the log for more details. "The Sims 4/mod_logs/<mod_name>_Exceptions.txt"')
         finally:
             if verbose_log.enabled:
-                verbose_log.format_with_message('Took {} seconds to return result from CommonMixerInteraction.'.format(stop_watch.stop()), class_name=cls.__name__)
+                time_taken = CommonTextUtils.to_truncated_decimal(CommonTimeUtils.convert_seconds_to_milliseconds(stop_watch.stop()))
+                verbose_log.format_with_message(f'Took {time_taken}ms to return result from CommonMixerInteraction.', class_name=cls.__name__)
             else:
                 stop_watch.stop()
 
