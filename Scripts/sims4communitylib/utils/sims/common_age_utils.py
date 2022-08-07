@@ -137,8 +137,9 @@ class CommonAgeUtils:
         :rtype: float
         """
         aging_service = services.get_aging_service()
-        setting_multiplier = aging_service.get_speed_multiple(sim_info._age_speed_setting)
-        return sim_info._age_time/setting_multiplier
+        sim_age = CommonAgeUtils.get_age(sim_info, exact_age=False)
+        age_transition_data = aging_service.get_age_transition_data(sim_age)
+        return sim_info._age_time/age_transition_data.get_age_duration(sim_info)
 
     @staticmethod
     def set_total_days_sim_has_been_in_their_current_age(sim_info: SimInfo, days: float) -> None:

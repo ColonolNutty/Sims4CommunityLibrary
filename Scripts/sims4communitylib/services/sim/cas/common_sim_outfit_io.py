@@ -12,6 +12,7 @@ from protocolbuffers import S4Common_pb2, Outfits_pb2
 from sims.outfits.outfit_enums import OutfitCategory, BodyType
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
+from sims4communitylib.enums.common_body_slot import CommonBodySlot
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
@@ -168,13 +169,13 @@ class CommonSimOutfitIO(HasLog):
         self.log.format_with_message('CAS Part not found.', cas_part_id=cas_part_id)
         return -1
 
-    def get_cas_part_at_body_type(self, body_type: Union[BodyType, int]) -> int:
+    def get_cas_part_at_body_type(self, body_type: Union[CommonBodySlot, BodyType, int]) -> int:
         """get_cas_part_at_body_type(body_type)
 
         Retrieve the CAS Part located at the specified body type.
 
         :param body_type: The BodyType to look at.
-        :type body_type: Union[BodyType, int]
+        :type body_type: Union[CommonBodySlot, BodyType, int]
         :return: The decimal identifier of the CAS Part located at the specified body part or -1 if the Outfit does not have the body type or the body type is empty.
         :rtype: int
         """

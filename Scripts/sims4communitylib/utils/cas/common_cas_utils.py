@@ -6,10 +6,11 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-from typing import Tuple, Union, Iterator, Dict
+from typing import Tuple, Union, Iterator, Dict, List
 
 from sims4.utils import classproperty
 from sims4communitylib.dtos.common_cas_part import CommonCASPart
+from sims4communitylib.enums.common_body_slot import CommonBodySlot
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
@@ -162,8 +163,8 @@ class CommonCASUtils(_HasS4CLClassLog):
         _log = cls.get_log()
         cas_parts_by_body_type = dict()
         for cas_part in cas_parts:
-            cas_parts_by_body_type[int(cas_part.body_type)] = cas_part
-        cas_part_body_types = [int(cas_part.body_type) for cas_part in cas_parts]
+            cas_parts_by_body_type[int(CommonBodySlot.convert_to_vanilla(cas_part.body_type))] = cas_part
+        cas_part_body_types = [int(CommonBodySlot.convert_to_vanilla(cas_part.body_type)) for cas_part in cas_parts]
         from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
         current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
         from protocolbuffers import S4Common_pb2, Outfits_pb2
@@ -173,7 +174,7 @@ class CommonCASUtils(_HasS4CLClassLog):
             saved_outfit_parts = dict(zip(list(saved_outfit.body_types_list.body_types), list(saved_outfit.parts.ids)))
             body_types = list()
             part_ids = list()
-            handled_body_types = list()
+            handled_body_types: List[int] = list()
             _log.format_with_message('Before modify parts.', outfit_category=saved_outfit.category, body_types=tuple(saved_outfit_parts.keys()), part_ids=tuple(saved_outfit_parts.values()))
             for (body_type, part_id) in saved_outfit_parts.items():
                 body_type_int = int(body_type)
@@ -182,7 +183,7 @@ class CommonCASUtils(_HasS4CLClassLog):
                     handled_body_types.append(body_type_int)
                     part = cas_parts_by_body_type[body_type_int]
                     _log.format_with_message('Replacing body type with CAS Part', original_body_type=body_type, cas_part=part, original_part_id=part_id)
-                    body_types.append(part.body_type)
+                    body_types.append(CommonBodySlot.convert_to_vanilla(part.body_type))
                     part_ids.append(part.cas_part_id)
                     continue
                 _log.format_with_message('Keeping body type.', original_body_type=body_type, cas_part_body_types=cas_part_body_types, original_part_id=part_id)
@@ -192,9 +193,10 @@ class CommonCASUtils(_HasS4CLClassLog):
             # Adding the rest of the CAS Parts.
             _log.format_with_message('Adding the rest of the CAS Parts.', body_types=body_types, part_ids=part_ids, cas_parts_by_body_type=cas_parts_by_body_type, handled_body_types=handled_body_types)
             for cas_part in cas_parts_by_body_type.values():
-                if int(cas_part.body_type) in handled_body_types:
+                cas_part_body_type = CommonBodySlot.convert_to_vanilla(cas_part.body_type)
+                if int(cas_part_body_type) in handled_body_types:
                     continue
-                body_types.append(cas_part.body_type)
+                body_types.append(cas_part_body_type)
                 part_ids.append(cas_part.cas_part_id)
 
             _log.format_with_message('After modify parts.', outfit_category=saved_outfit.category, body_types=body_types, part_ids=part_ids)
@@ -249,7 +251,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         if outfit_category_and_index is None:
             outfit_category_and_index = current_outfit
         existing_outfit_data = sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
-        cas_part_body_types = [cas_part.body_type for cas_part in cas_parts]
+        cas_part_body_types = [int(CommonBodySlot.convert_to_vanilla(cas_part.body_type)) for cas_part in cas_parts]
         from protocolbuffers import S4Common_pb2, Outfits_pb2
         saved_outfits = sim_info.save_outfits()
         for saved_outfit in saved_outfits.outfits:
@@ -268,7 +270,7 @@ class CommonCASUtils(_HasS4CLClassLog):
 
             # Add the new cas parts and their body types.
             for cas_part in cas_parts:
-                body_types.append(cas_part.body_type)
+                body_types.append(CommonBodySlot.convert_to_vanilla(cas_part.body_type))
                 part_ids.append(cas_part.cas_part_id)
 
             # Save the parts.
@@ -312,7 +314,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         _log = cls.get_log()
         cas_parts_by_body_type = dict()
         for cas_part in cas_parts:
-            cas_parts_by_body_type[int(cas_part.body_type)] = cas_part
+            cas_parts_by_body_type[int(CommonBodySlot.convert_to_vanilla(cas_part.body_type))] = cas_part
         cas_part_body_types = tuple(cas_parts_by_body_type.keys())
         cas_part_ids = tuple([cas_part.cas_part_id for cas_part in cas_parts_by_body_type.values()])
         from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils

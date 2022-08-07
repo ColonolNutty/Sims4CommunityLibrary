@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union
+from typing import Union, Iterator, Tuple
 
 from sims.outfits.outfit_enums import BodyType
 from sims4communitylib.enums.enumtypes.common_int_flags import CommonIntFlags
@@ -104,8 +104,52 @@ class CommonBodySlot(CommonIntFlags):
     WRIST_LEFT: 'CommonBodySlot' = 14
     WRIST_RIGHT: 'CommonBodySlot' = 15
 
+    @classmethod
+    def get_all(cls, exclude_values: Iterator['CommonBodySlot'] = None) -> Tuple['CommonBodySlot']:
+        """get_all(exclude_values=None)
+
+        Get a collection of all values.
+
+        :param exclude_values: These values will be excluded. If set to None, NONE will be excluded automatically. Default is None.
+        :type exclude_values: Iterator[CommonBodySlot], optional
+        :return: A collection of all values.
+        :rtype: Tuple[CommonBodySlot]
+        """
+        if exclude_values is None:
+            exclude_values = (cls.NONE,)
+        # noinspection PyTypeChecker
+        value_list: Tuple[CommonBodySlot, ...] = tuple([value for value in cls.values if value not in exclude_values])
+        return value_list
+
+    @classmethod
+    def get_all_names(cls, exclude_values: Iterator['CommonBodySlot'] = None) -> Tuple[str]:
+        """get_all_names(exclude_values=None)
+
+        Retrieve a collection of the names of all values.
+
+        :param exclude_values: These values will be excluded. If set to None, NONE will be excluded automatically. Default is None.
+        :type exclude_values: Iterator[CommonBodySlot], optional
+        :return: A collection of the names of all values.
+        :rtype: Tuple[str]
+        """
+        name_list: Tuple[str] = tuple([value.name for value in cls.get_all(exclude_values=exclude_values)])
+        return name_list
+
+    @classmethod
+    def get_comma_separated_names_string(cls, exclude_values: Iterator['CommonBodySlot'] = None) -> str:
+        """get_comma_separated_names_string(exclude_values=None)
+
+        Create a string containing all names of all values, separated by a comma.
+
+        :param exclude_values: These values will be excluded. If set to None, NONE will be excluded automatically. Default is None.
+        :type exclude_values: Iterator[CommonBodySlot], optional
+        :return: A string containing all names of all values, separated by a comma.
+        :rtype: str
+        """
+        return ', '.join(cls.get_all_names(exclude_values=exclude_values))
+
     @staticmethod
-    def convert_to_vanilla(value: 'CommonBodySlot') -> Union[BodyType, int]:
+    def convert_to_vanilla(value: Union['CommonBodySlot', BodyType, int]) -> Union[BodyType, 'CommonBodySlot', int]:
         """convert_to_vanilla(value)
 
         Convert a CommonBodySlot into the vanilla BodyType enum.
@@ -119,10 +163,10 @@ class CommonBodySlot(CommonIntFlags):
             return BodyType.NONE
         if isinstance(value, BodyType):
             return value
-        return CommonResourceUtils.get_enum_by_int_value(int(value), BodyType, default_value=int(value))
+        return CommonResourceUtils.get_enum_by_int_value(int(value), BodyType, default_value=value)
 
     @staticmethod
-    def convert_from_vanilla(value: Union['CommonBodySlot', BodyType, int]) -> Union['CommonBodySlot', int]:
+    def convert_from_vanilla(value: Union['CommonBodySlot', BodyType, int]) -> Union['CommonBodySlot', BodyType, int]:
         """convert_from_vanilla(value)
 
         Convert a BodyType into a CommonBodySlot
@@ -136,4 +180,4 @@ class CommonBodySlot(CommonIntFlags):
             return CommonBodySlot.NONE
         if isinstance(value, CommonBodySlot):
             return value
-        return CommonResourceUtils.get_enum_by_int_value(int(value), CommonBodySlot, default_value=int(value))
+        return CommonResourceUtils.get_enum_by_int_value(int(value), CommonBodySlot, default_value=value)

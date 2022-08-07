@@ -5,10 +5,13 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union
+from typing import Union, TypeVar, Type
 
 from objects.components import ComponentContainer, Component
 from sims4communitylib.enums.types.component_types import CommonComponentType
+
+
+CommonExpectedReturnType = TypeVar('CommonExpectedReturnType', bound=Component)
 
 
 class CommonComponentUtils:
@@ -32,9 +35,10 @@ class CommonComponentUtils:
             return False
         return component_container.has_component(component_type)
 
+    # noinspection PyUnusedLocal
     @staticmethod
-    def get_component(component_container: ComponentContainer, component_type: CommonComponentType, add_dynamic: bool = False) -> Union[Component, None]:
-        """get_component(component_container, component_type, add_dynamic=False)
+    def get_component(component_container: ComponentContainer, component_type: CommonComponentType, add_dynamic: bool = False, return_type: Type[CommonExpectedReturnType] = Component) -> Union[CommonExpectedReturnType, None]:
+        """get_component(component_container, component_type, add_dynamic=False, return_type=Component)
 
         Retrieve a component from a ComponentContainer.
 
@@ -44,8 +48,10 @@ class CommonComponentUtils:
         :type component_type: CommonComponentType
         :param add_dynamic: If True, the component will be added dynamically. If False, the component will not be added dynamically. Default is False.
         :type add_dynamic: bool, optional
+        :param return_type: The type of the returned value. (This is to make type hinting more accurate). It is not actually used in the function. Default is Component.
+        :type return_type: Type[CommonExpectedReturnType], optional
         :return: An object of type Component, or None if the specified component type is not found.
-        :rtype: Union[Component, None]
+        :rtype: Union[CommonExpectedReturnType, None]
         """
         if component_type is None or not isinstance(component_container, ComponentContainer) or not hasattr(component_container, 'get_component'):
             return None

@@ -1271,8 +1271,6 @@ class CommonTraitUtils(HasClassLog):
                 continue
             has_any = True
             cls.get_log().format_with_message('Attempting to add trait', trait=trait, trait_id=trait_id)
-            if cls.has_trait(sim_info, trait):
-                continue
             add_result = sim_info.add_trait(trait)
             if not add_result:
                 cls.get_log().format_with_message('Failed to add trait.', trait=trait, trait_id=trait_id, reason=add_result)
@@ -1324,8 +1322,6 @@ class CommonTraitUtils(HasClassLog):
                 failed_to_remove_traits.append(trait_id)
                 continue
             has_any_loaded = True
-            if not cls.has_trait(sim_info, trait):
-                continue
             if not sim_info.remove_trait(trait):
                 failed_to_remove_traits.append(trait)
                 success = False

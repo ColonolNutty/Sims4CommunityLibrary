@@ -13,7 +13,6 @@ from objects.components.buff_component import BuffComponent
 from protocolbuffers.Localization_pb2 import LocalizedString
 from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
-from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4.resources import Types
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
@@ -128,16 +127,7 @@ class CommonBuffUtils(HasClassLog):
         :return: The result of testing. True, if the Sim has the specified buff. False, if not.
         :rtype: CommonTestResult
         """
-        if isinstance(sim_info, SimInfoBaseWrapper):
-            return CommonTestResult(False, reason=f'{sim_info} is of type SimInfoBaseWrapper and does not have Buffs.')
-        else:
-            for _buff in buff:
-                __buff = cls.load_buff_by_id(_buff)
-                if __buff is None:
-                    continue
-                if sim_info.has_buff(__buff):
-                    return CommonTestResult(True, reason=f'{sim_info} has buff {__buff}.')
-        return CommonTestResult(False, reason=f'{sim_info} does not have buff(s) {buff}')
+        return cls.has_any_buffs(sim_info, buff)
 
     @classmethod
     def has_any_buffs(cls, sim_info: SimInfo, buffs: Iterator[Union[int, CommonBuffId, Buff]]) -> CommonTestResult:
@@ -158,15 +148,15 @@ class CommonBuffUtils(HasClassLog):
             return CommonTestResult(False, reason='No buffs were specified.')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
-        if isinstance(sim_info, SimInfoBaseWrapper):
-            return CommonTestResult(False, reason=f'{sim_info} is of type SimInfoBaseWrapper and does not have Buffs.')
-        else:
-            for buff in buffs:
-                _buff = cls.load_buff_by_id(buff)
-                if _buff is None:
-                    continue
-                if sim_info.has_buff(_buff):
-                    return CommonTestResult(True, reason=f'{sim_info} has buff {_buff}.')
+        from objects.components.buff_component import BuffComponent
+        buff_component: BuffComponent = CommonComponentUtils.get_component(sim_info, CommonComponentType.BUFF)
+        for buff in buffs:
+            _buff = cls.load_buff_by_id(buff)
+            cls.get_log().format_with_message('Got the buff', buff=_buff)
+            if _buff is None:
+                continue
+            if buff_component.has_buff(_buff):
+                return CommonTestResult(True, reason=f'{sim_info} has buff {_buff}.')
         return CommonTestResult(False, reason=f'{sim_info} does not have any buff(s) {buffs}.')
 
     @classmethod
@@ -188,16 +178,16 @@ class CommonBuffUtils(HasClassLog):
             return CommonTestResult(False, reason='No buffs were specified.')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
-        if isinstance(sim_info, SimInfoBaseWrapper):
-            return CommonTestResult(False, reason=f'{sim_info} is of type SimInfoBaseWrapper and does not have Buffs.')
-        else:
-            for buff in buffs:
-                _buff = cls.load_buff_by_id(buff)
-                if _buff is None:
-                    continue
-                if not sim_info.has_buff(_buff):
-                    return CommonTestResult(False, reason=f'{sim_info} does not have buff {_buff}.')
-        return CommonTestResult(True, reason=f'{sim_info} does not have all buffs {buffs}.')
+        from objects.components.buff_component import BuffComponent
+        buff_component: BuffComponent = CommonComponentUtils.get_component(sim_info, CommonComponentType.BUFF, return_type=BuffComponent)
+        for buff in buffs:
+            _buff = cls.load_buff_by_id(buff)
+            cls.get_log().format_with_message('Got the buff', buff=_buff)
+            if _buff is None:
+                continue
+            if not buff_component.has_buff(_buff):
+                return CommonTestResult(False, reason=f'{sim_info} does not have buff {_buff}.')
+        return CommonTestResult(True, reason=f'{sim_info} has all buffs {buffs}.')
 
     @classmethod
     def get_buffs(cls, sim_info: SimInfo) -> List[Buff]:
@@ -248,7 +238,7 @@ class CommonBuffUtils(HasClassLog):
         return buff_ids
 
     @classmethod
-    def add_buff(cls, sim_info: SimInfo, *buff: Union[int, CommonBuffId], buff_reason: Union[int, str, LocalizedString, CommonStringId]=None) -> CommonExecutionResult:
+    def add_buff(cls, sim_info: SimInfo, *buff: Union[int, CommonBuffId], buff_reason: Union[int, str, LocalizedString, CommonStringId] = None) -> CommonExecutionResult:
         """add_buff(sim_info, buff, buff_reason=None)
 
         Add a Buff to a Sim.
@@ -265,7 +255,7 @@ class CommonBuffUtils(HasClassLog):
         return cls.add_buffs(sim_info, buff, buff_reason=buff_reason)
 
     @classmethod
-    def add_buffs(cls, sim_info: SimInfo, buffs: Iterator[Union[int, CommonBuffId, Buff]], buff_reason: Union[int, str, LocalizedString, CommonStringId]=None) -> CommonExecutionResult:
+    def add_buffs(cls, sim_info: SimInfo, buffs: Iterator[Union[int, CommonBuffId, Buff]], buff_reason: Union[int, str, LocalizedString, CommonStringId] = None) -> CommonExecutionResult:
         """add_buffs(sim_info, buffs, buff_reason=None)
 
         Add Buffs to a Sim.
@@ -297,8 +287,6 @@ class CommonBuffUtils(HasClassLog):
                 failed_to_add_buffs.append(buff_id)
                 continue
             has_any_loaded = True
-            if cls.has_buff(sim_info, buff):
-                continue
             add_result = sim_info.add_buff_from_op(buff, buff_reason=localized_buff_reason)
             if not add_result:
                 cls.get_log().format_with_message('Failed to add buff.', buff=buff, sim=sim_info, buff_reason=buff_reason, reason=add_result)
@@ -355,8 +343,6 @@ class CommonBuffUtils(HasClassLog):
                 failed_to_remove_buffs.append(buff_id)
                 continue
             has_any_loaded = True
-            if not cls.has_buff(sim_info, buff):
-                continue
             sim_info.remove_buff_by_type(buff)
             if cls.has_buff(sim_info, buff):
                 failed_to_remove_buffs.append(buff)
@@ -477,6 +463,7 @@ class CommonBuffUtils(HasClassLog):
             # noinspection PyCallingNonCallable
             buff_instance = buff()
             if isinstance(buff_instance, Buff):
+                # noinspection PyTypeChecker
                 return buff
         except:
             pass
@@ -484,6 +471,7 @@ class CommonBuffUtils(HasClassLog):
         try:
             buff: int = int(buff)
         except:
+            # noinspection PyTypeChecker
             buff: Buff = buff
             return buff
 
@@ -505,7 +493,7 @@ class CommonBuffUtils(HasClassLog):
         's4clib.addbuff',
     )
 )
-def _common_add_buff(output: CommonConsoleCommandOutput, buff: TunableInstanceParam(Types.BUFF), sim_info: SimInfo=None, buff_reason: str=None):
+def _common_add_buff(output: CommonConsoleCommandOutput, buff: TunableInstanceParam(Types.BUFF), sim_info: SimInfo = None, buff_reason: str = None):
     if buff is None or isinstance(buff, str):
         return
     if sim_info is None:
@@ -531,7 +519,7 @@ def _common_add_buff(output: CommonConsoleCommandOutput, buff: TunableInstancePa
         's4clib.removebuff',
     )
 )
-def _common_remove_buff(output: CommonConsoleCommandOutput, buff: TunableInstanceParam(Types.BUFF), sim_info: SimInfo=None):
+def _common_remove_buff(output: CommonConsoleCommandOutput, buff: TunableInstanceParam(Types.BUFF), sim_info: SimInfo = None):
     if buff is None:
         return
     if sim_info is None:
@@ -556,7 +544,7 @@ def _common_remove_buff(output: CommonConsoleCommandOutput, buff: TunableInstanc
         's4clib_testing.printbuffs',
     )
 )
-def _common_print_buffs_on_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_print_buffs_on_sim(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         return
     log = CommonBuffUtils.get_log()
