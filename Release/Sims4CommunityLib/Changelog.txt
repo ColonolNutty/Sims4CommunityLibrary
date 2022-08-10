@@ -2,12 +2,20 @@ v1.81:
 - Added new dto CommonOutfit
 - Added new enums:
   - CommonBodySlot
+- Updated a few places to use CommonBodySlot
 - Fixed an error that could occur after enabling the verbose log within Item Query Registry and trying to query for items.
 - Added new utilities, CommonSimSpellUtils, CommonSimBucksUtils, CommonSimUnlockUtils, CommonSimDeathUtils.
 - Added many new commands for adding and removing spells, perks, bucks, and death control (Kill/Revive).
 - When the witch occult is removed, witch spells, witch perks, and witch perk points are also removed
 - When werewolf occult is removed, werewolf perks and werewolf perk points are removed.
 - When vampire occult is removed, vampire weakness and power perks and perk points are removed.
+- Added functions to retrieve and set the Sexual Orientation of Sims (Is Exploring Sexuality, Is Interested In Romance/Woohoo With)
+- Added a few functions for checking Sim permissions for various vanilla actions, such as changing to nude and engaging in pregnancies.
+- When attempting to spawn a Baby Sim via spawn_sims, S4CL now knows how to handle spawning them.
+- Changed get_romance_relationship_track and get_friendship_relationship_track into class methods instead of static methods.
+- Added a way to see times between logs for vanilla logging. This can help determine interaction performance.
+- Increased the performance of the has_trait, has_any_traits, has_all_traits, has_buff, has_any_buffs, and has_all_buffs
+- The time taken by interactions is now logged in milliseconds instead of seconds.
 
 v1.80:
 - Added an entire item query system. It can be used to quickly setup a library of objects that can be queried.
