@@ -131,12 +131,19 @@ class CommonStringId(CommonInt):
     S4CL_SIM_NOT_ALLOWED_THERE = 0x48245F2A
     # Tokens: {0.SimFirstName}
     S4CL_SIM_CANNOT_REACH_THAT_SPOT = 0x6B324A52
+    # Tokens: {0.SimFirstName} {1.SimFirstName}
+    S4CL_SIM_CANNOT_REACH_SIM = 0x6B324A52
     # Tokens: {0.SimFirstName}
     S4CL_NOT_ENOUGH_ROOM_FOR_SIM_HERE = 0x36EB7A72
     # Tokens: {0.SimFirstName}
     S4CL_SIM_IS_NOT_PREGNANT: 'CommonStringId' = 0x4992E851
     # Tokens: {0.SimFirstName} {0.SimLastName} (Sim)
     S4CL_SIM_CANNOT_BE_PICKED_UP = 0xAB3DD412
+
+    # Tokens: {0.SimFirstName}
+    S4CL_SIM_ALREADY_HAS_THIS_TRAIT = 0xD8FD72AC
+    # Tokens: {0.SimFirstName}
+    S4CL_SIM_DOES_NOT_HAVE_THIS_TRAIT = 0xF3533492
 
     S4CL_YES: 'CommonStringId' = 0x3A6189A6
     S4CL_NO: 'CommonStringId' = 0x6377188C
@@ -157,6 +164,7 @@ class CommonStringId(CommonInt):
     S4CL_DEFAULT = 0x2EA8FB98
     S4CL_REMOVE_ALL = 0x5C6C2580
     S4CL_REMOVE = 0x8B3681B1
+    S4CL_NOT_IMPLEMENTED = 0x54860E10
 
     # Species
     S4CL_DOG: 'CommonStringId' = 0x20953C2D
