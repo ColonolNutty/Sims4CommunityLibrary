@@ -18,6 +18,7 @@ from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.services.common_service import CommonService
+from sims4communitylib.utils.common_time_utils import CommonTimeUtils
 
 CommonLoadedItemType = TypeVar('CommonLoadedItemType', bound=CommonLoadedItem)
 
@@ -86,7 +87,7 @@ class CommonLoadedItemRegistry(Generic[CommonLoadedItemType], CommonService, Has
 
     @property
     def total_time(self) -> float:
-        """The total time the registry took to load."""
+        """The total time the registry took to load in milliseconds."""
         return self._total_time
 
     @item_loaders.setter
@@ -193,7 +194,7 @@ class CommonLoadedItemRegistry(Generic[CommonLoadedItemType], CommonService, Has
             self._loaded = True
             self._load_thread = None
             self._loading = False
-            self._total_time = stop_watch.stop()
+            self._total_time = stop_watch.stop_milliseconds()
             self._on_finished_loading_callback()
             self._on_finished_loading_callback.clear()
             self.log.debug('Finished loading items.')

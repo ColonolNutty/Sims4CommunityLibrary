@@ -351,7 +351,7 @@ class CommonLoadedItemQueryRegistry(Generic[CommonLoadedItemType], CommonService
         yield from _convert_found_items(found_item_identifiers)
 
         if self.log.enabled:
-            time_taken = CommonTextUtils.to_truncated_decimal(CommonTimeUtils.convert_seconds_to_milliseconds(stop_watch.stop()))
+            time_taken = CommonTextUtils.to_truncated_decimal(stop_watch.stop_milliseconds())
             self.log.format_with_message(f'Finished running loaded item tests in {time_taken}ms')
         else:
             stop_watch.stop()
@@ -448,9 +448,9 @@ class CommonLoadedItemQueryRegistry(Generic[CommonLoadedItemType], CommonService
             )
             enabled = self.log.enabled
             self.log.enable()
-            after_load_time = '%.3f' % self._registry.total_time
+            after_load_time = CommonTextUtils.to_truncated_decimal(self._registry.total_time)
             loaded_items_count = len(self._all)
-            self.log.debug(f'Took {after_load_time}s to collect {loaded_items_count} {self._item_name}s.')
+            self.log.debug(f'Took {after_load_time}ms to collect {loaded_items_count} {self._item_name}s.')
             if not enabled:
                 self.log.disable()
             stop_watch = CommonStopWatch()
@@ -458,10 +458,10 @@ class CommonLoadedItemQueryRegistry(Generic[CommonLoadedItemType], CommonService
             self._organize(self._all)
             self._collecting = False
             self.log.enable()
-            time_taken = CommonTextUtils.to_truncated_decimal(CommonTimeUtils.convert_seconds_to_milliseconds(stop_watch.stop()))
+            time_taken = CommonTextUtils.to_truncated_decimal(stop_watch.stop_milliseconds())
             after_organize_time = time_taken
             found_count = len(self._all)
-            self.log.debug(f'Took {after_organize_time}s to organize {found_count} {self._item_name}s')
+            self.log.debug(f'Took {after_organize_time}ms to organize {found_count} {self._item_name}s')
             if not enabled:
                 self.log.disable()
             if self.log.enabled:

@@ -99,7 +99,7 @@ class _CommonVanillaLogOverride(CommonService):
 
     def _append_time(self, log_name: str, message: str) -> str:
         stop_watch = self._get_stop_watch(log_name)
-        interval = stop_watch.interval()
+        interval = stop_watch.interval_milliseconds()
         if log_name not in self.last_time:
             self.last_time[log_name] = interval
             compare_time = 0
@@ -107,8 +107,8 @@ class _CommonVanillaLogOverride(CommonService):
             last_time = self.last_time[log_name]
             compare_time = interval - last_time
             self.last_time[log_name] = interval
-        interval_str = CommonTextUtils.to_truncated_decimal(1000*interval)
-        compare_time_str = CommonTextUtils.to_truncated_decimal(1000*compare_time)
+        interval_str = CommonTextUtils.to_truncated_decimal(interval)
+        compare_time_str = CommonTextUtils.to_truncated_decimal(compare_time)
         return f'{interval_str}ms +{compare_time_str}ms {message}'
 
     def _get_stop_watch(self, log_name: str) -> CommonStopWatch:

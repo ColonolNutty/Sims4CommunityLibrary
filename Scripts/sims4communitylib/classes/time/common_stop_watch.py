@@ -42,6 +42,17 @@ class CommonStopWatch:
         fractional_seconds = (interval_time - self._start_time)
         return fractional_seconds
 
+    def interval_milliseconds(self) -> float:
+        """interval_milliseconds()
+
+        Retrieve a time stamp for how long the watch has been running for without ending it, but in milliseconds.
+
+        :return: The number of milliseconds that occurred since the stop watch was started.
+        :rtype: float
+        """
+        from sims4communitylib.utils.common_time_utils import CommonTimeUtils
+        return CommonTimeUtils.convert_seconds_to_milliseconds(self.interval())
+
     def stop(self) -> float:
         """stop()
 
@@ -56,3 +67,16 @@ class CommonStopWatch:
         self._start_time = None
         self._started = False
         return stopped_time
+
+    def stop_milliseconds(self) -> float:
+        """stop_milliseconds()
+
+        Stop the stop watch, but return milliseconds rather than seconds.
+
+        .. warning:: This will also reset the start time of the stop watch. It will also stop the stop watch.
+
+        :return: The number of milliseconds that occurred since starting the stop watch.
+        :rtype: float
+        """
+        from sims4communitylib.utils.common_time_utils import CommonTimeUtils
+        return CommonTimeUtils.convert_seconds_to_milliseconds(self.stop())
