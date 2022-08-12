@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-from typing import List, Dict, Any, Union, Tuple
+from typing import List, Dict, Any, Union, Tuple, Iterator
 from pprint import pformat
 
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
@@ -40,7 +40,7 @@ class CommonLog:
     :param custom_file_path: A custom file path relative to The Sims 4 folder. Example: Value is 'fake_path/to/directory', the final path would be 'The Sims 4/fake_path/to_directory'. Default is None.
     :type custom_file_path: str, optional
     """
-    def __init__(self, mod_identifier: Union[str, CommonModIdentity], log_name: str, custom_file_path: str=None):
+    def __init__(self, mod_identifier: Union[str, CommonModIdentity], log_name: str, custom_file_path: str = None):
         self._log_name = log_name
         from sims4communitylib.utils.misc.common_mod_identity_utils import CommonModIdentityUtils
         self._mod_name = CommonModIdentityUtils.determine_mod_name_from_identifier(mod_identifier)
@@ -70,7 +70,7 @@ class CommonLog:
         if self.is_enabled(CommonMessageType.INFO):
             self._log_message(CommonMessageType.INFO, message)
 
-    def format_info(self, *args: Any, update_tokens: bool=True, **kwargs: Any):
+    def format_info(self, *args: Any, update_tokens: bool = True, **kwargs: Any):
         """format_info(*args, update_tokens=True, **kwargs)
 
         Log a non-descriptive message containing pformatted arguments and keyword arguments with message type INFO.
@@ -84,7 +84,7 @@ class CommonLog:
         """
         self.format(*args, message_type=CommonMessageType.INFO, update_tokens=update_tokens, **kwargs)
 
-    def format_info_with_message(self, message: str, *args, update_tokens: bool=True, **kwargs):
+    def format_info_with_message(self, message: str, *args, update_tokens: bool = True, **kwargs):
         """format_info_with_message(message, *args, update_tokens=True, **kwargs)
 
         Log a message containing pformatted arguments and keyword arguments with message type INFO.
@@ -100,7 +100,13 @@ class CommonLog:
         """
         self.format_with_message(message, *args, message_type=CommonMessageType.INFO, update_tokens=update_tokens, **kwargs)
 
-    def format(self, *args, message_type: CommonMessageType=CommonMessageType.DEBUG, update_tokens: bool=True, **kwargs):
+    def format(
+        self,
+        *args,
+        message_type: CommonMessageType = CommonMessageType.DEBUG,
+        update_tokens: bool = True,
+        **kwargs
+    ):
         """format(*args, message_type=CommonMessageType.DEBUG, update_tokens=True, **kwargs)
 
         Log a non-descriptive message containing pformatted arguments and keyword arguments with the specified message type.
@@ -125,7 +131,14 @@ class CommonLog:
             else:
                 self._log_message(message_type, '{}'.format(pformat(kwargs)))
 
-    def format_with_message(self, message: str, *args, message_type: CommonMessageType=CommonMessageType.DEBUG, update_tokens: bool=True, **kwargs):
+    def format_with_message(
+        self,
+        message: str,
+        *args,
+        message_type: CommonMessageType = CommonMessageType.DEBUG,
+        update_tokens: bool = True,
+        **kwargs
+    ):
         """format_with_message(message, *args, message_type=CommonMessageType.DEBUG, update_tokens=True, **kwargs)
 
         Log a message containing pformatted arguments and keyword arguments with the specified message type.
@@ -165,7 +178,7 @@ class CommonLog:
         if self.is_enabled(CommonMessageType.WARN):
             self._log_message(CommonMessageType.WARN, message)
 
-    def format_warn(self, *args: Any, update_tokens: bool=True, **kwargs: Any):
+    def format_warn(self, *args: Any, update_tokens: bool = True, **kwargs: Any):
         """format_warn(*args, update_tokens=True, **kwargs)
 
         Log a non-descriptive message containing pformatted arguments and keyword arguments with message type WARN.
@@ -179,7 +192,7 @@ class CommonLog:
         """
         self.format(*args, message_type=CommonMessageType.WARN, update_tokens=update_tokens, **kwargs)
 
-    def format_warn_with_message(self, message: str, *args, update_tokens: bool=True, **kwargs):
+    def format_warn_with_message(self, message: str, *args, update_tokens: bool = True, **kwargs):
         """format_warn_with_message(message, *args, update_tokens=True, **kwargs)
 
         Log a message containing pformatted arguments and keyword arguments with message type WARN.
@@ -195,7 +208,14 @@ class CommonLog:
         """
         self.format_with_message(message, *args, message_type=CommonMessageType.WARN, update_tokens=update_tokens, **kwargs)
 
-    def error(self, message: str, message_type: CommonMessageType=CommonMessageType.ERROR, exception: Exception=None, throw: bool=True, stack_trace: List[str]=None):
+    def error(
+        self,
+        message: str,
+        message_type: CommonMessageType = CommonMessageType.ERROR,
+        exception: Exception = None,
+        throw: bool = True,
+        stack_trace: List[str] = None
+    ):
         """error(message, message_type=CommonMessageType.ERROR, exception=None, throw=True, stack_trace=None)
 
         Log an error message with the specified message type
@@ -218,7 +238,15 @@ class CommonLog:
         if exception is not None:
             self._log_message(message_type, pformat(exception))
 
-    def format_error(self, *args, exception: Exception=None, throw: bool=True, update_tokens: bool=True, stack_trace: List[str]=None, **kwargs):
+    def format_error(
+        self,
+        *args,
+        exception: Exception = None,
+        throw: bool = True,
+        update_tokens: bool = True,
+        stack_trace: List[str] = None,
+        **kwargs
+    ):
         """format_error(*args, exception=None, throw=True, update_tokens=True, stack_trace=None, **kwargs)
 
         Log a non-descriptive error message containing pformatted arguments and keyword arguments.
@@ -247,8 +275,25 @@ class CommonLog:
         else:
             self.error('{}'.format(pformat(kwargs)), exception=exception, throw=throw, stack_trace=stack_trace)
 
-    def format_error_with_message(self, message: str, *args, exception: Exception=None, throw: bool=True, update_tokens: bool=True, stack_trace: List[str]=None, **kwargs):
-        """format_error_with_message(message, *args, exception=None, throw=True, update_tokens=True, stack_trace=None, **kwargs)
+    def format_error_with_message(
+        self,
+        message: str,
+        *args,
+        exception: Exception = None,
+        throw: bool = True,
+        update_tokens: bool = True,
+        stack_trace: List[str] = None,
+        **kwargs
+    ):
+        """format_error_with_message(\
+            message,\
+            *args,\
+            exception=None,\
+            throw=True,\
+            update_tokens=True,\
+            stack_trace=None,\
+            **kwargs\
+        )
 
         Log an error message containing pformatted arguments and keyword arguments.
 
@@ -295,8 +340,19 @@ class CommonLog:
         calling_frame = inspect.getouterframes(current_frame, 2)
         self.format(calling_frame)
 
-    def enable(self, message_types: Tuple[CommonMessageType]=(CommonMessageType.WARN, CommonMessageType.DEBUG, CommonMessageType.INFO), enable_logging_extra_sim_details: bool=False) -> None:
-        """enable(message_types=(CommonMessageType.WARN, CommonMessageType.DEBUG, CommonMessageType.INFO), enable_extra_sim_details=False)
+    def enable(
+        self,
+        message_types: Iterator[CommonMessageType] = (
+            CommonMessageType.WARN,
+            CommonMessageType.DEBUG,
+            CommonMessageType.INFO
+        ),
+        enable_logging_extra_sim_details: bool = False
+    ) -> None:
+        """enable(\
+            message_types=(CommonMessageType.WARN, CommonMessageType.DEBUG, CommonMessageType.INFO),\
+            enable_extra_sim_details=False\
+        )
 
         Enable the log or specific types of logs.
 
@@ -404,7 +460,7 @@ class CommonLog:
         except Exception as ex:
             CommonExceptionHandler.log_exception(self.mod_name, 'Error occurred while attempting to log message: {}'.format(pformat(message)), exception=ex, custom_file_path=self._custom_file_path)
 
-    def _log_error(self, message: str, exception: Exception=None, stack_trace: List[str]=None):
+    def _log_error(self, message: str, exception: Exception = None, stack_trace: List[str] = None):
         from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
         from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
         try:
@@ -518,7 +574,7 @@ class CommonLogRegistry(CommonService):
         self._registered_logs: Dict[str, Dict[str, CommonLog]] = dict()
         self._delete_old_log_files()
 
-    def get_registered_log_names(self, mod_identifier: Union[str, CommonModIdentity]=None) -> List[str]:
+    def get_registered_log_names(self, mod_identifier: Union[str, CommonModIdentity] = None) -> List[str]:
         """get_registered_log_names()
 
         Retrieve the names of all registered logs.
@@ -543,7 +599,7 @@ class CommonLogRegistry(CommonService):
                 return list()
             return list(self._registered_logs[mod_name].keys())
 
-    def register_log(self, mod_identifier: Union[str, CommonModIdentity], log_name: str, custom_file_path: str=None) -> CommonLog:
+    def register_log(self, mod_identifier: Union[str, CommonModIdentity], log_name: str, custom_file_path: str = None) -> CommonLog:
         """register_log(mod_identifier, log_name, custom_file_path: str=None)
 
         Create and register a log with the specified name.
@@ -563,8 +619,10 @@ class CommonLogRegistry(CommonService):
             self._registered_logs = dict()
         mod_name = CommonModIdentity._get_mod_name(mod_identifier)
         mod_name = mod_name.lower()
+        first_time_log = False
         # Dict[str, Dict[str, CommonLog]]
         if mod_name not in self._registered_logs:
+            first_time_log = True
             self._registered_logs[mod_name] = dict()
         # Dict[str, CommonLog]
         if log_name in self._registered_logs[mod_name]:
@@ -574,6 +632,13 @@ class CommonLogRegistry(CommonService):
         if log_name in S4CLConfiguration().enable_logs:
             log.enable(message_types=S4CLConfiguration().enable_logs[log_name])
         self._registered_logs[mod_name][log_name] = log
+        if first_time_log:
+            log.enable()
+            if isinstance(mod_identifier, CommonModIdentity):
+                log.debug(f'{mod_identifier.name} Version "{mod_identifier.version}" Detected.')
+            else:
+                log.debug(f'{mod_identifier} Detected.')
+            log.disable()
         return log
 
     def _delete_old_log_files(self) -> None:
@@ -592,7 +657,7 @@ class CommonLogRegistry(CommonService):
                 continue
 
     # noinspection PyUnusedLocal
-    def log_exists(self, log_name: str, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
+    def log_exists(self, log_name: str, mod_identifier: Union[str, CommonModIdentity] = None) -> bool:
         """log_exists(log_name, mod_identifier=None)
 
         Determine if logs exist with the specified name.
@@ -617,7 +682,7 @@ class CommonLogRegistry(CommonService):
             return mod_name in self._registered_logs and log_name in self._registered_logs[mod_name]
 
     # noinspection PyUnusedLocal
-    def enable_logs(self, log_name: str, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
+    def enable_logs(self, log_name: str, mod_identifier: Union[str, CommonModIdentity] = None) -> bool:
         """enable_logs(log_name, mod_identifier=None)
 
         Enable all logs with the specified name.
@@ -652,7 +717,7 @@ class CommonLogRegistry(CommonService):
         return True
 
     # noinspection PyUnusedLocal
-    def disable_logs(self, log_name: str, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
+    def disable_logs(self, log_name: str, mod_identifier: Union[str, CommonModIdentity] = None) -> bool:
         """disable_logs(log_name, mod_identifier=None)
 
         Disable all logs with the specified name.
@@ -683,7 +748,7 @@ class CommonLogRegistry(CommonService):
         return True
 
     # noinspection PyUnusedLocal
-    def enable_all_logs(self, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
+    def enable_all_logs(self, mod_identifier: Union[str, CommonModIdentity] = None) -> bool:
         """enable_all_logs(mod_identifier=None)
 
         Enable all logs from logging
@@ -709,7 +774,7 @@ class CommonLogRegistry(CommonService):
         return True
 
     # noinspection PyUnusedLocal
-    def disable_all_logs(self, mod_identifier: Union[str, CommonModIdentity]=None) -> bool:
+    def disable_all_logs(self, mod_identifier: Union[str, CommonModIdentity] = None) -> bool:
         """disable_all_logs(mod_identifier=None)
 
         Disable all logs from logging

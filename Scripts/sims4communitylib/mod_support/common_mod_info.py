@@ -57,26 +57,28 @@ class CommonModInfo(CommonService):
         :rtype: CommonModIdentity
         """
         identity_property_name = '_MOD_IDENTITY'
-        if getattr(cls, identity_property_name, None) is None:
+        mod_identity = getattr(cls, identity_property_name, None)
+        if mod_identity is None:
             mod_info: CommonModInfo = cls.get()
-            setattr(cls, identity_property_name, CommonModIdentity(mod_info._name, mod_info._author, mod_info._base_namespace, mod_info._file_path, mod_info._version))
-        return getattr(cls, identity_property_name)
+            mod_identity = CommonModIdentity(mod_info._name, mod_info._author, mod_info._base_namespace, mod_info._file_path, mod_info._version)
+            setattr(cls, identity_property_name, mod_identity)
+        return mod_identity
 
     @property
     def _name(self) -> str:
-        raise NotImplementedError('Missing \'{}._name\'.'.format(self.__class__.__name__))
+        raise NotImplementedError(f'Missing \'{self.__class__.__name__}._name\'.')
 
     @property
     def _author(self) -> str:
-        raise NotImplementedError('Missing \'{}._author\'.'.format(self.__class__.__name__))
+        raise NotImplementedError(f'Missing \'{self.__class__.__name__}._author\'.')
 
     @property
     def _base_namespace(self) -> str:
-        raise NotImplementedError('Missing \'{}._base_namespace\'.'.format(self.__class__.__name__))
+        raise NotImplementedError(f'Missing \'{self.__class__.__name__}._base_namespace\'.')
 
     @property
     def _file_path(self) -> str:
-        raise NotImplementedError('Missing \'{}._file_path\'.'.format(self.__class__.__name__))
+        raise NotImplementedError(f'Missing \'{self.__class__.__name__}._file_path\'.')
 
     @property
     def _version(self) -> str:

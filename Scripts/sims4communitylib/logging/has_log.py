@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 from sims4communitylib.mod_support.has_mod_identity import HasModIdentity
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 
@@ -20,9 +20,9 @@ class HasLog(HasModIdentity):
 
     """
     def __init__(self) -> None:
-        self._log: 'CommonLog' = None
-        self._verbose_log: 'CommonLog' = None
-        self._mod_identity: CommonModIdentity = None
+        self._log: Union['CommonLog', None] = None
+        self._verbose_log: Union['CommonLog', None] = None
+        self._mod_identity: Union[CommonModIdentity, None] = None
 
     @property
     def mod_identity(self) -> CommonModIdentity:
@@ -51,8 +51,7 @@ class HasLog(HasModIdentity):
         """
         if self._verbose_log is None:
             from sims4communitylib.utils.common_log_registry import CommonLogRegistry
-            mod_name = CommonModIdentity._get_mod_name(self.mod_identity)
-            self._verbose_log = CommonLogRegistry.get().register_log(mod_name, self.verbose_log_identifier)
+            self._verbose_log = CommonLogRegistry.get().register_log(self.mod_identity, self.verbose_log_identifier)
         return self._verbose_log
 
     @property
@@ -66,10 +65,9 @@ class HasLog(HasModIdentity):
         """
         if self._log is None:
             from sims4communitylib.utils.common_log_registry import CommonLogRegistry
-            mod_name = CommonModIdentity._get_mod_name(self.mod_identity)
-            self._log = CommonLogRegistry.get().register_log(mod_name, self.log_identifier)
+            self._log = CommonLogRegistry.get().register_log(self.mod_identity, self.log_identifier)
             if self._verbose_log is None:
-                self._verbose_log = CommonLogRegistry.get().register_log(mod_name, self.verbose_log_identifier)
+                self._verbose_log = CommonLogRegistry.get().register_log(self.mod_identity, self.verbose_log_identifier)
         return self._log
 
     @property
@@ -92,4 +90,4 @@ class HasLog(HasModIdentity):
         :return: The identifier of the verbose log
         :rtype: str
         """
-        return '{}_verbose'.format(self.log_identifier)
+        return f'{self.log_identifier}_verbose'

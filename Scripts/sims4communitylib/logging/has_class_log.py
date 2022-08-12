@@ -81,10 +81,9 @@ class HasClassLog(HasClassModIdentity, HasLog):
         """
         from sims4communitylib.utils.common_log_registry import CommonLogRegistry
         if not hasattr(cls, '_log') or getattr(cls, '_log', None) is None:
-            mod_name = CommonModIdentity._get_mod_name(cls.get_mod_identity())
-            setattr(cls, '_log', CommonLogRegistry().register_log(mod_name, cls.get_log_identifier()))
+            setattr(cls, '_log', CommonLogRegistry().register_log(cls.get_mod_identity(), cls.get_log_identifier()))
             if not hasattr(cls, '_verbose_log') or getattr(cls, '_verbose_log', None) is None:
-                setattr(cls, '_verbose_log', CommonLogRegistry().register_log(mod_name, cls.get_verbose_log_identifier()))
+                setattr(cls, '_verbose_log', CommonLogRegistry().register_log(cls.get_mod_identity(), cls.get_verbose_log_identifier()))
         return getattr(cls, '_log', None)
 
     @classmethod
@@ -102,8 +101,7 @@ class HasClassLog(HasClassModIdentity, HasLog):
         """
         from sims4communitylib.utils.common_log_registry import CommonLogRegistry
         if not hasattr(cls, '_verbose_log') or getattr(cls, '_verbose_log', None) is None:
-            mod_name = CommonModIdentity._get_mod_name(cls.get_mod_identity())
-            setattr(cls, '_verbose_log', CommonLogRegistry().register_log(mod_name, cls.get_verbose_log_identifier()))
+            setattr(cls, '_verbose_log', CommonLogRegistry().register_log(cls.get_mod_identity(), cls.get_verbose_log_identifier()))
         return getattr(cls, '_verbose_log', None)
 
     @classmethod
