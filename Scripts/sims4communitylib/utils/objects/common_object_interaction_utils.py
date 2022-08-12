@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from pprint import pformat
-from typing import Callable, Iterator, List
+from typing import Callable, Iterator, List, Union
 from interactions.base.interaction import Interaction
 from objects.game_object import GameObject
 from objects.script_object import ScriptObject
@@ -41,7 +41,7 @@ class CommonObjectInteractionUtils(HasClassLog):
         return 'common_object_interaction_utils'
 
     @staticmethod
-    def get_all_interactions_registered_to_object_gen(script_object: ScriptObject, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
+    def get_all_interactions_registered_to_object_gen(script_object: ScriptObject, include_interaction_callback: Callable[[Interaction], bool] = None) -> Iterator[Interaction]:
         """get_all_interactions_registered_to_object_gen(script_object, include_interaction_callback=None)
 
         Retrieve all interactions that are registered to an object.
@@ -132,6 +132,87 @@ class CommonObjectInteractionUtils(HasClassLog):
             script_object._super_affordances += tuple(new_script_object_super_affordances)
 
     @classmethod
+    def remove_super_interaction_from_terrain(cls, interaction_identifier: Union[int, Interaction]):
+        """remove_super_interaction_from_terrain(interaction_identifier)
+
+        Remove a super interaction from the terrain.
+
+        :param interaction_identifier: The GUID or instance of the interaction to remove.
+        :type interaction_identifier: Union[int, Interaction]
+        """
+        return cls.remove_super_interactions_from_terrain((interaction_identifier,))
+
+    @classmethod
+    def remove_super_interactions_from_terrain(cls, interaction_identifiers: Iterator[Union[int, Interaction]]):
+        """remove_super_interactions_from_terrain(interaction_identifiers)
+
+        Remove a super interaction from the terrain.
+
+        :param interaction_identifiers: The GUIDs or instances of the interactions to remove.
+        :type interaction_identifiers: Iterator[Union[int, Interaction]]
+        """
+        from services import get_terrain_service
+        terrain_service = get_terrain_service()
+
+        interactions_to_remove = list()
+        for interaction_id in interaction_identifiers:
+            interaction = CommonInteractionUtils.load_interaction_by_id(interaction_id)
+            if interaction is not None:
+                interactions_to_remove.append(interaction)
+
+        if not interactions_to_remove:
+            return None
+
+        new_terrain_definition_class = terrain_service.TERRAIN_DEFINITION.cls
+        new_super_affordances = list()
+        current_super_affordances_list = list(new_terrain_definition_class._super_affordances)
+        for super_interaction in current_super_affordances_list:
+            if super_interaction in interactions_to_remove:
+                continue
+            new_super_affordances.append(super_interaction)
+        new_terrain_definition_class._super_affordances = tuple(new_super_affordances)
+        terrain_service.TERRAIN_DEFINITION.set_class(new_terrain_definition_class)
+
+    @classmethod
+    def remove_super_interaction_from_ocean(cls, interaction_identifier: Union[int, Interaction]):
+        """remove_super_interaction_from_ocean(interaction_identifier)
+
+        Remove a super interaction from the ocean.
+
+        :param interaction_identifier: The GUID or instance of the interaction to remove.
+        :type interaction_identifier: Union[int, Interaction]
+        """
+        return cls.remove_super_interactions_from_ocean((interaction_identifier,))
+
+    @classmethod
+    def remove_super_interactions_from_ocean(cls, interaction_identifiers: Iterator[Union[int, Interaction]]):
+        """remove_super_interactions_from_ocean(interaction_identifiers)
+
+        Remove a super interaction from the ocean.
+
+        :param interaction_identifiers: The GUIDs of the interactions or instances to remove.
+        :type interaction_identifiers: Iterator[Union[int, Interaction]]
+        """
+        from services import get_terrain_service
+        terrain_service = get_terrain_service()
+
+        interactions_to_remove = list()
+        for interaction_guid in interaction_identifiers:
+            interaction = CommonInteractionUtils.load_interaction_by_id(interaction_guid)
+            if interaction is not None:
+                interactions_to_remove.append(interaction)
+
+        new_ocean_definition_class = terrain_service.OCEAN_DEFINITION.cls
+        new_super_affordances = list()
+        current_super_affordances_list = list(new_ocean_definition_class._super_affordances)
+        for super_interaction in current_super_affordances_list:
+            if super_interaction in interactions_to_remove:
+                continue
+            new_super_affordances.append(super_interaction)
+        new_ocean_definition_class._super_affordances = tuple(new_super_affordances)
+        terrain_service.OCEAN_DEFINITION.set_class(new_ocean_definition_class)
+
+    @classmethod
     def remove_super_interaction_from_object(cls, script_object: ScriptObject, interaction_guid: int):
         """remove_super_interaction_from_object(script_object, interaction_guid)
 
@@ -194,6 +275,7 @@ class CommonObjectInteractionUtils(HasClassLog):
                 definition_id = definition.id
         log.debug(f'Interactions that can be performed on \'{target_object}\' id:{object_id} def_id:{definition_id}:')
         interactions = CommonObjectInteractionUtils.get_all_interactions_registered_to_object_gen(target_object)
+        # noinspection PyTypeChecker
         target_object: GameObject = target_object
         interaction_short_names: List[str] = list()
         for interaction in interactions:
