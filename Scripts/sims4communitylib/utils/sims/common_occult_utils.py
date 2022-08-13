@@ -1229,6 +1229,19 @@ class CommonOccultUtils:
             raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.get_sim_info_for_all_occults_gen(sim_info, exclude_occult_types)
 
+    @classmethod
+    def has_full_body_cas_part_assigned_to_current_occult_of(cls, sim_info: SimInfo) -> CommonTestResult:
+        """has_full_body_cas_part_assigned_to_occult(sim_info)
+
+        Determine if the Sim is currently an occult that has a Full Body CAS Part associated with it. Such as a Skeleton (Skeleton Part) or Robot (Humanoid Bot Frame).
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The result of the test. True, if the Sim is currently an occult with a full body outfit. False, if not.
+        :rtype: CommonTestResult
+        """
+        return CommonOccultUtils.is_currently_a_robot(sim_info) or CommonOccultUtils.is_currently_a_skeleton(sim_info)
+
     @staticmethod
     def _has_occult_trait(sim_info: SimInfo, trait_id: Union[int, CommonTraitId]) -> bool:
         return CommonOccultUtils._has_occult_traits(sim_info, (trait_id,))

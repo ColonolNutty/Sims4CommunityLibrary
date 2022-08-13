@@ -788,10 +788,12 @@ def _s4clib_attach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int
             output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
             return
     else:
-        body_type_value = CommonResourceUtils.get_enum_by_name(body_type.upper(), BodyType, default_value=BodyType.NONE)
-        if body_type_value == BodyType.NONE:
-            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
-            return
+        body_type_value = CommonResourceUtils.get_enum_by_name(body_type.upper(), CommonBodySlot, default_value=None)
+        if body_type_value is None:
+            body_type_value = CommonResourceUtils.get_enum_by_name(body_type.upper(), BodyType, default_value=BodyType.NONE)
+            if body_type_value == BodyType.NONE:
+                output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
+                return
 
     output(f'Attempting to attach CAS Part \'{cas_part_id}\' to Sim {sim_info} at body location {body_type_value}')
     if CommonCASUtils.attach_cas_part_to_sim(sim_info, cas_part_id, body_type=body_type_value):
