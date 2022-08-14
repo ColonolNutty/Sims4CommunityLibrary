@@ -40,6 +40,7 @@ from sims4communitylib.events.sim.events.sim_changed_occult_type import S4CLSimC
 from sims4communitylib.events.sim.events.sim_changed_gender_options_can_be_impregnated import S4CLSimChangedGenderOptionsCanBeImpregnatedEvent
 from sims4communitylib.events.sim.events.sim_changed_gender_options_toilet_usage import S4CLSimChangedGenderOptionsToiletUsageEvent
 from sims4communitylib.events.sim.events.sim_changing_occult_type import S4CLSimChangingOccultTypeEvent
+from sims4communitylib.events.sim.events.sim_pre_despawned import S4CLSimPreDespawnedEvent
 from sims4communitylib.events.sim.events.sim_initialized import S4CLSimInitializedEvent
 from sims4communitylib.events.sim.events.sim_loaded import S4CLSimLoadedEvent
 from sims4communitylib.events.sim.events.game_object_added_to_sim_inventory import S4CLGameObjectAddedToSimInventoryEvent
@@ -112,6 +113,9 @@ class CommonSimEventDispatcherService(CommonService):
     def _on_sim_spawned(self, sim_info: SimInfo, *_, **__) -> bool:
         from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
         return CommonEventRegistry.get().dispatch(S4CLSimSpawnedEvent(CommonSimUtils.get_sim_info(sim_info)))
+
+    def _pre_sim_despawned(self, sim_info: SimInfo, *_, **__) -> bool:
+        return CommonEventRegistry.get().dispatch(S4CLSimPreDespawnedEvent(sim_info))
 
     def _on_sim_change_age(self, sim_info: SimInfo, new_age: Age, current_age: Age) -> bool:
         from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -204,6 +208,13 @@ def _common_on_sim_spawn(original, cls, *args, **kwargs) -> Any:
     if result:
         CommonSimEventDispatcherService.get()._on_sim_spawned(*args, **kwargs)
     return result
+
+
+# noinspection PyUnusedLocal
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Sim, Sim.destroy.__name__, handle_exceptions=False)
+def _common_on_sim_despawn(original, self, *args, **kwargs) -> Any:
+    CommonSimEventDispatcherService.get()._pre_sim_despawned(CommonSimUtils.get_sim_info(self), *args, **kwargs)
+    return original(self, *args, **kwargs)
 
 
 # noinspection PyUnusedLocal
