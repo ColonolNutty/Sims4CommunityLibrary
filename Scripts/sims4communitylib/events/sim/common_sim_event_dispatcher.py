@@ -5,9 +5,10 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any, Tuple
+from typing import Any, Tuple, Union
 
 from buffs.buff import Buff
+from interactions.utils.death import DeathTracker, DeathType
 from objects.components.buff_component import BuffComponent
 from objects.game_object import GameObject
 from objects.script_object import ScriptObject
@@ -20,6 +21,7 @@ from sims.sim_info import SimInfo
 from sims.sim_info_types import Age
 from sims.sim_spawner import SimSpawner
 from sims4communitylib.enums.common_age import CommonAge
+from sims4communitylib.enums.common_death_types import CommonDeathType
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
 from sims4communitylib.events.sim.events.sim_added_occult_type import S4CLSimAddedOccultTypeEvent
@@ -40,12 +42,14 @@ from sims4communitylib.events.sim.events.sim_changed_occult_type import S4CLSimC
 from sims4communitylib.events.sim.events.sim_changed_gender_options_can_be_impregnated import S4CLSimChangedGenderOptionsCanBeImpregnatedEvent
 from sims4communitylib.events.sim.events.sim_changed_gender_options_toilet_usage import S4CLSimChangedGenderOptionsToiletUsageEvent
 from sims4communitylib.events.sim.events.sim_changing_occult_type import S4CLSimChangingOccultTypeEvent
+from sims4communitylib.events.sim.events.sim_died import S4CLSimDiedEvent
 from sims4communitylib.events.sim.events.sim_pre_despawned import S4CLSimPreDespawnedEvent
 from sims4communitylib.events.sim.events.sim_initialized import S4CLSimInitializedEvent
 from sims4communitylib.events.sim.events.sim_loaded import S4CLSimLoadedEvent
 from sims4communitylib.events.sim.events.game_object_added_to_sim_inventory import S4CLGameObjectAddedToSimInventoryEvent
 from sims4communitylib.events.sim.events.game_object_pre_removed_from_sim_inventory import S4CLGameObjectPreRemovedFromSimInventoryEvent
 from sims4communitylib.events.sim.events.sim_removed_occult_type import S4CLSimRemovedOccultTypeEvent
+from sims4communitylib.events.sim.events.sim_revived import S4CLSimRevivedEvent
 from sims4communitylib.events.sim.events.sim_set_current_outfit import S4CLSimSetCurrentOutfitEvent
 from sims4communitylib.events.sim.events.sim_skill_leveled_up import S4CLSimSkillLeveledUpEvent
 from sims4communitylib.events.sim.events.sim_spawned import S4CLSimSpawnedEvent
@@ -113,6 +117,12 @@ class CommonSimEventDispatcherService(CommonService):
     def _on_sim_spawned(self, sim_info: SimInfo, *_, **__) -> bool:
         from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
         return CommonEventRegistry.get().dispatch(S4CLSimSpawnedEvent(CommonSimUtils.get_sim_info(sim_info)))
+
+    def _on_sim_died(self, sim_info: SimInfo, death_type: CommonDeathType, is_off_lot_death: bool, *_, **__) -> bool:
+        return CommonEventRegistry.get().dispatch(S4CLSimDiedEvent(sim_info, death_type, is_off_lot_death))
+
+    def _on_sim_revived(self, sim_info: SimInfo, previous_death_type: CommonDeathType, *_, **__) -> bool:
+        return CommonEventRegistry.get().dispatch(S4CLSimRevivedEvent(sim_info, previous_death_type))
 
     def _pre_sim_despawned(self, sim_info: SimInfo, *_, **__) -> bool:
         return CommonEventRegistry.get().dispatch(S4CLSimPreDespawnedEvent(sim_info))
@@ -215,6 +225,33 @@ def _common_on_sim_spawn(original, cls, *args, **kwargs) -> Any:
 def _common_on_sim_despawn(original, self, *args, **kwargs) -> Any:
     CommonSimEventDispatcherService.get()._pre_sim_despawned(CommonSimUtils.get_sim_info(self), *args, **kwargs)
     return original(self, *args, **kwargs)
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), DeathTracker, DeathTracker.set_death_type.__name__)
+def _common_on_sim_set_death_type(original, self, death_type: Union[DeathType, None], is_off_lot_death: bool = False, *_, **__) -> Any:
+    previous_death_type = self._death_type
+    original_result = original(self, death_type, is_off_lot_death=is_off_lot_death, *_, **__)
+    if death_type is None and previous_death_type is None:
+        return original_result
+
+    sim_info = CommonSimUtils.get_sim_info(self._sim_info)
+    if death_type is None:
+        CommonSimEventDispatcherService.get()._on_sim_revived(sim_info, CommonDeathType.convert_from_vanilla(previous_death_type))
+    else:
+        if previous_death_type is None:
+            CommonSimEventDispatcherService.get()._on_sim_died(sim_info, CommonDeathType.convert_from_vanilla(death_type), is_off_lot_death)
+    return original_result
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), DeathTracker, DeathTracker.clear_death_type.__name__)
+def _common_on_sim_clear_death_type(original, self, *_, **__) -> Any:
+    previous_death_type = self._death_type
+    original_result = original(self, *_, **__)
+    if previous_death_type is None:
+        return original_result
+    sim_info = CommonSimUtils.get_sim_info(self._sim_info)
+    CommonSimEventDispatcherService.get()._on_sim_revived(sim_info, CommonDeathType.convert_from_vanilla(previous_death_type))
+    return original_result
 
 
 # noinspection PyUnusedLocal

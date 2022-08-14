@@ -113,6 +113,30 @@ Sim Event Types
    :undoc-members:
    :show-inheritance:
 
+`Pre Sim Despawned`
+-------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_pre_despawned.S4CLSimPreDespawnedEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Sim Died`
+-------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_died.S4CLSimDiedEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Sim Revived
+-------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_revived.S4CLSimRevivedEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Skill Leveled Up`
 -----------------------------------------------------------
 
