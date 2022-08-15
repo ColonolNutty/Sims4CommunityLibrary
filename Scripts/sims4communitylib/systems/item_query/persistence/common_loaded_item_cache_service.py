@@ -17,7 +17,7 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 CommonLoadedItemCacheType = TypeVar('CommonLoadedItemCacheType', bound=CommonLoadedItemCache[CommonLoadedItem])
 
 
-class CommonLoadedItemCacheService(Generic[CommonLoadedItemCacheType], CommonSerializableObjectCacheService[CommonLoadedItemCacheType]):
+class CommonLoadedItemCacheService(CommonSerializableObjectCacheService[CommonLoadedItemCacheType], Generic[CommonLoadedItemCacheType]):
     """A service that manages a cache of Loaded Items."""
 
     # noinspection PyMissingOrEmptyDocstring

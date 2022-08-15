@@ -18,12 +18,11 @@ from sims4communitylib.classes.time.common_stop_watch import CommonStopWatch
 from sims4communitylib.logging.has_log import HasLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.services.common_service import CommonService
-from sims4communitylib.utils.common_time_utils import CommonTimeUtils
 
 CommonLoadedItemType = TypeVar('CommonLoadedItemType', bound=CommonLoadedItem)
 
 
-class CommonLoadedItemRegistry(Generic[CommonLoadedItemType], CommonService, HasLog):
+class CommonLoadedItemRegistry(CommonService, HasLog, Generic[CommonLoadedItemType]):
     """ A registry that contains loaded items. """
 
     # noinspection PyMissingOrEmptyDocstring

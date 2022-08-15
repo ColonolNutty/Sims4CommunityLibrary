@@ -24,7 +24,7 @@ from sims4communitylib.utils.time.common_alarm_utils import CommonAlarmUtils
 CommonRunnableContextType = TypeVar('CommonRunnableContextType', bound=CommonRunnableContext)
 
 
-class CommonRunnable(Generic[CommonRunnableContextType], HasClassLog):
+class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
     """CommonRunnable()
 
     This class is used when you want to have something reoccurring again and again.

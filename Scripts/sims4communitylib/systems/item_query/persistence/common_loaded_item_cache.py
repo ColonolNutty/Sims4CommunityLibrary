@@ -13,6 +13,6 @@ from sims4communitylib.systems.caching.common_serializable_object_cache import C
 CommonLoadedItemCacheType = TypeVar('CommonLoadedItemCacheType', bound=CommonLoadedItem)
 
 
-class CommonLoadedItemCache(Generic[CommonLoadedItemCacheType], CommonSerializableObjectCache[CommonLoadedItemCacheType]):
+class CommonLoadedItemCache(CommonSerializableObjectCache[CommonLoadedItemCacheType], Generic[CommonLoadedItemCacheType]):
     """A cache of Loaded Items."""
     pass

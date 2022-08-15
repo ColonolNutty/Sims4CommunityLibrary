@@ -16,7 +16,7 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 ItemKeyType = TypeVar('ItemKeyType', int, CommonInt, CommonIntFlags)
 
 
-class CommonLoadedItemFilter(Generic[ItemKeyType], HasLog):
+class CommonLoadedItemFilter(HasLog, Generic[ItemKeyType]):
     """ A filter for use when querying loaded items. """
 
     # noinspection PyMissingOrEmptyDocstring

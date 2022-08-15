@@ -23,7 +23,7 @@ from sims4communitylib.systems.item_query.query.common_loaded_item_filter_reques
 CommonLoadedItemType = TypeVar('CommonLoadedItemType', bound=CommonLoadedItem)
 
 
-class CommonLoadedItemQueryUtils(Generic[CommonLoadedItemType], HasLog):
+class CommonLoadedItemQueryUtils(HasLog, Generic[CommonLoadedItemType]):
     """ Query for items using various filter configurations. """
 
     # noinspection PyMissingOrEmptyDocstring

@@ -17,7 +17,7 @@ from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 CommonLoadedItemType = TypeVar('CommonLoadedItemType', bound=CommonLoadedItem)
 
 
-class CommonBaseItemLoader(Generic[CommonLoadedItemType], CommonService, HasLog):
+class CommonBaseItemLoader(CommonService, HasLog, Generic[CommonLoadedItemType]):
     """ Loads items. """
 
     # noinspection PyMissingOrEmptyDocstring

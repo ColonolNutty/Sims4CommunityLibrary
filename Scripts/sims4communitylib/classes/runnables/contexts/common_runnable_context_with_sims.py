@@ -20,7 +20,7 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 CommonRunnableSimContextType = TypeVar('CommonRunnableSimContextType', bound=CommonRunnableSimContext)
 
 
-class CommonRunnableContextWithSims(Generic[CommonRunnableSimContextType], CommonRunnableContext):
+class CommonRunnableContextWithSims(CommonRunnableContext, Generic[CommonRunnableSimContextType]):
     """CommonRunnableContextWithSims()
 
     A context used by a runnable.

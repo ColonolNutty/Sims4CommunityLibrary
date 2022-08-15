@@ -21,13 +21,12 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.systems.item_query.enums.common_query_method_type import CommonQueryMethodType
-from sims4communitylib.utils.common_time_utils import CommonTimeUtils
 from sims4communitylib.utils.misc.common_text_utils import CommonTextUtils
 
 CommonLoadedItemType = TypeVar('CommonLoadedItemType', bound=CommonLoadedItem)
 
 
-class CommonLoadedItemQueryRegistry(Generic[CommonLoadedItemType], CommonService, HasLog):
+class CommonLoadedItemQueryRegistry(CommonService, HasLog, Generic[CommonLoadedItemType]):
     """ Registry handling item queries. """
 
     # noinspection PyMissingOrEmptyDocstring

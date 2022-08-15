@@ -12,7 +12,7 @@ from sims4communitylib.classes.serialization.common_serializable import CommonSe
 CommonSerializableObjectCacheType = TypeVar('CommonSerializableObjectCacheType', bound=CommonSerializable)
 
 
-class CommonSerializableObjectCache(Generic[CommonSerializableObjectCacheType], CommonSerializable):
+class CommonSerializableObjectCache(CommonSerializable, Generic[CommonSerializableObjectCacheType]):
     """A cache of serializable objects."""
 
     def __init__(self, cached_objects: Tuple[CommonSerializableObjectCacheType], checksums: Dict[str, int]):

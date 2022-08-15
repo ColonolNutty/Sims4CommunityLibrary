@@ -22,7 +22,7 @@ CommonRunnableContextWithSimsType = TypeVar('CommonRunnableContextWithSimsType',
 CommonRunnableSimContextType = TypeVar('CommonRunnableSimContextType', bound=CommonRunnableSimContext)
 
 
-class CommonRunnableWithSims(Generic[CommonRunnableContextWithSimsType, CommonRunnableSimContextType], CommonRunnable[CommonRunnableContextWithSimsType]):
+class CommonRunnableWithSims(CommonRunnable[CommonRunnableContextWithSimsType], Generic[CommonRunnableContextWithSimsType, CommonRunnableSimContextType]):
     """CommonRunnableWithSims()
 
     This class is used when you want to have something reoccurring again and again. Specifically when it involves something reoccurring for Sims again and again.

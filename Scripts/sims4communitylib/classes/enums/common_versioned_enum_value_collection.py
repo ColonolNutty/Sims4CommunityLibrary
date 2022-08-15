@@ -17,7 +17,7 @@ CommonEnumType = TypeVar('CommonEnumType', CommonVersionedIntFlags, CommonVersio
 CommonVersionedEnumValueCollectionType = TypeVar('CommonVersionedEnumValueCollectionType', bound="CommonVersionedEnumValueCollection")
 
 
-class CommonVersionedEnumValueCollection(Generic[CommonEnumType], CommonSerializable):
+class CommonVersionedEnumValueCollection(CommonSerializable, Generic[CommonEnumType]):
     """CommonVersionedEnumValueCollection(\
         enum_values,\
         version=None\

@@ -16,7 +16,7 @@ from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 CommonLoadedItemType = TypeVar('CommonLoadedItemType', bound=CommonLoadedItem)
 
 
-class CommonLoadedItemTest(Generic[CommonLoadedItemType], HasClassLog):
+class CommonLoadedItemTest(HasClassLog, Generic[CommonLoadedItemType]):
     """ A test that is run to test a loaded item. """
 
     # noinspection PyMissingOrEmptyDocstring

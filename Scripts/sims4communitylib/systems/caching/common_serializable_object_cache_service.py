@@ -21,7 +21,7 @@ from sims4communitylib.utils.common_log_utils import CommonLogUtils
 CommonSerializableObjectCacheType = TypeVar('CommonSerializableObjectCacheType', bound=CommonSerializableObjectCache[CommonSerializable])
 
 
-class CommonSerializableObjectCacheService(Generic[CommonSerializableObjectCacheType], CommonService, HasLog):
+class CommonSerializableObjectCacheService(CommonService, HasLog, Generic[CommonSerializableObjectCacheType]):
     """A service that manages a cache of serializable objects."""
 
     # noinspection PyMissingOrEmptyDocstring
