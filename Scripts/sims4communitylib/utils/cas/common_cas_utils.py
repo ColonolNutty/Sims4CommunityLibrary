@@ -134,6 +134,30 @@ class CommonCASUtils(_HasS4CLClassLog):
         return value
 
     @classmethod
+    def attach_cas_part_to_sim(cls, sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int] = None, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None, **__) -> bool:
+        """attach_cas_part_to_sim(sim_info, cas_part_id, body_type=None, outfit_category_and_index=None, **__)
+
+        Add a CAS part at the specified BodyType to the Sims outfit.
+
+        :param sim_info: The SimInfo of a Sim to add the CAS part to.
+        :type sim_info: SimInfo
+        :param cas_part_id: The decimal identifier of a CAS part to attach to the Sim.
+        :type cas_part_id: int
+        :param body_type: The BodyType the CAS part will be attached to. If no value is provided, the BodyType of the CAS part itself will be used. Default is None.
+        :type body_type: Union[BodyType, int], optional
+        :param outfit_category_and_index: The outfit category and index of the Sims outfit to modify. If no value is provided, the Sims current outfit will be used.
+        :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
+        :return: True if the CAS part was successfully attached to the Sim. False if the CAS part was not successfully attached to the Sim.
+        :rtype: bool
+        """
+        if cas_part_id == -1 or cas_part_id is None:
+            raise RuntimeError('No cas_part_id was provided.')
+
+        cls.get_log().format_with_message('Attempting to attach CAS part to Sim', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
+        cas_part = CommonCASPart(cas_part_id, body_type=body_type if body_type != BodyType.NONE else None)
+        return cls.attach_cas_part_to_outfit_of_sim(sim_info, cas_part, outfit_category_and_index=outfit_category_and_index)
+
+    @classmethod
     def attach_cas_part_to_all_outfits_of_sim(cls, sim_info: SimInfo, cas_part: CommonCASPart) -> bool:
         """attach_cas_part_to_all_outfits_of_sim(sim_info, cas_part)
 
@@ -312,11 +336,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         :return: True, if all CAS Parts were successfully detached from all outfits of the Sim. False, if not.
         """
         _log = cls.get_log()
-        cas_parts_by_body_type = dict()
-        for cas_part in cas_parts:
-            cas_parts_by_body_type[int(CommonBodySlot.convert_to_vanilla(cas_part.body_type))] = cas_part
-        cas_part_body_types = tuple(cas_parts_by_body_type.keys())
-        cas_part_ids = tuple([cas_part.cas_part_id for cas_part in cas_parts_by_body_type.values()])
+        cas_part_ids = tuple([cas_part.cas_part_id for cas_part in cas_parts])
         from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
         current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
         from protocolbuffers import S4Common_pb2, Outfits_pb2
@@ -331,7 +351,7 @@ class CommonCASUtils(_HasS4CLClassLog):
                 if part_id in cas_part_ids:
                     # Remove cas_part_ids
                     continue
-                _log.format_with_message('Keeping body type.', original_body_type=body_type, cas_part_body_types=cas_part_body_types, original_part_id=part_id)
+                _log.format_with_message('Keeping body type.', original_body_type=body_type, original_part_id=part_id)
                 body_types.append(body_type)
                 part_ids.append(part_id)
 
@@ -414,30 +434,6 @@ class CommonCASUtils(_HasS4CLClassLog):
         sim_info._base.outfit_type_and_index = current_outfit
         sim_info.resend_outfits()
         return True
-
-    @classmethod
-    def attach_cas_part_to_sim(cls, sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int] = None, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None, **__) -> bool:
-        """attach_cas_part_to_sim(sim_info, cas_part_id, body_type=None, outfit_category_and_index=None, **__)
-
-        Add a CAS part at the specified BodyType to the Sims outfit.
-
-        :param sim_info: The SimInfo of a Sim to add the CAS part to.
-        :type sim_info: SimInfo
-        :param cas_part_id: The decimal identifier of a CAS part to attach to the Sim.
-        :type cas_part_id: int
-        :param body_type: The BodyType the CAS part will be attached to. If no value is provided, the BodyType of the CAS part itself will be used. Default is None.
-        :type body_type: Union[BodyType, int], optional
-        :param outfit_category_and_index: The outfit category and index of the Sims outfit to modify. If no value is provided, the Sims current outfit will be used.
-        :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
-        :return: True if the CAS part was successfully attached to the Sim. False if the CAS part was not successfully attached to the Sim.
-        :rtype: bool
-        """
-        if cas_part_id == -1 or cas_part_id is None:
-            raise RuntimeError('No cas_part_id was provided.')
-
-        cls.get_log().format_with_message('Attempting to attach CAS part to Sim', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
-        cas_part = CommonCASPart(cas_part_id, body_type=body_type if body_type != BodyType.NONE else None)
-        return cls.attach_cas_part_to_outfit_of_sim(sim_info, cas_part, outfit_category_and_index=outfit_category_and_index)
 
     # noinspection PyUnusedLocal
     @classmethod

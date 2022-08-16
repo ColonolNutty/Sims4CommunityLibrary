@@ -85,6 +85,7 @@ class CommonSimOccultTypeUtils:
             CommonOccultType.ALIEN: CommonOccultUtils.is_alien,
             CommonOccultType.MERMAID: CommonOccultUtils.is_mermaid,
             CommonOccultType.ROBOT: CommonOccultUtils.is_robot,
+            CommonOccultType.SCARECROW: CommonOccultUtils.is_scarecrow,
             CommonOccultType.SKELETON: CommonOccultUtils.is_skeleton,
             CommonOccultType.VAMPIRE: CommonOccultUtils.is_vampire,
             CommonOccultType.WITCH: CommonOccultUtils.is_witch,
@@ -118,6 +119,7 @@ class CommonSimOccultTypeUtils:
             CommonOccultType.ALIEN: CommonOccultUtils.is_currently_an_alien,
             CommonOccultType.MERMAID: CommonOccultUtils.is_currently_a_mermaid,
             CommonOccultType.ROBOT: CommonOccultUtils.is_currently_a_robot,
+            CommonOccultType.SCARECROW: CommonOccultUtils.is_currently_a_scarecrow,
             CommonOccultType.SKELETON: CommonOccultUtils.is_currently_a_skeleton,
             CommonOccultType.VAMPIRE: CommonOccultUtils.is_currently_a_vampire,
             CommonOccultType.WITCH: CommonOccultUtils.is_currently_a_witch,
@@ -143,6 +145,8 @@ class CommonSimOccultTypeUtils:
         from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
         if CommonOccultUtils.is_robot(sim_info):
             return CommonOccultType.ROBOT
+        elif CommonOccultUtils.is_scarecrow(sim_info):
+            return CommonOccultType.SCARECROW
         elif CommonOccultUtils.is_skeleton(sim_info):
             return CommonOccultType.SKELETON
         elif CommonOccultUtils.is_alien(sim_info):
@@ -178,6 +182,8 @@ class CommonSimOccultTypeUtils:
             return CommonOccultType.MERMAID
         elif CommonOccultUtils.is_robot(sim_info):
             return CommonOccultType.ROBOT
+        elif CommonOccultUtils.is_currently_a_scarecrow(sim_info):
+            return CommonOccultType.SCARECROW
         elif CommonOccultUtils.is_currently_a_vampire(sim_info):
             return CommonOccultType.VAMPIRE
         elif CommonOccultUtils.is_currently_a_werewolf(sim_info):

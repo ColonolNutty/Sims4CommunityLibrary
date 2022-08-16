@@ -5,6 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import random
 from typing import Iterator, Tuple, Union
 
 from sims.occult.occult_enums import OccultType
@@ -12,16 +13,20 @@ from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
+from sims4communitylib.dtos.common_cas_part import CommonCASPart
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.common_bucks_types import CommonBucksType
 from sims4communitylib.enums.common_occult_type import CommonOccultType
 from sims4communitylib.enums.traits_enum import CommonTraitId
+from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
+from sims4communitylib.utils.cas.common_cas_utils import CommonCASUtils
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
+from sims4communitylib.utils.sims.common_sim_appearance_modifier_utils import CommonSimAppearanceModifierUtils
 from sims4communitylib.utils.sims.common_sim_bucks_utils import CommonSimBucksUtils
 from sims4communitylib.utils.sims.common_sim_loot_action_utils import CommonSimLootActionUtils
 from sims4communitylib.utils.sims.common_sim_spell_utils import CommonSimSpellUtils
@@ -33,10 +38,16 @@ except ModuleNotFoundError:
     from traits.traits import TraitType
 
 
-class CommonOccultUtils:
+class CommonOccultUtils(_HasS4CLClassLog):
     """Utilities for manipulating the Occults of Sims.
 
     """
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_log_identifier(cls) -> str:
+        return 'common_occult_utils'
+
     @staticmethod
     def get_all_occult_types_for_sim_gen(sim_info: SimInfo) -> Iterator[OccultType]:
         """get_all_occult_types_for_sim_gen(sim_info)
@@ -210,6 +221,7 @@ class CommonOccultUtils:
             CommonOccultType.MERMAID: CommonOccultUtils.add_mermaid_occult,
             CommonOccultType.PLANT_SIM: CommonOccultUtils.add_plant_sim_occult,
             CommonOccultType.ROBOT: CommonOccultUtils.add_robot_occult,
+            CommonOccultType.SCARECROW: CommonOccultUtils.add_scarecrow_occult,
             CommonOccultType.SKELETON: CommonOccultUtils.add_skeleton_occult,
             CommonOccultType.VAMPIRE: CommonOccultUtils.add_vampire_occult,
             CommonOccultType.WITCH: CommonOccultUtils.add_witch_occult,
@@ -242,6 +254,7 @@ class CommonOccultUtils:
             CommonOccultType.MERMAID: CommonOccultUtils.remove_mermaid_occult,
             CommonOccultType.PLANT_SIM: CommonOccultUtils.remove_plant_sim_occult,
             CommonOccultType.ROBOT: CommonOccultUtils.remove_robot_occult,
+            CommonOccultType.SCARECROW: CommonOccultUtils.remove_scarecrow_occult,
             CommonOccultType.SKELETON: CommonOccultUtils.remove_skeleton_occult,
             CommonOccultType.VAMPIRE: CommonOccultUtils.remove_vampire_occult,
             CommonOccultType.WITCH: CommonOccultUtils.remove_witch_occult,
@@ -482,6 +495,83 @@ class CommonOccultUtils:
         if not is_robot_result:
             return is_robot_result.reverse_result()
         return CommonTraitUtils.remove_trait(sim_info, CommonTraitId.OCCULT_ROBOT)
+
+    @classmethod
+    def add_scarecrow_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
+        """add_scarecrow_occult(sim_info)
+
+        Add the Scarecrow Occult Type to a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The result of adding the Scarecrow occult. True, if the Sim has successfully become a Scarecrow. False, if not.
+        :rtype: CommonExecutionResult
+        """
+        if sim_info is None:
+            raise AssertionError('Argument sim_info was None')
+        is_scarecrow_available_result = CommonOccultUtils.is_scarecrow_occult_available()
+        if not is_scarecrow_available_result:
+            return is_scarecrow_available_result
+        is_scarecrow_result = CommonOccultUtils.is_scarecrow(sim_info)
+        if is_scarecrow_result:
+            return is_scarecrow_result
+
+        if not CommonTraitUtils.add_trait(sim_info, CommonTraitId.SCARECROW):
+            return CommonTestResult(False, reason=f'Failed to add scarecrow trait to {sim_info}.')
+
+        scarecrow_cas_part_ids = (
+            # yuBody_EP05ScareCrow_Gray
+            198149,
+            # yuBody_EP05ScareCrow_Red
+            198148,
+            # yuBody_EP05ScareCrow_Purple
+            198147
+        )
+        chosen_id = random.choice(scarecrow_cas_part_ids)
+        from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
+        if CommonCASUtils.attach_cas_part_to_all_outfits_of_sim(sim_info, CommonCASPart(chosen_id)):
+            current_outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+            CommonOutfitUtils.set_outfit_dirty(sim_info, current_outfit_category_and_index[0])
+            CommonOutfitUtils.set_current_outfit(sim_info, current_outfit_category_and_index)
+            return CommonExecutionResult(True, reason=f'{sim_info} is now a Scarecrow.')
+        CommonSimAppearanceModifierUtils.evaluate_appearance_modifiers(sim_info)
+        return CommonExecutionResult(False, reason=f'Failed to turn {sim_info} into a Scarecrow.')
+
+    @staticmethod
+    def remove_scarecrow_occult(sim_info: SimInfo) -> CommonExecutionResult:
+        """remove_scarecrow_occult(sim_info)
+
+        Remove the Scarecrow Occult Type from a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The result of removing the Scarecrow occult. True, if the Scarecrow Occult Type has been successfully removed from the specified Sim. False, if not.
+        :rtype: CommonExecutionResult
+        """
+        if sim_info is None:
+            raise AssertionError('Argument sim_info was None')
+        is_scarecrow_available_result = CommonOccultUtils.is_scarecrow_occult_available()
+        if not is_scarecrow_available_result:
+            return is_scarecrow_available_result.reverse_result()
+        is_scarecrow_result = CommonOccultUtils.is_scarecrow(sim_info)
+        if not is_scarecrow_result:
+            return is_scarecrow_result.reverse_result()
+        scarecrow_cas_parts = (
+            # yuBody_EP05ScareCrow_Gray
+            CommonCASPart(198149),
+            # yuBody_EP05ScareCrow_Red
+            CommonCASPart(198148),
+            # yuBody_EP05ScareCrow_Purple
+            CommonCASPart(198147)
+        )
+
+        from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
+        if CommonCASUtils.detach_cas_parts_from_all_outfits_of_sim(sim_info, scarecrow_cas_parts):
+            current_outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+            CommonOutfitUtils.set_outfit_dirty(sim_info, current_outfit_category_and_index[0])
+            CommonOutfitUtils.set_current_outfit(sim_info, current_outfit_category_and_index)
+            return CommonExecutionResult(True, reason=f'{sim_info} is now a Scarecrow.')
+        return CommonTraitUtils.remove_trait(sim_info, CommonTraitId.SCARECROW)
 
     @staticmethod
     def add_skeleton_occult(sim_info: SimInfo) -> CommonExecutionResult:
@@ -855,6 +945,26 @@ class CommonOccultUtils:
         return CommonTestResult(False, reason=f'Sim is not a ghost.')
 
     @staticmethod
+    def is_scarecrow(sim_info: SimInfo) -> CommonTestResult:
+        """is_scarecrow(sim_info)
+
+        Determine if a Sim is a Scarecrow.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The result of testing. True, if the Sim is a Scarecrow. False, if not.
+        :rtype: CommonTestResult
+        """
+        if sim_info is None:
+            raise AssertionError('Argument sim_info was None')
+        is_scarecrow_available_result = CommonOccultUtils.is_scarecrow_occult_available()
+        if not is_scarecrow_available_result:
+            return is_scarecrow_available_result
+        if CommonTraitUtils.has_trait(sim_info, CommonTraitId.SCARECROW):
+            return CommonTestResult(True, reason=f'{sim_info} is a Scarecrow.')
+        return CommonTestResult(False, reason=f'{sim_info} is not a Scarecrow.')
+
+    @staticmethod
     def is_robot(sim_info: SimInfo) -> CommonTestResult:
         """is_robot(sim_info)
 
@@ -1085,6 +1195,23 @@ class CommonOccultUtils:
         return CommonOccultUtils.is_robot(sim_info)
 
     @staticmethod
+    def is_currently_a_scarecrow(sim_info: SimInfo) -> CommonTestResult:
+        """is_currently_a_scarecrow(sim_info)
+
+        Determine if a Sim is currently in their Scarecrow form.
+
+        .. note:: In base game, if a Sim is a Scarecrow then they are automatically in their Scarecrow Form, since Scarecrows do not have an alternative form.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The result of testing. True, if the Sim is currently in their Scarecrow form. False, if not.
+        :rtype: CommonTestResult
+        """
+        if sim_info is None:
+            raise AssertionError('Argument sim_info was None')
+        return CommonOccultUtils.is_scarecrow(sim_info)
+
+    @staticmethod
     def is_currently_a_skeleton(sim_info: SimInfo) -> CommonTestResult:
         """is_currently_a_skeleton(sim_info)
 
@@ -1240,7 +1367,7 @@ class CommonOccultUtils:
         :return: The result of the test. True, if the Sim is currently an occult with a full body outfit. False, if not.
         :rtype: CommonTestResult
         """
-        return CommonOccultUtils.is_currently_a_robot(sim_info) or CommonOccultUtils.is_currently_a_skeleton(sim_info)
+        return CommonOccultUtils.is_currently_a_robot(sim_info) or CommonOccultUtils.is_currently_a_skeleton(sim_info) or CommonOccultUtils.is_currently_a_scarecrow(sim_info)
 
     @staticmethod
     def _has_occult_trait(sim_info: SimInfo, trait_id: Union[int, CommonTraitId]) -> bool:
@@ -1296,6 +1423,7 @@ class CommonOccultUtils:
             CommonOccultType.ALIEN: CommonOccultUtils.is_alien_occult_available,
             CommonOccultType.MERMAID: CommonOccultUtils.is_mermaid_occult_available,
             CommonOccultType.ROBOT: CommonOccultUtils.is_robot_occult_available,
+            CommonOccultType.SCARECROW: CommonOccultUtils.is_scarecrow_occult_available,
             CommonOccultType.SKELETON: CommonOccultUtils.is_skeleton_occult_available,
             CommonOccultType.VAMPIRE: CommonOccultUtils.is_vampire_occult_available,
             CommonOccultType.WITCH: CommonOccultUtils.is_witch_occult_available,
@@ -1350,6 +1478,19 @@ class CommonOccultUtils:
             return CommonTestResult(False, reason='Robots do not exist. They are a myth! (At least in this persons game, TraitType did not contain ROBOT)')
         if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_ROBOT):
             return CommonTestResult(False, reason='The Robot trait is not available.')
+        return CommonTestResult.TRUE
+
+    @staticmethod
+    def is_scarecrow_occult_available() -> CommonTestResult:
+        """is_scarecrow_occult_available()
+
+        Determine if the Scarecrow Occult is available.
+
+        :return: The result of testing. True, if the Scarecrow Occult is available.. False, if not.
+        :rtype: CommonTestResult
+        """
+        if not CommonTraitUtils.is_trait_available(CommonTraitId.SCARECROW):
+            return CommonTestResult(False, reason='The Scarecrow trait is not available.')
         return CommonTestResult.TRUE
 
     @staticmethod
