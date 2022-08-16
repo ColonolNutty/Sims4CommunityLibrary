@@ -2,6 +2,10 @@ v1.81:
 - Added new dto CommonOutfit
 - Added new enums:
   - CommonBodySlot
+- Added occult support for Scarecrows.
+  - New Sim types available related to Scarecrow
+  - New CommonOccultType value SCARECROW
+  - Can add/remove scarecrow from Sims (via commands)
 - Updated a few places to use CommonBodySlot
 - Fixed an error that could occur after enabling the verbose log within Item Query Registry and trying to query for items.
 - Added new utilities, CommonSimSpellUtils, CommonSimBucksUtils, CommonSimUnlockUtils, CommonSimDeathUtils.
