@@ -1367,7 +1367,23 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :return: The result of the test. True, if the Sim is currently an occult with a full body outfit. False, if not.
         :rtype: CommonTestResult
         """
-        return CommonOccultUtils.is_currently_a_robot(sim_info) or CommonOccultUtils.is_currently_a_skeleton(sim_info) or CommonOccultUtils.is_currently_a_scarecrow(sim_info)
+        current_occult_type = CommonOccultType.determine_current_occult_type(sim_info)
+        return cls.occult_has_full_body_cas_part(current_occult_type)
+
+    @classmethod
+    def occult_has_full_body_cas_part(cls, occult_type: CommonOccultType) -> CommonTestResult:
+        """occult_has_full_body_cas_part(occult_type)
+
+        Determine an occult type has a Full Body CAS Part associated with it. Such as a Skeleton (Skeleton Part) or Robot (Humanoid Bot Frame).
+
+        :param occult_type: The occult type to check.
+        :type occult_type: CommonOccultType
+        :return: The result of the test. True, if the occult type has a full body outfit associated with it. False, if not.
+        :rtype: CommonTestResult
+        """
+        if occult_type in (CommonOccultType.ROBOT, CommonOccultType.SKELETON, CommonOccultType.SCARECROW):
+            return CommonTestResult.TRUE
+        return CommonTestResult.FALSE
 
     @staticmethod
     def _has_occult_trait(sim_info: SimInfo, trait_id: Union[int, CommonTraitId]) -> bool:
