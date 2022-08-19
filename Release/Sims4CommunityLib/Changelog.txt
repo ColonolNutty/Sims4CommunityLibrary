@@ -22,6 +22,7 @@ v1.81:
 - The time taken by interactions is now logged in milliseconds instead of seconds.
 - In all places where we log an amount of seconds, it is now logged in milliseconds instead.
 - Whenever a mod registers their logs the first time, their mod versions will now be logged for easy reference.
+- Updated the S4CL phone icon.
 
 v1.80:
 - Added an entire item query system. It can be used to quickly setup a library of objects that can be queried.
