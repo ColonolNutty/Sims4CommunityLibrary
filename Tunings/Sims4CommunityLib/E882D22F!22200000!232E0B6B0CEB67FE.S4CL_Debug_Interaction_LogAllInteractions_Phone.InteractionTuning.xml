@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<I c="S4CLDebugLogAllInteractionsInteraction" i="interaction" m="sims4communitylib.debug.interactions.log_all_interactions" n="S4CL_Debug_Interaction_LogAllInteractions_Phone" s="2534976194662328318">
+  <V t="disabled" n="_saveable" />
+  <T n="cheat">True</T>
+  <T n="debug">True</T>
+  <T n="category">2411247910054422546<!--PieMenuCategory: S4CL_Pie_Sims4CommunityLibrary_Phone--></T>
+  <T n="display_name">0xBABE8AF7<!--Log All Interactions--></T>
+  <T n="allow_from_object_inventory">True</T>
+  <T n="allow_from_sim_inventory">True</T>
+  <T n="allow_from_portrait">True</T>
+  <L n="interaction_category_tags">
+    <E>Interaction_Super</E>
+    <E>Interaction_All</E>
+  </L>
+  <T n="pie_menu_priority">9</T>
+  <U n="progress_bar_enabled">
+    <T n="bar_enabled">False</T>
+  </U>
+  <E n="target_type">OBJECT</E>
+</I>

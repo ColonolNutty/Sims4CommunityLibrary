@@ -123,7 +123,7 @@ class _S4CLDebugSimPhoneInteractionHandler(CommonScriptObjectInteractionHandler)
     @property
     def interactions_to_add(self) -> Tuple[CommonInt]:
         result: Tuple[CommonInt, ...] = (
-            CommonInteractionId.S4CL_DEBUG_LOG_ALL_INTERACTIONS,
+            CommonInteractionId.S4CL_DEBUG_LOG_ALL_INTERACTIONS_PHONE,
         )
         return result
 
@@ -143,6 +143,7 @@ class _S4CLAddDebugInteractionsToAffordanceWhitelist(CommonAddInteractionsToAffo
             CommonInteractionId.S4CL_DEBUG_SHOW_TRAITS,
             CommonInteractionId.S4CL_DEBUG_SHOW_RUNNING_SITUATIONS,
             CommonInteractionId.S4CL_DEBUG_LOG_ALL_INTERACTIONS,
+            CommonInteractionId.S4CL_DEBUG_LOG_ALL_INTERACTIONS_PHONE,
             CommonInteractionId.S4CL_DEBUG_INDUCE_LABOR,
             CommonInteractionId.S4CL_DEBUG_OBJECT_BREAK,
             CommonInteractionId.S4CL_DEBUG_OBJECT_FIX,
