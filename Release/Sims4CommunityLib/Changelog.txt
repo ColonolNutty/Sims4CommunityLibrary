@@ -1,4 +1,4 @@
-v1.81:
+v2.0:
 - Added new dto CommonOutfit
 - Added new enums:
   - CommonBodySlot
@@ -23,6 +23,7 @@ v1.81:
 - In all places where we log an amount of seconds, it is now logged in milliseconds instead.
 - Whenever a mod registers their logs the first time, their mod versions will now be logged for easy reference.
 - Updated the S4CL phone icon.
+- Changed the default location of mod_data storage to The Sims 4/mod_data instead of The Sims 4/Mods/mod_data (This may break mods that were relying on the mod_data folder being specifically at the old place!)
 
 v1.80:
 - Added an entire item query system. It can be used to quickly setup a library of objects that can be queried.

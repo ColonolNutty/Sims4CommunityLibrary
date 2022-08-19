@@ -11,7 +11,7 @@ from Utilities.unpyc3_compiler import Unpyc3PythonCompiler
 release_dir = os.path.join('..', '..', 'Release', 'Sims4CommunityLib')
 
 Unpyc3PythonCompiler.compile_mod(
-    folder_path_to_output_ts4script_to=release_dir,
+    folder_path_to_output_ts4script_to=os.path.join(release_dir, 'Mods'),
     names_of_modules_include=('_s4cl_ctypes_module', 'sims4communitylib',),
     output_ts4script_name='sims4communitylib'
 )
