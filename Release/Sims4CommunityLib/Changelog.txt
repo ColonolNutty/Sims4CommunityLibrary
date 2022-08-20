@@ -1,29 +1,76 @@
 v2.0:
-- Added new dto CommonOutfit
-- Added new enums:
-  - CommonBodySlot
-- Added occult support for Scarecrows.
-  - New Sim types available related to Scarecrow
-  - New CommonOccultType value SCARECROW
-  - Can add/remove scarecrow from Sims (via commands)
-- Updated a few places to use CommonBodySlot
-- Fixed an error that could occur after enabling the verbose log within Item Query Registry and trying to query for items.
-- Added new utilities, CommonSimSpellUtils, CommonSimBucksUtils, CommonSimUnlockUtils, CommonSimDeathUtils.
-- Added many new commands for adding and removing spells, perks, bucks, and death control (Kill/Revive).
-- When the witch occult is removed, witch spells, witch perks, and witch perk points are also removed
-- When werewolf occult is removed, werewolf perks and werewolf perk points are removed.
-- When vampire occult is removed, vampire weakness and power perks and perk points are removed.
+# Important
+- Changed the default location of where the `mod_data` folder is created to `The Sims 4/mod_data` instead of `The Sims 4/Mods/mod_data` (This may break mods that were relying on the `mod_data` folder to be in the Mods folder specifically!)
+## What do I have to do?
+- Very Simple. You just have to move `The Sims 4/Mods/mod_data` up a folder to `The Sims 4/mod_data` and overwrite all, if it asks you to.
+- This only applies to the `mod_data` folder! Any package or ts4script files will continue to be placed under `The Sims 4/Mods`!
+# Changes
+## New
+- New DTOs (Data Transfer Objects)
+  - `CommonOutfit`, this can be used to store information related to the outfit of a Sim.
+- New enums:
+  - `CommonBodySlot` - This can be used in place of BodyType.
+  - `CommonRegionId` - A collection of identifiers for Regions.
+- Scarecrow Support:
+  - New Sim Types available for Scarecrows
+  - New `CommonOccultType` value `SCARECROW`
+  - New functions added for checking if Sims are scarecrows as well as adding and removing the Scarecrow occult to/from Sims.
+  - Updated the `s4clib.add_occult` and `s4clib.remove_occult` commands to add/remove Scarecrow.
+- New Utilities:
+  - `CommonSimSpellUtils` - A utility for manipulating Spells and also the spell book of Sims.
+    - Commands are now available for adding and removing spells.
+  - `CommonSimBucksUtils` - A utility for manipulating various bucks types of Sims, such as perk points, credits, spell points, life points, etc.
+    - Commands are now available for modifying the number of perk points, spell points, etc. of Sims.
+  - `CommonSimUnlockUtils` - A utility used for manipulating unlocks of Sims.
+  - `CommonSimDeathUtils` - Various utilities for manipulating the death/life of Sims.
+    - Commands are now available for killing and reviving Sims.
+    - When killing Sims via the console commands (Particularly via Murphy Bed, Cow Plant, or Vending Machine), appropriate objects will now be spawned to kill them with. (Killing them with a murphy bed will spawn a murphy bed so they can kill themselves with it)
+      - These objects should despawn automatically after one Sim hour.
+- New Events:
+  - Sim Died
+  - Sim Revived
+  - Sim Despawned
+- New Commands:
+  - Advancing Time. `s4clib.advance_time`
+- New Localized Strings:
+  - Sim Cannot Reach Sim
+  - Sim Already Has This Trait
+  - Sim Does Not Have This Trait
+  - Not Implemented
+## Updates:
+- Updated how `CommonAgeUtils.get_total_days_to_age_up` functions for the High School Years patch.
+- Renamed `CommonFundType` to `CommonFundsSource`. `CommonFundType` is now obsolete, please use `CommonFundsSource`.
+- Added new keyword argument `return_type` to various functions for specifying what the expected returned type should be, this can be useful to get PyCharm Type Hinting to not complain at you so much. It serves no functional aspect in the code however, simply used for type hinting.
+- Many functions within `CommonFunctionUtils` will now accept additional types `CommonTestResult` and `CommonExecutionResult` to make the type hinting in PyCharm happy.
+- Fixed a bug with the `CommonCASUtils.detach_cas_parts_from_all_outfits_of_sim` where it was not detaching CAS Parts in some cases.
+- Fixed a bug with the `CommonCASUtils.attach_cas_parts_to_all_outfits_of_sim` where it was not attaching CAS Parts in some cases.
+- Fixed an error that could occur within `CommonItemQueryRegistry` after enabling the verbose log and trying to query for items.
+- Updated a few places to use the new `CommonBodySlot` enum.
+- Added a function to `CommonOccultUtils` for quickly determining if the Occult Type of a Sim or an Occult Type utilize a full body outfit to change their appearance, such as Skeletons (Skeleton body), Robots (Robot Body Frame), and Scarecrows (Scarecrow Body)
+- When the witch occult is removed via the `remove_witch_occult` function, witch spells, witch perks, and witch perk points are also removed
+- When werewolf occult is removed via the `remove_werewolf_occult` function, werewolf perks and werewolf perk points are removed.
+- When vampire occult is removed via the `remove_vampire_occult` function, vampire weakness and power perks and perk points are removed.
+- New functions for retrieving the Current Region, checking the Current Region, and loading Regions by GUIDs. `CommonLocationUtils`
+- New function for converting hex32 values to strings while keeping any leading or trailing zeros. `CommonTextUtils`
+- New function for truncating decimal values by a number of places for string display. `CommonTextUtils`
+- New function for converting seconds to milliseconds. `CommonTimeUtils`
+- Added functions to `CommonStopWatch` to retrieve its time in milliseconds rather than seconds.
 - Added functions to retrieve and set the Sexual Orientation of Sims (Is Exploring Sexuality, Is Interested In Romance/Woohoo With)
-- Added a few functions for checking Sim permissions for various vanilla actions, such as changing to nude and engaging in pregnancies.
-- When attempting to spawn a Baby Sim via spawn_sims, S4CL now knows how to handle spawning them.
-- Changed get_romance_relationship_track and get_friendship_relationship_track into class methods instead of static methods.
+- Added a few functions for checking permissions of Sims for various vanilla actions, such as changing to nude, being able to have romantic relationships, and being able to start pregnancies.
+- Added functions to remove interactions from the Terrain or from the Ocean. `CommonObjectInteractionUtils`
+- Updated `has_buff`, `has_any_buffs`, and `has_all_buffs` to better handle `SimInfoBaseWrapper`
+- Updated `has_trait`, `has_any_traits`, and `has_all_traits` to better handle `SimInfoBaseWrapper`
+- S4CL will now create or assign a bassinet to Baby Sims spawned via the `CommonSimSpawnUtils.spawn_sim` function.
+- Changed `get_romance_relationship_track` and `get_friendship_relationship_track` into class methods instead of static methods.
+- `CommonRelationshipUtils.get_romance_level` and `CommonRelationshipUtils.get_friendship_level` will now return 0.0 instead of -1.0 when romance/friendship tracks are not found between the Sims.
+- Increased the performance of the `has_trait`, `has_any_traits`, `has_all_traits`, `has_buff`, `has_any_buffs`, and `has_all_buffs` functions of `CommonTraitUtils` and `CommonBuffUtils`
 - Added a way to see times between logs for vanilla logging. This can help determine interaction performance.
-- Increased the performance of the has_trait, has_any_traits, has_all_traits, has_buff, has_any_buffs, and has_all_buffs
-- The time taken by interactions is now logged in milliseconds instead of seconds.
-- In all places where we log an amount of seconds, it is now logged in milliseconds instead.
-- Whenever a mod registers their logs the first time, their mod versions will now be logged for easy reference.
-- Updated the S4CL phone icon.
-- Changed the default location of mod_data storage to The Sims 4/mod_data instead of The Sims 4/Mods/mod_data (This may break mods that were relying on the mod_data folder being specifically at the old place!)
+- The time taken by interactions is now logged in milliseconds instead of seconds for an easier time distinguishing how long functions take.
+- In all places where we were logging an amount of seconds, it is now logged in milliseconds instead.
+  - This applies to interactions, as well as the query system.
+- Whenever a mod registers their logs the first time, their mod versions will now be logged to their respective log files for easy reference.
+- Reordered many of the inherited Generic classes by putting the Generic inheritance at the end of the inheritance list, this will hopefully let the PyCharm Type Hinting be less confused about it.
+- Updated the S4CL phone icon to match how other phone icons look.
 
 v1.80:
 - Added an entire item query system. It can be used to quickly setup a library of objects that can be queried.
