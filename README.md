@@ -162,7 +162,7 @@ Follow the installation instructions below for details.
 
 ### Requirements:
 
-- Sims 4 Patch Version 1.54.120.1020 (Island Living) or above
+- Sims 4 Patch Version 1.90.358.1030 (Up to the High School Years patch, the High School Years DLC is not required) or above
 - DLCs are NOT required, you only need to have an up to date game (Check the bottom of the main menu for your current version).
 
 ### Planned Features:
