@@ -129,12 +129,12 @@ class CommonLogUtils:
     def get_mod_data_location_path() -> str:
         """get_mod_data_location_path()
 
-        Retrieve the full path of the folder 'Documents\Electronic Arts\The Sims 4\mod_data'
+        Retrieve the full path of the folder 'Documents\Electronic Arts\The Sims 4\Mods\mod_data'
 
-        :return: The file path to 'Documents\Electronic Arts\The Sims 4\mod_data' folder.
+        :return: The file path to 'Documents\Electronic Arts\The Sims 4\Mods\mod_data' folder.
         :rtype: str
         """
-        mods_location = CommonLogUtils.get_sims_documents_location_path()
+        mods_location = CommonLogUtils.get_mods_location_path()
         if mods_location == '':
             return ''
         return os.path.join(mods_location, 'mod_data')
