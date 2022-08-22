@@ -62,10 +62,7 @@ class CommonSimDeathUtils(_HasS4CLClassLog):
         :return: The result of the test. True, if it passes. False, if it fails.
         :rtype: CommonTestResult
         """
-        death_tracker = cls.get_death_tracker(sim_info)
-        if death_tracker is None:
-            return CommonTestResult(False, reason=f'{sim_info} did not have a death tracker.')
-        if death_tracker.death_type is not None:
+        if cls.get_death_type(sim_info) != CommonDeathType.NONE:
             return CommonTestResult(True, reason=f'{sim_info} is dead.')
         return CommonTestResult(False, reason=f'{sim_info} is not dead.')
 
@@ -89,18 +86,23 @@ class CommonSimDeathUtils(_HasS4CLClassLog):
         if death_type is not None:
             death_type = CommonDeathType.convert_from_vanilla(death_type)
 
-        def _has_death_type(_sim_info: SimInfo):
-            sim_death_type = cls.get_death_type(sim_info)
-            return sim_death_type == death_type
-
-        include_sim_callback = CommonFunctionUtils.run_predicates_as_one((
-            CommonSimDeathUtils.is_dead,
-            _has_death_type if death_type is not None and death_type != CommonDeathType.NONE else None,
-            include_sim_callback
-        ))
         for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
             if sim_info is None:
                 continue
+            is_dead_result = cls.is_dead(sim_info)
+            if not is_dead_result:
+                continue
+            death_tracker = cls.get_death_tracker(sim_info)
+            if death_tracker is None:
+                _death_type = None
+            else:
+                _death_type = death_tracker.death_type
+            if death_type is not None and death_type != CommonDeathType.NONE:
+                sim_death_type = cls.get_death_type(sim_info)
+                if sim_death_type == CommonDeathType.NONE:
+                    continue
+                if sim_death_type != death_type:
+                    continue
             yield sim_info
 
     @classmethod
@@ -342,8 +344,6 @@ class CommonSimDeathUtils(_HasS4CLClassLog):
         :return: The type of death the Sim succumbed to or NONE if the Sim is not dead.
         :rtype: CommonDeathType
         """
-        if not cls.is_dead(sim_info):
-            return CommonDeathType.NONE
         death_tracker = cls.get_death_tracker(sim_info)
         if death_tracker is None:
             return CommonDeathType.NONE

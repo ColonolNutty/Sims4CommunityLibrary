@@ -213,7 +213,7 @@ class CommonAgeUtils:
                     if aspiration_tracker is not None:
                         track_available = aspiration_tracker.is_aspiration_track_visible(aspiration_track)
                     if track_available:
-                        if sim_info.is_child and aspiration_track.is_child_aspiration_track:
+                        if sim_info.is_child and hasattr(aspiration_track, 'is_child_aspiration_track') and aspiration_track.is_child_aspiration_track:
                             available_aspirations.append(aspiration_track)
                         elif sim_info.is_teen:
                             available_aspirations.append(aspiration_track)
