@@ -132,6 +132,7 @@ class CommonWeatherUtils:
         weather_service = cls.get_weather_service()
         if weather_service is None:
             return
+        weather_event = cls.load_weather_event_by_id(weather_event)
         weather_service.start_weather_event(weather_event, duration_in_hours)
 
     @classmethod
