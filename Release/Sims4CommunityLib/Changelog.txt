@@ -1,3 +1,7 @@
+v2.1:
+- Fixed an issue when checking if a Sim is dead or not.
+- Fixed an issue when starting a weather event using an id.
+
 v2.0.1:
 # Important
 - Changed the default location of where the `mod_data` folder is created to `The Sims 4/Mods/mod_data` instead of `The Sims 4/mod_data` (This may break mods that were relying on the `mod_data` folder to be in the The Sims 4 folder specifically!)
