@@ -19,8 +19,7 @@ from sims4communitylib.classes.testing.common_test_result import CommonTestResul
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.types.component_types import CommonComponentType
-from sims4communitylib.logging.has_class_log import HasClassLog
-from sims4communitylib.mod_support.mod_identity import CommonModIdentity
+from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
@@ -31,15 +30,10 @@ from sims4communitylib.utils.localization.common_localization_utils import Commo
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
-class CommonBuffUtils(HasClassLog):
+class CommonBuffUtils(_HasS4CLClassLog):
     """Utilities for manipulating Buffs on Sims.
 
     """
-
-    # noinspection PyMissingOrEmptyDocstring
-    @classmethod
-    def get_mod_identity(cls) -> CommonModIdentity:
-        return ModInfo.get_identity()
 
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
@@ -341,6 +335,8 @@ class CommonBuffUtils(HasClassLog):
             buff = cls.load_buff_by_id(buff_id)
             if buff is None:
                 failed_to_remove_buffs.append(buff_id)
+                continue
+            if not cls.has_buff(sim_info, buff_id):
                 continue
             has_any_loaded = True
             sim_info.remove_buff_by_type(buff)

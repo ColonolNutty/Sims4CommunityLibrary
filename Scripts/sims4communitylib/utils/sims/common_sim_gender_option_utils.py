@@ -12,7 +12,7 @@ from sims.sim_info import SimInfo
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.traits_enum import CommonTraitId
-from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
+from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.utils.sims.common_gender_utils import CommonGenderUtils
 from sims4communitylib.utils.sims.common_sim_voice_utils import CommonSimVoiceUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
@@ -20,10 +20,15 @@ from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 from traits.traits import Trait
 
 
-class CommonSimGenderOptionUtils:
+class CommonSimGenderOptionUtils(_HasS4CLClassLog):
     """Utilities for manipulating the Gender Options of Sims.
 
     """
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_log_identifier(cls) -> str:
+        return 'common_sim_gender_option_utils'
 
     @staticmethod
     def has_masculine_frame(sim_info: SimInfo) -> CommonTestResult:
@@ -826,18 +831,26 @@ class CommonSimGenderOptionUtils:
         """
         if sim_info is None:
             return CommonTestResult(False, reason=f'{sim_info} is None!')
+
         if is_exploring:
+            cls.get_log().format_with_message('Setting Sim to exploring sexuality.', sim=sim_info, is_exploring=is_exploring)
             sexuality_status = SexualityStatus.EXPLORING
             opposite_sexuality_status = SexualityStatus.NOT_EXPLORING
         else:
+            cls.get_log().format_with_message('Setting Sim to not exploring sexuality.', sim=sim_info, is_exploring=is_exploring)
             sexuality_status = SexualityStatus.NOT_EXPLORING
             opposite_sexuality_status = SexualityStatus.EXPLORING
+
         to_remove_trait = cls.get_sexuality_status_trait(sim_info, opposite_sexuality_status)
         to_add_trait = cls.get_sexuality_status_trait(sim_info, sexuality_status)
+        cls.get_log().format_with_message('Got exploring sexuality traits.', sim=sim_info, to_remove_trait=to_remove_trait, to_add_trait=to_add_trait)
         remove_result = CommonTraitUtils.remove_trait(sim_info, to_remove_trait)
         if not remove_result:
+            cls.get_log().format_with_message('Failed to remove exploring sexuality trait.', sim=sim_info, to_remove_trait=to_remove_trait, remove_result=remove_result)
             return remove_result
-        return CommonTraitUtils.add_trait(sim_info, to_add_trait)
+        add_result = CommonTraitUtils.add_trait(sim_info, to_add_trait)
+        cls.get_log().format_with_message('Finished adding exploring sexuality trait.', sim=sim_info, to_add_trait=to_add_trait, add_result=add_result)
+        return add_result
 
     # noinspection PyUnusedLocal
     @classmethod
