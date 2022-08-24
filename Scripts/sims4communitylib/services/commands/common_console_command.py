@@ -409,7 +409,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
             num_of_required_arguments = len([v for k, v in arguments.items() if v.default is inspect.Parameter.empty]) - 1
             full_arg_spec = inspect.getfullargspec(original_func)
             spec_args = [_arg for _arg in full_arg_spec.args]
-            arg_names: Tuple[str] = tuple([arg_name for (arg_name, (k, v)) in zip(spec_args, arguments.items()) if arg_name != 'output' and v.default is inspect.Parameter.empty])
+            arg_names: Tuple[str, ...] = tuple([arg_name for (arg_name, (k, v)) in zip(spec_args, arguments.items()) if arg_name != 'output' and v.default is inspect.Parameter.empty])
             kwarg_parameters_by_name = {arg_name: v.default for (arg_name, (k, v)) in zip(spec_args, arguments.items()) if arg_name != 'output' and v.default is not inspect.Parameter.empty}
 
             def _invoke_command(*args: str, _session_id: int=0, **kwargs):
@@ -469,7 +469,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
 
         cls.get_log().format_with_message('Cleaning args.', args=args)
 
-        waiting_for_match_arg: str = None
+        waiting_for_match_arg: Union[str, None] = None
         for arg_val in args:
             if waiting_for_match_arg is not None:
                 if '=' in arg_val:
@@ -501,7 +501,7 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
         return tuple(cleaned_args), cleaned_kwargs
 
     @classmethod
-    def _parse_arguments(cls, full_arg_spec: inspect.FullArgSpec, args: Tuple[str], arg_names: Tuple[str], kwargs_by_name, kwargs: Dict[str, Any], output: Output):
+    def _parse_arguments(cls, full_arg_spec: inspect.FullArgSpec, args: Tuple[str], arg_names: Tuple[str], kwargs_by_name, kwargs: Dict[str, Any], output: Union[CommonConsoleCommandOutput, Output]):
         (cleaned_args, cleaned_kwargs) = cls._clean_arguments(args)
 
         from sims4communitylib.services.commands.common_console_command_parameters import CommonConsoleCommandParameter,\
@@ -614,14 +614,14 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                     try:
                         return float(arg_value)
                     except:
-                        output(f'ERROR: Failed to parse value {arg_value} as {arg_type_name}. Value is not a {arg_type_name}.')
+                        output(f'ERROR: Failed to parse float value {arg_value} as {arg_type_name}. Value is not a {arg_type_name}.')
                         return default_value
                 elif arg_type is int or arg_value.isnumeric():
                     # noinspection PyBroadException
                     try:
                         return int(arg_value, base=0)
                     except:
-                        output(f'ERROR: Failed to parse value {arg_value} as {arg_type_name}. Value is not an {arg_type_name}.')
+                        output(f'ERROR: Failed to parse int value {arg_value} as {arg_type_name}. Value is not an {arg_type_name}.')
                         return default_value
                 elif arg_type is str and not arg_value:
                     return default_value
@@ -632,9 +632,9 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                         return arg_type(arg_value)
                     except ValueError as ex:
                         output(f'ERROR: Failed to parse value {arg_value} as {arg_type_name}: {ex}')
-                        return arg_value
+                        return default_value
                     except Exception as ex:
-                        output(f'ERROR: Failed to parse value {arg_value} as {arg_type_name}: {ex}')
+                        output(f'ERROR: Failed to parse custom value {arg_value} as {arg_type_name}: {ex}')
                         raise ex
         return arg_value
 
@@ -648,5 +648,5 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
         CommonConsoleCommandArgument('thing_to_print', 'Text or Num', 'If specified, this value will be printed to the console.', is_optional=True, default_value='example message'),
     )
 )
-def _common_testing_do_example_command(output: CommonConsoleCommandOutput, thing_to_print: str='example message'):
+def _common_testing_do_example_command(output: CommonConsoleCommandOutput, thing_to_print: str = 'example message'):
     output(f'Here is what to print: {thing_to_print}')
