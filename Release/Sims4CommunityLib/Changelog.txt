@@ -1,6 +1,9 @@
 v2.1:
 - Fixed an issue when checking if a Sim is dead or not.
 - Fixed an issue when starting a weather event using an id.
+- Added a function that will hopefully print more details when installed mods have outdated Whims.
+- Fixed an error when doing a console command and an argument fails to parse properly.
+- Deleted the included mod_data folder, since it is pointless to have now.
 
 v2.0.1:
 # Important
