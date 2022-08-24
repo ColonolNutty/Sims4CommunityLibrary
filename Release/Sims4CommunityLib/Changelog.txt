@@ -4,6 +4,7 @@ v2.1:
 - Added a function that will hopefully print more details when installed mods have outdated Whims.
 - Fixed an error when doing a console command and an argument fails to parse properly.
 - Deleted the included mod_data folder, since it is pointless to have now.
+- Fixed an issue when checking if a Sim has traits and buffs.
 
 v2.0.1:
 # Important
