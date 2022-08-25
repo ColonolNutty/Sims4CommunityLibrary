@@ -11,6 +11,7 @@ from distributor.shared_messages import IconInfoData
 from relationships.relationship_tracker import RelationshipTracker
 from relationships.sim_knowledge import SimKnowledge
 from server_commands.argument_helpers import TunableInstanceParam
+from sims.pregnancy.pregnancy_offspring_data import PregnancyOffspringData
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4.resources import Types
@@ -1018,6 +1019,17 @@ class CommonTraitUtils(_HasS4CLClassLog):
                     continue
                 if _trait in any_traits:
                     return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.')
+        elif isinstance(sim_info, PregnancyOffspringData):
+            sim_info: PregnancyOffspringData = sim_info
+            any_traits = [cls.get_trait_id(trait) for trait in sim_info.traits]
+            if not any_traits:
+                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.')
+            for _trait in trait:
+                __trait = cls.get_trait_id(_trait)
+                if __trait is None:
+                    continue
+                if _trait in any_traits:
+                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.')
         return CommonTestResult(False, reason=f'{sim_info} does not have trait(s) {trait}')
 
     @classmethod
@@ -1047,6 +1059,17 @@ class CommonTraitUtils(_HasS4CLClassLog):
         elif isinstance(sim_info, SimInfoBaseWrapper):
             sim_info: SimInfoBaseWrapper = sim_info
             any_traits = cls.get_trait_ids(sim_info)
+            if not any_traits:
+                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.')
+            for _trait in traits:
+                __trait = cls.get_trait_id(_trait)
+                if __trait is None:
+                    continue
+                if _trait in any_traits:
+                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.')
+        elif isinstance(sim_info, PregnancyOffspringData):
+            sim_info: PregnancyOffspringData = sim_info
+            any_traits = [cls.get_trait_id(trait) for trait in sim_info.traits]
             if not any_traits:
                 return CommonTestResult(False, reason=f'{sim_info} does not have any traits.')
             for _trait in traits:
@@ -1092,6 +1115,17 @@ class CommonTraitUtils(_HasS4CLClassLog):
                     continue
                 if _trait not in any_traits:
                     return CommonTestResult(False, reason=f'{sim_info} does not have trait {_trait}.')
+        elif isinstance(sim_info, PregnancyOffspringData):
+            sim_info: PregnancyOffspringData = sim_info
+            any_traits = cls.get_trait_ids(sim_info)
+            if not any_traits:
+                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.')
+            for _trait in traits:
+                __trait = cls.get_trait_id(_trait)
+                if __trait is None:
+                    continue
+                if _trait not in any_traits:
+                    return CommonTestResult(False, reason=f'{sim_info} does not have trait {_trait}.')
         return CommonTestResult(True, reason=f'{sim_info} has all traits {traits}.')
 
     @classmethod
@@ -1115,18 +1149,18 @@ class CommonTraitUtils(_HasS4CLClassLog):
         return trait_tracker.is_conflicting(trait_to_check)
 
     @classmethod
-    def get_trait_ids(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> List[int]:
+    def get_trait_ids(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper, PregnancyOffspringData]) -> List[int]:
         """get_trait_ids(sim_info)
 
         Retrieve decimal identifiers for all Traits of a Sim.
 
         :param sim_info: The Sim to check.
-        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper, PregnancyOffspringData]
         :return: A collection of Trait identifiers on a Sim.
         :rtype: List[int]
         """
         trait_ids = list()
-        if isinstance(sim_info, SimInfo):
+        if isinstance(sim_info, SimInfo) or isinstance(sim_info, PregnancyOffspringData):
             for trait in cls.get_traits(sim_info):
                 trait_id = cls.get_trait_id(trait)
                 if trait_id is None:
@@ -1137,13 +1171,13 @@ class CommonTraitUtils(_HasS4CLClassLog):
         return trait_ids
 
     @classmethod
-    def get_traits(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper]) -> List[Trait]:
+    def get_traits(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper, PregnancyOffspringData]) -> List[Trait]:
         """get_traits(sim_info)
 
         Retrieve all Traits of a Sim.
 
         :param sim_info: The Sim to check.
-        :type sim_info: SimInfo
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper, PregnancyOffspringData]
         :return: A collection of Traits on a Sim.
         :rtype: List[int]
         """
@@ -1156,6 +1190,8 @@ class CommonTraitUtils(_HasS4CLClassLog):
             if not hasattr(sim_info, '_base'):
                 return traits
             return list([cls.load_trait_by_id(trait_id) for trait_id in (*sim_info._base.trait_ids, *sim_info._base.base_trait_ids) if cls.load_trait_by_id(trait_id) is not None])
+        elif isinstance(sim_info, PregnancyOffspringData):
+            return sim_info.traits
         elif isinstance(sim_info, SimInfoBaseWrapper):
             return [cls.load_trait_by_id(trait_id) for trait_id in cls.get_trait_ids(sim_info)]
         return list()

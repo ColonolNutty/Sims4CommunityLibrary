@@ -6,14 +6,13 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Union
-
-from objects.components.state import StateComponent
 from sims.pregnancy.pregnancy_enums import PregnancyOrigin
 from sims.pregnancy.pregnancy_tracker import PregnancyTracker
 from sims.sim_info import SimInfo
-from sims4.resources import Types
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.buffs_enum import CommonBuffId
+from sims4communitylib.enums.common_object_state_value_ids import CommonObjectStateValueId
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
@@ -21,8 +20,9 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+from sims4communitylib.utils.objects.common_object_state_utils import CommonObjectStateUtils
 from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
+from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
 from sims4communitylib.utils.sims.common_relationship_utils import CommonRelationshipUtils
 from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -151,7 +151,12 @@ class CommonSimPregnancyUtils(HasClassLog):
             return False
         pregnancy_tracker.start_pregnancy(sim_info, partner_sim_info, pregnancy_origin=pregnancy_origin)
         pregnancy_tracker.clear_pregnancy_visuals()
-        CommonSimStatisticUtils.set_statistic_value(sim_info, CommonStatisticId.PREGNANCY, 1.0)
+        pregnancy_stat = cls.determine_pregnancy_statistic(sim_info)
+        if pregnancy_stat is not None:
+            CommonSimStatisticUtils.set_statistic_value(sim_info, pregnancy_stat, 1.0)
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is not None:
+            CommonObjectStateUtils.set_object_state(sim, CommonObjectStateValueId.PREGNANT_NOT_SHOWING)
         return True
 
     @classmethod
@@ -166,13 +171,16 @@ class CommonSimPregnancyUtils(HasClassLog):
         """
         if sim_info is None or not cls.is_pregnant(sim_info):
             return False
-        # Pregnant_InLabor
-        state = CommonResourceUtils.load_instance(Types.OBJECT_STATE, 75273)
+        pregnancy_stat = cls.determine_pregnancy_statistic(sim_info)
+        if pregnancy_stat is not None:
+            CommonSimStatisticUtils.set_statistic_value(sim_info, pregnancy_stat, 100.0)
         sim = CommonSimUtils.get_sim_instance(sim_info)
-        if sim is None:
-            return False
-        state_component: StateComponent = sim.state_component
-        state_component.set_state(state.state, state)
+        if sim is not None:
+            CommonObjectStateUtils.set_object_state(sim, CommonObjectStateValueId.PREGNANT_IN_LABOR)
+        buff_id = cls.get_in_labor_buff(sim_info)
+        if buff_id != -1:
+            result = CommonBuffUtils.add_buff(sim_info, buff_id, buff_reason=CommonStringId.S4CL_BUFF_REASON_FROM_DEBUG)
+            return result.result
         return True
 
     @classmethod
@@ -190,7 +198,12 @@ class CommonSimPregnancyUtils(HasClassLog):
         if pregnancy_tracker is None:
             return False
         sim_info.pregnancy_tracker.clear_pregnancy()
-        CommonSimStatisticUtils.remove_statistic(sim_info, CommonStatisticId.PREGNANCY)
+        pregnancy_stat = cls.determine_pregnancy_statistic(sim_info)
+        if pregnancy_stat is not None:
+            CommonSimStatisticUtils.remove_statistic(sim_info, pregnancy_stat)
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is not None:
+            CommonObjectStateUtils.set_object_state(sim, CommonObjectStateValueId.PREGNANT_NOT_PREGNANT)
         return True
 
     @classmethod
@@ -346,10 +359,46 @@ class CommonSimPregnancyUtils(HasClassLog):
         return -1
 
     @classmethod
+    def get_pregnancy_tracker(cls, sim_info: SimInfo) -> Union[PregnancyTracker, None]:
+        """get_pregnancy_tracker(sim_info)
+
+        Retrieve the tracker for tracking pregnancy of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The pregnancy tracker for the Sim or None if the Sim does not have a pregnancy tracker.
+        :rtype: Union[PregnancyTracker, None]
+        """
+        return cls._get_pregnancy_tracker(sim_info)
+
+    @classmethod
     def _get_pregnancy_tracker(cls, sim_info: SimInfo) -> Union[PregnancyTracker, None]:
         if sim_info is None:
             return None
         return sim_info.pregnancy_tracker
+
+    @classmethod
+    def determine_pregnancy_statistic(cls, sim_info: SimInfo) -> Union[CommonStatisticId, None]:
+        """determine_pregnancy_statistic(sim_info)
+
+        Determine the statistic that would indicate the pregnancy progress of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The statistic that would indicate the pregnancy progress of the Sim or None if no trait is found.
+        :rtype: Union[CommonStatisticId, None]
+        """
+        if CommonSpeciesUtils.is_human(sim_info):
+            return CommonStatisticId.PREGNANCY
+        elif CommonSpeciesUtils.is_large_dog(sim_info):
+            return CommonStatisticId.PREGNANCY_DOG
+        elif CommonSpeciesUtils.is_small_dog(sim_info):
+            return CommonStatisticId.PREGNANCY_DOG
+        elif CommonSpeciesUtils.is_cat(sim_info):
+            return CommonStatisticId.PREGNANCY_CAT
+        elif CommonSpeciesUtils.is_fox(sim_info):
+            return CommonStatisticId.PREGNANCY
+        return None
 
     @classmethod
     def determine_can_impregnate_trait(cls, sim_info: SimInfo) -> Union[CommonTraitId, None]:
@@ -474,7 +523,7 @@ def _common_print_pregnancy_partner(output: CommonConsoleCommandOutput, sim_info
         's4clib.pregnancy_begone',
     )
 )
-def _common_command_stop_pregnancy(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_command_stop_pregnancy(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         return
     output(f'Attempting to stop the pregnancy of {sim_info}.')
