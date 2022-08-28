@@ -1,3 +1,7 @@
+v2.2:
+- Added more DLC traits
+- Added a fix for vanilla adding gender options when it doesn't need to.
+
 v2.1:
 - Fixed an issue when checking if a Sim is dead or not.
 - Fixed an issue when starting a weather event using an id.
