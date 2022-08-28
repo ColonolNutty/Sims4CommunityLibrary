@@ -24,8 +24,8 @@ from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 class CommonSimInventoryUtils:
     """ Utilities for manipulating the inventory of Sims. """
-    @staticmethod
-    def has_inventory(sim_info: SimInfo) -> bool:
+    @classmethod
+    def has_inventory(cls, sim_info: SimInfo) -> bool:
         """has_inventory(sim_info)
 
         Determine if a Sim has an inventory.
@@ -35,10 +35,23 @@ class CommonSimInventoryUtils:
         :return: True, if the Sim has an inventory. False, if not.
         :rtype: bool
         """
-        return CommonSimInventoryUtils._get_inventory(sim_info) is not None
+        return cls.get_inventory(sim_info) is not None
 
-    @staticmethod
-    def get_all_objects_in_inventory_gen(sim_info: SimInfo, include_object_callback: Callable[[GameObject], bool]=None) -> Iterator[GameObject]:
+    @classmethod
+    def get_inventory(cls, sim_info: SimInfo) -> Union[SimInventoryComponent, None]:
+        """get_inventory(sim_info)
+
+        Retrieve the inventory of a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The inventory component of the Sim or None if not found.
+        :rtype: Union[SimInventoryComponent, None]
+        """
+        return cls._get_inventory(sim_info)
+
+    @classmethod
+    def get_all_objects_in_inventory_gen(cls, sim_info: SimInfo, include_object_callback: Callable[[GameObject], bool] = None) -> Iterator[GameObject]:
         """get_all_objects_in_inventory_gen(sim_info, include_object_callback=None)
 
         Retrieve all Objects in the inventory of a Sim.
@@ -50,7 +63,7 @@ class CommonSimInventoryUtils:
         :return: An iterator containing the decimal identifiers for the objects in the inventory of a Sim.
         :rtype: Iterator[GameObject]
         """
-        inventory_component: SimInventoryComponent = CommonSimInventoryUtils._get_inventory(sim_info)
+        inventory_component: SimInventoryComponent = cls.get_inventory(sim_info)
         if inventory_component is None:
             return tuple()
         if include_object_callback is None:
@@ -61,8 +74,8 @@ class CommonSimInventoryUtils:
                 if include_object_callback(inventory_object):
                     yield inventory_object
 
-    @staticmethod
-    def add_to_inventory(sim_info: SimInfo, object_id: int, count: int=1) -> bool:
+    @classmethod
+    def add_to_inventory(cls, sim_info: SimInfo, object_id: int, count: int = 1) -> bool:
         """add_to_inventory(sim_info, object_definition_id, count=1)
 
         Add a number of Newly Created Objects to the Inventory of a Sim.
@@ -89,8 +102,8 @@ class CommonSimInventoryUtils:
                 success = False
         return success
 
-    @staticmethod
-    def remove_from_inventory(sim_info: SimInfo, object_id: int, count: int=1) -> bool:
+    @classmethod
+    def remove_from_inventory(cls, sim_info: SimInfo, object_id: int, count: int = 1) -> bool:
         """remove_from_inventory(sim_info, object_id, count=1)
 
         Remove a number of Objects from the inventory of a Sim.
@@ -103,13 +116,13 @@ class CommonSimInventoryUtils:
         :type count: int, optional
         :return: True, if the count of the specified Object were removed successfully. False, if not.
         """
-        inventory_component: SimInventoryComponent = CommonSimInventoryUtils._get_inventory(sim_info)
+        inventory_component: SimInventoryComponent = cls.get_inventory(sim_info)
         if inventory_component is None:
             return False
         return inventory_component.try_remove_object_by_id(object_id, count=count)
 
-    @staticmethod
-    def remove_from_inventory_by_definition(sim_info: SimInfo, object_definition: ObjectDefinition, count: int=1) -> bool:
+    @classmethod
+    def remove_from_inventory_by_definition(cls, sim_info: SimInfo, object_definition: ObjectDefinition, count: int = 1) -> bool:
         """remove_from_inventory(sim_info, object_id, count=1)
 
         Remove a number of Objects from the inventory of a Sim.
@@ -132,8 +145,8 @@ class CommonSimInventoryUtils:
                 return True
         return False
 
-    @staticmethod
-    def move_object_to_inventory(sim_info: SimInfo, game_object: GameObject) -> bool:
+    @classmethod
+    def move_object_to_inventory(cls, sim_info: SimInfo, game_object: GameObject) -> bool:
         """move_object_to_inventory(sim_info, game_object)
 
         Move an Object to the inventory of a Sim.
@@ -145,15 +158,15 @@ class CommonSimInventoryUtils:
         :return: True, if the object was successfully moved to the inventory of the specified Sim. False, if not.
         :rtype: bool
         """
-        inventory_component: SimInventoryComponent = CommonSimInventoryUtils._get_inventory(sim_info)
+        inventory_component: SimInventoryComponent = cls.get_inventory(sim_info)
         if inventory_component is None:
             return False
         from sims4communitylib.utils.objects.common_object_ownership_utils import CommonObjectOwnershipUtils
         CommonObjectOwnershipUtils.set_owning_sim(game_object, sim_info)
         return inventory_component.player_try_add_object(game_object)
 
-    @staticmethod
-    def move_objects_to_inventory(sim_info: SimInfo, game_objects: Tuple[GameObject]) -> bool:
+    @classmethod
+    def move_objects_to_inventory(cls, sim_info: SimInfo, game_objects: Tuple[GameObject]) -> bool:
         """move_objects_to_inventory(sim_info, game_objects)
 
         Move Objects to the inventory of a Sim.
@@ -173,8 +186,8 @@ class CommonSimInventoryUtils:
                 successfully_moved_all = False
         return successfully_moved_all
 
-    @staticmethod
-    def get_count_of_object_in_inventory(sim_info: SimInfo, object_id: int) -> int:
+    @classmethod
+    def get_count_of_object_in_inventory(cls, sim_info: SimInfo, object_id: int) -> int:
         """get_count_of_object_in_inventory(sim_info, object_id)
 
         Count the number of an Object in the inventory of a Sim.
@@ -186,14 +199,14 @@ class CommonSimInventoryUtils:
         :return: The number of the specified Object in the inventory of the specified Sim.
         :type: int
         """
-        inventory_component: SimInventoryComponent = CommonSimInventoryUtils._get_inventory(sim_info)
+        inventory_component: SimInventoryComponent = cls.get_inventory(sim_info)
         if inventory_component is None:
             return 0
         object_definition = CommonObjectUtils.get_object_definition(object_id)
         return inventory_component.get_count(object_definition)
 
-    @staticmethod
-    def make_inventory_visible(sim_info: SimInfo) -> bool:
+    @classmethod
+    def make_inventory_visible(cls, sim_info: SimInfo) -> bool:
         """make_inventory_visible(sim_info)
 
         Change the flags of the inventory of a Sim so that it becomes visible to the player.
@@ -210,7 +223,7 @@ class CommonSimInventoryUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return False
-        inventory_component: SimInventoryComponent = CommonSimInventoryUtils._get_inventory(sim_info)
+        inventory_component: SimInventoryComponent = cls.get_inventory(sim_info)
         if inventory_component is None:
             return False
         if inventory_component.visible_storage is None:
@@ -220,8 +233,8 @@ class CommonSimInventoryUtils:
         sim.ui_manager.refresh_ui_data()
         return True
 
-    @staticmethod
-    def make_inventory_hidden(sim_info: SimInfo) -> bool:
+    @classmethod
+    def make_inventory_hidden(cls, sim_info: SimInfo) -> bool:
         """make_inventory_hidden(sim_info)
 
         Change the flags of the inventory of a Sim so that it becomes hidden to the player.
@@ -236,7 +249,7 @@ class CommonSimInventoryUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return True
-        inventory_component: SimInventoryComponent = CommonSimInventoryUtils._get_inventory(sim_info)
+        inventory_component: SimInventoryComponent = cls.get_inventory(sim_info)
         if inventory_component is None:
             return True
         if inventory_component.visible_storage is None:
@@ -246,8 +259,8 @@ class CommonSimInventoryUtils:
         sim.ui_manager.refresh_ui_data()
         return True
 
-    @staticmethod
-    def open_inventory(sim_info: SimInfo) -> None:
+    @classmethod
+    def open_inventory(cls, sim_info: SimInfo) -> None:
         """open_inventory(sim_info)
 
         Open the inventory of a Sim.
@@ -257,15 +270,15 @@ class CommonSimInventoryUtils:
         """
         if sim_info is None:
             return
-        inventory_component: SimInventoryComponent = CommonSimInventoryUtils._get_inventory(sim_info)
+        inventory_component: SimInventoryComponent = cls.get_inventory(sim_info)
         if inventory_component is None:
             return
         if not CommonSimInventoryUtils.make_inventory_visible(sim_info):
             return
         inventory_component.open_ui_panel()
 
-    @staticmethod
-    def set_ownership_of_all_items_in_sim_inventory_to_sim(sim_info_a: SimInfo, sim_info_b: SimInfo) -> bool:
+    @classmethod
+    def set_ownership_of_all_items_in_sim_inventory_to_sim(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> bool:
         """set_ownership_of_all_items_in_sim_inventory_to_sim(sim_info_a, sim_info_b)
 
         Change the ownership status of all items in the inventory of Sim A to be owned by the household of Sim B
@@ -281,7 +294,7 @@ class CommonSimInventoryUtils:
             return False
         if not CommonSimInventoryUtils.make_inventory_visible(sim_info_a):
             return False
-        inventory_component: SimInventoryComponent = CommonSimInventoryUtils._get_inventory(sim_info_a)
+        inventory_component: SimInventoryComponent = cls.get_inventory(sim_info_a)
         if inventory_component is None:
             return False
         from sims4communitylib.utils.objects.common_object_ownership_utils import CommonObjectOwnershipUtils
@@ -290,8 +303,8 @@ class CommonSimInventoryUtils:
             CommonObjectOwnershipUtils.set_owning_sim(inventory_object, sim_info_b)
         return True
 
-    @staticmethod
-    def _get_inventory(sim_info: SimInfo) -> Union[SimInventoryComponent, None]:
+    @classmethod
+    def _get_inventory(cls, sim_info: SimInfo) -> Union[SimInventoryComponent, None]:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return None
