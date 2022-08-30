@@ -36,60 +36,6 @@ Misc Utilities
 `Resources`
 -----------------------------------------------------------------
 
-*******************
-`Statistics`
-*******************
-
-.. note:: To manipulate statistics/commodities of Sims, take a look at :class:`.CommonSimStatisticUtils`
-
-.. autoclass:: sims4communitylib.utils.resources.common_statistic_utils.CommonStatisticUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-*******************
-`Situations`
-*******************
-
-.. note:: To manipulate situations of Sims, take a look at :class:`.CommonSimSituationUtils`
-
-.. autoclass:: sims4communitylib.utils.resources.common_situation_utils.CommonSituationUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-*******************
-`Resources`
-*******************
-
-.. autoclass:: sims4communitylib.utils.common_resource_utils.CommonResourceUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-*******************
-`Components`
-*******************
-
-.. autoclass:: sims4communitylib.utils.common_component_utils.CommonComponentUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-*******************
-`Interactions`
-*******************
-
-.. note:: To manipulate interactions of Sims, take a look at :class:`.CommonSimInteractionUtils`
-
-.. autoclass:: sims4communitylib.utils.resources.common_interaction_utils.CommonInteractionUtils
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-`Resources`
---------------------------------------------------------
-
 *********************
 `Camera`
 *********************
@@ -136,6 +82,24 @@ Misc Utilities
    :show-inheritance:
 
 *******************
+`Components`
+*******************
+
+.. autoclass:: sims4communitylib.utils.common_component_utils.CommonComponentUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*******************
+`Fires`
+*******************
+
+.. autoclass:: sims4communitylib.utils.misc.common_fire_utils.CommonFireUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*******************
 `Functions`
 *******************
 
@@ -163,6 +127,17 @@ Misc Utilities
    :show-inheritance:
 
 *******************
+`Interactions`
+*******************
+
+.. note:: To manipulate interactions of Sims, take a look at :class:`.CommonSimInteractionUtils`
+
+.. autoclass:: sims4communitylib.utils.resources.common_interaction_utils.CommonInteractionUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*******************
 `Math`
 *******************
 
@@ -176,6 +151,37 @@ Misc Utilities
 *******************
 
 .. autoclass:: sims4communitylib.utils.sims.common_rabbit_hole_utils.CommonRabbitHoleUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*******************
+`Resources`
+*******************
+
+.. autoclass:: sims4communitylib.utils.common_resource_utils.CommonResourceUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*******************
+`Statistics`
+*******************
+
+.. note:: To manipulate statistics/commodities of Sims, take a look at :class:`.CommonSimStatisticUtils`
+
+.. autoclass:: sims4communitylib.utils.resources.common_statistic_utils.CommonStatisticUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*******************
+`Situations`
+*******************
+
+.. note:: To manipulate situations of Sims, take a look at :class:`.CommonSimSituationUtils`
+
+.. autoclass:: sims4communitylib.utils.resources.common_situation_utils.CommonSituationUtils
    :members:
    :undoc-members:
    :show-inheritance:

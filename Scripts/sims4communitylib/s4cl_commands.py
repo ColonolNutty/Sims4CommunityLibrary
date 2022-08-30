@@ -5,12 +5,13 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import services
-from services.fire_service import FireService
+from objects.game_object import GameObject
 from sims4communitylib.modinfo import ModInfo
-from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+from sims4communitylib.utils.misc.common_fire_utils import CommonFireUtils
 from sims4communitylib.utils.objects.common_object_location_utils import CommonObjectLocationUtils
 from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
 from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
@@ -59,9 +60,28 @@ def _common_burn_it_all(output: CommonConsoleCommandOutput):
     for game_object in CommonObjectUtils.get_instance_for_all_game_objects_generator():
         # noinspection PyBroadException
         try:
-            fire_service: FireService = services.get_fire_service()
-            fire_service.spawn_fire_at_object(game_object)
-            object_count += 1
+            if CommonFireUtils.spawn_fires_on_object(game_object):
+                object_count += 1
         except:
             continue
     output(f'{object_count} Object(s) have been set ablaze. You might want to run now.')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.burn_it',
+    'Some Sims just want to see the world burn.',
+    command_arguments=(
+        CommonConsoleCommandArgument('game_object', 'Decimal ID', 'The Decimal Identifier of the object to spawn a fire at.'),
+    ),
+    show_with_help_command=False
+)
+def _common_burn_it(output: CommonConsoleCommandOutput, game_object: GameObject):
+    output(f'Do you smell smoke?')
+    if not CommonFireUtils.is_fire_allowed_at_location(CommonObjectLocationUtils.get_location(game_object)):
+        output(f'Fires are not allowed on the object. {game_object}.')
+        return
+    if CommonFireUtils.spawn_fires_on_object(game_object):
+        output(f'{game_object} has been set ablaze. You might want to run now.')
+    else:
+        output(f'For some reason {game_object} failed to catch fire.')
