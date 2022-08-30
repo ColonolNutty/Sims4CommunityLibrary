@@ -10,6 +10,7 @@ from typing import Iterator, Union, Any, Callable, List
 from distributor.shared_messages import IconInfoData
 from interactions.aop import AffordanceObjectPair
 from interactions.base.interaction import Interaction
+from interactions.base.super_interaction import SuperInteraction
 from interactions.context import InteractionSource, InteractionContext, QueueInsertStrategy
 from interactions.interaction_finisher import FinishingType
 from interactions.priority import Priority
@@ -322,8 +323,22 @@ class CommonSimInteractionUtils(HasClassLog):
         return False
 
     @classmethod
-    def cancel_all_queued_or_running_interactions(cls, sim_info: SimInfo, cancel_reason: str, finishing_type: FinishingType=FinishingType.USER_CANCEL, include_interaction_callback: Callable[[Interaction], bool]=None, **kwargs) -> bool:
-        """cancel_all_queued_or_running_interactions(sim_info, cancel_reason, finishing_type=FinishingType.USER_CANCEL, include_interaction_callback=None, **kwargs)
+    def cancel_all_queued_or_running_interactions(
+        cls,
+        sim_info: SimInfo,
+        cancel_reason: str,
+        finishing_type: FinishingType = FinishingType.USER_CANCEL,
+        include_interaction_callback: Callable[[Interaction], bool] = None,
+        **kwargs
+    ) -> bool:
+        """cancel_all_queued_or_running_interactions(\
+            sim_info,\
+            cancel_reason,\
+            finishing_type=FinishingType.USER_CANCEL,\
+            include_interaction_callback=None,\
+            source=None,\
+            **kwargs\
+        )
 
         Cancel all interactions that a Sim currently has queued or is currently running.
 
@@ -335,15 +350,46 @@ class CommonSimInteractionUtils(HasClassLog):
         :type finishing_type: FinishingType, optional
         :param include_interaction_callback: If the result of this callback is True, the Interaction will be cancelled. If set to None, All interactions will be cancelled. Default is None.
         :type include_interaction_callback: Callable[[Interaction], bool], optional
-        :return: True, if all queued and running Interactions that pass the include callback were successfully cancelled. False, if not.
+        :return: True, if all queued and running Interactions that pass the "include" callback were successfully cancelled. False, if not.
         :rtype: bool
         """
-        return cls.cancel_all_queued_interactions(sim_info, cancel_reason, finishing_type=finishing_type, include_interaction_callback=include_interaction_callback, **kwargs)\
-               and cls.cancel_all_running_interactions(sim_info, cancel_reason, finishing_type=finishing_type, include_interaction_callback=include_interaction_callback, **kwargs)
+        queued_result = cls.cancel_all_queued_interactions(
+            sim_info,
+            cancel_reason,
+            finishing_type=finishing_type,
+            include_interaction_callback=include_interaction_callback,
+            **kwargs
+        )
+        if not queued_result:
+            return False
+        running_result = cls.cancel_all_running_interactions(
+            sim_info,
+            cancel_reason,
+            finishing_type=finishing_type,
+            include_interaction_callback=include_interaction_callback,
+            **kwargs
+        )
+        if not running_result:
+            return False
+        return True
 
     @classmethod
-    def cancel_all_running_interactions(cls, sim_info: SimInfo, cancel_reason: str, finishing_type: FinishingType=FinishingType.USER_CANCEL, include_interaction_callback: Callable[[Interaction], bool]=None, **kwargs) -> bool:
-        """cancel_all_running_interactions(sim_info, cancel_reason, finishing_type=FinishingType.USER_CANCEL, include_interaction_callback=None, **kwargs)
+    def cancel_all_running_interactions(
+        cls,
+        sim_info: SimInfo,
+        cancel_reason: str,
+        finishing_type: FinishingType = FinishingType.USER_CANCEL,
+        include_interaction_callback: Callable[[Interaction], bool] = None,
+        **kwargs
+    ) -> bool:
+        """cancel_all_running_interactions(\
+            sim_info,\
+            cancel_reason,\
+            finishing_type=FinishingType.USER_CANCEL,\
+            include_interaction_callback=None,\
+            source=None,\
+            **kwargs\
+        )
 
         Cancel all interactions that a Sim is currently running.
 
@@ -359,12 +405,25 @@ class CommonSimInteractionUtils(HasClassLog):
         :rtype: bool
         """
         for interaction in tuple(cls.get_running_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)):
-            interaction.cancel(finishing_type, cancel_reason_msg=cancel_reason, **kwargs)
+            cls.cancel_interaction(interaction, cancel_reason, finishing_type=finishing_type, **kwargs)
         return True
 
     @classmethod
-    def cancel_all_queued_interactions(cls, sim_info: SimInfo, cancel_reason: str, finishing_type: FinishingType=FinishingType.USER_CANCEL, include_interaction_callback: Callable[[Interaction], bool]=None, **kwargs) -> bool:
-        """cancel_all_queued_interactions(sim_info, cancel_reason, finishing_type=FinishingType.USER_CANCEL, include_interaction_callback=None, **kwargs)
+    def cancel_all_queued_interactions(
+        cls,
+        sim_info: SimInfo,
+        cancel_reason: str,
+        finishing_type: FinishingType = FinishingType.USER_CANCEL,
+        include_interaction_callback: Callable[[Interaction], bool] = None,
+        **kwargs
+    ) -> bool:
+        """cancel_all_queued_interactions(\
+            sim_info,\
+            cancel_reason,\
+            finishing_type=FinishingType.USER_CANCEL,\
+            include_interaction_callback=None,\
+            **kwargs\
+        )
 
         Cancel all interactions that a Sim currently has queued.
 
@@ -380,11 +439,50 @@ class CommonSimInteractionUtils(HasClassLog):
         :rtype: bool
         """
         for interaction in tuple(cls.get_queued_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)):
-            interaction.cancel(finishing_type, cancel_reason_msg=cancel_reason, **kwargs)
+            cls.cancel_interaction(interaction, cancel_reason, finishing_type=finishing_type, **kwargs)
         return True
 
     @classmethod
-    def get_queued_or_running_interactions_gen(cls, sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
+    def cancel_interaction(
+        cls,
+        interaction: Interaction,
+        cancel_reason: str,
+        finishing_type: FinishingType = FinishingType.USER_CANCEL,
+        **kwargs
+    ) -> bool:
+        """cancel_interaction(\
+            interaction,\
+            cancel_reason,\
+            finishing_type=FinishingType.USER_CANCEL,\
+            **kwargs\
+        )
+
+        Cancel an interaction.
+
+        :param interaction: The interaction to cancel.
+        :type interaction: Interaction
+        :param cancel_reason: The reason for the cancellation.
+        :type cancel_reason: str
+        :param finishing_type: The type of finish to finish the interaction with. Default is FinishingType.USER_CANCEL.
+        :type finishing_type: FinishingType, optional
+        :return: True, if the interaction was cancelled successfully. False, if not.
+        :rtype: bool
+        """
+        if isinstance(interaction, SuperInteraction):
+            immediate = kwargs.get('immediate', False)
+            ignore_must_run = kwargs.get('ignore_must_run', False)
+            carry_cancel_override = kwargs.get('carry_cancel_override', None)
+            return interaction.cancel(
+                finishing_type,
+                cancel_reason,
+                immediate=immediate,
+                ignore_must_run=ignore_must_run,
+                carry_cancel_override=carry_cancel_override
+            )
+        return interaction.cancel(finishing_type, cancel_reason, **kwargs)
+
+    @classmethod
+    def get_queued_or_running_interactions_gen(cls, sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool] = None) -> Iterator[Interaction]:
         """get_queued_or_running_interactions_gen(sim_info, include_interaction_callback=None)
 
         Retrieve all interactions that a Sim has queued or is currently running.
@@ -400,7 +498,7 @@ class CommonSimInteractionUtils(HasClassLog):
         yield from cls.get_running_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)
 
     @classmethod
-    def get_running_interactions_gen(cls, sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
+    def get_running_interactions_gen(cls, sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool] = None) -> Iterator[Interaction]:
         """get_running_interactions_gen(sim_info, include_interaction_callback=None)
 
         Retrieve all interactions that a Sim is currently running.
@@ -423,7 +521,7 @@ class CommonSimInteractionUtils(HasClassLog):
             yield interaction
 
     @classmethod
-    def get_queued_interactions_gen(cls, sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool]=None) -> Iterator[Interaction]:
+    def get_queued_interactions_gen(cls, sim_info: SimInfo, include_interaction_callback: Callable[[Interaction], bool] = None) -> Iterator[Interaction]:
         """get_queued_interactions_gen(sim_info, include_interaction_callback=None)
 
         Retrieve all interactions that a Sim currently has queued.
@@ -450,11 +548,11 @@ class CommonSimInteractionUtils(HasClassLog):
         cls,
         sim_info: SimInfo,
         interaction_id: Union[int, CommonInteractionId],
-        social_super_interaction_id: Union[int, CommonInteractionId]=None,
-        target: Any=None,
-        picked_object: Any=None,
-        interaction_context: InteractionContext=None,
-        skip_if_running: bool=False,
+        social_super_interaction_id: Union[int, CommonInteractionId] = None,
+        target: Any = None,
+        picked_object: Any = None,
+        interaction_context: InteractionContext = None,
+        skip_if_running: bool = False,
         **kwargs
     ) -> CommonEnqueueResult:
         """queue_interaction(\
@@ -555,9 +653,9 @@ class CommonSimInteractionUtils(HasClassLog):
         cls,
         sim_info: SimInfo,
         super_interaction_id: Union[int, CommonInteractionId],
-        target: Any=None,
-        picked_object: Any=None,
-        interaction_context: InteractionContext=None,
+        target: Any = None,
+        picked_object: Any = None,
+        interaction_context: InteractionContext = None,
         **kwargs
     ) -> CommonEnqueueResult:
         """queue_super_interaction(\
@@ -617,9 +715,9 @@ class CommonSimInteractionUtils(HasClassLog):
         sim_info: SimInfo,
         social_mixer_interaction_id: Union[int, CommonInteractionId],
         social_super_interaction_id: Union[int, CommonInteractionId],
-        target: SimInfo=None,
-        picked_object: Any=None,
-        interaction_context: InteractionContext=None,
+        target: SimInfo = None,
+        picked_object: Any = None,
+        interaction_context: InteractionContext = None,
         **kwargs
     ) -> CommonEnqueueResult:
         """queue_social_mixer_interaction(\
@@ -742,8 +840,8 @@ class CommonSimInteractionUtils(HasClassLog):
         cls,
         sim_info: SimInfo,
         mixer_interaction_id: Union[int, CommonInteractionId],
-        target: Any=None,
-        interaction_context: InteractionContext=None,
+        target: Any = None,
+        interaction_context: InteractionContext = None,
         **kwargs
     ) -> CommonEnqueueResult:
         """queue_mixer_interaction(\
@@ -846,10 +944,10 @@ class CommonSimInteractionUtils(HasClassLog):
         cls,
         sim_info: SimInfo,
         interaction_id: Union[int, CommonInteractionId],
-        social_super_interaction_id: Union[int, CommonInteractionId]=None,
-        target: Any=None,
-        picked_object: Any=None,
-        interaction_context: InteractionContext=None,
+        social_super_interaction_id: Union[int, CommonInteractionId] = None,
+        target: Any = None,
+        picked_object: Any = None,
+        interaction_context: InteractionContext = None,
         **kwargs
     ) -> CommonTestResult:
         """test_interaction(\
@@ -945,9 +1043,9 @@ class CommonSimInteractionUtils(HasClassLog):
         cls,
         sim_info: SimInfo,
         super_interaction_id: Union[int, CommonInteractionId],
-        target: Any=None,
-        picked_object: Any=None,
-        interaction_context: InteractionContext=None,
+        target: Any = None,
+        picked_object: Any = None,
+        interaction_context: InteractionContext = None,
         **kwargs
     ) -> CommonTestResult:
         """test_super_interaction(\
@@ -1005,9 +1103,9 @@ class CommonSimInteractionUtils(HasClassLog):
         sim_info: SimInfo,
         social_mixer_interaction_id: Union[int, CommonInteractionId],
         social_super_interaction_id: Union[int, CommonInteractionId],
-        target: SimInfo=None,
-        picked_object: Any=None,
-        interaction_context: InteractionContext=None,
+        target: SimInfo = None,
+        picked_object: Any = None,
+        interaction_context: InteractionContext = None,
         **kwargs
     ) -> CommonTestResult:
         """test_social_mixer_interaction(\
@@ -1123,8 +1221,8 @@ class CommonSimInteractionUtils(HasClassLog):
         cls,
         sim_info: SimInfo,
         mixer_interaction_id: Union[int, CommonInteractionId],
-        target: Any=None,
-        interaction_context: InteractionContext=None,
+        target: Any = None,
+        interaction_context: InteractionContext = None,
         **kwargs
     ) -> CommonTestResult:
         """test_mixer_interaction(\
@@ -1216,11 +1314,11 @@ class CommonSimInteractionUtils(HasClassLog):
     def create_interaction_context(
         cls,
         sim_info: SimInfo,
-        interaction_source: InteractionSource=InteractionContext.SOURCE_SCRIPT_WITH_USER_INTENT,
-        priority: Priority=Priority.High,
-        run_priority: Union[Priority, None]=Priority.High,
-        insert_strategy: QueueInsertStrategy=QueueInsertStrategy.NEXT,
-        must_run_next: bool=False,
+        interaction_source: InteractionSource = InteractionContext.SOURCE_SCRIPT_WITH_USER_INTENT,
+        priority: Priority = Priority.High,
+        run_priority: Union[Priority, None] = Priority.High,
+        insert_strategy: QueueInsertStrategy = QueueInsertStrategy.NEXT,
+        must_run_next: bool = False,
         **kwargs
     ) -> Union[InteractionContext, None]:
         """create_interaction_context(\
@@ -1276,7 +1374,7 @@ class CommonSimInteractionUtils(HasClassLog):
         's4clib_testing.printrunninginteractions',
     )
 )
-def _common_show_running_interactions(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+def _common_show_running_interactions(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     if sim_info is None:
         return
     log = CommonSimInteractionUtils.get_log()

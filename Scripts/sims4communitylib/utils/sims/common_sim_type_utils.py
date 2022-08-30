@@ -1798,6 +1798,8 @@ class CommonSimTypeUtils:
         :return: True, if the Sim is an NPC. False, if not.
         :rtype: bool
         """
+        if sim_info is None:
+            raise AssertionError('Sim Info was None!')
         # noinspection PyTypeChecker
         return sim_info.is_npc
 
@@ -1814,6 +1816,8 @@ class CommonSimTypeUtils:
         :return: True, if the Sim is a Player Sim. False, if not.
         :rtype: bool
         """
+        if sim_info is None:
+            raise AssertionError('Sim Info was None!')
         return not CommonSimTypeUtils.is_non_player_sim(sim_info)
 
     @staticmethod
@@ -1822,13 +1826,15 @@ class CommonSimTypeUtils:
 
         Determine if a Sim is a Played Sim.
 
-        .. note:: This does not indicate whether or not a Sim is a Player Sim or Non Player Sim.
+        .. note:: This does not indicate if a Sim is a Player Sim or Non Player Sim.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is a Played Sim. False, if not.
         :rtype: bool
         """
+        if sim_info is None:
+            raise AssertionError('Sim Info was None!')
         return sim_info.is_played_sim
 
     @staticmethod
@@ -1862,6 +1868,8 @@ class CommonSimTypeUtils:
         :return: The result of testing. True, if the Sim is a Service Sim. False, if not.
         :rtype: CommonTestResult
         """
+        if sim_info is None:
+            raise AssertionError('Sim Info was None!')
         from sims4communitylib.enums.traits_enum import CommonTraitId
         from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
         trait_ids = (
@@ -1901,6 +1909,8 @@ class CommonSimTypeUtils:
         :return: True, if the specified Sim has an Occult Sim Type. False, if not.
         :rtype: bool
         """
+        if sim_info is None:
+            raise AssertionError('Sim Info was None!')
         sim_type = CommonSimTypeUtils.determine_sim_type(
             sim_info,
             combine_teen_young_adult_and_elder_age=combine_teen_young_adult_and_elder_age,
@@ -1938,6 +1948,8 @@ class CommonSimTypeUtils:
         :return: An iterable of all types the Sim is.
         :rtype: Iterator[CommonSimType]
         """
+        if sim_info is None:
+            raise AssertionError('Sim Info was None!')
         species = CommonSpecies.get_species(sim_info)
         age = CommonAge.get_age(sim_info)
         from sims4communitylib.utils.sims.common_sim_occult_type_utils import CommonSimOccultTypeUtils
@@ -1966,9 +1978,11 @@ class CommonSimTypeUtils:
         :type combine_child_dog_types: bool, optional
         :param use_current_occult_type: If set to True, the Sims current occult type will be used, for example an Adult Human Mermaid with no tail would return ADULT_HUMAN instead of ADULT_HUMAN_MERMAID. If set to False, the Sims occult type will be used (whether current or not), for example an Adult Human Mermaid wearing or not wearing their tail would return ADULT_HUMAN_MERMAID. Default is False.
         :param use_current_occult_type: bool, optional
-        :return: The type of Sim the Sim is or CommonSimType.NONE if no type was found for the Sim.
+        :return: The type of Sim the Sim is or NONE if no type was found for the Sim.
         :rtype: CommonSimType
         """
+        if sim_info is None:
+            raise AssertionError('Sim Info was None!')
         species = CommonSpecies.get_species(sim_info)
         age = CommonAge.get_age(sim_info)
         if use_current_occult_type:
@@ -1980,11 +1994,11 @@ class CommonSimTypeUtils:
 
     @staticmethod
     def determine_sim_type_for_species_age_occult(
-            species: CommonSpecies,
-            age: CommonAge,
-            occult_type: CommonOccultType,
-            combine_teen_young_adult_and_elder_age: bool = True,
-            combine_child_dog_types: bool = True
+        species: CommonSpecies,
+        age: CommonAge,
+        occult_type: CommonOccultType,
+        combine_teen_young_adult_and_elder_age: bool = True,
+        combine_child_dog_types: bool = True
     ) -> CommonSimType:
         """determine_sim_type_for_species_age_occult(\
             species,\
