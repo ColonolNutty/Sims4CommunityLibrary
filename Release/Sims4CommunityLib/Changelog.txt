@@ -1,6 +1,8 @@
 v2.2:
-- Added more DLC traits
+- Added more DLC traits to `CommonTraitId`
 - Added a fix for vanilla adding gender options when it doesn't need to.
+- Added a utility for manipulating fires. `CommonFireUtils`
+- Fixed an error that could happen when attempting to cancel Super Interactions.
 
 v2.1:
 - Fixed an issue when checking if a Sim is dead or not.
