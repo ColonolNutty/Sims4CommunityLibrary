@@ -121,6 +121,32 @@ class CommonOccultType(CommonInt):
         return CommonSimOccultTypeUtils.convert_custom_type_to_vanilla(occult_type)
 
     @staticmethod
+    def convert_from_vanilla(value: Union[OccultType, 'CommonOccultType', int]) -> Union['CommonOccultType', OccultType, int]:
+        """convert_from_vanilla(value)
+
+        Convert a vanilla value into this enum.
+
+        :param value: The value to convert.
+        :type value: Union[OccultType, 'CommonOccultType', int]
+        :return: The specified value translated to CommonOccultType. The value will be returned if it cannot be translated.
+        :rtype: Union['CommonOccultType', OccultType, int]
+        """
+        mapping: Dict[OccultType, CommonOccultType] = dict()
+        if hasattr(OccultType, 'HUMAN'):
+            mapping[OccultType.HUMAN] = CommonOccultType.NON_OCCULT
+        if hasattr(OccultType, 'ALIEN'):
+            mapping[OccultType.ALIEN] = CommonOccultType.ALIEN
+        if hasattr(OccultType, 'VAMPIRE'):
+            mapping[OccultType.VAMPIRE] = CommonOccultType.VAMPIRE
+        if hasattr(OccultType, 'MERMAID'):
+            mapping[OccultType.MERMAID] = CommonOccultType.MERMAID
+        if hasattr(OccultType, 'WITCH'):
+            mapping[OccultType.WITCH] = CommonOccultType.WITCH
+        if hasattr(OccultType, 'WEREWOLF'):
+            mapping[OccultType.WEREWOLF] = CommonOccultType.WEREWOLF
+        return mapping.get(value, value)
+
+    @staticmethod
     def convert_to_localized_string_id(value: 'CommonOccultType') -> Union[int, str, CommonStringId, LocalizedString]:
         """convert_to_localized_string_id(value)
 

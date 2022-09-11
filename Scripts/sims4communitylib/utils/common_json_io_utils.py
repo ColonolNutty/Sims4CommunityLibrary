@@ -117,7 +117,8 @@ class CommonJSONIOUtils:
         skip_file_names = tuple(skip_file_names)
         skip_file_names = (
             *skip_file_names,
-            '.DS_Store'
+            '.DS_Store',
+            'desktop.ini'
         )
         data = dict()
         for entry in os.scandir(folder_path):

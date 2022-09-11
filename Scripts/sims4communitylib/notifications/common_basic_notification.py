@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any, Union, Iterator, Tuple
+from typing import Any, Union, Tuple, Iterable
 from distributor.shared_messages import IconInfoData
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.enums.strings_enum import CommonStringId
@@ -28,6 +28,7 @@ class CommonBasicNotification:
         urgency=UiDialogNotification.UiDialogNotificationUrgency.DEFAULT,\
         information_level=UiDialogNotification.UiDialogNotificationLevel.SIM,\
         expand_behavior=UiDialogNotification.UiDialogNotificationExpandBehavior.USER_SETTING,\
+        visual_type=UiDialogNotification.UiDialogNotificationVisualType.INFORMATION,\
         ui_responses=()\
     )
 
@@ -75,12 +76,14 @@ class CommonBasicNotification:
     :type title_tokens: Iterator[Any], optional
     :param description_tokens: Tokens to format into the description.
     :type description_tokens: Iterator[Any], optional
-    :param urgency: The urgency to which the notification will appear. (URGENT makes it orange)
+    :param urgency: The urgency to which the notification will appear. (URGENT makes it orange) Default is Default (Blue).
     :type urgency: UiDialogNotification.UiDialogNotificationUrgency, optional
-    :param information_level: The information level of the notification.
+    :param information_level: The information level of the notification. Default is Sim.
     :type information_level: UiDialogNotification.UiDialogNotificationLevel, optional
-    :param expand_behavior: Specify how the notification will expand.
+    :param expand_behavior: Specify how the notification will expand. Default is User Setting.
     :type expand_behavior: UiDialogNotification.UiDialogNotificationExpandBehavior, optional
+    :param visual_type: How the notification should appear. Default is Information
+    :type visual_type: UiDialogNotification.UiDialogNotificationVisualType, optional
     :param ui_responses: A collection of UI Responses that may be performed within the notification.
     :type ui_responses: Tuple[UiDialogResponse], optional
     """
@@ -88,22 +91,23 @@ class CommonBasicNotification:
         self,
         title_identifier: Union[int, str, LocalizedString, CommonStringId],
         description_identifier: Union[int, str, LocalizedString, CommonStringId],
-        title_tokens: Iterator[Any]=(),
-        description_tokens: Iterator[Any]=(),
-        urgency: UiDialogNotification.UiDialogNotificationUrgency=UiDialogNotification.UiDialogNotificationUrgency.DEFAULT,
-        information_level: UiDialogNotification.UiDialogNotificationLevel=UiDialogNotification.UiDialogNotificationLevel.SIM,
-        expand_behavior: UiDialogNotification.UiDialogNotificationExpandBehavior=UiDialogNotification.UiDialogNotificationExpandBehavior.USER_SETTING,
-        ui_responses: Tuple[UiDialogResponse]=()
+        title_tokens: Iterable[Any] = (),
+        description_tokens: Iterable[Any] = (),
+        urgency: UiDialogNotification.UiDialogNotificationUrgency = UiDialogNotification.UiDialogNotificationUrgency.DEFAULT,
+        information_level: UiDialogNotification.UiDialogNotificationLevel = UiDialogNotification.UiDialogNotificationLevel.SIM,
+        expand_behavior: UiDialogNotification.UiDialogNotificationExpandBehavior = UiDialogNotification.UiDialogNotificationExpandBehavior.USER_SETTING,
+        visual_type: UiDialogNotification.UiDialogNotificationVisualType = UiDialogNotification.UiDialogNotificationVisualType.INFORMATION,
+        ui_responses: Tuple[UiDialogResponse] = ()
     ):
         self.title = CommonLocalizationUtils.create_localized_string(title_identifier, tokens=tuple(title_tokens))
         self.description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=tuple(description_tokens))
-        self.visual_type = UiDialogNotification.UiDialogNotificationVisualType.INFORMATION
+        self.visual_type = visual_type
         self.urgency = urgency
         self.information_level = information_level
         self.expand_behavior = expand_behavior
         self.ui_responses = ui_responses
 
-    def show(self, icon: IconInfoData=None, secondary_icon: IconInfoData=None):
+    def show(self, icon: IconInfoData = None, secondary_icon: IconInfoData = None):
         """show(icon=None, secondary_icon=None)
 
         Show the notification to the player.

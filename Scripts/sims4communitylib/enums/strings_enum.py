@@ -166,6 +166,7 @@ class CommonStringId(CommonInt):
     S4CL_REMOVE_ALL = 0x5C6C2580
     S4CL_REMOVE = 0x8B3681B1
     S4CL_NOT_IMPLEMENTED = 0x54860E10
+    S4CL_CUSTOM_BREED = 0x599432EA
 
     # Species
     S4CL_DOG: 'CommonStringId' = 0x20953C2D

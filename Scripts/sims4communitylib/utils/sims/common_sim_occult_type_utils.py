@@ -213,7 +213,7 @@ class CommonSimOccultTypeUtils:
         :return: The specified CommonOccultType translated to OccultType, or None if the value could not be translated.
         :rtype: Union[OccultType, None]
         """
-        return CommonOccultType.convert_to_vanilla(occult_type)
+        return CommonSimOccultTypeUtils.convert_custom_type_to_vanilla(occult_type)
 
     @staticmethod
     def convert_custom_type_to_vanilla(occult_type: 'CommonOccultType') -> Union[OccultType, None]:
@@ -234,9 +234,9 @@ class CommonSimOccultTypeUtils:
             return occult_type
         conversion_mapping: Dict[CommonOccultType, OccultType] = {
             CommonOccultType.NON_OCCULT: OccultType.HUMAN,
-            CommonOccultType.ALIEN: OccultType.ALIEN,
+            CommonOccultType.ALIEN: OccultType.ALIEN if hasattr(OccultType, 'ALIEN') else None,
             CommonOccultType.MERMAID: OccultType.MERMAID if hasattr(OccultType, 'MERMAID') else None,
-            CommonOccultType.VAMPIRE: OccultType.VAMPIRE,
+            CommonOccultType.VAMPIRE: OccultType.VAMPIRE if hasattr(OccultType, 'VAMPIRE') else None,
             CommonOccultType.WITCH: OccultType.WITCH if hasattr(OccultType, 'WITCH') else None,
             CommonOccultType.WEREWOLF: OccultType.WEREWOLF if hasattr(OccultType, 'WEREWOLF') else None
         }

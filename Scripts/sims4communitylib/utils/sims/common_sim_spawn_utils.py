@@ -7,17 +7,19 @@ Copyright (c) COLONOLNUTTY
 """
 import os
 
-from typing import Union, Tuple, Callable, Any, Iterator
+from typing import Union, Tuple, Callable, Any, Iterator, Iterable
 from sims.sim_info_lod import SimInfoLODLevel
 from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.common_species import CommonSpecies
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
+from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
 from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
@@ -27,7 +29,25 @@ from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
-if ON_RTD:
+if not ON_RTD:
+    import build_buy
+    try:
+        import _buildbuy
+    except ImportError:
+        # noinspection SpellCheckingInspection
+        _buildbuy = build_buy
+    import services
+    from interactions.interaction_finisher import FinishingType
+    from sims.household import Household
+    from sims.sim_info import SimInfo
+    from sims.sim_spawner import SimCreator, SimSpawner
+    from animation.posture_manifest import Hand
+    from interactions.si_state import SIState
+    from objects.object_enums import ResetReason
+    from postures import posture_graph
+    from postures.posture_specs import PostureSpecVariable
+    from postures.posture_state import PostureState
+else:
     # noinspection PyMissingOrEmptyDocstring
     class FinishingType:
         pass
@@ -87,25 +107,6 @@ if ON_RTD:
     # noinspection PyMissingOrEmptyDocstring
     class PostureState:
         pass
-
-if not ON_RTD:
-    import build_buy
-    try:
-        import _buildbuy
-    except ImportError:
-        # noinspection SpellCheckingInspection
-        _buildbuy = build_buy
-    import services
-    from interactions.interaction_finisher import FinishingType
-    from sims.household import Household
-    from sims.sim_info import SimInfo
-    from sims.sim_spawner import SimCreator, SimSpawner
-    from animation.posture_manifest import Hand
-    from interactions.si_state import SIState
-    from objects.object_enums import ResetReason
-    from postures import posture_graph
-    from postures.posture_specs import PostureSpecVariable
-    from postures.posture_state import PostureState
 
 
 class CommonSimSpawnUtils:
@@ -430,8 +431,13 @@ class CommonSimSpawnUtils:
         gender: CommonGender = None,
         age: CommonAge = None,
         first_name: str = None,
+        first_name_key: int = 0,
         last_name: str = None,
-        trait_ids: Tuple[int] = (),
+        last_name_key: int = 0,
+        full_name_key: int = 0,
+        breed_name: str = '',
+        breed_name_key: int = 0,
+        trait_ids: Iterable[int] = (),
         household: Household = None,
         source: str = 'testing'
     ) -> Union[SimInfo, None]:
@@ -451,10 +457,13 @@ class CommonSimSpawnUtils:
             age=vanilla_age,
             species=vanilla_species,
             first_name=first_name,
+            first_name_key=first_name_key,
             last_name=last_name,
+            last_name_key=last_name_key,
+            full_name_key=full_name_key,
             traits=traits,
-            breed_name='Custom Breed' if CommonSpeciesUtils.is_animal_species(vanilla_species) else '',
-            breed_name_key=0x599432EA if CommonSpeciesUtils.is_animal_species(vanilla_species) else 0,
+            breed_name=breed_name if breed_name else 'Custom Breed' if CommonSpeciesUtils.is_animal_species(vanilla_species) else '',
+            breed_name_key=breed_name_key if breed_name_key else CommonStringId.S4CL_CUSTOM_BREED if CommonSpeciesUtils.is_animal_species(vanilla_species) else 0,
         )
         (sim_info_list, _) = SimSpawner.create_sim_infos((sim_creator,), household=household, generate_deterministic_sim=True, creation_source=source)
         if not sim_info_list:
@@ -712,7 +721,8 @@ class CommonSimSpawnUtils:
         client = services.client_manager().get_first_client()
         if sim_info.household is not None and hasattr(sim_info.household, 'refresh_aging_updates'):
             client.remove_selectable_sim_info(sim_info)
-        sim_info.remove_permanently()
+        household = sim_info.household or CommonHouseholdUtils.create_empty_household()
+        sim_info.remove_permanently(household=household)
         return True
 
     @classmethod

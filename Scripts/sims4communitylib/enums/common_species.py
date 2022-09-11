@@ -92,26 +92,27 @@ class CommonSpecies(CommonInt):
         return CommonSpecies.INVALID
 
     @staticmethod
-    def convert_to_vanilla(value: 'CommonSpecies') -> Union[Species, None]:
+    def convert_to_vanilla(value: 'CommonSpecies') -> Union[SpeciesExtended, None]:
         """convert_to_vanilla(value)
 
-        Convert a CommonSpecies into the vanilla Species enum.
+        Convert a CommonSpecies into the vanilla SpeciesExtended enum.
 
         :param value: An instance of CommonSpecies
         :type value: CommonSpecies
-        :return: The specified CommonSpecies translated to Species or SpeciesExtended or None if the CommonSpecies could not be translated.
-        :rtype: Union[Species, None]
+        :return: The specified CommonSpecies translated to SpeciesExtended or None if the CommonSpecies could not be translated.
+        :rtype: Union[SpeciesExtended, None]
         """
         if value is None or value == CommonSpecies.INVALID:
             return None
-        if isinstance(value, Species):
+        if isinstance(value, SpeciesExtended) or isinstance(value, Species):
+            # noinspection PyTypeChecker
             return value
         conversion_mapping: Dict[CommonSpecies, Species] = {
-            CommonSpecies.HUMAN: Species.HUMAN,
+            CommonSpecies.HUMAN: SpeciesExtended.HUMAN,
             CommonSpecies.SMALL_DOG: SpeciesExtended.SMALLDOG if hasattr(SpeciesExtended, 'SMALLDOG') else None,
-            CommonSpecies.LARGE_DOG: Species.DOG if hasattr(Species, 'DOG') else None,
-            CommonSpecies.CAT: Species.CAT if hasattr(Species, 'CAT') else None,
-            CommonSpecies.FOX: Species.FOX if hasattr(Species, 'FOX') else None
+            CommonSpecies.LARGE_DOG: SpeciesExtended.DOG if hasattr(SpeciesExtended, 'DOG') else None,
+            CommonSpecies.CAT: SpeciesExtended.CAT if hasattr(SpeciesExtended, 'CAT') else None,
+            CommonSpecies.FOX: SpeciesExtended.FOX if hasattr(SpeciesExtended, 'FOX') else None
         }
         return conversion_mapping.get(value, None)
 
