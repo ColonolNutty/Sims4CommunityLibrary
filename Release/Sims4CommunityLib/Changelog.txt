@@ -3,6 +3,12 @@ v2.2:
 - Added a fix for vanilla adding gender options when it doesn't need to.
 - Added a utility for manipulating fires. `CommonFireUtils`
 - Fixed an error that could happen when attempting to cancel Super Interactions.
+- Added a function to convert OccultType to CommonOccultType
+- The CommonSpecies.convert_to_vanilla function now returns SpeciesExtended instead of Species.
+- Added Custom Breed to CommonStringId
+- Added the ability to specify the visual type for CommonBasicNotification
+- When reading JSON files from a folder, desktop.ini files will no longer be read.
+- Added the ability to specify first_name_key, last_name_key, full_name_key, breed_name, and breed_name_key when creating SimInfo
 
 v2.1:
 - Fixed an issue when checking if a Sim is dead or not.
