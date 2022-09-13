@@ -729,7 +729,9 @@ def _s4clib_attach_cas_part_to_all_outfits(output: CommonConsoleCommandOutput, c
         return
     if body_type == 'any':
         body_type_value = BodyType.NONE
-    elif body_type.isnumeric():
+    elif isinstance(body_type, int):
+        body_type_value = body_type
+    elif isinstance(body_type, str) and body_type.isnumeric():
         try:
             body_type_value = int(body_type)
         except ValueError:
@@ -777,7 +779,9 @@ def _s4clib_attach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int
         return
     if body_type == 'any':
         body_type_value = BodyType.NONE
-    elif body_type.isnumeric():
+    elif isinstance(body_type, int):
+        body_type_value = body_type
+    elif isinstance(body_type, str) and body_type.isnumeric():
         try:
             body_type_value = int(body_type)
         except ValueError:
@@ -826,7 +830,9 @@ def _s4clib_detach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int
         return
     if body_type == 'all':
         body_type_value = None
-    elif body_type.isnumeric():
+    elif isinstance(body_type, int):
+        body_type_value = body_type
+    elif isinstance(body_type, str) and body_type.isnumeric():
         try:
             body_type_value = int(body_type)
         except ValueError:
@@ -860,7 +866,9 @@ def _s4clib_print_cas_part_at_body_type(output: CommonConsoleCommandOutput, body
     if body_type is None:
         output('ERROR: No Body Type was specified.')
         return
-    if not body_type.isnumeric():
+    if isinstance(body_type, int):
+        body_type_value = body_type
+    elif isinstance(body_type, str) and not body_type.isnumeric():
         body_type_value = CommonResourceUtils.get_enum_by_name(body_type.upper(), BodyType, default_value=BodyType.NONE)
         if body_type_value == BodyType.NONE:
             output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
