@@ -9,6 +9,8 @@ v2.2:
 - Added the ability to specify the visual type for CommonBasicNotification
 - When reading JSON files from a folder, desktop.ini files will no longer be read.
 - Added the ability to specify first_name_key, last_name_key, full_name_key, breed_name, and breed_name_key when creating SimInfo
+- Fixed an issue where the update alarm for CommonRunnables was not properly being set when the runnable is restarted.
+- Fixed an issue where Unknown_Mod_Messages.txt was mistakenly having "None Detected", as if "None" was a mod.
 
 v2.1:
 - Fixed an issue when checking if a Sim is dead or not.
