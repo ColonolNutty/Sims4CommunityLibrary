@@ -94,6 +94,7 @@ class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
 
     def _start_updater(self, milliseconds_per_update: int) -> None:
         self._stop_updater()
+        self._updating = False
 
         def _start_update(_: Any) -> None:
             if self._updating:
@@ -124,12 +125,6 @@ class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
                 milliseconds_per_update,
                 lambda *_, **__: _start_update(None)
             )
-
-    def _setup_updater(self) -> None:
-        if self._update_dispatcher is not None:
-            if self._update_dispatcher not in CommonIntervalEventRegistry()._registered_interval_trackers:
-                self.log.debug('Adding update dispatcher to interval trackers.')
-                CommonIntervalEventRegistry()._registered_interval_trackers.append(self._update_dispatcher)
 
     def _stop_updater(self) -> None:
         if self._update_dispatcher is not None:
@@ -164,6 +159,7 @@ class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
         :rtype: CommonExecutionResult
         """
         try:
+            self._is_ended = False
             if self.is_starting:
                 self.log.debug('Failed to start runnable, Already starting!')
                 return CommonExecutionResult(True, reason='Runnable Is Already starting')
@@ -192,7 +188,7 @@ class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
                 self.log.format_with_message('Runnable is waiting to start.')
                 return CommonExecutionResult.TRUE
 
-            self._setup_updater()
+            self._start_updater(self.milliseconds_per_update)
 
             if not self._has_initial_started:
                 on_initial_start_result = self._on_initial_start(*_, **__)

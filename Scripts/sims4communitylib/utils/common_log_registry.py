@@ -632,7 +632,7 @@ class CommonLogRegistry(CommonService):
         if log_name in S4CLConfiguration().enable_logs:
             log.enable(message_types=S4CLConfiguration().enable_logs[log_name])
         self._registered_logs[mod_name][log_name] = log
-        if first_time_log:
+        if first_time_log and mod_identifier is not None:
             log.enable()
             if isinstance(mod_identifier, CommonModIdentity):
                 log.debug(f'{mod_identifier.name} Version "{mod_identifier.version}" Detected.')
