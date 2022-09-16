@@ -40,6 +40,21 @@ class CommonTraitUtils(_HasS4CLClassLog):
         return 'common_trait_utils'
 
     @classmethod
+    def is_player(cls, sim_info: SimInfo) -> CommonTestResult:
+        """is_player(sim_info)
+
+        Determine if a Sim has the Player trait.
+
+        .. note:: This does not indicate whether the Sim is one of the Players Sims, it simply indicates if they have the trait that makes other Sims less jealous.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: The result of testing. True, if the Sim has the Trait. False, if the Sim does not have the Trait.
+        :rtype: CommonTestResult
+        """
+        return cls.has_trait(sim_info, CommonTraitId.PLAYER)
+
+    @classmethod
     def is_special_npc(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_special_npc(sim_info)
 

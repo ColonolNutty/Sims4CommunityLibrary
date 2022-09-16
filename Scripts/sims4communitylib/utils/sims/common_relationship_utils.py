@@ -75,6 +75,43 @@ class CommonRelationshipUtils:
         return any(CommonRelationshipUtils.get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info))
 
     @staticmethod
+    def is_friendly_with(sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
+        """is_friendly_with(sim_info, target_sim_info)
+
+        Determine if a Sim is friendly with a Target Sim.
+
+        .. note:: By default, a Sim is friendly with another Sim when their Friendship relationship is at or above 30. If both Sims are Animals, they are friendly with each other if they have the Friendly relationship bit.
+
+        :param sim_info: The info of a Sim.
+        :type sim_info: SimInfo
+        :param target_sim_info: The info of a Sim.
+        :type target_sim_info: SimInfo
+        :return: True, if the Sim is friendly with the Target Sim. False, if not.
+        :rtype: bool
+        """
+        if CommonSpeciesUtils.is_animal(sim_info) and CommonSpeciesUtils.is_animal(target_sim_info):
+            return CommonRelationshipUtils.has_relationship_bit_with_sim(sim_info, target_sim_info, CommonRelationshipBitId.PET_TO_PET_FRIENDLY)\
+                   or CommonRelationshipUtils.has_relationship_bit_with_sim(target_sim_info, sim_info, CommonRelationshipBitId.PET_TO_PET_FRIENDLY)
+        return CommonRelationshipUtils.get_friendship_level(sim_info, target_sim_info) >= 30
+
+    @staticmethod
+    def is_romantic_with(sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
+        """is_romantic_with(sim_info, target_sim_info)
+
+        Determine if a Sim is romantic with a Target Sim.
+
+        .. note:: By default, a Sim is romantic with another Sim when their Romance relationship is at or above 30.
+
+        :param sim_info: The info of a Sim.
+        :type sim_info: SimInfo
+        :param target_sim_info: The info of a Sim.
+        :type target_sim_info: SimInfo
+        :return: True, if the Sim is romantic with the Target Sim. False, if not.
+        :rtype: bool
+        """
+        return CommonRelationshipUtils.get_romance_level(sim_info, target_sim_info) >= 30
+
+    @staticmethod
     def is_romantically_committed_to(sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
         """is_romantically_committed_to(sim_info, target_sim_info)
 
@@ -425,7 +462,10 @@ class CommonRelationshipUtils:
         if relationship_bit_instance is None:
             return False
         target_sim_id = CommonSimUtils.get_sim_id(target_sim_info)
-        sim_info.relationship_tracker.add_relationship_bit(target_sim_id, relationship_bit_instance)
+        relationship_tracker = sim_info.relationship_tracker
+        if relationship_tracker is None:
+            return False
+        relationship_tracker.add_relationship_bit(target_sim_id, relationship_bit_instance)
         return True
 
     @staticmethod
@@ -461,7 +501,10 @@ class CommonRelationshipUtils:
         if relationship_bit_instance is None:
             return False
         target_sim_id = CommonSimUtils.get_sim_id(target_sim_info)
-        sim_info.relationship_tracker.remove_relationship_bit(target_sim_id, relationship_bit_instance)
+        relationship_tracker = sim_info.relationship_tracker
+        if relationship_tracker is None:
+            return False
+        relationship_tracker.remove_relationship_bit(target_sim_id, relationship_bit_instance)
         return True
 
     @staticmethod
@@ -829,13 +872,13 @@ def _common_print_relationship_bits(output: CommonConsoleCommandOutput, sim_info
 @CommonConsoleCommand(
     ModInfo.get_identity(),
     's4clib.meet_everyone',
-    'Add the Has Met Relationship bit between every Sim on the current lot.'
+    'Add the Has Met Relationship Bit between all Sim.'
 )
 def _common_meet_everyone(output: CommonConsoleCommandOutput):
-    output('Attempting to make everyone meet everyone on the current lot.')
+    output('Attempting to make everyone meet everyone.')
     sim_pair_count = 0
-    for sim_info in CommonSimUtils.get_instanced_sim_info_for_all_sims_generator():
-        for target_sim_info in CommonSimUtils.get_instanced_sim_info_for_all_sims_generator():
+    for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
+        for target_sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
             if sim_info is target_sim_info:
                 continue
             if CommonRelationshipUtils.has_met(sim_info, target_sim_info):
@@ -843,4 +886,24 @@ def _common_meet_everyone(output: CommonConsoleCommandOutput):
             sim_pair_count += 1
             CommonRelationshipUtils.add_relationship_bit(sim_info, target_sim_info, CommonRelationshipBitId.HAS_MET)
             CommonRelationshipUtils.add_relationship_bit(target_sim_info, sim_info, CommonRelationshipBitId.HAS_MET)
-    output(f'Done updating {sim_pair_count} Sim pair(s) with the Has Met relationship bit, on the current lot.')
+    output(f'Done adding the Has Met relationship bit to {sim_pair_count} Sim pair(s).')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.unmeet_everyone',
+    'Remove the Has Met Relationship Bit between all Sims.',
+)
+def _common_meet_everyone(output: CommonConsoleCommandOutput):
+    output('Attempting to make everyone unmeet everyone.')
+    sim_pair_count = 0
+    for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
+        for target_sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
+            if sim_info is target_sim_info:
+                continue
+            if not CommonRelationshipUtils.has_met(sim_info, target_sim_info):
+                continue
+            sim_pair_count += 1
+            CommonRelationshipUtils.remove_relationship_bit(sim_info, target_sim_info, CommonRelationshipBitId.HAS_MET)
+            CommonRelationshipUtils.remove_relationship_bit(target_sim_info, sim_info, CommonRelationshipBitId.HAS_MET)
+    output(f'Done removing the Has Met relationship from {sim_pair_count} Sim pair(s).')

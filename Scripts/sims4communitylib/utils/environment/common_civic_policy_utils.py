@@ -31,6 +31,17 @@ class CommonCivicPolicyUtils(_HasS4CLClassLog):
         return 'common_civic_policy_utils'
 
     @classmethod
+    def is_free_love_enacted(cls) -> bool:
+        """is_free_love_enacted()
+
+        Determine if the Free Love civic policy has been enacted in the current zone.
+
+        :return: True, if the policy is enacted. False, if not.
+        :rtype: bool
+        """
+        return cls.is_policy_enacted_in_current_zone(CommonStreetCivicPolicyId.SKILL_BASED_FREE_LOVE)
+
+    @classmethod
     def is_policy_enacted_in_zone(cls, zone_id: int, policy: Union[int, CommonVenueCivicPolicyId, CommonStreetCivicPolicyId, BaseCivicPolicy]) -> bool:
         """is_policy_enacted_in_zone(zone_id, policy)
 
@@ -355,6 +366,7 @@ class CommonCivicPolicyUtils(_HasS4CLClassLog):
             # noinspection PyCallingNonCallable
             policy_instance = policy()
             if isinstance(policy_instance, BaseCivicPolicy):
+                # noinspection PyTypeChecker
                 return policy
         except:
             pass
