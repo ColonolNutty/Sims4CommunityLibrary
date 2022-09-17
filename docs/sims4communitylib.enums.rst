@@ -350,6 +350,14 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Side`
+----------------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_side.CommonSide
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Sim Demographics`
 ------------------------------------------
 
