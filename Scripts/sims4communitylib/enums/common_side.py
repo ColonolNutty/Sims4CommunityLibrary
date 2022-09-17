@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Iterator, Tuple
+from typing import Iterator, Tuple, Union
 
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
@@ -63,3 +63,25 @@ class CommonSide(CommonInt):
         :rtype: str
         """
         return ', '.join(cls.get_all_names(exclude_values=exclude_values))
+
+    @staticmethod
+    def convert_to_localized_string_id(value: Union[int, 'CommonSide']) -> Union[int, str]:
+        """convert_to_localized_string_id(value)
+
+        Convert a value into a Localized String identifier.
+
+        :param value: An instance of a value
+        :type value: CommonSide
+        :return: The specified value translated to a localized string identifier. If no localized string id is found, the name property of the value will be used instead.
+        :rtype: Union[int, str]
+        """
+        from sims4communitylib.enums.strings_enum import CommonStringId
+        display_name_mapping = {
+            CommonSide.LEFT: CommonStringId.S4CL_LEFT,
+            CommonSide.RIGHT: CommonStringId.S4CL_RIGHT,
+            CommonSide.FRONT: CommonStringId.S4CL_FRONT,
+            CommonSide.BACK: CommonStringId.S4CL_BACK,
+            CommonSide.TOP: CommonStringId.S4CL_TOP,
+            CommonSide.BOTTOM: CommonStringId.S4CL_BOTTOM,
+        }
+        return display_name_mapping.get(value, value.name if hasattr(value, 'name') else str(value))
