@@ -275,7 +275,10 @@ class CommonInteractionUtils:
         from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
         if interaction is None or interaction.display_name is None:
             return None
-        return CommonLocalizationUtils.create_localized_string(interaction.display_name._string_id, tokens=tuple(tokens))
+        display_name_string_id = interaction.display_name._string_id
+        if not display_name_string_id:
+            return None
+        return CommonLocalizationUtils.create_localized_string(display_name_string_id, tokens=tuple(tokens))
 
     @staticmethod
     def get_interaction_short_name(interaction: Interaction) -> Union[str, None]:
@@ -347,6 +350,7 @@ class CommonInteractionUtils:
             # noinspection PyCallingNonCallable
             interaction_instance = interaction_id()
             if isinstance(interaction_instance, Interaction):
+                # noinspection PyTypeChecker
                 return interaction_id
         except:
             pass

@@ -64,8 +64,29 @@ class CommonSide(CommonInt):
         """
         return ', '.join(cls.get_all_names(exclude_values=exclude_values))
 
-    @staticmethod
-    def convert_to_localized_string_id(value: Union[int, 'CommonSide']) -> Union[int, str]:
+    @classmethod
+    def convert_to_opposite(cls, value: 'CommonSide') -> 'CommonSide':
+        """convert_to_opposite(value)
+
+        Convert a value to its opposite.
+
+        :param value: An instance of a value
+        :type value: CommonSide
+        :return: The specified value converted to its opposite or the value itself if it could not be converted.
+        :rtype: CommonSide
+        """
+        mapping = {
+            CommonSide.LEFT: CommonSide.RIGHT,
+            CommonSide.RIGHT: CommonSide.LEFT,
+            CommonSide.FRONT: CommonSide.BACK,
+            CommonSide.BACK: CommonSide.FRONT,
+            CommonSide.TOP: CommonSide.BOTTOM,
+            CommonSide.BOTTOM: CommonSide.TOP,
+        }
+        return mapping.get(value, value)
+
+    @classmethod
+    def convert_to_localized_string_id(cls, value: Union[int, 'CommonSide']) -> Union[int, str]:
         """convert_to_localized_string_id(value)
 
         Convert a value into a Localized String identifier.
@@ -76,7 +97,7 @@ class CommonSide(CommonInt):
         :rtype: Union[int, str]
         """
         from sims4communitylib.enums.strings_enum import CommonStringId
-        display_name_mapping = {
+        mapping = {
             CommonSide.LEFT: CommonStringId.S4CL_LEFT,
             CommonSide.RIGHT: CommonStringId.S4CL_RIGHT,
             CommonSide.FRONT: CommonStringId.S4CL_FRONT,
@@ -84,4 +105,4 @@ class CommonSide(CommonInt):
             CommonSide.TOP: CommonStringId.S4CL_TOP,
             CommonSide.BOTTOM: CommonStringId.S4CL_BOTTOM,
         }
-        return display_name_mapping.get(value, value.name if hasattr(value, 'name') else str(value))
+        return mapping.get(value, value.name if hasattr(value, 'name') else str(value))
