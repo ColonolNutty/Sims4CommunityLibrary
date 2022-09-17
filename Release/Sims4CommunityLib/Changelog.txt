@@ -12,6 +12,11 @@ v2.2:
 - Fixed an issue where the update alarm for CommonRunnables was not properly being set when the runnable is restarted.
 - Fixed an issue where Unknown_Mod_Messages.txt was mistakenly having "None Detected", as if "None" was a mod.
 - Fixed an issue when specifying integer values for body_type when attaching/detaching/printing CAS Parts for Sims via commands.
+- Added new enum CommonSide
+- Added a function to CommonCivicPolicyUtils for quickly checking if Free Love is enabled.
+- Added functions to CommonRelationshipUtils for checking if Sims are friendly or romantic with other Sims.
+- Added a function to CommonTraitUtils to check if a Sim has the Player trait.
+- CommonInteractionUtils.get_interaction_display_name will now return None if the string_id is empty.
 
 v2.1:
 - Fixed an issue when checking if a Sim is dead or not.
