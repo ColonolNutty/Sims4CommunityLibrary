@@ -169,6 +169,7 @@ class CommonChooseSimDialog(CommonChooseDialog):
         :exception AssertionError: when something is wrong with the arguments or no rows were added to the dialog.
         """
         try:
+            self._rows = tuple(sorted(self._rows, key=lambda row: CommonSimNameUtils.get_full_name(CommonSimUtils.get_sim_info(row.sim_id))))
             return self._show(
                 on_chosen=on_chosen,
                 sim_info=sim_info,

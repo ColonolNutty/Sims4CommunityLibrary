@@ -174,6 +174,7 @@ class CommonChooseSimsDialog(CommonChooseSimDialog):
         :exception AttributeError: When Min or Max Selectable are invalid.
         """
         try:
+            self._rows = tuple(sorted(self._rows, key=lambda row: CommonSimNameUtils.get_full_name(CommonSimUtils.get_sim_info(row.sim_id))))
             return self._show(
                 on_chosen=on_chosen,
                 sim_info=sim_info,
