@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Iterator, Union
+from typing import Iterator, Union, Tuple
 
 from relationships.relationship import Relationship
 from server_commands.argument_helpers import TunableInstanceParam
@@ -94,8 +94,8 @@ class CommonRelationshipUtils:
                    or CommonRelationshipUtils.has_relationship_bit_with_sim(target_sim_info, sim_info, CommonRelationshipBitId.PET_TO_PET_FRIENDLY)
         return CommonRelationshipUtils.get_friendship_level(sim_info, target_sim_info) >= 30
 
-    @staticmethod
-    def is_romantic_with(sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_romantic_with(cls, sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
         """is_romantic_with(sim_info, target_sim_info)
 
         Determine if a Sim is romantic with a Target Sim.
@@ -109,7 +109,25 @@ class CommonRelationshipUtils:
         :return: True, if the Sim is romantic with the Target Sim. False, if not.
         :rtype: bool
         """
-        return CommonRelationshipUtils.get_romance_level(sim_info, target_sim_info) >= 30
+        return cls.get_romance_level(sim_info, target_sim_info) >= 30
+
+    @classmethod
+    def get_romantically_committed_relationship_bits(cls) -> Tuple[CommonRelationshipBitId]:
+        """get_romantically_committed_relationship_bits()
+
+        Retrieve a collection of relationship bits that signify two Sims are in a committed relationship.
+
+        :return: A collection of relationship bits.
+        :rtype: Tuple[CommonRelationshipBitId]
+        """
+        result: Tuple[CommonRelationshipBitId, ...] = (
+            CommonRelationshipBitId.ROMANTIC_ENGAGED,
+            CommonRelationshipBitId.ROMANTIC_GETTING_MARRIED,
+            CommonRelationshipBitId.ROMANTIC_MARRIED,
+            CommonRelationshipBitId.ROMANTIC_PROMISED,
+            CommonRelationshipBitId.ROMANTIC_SIGNIFICANT_OTHER
+        )
+        return result
 
     @staticmethod
     def is_romantically_committed_to(sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
@@ -644,8 +662,8 @@ class CommonRelationshipUtils:
             CommonRelationshipBitId.ROMANTIC_COMBO_LOVEBIRDS
         ))
 
-    @staticmethod
-    def get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info: SimInfo, instanced_only: bool = True) -> Iterator[SimInfo]:
+    @classmethod
+    def get_sim_info_of_all_sims_romantically_committed_to_generator(cls, sim_info: SimInfo, instanced_only: bool = True) -> Iterator[SimInfo]:
         """get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info, instanced_only=True)
 
         Retrieve a SimInfo object for all Sims romantically committed with the specified Sim.
@@ -658,6 +676,7 @@ class CommonRelationshipUtils:
             - Getting Married
             - Engaged
             - Significant Other
+            - Promised
 
 
         :param sim_info: The Sim to locate romantically involved Sims with.
@@ -667,12 +686,7 @@ class CommonRelationshipUtils:
         :return: An iterable of Sims the specified Sim is romantically committed to.
         :rtype: Iterator[SimInfo]
         """
-        romance_relationship_ids = (
-            CommonRelationshipBitId.ROMANTIC_MARRIED,
-            CommonRelationshipBitId.ROMANTIC_GETTING_MARRIED,
-            CommonRelationshipBitId.ROMANTIC_ENGAGED,
-            CommonRelationshipBitId.ROMANTIC_SIGNIFICANT_OTHER
-        )
+        romance_relationship_ids = cls.get_romantically_committed_relationship_bits()
         for target_sim_info in CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, romance_relationship_ids, instanced_only=instanced_only):
             yield target_sim_info
 
