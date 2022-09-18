@@ -113,7 +113,7 @@ class CommonSatisfactionRewardStoreUtils:
         :rtype: Iterator[CommonSatisfactionRewardStoreItem]
         """
         satisfaction_reward_store_items: Dict[Reward, Tuple[int, SatisfactionTracker.SatisfactionAwardTypes]] = dict(SatisfactionTracker.SATISFACTION_STORE_ITEMS)
-        for (reward, data) in satisfaction_reward_store_items:
+        for (reward, data) in satisfaction_reward_store_items.items():
             reward_cost = data[0]
             reward_type = data[1]
             reward_store_item = CommonSatisfactionRewardStoreItem(reward, reward_cost, reward_type)
