@@ -864,6 +864,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
                 return CommonExecutionResult(False, reason=f'Sim failed to switch to occult type {occult_type.name}')
         else:
             vanilla_occult_type = occult_type
+        # noinspection PyPropertyAccess
+        sim_info.occult_tracker.set_pending_occult_type(sim_info.current_occult_types)
         sim_info.occult_tracker.switch_to_occult_type(vanilla_occult_type)
         return CommonExecutionResult.TRUE
 

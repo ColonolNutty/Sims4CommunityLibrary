@@ -9,8 +9,10 @@ from typing import Tuple, Dict, Callable, Iterator
 
 import sims4.collections
 from rewards.reward import Reward
+from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.whims.common_satisfaction_reward_store_item import CommonSatisfactionRewardStoreItem
 
+# noinspection PyBroadException
 try:
     from satisfaction.satisfaction_tracker import SatisfactionTracker
 except:
@@ -114,8 +116,8 @@ class CommonSatisfactionRewardStoreUtils:
         """
         satisfaction_reward_store_items: Dict[Reward, Tuple[int, SatisfactionTracker.SatisfactionAwardTypes]] = dict(SatisfactionTracker.SATISFACTION_STORE_ITEMS)
         for (reward, data) in satisfaction_reward_store_items.items():
-            reward_cost = data[0]
-            reward_type = data[1]
+            reward_cost = data.cost
+            reward_type = CommonResourceUtils.get_enum_by_int_value(int(data.award_type), SatisfactionTracker.SatisfactionAwardTypes, default_value=None)
             reward_store_item = CommonSatisfactionRewardStoreItem(reward, reward_cost, reward_type)
             if include_satisfaction_reward_callback is not None and not include_satisfaction_reward_callback(reward_store_item):
                 continue

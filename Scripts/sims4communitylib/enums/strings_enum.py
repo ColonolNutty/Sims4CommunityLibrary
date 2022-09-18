@@ -104,6 +104,10 @@ class CommonStringId(CommonInt):
     FEMININE: 'CommonStringId' = 667254132
     PHYSICAL_FRAME: 'CommonStringId' = 2574825855
 
+    # Store
+    THIS_REWARD_IS_NOT_AVAILABLE_FOR_YOUR_SIM_OR_IT_IS_ALREADY_OWNED_BY_YOUR_SIM = 0x0709B9CC
+    INSUFFICIENT_POINTS = 0x67D91493
+
     # Text
     # Tokens: {0.String}
     STRING_NOT_FOUND_WITH_IDENTIFIER: 'CommonStringId' = 3037244137
