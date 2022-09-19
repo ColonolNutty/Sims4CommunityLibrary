@@ -17,6 +17,11 @@ v2.2:
 - Added functions to CommonRelationshipUtils for checking if Sims are friendly or romantic with other Sims.
 - Added a function to CommonTraitUtils to check if a Sim has the Player trait.
 - CommonInteractionUtils.get_interaction_display_name will now return None if the string_id is empty.
+- Fixed an error when retrieving all satisfaction reward store items.
+- Fixed an issue when switching Sims to a different occult.
+- Fixed an issue when retrieving satisfaction reward items.
+- The Choose Sims dialogs will now always be sorted
+- Added a function to CommonRelationshipUtils to retrieve all relationship bits that signify two Sims are in a relationship
 
 v2.1:
 - Fixed an issue when checking if a Sim is dead or not.
