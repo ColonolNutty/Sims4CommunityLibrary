@@ -125,7 +125,8 @@ class CommonRelationshipUtils:
             CommonRelationshipBitId.ROMANTIC_GETTING_MARRIED,
             CommonRelationshipBitId.ROMANTIC_MARRIED,
             CommonRelationshipBitId.ROMANTIC_PROMISED,
-            CommonRelationshipBitId.ROMANTIC_SIGNIFICANT_OTHER
+            CommonRelationshipBitId.ROMANTIC_SIGNIFICANT_OTHER,
+            CommonRelationshipBitId.SEXUAL_ORIENTATION_WOOHOO_PARTNERS
         )
         return result
 

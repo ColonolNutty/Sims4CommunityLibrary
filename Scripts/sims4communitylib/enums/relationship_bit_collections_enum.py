@@ -11,6 +11,15 @@ from sims4communitylib.enums.enumtypes.common_int import CommonInt
 class CommonRelationshipBitCollectionId(CommonInt):
     """Identifiers for vanilla relationship bit collections."""
     INVALID: 'CommonRelationshipBitCollectionId' = 0
+    CHILD: 'CommonRelationshipBitCollectionId' = 195565
+    FAMILY: 'CommonRelationshipBitCollectionId' = 15806
+    FAMILY_ACQUIRED_NEGATIVE: 'CommonRelationshipBitCollectionId' = 162462
+    FAMILY_ACQUIRED_NEUTRAL: 'CommonRelationshipBitCollectionId' = 164649
+    FAMILY_ACQUIRED_POSITIVE: 'CommonRelationshipBitCollectionId' = 164128
+    FRIEND: 'CommonRelationshipBitCollectionId' = 15807
+    FRIEND_AT_LEAST_FRIEND: 'CommonRelationshipBitCollectionId' = 273773
+    ROMANTIC: 'CommonRelationshipBitCollectionId' = 240628
+    ROMANTIC_HAVE_BEEN_EXES: 'CommonRelationshipBitCollectionId' = 274292
     SENTIMENT_ADORING: 'CommonRelationshipBitCollectionId' = 246492
     SENTIMENT_BITTER: 'CommonRelationshipBitCollectionId' = 240104
     SENTIMENT_CLOSE: 'CommonRelationshipBitCollectionId' = 240103

@@ -49,7 +49,7 @@ class CommonFundsSource(CommonInt):
 
         :param value: An instance of the enum.
         :type value: FundsSource
-        :return: The specified value translated to value or HOUSEHOLD if the value could not be translated.
+        :return: The specified value translated to CommonFundsSource or HOUSEHOLD if the value could not be translated.
         :rtype: CommonFundsSource
         """
         mapping: Dict[FundsSource, CommonFundsSource] = {
