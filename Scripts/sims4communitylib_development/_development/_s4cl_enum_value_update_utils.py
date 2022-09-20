@@ -132,6 +132,7 @@ class _S4CLEnumValueUpdateUtils(HasLog):
         self.log.debug('{')
         sorted_conversion_table = sorted(tuple(conversion_table.items()), key=lambda x: x[0])
         for (vanilla_value_name, cleaned_value_name) in sorted_conversion_table:
+            vanilla_value_name = vanilla_value_name.replace("'", "\'")
             self.log.debug(f'    \'{vanilla_value_name}\': \'{cleaned_value_name}\',')
         self.log.debug('}')
         self.log.format_with_message('---------------------------------------------------------------------------------')
