@@ -59,7 +59,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
 
         :param sim_info: The Sim to locate the Occults of.
         :type sim_info: SimInfo
-        :return: An iterable of OccultType for all occults of the Sim. (Results will not include Occult Types not within the OccultTypes enum, such as Skeleton, Robot, and Ghost! Use :class:`.CommonSimOccultTypeUtils` for more accurate results.)
+        :return: An iterator of OccultType for all occults of the Sim. (Results will not include Occult Types not within the OccultTypes enum, such as Skeleton, Robot, and Ghost! Use :class:`.CommonSimOccultTypeUtils` for more accurate results.)
         :rtype: Iterator[OccultType]
         """
         if sim_info is None:
@@ -85,7 +85,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :type sim_info: SimInfo
         :param exclude_occult_types: A collection of OccultTypes to exclude from the resulting SimInfo list.
         :type exclude_occult_types: Iterator[OccultType]
-        :return: An iterable of Sims for all occult types of the Sim.
+        :return: An iterator of Sims for all occult types of the Sim.
         :rtype: Iterator[SimInfo]
         """
         if sim_info is None:
@@ -1351,7 +1351,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :type sim_info: SimInfo
         :param exclude_occult_types: A collection of OccultTypes to exclude from the resulting SimInfo list.
         :type exclude_occult_types: OccultType
-        :return: An iterable of Sims for all occult types of the Sim.
+        :return: An iterator of Sims for all occult types of the Sim.
         :rtype: Iterator[SimInfo]
         """
         if sim_info is None:

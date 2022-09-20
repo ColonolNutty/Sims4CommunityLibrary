@@ -82,7 +82,7 @@ class CommonSkillUtils:
 
         :param include_skill_callback: If the result of this callback is True, the Skill will be included in the results. If set to None, All Skills will be included.
         :type include_skill_callback: Callable[[Skill], bool], optional
-        :return: An iterable of Skills that pass the specified include_skill_callback.
+        :return: An iterator of Skills that pass the specified include_skill_callback.
         :rtype: Iterator[Skill]
         """
         from sims4communitylib.utils.resources.common_statistic_utils import CommonStatisticUtils

@@ -1945,7 +1945,7 @@ class CommonSimTypeUtils:
         :type combine_teen_young_adult_and_elder_age: bool, optional
         :param combine_child_dog_types: If set to True, the Child Dog Sim Types will be combined into a single Sim Type, i.e. CHILD_DOG. If set to False, the Child Dog Sim Types will be returned as their more specific values. i.e. CHILD_LARGE_DOG, CHILD_SMALL_DOG, etc. Default is True.
         :type combine_child_dog_types: bool, optional
-        :return: An iterable of all types the Sim is.
+        :return: An iterator of all types the Sim is.
         :rtype: Iterator[CommonSimType]
         """
         if sim_info is None:

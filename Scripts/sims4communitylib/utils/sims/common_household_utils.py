@@ -101,6 +101,7 @@ class CommonHouseholdUtils(HasClassLog):
         """
         if household is None:
             return -1
+        # noinspection PyTypeChecker
         return household.home_zone_id
 
     @classmethod
@@ -134,7 +135,7 @@ class CommonHouseholdUtils(HasClassLog):
 
         Retrieve a collection of Sims that are a part of the active household.
 
-        :return: An iterable of Sims in the active household.
+        :return: An iterator of Sims in the active household.
         :rtype: Iterator[SimInfo]
         """
         household = cls.get_active_household()
@@ -149,7 +150,7 @@ class CommonHouseholdUtils(HasClassLog):
 
         :param household: The Household to retrieve Sims from.
         :type household: Household
-        :return: An iterable of Sims in the specified Household.
+        :return: An iterator of Sims in the specified Household.
         :rtype: Iterator[SimInfo]
         """
         if household is None:
@@ -231,7 +232,7 @@ class CommonHouseholdUtils(HasClassLog):
 
         Retrieve a collection of all households.
 
-        :return: An iterable of all Households.
+        :return: An iterator of all Households.
         :rtype: Iterator[Household]
         """
         household_list = tuple(services.household_manager().get_all())
@@ -258,7 +259,7 @@ class CommonHouseholdUtils(HasClassLog):
             return None
 
     @classmethod
-    def locate_household_by_name(cls, name: str, allow_partial_match: bool=False, create_on_missing: bool=False, starting_funds: int=0, as_hidden_household: bool=False) -> Union[Household, None]:
+    def locate_household_by_name(cls, name: str, allow_partial_match: bool = False, create_on_missing: bool = False, starting_funds: int = 0, as_hidden_household: bool = False) -> Union[Household, None]:
         """locate_household_by_name(name, allow_partial_match=False, create_on_missing=False, starting_funds=0, as_hidden_household=False)
 
         Locate a household with the specified name.
@@ -288,7 +289,7 @@ class CommonHouseholdUtils(HasClassLog):
         return cls.create_empty_household(starting_funds=starting_funds, as_hidden_household=as_hidden_household)
 
     @classmethod
-    def locate_households_by_name_generator(cls, name: str, allow_partial_match: bool=False) -> Iterator[Household]:
+    def locate_households_by_name_generator(cls, name: str, allow_partial_match: bool = False) -> Iterator[Household]:
         """locate_households_by_name_generator(name, allow_partial_match=False)
 
         Locate all households with the specified name.
@@ -297,7 +298,7 @@ class CommonHouseholdUtils(HasClassLog):
         :type name: str
         :param allow_partial_match: If True, households only need to contain the name to match.
         :type allow_partial_match: bool, optional
-        :return: An iterable of Households with the specified name.
+        :return: An iterator of Households with the specified name.
         :rtype: Iterator[Household]
         """
         log = cls.get_log()
@@ -325,7 +326,7 @@ class CommonHouseholdUtils(HasClassLog):
             yield household
 
     @classmethod
-    def create_empty_household(cls, starting_funds: int=0, as_hidden_household: bool=False) -> Household:
+    def create_empty_household(cls, starting_funds: int = 0, as_hidden_household: bool = False) -> Household:
         """create_empty_household(starting_funds=0, as_hidden_household=False)
 
         Create an empty household.
@@ -344,7 +345,7 @@ class CommonHouseholdUtils(HasClassLog):
         return household
 
     @classmethod
-    def add_sim_to_active_household(cls, sim_info: SimInfo, destroy_if_empty_household: bool=True) -> bool:
+    def add_sim_to_active_household(cls, sim_info: SimInfo, destroy_if_empty_household: bool = True) -> bool:
         """add_sim_to_active_household(sim_info, destroy_if_empty_household=True)
 
         Add a Sim to the Active Sims household.
@@ -360,7 +361,7 @@ class CommonHouseholdUtils(HasClassLog):
         return cls.add_sim_to_target_household(sim_info, target_sim_info, destroy_if_empty_household=destroy_if_empty_household)
 
     @classmethod
-    def add_sim_to_target_household(cls, sim_info: SimInfo, target_sim_info: SimInfo, destroy_if_empty_household: bool=True) -> bool:
+    def add_sim_to_target_household(cls, sim_info: SimInfo, target_sim_info: SimInfo, destroy_if_empty_household: bool = True) -> bool:
         """add_sim_to_active_household(sim_info, destroy_if_empty_household=True)
 
         Add a Sim to the Household of the Target Sim.
@@ -381,7 +382,7 @@ class CommonHouseholdUtils(HasClassLog):
         return cls.move_sim_to_household(sim_info, household_id=destination_household.id, destroy_if_empty_household=destroy_if_empty_household)
 
     @classmethod
-    def move_sim_to_household(cls, sim_info: SimInfo, household_id: int=None, destroy_if_empty_household: bool=True) -> bool:
+    def move_sim_to_household(cls, sim_info: SimInfo, household_id: int = None, destroy_if_empty_household: bool = True) -> bool:
         """move_sim_to_household(sim_info, household_id=None, destroy_if_empty_household=True)
 
         Move a Sim to the specified household or a new household if no Household is specified.
@@ -480,6 +481,42 @@ class CommonHouseholdUtils(HasClassLog):
         if household is None:
             return -1
         return household.free_slot_count
+
+    @classmethod
+    def get_household_members_gen(cls, sim_info: SimInfo) -> Iterator[SimInfo]:
+        """get_household_members_gen(sim_info)
+
+        Retrieve the Sims within the household of a Sim.
+
+        .. note:: The result will include the specified Sim as well.
+
+        :param sim_info: The info of a Sim.
+        :type sim_info: SimInfo
+        :return: An iterator of Sims within the household of the specified Sim.
+        :rtype: Iterator[SimInfo]
+        """
+        household = cls.get_household(sim_info)
+        if household is None:
+            yield sim_info
+        else:
+            yield from cls.get_household_members_from_household_gen(household)
+
+    @classmethod
+    def get_household_members_from_household_gen(cls, household: Household) -> Iterator[SimInfo]:
+        """get_household_members_from_household_gen(sim_info)
+
+        Retrieve the Sims within a Household.
+
+        :param household: An instance of a Household
+        :type household: Household
+        :return: An iterator of Sims within the specified household.
+        :rtype: Iterator[SimInfo]
+        """
+        if household is None:
+            return tuple()
+
+        for household_member_sim_info in household:
+            yield CommonSimUtils.get_sim_info(household_member_sim_info)
 
     @classmethod
     def get_household(cls, sim_info: SimInfo) -> Union[Household, None]:
@@ -633,7 +670,7 @@ class CommonHouseholdUtils(HasClassLog):
         return True
 
     @classmethod
-    def delete_households_with_name(cls, name: str, allow_partial_match: bool=False) -> bool:
+    def delete_households_with_name(cls, name: str, allow_partial_match: bool = False) -> bool:
         """delete_households_with_name(name, allow_partial_match=False)
 
         Delete all households with the specified name.
@@ -673,7 +710,7 @@ class CommonHouseholdUtils(HasClassLog):
         's4clib.addtohousehold',
     )
 )
-def _common_command_add_to_my_household(output: CommonConsoleCommandOutput, sim_info: SimInfo=None, target_household_sim_info: SimInfo=None):
+def _common_command_add_to_my_household(output: CommonConsoleCommandOutput, sim_info: SimInfo = None, target_household_sim_info: SimInfo = None):
     if sim_info is None:
         return
     if target_household_sim_info is None:

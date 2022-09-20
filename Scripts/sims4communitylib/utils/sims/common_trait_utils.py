@@ -1055,7 +1055,7 @@ class CommonTraitUtils(_HasS4CLClassLog):
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :param traits: An iterable of identifiers of Traits.
+        :param traits: An iterator of identifiers of Traits.
         :type traits: Iterator[Union[int, CommonTraitId, Trait]]
         :return: The result of testing. True, if the Sim has any of the specified traits. False, if not.
         :rtype: CommonTestResult
@@ -1103,7 +1103,7 @@ class CommonTraitUtils(_HasS4CLClassLog):
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :param traits: An iterable of identifiers of Traits.
+        :param traits: An iterator of identifiers of Traits.
         :type traits: Iterator[Union[int, CommonTraitId, Trait]]
         :return: The result of testing. True, if the Sim has any of the specified traits. False, if not.
         :rtype: CommonTestResult
@@ -1301,7 +1301,7 @@ class CommonTraitUtils(_HasS4CLClassLog):
 
         :param sim_info: The Sim to add the specified traits to.
         :type sim_info: SimInfo
-        :param traits: An iterable of identifiers of traits being added.
+        :param traits: An iterator of identifiers of traits being added.
         :type traits: Iterator[Union[int, CommonTraitId, Trait]]
         :return: The result of adding the traits. True, if all specified traits were successfully added to the Sim. False, if not.
         :rtype: CommonExecutionResult
@@ -1359,7 +1359,7 @@ class CommonTraitUtils(_HasS4CLClassLog):
 
         :param sim_info: The Sim to remove the specified traits from.
         :type sim_info: SimInfo
-        :param traits: An iterable of Trait identifiers of traits being removed.
+        :param traits: An iterator of Trait identifiers of traits being removed.
         :type traits: Iterator[Union[int, CommonTraitId, Trait]]
         :return: The result of removing the traits. True, if all specified traits were successfully removed from the Sim. False, if not.
         :rtype: CommonExecutionResult

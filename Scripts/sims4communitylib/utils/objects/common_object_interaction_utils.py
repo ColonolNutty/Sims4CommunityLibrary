@@ -50,7 +50,7 @@ class CommonObjectInteractionUtils(HasClassLog):
         :type script_object: ScriptObject
         :param include_interaction_callback: If the result of this callback is True, the Interaction will be included in the results. If set to None, All Interactions will be included. Default is None.
         :type include_interaction_callback: Callable[[Interaction], bool], optional
-        :return: An iterable of Interactions that pass the include callback filter.
+        :return: An iterator of Interactions that pass the include callback filter.
         :rtype: Iterator[Interaction]
         """
         if script_object is None or not hasattr(script_object, '_super_affordances') or not script_object._super_affordances:

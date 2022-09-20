@@ -50,7 +50,7 @@ class CommonDialogInputTextOption(CommonDialogObjectOption):
     :param dialog_description_identifier: The description that will display in the input dialog separately from the option.\
     If not provided the description from the provided context will be used instead.
     :type dialog_description_identifier: Union[int, str, LocalizedString, CommonStringId], optional
-    :param dialog_description_tokens: An iterable of Tokens that will be formatted into the dialog description.
+    :param dialog_description_tokens: An iterator of Tokens that will be formatted into the dialog description.
     :type dialog_description_tokens: Iterator[Any], optional
     """
     def __init__(

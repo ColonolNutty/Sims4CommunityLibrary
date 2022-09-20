@@ -33,7 +33,7 @@ class CommonSimOccultTypeUtils:
 
         :param sim_info: The Sim to locate the Occults of.
         :type sim_info: SimInfo
-        :return: An iterable of Occult Types for all occults of the Sim.
+        :return: An iterator of Occult Types for all occults of the Sim.
         :rtype: Iterator[CommonOccultType]
         """
         if sim_info is None:

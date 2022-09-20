@@ -27,13 +27,13 @@ class CommonAvailableForSim:
 
     .. note:: At least one argument must be supplied with values.
 
-    :param genders: An iterable of CommonGender. Default is an empty collection.
+    :param genders: An iterator of CommonGender. Default is an empty collection.
     :type genders: Iterator[CommonGender], optional
-    :param ages: An iterable of CommonAge. Default is an empty collection.
+    :param ages: An iterator of CommonAge. Default is an empty collection.
     :type ages: Iterator[CommonAge], optional
-    :param species: An iterable of CommonSpecies. Default is an empty collection.
+    :param species: An iterator of CommonSpecies. Default is an empty collection.
     :type species: Iterator[CommonSpecies], optional
-    :param occult_types: An iterable of CommonOccultType. Default is an empty collection.
+    :param occult_types: An iterator of CommonOccultType. Default is an empty collection.
     :type occult_types: Iterator[CommonOccultType], optional
     """
     def __init__(

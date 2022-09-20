@@ -123,7 +123,7 @@ class CommonObjectSlotUtils:
         :type slot_name: CommonSlotType
         :param include_object_callback: If the result of this callback is True, the Object will be included in the results. If set to None, All Objects will be included. Default is None.
         :type include_object_callback: Callable[[ScriptObject], bool], optional
-        :return: An iterable of objects connected to the specified object at the specified slot.
+        :return: An iterator of objects connected to the specified object at the specified slot.
         :rtype: Iterator[ScriptObject]
         """
         if script_object is None:
@@ -176,7 +176,7 @@ class CommonObjectSlotUtils:
         :type direct_connections_only: bool, optional
         :param include_object_callback: If the result of this callback is True, the Object will be included in the results. If set to None, All Objects will be included. Default is None.
         :type include_object_callback: Callable[[ScriptObject], bool], optional
-        :return: An iterable of Objects connected to the specified Object.
+        :return: An iterator of Objects connected to the specified Object.
         :rtype: Iterator[BaseObject]
         """
         if direct_connections_only:

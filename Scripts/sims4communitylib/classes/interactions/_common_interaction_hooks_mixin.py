@@ -42,7 +42,7 @@ class _CommonInteractionHooksMixin:
         :type sim: Sim
         :param target: The target Object of the interaction.
         :type target: Any
-        :return: An iterable of constraints to replace the normal constraints of the interaction or None if replacement constraints are not wanted.
+        :return: An iterator of constraints to replace the normal constraints of the interaction or None if replacement constraints are not wanted.
         :rtype: Union[Iterator[Constraint], None]
         """
         return None
@@ -62,7 +62,7 @@ class _CommonInteractionHooksMixin:
         :type sim: Sim
         :param target: The target Object of the interaction.
         :type target: Any
-        :return: A constraint or an iterable of constraints to return in addition to the normal constraints or None if no additional constraints should be added.
+        :return: A constraint or an iterator of constraints to return in addition to the normal constraints or None if no additional constraints should be added.
         :rtype: Union[Iterator[Constraint], Constraint, None]
         """
         return None

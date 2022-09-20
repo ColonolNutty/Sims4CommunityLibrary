@@ -394,7 +394,7 @@ class CommonSimSituationUtils(HasClassLog):
         :type sim_info: SimInfo
         :param include_situation_callback: If the result of this callback is True, the Situation will be included in the results. If set to None, All situations will be included. Default is None.
         :type include_situation_callback: Callable[[Situation], bool], optional
-        :return: An iterable of Situations that pass the include callback filter.
+        :return: An iterator of Situations that pass the include callback filter.
         :rtype: Iterator[Situation]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
@@ -452,7 +452,7 @@ class CommonSimSituationUtils(HasClassLog):
         :type sim_info: SimInfo
         :param tag: The tag to locate situations with.
         :type tag: CommonGameTag
-        :return: An iterable of Situations the Sim is running that have the specified tag.
+        :return: An iterator of Situations the Sim is running that have the specified tag.
         :rtype: Iterator[Situation]
         """
         def _situation_has_tag(_situation: Situation) -> bool:
@@ -472,7 +472,7 @@ class CommonSimSituationUtils(HasClassLog):
         :type sim_info: SimInfo
         :param tags: A collection of tags to locate situations with. Matching situations will have at least one of these tags.
         :type tags: Iterator[CommonGameTag]
-        :return: An iterable of Situations the Sim is running that have any of the specified tags.
+        :return: An iterator of Situations the Sim is running that have any of the specified tags.
         :rtype: Iterator[Situation]
         """
         matching_situations: List[Situation] = list()
@@ -492,7 +492,7 @@ class CommonSimSituationUtils(HasClassLog):
         :type sim_info: SimInfo
         :param situation_type: A situation type to locate situations with.
         :type situation_type: Type[Situation]
-        :return: An iterable of Situations the Sim is running that are of the specified type.
+        :return: An iterator of Situations the Sim is running that are of the specified type.
         :rtype: Iterator[Situation]
         """
         def _situation_is_of_type(_situation: Situation) -> bool:

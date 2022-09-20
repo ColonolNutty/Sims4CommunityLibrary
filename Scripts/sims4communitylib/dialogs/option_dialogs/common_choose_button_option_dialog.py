@@ -134,9 +134,9 @@ class CommonChooseButtonOptionDialog(CommonChooseResponseOptionDialog):
     :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: A decimal identifier of the description text.
     :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
-    :param title_tokens: An iterable of Tokens to format into the title. Default is an empty collection.
+    :param title_tokens: An iterator of Tokens to format into the title. Default is an empty collection.
     :type title_tokens: Iterator[Any], optional
-    :param description_tokens: An iterable of Tokens to format into the description. Default is an empty collection.
+    :param description_tokens: An iterator of Tokens to format into the description. Default is an empty collection.
     :type description_tokens: Iterator[Any], optional
     :param include_previous_button: If True, the Previous button will be appended to the end of the dialog. Default is True.
     :type include_previous_button: bool, optional

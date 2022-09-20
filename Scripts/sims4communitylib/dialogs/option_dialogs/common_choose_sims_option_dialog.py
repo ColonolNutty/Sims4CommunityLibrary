@@ -107,9 +107,9 @@ class CommonChooseSimsOptionDialog(CommonChooseOptionsDialog):
     :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: A decimal identifier of the description text.
     :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
-    :param title_tokens: An iterable of Tokens to format into the title.
+    :param title_tokens: An iterator of Tokens to format into the title.
     :type title_tokens: Iterator[Any], optional
-    :param description_tokens: An iterable of Tokens to format into the description.
+    :param description_tokens: An iterator of Tokens to format into the description.
     :type description_tokens: Iterator[Any], optional
     :param on_close: A callback invoked upon the dialog closing.
     :type on_close: Callable[[], None], optional

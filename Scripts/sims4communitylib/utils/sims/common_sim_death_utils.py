@@ -80,7 +80,7 @@ class CommonSimDeathUtils(_HasS4CLClassLog):
         :type death_type: Union[CommonDeathType, DeathType], optional
         :param include_sim_callback: If the result of this callback is True, the sim will be included in the results. If set to None, All sims will be included.
         :type include_sim_callback: Callable[[SimInfo], bool], optional
-        :return: An iterable of all Sims matching the `include_sim_callback` filter.
+        :return: An iterator of all Sims matching the `include_sim_callback` filter.
         :rtype: Iterator[SimInfo]
         """
         if death_type is not None:

@@ -119,7 +119,7 @@ class CommonSimUtils:
 
         :param last_name: A last name to look for.
         :type last_name: str
-        :return: An iterable of Sims found with the specified last name.
+        :return: An iterator of Sims found with the specified last name.
         :rtype: Iterator[SimInfo]
         """
         from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
@@ -138,7 +138,7 @@ class CommonSimUtils:
 
         :param first_name: A first name to look for.
         :type first_name: str
-        :return: An iterable of Sims found with the specified first name.
+        :return: An iterator of Sims found with the specified first name.
         :rtype: Iterator[SimInfo]
         """
         from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
@@ -159,7 +159,7 @@ class CommonSimUtils:
         :type first_name: str
         :param last_name: A last name to look for.
         :type last_name: str
-        :return: An iterable of Sims found with the specified first and last name.
+        :return: An iterator of Sims found with the specified first and last name.
         :rtype: Iterator[SimInfo]
         """
         from sims4communitylib.utils.sims.common_sim_name_utils import CommonSimNameUtils
@@ -185,7 +185,7 @@ class CommonSimUtils:
         :type include_sim_callback: Callable[[SimInfo], bool], optional
         :param allow_hidden_flags: Flags to indicate the types of hidden Sims to consider as being instanced. Default is ALL_HIDDEN_REASONS
         :type allow_hidden_flags: HiddenReasonFlag, optional
-        :return: An iterable of all Sims matching the `include_sim_callback` filter.
+        :return: An iterator of all Sims matching the `include_sim_callback` filter.
         :rtype: Iterator[Sim]
         """
         for sim_info in cls.get_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):
@@ -205,7 +205,7 @@ class CommonSimUtils:
 
         :param include_sim_callback: If the result of this callback is True, the Sim will be included in the results. If set to None, All Sims will be included.
         :type include_sim_callback: Callable[[SimInfo], bool], optional
-        :return: An iterable of all Sims matching the `include_sim_callback` filter.
+        :return: An iterator of all Sims matching the `include_sim_callback` filter.
         :rtype: Iterator[SimInfo]
         """
         sim_info_list = tuple(cls.get_sim_info_manager().get_all())
@@ -235,7 +235,7 @@ class CommonSimUtils:
         :type include_sim_callback: Callable[[SimInfo], bool], optional
         :param allow_hidden_flags: Flags to indicate the types of hidden Sims to consider as being instanced. Default is ALL_HIDDEN_REASONS
         :type allow_hidden_flags: HiddenReasonFlag, optional
-        :return: An iterable of all Sims matching the `include_sim_callback` filter.
+        :return: An iterator of all Sims matching the `include_sim_callback` filter.
         :rtype: Iterator[SimInfo]
         """
         def _is_instanced(_sim_info: SimInfo) -> bool:

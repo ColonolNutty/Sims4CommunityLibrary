@@ -72,7 +72,7 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
         :type sim_info: SimInfo
         :param include_career_callback: If the result of this callback is True, the Career of the Sim will be included in the results. If set to None, All Careers of the Sim will be included. Default is None.
         :type include_career_callback: Callable[[Career], bool], optional
-        :return: An iterable of all Careers matching the `include_career_callback` filter.
+        :return: An iterator of all Careers matching the `include_career_callback` filter.
         :rtype: Iterator[Career]
         """
         if sim_info is None:

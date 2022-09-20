@@ -47,7 +47,7 @@ class CommonLocalizationUtils:
         :param tooltip_text: The text that will be displayed.
         :type tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator]
         :param tooltip_tokens: A collection of objects to format into the localized string. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few)
-        :type tooltip_tokens: Iterable[Any], optional
+        :type tooltip_tokens: Iterator[Any], optional
         :return: A tooltip ready for display.
         :rtype: LocalizedTooltip
         """
@@ -56,7 +56,7 @@ class CommonLocalizationUtils:
         return CommonLocalizationUtils.LocalizedTooltip(tooltip_text, *tuple(tooltip_tokens))
 
     @staticmethod
-    def create_localized_string(identifier: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator], tokens: Iterator[Any]=(), localize_tokens: bool=True, text_color: CommonLocalizedStringColor=CommonLocalizedStringColor.DEFAULT) -> LocalizedString:
+    def create_localized_string(identifier: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator], tokens: Iterator[Any] = (), localize_tokens: bool = True, text_color: CommonLocalizedStringColor = CommonLocalizedStringColor.DEFAULT) -> LocalizedString:
         """create_localized_string(identifier, tokens=(), localize_tokens=True, text_color=CommonLocalizedStringColor.DEFAULT)
 
         Create a LocalizedString formatted with the specified tokens.
@@ -64,7 +64,7 @@ class CommonLocalizationUtils:
         :param identifier: An identifier to locate a LocalizedString with, text that will be turned into a LocalizedString, or a LocalizedString itself.
         :type identifier: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator]
         :param tokens: A collection of objects to format into the localized string. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few)
-        :type tokens: Iterable[Any]
+        :type tokens: Iterator[Any]
         :param localize_tokens: If True, the specified tokens will be localized. If False, the specified tokens will be formatted into the LocalizedString as they are. Default is True
         :type localize_tokens: bool
         :param text_color: The color the text will be when displayed.

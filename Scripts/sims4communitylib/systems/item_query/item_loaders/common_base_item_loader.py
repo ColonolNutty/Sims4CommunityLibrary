@@ -65,7 +65,7 @@ class CommonBaseItemLoader(CommonService, HasLog, Generic[CommonLoadedItemType])
 
         Loads all items.
 
-        :return: An iterable of the valid items.
+        :return: An iterator of the valid items.
         :rtype: Iterator[Any]
         """
         self._total = 0

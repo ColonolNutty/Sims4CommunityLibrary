@@ -32,13 +32,13 @@ class CommonDialogOptionContext:
     :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: The description of the option.
     :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
-    :param title_tokens: An iterable of Tokens that will be formatted into the title.
+    :param title_tokens: An iterator of Tokens that will be formatted into the title.
     :type title_tokens: Iterator[Any], optional
-    :param description_tokens: An iterable of Tokens that will be formatted into the description.
+    :param description_tokens: An iterator of Tokens that will be formatted into the description.
     :type description_tokens: Iterator[Any], optional
     :param tooltip_text_identifier: Text that will be displayed upon hovering the option.
     :type tooltip_text_identifier: Union[int, str, LocalizedString, CommonStringId], optional
-    :param tooltip_tokens: An iterable of Tokens that will be formatted into the tooltip text.
+    :param tooltip_tokens: An iterator of Tokens that will be formatted into the tooltip text.
     :type tooltip_tokens: Tuple[Any], optional
     :param icon: The icon to display for the option.
     :type icon: Any, optional

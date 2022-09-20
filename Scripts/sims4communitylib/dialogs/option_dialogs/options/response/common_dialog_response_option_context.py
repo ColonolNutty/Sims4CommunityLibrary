@@ -27,15 +27,15 @@ class CommonDialogResponseOptionContext:
 
     :param text_identifier: The text of the option.
     :type text_identifier: Union[int, str, LocalizedString, CommonStringId]
-    :param text_tokens: An iterable of Tokens that will be formatted into the text.
+    :param text_tokens: An iterator of Tokens that will be formatted into the text.
     :type text_tokens: Iterator[Any], optional
     :param subtext_identifier: The subtext of the option. Default is None.
     :type subtext_identifier: Union[int, str, LocalizedString, CommonStringId], optional
-    :param subtext_tokens: An iterable of Tokens that will be formatted into the description.
+    :param subtext_tokens: An iterator of Tokens that will be formatted into the description.
     :type subtext_tokens: Iterator[Any], optional
     :param disabled_text_identifier: The text that displays on the option as a tooltip. Setting this value will also disable the option. Default is None.
     :type disabled_text_identifier: Union[int, str, LocalizedString, CommonStringId], optional
-    :param disabled_text_tokens: An iterable of Tokens that will be formatted into the description.
+    :param disabled_text_tokens: An iterator of Tokens that will be formatted into the description.
     :type disabled_text_tokens: Iterator[Any], optional
     """
     def __init__(

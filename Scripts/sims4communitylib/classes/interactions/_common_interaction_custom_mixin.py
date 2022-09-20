@@ -49,7 +49,7 @@ class _CommonInteractionCustomMixin:
         :param tooltip: The tooltip displayed when hovering the interaction while it is disabled.
         :type tooltip: Union[int, str, LocalizedTooltip], optional
         :param tooltip_tokens: A collection of objects to format into the localized tooltip. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few) Default is an empty collection.
-        :type tooltip_tokens: Iterable[Any], optional
+        :type tooltip_tokens: Iterator[Any], optional
         :param icon: The icon of the outcome.
         :type icon: CommonResourceKey, optional
         :param influence_by_active_mood: If true, the Test Result will be influenced by the active mood.

@@ -327,7 +327,7 @@ class CommonSimSkillUtils:
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :return: An iterable of Skills that are available for the specified Sim.
+        :return: An iterator of Skills that are available for the specified Sim.
         :rtype: Iterator[Skill]
         """
         from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils

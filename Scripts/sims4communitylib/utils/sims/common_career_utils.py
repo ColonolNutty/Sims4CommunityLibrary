@@ -178,7 +178,7 @@ class CommonCareerUtils:
 
         :param include_career_callback: If the result of this callback is True, the Career will be included in the results. If set to None, All Careers will be included. Default is None.
         :type include_career_callback: Callable[[Career], bool], optional
-        :return: An iterable of Careers matching `include_career_callback`
+        :return: An iterator of Careers matching `include_career_callback`
         :rtype: Iterator[Career]
         """
         from sims4.resources import Types

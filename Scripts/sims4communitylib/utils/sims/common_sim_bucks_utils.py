@@ -322,7 +322,7 @@ class CommonSimBucksUtils:
         :type sim_info: SimInfo
         :param bucks_type: The Bucks associated with the perks being returned.
         :type bucks_type: Union[CommonBucksType, BucksType]
-        :return: An iterable of Bucks Perks available to a Sim, regardless of locked status.
+        :return: An iterator of Bucks Perks available to a Sim, regardless of locked status.
         :rtype: Iterator[BucksPerk]
         """
         bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
@@ -345,7 +345,7 @@ class CommonSimBucksUtils:
         :type sim_info: SimInfo
         :param bucks_type: The Bucks associated with the perks being returned.
         :type bucks_type: Union[CommonBucksType, BucksType]
-        :return: An iterable of Bucks Perks that are locked for a Sim.
+        :return: An iterator of Bucks Perks that are locked for a Sim.
         :rtype: Iterator[BucksPerk]
         """
         bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
@@ -368,7 +368,7 @@ class CommonSimBucksUtils:
         :type sim_info: SimInfo
         :param bucks_type: The Bucks associated with the perks being returned.
         :type bucks_type: Union[CommonBucksType, BucksType]
-        :return: An iterable of Bucks Perks that are unlocked for a Sim.
+        :return: An iterator of Bucks Perks that are unlocked for a Sim.
         :rtype: Iterator[BucksPerk]
         """
         bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)

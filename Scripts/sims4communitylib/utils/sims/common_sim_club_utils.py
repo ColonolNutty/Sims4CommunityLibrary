@@ -68,7 +68,7 @@ class CommonSimClubUtils:
         :type sim_info: SimInfo
         :param include_club_callback: If the result of this callback is True, the Club will be included in the results. The default callback will allow all.
         :type include_club_callback: Callable[[Club], bool], optional
-        :return: An iterable of all Clubs the specified Sim is a part of and that pass the include callback filter.
+        :return: An iterator of all Clubs the specified Sim is a part of and that pass the include callback filter.
         :rtype: Iterator[Club]
         """
         if sim_info is None:
@@ -91,7 +91,7 @@ class CommonSimClubUtils:
         :type sim_info: SimInfo
         :param include_club_callback: If the result of this callback is True, the Club will be included in the results. The default callback will allow all.
         :type include_club_callback: Callable[[Club], bool], optional
-        :return: An iterable of all Clubs the Sim is in that are currently gathering and that pass the include_club_callback filter.
+        :return: An iterator of all Clubs the Sim is in that are currently gathering and that pass the include_club_callback filter.
         :rtype: Iterator[Club]
         """
         if sim_info is None:

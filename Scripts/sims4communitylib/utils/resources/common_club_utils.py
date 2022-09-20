@@ -25,7 +25,7 @@ class CommonClubUtils:
 
         :param include_club_callback: If the result of this callback is True, the Club will be included in the results. The default callback will allow all.
         :type include_club_callback: Callable[[Club], bool], optional
-        :return: An iterable of all Clubs that are currently gathering and that pass the include callback filter.
+        :return: An iterator of all Clubs that are currently gathering and that pass the include callback filter.
         :rtype: Iterator[Club]
         """
         from clubs.club_service import ClubService
@@ -47,7 +47,7 @@ class CommonClubUtils:
         :type club: Club
         :param include_club_member_callback: If the result of this callback is True, the Club Member will be included in the results. The default callback will allow all.
         :type include_club_member_callback: Callable[[SimInfo], bool], optional
-        :return: An iterable of all Sims in a Club that pass the include callback filter.
+        :return: An iterator of all Sims in a Club that pass the include callback filter.
         :rtype: Iterator[SimInfo]
         """
         from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -67,7 +67,7 @@ class CommonClubUtils:
         :type club: Club
         :param include_club_rule_callback: If the result of this callback is True, the Club Rule will be included in the results. The default callback will allow all.
         :type include_club_rule_callback: Callable[[ClubRule], bool], optional
-        :return: An iterable of all Club Rules for the specified Club that pass the include callback filter.
+        :return: An iterator of all Club Rules for the specified Club that pass the include callback filter.
         :rtype: Iterator[ClubRule]
         """
         if club is None:

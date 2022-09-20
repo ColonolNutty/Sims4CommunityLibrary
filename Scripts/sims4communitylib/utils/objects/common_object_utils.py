@@ -191,7 +191,7 @@ class CommonObjectUtils(_HasS4CLClassLog):
         :param include_object_callback: If the result of this callback is True, the Object will be included in the\
          results. If set to None, All Objects will be included.
         :type include_object_callback: Callable[[GameObject], bool], optional
-        :return: An iterable of all Objects matching the `include_object_callback` filter.
+        :return: An iterator of all Objects matching the `include_object_callback` filter.
         :rtype: Iterator[GameObject]
         """
         game_object_list = tuple(CommonObjectUtils.get_game_object_manager().get_all())
@@ -212,7 +212,7 @@ class CommonObjectUtils(_HasS4CLClassLog):
 
         :param include_object_callback: If the result of this callback is True, the Object will be included in the results. If set to None, All Objects will be included.
         :type include_object_callback: Callable[[GameObject], bool], optional
-        :return: An iterable of all Objects matching the `include_object_callback` filter.
+        :return: An iterator of all Objects matching the `include_object_callback` filter.
         :rtype: Iterator[GameObject]
         """
         def _is_visible(_game_object: GameObject) -> bool:

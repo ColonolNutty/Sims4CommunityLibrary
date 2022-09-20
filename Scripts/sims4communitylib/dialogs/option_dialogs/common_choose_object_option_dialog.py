@@ -130,9 +130,9 @@ class CommonChooseObjectOptionDialog(CommonChooseOptionDialog):
     :type title_identifier: Union[int, str, LocalizedString, CommonStringId]
     :param description_identifier: A decimal identifier of the description text.
     :type description_identifier: Union[int, str, LocalizedString, CommonStringId]
-    :param title_tokens: An iterable of Tokens to format into the title. Default is an empty collection.
+    :param title_tokens: An iterator of Tokens to format into the title. Default is an empty collection.
     :type title_tokens: Iterator[Any], optional
-    :param description_tokens: An iterable of Tokens to format into the description. Default is an empty collection.
+    :param description_tokens: An iterator of Tokens to format into the description. Default is an empty collection.
     :type description_tokens: Iterator[Any], optional
     :param on_close: A callback invoked upon the dialog closing. Default is CommonFunctionUtils.noop.
     :type on_close: Callable[[], None], optional

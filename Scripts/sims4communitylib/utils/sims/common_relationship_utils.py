@@ -440,7 +440,7 @@ class CommonRelationshipUtils:
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :return: An iterable of Relationships a Sim has with other Sims.
+        :return: An iterator of Relationships a Sim has with other Sims.
         :rtype: Iterator[Relationship]
         """
         if not hasattr(sim_info, 'relationship_tracker') or not sim_info.relationship_tracker:
@@ -584,7 +584,7 @@ class CommonRelationshipUtils:
         :type relationship_bit_id: Union[int, CommonRelationshipBitId]
         :param instanced_only: If True, only Sims that are currently loaded will be returned.
         :type instanced_only: bool, optional
-        :return: An iterable of Sims that have the specified relationship bit with the specified Sim.
+        :return: An iterator of Sims that have the specified relationship bit with the specified Sim.
         :rtype: Iterator[SimInfo]
         """
         return CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, (relationship_bit_id, ), instanced_only=instanced_only)
@@ -610,7 +610,7 @@ class CommonRelationshipUtils:
         :type relationship_bit_ids: Iterator[Union[int, CommonRelationshipBitId]]
         :param instanced_only: If True, only Sims that are currently loaded will be returned.
         :type instanced_only: bool, optional
-        :return: An iterable of Sims that have any of the specified relationship bits with the specified Sim.
+        :return: An iterator of Sims that have any of the specified relationship bits with the specified Sim.
         :rtype: Iterator[SimInfo]
         """
         if sim_info is None:
@@ -684,7 +684,7 @@ class CommonRelationshipUtils:
         :type sim_info: SimInfo
         :param instanced_only: If True, only Sims that are currently loaded will be returned.
         :type instanced_only: bool, optional
-        :return: An iterable of Sims the specified Sim is romantically committed to.
+        :return: An iterator of Sims the specified Sim is romantically committed to.
         :rtype: Iterator[SimInfo]
         """
         romance_relationship_ids = cls.get_romantically_committed_relationship_bits()

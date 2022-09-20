@@ -72,7 +72,7 @@ class CommonCollectionUtils:
 
         :param list_one: The list being checked.
         :type list_one: List[Any]
-        :param list_items: An iterable of items being searched for.
+        :param list_items: An iterator of items being searched for.
         :type list_items: Any
         :return: True, if the list contains any of the specified items. False, if not.
         :rtype: bool

@@ -131,7 +131,7 @@ class CommonBuffUtils(_HasS4CLClassLog):
 
         :param sim_info: The Sim being checked.
         :type sim_info: SimInfo
-        :param buffs: An iterable of buffs to check for.
+        :param buffs: An iterator of buffs to check for.
         :type buffs: Iterator[Union[int, CommonBuffId, Buff]]
         :return: The result of testing. True, if the Sim has any of the specified buffs. False, if not.
         :rtype: CommonTestResult
@@ -161,7 +161,7 @@ class CommonBuffUtils(_HasS4CLClassLog):
 
         :param sim_info: The Sim being checked.
         :type sim_info: SimInfo
-        :param buffs: An iterable of buffs to check for.
+        :param buffs: An iterator of buffs to check for.
         :type buffs: Iterator[Union[int, CommonBuffId, Buff]]
         :return: The result of testing. True, if the Sim has all of the specified buffs. False, if not.
         :rtype: CommonTestResult
@@ -256,7 +256,7 @@ class CommonBuffUtils(_HasS4CLClassLog):
 
         :param sim_info: The Sim to add the specified buffs to.
         :type sim_info: SimInfo
-        :param buffs: An iterable of identifiers of buffs being added.
+        :param buffs: An iterator of identifiers of buffs being added.
         :type buffs: Iterator[Union[int, CommonBuffId, Buff]]
         :param buff_reason: The text that will display when the player hovers over the buffs. What caused the buffs to be added.
         :type buff_reason: Union[int, str, LocalizedString, CommonStringId], optional
@@ -319,7 +319,7 @@ class CommonBuffUtils(_HasS4CLClassLog):
 
         :param sim_info: The Sim to remove the specified buffs from.
         :type sim_info: SimInfo
-        :param buffs: An iterable of identifiers of buffs being removed.
+        :param buffs: An iterator of identifiers of buffs being removed.
         :type buffs: Iterator[Union[int, CommonBuffId, Buff]]
         :return: The result of removing the buffs. True, if all of the specified buffs were successfully removed. False, if not.
         :rtype: CommonExecutionResult

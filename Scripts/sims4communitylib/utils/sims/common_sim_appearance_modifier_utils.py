@@ -89,7 +89,7 @@ class CommonSimAppearanceModifierUtils:
         :type sim_info: SimInfo
         :param modifier_guid: The GUID of the modifiers to search for.
         :type modifier_guid: int
-        :return: An iterable of Appearance Modifiers that have the specified GUID.
+        :return: An iterator of Appearance Modifiers that have the specified GUID.
         :rtype: Iterator[ModifierInfo]
         """
         def _matches(_modifier_type: Any, _appearance_modifier: ModifierInfo) -> bool:
@@ -107,7 +107,7 @@ class CommonSimAppearanceModifierUtils:
         :type sim_info: SimInfo
         :param modifier_type: The type of the modifiers to search for.
         :type modifier_type: Type[AppearanceModifier.BaseAppearanceModification]
-        :return: An iterable of Appearance Modifiers that match the specified type.
+        :return: An iterator of Appearance Modifiers that match the specified type.
         :rtype: Iterator[ModifierInfo]
         """
         def _matches(_modifier_type: Any, _appearance_modifier: ModifierInfo) -> bool:
@@ -125,7 +125,7 @@ class CommonSimAppearanceModifierUtils:
         :type sim_info: SimInfo
         :param include_appearance_modifier: If the result of this callback is True, the Appearance Modifier will be included in the results. If set to None, All Appearance Modifiers will be included. Default is None.
         :type include_appearance_modifier: Callable[[CommonAppearanceModifierType, ModifierInfo], bool], optional
-        :return: An iterable of all Appearance Modifiers applied to the Sim that match the `include_appearance_modifier` filter.
+        :return: An iterator of all Appearance Modifiers applied to the Sim that match the `include_appearance_modifier` filter.
         :rtype: Iterator[ModifierInfo]
         """
         appearance_tracker = CommonSimAppearanceModifierUtils.get_appearance_tracker(sim_info)

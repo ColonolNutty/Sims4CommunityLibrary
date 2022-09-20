@@ -273,7 +273,7 @@ class CommonSimInteractionUtils(HasClassLog):
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :param interaction_ids: An iterable of identifiers of the interactions to check for.
+        :param interaction_ids: An iterator of identifiers of the interactions to check for.
         :type interaction_ids: Union[int, CommonInteractionId]
         :return: True, if the Sim has any of the specified interactions running or queued. False, if not.
         :rtype: bool
@@ -292,7 +292,7 @@ class CommonSimInteractionUtils(HasClassLog):
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :param interaction_ids: An iterable of identifiers of the interactions to check for.
+        :param interaction_ids: An iterator of identifiers of the interactions to check for.
         :type interaction_ids: Union[int, CommonInteractionId]
         :return: True, if the Sim has any of the specified interactions running. False, if not.
         :rtype: bool
@@ -311,7 +311,7 @@ class CommonSimInteractionUtils(HasClassLog):
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
-        :param interaction_ids: An iterable of identifiers of the interactions to check for.
+        :param interaction_ids: An iterator of identifiers of the interactions to check for.
         :type interaction_ids: Union[int, CommonInteractionId]
         :return: True, if the Sim has any of the specified interactions queued. False, if not.
         :rtype: bool
@@ -491,7 +491,7 @@ class CommonSimInteractionUtils(HasClassLog):
         :type sim_info: SimInfo
         :param include_interaction_callback: If the result of this callback is True, the Interaction will be included in the results. If set to None, all interactions will be included. Default is None.
         :type include_interaction_callback: Callable[[Interaction], bool], optional
-        :return: An iterable of all queued or running Interactions that pass the include callback filter.
+        :return: An iterator of all queued or running Interactions that pass the include callback filter.
         :rtype: Iterator[Interaction]
         """
         yield from cls.get_queued_interactions_gen(sim_info, include_interaction_callback=include_interaction_callback)
@@ -507,7 +507,7 @@ class CommonSimInteractionUtils(HasClassLog):
         :type sim_info: SimInfo
         :param include_interaction_callback: If the result of this callback is True, the Interaction will be included in the results. If set to None, all interactions will be included. Default is None.
         :type include_interaction_callback: Callable[[Interaction], bool], optional
-        :return: An iterable of all running Interactions that pass the include callback filter.
+        :return: An iterator of all running Interactions that pass the include callback filter.
         :rtype: Iterator[Interaction]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
@@ -530,7 +530,7 @@ class CommonSimInteractionUtils(HasClassLog):
         :type sim_info: SimInfo
         :param include_interaction_callback: If the result of this callback is True, the Interaction will be included in the results. If set to None, All interactions will be included. Default is None.
         :type include_interaction_callback: Callable[[Interaction], bool], optional
-        :return: An iterable of all queued Interactions that pass the include callback filter.
+        :return: An iterator of all queued Interactions that pass the include callback filter.
         :rtype: Iterator[Interaction]
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)

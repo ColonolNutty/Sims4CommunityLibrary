@@ -37,7 +37,7 @@ class CommonTestResult(CommonExecutionResult):
     :param tooltip_text: The text that will be displayed. If not specified, then no tooltip will be displayed. Default is None.
     :type tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator], optional
     :param tooltip_tokens: A collection of objects to format into the localized tooltip. (They can be anything. LocalizedString, str, int, SimInfo, just to name a few). Default is an empty collection.
-    :type tooltip_tokens: Iterable[Any], optional
+    :type tooltip_tokens: Iterator[Any], optional
     :param icon: The icon to display. Default is None.
     :type icon: Any, optional
     :param influenced_by_active_mood: Indicate whether or not the result was influenced by a Sims active mood. Default is False.

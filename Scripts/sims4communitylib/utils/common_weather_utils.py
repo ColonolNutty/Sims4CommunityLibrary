@@ -48,7 +48,7 @@ class CommonWeatherUtils:
 
         Determine if any of the specified weather effects are currently active.
 
-        :param weather_effect_types: An iterable of weather effects to check for.
+        :param weather_effect_types: An iterator of weather effects to check for.
         :type weather_effect_types: Iterator[CommonWeatherEffectType]
         :return: True, if any of the weathers is active. False, if none of the weathers are active.
         :rtype: bool

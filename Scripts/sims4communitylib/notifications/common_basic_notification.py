@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Any, Union, Tuple, Iterable
+from typing import Any, Union, Tuple, Iterator
 from distributor.shared_messages import IconInfoData
 from protocolbuffers.Localization_pb2 import LocalizedString
 from sims4communitylib.enums.strings_enum import CommonStringId
@@ -91,8 +91,8 @@ class CommonBasicNotification:
         self,
         title_identifier: Union[int, str, LocalizedString, CommonStringId],
         description_identifier: Union[int, str, LocalizedString, CommonStringId],
-        title_tokens: Iterable[Any] = (),
-        description_tokens: Iterable[Any] = (),
+        title_tokens: Iterator[Any] = (),
+        description_tokens: Iterator[Any] = (),
         urgency: UiDialogNotification.UiDialogNotificationUrgency = UiDialogNotification.UiDialogNotificationUrgency.DEFAULT,
         information_level: UiDialogNotification.UiDialogNotificationLevel = UiDialogNotification.UiDialogNotificationLevel.SIM,
         expand_behavior: UiDialogNotification.UiDialogNotificationExpandBehavior = UiDialogNotification.UiDialogNotificationExpandBehavior.USER_SETTING,

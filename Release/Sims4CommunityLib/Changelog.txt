@@ -22,6 +22,7 @@ v2.2:
 - Fixed an issue when retrieving satisfaction reward items.
 - The Choose Sims dialogs will now always be sorted
 - Added a function to CommonRelationshipUtils to retrieve all relationship bits that signify two Sims are in a relationship
+- Updated CommonRelationshipBitId, CommonShortTermSentimentId, CommonRelationshipBitCollectionId, and CommonLongTermSentimentId with new values.
 
 v2.1:
 - Fixed an issue when checking if a Sim is dead or not.

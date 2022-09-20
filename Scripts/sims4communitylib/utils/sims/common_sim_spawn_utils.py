@@ -7,7 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 import os
 
-from typing import Union, Tuple, Callable, Any, Iterator, Iterable
+from typing import Union, Tuple, Callable, Any, Iterator
 from sims.sim_info_lod import SimInfoLODLevel
 from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
 from sims4communitylib.enums.common_age import CommonAge
@@ -437,7 +437,7 @@ class CommonSimSpawnUtils:
         full_name_key: int = 0,
         breed_name: str = '',
         breed_name_key: int = 0,
-        trait_ids: Iterable[int] = (),
+        trait_ids: Iterator[int] = (),
         household: Household = None,
         source: str = 'testing'
     ) -> Union[SimInfo, None]:
