@@ -23,6 +23,8 @@ v2.2:
 - The Choose Sims dialogs will now always be sorted
 - Added a function to CommonRelationshipUtils to retrieve all relationship bits that signify two Sims are in a relationship
 - Updated CommonRelationshipBitId, CommonShortTermSentimentId, CommonRelationshipBitCollectionId, and CommonLongTermSentimentId with new values.
+- Updated CommonBuffId, CommonTraitId, CommonGameTag, and CommonCareerId with new values.
+- Added a function for retrieving all household members of a household.
 
 v2.1:
 - Fixed an issue when checking if a Sim is dead or not.
