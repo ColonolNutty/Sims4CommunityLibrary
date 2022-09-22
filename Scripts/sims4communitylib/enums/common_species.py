@@ -92,7 +92,7 @@ class CommonSpecies(CommonInt):
         return CommonSpecies.INVALID
 
     @staticmethod
-    def convert_to_vanilla(value: 'CommonSpecies') -> SpeciesExtended:
+    def convert_to_vanilla(value: 'CommonSpecies') -> Union[SpeciesExtended, None]:
         """convert_to_vanilla(value)
 
         Convert a value into the vanilla SpeciesExtended enum.
@@ -100,10 +100,10 @@ class CommonSpecies(CommonInt):
         :param value: An instance of CommonSpecies
         :type value: CommonSpecies
         :return: The specified value translated to SpeciesExtended or INVALID if the value could not be translated.
-        :rtype: SpeciesExtended
+        :rtype: Union[SpeciesExtended, None]
         """
         if value is None or value == CommonSpecies.INVALID:
-            return SpeciesExtended.INVALID
+            return None
         if isinstance(value, SpeciesExtended) or isinstance(value, Species):
             # noinspection PyTypeChecker
             return value
@@ -118,7 +118,7 @@ class CommonSpecies(CommonInt):
             mapping[CommonSpecies.CAT] = SpeciesExtended.CAT
         if hasattr(SpeciesExtended, 'FOX'):
             mapping[CommonSpecies.FOX] = SpeciesExtended.FOX
-        return mapping.get(value, SpeciesExtended.INVALID)
+        return mapping.get(value, None)
 
     @staticmethod
     def convert_from_vanilla(value: SpeciesExtended) -> 'CommonSpecies':

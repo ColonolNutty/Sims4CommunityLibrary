@@ -122,10 +122,10 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
         title_identifier: Union[int, str, LocalizedString, CommonStringId],
         description_identifier: Union[int, str, LocalizedString, CommonStringId],
         purchasable_objects: Iterator[PurchasePickerRow],
-        title_tokens: Iterator[Any]=(),
-        description_tokens: Iterator[Any]=(),
-        required_tooltip: Union[int, str, LocalizedString, CommonStringId]=None,
-        required_tooltip_tokens: Iterator[Any]=()
+        title_tokens: Iterator[Any] = (),
+        description_tokens: Iterator[Any] = (),
+        required_tooltip: Union[int, str, LocalizedString, CommonStringId] = None,
+        required_tooltip_tokens: Iterator[Any] = ()
     ):
         super().__init__(
             title_identifier,
@@ -141,6 +141,7 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
     # noinspection PyMissingOrEmptyDocstring
     @property
     def rows(self) -> Tuple[PurchasePickerRow]:
+        # noinspection PyTypeChecker
         result: Tuple[PurchasePickerRow] = super().rows
         return result
 
@@ -157,10 +158,10 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
 
     def show(
         self,
-        on_chosen: Callable[[Any, CommonChoiceOutcome], Any]=CommonFunctionUtils.noop,
-        target_sim_info_to_receive_objects: SimInfo=None,
-        categories: Iterator[CommonDialogObjectOptionCategory]=(),
-        object_delivery_method: CommonObjectDeliveryMethod=CommonObjectDeliveryMethod.INVENTORY
+        on_chosen: Callable[[Any, CommonChoiceOutcome], Any] = CommonFunctionUtils.noop,
+        target_sim_info_to_receive_objects: SimInfo = None,
+        categories: Iterator[CommonDialogObjectOptionCategory] = (),
+        object_delivery_method: CommonObjectDeliveryMethod = CommonObjectDeliveryMethod.INVENTORY
     ):
         """show(\
             on_chosen=CommonFunctionUtils.noop,\
@@ -195,10 +196,10 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
 
     def _show(
         self,
-        on_chosen: Callable[[Any, CommonChoiceOutcome], bool]=CommonFunctionUtils.noop,
-        target_sim_info_to_receive_objects: SimInfo=None,
-        categories: Iterator[CommonDialogObjectOptionCategory]=(),
-        object_delivery_method: CommonObjectDeliveryMethod=CommonObjectDeliveryMethod.INVENTORY
+        on_chosen: Callable[[Any, CommonChoiceOutcome], bool] = CommonFunctionUtils.noop,
+        target_sim_info_to_receive_objects: SimInfo = None,
+        categories: Iterator[CommonDialogObjectOptionCategory] = (),
+        object_delivery_method: CommonObjectDeliveryMethod = CommonObjectDeliveryMethod.INVENTORY
     ):
         def _on_chosen(choice: Any, outcome: CommonChoiceOutcome) -> bool:
             try:
@@ -225,10 +226,10 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
     # noinspection PyMissingOrEmptyDocstring
     def build_dialog(
         self,
-        on_chosen: Callable[[Any, CommonChoiceOutcome], bool]=CommonFunctionUtils.noop,
-        target_sim_info_to_receive_objects: SimInfo=None,
-        categories: Iterator[CommonDialogObjectOptionCategory]=(),
-        object_delivery_method: CommonObjectDeliveryMethod=CommonObjectDeliveryMethod.INVENTORY
+        on_chosen: Callable[[Any, CommonChoiceOutcome], bool] = CommonFunctionUtils.noop,
+        target_sim_info_to_receive_objects: SimInfo = None,
+        categories: Iterator[CommonDialogObjectOptionCategory] = (),
+        object_delivery_method: CommonObjectDeliveryMethod = CommonObjectDeliveryMethod.INVENTORY
     ) -> Union[UiPurchasePicker, None]:
         self.log.format_with_message('Attempting to build dialog.', categories=categories)
 
@@ -281,10 +282,10 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
 
     def _create_dialog(
         self,
-        picker_type: UiObjectPicker.UiObjectPickerObjectPickerType=UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
-        target_sim_info_to_receive_objects: SimInfo=None,
-        categories: Iterator[CommonDialogObjectOptionCategory]=(),
-        object_delivery_method: CommonObjectDeliveryMethod=CommonObjectDeliveryMethod.INVENTORY
+        picker_type: UiObjectPicker.UiObjectPickerObjectPickerType = UiObjectPicker.UiObjectPickerObjectPickerType.OBJECT,
+        target_sim_info_to_receive_objects: SimInfo = None,
+        categories: Iterator[CommonDialogObjectOptionCategory] = (),
+        object_delivery_method: CommonObjectDeliveryMethod = CommonObjectDeliveryMethod.INVENTORY
     ) -> Union[UiPurchasePicker, None]:
         try:
             category_type = namedtuple('category_type', ('tag', 'icon', 'tooltip'))
@@ -310,6 +311,10 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
             purchase_picker_data = PurchasePickerData()
             if object_delivery_method == CommonObjectDeliveryMethod.INVENTORY:
                 purchase_picker_data.inventory_owner_id_to_purchase_to = inventory_target_id
+            if object_delivery_method == CommonObjectDeliveryMethod.MAIL:
+                purchase_picker_data.delivery_method = CommonObjectDeliveryMethod.convert_to_vanilla(object_delivery_method)
+            if object_delivery_method == CommonObjectDeliveryMethod.DELIVERY_SERVICE:
+                purchase_picker_data.delivery_method = CommonObjectDeliveryMethod.convert_to_vanilla(object_delivery_method)
             for purchase_object in purchase_objects:
                 purchase_picker_data.add_definition_to_purchase(purchase_object)
             dialog.object_id = purchase_picker_data.inventory_owner_id_to_purchase_to

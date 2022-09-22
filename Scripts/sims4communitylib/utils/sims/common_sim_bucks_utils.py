@@ -97,13 +97,13 @@ class CommonSimBucksUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be removed.')
-        bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
-        if bucks_type is None:
+        vanilla_bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
+        if vanilla_bucks_type is None:
             return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.')
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=False)
         if bucks_tracker is None:
             return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}')
-        bucks_tracker.lock_all_perks(bucks_type, refund_cost=refund_cost or remove_perk_points)
+        bucks_tracker.lock_all_perks(vanilla_bucks_type, refund_cost=refund_cost or remove_perk_points)
         if remove_perk_points:
             cls.set_bucks(sim_info, bucks_type, 0, reason=reason, **__)
         return CommonExecutionResult.TRUE
@@ -128,13 +128,13 @@ class CommonSimBucksUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be locked.')
-        bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
-        if bucks_type is None:
+        vanilla_bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
+        if vanilla_bucks_type is None:
             return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.')
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
             return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}')
-        bucks_tracker.lock_all_perks(bucks_type, refund_cost=refund_cost)
+        bucks_tracker.lock_all_perks(vanilla_bucks_type, refund_cost=refund_cost)
         return CommonExecutionResult.TRUE
 
     @classmethod
@@ -325,13 +325,13 @@ class CommonSimBucksUtils:
         :return: An iterator of Bucks Perks available to a Sim, regardless of locked status.
         :rtype: Iterator[BucksPerk]
         """
-        bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
-        if bucks_type is None:
+        vanilla_bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
+        if vanilla_bucks_type is None:
             return tuple()
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
             return tuple()
-        yield from bucks_tracker.all_perks_of_type_gen(bucks_type)
+        yield from bucks_tracker.all_perks_of_type_gen(vanilla_bucks_type)
 
     @classmethod
     def get_locked_perks_gen(cls, sim_info: SimInfo, bucks_type: Union[CommonBucksType, BucksType]) -> Iterator[BucksPerk]:
@@ -348,13 +348,13 @@ class CommonSimBucksUtils:
         :return: An iterator of Bucks Perks that are locked for a Sim.
         :rtype: Iterator[BucksPerk]
         """
-        bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
-        if bucks_type is None:
+        vanilla_bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
+        if vanilla_bucks_type is None:
             return tuple()
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
             return tuple()
-        yield from bucks_tracker.all_perks_of_type_with_lock_state_gen(bucks_type, True)
+        yield from bucks_tracker.all_perks_of_type_with_lock_state_gen(vanilla_bucks_type, True)
 
     @classmethod
     def get_unlocked_perks_gen(cls, sim_info: SimInfo, bucks_type: Union[CommonBucksType, BucksType]) -> Iterator[BucksPerk]:
@@ -371,13 +371,13 @@ class CommonSimBucksUtils:
         :return: An iterator of Bucks Perks that are unlocked for a Sim.
         :rtype: Iterator[BucksPerk]
         """
-        bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
-        if bucks_type is None:
+        vanilla_bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
+        if vanilla_bucks_type is None:
             return tuple()
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
             return tuple()
-        yield from bucks_tracker.all_perks_of_type_with_lock_state_gen(bucks_type, False)
+        yield from bucks_tracker.all_perks_of_type_with_lock_state_gen(vanilla_bucks_type, False)
 
     @classmethod
     def get_bucks_amount(cls, sim_info: SimInfo, bucks_type: Union[CommonBucksType, BucksType]) -> int:
@@ -394,13 +394,13 @@ class CommonSimBucksUtils:
         :return: The number of available bucks to a Sim for the specified Bucks Type or 0 if the Sim is not spawned, the bucks type does not exist, or a bucks tracker is not found.
         :rtype: int
         """
-        bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
-        if bucks_type is None:
+        vanilla_bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
+        if vanilla_bucks_type is None:
             return 0
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=False)
         if bucks_tracker is None:
             return 0
-        return bucks_tracker.get_bucks_amount_for_type(bucks_type)
+        return bucks_tracker.get_bucks_amount_for_type(vanilla_bucks_type)
 
     @classmethod
     def modify_bucks(cls, sim_info: SimInfo, bucks_type: Union[CommonBucksType, BucksType], amount: int, reason: str = None, **__) -> CommonExecutionResult:
@@ -424,8 +424,8 @@ class CommonSimBucksUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before their perk points can be modified.')
-        bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
-        if bucks_type is None:
+        vanilla_bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
+        if vanilla_bucks_type is None:
             return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.')
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
@@ -433,7 +433,7 @@ class CommonSimBucksUtils:
         current_bucks_count = cls.get_bucks_amount(sim_info, bucks_type)
         if amount < 0 and ((amount * -1) > current_bucks_count):
             amount = -current_bucks_count
-        bucks_tracker.try_modify_bucks(bucks_type, amount, reason=reason, **__)
+        bucks_tracker.try_modify_bucks(vanilla_bucks_type, amount, reason=reason, **__)
         return CommonExecutionResult.TRUE
 
     @classmethod
@@ -458,8 +458,8 @@ class CommonSimBucksUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before their perk points can be modified.')
-        bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
-        if bucks_type is None:
+        vanilla_bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
+        if vanilla_bucks_type is None:
             return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.')
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
@@ -468,8 +468,8 @@ class CommonSimBucksUtils:
             amount = 0
         current_bucks_amount = cls.get_bucks_amount(sim_info, bucks_type)
         if current_bucks_amount > 0:
-            bucks_tracker.try_modify_bucks(bucks_type, -current_bucks_amount, reason=reason)
-        bucks_tracker.try_modify_bucks(bucks_type, amount, reason=reason, **__)
+            bucks_tracker.try_modify_bucks(vanilla_bucks_type, -current_bucks_amount, reason=reason)
+        bucks_tracker.try_modify_bucks(vanilla_bucks_type, amount, reason=reason, **__)
         return CommonExecutionResult.TRUE
 
     @classmethod
@@ -505,7 +505,7 @@ class CommonSimBucksUtils:
         if perk is None:
             return CommonBucksType.INVALID
         if hasattr(perk, 'associated_bucks_type'):
-            return perk.associated_bucks_type
+            return CommonBucksType.convert_from_vanilla(perk.associated_bucks_type)
         return CommonBucksType.INVALID
 
     @classmethod
@@ -526,10 +526,10 @@ class CommonSimBucksUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return None
-        bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
-        if bucks_type is None:
+        vanilla_bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
+        if vanilla_bucks_type is None:
             return None
-        return BucksUtils.get_tracker_for_bucks_type(bucks_type, owner_id=sim.id, add_if_none=add_if_none)
+        return BucksUtils.get_tracker_for_bucks_type(vanilla_bucks_type, owner_id=sim.id, add_if_none=add_if_none)
 
     @classmethod
     def load_perk_by_guid(cls, perk: Union[int, BucksPerk]) -> Union[BucksPerk, None]:

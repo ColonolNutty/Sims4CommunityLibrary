@@ -150,6 +150,14 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Game Tag Categories`
+-----------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_game_tag_category.CommonGameTagCategory
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Genders`
 -----------------------------------------
 

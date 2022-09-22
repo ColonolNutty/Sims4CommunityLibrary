@@ -86,46 +86,46 @@ class CommonGender(CommonInt):
     def convert_to_vanilla(value: 'CommonGender') -> Union[Gender, None]:
         """convert_to_vanilla(value)
 
-        Convert a CommonGender into the vanilla Gender enum.
+        Convert a value into the vanilla Gender enum.
 
         :param value: An instance of CommonGender
         :type value: CommonGender
-        :return: The specified CommonGender translated to Gender or None if the CommonGender could not be translated.
+        :return: The specified value translated to Gender or None if the value could not be translated.
         :rtype: Union[Gender, None]
         """
         if value is None or value == CommonGender.INVALID:
             return None
         if isinstance(value, Gender):
             return value
-        conversion_mapping: Dict[CommonGender, Gender] = {
+        mapping = {
             CommonGender.MALE: Gender.MALE,
             CommonGender.FEMALE: Gender.FEMALE
         }
-        return conversion_mapping.get(value, None)
+        return mapping.get(value, None)
 
     @staticmethod
     def convert_from_vanilla(value: Union[int, Gender]) -> 'CommonGender':
         """convert_from_vanilla(value)
 
-        Convert a vanilla Gender into a CommonGender enum.
+        Convert a value into a CommonGender enum.
 
         :param value: An instance of Gender
         :type value: Gender
-        :return: The specified Gender translated to CommonGender or INVALID if the Gender could not be translated.
-        :rtype: Union[Gender, None]
+        :return: The specified value translated to CommonGender or INVALID if the value could not be translated.
+        :rtype: CommonGender
         """
         if value is None:
             return CommonGender.INVALID
         if isinstance(value, CommonGender):
             return value
-        conversion_mapping: Dict[int, CommonGender] = {
+        mapping = {
             int(Gender.MALE): CommonGender.MALE,
             int(Gender.FEMALE): CommonGender.FEMALE
         }
         value = int(value)
-        if value not in conversion_mapping:
+        if value not in mapping:
             return CommonGender.INVALID
-        return conversion_mapping[value]
+        return mapping[value]
 
     @staticmethod
     def convert_to_localized_string_id(value: 'CommonGender') -> Union[int, str]:
@@ -139,10 +139,10 @@ class CommonGender(CommonInt):
         :rtype: Union[int, str]
         """
         from sims4communitylib.enums.strings_enum import CommonStringId
-        display_name_mapping = {
+        mapping = {
             CommonGender.MALE: CommonStringId.MALE,
             CommonGender.FEMALE: CommonStringId.FEMALE
         }
         if isinstance(value, int) and not isinstance(value, CommonGender):
             value = CommonGender.convert_from_vanilla(value)
-        return display_name_mapping.get(value, value.name if hasattr(value, 'name') else str(value))
+        return mapping.get(value, value.name if hasattr(value, 'name') else str(value))

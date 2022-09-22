@@ -183,7 +183,8 @@ class CommonSimAppearanceModifierUtils:
                 modifier = appearance_tracker._choose_modifier(modifier)
             else:
                 modifier = modifier[0].modifier
-        appearance_tracker.add_appearance_modifier(modifier, modifier_guid, priority, apply_to_all_outfits, source=source, additional_flags=additional_flags)
+        vanilla_priority = CommonAppearanceModifierPriority.convert_to_vanilla(priority)
+        appearance_tracker.add_appearance_modifier(modifier, modifier_guid, vanilla_priority, apply_to_all_outfits, source=source, additional_flags=additional_flags)
 
     @staticmethod
     def remove_appearance_modifiers_by_guid(sim_info: SimInfo, modifier_guid: int, source: str = 'S4CL Removal') -> None:

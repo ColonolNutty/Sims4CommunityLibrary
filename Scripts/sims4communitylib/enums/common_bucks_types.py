@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Iterator, Tuple, Union, Dict
+from typing import Iterator, Tuple, Union
 
 from bucks.bucks_enums import BucksType
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
@@ -13,22 +13,22 @@ from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 class CommonBucksType(CommonInt):
     """Variants of Bucks Types."""
-    INVALID: 'CommonBucksType' = 0
-    RETAIL: 'CommonBucksType' = 12289
-    VAMPIRE_POWER: 'CommonBucksType' = 40961
-    VAMPIRE_WEAKNESS: 'CommonBucksType' = 40962
-    VET: 'CommonBucksType' = 57345
-    CLUB: 'CommonBucksType' = 64
-    RESTAURANT: 'CommonBucksType' = 65
-    RECYCLE_BITS: 'CommonBucksType' = 66
-    RECYCLE_PIECES: 'CommonBucksType' = 67
-    FAME_PERK: 'CommonBucksType' = 61441
-    FAME_QUIRK: 'CommonBucksType' = 61442
-    WITCH_PERK: 'CommonBucksType' = 49153
-    INFLUENCE: 'CommonBucksType' = 67587
-    GALACTIC_CREDIT: 'CommonBucksType' = 51201
-    WEREWOLF_ABILITY: 'CommonBucksType' = 135169
-    WEREWOLF_ABILITY_QUEST: 'CommonBucksType' = 135170
+    INVALID: 'CommonBucksType' = ...
+    RETAIL: 'CommonBucksType' = ...
+    VAMPIRE_POWER: 'CommonBucksType' = ...
+    VAMPIRE_WEAKNESS: 'CommonBucksType' = ...
+    VET: 'CommonBucksType' = ...
+    CLUB: 'CommonBucksType' = ...
+    RESTAURANT: 'CommonBucksType' = ...
+    RECYCLE_BITS: 'CommonBucksType' = ...
+    RECYCLE_PIECES: 'CommonBucksType' = ...
+    FAME_PERK: 'CommonBucksType' = ...
+    FAME_QUIRK: 'CommonBucksType' = ...
+    WITCH_PERK: 'CommonBucksType' = ...
+    INFLUENCE: 'CommonBucksType' = ...
+    GALACTIC_CREDIT: 'CommonBucksType' = ...
+    WEREWOLF_ABILITY: 'CommonBucksType' = ...
+    WEREWOLF_ABILITY_QUEST: 'CommonBucksType' = ...
 
     @classmethod
     def get_all(cls, exclude_values: Iterator['CommonBucksType'] = None) -> Tuple['CommonBucksType']:
@@ -78,97 +78,97 @@ class CommonBucksType(CommonInt):
     def convert_to_vanilla(value: 'CommonBucksType') -> Union[BucksType, None]:
         """convert_to_vanilla(value)
 
-        Convert a CommonBucksType into the vanilla BucksType enum.
+        Convert a value into the vanilla BucksType enum.
 
         :param value: An instance of CommonBucksType
         :type value: CommonBucksType
-        :return: The specified CommonBucksType translated to BucksType or None if the CommonBucksType could not be translated.
+        :return: The specified value translated to BucksType or None if the value could not be translated.
         :rtype: Union[BucksType, None]
         """
         if value is None or value == CommonBucksType.INVALID:
             return None
         if isinstance(value, BucksType):
             return value
-        conversion_mapping: Dict[CommonBucksType, BucksType] = dict()
+        mapping = dict()
         if hasattr(BucksType, 'RetailBucks'):
-            conversion_mapping[CommonBucksType.RETAIL] = BucksType.RetailBucks
+            mapping[CommonBucksType.RETAIL] = BucksType.RetailBucks
         if hasattr(BucksType, 'VampirePowerBucks'):
-            conversion_mapping[CommonBucksType.VAMPIRE_POWER] = BucksType.VampirePowerBucks
+            mapping[CommonBucksType.VAMPIRE_POWER] = BucksType.VampirePowerBucks
         if hasattr(BucksType, 'VampireWeaknessBucks'):
-            conversion_mapping[CommonBucksType.VAMPIRE_WEAKNESS] = BucksType.VampireWeaknessBucks
+            mapping[CommonBucksType.VAMPIRE_WEAKNESS] = BucksType.VampireWeaknessBucks
         if hasattr(BucksType, 'VetBucks'):
-            conversion_mapping[CommonBucksType.VET] = BucksType.VetBucks
+            mapping[CommonBucksType.VET] = BucksType.VetBucks
         if hasattr(BucksType, 'ClubBucks'):
-            conversion_mapping[CommonBucksType.CLUB] = BucksType.ClubBucks
+            mapping[CommonBucksType.CLUB] = BucksType.ClubBucks
         if hasattr(BucksType, 'RestaurantBucks'):
-            conversion_mapping[CommonBucksType.RESTAURANT] = BucksType.RestaurantBucks
+            mapping[CommonBucksType.RESTAURANT] = BucksType.RestaurantBucks
         if hasattr(BucksType, 'RecycleBitsBucks'):
-            conversion_mapping[CommonBucksType.RECYCLE_BITS] = BucksType.RecycleBitsBucks
+            mapping[CommonBucksType.RECYCLE_BITS] = BucksType.RecycleBitsBucks
         if hasattr(BucksType, 'RecyclePiecesBucks'):
-            conversion_mapping[CommonBucksType.RECYCLE_PIECES] = BucksType.RecyclePiecesBucks
+            mapping[CommonBucksType.RECYCLE_PIECES] = BucksType.RecyclePiecesBucks
         if hasattr(BucksType, 'FamePerkBucks'):
-            conversion_mapping[CommonBucksType.FAME_PERK] = BucksType.FamePerkBucks
+            mapping[CommonBucksType.FAME_PERK] = BucksType.FamePerkBucks
         if hasattr(BucksType, 'FameQuirkBucks'):
-            conversion_mapping[CommonBucksType.FAME_QUIRK] = BucksType.FameQuirkBucks
+            mapping[CommonBucksType.FAME_QUIRK] = BucksType.FameQuirkBucks
         if hasattr(BucksType, 'WitchPerkBucks'):
-            conversion_mapping[CommonBucksType.WITCH_PERK] = BucksType.WitchPerkBucks
+            mapping[CommonBucksType.WITCH_PERK] = BucksType.WitchPerkBucks
         if hasattr(BucksType, 'InfluenceBuck'):
-            conversion_mapping[CommonBucksType.INFLUENCE] = BucksType.InfluenceBuck
+            mapping[CommonBucksType.INFLUENCE] = BucksType.InfluenceBuck
         if hasattr(BucksType, 'GalacticCredits'):
-            conversion_mapping[CommonBucksType.GALACTIC_CREDIT] = BucksType.GalacticCredits
+            mapping[CommonBucksType.GALACTIC_CREDIT] = BucksType.GalacticCredits
         if hasattr(BucksType, 'WerewolfAbilityBucks'):
-            conversion_mapping[CommonBucksType.WEREWOLF_ABILITY] = BucksType.WerewolfAbilityBucks
+            mapping[CommonBucksType.WEREWOLF_ABILITY] = BucksType.WerewolfAbilityBucks
         if hasattr(BucksType, 'WerewolfQuestAbilityBucks'):
-            conversion_mapping[CommonBucksType.WEREWOLF_ABILITY_QUEST] = BucksType.WerewolfQuestAbilityBucks
-        return conversion_mapping.get(value, None)
+            mapping[CommonBucksType.WEREWOLF_ABILITY_QUEST] = BucksType.WerewolfQuestAbilityBucks
+        return mapping.get(value, None)
 
     @staticmethod
     def convert_from_vanilla(value: Union[int, BucksType]) -> 'CommonBucksType':
         """convert_from_vanilla(value)
 
-        Convert a vanilla BucksType into a CommonBucksType enum.
+        Convert a value into a CommonBucksType enum.
 
         :param value: An instance of BucksType
         :type value: BucksType
-        :return: The specified BucksType translated to CommonBucksType or INVALID if the BucksType could not be translated.
+        :return: The specified value translated to CommonBucksType or INVALID if the value could not be translated.
         :rtype: Union[BucksType, None]
         """
         if value is None:
             return CommonBucksType.INVALID
         if isinstance(value, CommonBucksType):
             return value
-        conversion_mapping: Dict[int, CommonBucksType] = {}
+        mapping = dict()
         if hasattr(BucksType, 'RetailBucks'):
-            conversion_mapping[int(BucksType.RetailBucks)] = CommonBucksType.RETAIL
+            mapping[BucksType.RetailBucks] = CommonBucksType.RETAIL
         if hasattr(BucksType, 'VampirePowerBucks'):
-            conversion_mapping[int(BucksType.VampirePowerBucks)] = CommonBucksType.VAMPIRE_POWER
+            mapping[BucksType.VampirePowerBucks] = CommonBucksType.VAMPIRE_POWER
         if hasattr(BucksType, 'VampireWeaknessBucks'):
-            conversion_mapping[int(BucksType.VampireWeaknessBucks)] = CommonBucksType.VAMPIRE_WEAKNESS
+            mapping[BucksType.VampireWeaknessBucks] = CommonBucksType.VAMPIRE_WEAKNESS
         if hasattr(BucksType, 'VetBucks'):
-            conversion_mapping[int(BucksType.VetBucks)] = CommonBucksType.VET
+            mapping[BucksType.VetBucks] = CommonBucksType.VET
         if hasattr(BucksType, 'ClubBucks'):
-            conversion_mapping[int(BucksType.ClubBucks)] = CommonBucksType.CLUB
+            mapping[BucksType.ClubBucks] = CommonBucksType.CLUB
         if hasattr(BucksType, 'RestaurantBucks'):
-            conversion_mapping[int(BucksType.RestaurantBucks)] = CommonBucksType.RESTAURANT
+            mapping[BucksType.RestaurantBucks] = CommonBucksType.RESTAURANT
         if hasattr(BucksType, 'RecycleBitsBucks'):
-            conversion_mapping[int(BucksType.RecycleBitsBucks)] = CommonBucksType.RECYCLE_BITS
+            mapping[BucksType.RecycleBitsBucks] = CommonBucksType.RECYCLE_BITS
         if hasattr(BucksType, 'RecyclePiecesBucks'):
-            conversion_mapping[int(BucksType.RecyclePiecesBucks)] = CommonBucksType.RECYCLE_PIECES
+            mapping[BucksType.RecyclePiecesBucks] = CommonBucksType.RECYCLE_PIECES
         if hasattr(BucksType, 'FamePerkBucks'):
-            conversion_mapping[int(BucksType.FamePerkBucks)] = CommonBucksType.FAME_PERK
+            mapping[BucksType.FamePerkBucks] = CommonBucksType.FAME_PERK
         if hasattr(BucksType, 'FameQuirkBucks'):
-            conversion_mapping[int(BucksType.FameQuirkBucks)] = CommonBucksType.FAME_QUIRK
+            mapping[BucksType.FameQuirkBucks] = CommonBucksType.FAME_QUIRK
         if hasattr(BucksType, 'WitchPerkBucks'):
-            conversion_mapping[int(BucksType.WitchPerkBucks)] = CommonBucksType.WITCH_PERK
+            mapping[BucksType.WitchPerkBucks] = CommonBucksType.WITCH_PERK
         if hasattr(BucksType, 'InfluenceBuck'):
-            conversion_mapping[int(BucksType.InfluenceBuck)] = CommonBucksType.INFLUENCE
+            mapping[BucksType.InfluenceBuck] = CommonBucksType.INFLUENCE
         if hasattr(BucksType, 'GalacticCredits'):
-            conversion_mapping[int(BucksType.GalacticCredits)] = CommonBucksType.GALACTIC_CREDIT
+            mapping[BucksType.GalacticCredits] = CommonBucksType.GALACTIC_CREDIT
         if hasattr(BucksType, 'WerewolfAbilityBucks'):
-            conversion_mapping[int(BucksType.WerewolfAbilityBucks)] = CommonBucksType.WEREWOLF_ABILITY
+            mapping[BucksType.WerewolfAbilityBucks] = CommonBucksType.WEREWOLF_ABILITY
         if hasattr(BucksType, 'WerewolfQuestAbilityBucks'):
-            conversion_mapping[int(BucksType.WerewolfQuestAbilityBucks)] = CommonBucksType.WEREWOLF_ABILITY_QUEST
-        return conversion_mapping.get(int(value), value)
+            mapping[BucksType.WerewolfQuestAbilityBucks] = CommonBucksType.WEREWOLF_ABILITY_QUEST
+        return mapping.get(value, value)
 
     @staticmethod
     def convert_to_localized_string_id(value: 'CommonBucksType') -> Union[int, str]:

@@ -22,9 +22,9 @@ class CommonDialogObjectOptionCategory:
     :param icon: The decimal identifier of the icon for the category.
     :type icon: int
     :param category_name: The name of the category. Default is the object_category value.
-    :type category_name: Union[int, str, LocalizedString, CommonStringId]
+    :type category_name: LocalizedString
     """
-    def __init__(self, object_category: str, icon: int, category_name: Union[int, str, LocalizedString, CommonStringId]=None):
+    def __init__(self, object_category: str, icon: int, category_name: Union[int, str, LocalizedString, CommonStringId, None] = None):
         self.object_category = object_category
         self.icon = icon
         if category_name is None:
