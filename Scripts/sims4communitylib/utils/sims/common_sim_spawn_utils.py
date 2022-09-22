@@ -9,6 +9,7 @@ import os
 
 from typing import Union, Tuple, Callable, Any, Iterator
 from sims.sim_info_lod import SimInfoLODLevel
+from sims.sim_info_types import SpeciesExtended
 from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_gender import CommonGender
@@ -446,7 +447,7 @@ class CommonSimSpawnUtils:
         vanilla_gender = CommonGender.convert_to_vanilla(gender)
         vanilla_age = CommonAge.convert_to_vanilla(age)
         vanilla_species = CommonSpecies.convert_to_vanilla(species)
-        if vanilla_species is None:
+        if vanilla_species is None or vanilla_species == SpeciesExtended.INVALID:
             raise AssertionError(f'Invalid species specified for SimInfo creation! {species}')
         first_name = first_name or CommonSimNameUtils.create_random_first_name(gender, species=species)
         last_name = last_name or CommonSimNameUtils.create_random_last_name(gender, species=species)

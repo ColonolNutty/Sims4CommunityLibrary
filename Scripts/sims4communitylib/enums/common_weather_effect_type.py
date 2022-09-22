@@ -15,24 +15,38 @@ try:
 except:
     class WeatherEffectType(CommonInt):
         """Mock class."""
-        pass
+        WINDOW_FROST = 1004
+        WATER_FROZEN = 1005
+        WIND = 1006
+        TEMPERATURE = 1007
+        THUNDER = 1008
+        LIGHTNING = 1009
+        SNOW_FRESHNESS = 1010
+        STRANGERVILLE_ACT = 1011
+        ECO_FOOTPRINT = 1012
+        ACID_RAIN = 1013
+        # noinspection SpellCheckingInspection
+        STARWARS_RESISTANCE = 1014
+        # noinspection SpellCheckingInspection
+        STARWARS_FIRST_ORDER = 1015
+        SNOW_ICINESS = 1016
 
 
 class CommonWeatherEffectType(CommonInt):
     """Identifiers for weather effects types."""
-    WINDOW_FROST: 'CommonWeatherEffectType' = 1004
-    WATER_FROZEN: 'CommonWeatherEffectType' = 1005
-    WIND: 'CommonWeatherEffectType' = 1006
-    TEMPERATURE: 'CommonWeatherEffectType' = 1007
-    THUNDER: 'CommonWeatherEffectType' = 1008
-    LIGHTNING: 'CommonWeatherEffectType' = 1009
-    SNOW_FRESHNESS: 'CommonWeatherEffectType' = 1010
-    STRANGERVILLE_ACT: 'CommonWeatherEffectType' = 1011
-    ECO_FOOTPRINT: 'CommonWeatherEffectType' = 1012
-    ACID_RAIN: 'CommonWeatherEffectType' = 1013
-    STAR_WARS_RESISTANCE: 'CommonWeatherEffectType' = 1014
-    STAR_WARS_FIRST_ORDER: 'CommonWeatherEffectType' = 1015
-    SNOW_ICINESS: 'CommonWeatherEffectType' = 1016
+    WINDOW_FROST: 'CommonWeatherEffectType' = ...
+    WATER_FROZEN: 'CommonWeatherEffectType' = ...
+    WIND: 'CommonWeatherEffectType' = ...
+    TEMPERATURE: 'CommonWeatherEffectType' = ...
+    THUNDER: 'CommonWeatherEffectType' = ...
+    LIGHTNING: 'CommonWeatherEffectType' = ...
+    SNOW_FRESHNESS: 'CommonWeatherEffectType' = ...
+    STRANGERVILLE_ACT: 'CommonWeatherEffectType' = ...
+    ECO_FOOTPRINT: 'CommonWeatherEffectType' = ...
+    ACID_RAIN: 'CommonWeatherEffectType' = ...
+    STAR_WARS_RESISTANCE: 'CommonWeatherEffectType' = ...
+    STAR_WARS_FIRST_ORDER: 'CommonWeatherEffectType' = ...
+    SNOW_ICINESS: 'CommonWeatherEffectType' = ...
 
     @classmethod
     def get_all(cls, exclude_values: Iterator['CommonWeatherEffectType'] = ()) -> Tuple['CommonWeatherEffectType']:
@@ -60,8 +74,24 @@ class CommonWeatherEffectType(CommonInt):
         :return: The specified CommonWeatherEffectType translated to WeatherEffectType, or None if the value could not be translated.
         :rtype: Union[WeatherEffectType, None]
         """
-        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-        return CommonResourceUtils.get_enum_by_int_value(int(value), WeatherEffectType, default_value=None)
+        if isinstance(value, WeatherEffectType):
+            return value
+        mapping = {
+            CommonWeatherEffectType.WINDOW_FROST: WeatherEffectType.WINDOW_FROST,
+            CommonWeatherEffectType.WATER_FROZEN: WeatherEffectType.WATER_FROZEN,
+            CommonWeatherEffectType.WIND: WeatherEffectType.WIND,
+            CommonWeatherEffectType.TEMPERATURE: WeatherEffectType.TEMPERATURE,
+            CommonWeatherEffectType.THUNDER: WeatherEffectType.THUNDER,
+            CommonWeatherEffectType.LIGHTNING: WeatherEffectType.LIGHTNING,
+            CommonWeatherEffectType.SNOW_FRESHNESS: WeatherEffectType.SNOW_FRESHNESS,
+            CommonWeatherEffectType.STRANGERVILLE_ACT: WeatherEffectType.STRANGERVILLE_ACT,
+            CommonWeatherEffectType.ECO_FOOTPRINT: WeatherEffectType.ECO_FOOTPRINT,
+            CommonWeatherEffectType.ACID_RAIN: WeatherEffectType.ACID_RAIN,
+            CommonWeatherEffectType.STAR_WARS_RESISTANCE: WeatherEffectType.STARWARS_RESISTANCE,
+            CommonWeatherEffectType.STAR_WARS_FIRST_ORDER: WeatherEffectType.STARWARS_FIRST_ORDER,
+            CommonWeatherEffectType.SNOW_ICINESS: WeatherEffectType.SNOW_ICINESS,
+        }
+        return mapping.get(value, None)
 
     @staticmethod
     def convert_from_vanilla(value: WeatherEffectType) -> Union['CommonWeatherEffectType', None]:
@@ -74,5 +104,21 @@ class CommonWeatherEffectType(CommonInt):
         :return: The specified WeatherEffectType translated to CommonWeatherEffectType, or None if the value could not be translated.
         :rtype: Union[CommonWeatherEffectType, None]
         """
-        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-        return CommonResourceUtils.get_enum_by_int_value(int(value), CommonWeatherEffectType, default_value=None)
+        if isinstance(value, CommonWeatherEffectType):
+            return value
+        mapping = {
+            WeatherEffectType.WINDOW_FROST: CommonWeatherEffectType.WINDOW_FROST,
+            WeatherEffectType.WATER_FROZEN: CommonWeatherEffectType.WATER_FROZEN,
+            WeatherEffectType.WIND: CommonWeatherEffectType.WIND,
+            WeatherEffectType.TEMPERATURE: CommonWeatherEffectType.TEMPERATURE,
+            WeatherEffectType.THUNDER: CommonWeatherEffectType.THUNDER,
+            WeatherEffectType.LIGHTNING: CommonWeatherEffectType.LIGHTNING,
+            WeatherEffectType.SNOW_FRESHNESS: CommonWeatherEffectType.SNOW_FRESHNESS,
+            WeatherEffectType.STRANGERVILLE_ACT: CommonWeatherEffectType.STRANGERVILLE_ACT,
+            WeatherEffectType.ECO_FOOTPRINT: CommonWeatherEffectType.ECO_FOOTPRINT,
+            WeatherEffectType.ACID_RAIN: CommonWeatherEffectType.ACID_RAIN,
+            WeatherEffectType.STARWARS_RESISTANCE: CommonWeatherEffectType.STAR_WARS_RESISTANCE,
+            WeatherEffectType.STARWARS_FIRST_ORDER: CommonWeatherEffectType.STAR_WARS_FIRST_ORDER,
+            WeatherEffectType.SNOW_ICINESS: CommonWeatherEffectType.SNOW_ICINESS,
+        }
+        return mapping.get(value, None)

@@ -9,100 +9,99 @@ from typing import Union, Iterator, Tuple
 
 from sims.outfits.outfit_enums import BodyType
 from sims4communitylib.enums.enumtypes.common_int_flags import CommonIntFlags
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
 
 class CommonBodySlot(CommonIntFlags):
     """Slots on the body of Sims that CAS Parts can be attached to."""
-    NONE: 'CommonBodySlot' = 0
-    ACNE: 'CommonBodySlot' = 72
-    BITE: 'CommonBodySlot' = 76
-    BLUSH: 'CommonBodySlot' = 32
-    BODY_HAIR_ARM: 'CommonBodySlot' = 78
-    BODY_HAIR_LEG: 'CommonBodySlot' = 79
-    BODY_HAIR_TORSO_BACK: 'CommonBodySlot' = 81
-    BODY_HAIR_TORSO_FRONT: 'CommonBodySlot' = 80
-    BODY_SCAR_ARM_LEFT: 'CommonBodySlot' = 82
-    BODY_SCAR_ARM_RIGHT: 'CommonBodySlot' = 83
-    BODY_SCAR_LEG_LEFT: 'CommonBodySlot' = 86
-    BODY_SCAR_LEG_RIGHT: 'CommonBodySlot' = 87
-    BODY_SCAR_TORSO_BACK: 'CommonBodySlot' = 85
-    BODY_SCAR_TORSO_FRONT: 'CommonBodySlot' = 84
-    BROW_RING_LEFT: 'CommonBodySlot' = 20
-    BROW_RING_RIGHT: 'CommonBodySlot' = 21
-    CUMMERBUND: 'CommonBodySlot' = 9
-    EARRINGS: 'CommonBodySlot' = 10
-    EARS: 'CommonBodySlot' = 60
-    EYE_COLOR: 'CommonBodySlot' = 35
-    EYE_COLOR_SECONDARY: 'CommonBodySlot' = 63
-    EYE_LINER: 'CommonBodySlot' = 31
-    EYE_SHADOW: 'CommonBodySlot' = 30
-    EYEBROWS: 'CommonBodySlot' = 34
-    FACE_PAINT: 'CommonBodySlot' = 33
-    FACIAL_HAIR: 'CommonBodySlot' = 28
-    FINGERNAIL: 'CommonBodySlot' = 73
-    FOREARM_SCAR: 'CommonBodySlot' = 71
-    FULL_BODY: 'CommonBodySlot' = 5
-    FUR_BODY: 'CommonBodySlot' = 59
-    GLASSES: 'CommonBodySlot' = 11
-    GLOVES: 'CommonBodySlot' = 13
-    HAIR: 'CommonBodySlot' = 2
-    HAIR_COLOR_OVERRIDE: 'CommonBodySlot' = 75
-    HAT: 'CommonBodySlot' = 1
-    HEAD: 'CommonBodySlot' = 3
-    INDEX_FINGER_LEFT: 'CommonBodySlot' = 22
-    INDEX_FINGER_RIGHT: 'CommonBodySlot' = 23
-    LIP_RING_LEFT: 'CommonBodySlot' = 16
-    LIP_RING_RIGHT: 'CommonBodySlot' = 17
-    LIPSTICK: 'CommonBodySlot' = 29
-    LOWER_BODY: 'CommonBodySlot' = 7
-    MASCARA: 'CommonBodySlot' = 37
-    MIDDLE_FINGER_LEFT: 'CommonBodySlot' = 26
-    MIDDLE_FINGER_RIGHT: 'CommonBodySlot' = 27
-    NECKLACE: 'CommonBodySlot' = 12
-    NOSE_RING_LEFT: 'CommonBodySlot' = 18
-    NOSE_RING_RIGHT: 'CommonBodySlot' = 19
-    OCCULT_BROW: 'CommonBodySlot' = 64
-    OCCULT_EYE_SOCKET: 'CommonBodySlot' = 65
-    OCCULT_EYELID: 'CommonBodySlot' = 66
-    OCCULT_LEFT_CHEEK: 'CommonBodySlot' = 68
-    OCCULT_MOUTH: 'CommonBodySlot' = 67
-    OCCULT_NECK_SCAR: 'CommonBodySlot' = 70
-    OCCULT_RIGHT_CHEEK: 'CommonBodySlot' = 69
-    RING_FINGER_LEFT: 'CommonBodySlot' = 24
-    RING_FINGER_RIGHT: 'CommonBodySlot' = 25
-    SHOES: 'CommonBodySlot' = 8
-    SKIN_DETAIL_ACNE_PUBERTY: 'CommonBodySlot' = 89
-    SKIN_DETAIL_CREASE_FOREHEAD: 'CommonBodySlot' = 38
-    SKIN_DETAIL_CREASE_MOUTH: 'CommonBodySlot' = 57
-    SKIN_DETAIL_DIMPLE_LEFT: 'CommonBodySlot' = 40
-    SKIN_DETAIL_DIMPLE_RIGHT: 'CommonBodySlot' = 41
-    SKIN_DETAIL_FRECKLES: 'CommonBodySlot' = 39
-    SKIN_DETAIL_MOLE_CHEEK_LEFT: 'CommonBodySlot' = 55
-    SKIN_DETAIL_MOLE_CHEEK_RIGHT: 'CommonBodySlot' = 56
-    SKIN_DETAIL_MOLE_LIP_LEFT: 'CommonBodySlot' = 43
-    SKIN_DETAIL_MOLE_LIP_RIGHT: 'CommonBodySlot' = 44
-    SKIN_DETAIL_NOSE_COLOR: 'CommonBodySlot' = 62
-    SKIN_OVERLAY: 'CommonBodySlot' = 58
-    SOCKS: 'CommonBodySlot' = 36
-    TAIL: 'CommonBodySlot' = 61
-    TATTOO_ARM_LOWER_LEFT: 'CommonBodySlot' = 45
-    TATTOO_ARM_LOWER_RIGHT: 'CommonBodySlot' = 47
-    TATTOO_ARM_UPPER_LEFT: 'CommonBodySlot' = 46
-    TATTOO_ARM_UPPER_RIGHT: 'CommonBodySlot' = 48
-    TATTOO_LEG_LEFT: 'CommonBodySlot' = 49
-    TATTOO_LEG_RIGHT: 'CommonBodySlot' = 50
-    TATTOO_TORSO_BACK_LOWER: 'CommonBodySlot' = 51
-    TATTOO_TORSO_BACK_UPPER: 'CommonBodySlot' = 52
-    TATTOO_TORSO_FRONT_LOWER: 'CommonBodySlot' = 53
-    TATTOO_TORSO_FRONT_UPPER: 'CommonBodySlot' = 54
-    TEETH: 'CommonBodySlot' = 4
-    TIGHTS: 'CommonBodySlot' = 42
-    TOENAIL: 'CommonBodySlot' = 74
-    UNUSED_1: 'CommonBodySlot' = 77
-    UPPER_BODY: 'CommonBodySlot' = 6
-    WRIST_LEFT: 'CommonBodySlot' = 14
-    WRIST_RIGHT: 'CommonBodySlot' = 15
+    NONE: 'CommonBodySlot' = ...
+    ACNE: 'CommonBodySlot' = ...
+    BITE: 'CommonBodySlot' = ...
+    BLUSH: 'CommonBodySlot' = ...
+    BODY_HAIR_ARM: 'CommonBodySlot' = ...
+    BODY_HAIR_LEG: 'CommonBodySlot' = ...
+    BODY_HAIR_TORSO_BACK: 'CommonBodySlot' = ...
+    BODY_HAIR_TORSO_FRONT: 'CommonBodySlot' = ...
+    BODY_SCAR_ARM_LEFT: 'CommonBodySlot' = ...
+    BODY_SCAR_ARM_RIGHT: 'CommonBodySlot' = ...
+    BODY_SCAR_LEG_LEFT: 'CommonBodySlot' = ...
+    BODY_SCAR_LEG_RIGHT: 'CommonBodySlot' = ...
+    BODY_SCAR_TORSO_BACK: 'CommonBodySlot' = ...
+    BODY_SCAR_TORSO_FRONT: 'CommonBodySlot' = ...
+    BROW_RING_LEFT: 'CommonBodySlot' = ...
+    BROW_RING_RIGHT: 'CommonBodySlot' = ...
+    CUMMERBUND: 'CommonBodySlot' = ...
+    EARRINGS: 'CommonBodySlot' = ...
+    EARS: 'CommonBodySlot' = ...
+    EYE_COLOR: 'CommonBodySlot' = ...
+    EYE_COLOR_SECONDARY: 'CommonBodySlot' = ...
+    EYE_LINER: 'CommonBodySlot' = ...
+    EYE_SHADOW: 'CommonBodySlot' = ...
+    EYEBROWS: 'CommonBodySlot' = ...
+    FACE_PAINT: 'CommonBodySlot' = ...
+    FACIAL_HAIR: 'CommonBodySlot' = ...
+    FINGERNAIL: 'CommonBodySlot' = ...
+    FOREARM_SCAR: 'CommonBodySlot' = ...
+    FULL_BODY: 'CommonBodySlot' = ...
+    FUR_BODY: 'CommonBodySlot' = ...
+    GLASSES: 'CommonBodySlot' = ...
+    GLOVES: 'CommonBodySlot' = ...
+    HAIR: 'CommonBodySlot' = ...
+    HAIR_COLOR_OVERRIDE: 'CommonBodySlot' = ...
+    HAT: 'CommonBodySlot' = ...
+    HEAD: 'CommonBodySlot' = ...
+    INDEX_FINGER_LEFT: 'CommonBodySlot' = ...
+    INDEX_FINGER_RIGHT: 'CommonBodySlot' = ...
+    LIP_RING_LEFT: 'CommonBodySlot' = ...
+    LIP_RING_RIGHT: 'CommonBodySlot' = ...
+    LIPSTICK: 'CommonBodySlot' = ...
+    LOWER_BODY: 'CommonBodySlot' = ...
+    MASCARA: 'CommonBodySlot' = ...
+    MIDDLE_FINGER_LEFT: 'CommonBodySlot' = ...
+    MIDDLE_FINGER_RIGHT: 'CommonBodySlot' = ...
+    NECKLACE: 'CommonBodySlot' = ...
+    NOSE_RING_LEFT: 'CommonBodySlot' = ...
+    NOSE_RING_RIGHT: 'CommonBodySlot' = ...
+    OCCULT_BROW: 'CommonBodySlot' = ...
+    OCCULT_EYE_SOCKET: 'CommonBodySlot' = ...
+    OCCULT_EYELID: 'CommonBodySlot' = ...
+    OCCULT_LEFT_CHEEK: 'CommonBodySlot' = ...
+    OCCULT_MOUTH: 'CommonBodySlot' = ...
+    OCCULT_NECK_SCAR: 'CommonBodySlot' = ...
+    OCCULT_RIGHT_CHEEK: 'CommonBodySlot' = ...
+    RING_FINGER_LEFT: 'CommonBodySlot' = ...
+    RING_FINGER_RIGHT: 'CommonBodySlot' = ...
+    SHOES: 'CommonBodySlot' = ...
+    SKIN_DETAIL_ACNE_PUBERTY: 'CommonBodySlot' = ...
+    SKIN_DETAIL_CREASE_FOREHEAD: 'CommonBodySlot' = ...
+    SKIN_DETAIL_CREASE_MOUTH: 'CommonBodySlot' = ...
+    SKIN_DETAIL_DIMPLE_LEFT: 'CommonBodySlot' = ...
+    SKIN_DETAIL_DIMPLE_RIGHT: 'CommonBodySlot' = ...
+    SKIN_DETAIL_FRECKLES: 'CommonBodySlot' = ...
+    SKIN_DETAIL_MOLE_CHEEK_LEFT: 'CommonBodySlot' = ...
+    SKIN_DETAIL_MOLE_CHEEK_RIGHT: 'CommonBodySlot' = ...
+    SKIN_DETAIL_MOLE_LIP_LEFT: 'CommonBodySlot' = ...
+    SKIN_DETAIL_MOLE_LIP_RIGHT: 'CommonBodySlot' = ...
+    SKIN_DETAIL_NOSE_COLOR: 'CommonBodySlot' = ...
+    SKIN_OVERLAY: 'CommonBodySlot' = ...
+    SOCKS: 'CommonBodySlot' = ...
+    TAIL: 'CommonBodySlot' = ...
+    TATTOO_ARM_LOWER_LEFT: 'CommonBodySlot' = ...
+    TATTOO_ARM_LOWER_RIGHT: 'CommonBodySlot' = ...
+    TATTOO_ARM_UPPER_LEFT: 'CommonBodySlot' = ...
+    TATTOO_ARM_UPPER_RIGHT: 'CommonBodySlot' = ...
+    TATTOO_LEG_LEFT: 'CommonBodySlot' = ...
+    TATTOO_LEG_RIGHT: 'CommonBodySlot' = ...
+    TATTOO_TORSO_BACK_LOWER: 'CommonBodySlot' = ...
+    TATTOO_TORSO_BACK_UPPER: 'CommonBodySlot' = ...
+    TATTOO_TORSO_FRONT_LOWER: 'CommonBodySlot' = ...
+    TATTOO_TORSO_FRONT_UPPER: 'CommonBodySlot' = ...
+    TEETH: 'CommonBodySlot' = ...
+    TIGHTS: 'CommonBodySlot' = ...
+    TOENAIL: 'CommonBodySlot' = ...
+    UNUSED_1: 'CommonBodySlot' = ...
+    UPPER_BODY: 'CommonBodySlot' = ...
+    WRIST_LEFT: 'CommonBodySlot' = ...
+    WRIST_RIGHT: 'CommonBodySlot' = ...
 
     @classmethod
     def get_all(cls, exclude_values: Iterator['CommonBodySlot'] = None) -> Tuple['CommonBodySlot']:
@@ -163,7 +162,97 @@ class CommonBodySlot(CommonIntFlags):
             return BodyType.NONE
         if isinstance(value, BodyType):
             return value
-        return CommonResourceUtils.get_enum_by_int_value(int(value), BodyType, default_value=value)
+        mapping = {
+            CommonBodySlot.ACNE: BodyType.ACNE,
+            CommonBodySlot.BITE: BodyType.BITE,
+            CommonBodySlot.BLUSH: BodyType.BLUSH,
+            CommonBodySlot.BODY_HAIR_ARM: BodyType.BODYHAIR_ARM,
+            CommonBodySlot.BODY_HAIR_LEG: BodyType.BODYHAIR_LEG,
+            CommonBodySlot.BODY_HAIR_TORSO_BACK: BodyType.BODYHAIR_TORSOBACK,
+            CommonBodySlot.BODY_HAIR_TORSO_FRONT: BodyType.BODYHAIR_TORSOFRONT,
+            CommonBodySlot.BODY_SCAR_ARM_LEFT: BodyType.BODYSCAR_ARMLEFT,
+            CommonBodySlot.BODY_SCAR_ARM_RIGHT: BodyType.BODYSCAR_ARMRIGHT,
+            CommonBodySlot.BODY_SCAR_LEG_LEFT: BodyType.BODYSCAR_LEGLEFT,
+            CommonBodySlot.BODY_SCAR_LEG_RIGHT: BodyType.BODYSCAR_LEGRIGHT,
+            CommonBodySlot.BODY_SCAR_TORSO_BACK: BodyType.BODYSCAR_TORSOBACK,
+            CommonBodySlot.BODY_SCAR_TORSO_FRONT: BodyType.BODYSCAR_TORSOFRONT,
+            CommonBodySlot.BROW_RING_LEFT: BodyType.BROW_RING_LEFT,
+            CommonBodySlot.BROW_RING_RIGHT: BodyType.BROW_RING_RIGHT,
+            CommonBodySlot.CUMMERBUND: BodyType.CUMMERBUND,
+            CommonBodySlot.EARRINGS: BodyType.EARRINGS,
+            CommonBodySlot.EARS: BodyType.EARS,
+            CommonBodySlot.EYE_COLOR: BodyType.EYECOLOR,
+            CommonBodySlot.EYE_COLOR_SECONDARY: BodyType.EYECOLOR_SECONDARY,
+            CommonBodySlot.EYE_LINER: BodyType.EYE_LINER,
+            CommonBodySlot.EYE_SHADOW: BodyType.EYE_SHADOW,
+            CommonBodySlot.EYEBROWS: BodyType.EYEBROWS,
+            CommonBodySlot.FACE_PAINT: BodyType.FACEPAINT,
+            CommonBodySlot.FACIAL_HAIR: BodyType.FACIAL_HAIR,
+            CommonBodySlot.FINGERNAIL: BodyType.FINGERNAIL,
+            CommonBodySlot.FOREARM_SCAR: BodyType.FOREARM_SCAR,
+            CommonBodySlot.FULL_BODY: BodyType.FULL_BODY,
+            CommonBodySlot.FUR_BODY: BodyType.FUR_BODY,
+            CommonBodySlot.GLASSES: BodyType.GLASSES,
+            CommonBodySlot.GLOVES: BodyType.GLOVES,
+            CommonBodySlot.HAIR: BodyType.HAIR,
+            CommonBodySlot.HAIR_COLOR_OVERRIDE: BodyType.HAIRCOLOR_OVERRIDE,
+            CommonBodySlot.HAT: BodyType.HAT,
+            CommonBodySlot.HEAD: BodyType.HEAD,
+            CommonBodySlot.INDEX_FINGER_LEFT: BodyType.INDEX_FINGER_LEFT,
+            CommonBodySlot.INDEX_FINGER_RIGHT: BodyType.INDEX_FINGER_RIGHT,
+            CommonBodySlot.LIP_RING_LEFT: BodyType.LIP_RING_LEFT,
+            CommonBodySlot.LIP_RING_RIGHT: BodyType.LIP_RING_RIGHT,
+            CommonBodySlot.LIPSTICK: BodyType.LIPS_TICK,
+            CommonBodySlot.LOWER_BODY: BodyType.LOWER_BODY,
+            CommonBodySlot.MASCARA: BodyType.MASCARA,
+            CommonBodySlot.MIDDLE_FINGER_LEFT: BodyType.MIDDLE_FINGER_LEFT,
+            CommonBodySlot.MIDDLE_FINGER_RIGHT: BodyType.MIDDLE_FINGER_RIGHT,
+            CommonBodySlot.NECKLACE: BodyType.NECKLACE,
+            CommonBodySlot.NOSE_RING_LEFT: BodyType.NOSE_RING_LEFT,
+            CommonBodySlot.NOSE_RING_RIGHT: BodyType.NOSE_RING_RIGHT,
+            CommonBodySlot.OCCULT_BROW: BodyType.OCCULT_BROW,
+            CommonBodySlot.OCCULT_EYE_SOCKET: BodyType.OCCULT_EYE_SOCKET,
+            CommonBodySlot.OCCULT_EYELID: BodyType.OCCULT_EYE_LID,
+            CommonBodySlot.OCCULT_LEFT_CHEEK: BodyType.OCCULT_LEFT_CHEEK,
+            CommonBodySlot.OCCULT_MOUTH: BodyType.OCCULT_MOUTH,
+            CommonBodySlot.OCCULT_NECK_SCAR: BodyType.OCCULT_NECK_SCAR,
+            CommonBodySlot.OCCULT_RIGHT_CHEEK: BodyType.OCCULT_RIGHT_CHEEK,
+            CommonBodySlot.RING_FINGER_LEFT: BodyType.RING_FINGER_LEFT,
+            CommonBodySlot.RING_FINGER_RIGHT: BodyType.RING_FINGER_RIGHT,
+            CommonBodySlot.SHOES: BodyType.SHOES,
+            CommonBodySlot.SKIN_DETAIL_ACNE_PUBERTY: BodyType.SKINDETAIL_ACNE_PUBERTY,
+            CommonBodySlot.SKIN_DETAIL_CREASE_FOREHEAD: BodyType.SKINDETAIL_CREASE_FOREHEAD,
+            CommonBodySlot.SKIN_DETAIL_CREASE_MOUTH: BodyType.SKINDETAIL_CREASE_MOUTH,
+            CommonBodySlot.SKIN_DETAIL_DIMPLE_LEFT: BodyType.SKINDETAIL_DIMPLE_LEFT,
+            CommonBodySlot.SKIN_DETAIL_DIMPLE_RIGHT: BodyType.SKINDETAIL_DIMPLE_RIGHT,
+            CommonBodySlot.SKIN_DETAIL_FRECKLES: BodyType.SKINDETAIL_FRECKLES,
+            CommonBodySlot.SKIN_DETAIL_MOLE_CHEEK_LEFT: BodyType.SKINDETAIL_MOLE_CHEEK_LEFT,
+            CommonBodySlot.SKIN_DETAIL_MOLE_CHEEK_RIGHT: BodyType.SKINDETAIL_MOLE_CHEEK_RIGHT,
+            CommonBodySlot.SKIN_DETAIL_MOLE_LIP_LEFT: BodyType.SKINDETAIL_MOLE_LIP_LEFT,
+            CommonBodySlot.SKIN_DETAIL_MOLE_LIP_RIGHT: BodyType.SKINDETAIL_MOLE_LIP_RIGHT,
+            CommonBodySlot.SKIN_DETAIL_NOSE_COLOR: BodyType.SKINDETAIL_NOSE_COLOR,
+            CommonBodySlot.SKIN_OVERLAY: BodyType.SKIN_OVERLAY,
+            CommonBodySlot.SOCKS: BodyType.SOCKS,
+            CommonBodySlot.TAIL: BodyType.TAIL,
+            CommonBodySlot.TATTOO_ARM_LOWER_LEFT: BodyType.TATTOO_ARM_LOWER_LEFT,
+            CommonBodySlot.TATTOO_ARM_LOWER_RIGHT: BodyType.TATTOO_ARM_LOWER_RIGHT,
+            CommonBodySlot.TATTOO_ARM_UPPER_LEFT: BodyType.TATTOO_ARM_UPPER_LEFT,
+            CommonBodySlot.TATTOO_ARM_UPPER_RIGHT: BodyType.TATTOO_ARM_UPPER_RIGHT,
+            CommonBodySlot.TATTOO_LEG_LEFT: BodyType.TATTOO_LEG_LEFT,
+            CommonBodySlot.TATTOO_LEG_RIGHT: BodyType.TATTOO_LEG_RIGHT,
+            CommonBodySlot.TATTOO_TORSO_BACK_LOWER: BodyType.TATTOO_TORSO_BACK_LOWER,
+            CommonBodySlot.TATTOO_TORSO_BACK_UPPER: BodyType.TATTOO_TORSO_BACK_UPPER,
+            CommonBodySlot.TATTOO_TORSO_FRONT_LOWER: BodyType.TATTOO_TORSO_FRONT_LOWER,
+            CommonBodySlot.TATTOO_TORSO_FRONT_UPPER: BodyType.TATTOO_TORSO_FRONT_UPPER,
+            CommonBodySlot.TEETH: BodyType.TEETH,
+            CommonBodySlot.TIGHTS: BodyType.TIGHTS,
+            CommonBodySlot.TOENAIL: BodyType.TOENAIL,
+            CommonBodySlot.UNUSED_1: BodyType.UNUSED1,
+            CommonBodySlot.UPPER_BODY: BodyType.UPPER_BODY,
+            CommonBodySlot.WRIST_LEFT: BodyType.WRIST_LEFT,
+            CommonBodySlot.WRIST_RIGHT: BodyType.WRIST_RIGHT,
+        }
+        return mapping.get(value, value)
 
     @staticmethod
     def convert_from_vanilla(value: Union['CommonBodySlot', BodyType, int]) -> Union['CommonBodySlot', BodyType, int]:
@@ -180,4 +269,94 @@ class CommonBodySlot(CommonIntFlags):
             return CommonBodySlot.NONE
         if isinstance(value, CommonBodySlot):
             return value
-        return CommonResourceUtils.get_enum_by_int_value(int(value), CommonBodySlot, default_value=value)
+        mapping = {
+            BodyType.ACNE: CommonBodySlot.ACNE,
+            BodyType.BITE: CommonBodySlot.BITE,
+            BodyType.BLUSH: CommonBodySlot.BLUSH,
+            BodyType.BODYHAIR_ARM: CommonBodySlot.BODY_HAIR_ARM,
+            BodyType.BODYHAIR_LEG: CommonBodySlot.BODY_HAIR_LEG,
+            BodyType.BODYHAIR_TORSOBACK: CommonBodySlot.BODY_HAIR_TORSO_BACK,
+            BodyType.BODYHAIR_TORSOFRONT: CommonBodySlot.BODY_HAIR_TORSO_FRONT,
+            BodyType.BODYSCAR_ARMLEFT: CommonBodySlot.BODY_SCAR_ARM_LEFT,
+            BodyType.BODYSCAR_ARMRIGHT: CommonBodySlot.BODY_SCAR_ARM_RIGHT,
+            BodyType.BODYSCAR_LEGLEFT: CommonBodySlot.BODY_SCAR_LEG_LEFT,
+            BodyType.BODYSCAR_LEGRIGHT: CommonBodySlot.BODY_SCAR_LEG_RIGHT,
+            BodyType.BODYSCAR_TORSOBACK: CommonBodySlot.BODY_SCAR_TORSO_BACK,
+            BodyType.BODYSCAR_TORSOFRONT: CommonBodySlot.BODY_SCAR_TORSO_FRONT,
+            BodyType.BROW_RING_LEFT: CommonBodySlot.BROW_RING_LEFT,
+            BodyType.BROW_RING_RIGHT: CommonBodySlot.BROW_RING_RIGHT,
+            BodyType.CUMMERBUND: CommonBodySlot.CUMMERBUND,
+            BodyType.EARRINGS: CommonBodySlot.EARRINGS,
+            BodyType.EARS: CommonBodySlot.EARS,
+            BodyType.EYECOLOR: CommonBodySlot.EYE_COLOR,
+            BodyType.EYECOLOR_SECONDARY: CommonBodySlot.EYE_COLOR_SECONDARY,
+            BodyType.EYE_LINER: CommonBodySlot.EYE_LINER,
+            BodyType.EYE_SHADOW: CommonBodySlot.EYE_SHADOW,
+            BodyType.EYEBROWS: CommonBodySlot.EYEBROWS,
+            BodyType.FACEPAINT: CommonBodySlot.FACE_PAINT,
+            BodyType.FACIAL_HAIR: CommonBodySlot.FACIAL_HAIR,
+            BodyType.FINGERNAIL: CommonBodySlot.FINGERNAIL,
+            BodyType.FOREARM_SCAR: CommonBodySlot.FOREARM_SCAR,
+            BodyType.FULL_BODY: CommonBodySlot.FULL_BODY,
+            BodyType.FUR_BODY: CommonBodySlot.FUR_BODY,
+            BodyType.GLASSES: CommonBodySlot.GLASSES,
+            BodyType.GLOVES: CommonBodySlot.GLOVES,
+            BodyType.HAIR: CommonBodySlot.HAIR,
+            BodyType.HAIRCOLOR_OVERRIDE: CommonBodySlot.HAIR_COLOR_OVERRIDE,
+            BodyType.HAT: CommonBodySlot.HAT,
+            BodyType.HEAD: CommonBodySlot.HEAD,
+            BodyType.INDEX_FINGER_LEFT: CommonBodySlot.INDEX_FINGER_LEFT,
+            BodyType.INDEX_FINGER_RIGHT: CommonBodySlot.INDEX_FINGER_RIGHT,
+            BodyType.LIP_RING_LEFT: CommonBodySlot.LIP_RING_LEFT,
+            BodyType.LIP_RING_RIGHT: CommonBodySlot.LIP_RING_RIGHT,
+            BodyType.LIPS_TICK: CommonBodySlot.LIPSTICK,
+            BodyType.LOWER_BODY: CommonBodySlot.LOWER_BODY,
+            BodyType.MASCARA: CommonBodySlot.MASCARA,
+            BodyType.MIDDLE_FINGER_LEFT: CommonBodySlot.MIDDLE_FINGER_LEFT,
+            BodyType.MIDDLE_FINGER_RIGHT: CommonBodySlot.MIDDLE_FINGER_RIGHT,
+            BodyType.NECKLACE: CommonBodySlot.NECKLACE,
+            BodyType.NOSE_RING_LEFT: CommonBodySlot.NOSE_RING_LEFT,
+            BodyType.NOSE_RING_RIGHT: CommonBodySlot.NOSE_RING_RIGHT,
+            BodyType.OCCULT_BROW: CommonBodySlot.OCCULT_BROW,
+            BodyType.OCCULT_EYE_SOCKET: CommonBodySlot.OCCULT_EYE_SOCKET,
+            BodyType.OCCULT_EYE_LID: CommonBodySlot.OCCULT_EYELID,
+            BodyType.OCCULT_LEFT_CHEEK: CommonBodySlot.OCCULT_LEFT_CHEEK,
+            BodyType.OCCULT_MOUTH: CommonBodySlot.OCCULT_MOUTH,
+            BodyType.OCCULT_NECK_SCAR: CommonBodySlot.OCCULT_NECK_SCAR,
+            BodyType.OCCULT_RIGHT_CHEEK: CommonBodySlot.OCCULT_RIGHT_CHEEK,
+            BodyType.RING_FINGER_LEFT: CommonBodySlot.RING_FINGER_LEFT,
+            BodyType.RING_FINGER_RIGHT: CommonBodySlot.RING_FINGER_RIGHT,
+            BodyType.SHOES: CommonBodySlot.SHOES,
+            BodyType.SKINDETAIL_ACNE_PUBERTY: CommonBodySlot.SKIN_DETAIL_ACNE_PUBERTY,
+            BodyType.SKINDETAIL_CREASE_FOREHEAD: CommonBodySlot.SKIN_DETAIL_CREASE_FOREHEAD,
+            BodyType.SKINDETAIL_CREASE_MOUTH: CommonBodySlot.SKIN_DETAIL_CREASE_MOUTH,
+            BodyType.SKINDETAIL_DIMPLE_LEFT: CommonBodySlot.SKIN_DETAIL_DIMPLE_LEFT,
+            BodyType.SKINDETAIL_DIMPLE_RIGHT: CommonBodySlot.SKIN_DETAIL_DIMPLE_RIGHT,
+            BodyType.SKINDETAIL_FRECKLES: CommonBodySlot.SKIN_DETAIL_FRECKLES,
+            BodyType.SKINDETAIL_MOLE_CHEEK_LEFT: CommonBodySlot.SKIN_DETAIL_MOLE_CHEEK_LEFT,
+            BodyType.SKINDETAIL_MOLE_CHEEK_RIGHT: CommonBodySlot.SKIN_DETAIL_MOLE_CHEEK_RIGHT,
+            BodyType.SKINDETAIL_MOLE_LIP_LEFT: CommonBodySlot.SKIN_DETAIL_MOLE_LIP_LEFT,
+            BodyType.SKINDETAIL_MOLE_LIP_RIGHT: CommonBodySlot.SKIN_DETAIL_MOLE_LIP_RIGHT,
+            BodyType.SKINDETAIL_NOSE_COLOR: CommonBodySlot.SKIN_DETAIL_NOSE_COLOR,
+            BodyType.SKIN_OVERLAY: CommonBodySlot.SKIN_OVERLAY,
+            BodyType.SOCKS: CommonBodySlot.SOCKS,
+            BodyType.TAIL: CommonBodySlot.TAIL,
+            BodyType.TATTOO_ARM_LOWER_LEFT: CommonBodySlot.TATTOO_ARM_LOWER_LEFT,
+            BodyType.TATTOO_ARM_LOWER_RIGHT: CommonBodySlot.TATTOO_ARM_LOWER_RIGHT,
+            BodyType.TATTOO_ARM_UPPER_LEFT: CommonBodySlot.TATTOO_ARM_UPPER_LEFT,
+            BodyType.TATTOO_ARM_UPPER_RIGHT: CommonBodySlot.TATTOO_ARM_UPPER_RIGHT,
+            BodyType.TATTOO_LEG_LEFT: CommonBodySlot.TATTOO_LEG_LEFT,
+            BodyType.TATTOO_LEG_RIGHT: CommonBodySlot.TATTOO_LEG_RIGHT,
+            BodyType.TATTOO_TORSO_BACK_LOWER: CommonBodySlot.TATTOO_TORSO_BACK_LOWER,
+            BodyType.TATTOO_TORSO_BACK_UPPER: CommonBodySlot.TATTOO_TORSO_BACK_UPPER,
+            BodyType.TATTOO_TORSO_FRONT_LOWER: CommonBodySlot.TATTOO_TORSO_FRONT_LOWER,
+            BodyType.TATTOO_TORSO_FRONT_UPPER: CommonBodySlot.TATTOO_TORSO_FRONT_UPPER,
+            BodyType.TEETH: CommonBodySlot.TEETH,
+            BodyType.TIGHTS: CommonBodySlot.TIGHTS,
+            BodyType.TOENAIL: CommonBodySlot.TOENAIL,
+            BodyType.UNUSED1: CommonBodySlot.UNUSED_1,
+            BodyType.UPPER_BODY: CommonBodySlot.UPPER_BODY,
+            BodyType.WRIST_LEFT: CommonBodySlot.WRIST_LEFT,
+            BodyType.WRIST_RIGHT: CommonBodySlot.WRIST_RIGHT,
+        }
+        return mapping.get(value, value)

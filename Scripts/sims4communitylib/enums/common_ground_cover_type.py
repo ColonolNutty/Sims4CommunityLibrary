@@ -15,13 +15,14 @@ try:
 except:
     class GroundCoverType(CommonInt):
         """Mock class."""
-        pass
+        RAIN_ACCUMULATION = 1002
+        SNOW_ACCUMULATION = 1003
 
 
 class CommonGroundCoverType(CommonInt):
     """Identifiers for ground cover types."""
-    RAIN_ACCUMULATION = 1002
-    SNOW_ACCUMULATION = 1003
+    RAIN_ACCUMULATION: 'CommonGroundCoverType' = ...
+    SNOW_ACCUMULATION: 'CommonGroundCoverType' = ...
 
     @classmethod
     def get_all(cls, exclude_values: Iterator['CommonGroundCoverType'] = ()) -> Tuple['CommonGroundCoverType']:
@@ -49,8 +50,13 @@ class CommonGroundCoverType(CommonInt):
         :return: The specified CommonGroundCoverType translated to GroundCoverType, or None if the value could not be translated.
         :rtype: Union[GroundCoverType, None]
         """
-        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-        return CommonResourceUtils.get_enum_by_int_value(int(value), GroundCoverType, default_value=None)
+        if isinstance(value, GroundCoverType):
+            return value
+        mapping = {
+            CommonGroundCoverType.RAIN_ACCUMULATION: GroundCoverType.RAIN_ACCUMULATION,
+            CommonGroundCoverType.SNOW_ACCUMULATION: GroundCoverType.SNOW_ACCUMULATION
+        }
+        return mapping.get(value, None)
 
     @staticmethod
     def convert_from_vanilla(value: GroundCoverType) -> Union['CommonGroundCoverType', None]:
@@ -63,5 +69,10 @@ class CommonGroundCoverType(CommonInt):
         :return: The specified GroundCoverType translated to CommonGroundCoverType, or None if the value could not be translated.
         :rtype: Union[CommonGroundCoverType, None]
         """
-        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-        return CommonResourceUtils.get_enum_by_int_value(int(value), CommonGroundCoverType, default_value=None)
+        if isinstance(value, CommonGroundCoverType):
+            return value
+        mapping = {
+            GroundCoverType.RAIN_ACCUMULATION: CommonGroundCoverType.RAIN_ACCUMULATION,
+            GroundCoverType.SNOW_ACCUMULATION: CommonGroundCoverType.SNOW_ACCUMULATION
+        }
+        return mapping.get(value, None)

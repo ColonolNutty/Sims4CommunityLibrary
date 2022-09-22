@@ -9,39 +9,39 @@ from typing import Tuple, Iterator
 
 from sims.sim_spawner_enums import SimNameType
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
 
 class CommonSimNameType(CommonInt):
     """Types of names."""
-    DEFAULT: 'CommonSimNameType' = 0
-    JAPANESE: 'CommonSimNameType' = 1
-    MOROCCAN: 'CommonSimNameType' = 2
-    INDIAN: 'CommonSimNameType' = 3
-    CAT: 'CommonSimNameType' = 4
-    DOG: 'CommonSimNameType' = 5
-    SKELETON: 'CommonSimNameType' = 6
-    LATIN: 'CommonSimNameType' = 7
-    ISLANDER: 'CommonSimNameType' = 8
-    CHINESE: 'CommonSimNameType' = 9
-    FAMILIAR_DRAGON: 'CommonSimNameType' = 10
-    FAMILIAR_BUNNERFLY: 'CommonSimNameType' = 11
-    FAMILIAR_FAIRY: 'CommonSimNameType' = 12
-    FAMILIAR_FROG: 'CommonSimNameType' = 13
-    FAMILIAR_OWL: 'CommonSimNameType' = 14
-    FAMILIAR_PHOENIX: 'CommonSimNameType' = 15
-    FAMILIAR_RAVEN: 'CommonSimNameType' = 16
-    FAMILIAR_SKULL: 'CommonSimNameType' = 17
-    FAMILIAR_VOID_CRITTER: 'CommonSimNameType' = 18
-    FAMILIAR_VOODOO_DOLL: 'CommonSimNameType' = 19
-    FAMILIAR_BAT: 'CommonSimNameType' = 20
-    HUMANOID_ROBOT: 'CommonSimNameType' = 21
-    HUMANOID_ROBOT_GENERIC: 'CommonSimNameType' = 22
-    MARKETPLACE_NAME: 'CommonSimNameType' = 23
-    STAR_WARS_GENERAL: 'CommonSimNameType' = 24
-    STAR_WARS_FIRST_ORDER: 'CommonSimNameType' = 25
-    STAR_WARS_STORM_TROOPER: 'CommonSimNameType' = 26
-    FOX: 'CommonSimNameType' = 27
+    DEFAULT: 'CommonSimNameType' = ...
+    JAPANESE: 'CommonSimNameType' = ...
+    MOROCCAN: 'CommonSimNameType' = ...
+    INDIAN: 'CommonSimNameType' = ...
+    CAT: 'CommonSimNameType' = ...
+    DOG: 'CommonSimNameType' = ...
+    SKELETON: 'CommonSimNameType' = ...
+    LATIN: 'CommonSimNameType' = ...
+    ISLANDER: 'CommonSimNameType' = ...
+    CHINESE: 'CommonSimNameType' = ...
+    FAMILIAR_DRAGON: 'CommonSimNameType' = ...
+    FAMILIAR_BUNNERFLY: 'CommonSimNameType' = ...
+    FAMILIAR_FAIRY: 'CommonSimNameType' = ...
+    FAMILIAR_FROG: 'CommonSimNameType' = ...
+    FAMILIAR_OWL: 'CommonSimNameType' = ...
+    FAMILIAR_PHOENIX: 'CommonSimNameType' = ...
+    FAMILIAR_RAVEN: 'CommonSimNameType' = ...
+    FAMILIAR_SKULL: 'CommonSimNameType' = ...
+    FAMILIAR_VOID_CRITTER: 'CommonSimNameType' = ...
+    FAMILIAR_VOODOO_DOLL: 'CommonSimNameType' = ...
+    FAMILIAR_BAT: 'CommonSimNameType' = ...
+    HUMANOID_ROBOT: 'CommonSimNameType' = ...
+    HUMANOID_ROBOT_GENERIC: 'CommonSimNameType' = ...
+    MARKETPLACE_NAME: 'CommonSimNameType' = ...
+    MARKETPLACE_FASHION_NAME: 'CommonSimNameType' = ...
+    STAR_WARS_GENERAL: 'CommonSimNameType' = ...
+    STAR_WARS_FIRST_ORDER: 'CommonSimNameType' = ...
+    STAR_WARS_STORM_TROOPER: 'CommonSimNameType' = ...
+    FOX: 'CommonSimNameType' = ...
 
     @classmethod
     def get_all(cls, exclude_values: Iterator['CommonSimNameType'] = None) -> Tuple['CommonSimNameType']:
@@ -87,28 +87,150 @@ class CommonSimNameType(CommonInt):
         """
         return ', '.join(cls.get_all_names(exclude_values=exclude_values))
 
-    @staticmethod
-    def convert_to_vanilla(sim_name_type: 'CommonSimNameType') -> SimNameType:
-        """convert_to_vanilla(sim_name_type)
+    @classmethod
+    def convert_to_vanilla(cls, value: 'CommonSimNameType') -> SimNameType:
+        """convert_to_vanilla(value)
 
-        Convert a CommonSimNameType into the vanilla SimNameType enum.
+        Convert a value into the vanilla SimNameType enum.
 
-        :param sim_name_type: An instance of CommonSimNameType.
-        :type sim_name_type: CommonSimNameType
-        :return: The specified CommonSimNameType translated to SimNameType or DEFAULT if the CommonSimNameType could not be translated.
+        :param value: An instance of CommonSimNameType.
+        :type value: CommonSimNameType
+        :return: The specified value translated to SimNameType or DEFAULT if the value could not be translated.
         :rtype: SimNameType
         """
-        return CommonResourceUtils.get_enum_by_int_value(int(sim_name_type), SimNameType, default_value=SimNameType.DEFAULT)
+        if value is None or value == CommonSimNameType.DEFAULT:
+            return SimNameType.DEFAULT
+        if isinstance(value, SimNameType):
+            return value
+        mapping = dict()
+        if hasattr(SimNameType, 'Japanese'):
+            mapping[CommonSimNameType.JAPANESE] = SimNameType.Japanese
+        if hasattr(SimNameType, 'Moroccan'):
+            mapping[CommonSimNameType.MOROCCAN] = SimNameType.Moroccan
+        if hasattr(SimNameType, 'Indian'):
+            mapping[CommonSimNameType.INDIAN] = SimNameType.Indian
+        if hasattr(SimNameType, 'Cat'):
+            mapping[CommonSimNameType.CAT] = SimNameType.Cat
+        if hasattr(SimNameType, 'Dog'):
+            mapping[CommonSimNameType.DOG] = SimNameType.Dog
+        if hasattr(SimNameType, 'Skeleton'):
+            mapping[CommonSimNameType.SKELETON] = SimNameType.Skeleton
+        if hasattr(SimNameType, 'Latin'):
+            mapping[CommonSimNameType.LATIN] = SimNameType.Latin
+        if hasattr(SimNameType, 'Islander'):
+            mapping[CommonSimNameType.ISLANDER] = SimNameType.Islander
+        if hasattr(SimNameType, 'Chinese'):
+            mapping[CommonSimNameType.CHINESE] = SimNameType.Chinese
+        if hasattr(SimNameType, 'FamiliarDragon'):
+            mapping[CommonSimNameType.FAMILIAR_DRAGON] = SimNameType.FamiliarDragon
+        if hasattr(SimNameType, 'FamiliarBunnerfly'):
+            mapping[CommonSimNameType.FAMILIAR_BUNNERFLY] = SimNameType.FamiliarBunnerfly
+        if hasattr(SimNameType, 'FamiliarFairy'):
+            mapping[CommonSimNameType.FAMILIAR_FAIRY] = SimNameType.FamiliarFairy
+        if hasattr(SimNameType, 'FamiliarFrog'):
+            mapping[CommonSimNameType.FAMILIAR_FROG] = SimNameType.FamiliarFrog
+        if hasattr(SimNameType, 'FamiliarOwl'):
+            mapping[CommonSimNameType.FAMILIAR_OWL] = SimNameType.FamiliarOwl
+        if hasattr(SimNameType, 'FamiliarPhoenix'):
+            mapping[CommonSimNameType.FAMILIAR_PHOENIX] = SimNameType.FamiliarPhoenix
+        if hasattr(SimNameType, 'FamiliarRaven'):
+            mapping[CommonSimNameType.FAMILIAR_RAVEN] = SimNameType.FamiliarRaven
+        if hasattr(SimNameType, 'FamiliarSkull'):
+            mapping[CommonSimNameType.FAMILIAR_SKULL] = SimNameType.FamiliarSkull
+        if hasattr(SimNameType, 'FamiliarVoidcritter'):
+            mapping[CommonSimNameType.FAMILIAR_VOID_CRITTER] = SimNameType.FamiliarVoidcritter
+        if hasattr(SimNameType, 'FamiliarVoodooDoll'):
+            mapping[CommonSimNameType.FAMILIAR_VOODOO_DOLL] = SimNameType.FamiliarVoodooDoll
+        if hasattr(SimNameType, 'FamiliarBat'):
+            mapping[CommonSimNameType.FAMILIAR_BAT] = SimNameType.FamiliarBat
+        if hasattr(SimNameType, 'HumanoidRobot'):
+            mapping[CommonSimNameType.HUMANOID_ROBOT] = SimNameType.HumanoidRobot
+        if hasattr(SimNameType, 'HumanoidRobot_Generic'):
+            mapping[CommonSimNameType.HUMANOID_ROBOT_GENERIC] = SimNameType.HumanoidRobot_Generic
+        if hasattr(SimNameType, 'Marketplace_Name'):
+            mapping[CommonSimNameType.MARKETPLACE_NAME] = SimNameType.Marketplace_Name
+        if hasattr(SimNameType, 'StarWars_General'):
+            mapping[CommonSimNameType.STAR_WARS_GENERAL] = SimNameType.StarWars_General
+        if hasattr(SimNameType, 'StarWars_FirstOrder'):
+            mapping[CommonSimNameType.STAR_WARS_FIRST_ORDER] = SimNameType.StarWars_FirstOrder
+        if hasattr(SimNameType, 'StarWars_Stormtrooper'):
+            mapping[CommonSimNameType.STAR_WARS_STORM_TROOPER] = SimNameType.StarWars_Stormtrooper
+        if hasattr(SimNameType, 'Fox'):
+            mapping[CommonSimNameType.FOX] = SimNameType.Fox
+        if hasattr(SimNameType, 'FashionMarketplace_Name'):
+            mapping[CommonSimNameType.MARKETPLACE_FASHION_NAME] = SimNameType.FashionMarketplace_Name
+        return mapping.get(value, SimNameType.DEFAULT)
 
-    @staticmethod
-    def convert_from_vanilla(sim_name_type: SimNameType) -> 'CommonSimNameType':
-        """convert_from_vanilla(sim_name_type)
+    @classmethod
+    def convert_from_vanilla(cls, value: SimNameType) -> 'CommonSimNameType':
+        """convert_from_vanilla(value)
 
-        Convert a vanilla SimNameType into a CommonSimNameType enum.
+        Convert a vanilla value into a CommonSimNameType enum.
 
-        :param sim_name_type: An instance of SimNameType.
-        :type sim_name_type: SimNameType
-        :return: The specified SimNameType translated to CommonSimNameType or DEFAULT if the SimNameType could not be translated.
+        :param value: An instance of SimNameType.
+        :type value: SimNameType
+        :return: The specified value translated to CommonSimNameType or DEFAULT if the value could not be translated.
         :rtype: CommonSimNameType
         """
-        return CommonResourceUtils.get_enum_by_int_value(int(sim_name_type), CommonSimNameType, default_value=CommonSimNameType.DEFAULT)
+        if value is None or value == SimNameType.DEFAULT:
+            return CommonSimNameType.DEFAULT
+        if isinstance(value, CommonSimNameType):
+            return value
+        mapping = dict()
+        if hasattr(SimNameType, 'Japanese'):
+            mapping[SimNameType.Japanese] = CommonSimNameType.JAPANESE
+        if hasattr(SimNameType, 'Moroccan'):
+            mapping[SimNameType.Moroccan] = CommonSimNameType.MOROCCAN
+        if hasattr(SimNameType, 'Indian'):
+            mapping[SimNameType.Indian] = CommonSimNameType.INDIAN
+        if hasattr(SimNameType, 'Cat'):
+            mapping[SimNameType.Cat] = CommonSimNameType.CAT
+        if hasattr(SimNameType, 'Dog'):
+            mapping[SimNameType.Dog] = CommonSimNameType.DOG
+        if hasattr(SimNameType, 'Skeleton'):
+            mapping[SimNameType.Skeleton] = CommonSimNameType.SKELETON
+        if hasattr(SimNameType, 'Latin'):
+            mapping[SimNameType.Latin] = CommonSimNameType.LATIN
+        if hasattr(SimNameType, 'Islander'):
+            mapping[SimNameType.Islander] = CommonSimNameType.ISLANDER
+        if hasattr(SimNameType, 'Chinese'):
+            mapping[SimNameType.Chinese] = CommonSimNameType.CHINESE
+        if hasattr(SimNameType, 'FamiliarDragon'):
+            mapping[SimNameType.FamiliarDragon] = CommonSimNameType.FAMILIAR_DRAGON
+        if hasattr(SimNameType, 'FamiliarBunnerfly'):
+            mapping[SimNameType.FamiliarBunnerfly] = CommonSimNameType.FAMILIAR_BUNNERFLY
+        if hasattr(SimNameType, 'FamiliarFairy'):
+            mapping[SimNameType.FamiliarFairy] = CommonSimNameType.FAMILIAR_FAIRY
+        if hasattr(SimNameType, 'FamiliarFrog'):
+            mapping[SimNameType.FamiliarFrog] = CommonSimNameType.FAMILIAR_FROG
+        if hasattr(SimNameType, 'FamiliarOwl'):
+            mapping[SimNameType.FamiliarOwl] = CommonSimNameType.FAMILIAR_OWL
+        if hasattr(SimNameType, 'FamiliarPhoenix'):
+            mapping[SimNameType.FamiliarPhoenix] = CommonSimNameType.FAMILIAR_PHOENIX
+        if hasattr(SimNameType, 'FamiliarRaven'):
+            mapping[SimNameType.FamiliarRaven] = CommonSimNameType.FAMILIAR_RAVEN
+        if hasattr(SimNameType, 'FamiliarSkull'):
+            mapping[SimNameType.FamiliarSkull] = CommonSimNameType.FAMILIAR_SKULL
+        if hasattr(SimNameType, 'FamiliarVoidcritter'):
+            mapping[SimNameType.FamiliarVoidcritter] = CommonSimNameType.FAMILIAR_VOID_CRITTER
+        if hasattr(SimNameType, 'FamiliarVoodooDoll'):
+            mapping[SimNameType.FamiliarVoodooDoll] = CommonSimNameType.FAMILIAR_VOODOO_DOLL
+        if hasattr(SimNameType, 'FamiliarBat'):
+            mapping[SimNameType.FamiliarBat] = CommonSimNameType.FAMILIAR_BAT
+        if hasattr(SimNameType, 'HumanoidRobot'):
+            mapping[SimNameType.HumanoidRobot] = CommonSimNameType.HUMANOID_ROBOT
+        if hasattr(SimNameType, 'HumanoidRobot_Generic'):
+            mapping[SimNameType.HumanoidRobot_Generic] = CommonSimNameType.HUMANOID_ROBOT_GENERIC
+        if hasattr(SimNameType, 'Marketplace_Name'):
+            mapping[SimNameType.Marketplace_Name] = CommonSimNameType.MARKETPLACE_NAME
+        if hasattr(SimNameType, 'StarWars_General'):
+            mapping[SimNameType.StarWars_General] = CommonSimNameType.STAR_WARS_GENERAL
+        if hasattr(SimNameType, 'StarWars_FirstOrder'):
+            mapping[SimNameType.StarWars_FirstOrder] = CommonSimNameType.STAR_WARS_FIRST_ORDER
+        if hasattr(SimNameType, 'StarWars_Stormtrooper'):
+            mapping[SimNameType.StarWars_Stormtrooper] = CommonSimNameType.STAR_WARS_STORM_TROOPER
+        if hasattr(SimNameType, 'Fox'):
+            mapping[SimNameType.Fox] = CommonSimNameType.FOX
+        if hasattr(SimNameType, 'FashionMarketplace_Name'):
+            mapping[SimNameType.FashionMarketplace_Name] = CommonSimNameType.MARKETPLACE_FASHION_NAME
+        return mapping.get(value, CommonSimNameType.DEFAULT)

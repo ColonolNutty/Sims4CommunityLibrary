@@ -15,13 +15,14 @@ try:
 except:
     class PrecipitationType(CommonInt):
         """Mock class."""
-        pass
+        RAIN = 1000
+        SNOW = 1001
 
 
 class CommonPrecipitationType(CommonInt):
     """Identifiers for precipitation types."""
-    RAIN: 'CommonPrecipitationType' = 1000
-    SNOW: 'CommonPrecipitationType' = 1001
+    RAIN: 'CommonPrecipitationType' = ...
+    SNOW: 'CommonPrecipitationType' = ...
 
     @classmethod
     def get_all(cls, exclude_values: Iterator['CommonPrecipitationType'] = ()) -> Tuple['CommonPrecipitationType']:
@@ -39,18 +40,23 @@ class CommonPrecipitationType(CommonInt):
         return value_list
 
     @staticmethod
-    def convert_to_vanilla(value: 'CommonPrecipitationType') -> Union[PrecipitationType, None]:
+    def convert_to_vanilla(value: 'CommonPrecipitationType') -> PrecipitationType:
         """convert_to_vanilla(value)
 
         Convert a CommonPrecipitationType into PrecipitationType.
 
         :param value: An instance of CommonPrecipitationType
         :type value: CommonPrecipitationType
-        :return: The specified CommonPrecipitationType translated to PrecipitationType, or None if the value could not be translated.
-        :rtype: Union[PrecipitationType, None]
+        :return: The specified CommonPrecipitationType translated to PrecipitationType, or the value itself if the value could not be translated.
+        :rtype: PrecipitationType
         """
-        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-        return CommonResourceUtils.get_enum_by_int_value(int(value), PrecipitationType, default_value=None)
+        if isinstance(value, PrecipitationType):
+            return value
+        mapping = {
+            CommonPrecipitationType.RAIN: PrecipitationType.RAIN,
+            CommonPrecipitationType.SNOW: PrecipitationType.SNOW
+        }
+        return mapping.get(value, value)
 
     @staticmethod
     def convert_from_vanilla(value: PrecipitationType) -> Union['CommonPrecipitationType', None]:
@@ -60,8 +66,13 @@ class CommonPrecipitationType(CommonInt):
 
         :param value: An instance of PrecipitationType
         :type value: PrecipitationType
-        :return: The specified PrecipitationType translated to CommonPrecipitationType, or None if the value could not be translated.
-        :rtype: Union[CommonPrecipitationType, None]
+        :return: The specified PrecipitationType translated to CommonPrecipitationType, or the value itself if the value could not be translated.
+        :rtype: CommonPrecipitationType
         """
-        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-        return CommonResourceUtils.get_enum_by_int_value(int(value), CommonPrecipitationType, default_value=None)
+        if isinstance(value, CommonPrecipitationType):
+            return value
+        mapping = {
+            PrecipitationType.RAIN: CommonPrecipitationType.RAIN,
+            PrecipitationType.SNOW: CommonPrecipitationType.SNOW
+        }
+        return mapping.get(value, value)
