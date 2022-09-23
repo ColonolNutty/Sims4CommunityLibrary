@@ -595,7 +595,7 @@ class CommonOutfitUtils(HasClassLog):
             yield modifier_info.modifier
 
     @classmethod
-    def get_outfit_data(cls, sim_info: Union[Union[SimInfo, SimInfoBaseWrapper], SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None) -> OutfitData:
+    def get_outfit_data(cls, sim_info: Union[Union[SimInfo, SimInfoBaseWrapper], SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None) -> Union[OutfitData, None]:
         """get_outfit_data(sim_info, outfit_category_and_index=None)
 
         Retrieve OutfitData for the specified OutfitCategory and Index of a Sim.
@@ -604,11 +604,13 @@ class CommonOutfitUtils(HasClassLog):
         :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
         :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
-        :return: Outfit Data for the specified outfit.
-        :rtype: OutfitData
+        :return: Outfit Data for the specified outfit or None if the Sim does not have the specified outfit.
+        :rtype: Union[OutfitData, None]
         """
         if outfit_category_and_index is None:
             outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+        if not cls.has_outfit(sim_info, outfit_category_and_index):
+            return None
         return sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
 
     @classmethod
@@ -662,11 +664,13 @@ class CommonOutfitUtils(HasClassLog):
         :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
         :param outfit_category_and_index: The OutfitCategory and Index of the outfit to retrieve data from. Default is the current outfit.
         :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
-        :return: A dictionary of body types and cas parts in those body types for the outfit of a Sim.
+        :return: A dictionary of body types and cas parts in those body types for the outfit of a Sim. If an outfit does not exist, an empty dict will be returned.
         :rtype: Dict[Union[BodyType, int], int]
         """
         if outfit_category_and_index is None:
             outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+        if not cls.has_outfit(sim_info, outfit_category_and_index):
+            return dict()
         outfit_data = sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
         if outfit_data is None:
             return dict()
