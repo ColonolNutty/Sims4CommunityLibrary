@@ -1,3 +1,10 @@
+v2.3:
+- Updated many of the `convert_to_vanilla` and `convert_from_vanilla` functions to be more reliable and not dependent on the values of the enums.
+- Added `MARKETPLACE_FASHION_NAME` to CommonSimNameType
+- The `CommonOutfitUtils.get_outfit_parts` and `CommonOutfitUtils.get_outfit_data` functions will no longer generate an outfit for a Sim if they do not have it. Instead empty data will be returned.
+- Added a function to check if a trait is a ghost trait.
+- Updated the `CommonObjectUtils` functions to be class methods
+
 v2.2:
 - Added more DLC traits to `CommonTraitId`
 - Added a fix for vanilla adding gender options when it doesn't need to.
