@@ -29,8 +29,8 @@ class CommonObjectUtils(_HasS4CLClassLog):
     def get_log_identifier(cls) -> str:
         return 'common_object_utils'
 
-    @staticmethod
-    def create_unique_identifier(game_object: GameObject) -> int:
+    @classmethod
+    def create_unique_identifier(cls, game_object: GameObject) -> int:
         """create_unique_identifier(game_object)
 
         Create a unique identifier for an Object.
@@ -42,15 +42,15 @@ class CommonObjectUtils(_HasS4CLClassLog):
         :return: An identifier that uniquely identifies a specific type of Object.
         :rtype: int
         """
-        guid64 = CommonObjectUtils.get_object_guid(game_object)
-        catalog_name = CommonObjectUtils.get_catalog_name(game_object)
+        guid64 = cls.get_object_guid(game_object)
+        catalog_name = cls.get_catalog_name(game_object)
         hash_value = 0x09D05916 ^ min(guid64, catalog_name)
         hash_value = (((0x000F4243 * hash_value) >> 4) & 0x0FFFFFFF) ^ max(guid64, catalog_name)
         hash_value = abs(hash_value ^ 2)
         return hash_value
 
-    @staticmethod
-    def get_object_id(object_instance: BaseObject) -> int:
+    @classmethod
+    def get_object_id(cls, object_instance: BaseObject) -> int:
         """get_object_id(object_instance)
 
         Retrieve the decimal identifier of an Object.
@@ -64,8 +64,8 @@ class CommonObjectUtils(_HasS4CLClassLog):
             return -1
         return object_instance.id or getattr(object_instance, 'id', -1)
 
-    @staticmethod
-    def get_object_guid(game_object: GameObject) -> int:
+    @classmethod
+    def get_object_guid(cls, game_object: GameObject) -> int:
         """get_object_guid(game_object)
 
         Retrieve the GUID of an Object.
@@ -79,8 +79,8 @@ class CommonObjectUtils(_HasS4CLClassLog):
             return -1
         return getattr(game_object, 'guid64', -1)
 
-    @staticmethod
-    def get_object_definition(object_id: int, pack_safe: bool=False, get_fallback_definition_id: bool=True) -> Definition:
+    @classmethod
+    def get_object_definition(cls, object_id: int, pack_safe: bool = False, get_fallback_definition_id: bool = True) -> Definition:
         """get_object_definition(object_id, pack_safe=False, get_fallback_definition_id=True)
 
         Retrieve the definition for an Object.
@@ -89,19 +89,39 @@ class CommonObjectUtils(_HasS4CLClassLog):
         :type object_id: int
         :param pack_safe: If true, objects will be searched for keeping package safety in mind. Default is False.
         :type pack_safe: bool, optional
-        :param get_fallback_definition_id: Whether or not to locate a fallback definition id. Default is True.
+        :param get_fallback_definition_id: Set True, to locate a fallback definition id. Default is True.
         :type get_fallback_definition_id: bool, optional
         :return: The definition of the object with the id.
         :rtype: Definition
         """
-        game_object = CommonObjectUtils.get_game_object(object_id)
+        game_object = cls.get_game_object(object_id)
         if game_object is not None:
             if game_object.definition is not None:
                 return game_object.definition
         return services.definition_manager().get(object_id, pack_safe=pack_safe, get_fallback_definition_id=get_fallback_definition_id)
 
-    @staticmethod
-    def get_game_object_definition(game_object: GameObject, pack_safe: bool=False, get_fallback_definition_id: bool=True) -> Union[Definition, None]:
+    @classmethod
+    def get_object_definition_id(cls, object_id: int, pack_safe: bool = False, get_fallback_definition_id: bool = True) -> Union[int, None]:
+        """get_object_definition_id(object_id, pack_safe=False, get_fallback_definition_id=True)
+
+        Retrieve the definition for an Object.
+
+        :param object_id: The decimal identifier of an Object.
+        :type object_id: int
+        :param pack_safe: If true, objects will be searched for keeping package safety in mind. Default is False.
+        :type pack_safe: bool, optional
+        :param get_fallback_definition_id: Set True, to locate a fallback definition id. Default is True.
+        :type get_fallback_definition_id: bool, optional
+        :return: The id of the definition of the object with the id.
+        :rtype: Union[int, None]
+        """
+        definition = cls.get_object_definition(object_id, pack_safe=pack_safe, get_fallback_definition_id=get_fallback_definition_id)
+        if definition is None:
+            return None
+        return definition.id
+
+    @classmethod
+    def get_game_object_definition(cls, game_object: GameObject, pack_safe: bool = False, get_fallback_definition_id: bool = True) -> Union[Definition, None]:
         """get_game_object_definition(game_object, pack_safe=False, get_fallback_definition_id=True)
 
         Retrieve the definition for an Object.
@@ -110,7 +130,7 @@ class CommonObjectUtils(_HasS4CLClassLog):
         :type game_object: GameObject
         :param pack_safe: If true, objects will be searched for keeping package safety in mind. Default is False.
         :type pack_safe: bool, optional
-        :param get_fallback_definition_id: Whether or not to locate a fallback definition id. Default is True.
+        :param get_fallback_definition_id: Set True, to locate a fallback definition id. Default is True.
         :type get_fallback_definition_id: bool, optional
         :return: The definition of the Game Object or None if no definition is found.
         :rtype: Definition
@@ -119,11 +139,31 @@ class CommonObjectUtils(_HasS4CLClassLog):
             return None
         if game_object.definition is not None:
             return game_object.definition
-        game_object_id = CommonObjectUtils.get_object_id(game_object)
+        game_object_id = cls.get_object_id(game_object)
         return services.definition_manager().get(game_object_id, pack_safe=pack_safe, get_fallback_definition_id=get_fallback_definition_id)
 
-    @staticmethod
-    def get_catalog_name(game_object: GameObject) -> int:
+    @classmethod
+    def get_game_object_definition_id(cls, game_object: GameObject, pack_safe: bool = False, get_fallback_definition_id: bool = True) -> Union[int, None]:
+        """get_game_object_definition(game_object, pack_safe=False, get_fallback_definition_id=True)
+
+        Retrieve the definition for an Object.
+
+        :param game_object: An instance of a GameObject.
+        :type game_object: GameObject
+        :param pack_safe: If true, objects will be searched for keeping package safety in mind. Default is False.
+        :type pack_safe: bool, optional
+        :param get_fallback_definition_id: Set True, to locate a fallback definition id. Default is True.
+        :type get_fallback_definition_id: bool, optional
+        :return: The id of the definition of the Game Object or None if no definition is found.
+        :rtype: Union[int, None]
+        """
+        definition = cls.get_game_object_definition(game_object, pack_safe=pack_safe, get_fallback_definition_id=get_fallback_definition_id)
+        if definition is None:
+            return None
+        return definition.id
+
+    @classmethod
+    def get_catalog_name(cls, game_object: GameObject) -> int:
         """get_catalog_name(game_object)
 
         Retrieve the catalog name identifier of an Object.
@@ -137,8 +177,8 @@ class CommonObjectUtils(_HasS4CLClassLog):
             return -1
         return game_object.catalog_name
 
-    @staticmethod
-    def get_game_object(game_object_id: int) -> GameObject:
+    @classmethod
+    def get_game_object(cls, game_object_id: int) -> GameObject:
         """get_game_object(game_object_id)
 
         Retrieve an instance of an Object in the game world.
@@ -148,10 +188,10 @@ class CommonObjectUtils(_HasS4CLClassLog):
         :return: An instance of an Object or None if not found.
         :rtype: GameObject
         """
-        return CommonObjectUtils.get_game_object_manager().get(game_object_id)
+        return cls.get_game_object_manager().get(game_object_id)
 
-    @staticmethod
-    def has_root_parent(object_instance: ScriptObject) -> bool:
+    @classmethod
+    def has_root_parent(cls, object_instance: ScriptObject) -> bool:
         """has_root_parent(object_instance)
 
         Determine if an Object has a root parent.
@@ -165,8 +205,8 @@ class CommonObjectUtils(_HasS4CLClassLog):
             return False
         return object_instance.parent is not None
 
-    @staticmethod
-    def get_root_parent(object_instance: ScriptObject) -> Union[ScriptObject, None]:
+    @classmethod
+    def get_root_parent(cls, object_instance: ScriptObject) -> Union[ScriptObject, None]:
         """get_root_parent(object_instance)
 
         Retrieve the root parent of an Object.
@@ -178,11 +218,12 @@ class CommonObjectUtils(_HasS4CLClassLog):
         """
         if object_instance is None or object_instance.parent is None:
             return object_instance
-        return CommonObjectUtils.get_root_parent(object_instance.parent) or object_instance
+        return cls.get_root_parent(object_instance.parent) or object_instance
 
-    @staticmethod
+    @classmethod
     def get_instance_for_all_game_objects_generator(
-        include_object_callback: Callable[[GameObject], bool]=None
+        cls,
+        include_object_callback: Callable[[GameObject], bool] = None
     ) -> Iterator[GameObject]:
         """get_instance_for_all_objects_generator(include_object_callback=None)
 
@@ -194,7 +235,7 @@ class CommonObjectUtils(_HasS4CLClassLog):
         :return: An iterator of all Objects matching the `include_object_callback` filter.
         :rtype: Iterator[GameObject]
         """
-        game_object_list = tuple(CommonObjectUtils.get_game_object_manager().get_all())
+        game_object_list = tuple(cls.get_game_object_manager().get_all())
         for game_object in game_object_list:
             if game_object is None:
                 continue
@@ -202,9 +243,10 @@ class CommonObjectUtils(_HasS4CLClassLog):
                 continue
             yield game_object
 
-    @staticmethod
+    @classmethod
     def get_instance_for_all_visible_game_objects_generator(
-        include_object_callback: Callable[[GameObject], bool]=None
+        cls,
+        include_object_callback: Callable[[GameObject], bool] = None
     ) -> Iterator[GameObject]:
         """get_instance_for_all_visible_objects_generator(include_object_callback=None)
 
@@ -220,13 +262,13 @@ class CommonObjectUtils(_HasS4CLClassLog):
 
         include_object_callback = CommonFunctionUtils.run_predicates_as_one((_is_visible, include_object_callback))
 
-        for game_object in CommonObjectUtils.get_instance_for_all_game_objects_generator(
+        for game_object in cls.get_instance_for_all_game_objects_generator(
             include_object_callback=include_object_callback
         ):
             yield game_object
 
-    @staticmethod
-    def get_game_object_manager() -> ObjectManager:
+    @classmethod
+    def get_game_object_manager(cls) -> ObjectManager:
         """get_game_object_manager()
 
         Retrieve the manager that manages all Game Objects in a game world.
