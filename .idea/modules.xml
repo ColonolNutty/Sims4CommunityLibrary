@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/sims4pythonscripts.iml" filepath="$PROJECT_DIR$/.idea/sims4pythonscripts.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Sims4CommunityLibrary.iml" filepath="$PROJECT_DIR$/.idea/Sims4CommunityLibrary.iml" />
     </modules>
   </component>
 </project>

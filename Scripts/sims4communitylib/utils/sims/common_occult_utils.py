@@ -941,8 +941,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return is_ghost_available_result
         equipped_sim_traits = CommonTraitUtils.get_equipped_traits(sim_info)
         for trait in equipped_sim_traits:
-            is_ghost_trait = getattr(trait, 'is_ghost_trait', None)
-            if is_ghost_trait:
+            if CommonTraitUtils.is_ghost_trait(trait):
                 return CommonTestResult.TRUE
         return CommonTestResult(False, reason=f'Sim is not a ghost.')
 

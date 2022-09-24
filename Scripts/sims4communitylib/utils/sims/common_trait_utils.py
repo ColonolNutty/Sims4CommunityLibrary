@@ -1004,6 +1004,21 @@ class CommonTraitUtils(_HasS4CLClassLog):
         return CommonSimGenderOptionUtils.uses_toilet_sitting(sim_info)
 
     @classmethod
+    def is_ghost_trait(cls, trait_identifier: Union[int, CommonTraitId, Trait]) -> bool:
+        """is_ghost_trait(trait_identifier)
+
+        Determine if a trait is a Ghost trait.
+
+        :param trait_identifier: An identifier of a trait.
+        :type trait_identifier: Union[int, CommonTraitId, Trait]
+        :return: True, if the specified trait is a ghost trait. False, if not.
+        """
+        trait = cls.load_trait_by_id(trait_identifier)
+        if trait is None:
+            return False
+        return getattr(trait, 'is_ghost_trait', None) is True
+
+    @classmethod
     def has_trait(cls, sim_info: SimInfo, *trait: Union[int, CommonTraitId, Trait]) -> CommonTestResult:
         """has_trait(sim_info, trait)
 
