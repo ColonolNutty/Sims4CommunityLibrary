@@ -4,6 +4,12 @@ v2.3:
 - The `CommonOutfitUtils.get_outfit_parts` and `CommonOutfitUtils.get_outfit_data` functions will no longer generate an outfit for a Sim if they do not have it. Instead empty data will be returned.
 - Added a function to check if a trait is a ghost trait.
 - Updated the `CommonObjectUtils` functions to be class methods
+- `get_occult_sim_info` will now return the original `sim_info` as it specifies in the return type, instead of None.
+- Added new utility `CommonRecipeUtils`
+- Fixed an issue with the `CommonSimCraftingUtils` if a Recipe object was passed to it instead of an identifier.
+- Added an optional callback to `CommonSimInventoryUtils.add_to_inventory` that will be invoked when an object is added to the inventory of a Sim.
+- Added an Information Pie menu to S4CL that can be used by various mods (Comes with a phone variant as well!)
+- Fixed an error that could occur when retrieving the object definition of objects that do not have a definition.
 
 v2.2:
 - Added more DLC traits to `CommonTraitId`
