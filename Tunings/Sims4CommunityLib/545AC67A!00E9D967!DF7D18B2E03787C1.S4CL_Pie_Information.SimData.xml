@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SimData version="0x00000101" u="0x00000000">
+  <Instances>
+    <I name="S4CL_Pie_Information" schema="PieMenuCategory" type="Object">
+      <T name="_collapsible">0</T>
+      <T name="_display_name">0x45C62969</T>
+      <T name="_display_priority">200</T>
+      <T name="_icon">00B2D882-00000000-AACBCAB7F5AE81C8</T>
+      <T name="_parent">0</T>
+      <T name="_special_category">1</T>
+      <L name="mood_overrides" />
+    </I>
+  </Instances>
+  <Schemas>
+    <Schema name="PieMenuCategory" schema_hash="0x022065C1">
+      <Columns>
+        <Column name="_collapsible" type="Boolean" flags="0x00000000" />
+        <Column name="_display_name" type="LocalizationKey" flags="0x00000000" />
+        <Column name="_display_priority" type="Int32" flags="0x00000000" />
+        <Column name="_icon" type="ResourceKey" flags="0x00000000" />
+        <Column name="_parent" type="TableSetReference" flags="0x00000000" />
+        <Column name="_special_category" type="Int64" flags="0x00000000" />
+        <Column name="mood_overrides" type="Vector" flags="0x00000000" />
+      </Columns>
+    </Schema>
+  </Schemas>
+</SimData>

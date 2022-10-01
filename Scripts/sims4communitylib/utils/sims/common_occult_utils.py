@@ -179,7 +179,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         return CommonOccultUtils.get_occult_sim_info(sim_info, current_occult_type)
 
     @staticmethod
-    def get_occult_sim_info(sim_info: SimInfo, occult_type: OccultType) -> Union[SimInfo, SimInfoBaseWrapper, None]:
+    def get_occult_sim_info(sim_info: SimInfo, occult_type: OccultType) -> Union[SimInfo, SimInfoBaseWrapper]:
         """get_occult_sim_info(sim_info, occult_type)
 
         Retrieve the SimInfo for an Occult of a Sim.
@@ -194,7 +194,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not hasattr(sim_info, 'occult_tracker') or sim_info.occult_tracker is None:
-            return None
+            return sim_info
         occult_sim_info = sim_info.occult_tracker.get_occult_sim_info(occult_type)
         return occult_sim_info
 

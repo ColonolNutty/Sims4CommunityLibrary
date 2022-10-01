@@ -492,7 +492,7 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
 
     @classmethod
     def _map_motive_id(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int]) -> Union[CommonMotiveId, CommonInt, int]:
-        motive_mappings = CommonSimMotiveUtils._get_motive_mappings()
+        motive_mappings = cls._get_motive_mappings()
         if motive_id not in motive_mappings:
             return motive_id
         motive_species_mapping: Dict[CommonSpecies, CommonMotiveId] = motive_mappings[motive_id]
@@ -500,8 +500,8 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         species = CommonSpecies.get_species(sim_info)
         return motive_species_mapping.get(species, motive_id)
 
-    @staticmethod
-    def _get_motive_mappings() -> Dict[Union[CommonMotiveId, CommonInt, int], Dict[CommonSpecies, Union[CommonMotiveId, CommonInt, int]]]:
+    @classmethod
+    def _get_motive_mappings(cls) -> Dict[Union[CommonMotiveId, CommonInt, int], Dict[CommonSpecies, Union[CommonMotiveId, CommonInt, int]]]:
         if CommonSimMotiveUtils._MOTIVE_MAPPINGS is not None:
             return CommonSimMotiveUtils._MOTIVE_MAPPINGS
 

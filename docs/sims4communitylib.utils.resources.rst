@@ -27,6 +27,14 @@ Resource Utilities
    :undoc-members:
    :show-inheritance:
 
+`Recipes`
+------------------------------------------------------
+
+.. autoclass:: sims4communitylib.utils.common_recipe_utils.CommonRecipeUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Resources`
 ------------------------------------------------------
 

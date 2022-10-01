@@ -11,9 +11,7 @@ from typing import Union, Callable
 from objects.game_object import GameObject
 from sims.sim import Sim
 from sims.sim_info import SimInfo
-from sims4.resources import Types
 from sims4communitylib.enums.common_object_quality import CommonObjectQuality
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.objects.common_object_state_utils import CommonObjectStateUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -70,7 +68,8 @@ class CommonSimCraftingUtils:
         crafting_sim = CommonSimUtils.get_sim_instance(crafting_sim_info)
         if crafting_sim is None:
             return None
-        recipe = CommonResourceUtils.load_instance(Types.RECIPE, recipe_id)
+        from sims4communitylib.utils.resources.common_recipe_utils import CommonRecipeUtils
+        recipe = CommonRecipeUtils.load_recipe_by_guid(recipe_id)
         try:
             from crafting.crafting_interactions import create_craftable
             from sims4communitylib.utils.objects.common_object_ownership_utils import CommonObjectOwnershipUtils

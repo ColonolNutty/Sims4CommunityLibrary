@@ -145,6 +145,8 @@ class CommonObjectStateUtils(_HasS4CLClassLog):
         :return: The value translated to an ObjectStateValue, or None if the value could not be translated.
         :rtype: Union[ObjectStateValue, None]
         """
+        if value is None:
+            return None
         mapping: Dict[CommonObjectQuality, CommonObjectStateValueId] = {
             CommonObjectQuality.POOR: CommonObjectStateValueId.QUALITY_POOR,
             CommonObjectQuality.NORMAL: CommonObjectStateValueId.QUALITY_NORMAL,

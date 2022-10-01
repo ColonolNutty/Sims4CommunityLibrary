@@ -96,7 +96,7 @@ class CommonObjectUtils(_HasS4CLClassLog):
         """
         game_object = cls.get_game_object(object_id)
         if game_object is not None:
-            if game_object.definition is not None:
+            if hasattr(game_object, 'definition') and game_object.definition is not None:
                 return game_object.definition
         return services.definition_manager().get(object_id, pack_safe=pack_safe, get_fallback_definition_id=get_fallback_definition_id)
 
@@ -137,9 +137,11 @@ class CommonObjectUtils(_HasS4CLClassLog):
         """
         if game_object is None:
             return None
-        if game_object.definition is not None:
+        if hasattr(game_object, 'definition') and game_object.definition is not None:
             return game_object.definition
         game_object_id = cls.get_object_id(game_object)
+        if game_object_id is None or game_object_id == -1:
+            return None
         return services.definition_manager().get(game_object_id, pack_safe=pack_safe, get_fallback_definition_id=get_fallback_definition_id)
 
     @classmethod

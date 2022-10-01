@@ -17,6 +17,7 @@ from sims4communitylib.services.commands.common_console_command import CommonCon
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
+from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.objects.common_object_spawn_utils import CommonObjectSpawnUtils
 from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -75,8 +76,8 @@ class CommonSimInventoryUtils:
                     yield inventory_object
 
     @classmethod
-    def add_to_inventory(cls, sim_info: SimInfo, object_id: int, count: int = 1) -> bool:
-        """add_to_inventory(sim_info, object_definition_id, count=1)
+    def add_to_inventory(cls, sim_info: SimInfo, object_id: int, count: int = 1, on_added: Callable[[GameObject], None] = CommonFunctionUtils.noop) -> bool:
+        """add_to_inventory(sim_info, object_definition_id, count=1, on_added=CommonFunctionUtils.noop)
 
         Add a number of Newly Created Objects to the Inventory of a Sim.
 
@@ -86,6 +87,8 @@ class CommonSimInventoryUtils:
         :type object_id: int
         :param count: The number of the specified Object to add. Default is 1.
         :type count: int, optional
+        :param on_added: A callback invoked when the object is added to the inventory.
+        :type on_added: Callable[[GameObject], None]
         :return: True, if the count of the specified Object were added successfully. False, it not.
         :rtype: bool
         """
@@ -93,7 +96,9 @@ class CommonSimInventoryUtils:
             return False
 
         def _post_create(_game_object: GameObject) -> bool:
-            return CommonSimInventoryUtils.move_object_to_inventory(sim_info, _game_object)
+            move_result = CommonSimInventoryUtils.move_object_to_inventory(sim_info, _game_object)
+            on_added(_game_object)
+            return move_result
 
         success = True
         for _ in range(count):

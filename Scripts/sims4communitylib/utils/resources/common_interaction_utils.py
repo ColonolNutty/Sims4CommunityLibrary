@@ -20,7 +20,10 @@ from server.pick_info import PickInfo
 from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
 from sims4communitylib.enums.interactions_enum import CommonInteractionId
+from sims4communitylib.enums.tags_enum import CommonGameTag
+from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.location.common_location_utils import CommonLocationUtils
+from tag import Tag
 
 
 class CommonInteractionUtils:
@@ -58,13 +61,13 @@ class CommonInteractionUtils:
     def has_all_static_commodities(interaction: Interaction, static_commodity_ids: Iterator[int]) -> bool:
         """has_all_static_commodities(interaction, static_commodity_ids)
 
-        Determine if an interaction has all of the specified static commodities.
+        Determine if an interaction has all the specified static commodities.
 
         :param interaction: An instance of an interaction.
         :type interaction: Interaction
         :param static_commodity_ids: A collection of static commodity ids.
         :type static_commodity_ids: Iterator[int], optional
-        :return: True, if the interaction has all of the specified static commodities. False, if not.
+        :return: True, if the interaction has all the specified static commodities. False, if not.
         :rtype: bool
         """
         interaction_commodities = interaction.static_commodities
@@ -81,6 +84,56 @@ class CommonInteractionUtils:
                     has_commodity = True
                     break
             if not has_commodity:
+                return False
+        return True
+
+    @staticmethod
+    def has_any_appropriateness_tags(interaction: Interaction, appropriateness_tags: Iterator[CommonGameTag]) -> bool:
+        """has_any_appropriateness_tags(interaction, appropriateness_tags)
+
+        Determine if an interaction has Appropriateness Tags
+
+        :param interaction: An instance of an interaction.
+        :type interaction: Interaction
+        :param appropriateness_tags: A collection of appropriateness tags.
+        :type appropriateness_tags: Iterator[CommonGameTag]
+        :return: True, if the Interaction has any of the specified appropriateness tags. False, if not.
+        :rtype: bool
+        """
+        if interaction.appropriateness_tags is None:
+            return False
+        appropriateness_tags = tuple(appropriateness_tags)
+        if not appropriateness_tags:
+            return False
+        for appropriateness_tag in interaction.appropriateness_tags:
+            appropriateness_tag_converted = CommonResourceUtils.get_enum_by_int_value(int(appropriateness_tag), CommonGameTag, default_value=int(appropriateness_tag))
+            if appropriateness_tag_converted is None:
+                continue
+            if appropriateness_tag_converted in appropriateness_tags:
+                return True
+        return False
+
+    @staticmethod
+    def has_all_appropriateness_tags(interaction: Interaction, appropriateness_tags: Iterator[CommonGameTag]) -> bool:
+        """has_all_appropriateness_tags(interaction, appropriateness_tags)
+
+        Determine if an interaction has Appropriateness Tags
+
+        :param interaction: An instance of an interaction.
+        :type interaction: Interaction
+        :param appropriateness_tags: A collection of appropriateness tags.
+        :type appropriateness_tags: Iterator[CommonGameTag]
+        :return: True, if the Interaction has all the specified appropriateness tags. False, if not.
+        :rtype: bool
+        """
+        if interaction.appropriateness_tags is None:
+            return False
+        if not appropriateness_tags:
+            return False
+        interaction_appropriateness_tags = interaction.appropriateness_tags
+        for appropriateness_tag in tuple(appropriateness_tags):
+            tag = CommonResourceUtils.get_enum_by_int_value(int(appropriateness_tag), Tag, default_value=int(appropriateness_tag))
+            if tag not in interaction_appropriateness_tags:
                 return False
         return True
 
