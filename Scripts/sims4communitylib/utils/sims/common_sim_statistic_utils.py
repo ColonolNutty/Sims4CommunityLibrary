@@ -79,8 +79,8 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def is_statistic_locked(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=True, add: bool= False) -> CommonTestResult:
-        """is_statistic_locked(sim_info, statistic, add_dynamic=True, add=False)
+    def is_statistic_locked(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=False, add: bool= False) -> CommonTestResult:
+        """is_statistic_locked(sim_info, statistic, add_dynamic=False, add=False)
 
         Determine if a statistic is locked for the specified Sim.
 
@@ -131,8 +131,8 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def get_statistic(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=True, add: bool=False) -> Union[BaseStatistic, None]:
-        """get_statistic(sim_info, statistic, statistic, add_dynamic=True, add=False)
+    def get_statistic(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=False, add: bool=False) -> Union[BaseStatistic, None]:
+        """get_statistic(sim_info, statistic, statistic, add_dynamic=False, add=False)
 
         Retrieve a Statistic for the specified Sim.
 
@@ -159,7 +159,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
     # noinspection PyUnusedLocal
     @classmethod
     def get_statistic_value(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=False, add: bool=False) -> float:
-        """get_statistic_value(sim_info, statistic, add_dynamic=True, add=False)
+        """get_statistic_value(sim_info, statistic, add_dynamic=False, add=False)
 
         Retrieve the Value of a Statistic for the specified Sim.
 
