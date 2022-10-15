@@ -10,6 +10,7 @@ v2.3:
 - Added an optional callback to `CommonSimInventoryUtils.add_to_inventory` that will be invoked when an object is added to the inventory of a Sim.
 - Added an Information Pie menu to S4CL that can be used by various mods (Comes with a phone variant as well!)
 - Fixed an error that could occur when retrieving the object definition of objects that do not have a definition.
+- Added more details to the exception that occurs when producing Whims. It now displays the id of the Whim so it can be found easier.
 
 v2.2:
 - Added more DLC traits to `CommonTraitId`
