@@ -11,6 +11,7 @@ v2.3:
 - Added an Information Pie menu to S4CL that can be used by various mods (Comes with a phone variant as well!)
 - Fixed an error that could occur when retrieving the object definition of objects that do not have a definition.
 - Added more details to the exception that occurs when producing Whims. It now displays the id of the Whim so it can be found easier.
+- When JSON files are being read and an exception occurs, more details are made available to indicate the name of the file failing to be read.
 
 v2.2:
 - Added more DLC traits to `CommonTraitId`
