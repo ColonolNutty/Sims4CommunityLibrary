@@ -66,10 +66,13 @@ class CommonJSONIOUtils:
         :return: The contents of the file as an object or None if an error occurred.
         :rtype: Union[Any, None]
         """
-        file_contents: str = CommonIOUtils.load_from_file(file_path, buffering=buffering, encoding=encoding)
-        if file_contents is None:
-            return None
-        return json.loads(file_contents, cls=decoder_class, object_hook=object_hook)
+        try:
+            file_contents: str = CommonIOUtils.load_from_file(file_path, buffering=buffering, encoding=encoding)
+            if file_contents is None:
+                return None
+            return json.loads(file_contents, cls=decoder_class, object_hook=object_hook)
+        except Exception as ex:
+            raise Exception(f'Failed to read file {file_path}, it is either corrupted, or happened to be locked at the time of trying to read it.') from ex
 
     @staticmethod
     def load_from_folder(
