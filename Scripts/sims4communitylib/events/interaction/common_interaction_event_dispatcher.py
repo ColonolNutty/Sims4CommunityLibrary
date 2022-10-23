@@ -23,6 +23,7 @@ from sims4communitylib.events.interaction.events.interaction_post_queued import 
 from sims4communitylib.events.interaction.events.interaction_pre_run import S4CLInteractionPreRunEvent
 from sims4communitylib.events.interaction.events.interaction_queued import S4CLInteractionQueuedEvent
 from sims4communitylib.events.interaction.events.interaction_run import S4CLInteractionRunEvent
+from sims4communitylib.events.interaction.events.interaction_started import S4CLInteractionStartedEvent
 from sims4communitylib.events.interaction.events.mixer_interaction_cancelled import S4CLMixerInteractionCancelledEvent
 from sims4communitylib.events.interaction.events.super_interaction_cancelled import S4CLSuperInteractionCancelledEvent
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
@@ -32,6 +33,7 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.resources.common_interaction_utils import CommonInteractionUtils
+from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
 
@@ -94,6 +96,28 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
                     CommonInteractionUtils.get_interaction_short_name(interaction),
                     CommonInteractionUtils.get_interaction_display_name(interaction),
                     str(run_result),
+                    _,
+                    __
+                ),
+                exception=ex
+            )
+        return None
+
+    # noinspection PyUnusedLocal
+    def _on_interaction_started(self, interaction: Interaction, *_, **__) -> None:
+        if interaction is None or interaction.sim is None:
+            return None
+        try:
+            source_sim_info = CommonSimUtils.get_sim_info(interaction.sim)
+            target = interaction.target
+            CommonEventRegistry().dispatch(S4CLInteractionStartedEvent(interaction, source_sim_info, target))
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(
+                None,
+                'Error occurred while running _on_interaction_started for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Args: {}, Kwargs: {}'.format(
+                    pformat(interaction),
+                    CommonInteractionUtils.get_interaction_short_name(interaction),
+                    CommonInteractionUtils.get_interaction_display_name(interaction),
                     _,
                     __
                 ),
@@ -252,6 +276,41 @@ def _common_on_interaction_run(original, self, timeline: Timeline, interaction: 
                 pformat(interaction),
                 CommonInteractionUtils.get_interaction_short_name(interaction),
                 CommonInteractionUtils.get_interaction_display_name(interaction),
+                _,
+                __
+            ),
+            exception=ex
+        )
+    return False
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Interaction, Interaction._trigger_interaction_start_event.__name__)
+def _common_on_interaction_started(original, self, *_, **__) -> bool:
+    try:
+        try:
+            original_result = original(self, *_, **__)
+        except Exception as ex:
+            CommonExceptionHandler.log_exception(
+                None,
+                'Error occurred while running _trigger_interaction_start_event for interaction {} with short name \'{}\' and display name {}. (This exception is not caused by S4CL, but rather caught) Args: {}, Kwargs: {}'.format(
+                    pformat(self),
+                    CommonInteractionUtils.get_interaction_short_name(self),
+                    CommonInteractionUtils.get_interaction_display_name(self),
+                    _,
+                    __
+                ),
+                exception=ex
+            )
+            return False
+        CommonInteractionEventDispatcherService()._on_interaction_started(self, *_, **__)
+        return original_result
+    except Exception as ex:
+        CommonExceptionHandler.log_exception(
+            ModInfo.get_identity(),
+            'Error occurred while running _trigger_interaction_start_event for interaction {} with short name \'{}\' and display name {}. Args: {}, Kwargs: {}'.format(
+                pformat(self),
+                CommonInteractionUtils.get_interaction_short_name(self),
+                CommonInteractionUtils.get_interaction_display_name(self),
                 _,
                 __
             ),

@@ -25,6 +25,14 @@ Interaction Event Types
    :undoc-members:
    :show-inheritance:
 
+`Interaction Started Event`
+----------------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.interaction.events.interaction_started.S4CLInteractionStartedEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Interaction Pre Run Event`
 -------------------------------------------------------------------
 
