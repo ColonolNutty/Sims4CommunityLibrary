@@ -154,7 +154,13 @@ class CommonGenderUtils:
         :return: True, if both Sims are the same Gender. False, if not.
         :rtype: bool
         """
-        return int(CommonGenderUtils.get_gender(sim_info)) == int(CommonGenderUtils.get_gender(other_sim_info))
+        gender_a = CommonGenderUtils.get_gender(sim_info)
+        if gender_a is None:
+            return False
+        gender_b = CommonGenderUtils.get_gender(other_sim_info)
+        if gender_b is None:
+            return False
+        return int(gender_a) == int(gender_b)
 
     @staticmethod
     def is_female_gender(gender: Union[Gender, CommonGender, int]) -> bool:
@@ -167,6 +173,8 @@ class CommonGenderUtils:
         :return: True, if the gender is female. False, if the gender is not female.
         :rtype: bool
         """
+        if gender is None:
+            return False
         return int(gender) == int(Gender.FEMALE)
 
     @staticmethod
@@ -180,6 +188,8 @@ class CommonGenderUtils:
         :return: True, if the gender is male. False, if the gender is not male.
         :rtype: bool
         """
+        if gender is None:
+            return False
         return int(gender) == int(Gender.MALE)
 
     @staticmethod

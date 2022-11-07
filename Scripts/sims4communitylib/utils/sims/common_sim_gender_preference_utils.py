@@ -240,11 +240,30 @@ class CommonSimGenderPreferenceUtils:
 # noinspection SpellCheckingInspection
 @CommonConsoleCommand(
     ModInfo.get_identity(),
+    's4clib.set_world_sexually_exploring',
+    'Set all Sims to be sexually exploring in their Sexual Orientation.',
+    command_arguments=(
+        CommonConsoleCommandArgument('is_sexually_exploring', 'True or False', 'If True, all Sims will be sexually exploring. If False, all Sims will NOT be sexually exploring.'),
+    )
+)
+def _common_set_world_sexually_exploring(output: CommonConsoleCommandOutput, is_sexually_exploring: bool):
+    if is_sexually_exploring:
+        output('Attempting to set all Sims to be Sexually Exporing in their Sexual Orientation.')
+    else:
+        output('Attempting to set all Sims to be Not Sexually Exporing in their Sexual Orientation.')
+    for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
+        from sims4communitylib.utils.sims.common_sim_gender_option_utils import CommonSimGenderOptionUtils
+        CommonSimGenderOptionUtils.set_is_exploring_sexuality(sim_info, is_sexually_exploring)
+
+
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
     's4clib.set_gender_pref',
     'Set the gender preference amount of a Sim towards a Gender.',
     command_arguments=(
         CommonConsoleCommandArgument('gender', 'CommonGender', f'The gender to change the preference of the Sim for. Valid Values: {CommonGender.get_comma_separated_names_string()}'),
-        CommonConsoleCommandArgument('is_attracted_to_gender', 'True or False', 'If True, all Female Sims will be attracted to the specified Gender. If False, all Female Sims will no longer be attracted to the gender.'),
+        CommonConsoleCommandArgument('is_attracted_to_gender', 'True or False', 'If True, the Sim will be attracted to the specified Gender. If False, the Sim will no longer be attracted to the gender.'),
         CommonConsoleCommandArgument('preference_type', 'ROMANTIC or WOOHOO', 'The type of preference being updated.', is_optional=True, default_value='ROMANTIC'),
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The instance id or name of the Sim to change.', is_optional=True, default_value='Active Sim'),
     ),
