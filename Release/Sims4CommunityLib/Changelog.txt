@@ -1,3 +1,10 @@
+v2.4:
+- The purchase picker dialog now sends values zipped up
+- Updated the clone functions with better clone technology
+- When an object is spawned via the spawn_object command, it now becomes the owner of the active Sim.
+- Added some logging to the add career function.
+- Added a check to prevent an error when checking if an object has game tags.
+
 v2.3:
 - Updated many of the `convert_to_vanilla` and `convert_from_vanilla` functions to be more reliable and not dependent on the values of the enums.
 - Added `MARKETPLACE_FASHION_NAME` to CommonSimNameType
