@@ -18,7 +18,6 @@ from sims4communitylib.dialogs.common_choice_outcome import CommonChoiceOutcome
 from sims4communitylib.dialogs.common_choose_dialog import CommonChooseDialog
 from sims4communitylib.dialogs.option_dialogs.options.objects.common_dialog_option_category import \
     CommonDialogObjectOptionCategory
-from sims4communitylib.dialogs.utils.common_dialog_utils import CommonDialogUtils
 from sims4communitylib.enums.common_object_delivery_method import CommonObjectDeliveryMethod
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.tags_enum import CommonGameTag
@@ -255,9 +254,13 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
                     self.log.debug('Dialog cancelled.')
                     return on_chosen(None, CommonChoiceOutcome.CANCEL)
                 self.log.debug('Dialog accepted, checking if choices were made.')
-                choices = CommonDialogUtils.get_chosen_items(dialog)
-                self.log.format_with_message('Purchase Objects choice made.', choice=choices)
-                result = on_chosen(choices, CommonChoiceOutcome.CHOICE_MADE)
+                choices = dialog.get_result_definitions_and_counts()
+                zipped_choices = zip(choices[0], choices[1])
+                self.log.format_with_message('Purchase Objects choice made.', choice=zipped_choices)
+                outcome = CommonChoiceOutcome.CHOICE_MADE
+                if not choices:
+                    outcome = CommonChoiceOutcome.CANCEL
+                result = on_chosen(zipped_choices, outcome)
                 self.log.format_with_message('Finished handling purchase objects _on_chosen.', result=result)
                 return result
             except Exception as ex:
@@ -299,10 +302,11 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
                     )
                 )
 
-            inventory_target_id = CommonSimUtils.get_sim_id(target_sim_info_to_receive_objects or CommonSimUtils.get_active_sim_info())
+            target_to_receive_sim_info = target_sim_info_to_receive_objects or CommonSimUtils.get_active_sim_info()
+            inventory_target_id = CommonSimUtils.get_sim_id(target_to_receive_sim_info)
             purchase_objects: List[int] = list()
             dialog = UiPurchasePicker.TunableFactory().default(
-                target_sim_info_to_receive_objects or CommonSimUtils.get_active_sim_info(),
+                target_to_receive_sim_info,
                 text=lambda *_, **__: self.description,
                 title=lambda *_, **__: self.title,
                 categories=dialog_categories,
@@ -317,12 +321,14 @@ class CommonPurchaseObjectsDialog(CommonChooseDialog):
                 purchase_picker_data.delivery_method = CommonObjectDeliveryMethod.convert_to_vanilla(object_delivery_method)
             for purchase_object in purchase_objects:
                 purchase_picker_data.add_definition_to_purchase(purchase_object)
+            dialog.set_target_sim(CommonSimUtils.get_sim_instance(target_to_receive_sim_info))
             dialog.object_id = purchase_picker_data.inventory_owner_id_to_purchase_to
             dialog.inventory_object_id = purchase_picker_data.inventory_owner_id_to_purchase_from
             dialog.purchase_by_object_ids = purchase_picker_data.use_obj_ids_in_response
+            dialog.delivery_method = purchase_picker_data.delivery_method
             dialog.show_description = 1
             dialog.show_description_tooltip = 1
-            dialog.use_dialog_pick_response = False
+            dialog.use_dialog_pick_response = True
             dialog.max_selectable_num = len(self.rows)
             dialog.use_dropdown_filter = len(dialog_categories) > 0
             right_custom_text = None

@@ -451,7 +451,7 @@ class CommonLog:
         from sims4communitylib.utils.common_date_utils import CommonRealDateUtils
         from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
         current_date_time = CommonRealDateUtils.get_current_date_string()
-        new_message = '{} {}: [{}]: {}\n'.format(current_date_time, message_type.name, self.name, message)
+        new_message = '{} {}: [{}]: {}\n'.format(current_date_time, getattr(message_type, 'name', str(message_type)), self.name, message)
         try:
             from sims4communitylib.utils.common_io_utils import CommonIOUtils
             file_path = self.messages_file_path

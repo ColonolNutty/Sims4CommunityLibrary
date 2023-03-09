@@ -42,9 +42,19 @@ if ON_RTD:
             pass
 
 if not ON_RTD:
-    # noinspection PyUnresolvedReferences
-    from _resourceman import Key
-    from sims4.resources import Types, Groups
+    try:
+        # noinspection PyUnresolvedReferences
+        from _resourceman import Key
+        from sims4.resources import Types, Groups
+    except:
+        class Key:
+            pass
+
+        class Types:
+            pass
+
+        class Groups:
+            pass
 
 
 class CommonResourceKey:

@@ -85,6 +85,7 @@ class CommonLogUtils:
         :return: The file path to 'Documents\Electronic Arts\The Sims 4' folder.
         :rtype: str
         """
+        # return os.environ['TS4_MODS_FOLDER']
         from sims4communitylib.modinfo import ModInfo
         root_file = os.path.normpath(os.path.dirname(os.path.realpath(ModInfo.get_identity().file_path))).replace(os.sep, '/')
         root_file_split = root_file.split('/')

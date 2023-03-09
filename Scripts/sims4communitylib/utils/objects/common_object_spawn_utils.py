@@ -20,6 +20,7 @@ from objects.object_enums import ResetReason
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
+from sims4communitylib.utils.objects.common_object_ownership_utils import CommonObjectOwnershipUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -401,6 +402,8 @@ def _common_spawn_object(output: CommonConsoleCommandOutput, object_definition_i
         CommonObjectSpawnUtils.get_log().debug(f'Object {game_object} spawned successfully. Can you see it? Object Id: {game_object_id}')
         CommonObjectSpawnUtils.get_log().disable()
         output(f'SUCCESS: Object {game_object} spawned successfully. Can you see it? Object Id: {game_object_id}')
+        from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
+        CommonObjectOwnershipUtils.set_owning_household_id(game_object, CommonHouseholdUtils.get_household_id(sim_info))
     else:
         output(f'ERROR: Failed to spawn object with definition id {object_definition_id}.')
     output(f'Done spawning object {game_object}.')

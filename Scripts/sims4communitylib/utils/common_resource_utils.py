@@ -8,13 +8,47 @@ Copyright (c) COLONOLNUTTY
 import services
 from io import BytesIO
 from typing import ItemsView, Any, Union, Tuple, Type, ValuesView, Dict, TypeVar, List
-from sims4.resources import ResourceLoader, Types
-from sims4.tuning.instance_manager import InstanceManager
-from sims4.tuning.merged_tuning_manager import get_manager
-from sims4.tuning.dynamic_enum import DynamicEnumLocked, DynamicEnum
-# noinspection PyUnresolvedReferences
-from sims4.tuning.serialization import ETreeTuningLoader
-from sims4.tuning.tunable_base import LoadingTags
+try:
+    from sims4.resources import ResourceLoader, Types
+    from sims4.tuning.instance_manager import InstanceManager
+    from sims4.tuning.merged_tuning_manager import get_manager
+    from sims4.tuning.dynamic_enum import DynamicEnumLocked, DynamicEnum
+    # noinspection PyUnresolvedReferences
+    from sims4.tuning.serialization import ETreeTuningLoader
+    from sims4.tuning.tunable_base import LoadingTags
+except:
+    # noinspection PyMissingOrEmptyDocstring
+    class Types:
+        pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    class ResourceLoader:
+        pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    class InstanceManager:
+        pass
+
+    # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring
+    def get_manager():
+        pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    class DynamicEnumLocked:
+        pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    class DynamicEnum:
+        pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    class ETreeTuningLoader:
+        pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    class LoadingTags:
+        pass
+
 from sims4communitylib.classes.common_resource_key import CommonResourceKey
 from sims4communitylib.enums.enumtypes.common_int import Int, CommonInt
 from sims4communitylib.enums.enumtypes.common_int_flags import CommonIntFlags

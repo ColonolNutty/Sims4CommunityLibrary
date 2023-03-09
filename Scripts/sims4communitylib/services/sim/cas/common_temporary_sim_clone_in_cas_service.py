@@ -7,7 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 import services
 from typing import List, Callable, Dict, Tuple
-from sims.occult.occult_enums import OccultType
 from sims.outfits.outfit_enums import OutfitCategory, BodyType
 from sims.sim_info import SimInfo
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
@@ -117,6 +116,8 @@ class CommonEditSimCloneInCASService(CommonService, HasLog):
                 if CommonSimSpawnUtils.delete_sim(_clone_sim_info, source=f'{self.mod_identity.name} Destroy Old Sim Clone', cause='Sim Clone is Old'):
                     if _sim_clone_sim_id in self._sim_clone_sim_ids_awaiting_destruction:
                         self._sim_clone_sim_ids_awaiting_destruction.remove(_sim_clone_sim_id)
+        # if CommonOccultUtils.has_any_occult(source_sim_info):
+        #     CommonOccultUtils.switch_to_occult_form(source_sim_info, CommonOccultType.NON_OCCULT)
 
         clone_sim_info = CommonSimSpawnUtils.clone_sim(source_sim_info, add_to_household=True)
         if clone_sim_info is None:
@@ -127,6 +128,8 @@ class CommonEditSimCloneInCASService(CommonService, HasLog):
             CommonSimSpawnUtils.spawn_sim(clone_sim_info, location=CommonSimLocationUtils.get_location(source_sim_info))
             self._delete_other_outfits(clone_sim_info)
             sim_clone_sim_id = CommonSimUtils.get_sim_id(clone_sim_info)
+            clone_sim_info.skin_tone = source_sim_info.skin_tone
+            clone_sim_info.skin_tone_val_shift = source_sim_info.skin_tone_val_shift
 
             self.verbose_log.format_with_message('Current Sim clone outfit', outfit_parts=CommonOutfitUtils.get_outfit_parts(clone_sim_info))
             self._setup_sim_clone_outfit(clone_sim_info, CommonOutfitUtils.get_outfit_parts(source_sim_info, outfit_category_and_index=(OutfitCategory.BATHING, 0)), setup_outfit)
@@ -153,9 +156,10 @@ class CommonEditSimCloneInCASService(CommonService, HasLog):
         outfit_io = CommonSimOutfitIO(clone_sim_info, outfit_category_and_index=self._outfit_category_and_index, initial_outfit_parts=initial_outfit_parts, mod_identity=self.mod_identity)
         if setup_outfit is not None:
             setup_outfit(outfit_io)
-        from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
-        if CommonOccultUtils.has_any_occult(clone_sim_info):
-            CommonOccultUtils.switch_to_occult_form(clone_sim_info, OccultType.HUMAN)
+
+        # from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
+        # if CommonOccultUtils.has_any_occult(clone_sim_info):
+        #     CommonOccultUtils.switch_to_occult_form(clone_sim_info, OccultType.HUMAN)
         if outfit_io.apply(apply_to_all_outfits_in_same_category=True, apply_to_outfit_category_and_index=self._outfit_category_and_index):
             CommonOutfitUtils.set_outfit_dirty(clone_sim_info, self._outfit_category_and_index[0])
             CommonOutfitUtils.set_current_outfit(clone_sim_info, self._outfit_category_and_index)

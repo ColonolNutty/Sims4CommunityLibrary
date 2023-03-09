@@ -38,7 +38,7 @@ class CommonObjectTagUtils:
         :return: True, if the Object has any of the specified tags. False, if not.
         :rtype: bool
         """
-        if game_object is None:
+        if game_object is None or not hasattr(game_object, 'has_any_tag'):
             return False
         return game_object.has_any_tag(tuple(tags))
 
@@ -53,7 +53,7 @@ class CommonObjectTagUtils:
         :return: A collection of tags the Object has.
         :rtype: Set[int]
         """
-        if game_object is None:
+        if game_object is None or not hasattr(game_object, 'get_tags'):
             return set()
         return game_object.get_tags()
 
@@ -72,7 +72,7 @@ class CommonObjectTagUtils:
         :return: True, if the Tags were successfully added. False, if not.
         :rtype: bool
         """
-        if game_object is None:
+        if game_object is None or not hasattr(game_object, 'append_tags'):
             return False
         game_object.append_tags(set(tags), persist=persist)
         return True
@@ -90,7 +90,7 @@ class CommonObjectTagUtils:
         :return: True, if the Tags were successfully removed. False, if not.
         :rtype: bool
         """
-        if game_object is None:
+        if game_object is None or not hasattr(game_object, 'remove_dynamic_tags'):
             return False
         game_object.remove_dynamic_tags(set(tags))
         return True

@@ -127,7 +127,7 @@ def _common_command_enable_all_logs(output: CommonConsoleCommandOutput, mod_name
         output(f'Attempting to enable all logs.')
     else:
         output(f'Attempting to enable log for mod \'{mod_name}\'.')
-    CommonLogRegistry.get().disable_all_logs(mod_identifier=mod_name)
+    CommonLogRegistry.get().enable_all_logs(mod_identifier=mod_name)
     if mod_name is None:
         output(f'SUCCESS: All logs successfully enabled.')
     else:

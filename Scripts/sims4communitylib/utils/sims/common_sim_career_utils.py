@@ -600,7 +600,9 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
             career_level = CommonCareerTrackUtils.get_career_level_by_index(picked_track, career_level_index)
         else:
             if career_level is None:
-                (career_level_index, _, picked_track) = cls.determine_entry_level_into_career_for_sim(sim_info, career, use_career_history=use_career_history)
+                entry_level_values = cls.determine_entry_level_into_career_for_sim(sim_info, career, use_career_history=use_career_history)
+                cls.get_log().format_with_message('Got entry level values', entry_level_values=entry_level_values)
+                (career_level_index, _, picked_track) = entry_level_values
                 picked_track: TunableCareerTrack = picked_track
                 career_level = CommonCareerTrackUtils.get_career_level_by_index(picked_track, career_level_index)
                 cls.get_log().format_with_message('Got career level.', career_level=career_level_index, returned_user_level=_, picked_track=picked_track)
