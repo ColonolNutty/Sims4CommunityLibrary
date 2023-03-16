@@ -1,3 +1,7 @@
+v2.5:
+- Added INFANT age to CommonAge
+- Updated CommonAgeUtils, CommonSimType, and CommonSimDemographics with the new INFANT age.
+
 v2.4:
 - The purchase picker dialog now sends values zipped up
 - Updated the clone functions with better clone technology
