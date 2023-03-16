@@ -4,6 +4,7 @@
     <I name="S4CL_Trait_GenderOptions_Toilet_Unknown" schema="Trait" type="Object">
       <L name="ages">
         <T type="Int64">1</T>
+        <T type="Int64">128</T>
         <T type="Int64">2</T>
         <T type="Int64">4</T>
         <T type="Int64">8</T>

@@ -39,13 +39,13 @@ class CommonAgeUtils:
         if sim_info is None:
             return None
         age: Union[Age, None] = None
-        if hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age') and exact_age:
+        if hasattr(sim_info, 'age'):
+            # noinspection PyPropertyAccess
+            age = sim_info.age
+        elif hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age') and exact_age:
             age = sim_info.sim_info._base.age
         elif hasattr(sim_info, '_base') and hasattr(sim_info._base, 'age'):
             age = sim_info._base.age
-        elif hasattr(sim_info, 'age'):
-            # noinspection PyPropertyAccess
-            age = sim_info.age
         elif hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, '_base') and hasattr(sim_info.sim_info._base, 'age') and exact_age:
             age = sim_info.sim_info._base.age
         elif hasattr(sim_info, 'sim_info') and hasattr(sim_info.sim_info, 'age'):
@@ -72,8 +72,12 @@ class CommonAgeUtils:
         if isinstance(age, Age):
             return age
         age: int = int(age)
-        if int(Age.BABY) <= age < int(Age.TODDLER):
+        if int(age) == int(Age.INFANT):
+            return Age.INFANT
+        if int(Age.BABY) <= age < int(Age.INFANT):
             return Age.BABY
+        if int(Age.INFANT) <= age < int(Age.TODDLER):
+            return Age.INFANT
         if int(Age.TODDLER) <= age < int(Age.CHILD):
             return Age.TODDLER
         if int(Age.CHILD) <= age < int(Age.TEEN):
@@ -84,7 +88,9 @@ class CommonAgeUtils:
             return Age.YOUNGADULT
         if int(Age.ADULT) <= age < int(Age.ELDER):
             return Age.ADULT
-        return Age.ELDER
+        if int(Age.ELDER) <= age:
+            return Age.ELDER
+        return Age.INFANT
 
     @staticmethod
     def get_total_days_sim_has_been_in_their_current_age(sim_info: SimInfo) -> float:
@@ -303,7 +309,26 @@ class CommonAgeUtils:
         """
         if age is None:
             return False
+        if isinstance(age, CommonAge):
+            age = CommonAge.convert_to_vanilla(age)
         return int(age) == int(Age.BABY)
+
+    @staticmethod
+    def is_infant_age(age: Union[CommonAge, Age, int]) -> bool:
+        """is_infant_age(age)
+
+        Determine if an Age is an Infant.
+
+        :param age: The age to check.
+        :type age: Union[CommonAge, Age, int]
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
+        """
+        if age is None:
+            return False
+        if isinstance(age, CommonAge):
+            age = CommonAge.convert_to_vanilla(age)
+        return int(age) == int(Age.INFANT)
 
     @staticmethod
     def is_toddler_age(age: Union[CommonAge, Age, int]) -> bool:
@@ -318,6 +343,8 @@ class CommonAgeUtils:
         """
         if age is None:
             return False
+        if isinstance(age, CommonAge):
+            age = CommonAge.convert_to_vanilla(age)
         return int(age) == int(Age.TODDLER)
 
     @staticmethod
@@ -333,6 +360,8 @@ class CommonAgeUtils:
         """
         if age is None:
             return False
+        if isinstance(age, CommonAge):
+            age = CommonAge.convert_to_vanilla(age)
         return int(age) == int(Age.CHILD)
 
     @staticmethod
@@ -348,6 +377,8 @@ class CommonAgeUtils:
         """
         if age is None:
             return False
+        if isinstance(age, CommonAge):
+            age = CommonAge.convert_to_vanilla(age)
         return int(age) == int(Age.TEEN)
 
     @staticmethod
@@ -376,6 +407,8 @@ class CommonAgeUtils:
         """
         if age is None:
             return False
+        if isinstance(age, CommonAge):
+            age = CommonAge.convert_to_vanilla(age)
         return int(age) == int(Age.YOUNGADULT)
 
     @staticmethod
@@ -391,6 +424,8 @@ class CommonAgeUtils:
         """
         if age is None:
             return False
+        if isinstance(age, CommonAge):
+            age = CommonAge.convert_to_vanilla(age)
         return int(age) == int(Age.ADULT)
 
     @staticmethod
@@ -406,6 +441,8 @@ class CommonAgeUtils:
         """
         if age is None:
             return False
+        if isinstance(age, CommonAge):
+            age = CommonAge.convert_to_vanilla(age)
         return int(age) == int(Age.ELDER)
 
     @staticmethod
@@ -422,6 +459,19 @@ class CommonAgeUtils:
         return CommonAgeUtils.is_baby_age(age) or CommonAgeUtils.is_toddler_age(age)
 
     @staticmethod
+    def is_baby_infant_or_toddler_age(age: Union[CommonAge, Age, int]) -> bool:
+        """is_baby_infant_or_toddler_age(age)
+
+        Determine if an age is Baby or Toddler.
+
+        :param age: The age to check.
+        :type age: Union[CommonAge, Age, int]
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
+        """
+        return CommonAgeUtils.is_baby_age(age) or CommonAgeUtils.is_infant_age(age) or CommonAgeUtils.is_toddler_age(age)
+
+    @staticmethod
     def is_baby_toddler_or_child_age(age: Union[CommonAge, Age, int]) -> bool:
         """is_baby_toddler_or_child_age(age)
 
@@ -433,6 +483,19 @@ class CommonAgeUtils:
         :rtype: bool
         """
         return CommonAgeUtils.is_baby_age(age) or CommonAgeUtils.is_toddler_age(age) or CommonAgeUtils.is_child_age(age)
+
+    @staticmethod
+    def is_baby_infant_toddler_or_child_age(age: Union[CommonAge, Age, int]) -> bool:
+        """is_baby_infant_toddler_or_child_age(age)
+
+        Determine if an age is Baby, Infant, Toddler, or Child.
+
+        :param age: The age to check.
+        :type age: Union[CommonAge, Age, int]
+        :return: True, if it is. False, if it is not.
+        :rtype: bool
+        """
+        return CommonAgeUtils.is_baby_age(age) or CommonAgeUtils.is_infant_age(age) or CommonAgeUtils.is_toddler_age(age) or CommonAgeUtils.is_child_age(age)
 
     @staticmethod
     def is_toddler_or_child_age(age: Union[CommonAge, Age, int]) -> bool:
@@ -537,6 +600,19 @@ class CommonAgeUtils:
         :rtype: bool
         """
         return CommonAgeUtils.is_baby_age(CommonAgeUtils.get_age(sim_info))
+
+    @staticmethod
+    def is_infant(sim_info: SimInfo) -> bool:
+        """is_infant(sim_info)
+
+        Determine if a sim is an Infant.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is. False, if the Sim is not.
+        :rtype: bool
+        """
+        return CommonAgeUtils.is_infant_age(CommonAgeUtils.get_age(sim_info))
 
     @staticmethod
     def is_toddler(sim_info: SimInfo) -> bool:
@@ -647,6 +723,19 @@ class CommonAgeUtils:
         return CommonAgeUtils.is_baby_or_toddler_age(CommonAgeUtils.get_age(sim_info))
 
     @staticmethod
+    def is_baby_infant_or_toddler(sim_info: SimInfo) -> bool:
+        """is_baby_infant_or_toddler(sim_info)
+
+        Determine if a sim is a Baby, Infant, or a Toddler.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is. False, if the Sim is not.
+        :rtype: bool
+        """
+        return CommonAgeUtils.is_baby_infant_or_toddler_age(CommonAgeUtils.get_age(sim_info))
+
+    @staticmethod
     def is_toddler_or_child(sim_info: SimInfo) -> bool:
         """is_toddler_or_child(sim_info)
 
@@ -671,6 +760,19 @@ class CommonAgeUtils:
         :rtype: bool
         """
         return CommonAgeUtils.is_baby_toddler_or_child_age(CommonAgeUtils.get_age(sim_info))
+
+    @staticmethod
+    def is_baby_infant_toddler_or_child(sim_info: SimInfo) -> bool:
+        """is_baby_infant_toddler_or_child(sim_info)
+
+        Determine if a sim is a Baby, Infant, a Toddler, or a Child.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is. False, if the Sim is not.
+        :rtype: bool
+        """
+        return CommonAgeUtils.is_baby_infant_toddler_or_child_age(CommonAgeUtils.get_age(sim_info))
 
     @staticmethod
     def is_child_or_teen(sim_info: SimInfo) -> bool:

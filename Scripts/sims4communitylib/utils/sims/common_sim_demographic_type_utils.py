@@ -120,6 +120,7 @@ class CommonSimDemographicTypeUtils(_HasS4CLClassLog):
         from sims4communitylib.enums.common_age import CommonAge
         mapping: Dict[CommonSimDemographicType, CommonAge] = {
             CommonSimDemographicType.BABY: CommonAge.BABY,
+            CommonSimDemographicType.INFANT: CommonAge.INFANT,
             CommonSimDemographicType.TODDLER: CommonAge.TODDLER,
             CommonSimDemographicType.CHILD: CommonAge.CHILD,
             CommonSimDemographicType.TEEN: CommonAge.TEEN,
@@ -136,6 +137,7 @@ class CommonSimDemographicTypeUtils(_HasS4CLClassLog):
         from sims4communitylib.enums.common_age import CommonAge
         mapping: Dict[CommonAge, CommonSimDemographicType] = {
             CommonAge.BABY: CommonSimDemographicType.BABY,
+            CommonAge.INFANT: CommonSimDemographicType.INFANT,
             CommonAge.TODDLER: CommonSimDemographicType.TODDLER,
             CommonAge.CHILD: CommonSimDemographicType.CHILD,
             CommonAge.TEEN: CommonSimDemographicType.TEEN,

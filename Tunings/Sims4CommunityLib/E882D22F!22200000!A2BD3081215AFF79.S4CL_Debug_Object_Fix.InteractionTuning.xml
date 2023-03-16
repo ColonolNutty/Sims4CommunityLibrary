@@ -13,7 +13,8 @@
   <T n="category">1933473823803033950<!--PieMenuCategory: S4CL_Pie_Object_State--></T>
   <T n="display_name">0x275DAF8F<!--Fix Object--></T>
   <L n="interaction_category_tags">
-    <E>INVALID</E>
+    <E>Interaction_Super</E>
+    <E>Interaction_All</E>
   </L>
   <T n="pie_menu_priority">9</T>
   <U n="progress_bar_enabled">

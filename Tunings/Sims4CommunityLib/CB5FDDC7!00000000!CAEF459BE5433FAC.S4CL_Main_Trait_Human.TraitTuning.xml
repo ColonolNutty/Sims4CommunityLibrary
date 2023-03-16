@@ -2,6 +2,7 @@
 <I c="Trait" i="trait" m="traits.traits" n="S4CL_Main_Trait_Human" s="14622983050963926956">
   <L n="ages">
     <E>BABY</E>
+    <E>INFANT</E>
     <E>TODDLER</E>
     <E>CHILD</E>
     <E>TEEN</E>

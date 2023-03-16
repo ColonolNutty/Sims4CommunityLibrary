@@ -18,12 +18,13 @@ class CommonAge(CommonInt):
     """
     INVALID: 'CommonAge' = 0
     BABY: 'CommonAge' = 1
-    TODDLER: 'CommonAge' = 2
-    CHILD: 'CommonAge' = 4
-    TEEN: 'CommonAge' = 8
-    YOUNGADULT: 'CommonAge' = 16
-    ADULT: 'CommonAge' = 32
-    ELDER: 'CommonAge' = 64
+    INFANT: 'CommonAge' = 2
+    TODDLER: 'CommonAge' = 4
+    CHILD: 'CommonAge' = 8
+    TEEN: 'CommonAge' = 16
+    YOUNGADULT: 'CommonAge' = 32
+    ADULT: 'CommonAge' = 64
+    ELDER: 'CommonAge' = 128
 
     @classmethod
     def get_all(cls, exclude_values: Iterator['CommonAge'] = None) -> Tuple['CommonAge']:
@@ -83,6 +84,8 @@ class CommonAge(CommonInt):
         from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
         if CommonAgeUtils.is_baby(sim_info):
             return CommonAge.BABY
+        elif CommonAgeUtils.is_infant(sim_info):
+            return CommonAge.INFANT
         elif CommonAgeUtils.is_toddler(sim_info):
             return CommonAge.TODDLER
         elif CommonAgeUtils.is_child(sim_info):
@@ -114,6 +117,7 @@ class CommonAge(CommonInt):
             return value
         age_conversion_mapping: Dict[CommonAge, Age] = {
             CommonAge.BABY: Age.BABY,
+            CommonAge.INFANT: Age.INFANT,
             CommonAge.TODDLER: Age.TODDLER,
             CommonAge.CHILD: Age.CHILD,
             CommonAge.TEEN: Age.TEEN,
@@ -140,6 +144,7 @@ class CommonAge(CommonInt):
             return value
         age_conversion_mapping: Dict[int, CommonAge] = {
             int(Age.BABY): CommonAge.BABY,
+            int(Age.INFANT): CommonAge.INFANT,
             int(Age.TODDLER): CommonAge.TODDLER,
             int(Age.CHILD): CommonAge.CHILD,
             int(Age.TEEN): CommonAge.TEEN,
@@ -166,6 +171,7 @@ class CommonAge(CommonInt):
         from sims4communitylib.enums.strings_enum import CommonStringId
         display_name_mapping = {
             CommonAge.BABY: CommonStringId.BABY,
+            CommonAge.INFANT: CommonStringId.INFANT,
             CommonAge.TODDLER: CommonStringId.TODDLER,
             CommonAge.CHILD: CommonStringId.CHILD,
             CommonAge.TEEN: CommonStringId.TEEN,

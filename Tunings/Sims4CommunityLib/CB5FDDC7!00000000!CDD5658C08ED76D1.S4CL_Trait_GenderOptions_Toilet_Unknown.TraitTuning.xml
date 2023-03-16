@@ -2,6 +2,7 @@
 <I c="Trait" i="trait" m="traits.traits" n="S4CL_Trait_GenderOptions_Toilet_Unknown" s="14831872599934203601">
   <L n="ages">
     <E>BABY</E>
+    <E>INFANT</E>
     <E>TODDLER</E>
     <E>CHILD</E>
     <E>TEEN</E>

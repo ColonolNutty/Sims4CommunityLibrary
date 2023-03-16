@@ -47,6 +47,7 @@ class CommonStringId(CommonInt):
 
     # Ages
     BABY: 'CommonStringId' = 4016862175
+    INFANT: 'CommonStringId' = 0xD0D04D65
     TODDLER: 'CommonStringId' = 3252370736
     CHILD: 'CommonStringId' = 2993678259
     TEEN: 'CommonStringId' = 1166433319

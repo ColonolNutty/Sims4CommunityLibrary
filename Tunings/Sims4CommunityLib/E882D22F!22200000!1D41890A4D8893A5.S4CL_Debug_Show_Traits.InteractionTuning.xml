@@ -6,7 +6,8 @@
   <T n="category">2583168707197502942<!--PieMenuCategory: S4CL_Pie_Sims_4_Community_Library--></T>
   <T n="display_name">0x29D3AE09<!--Show Traits--></T>
   <L n="interaction_category_tags">
-    <E>INVALID</E>
+    <E>Interaction_Super</E>
+    <E>Interaction_All</E>
   </L>
   <T n="pie_menu_priority">9</T>
   <U n="progress_bar_enabled">

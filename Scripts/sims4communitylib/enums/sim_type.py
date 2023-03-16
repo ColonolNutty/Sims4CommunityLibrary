@@ -86,6 +86,18 @@ class CommonSimType(CommonIntFlags):
     TODDLER_HUMAN_PLANT_SIM: 'CommonSimType' = ...
     TODDLER_HUMAN_WEREWOLF: 'CommonSimType' = ...
 
+    INFANT_HUMAN: 'CommonSimType' = ...
+    INFANT_HUMAN_VAMPIRE: 'CommonSimType' = ...
+    INFANT_HUMAN_GHOST: 'CommonSimType' = ...
+    INFANT_HUMAN_ALIEN: 'CommonSimType' = ...
+    INFANT_HUMAN_MERMAID: 'CommonSimType' = ...
+    INFANT_HUMAN_WITCH: 'CommonSimType' = ...
+    INFANT_HUMAN_ROBOT: 'CommonSimType' = ...
+    INFANT_HUMAN_SCARECROW: 'CommonSimType' = ...
+    INFANT_HUMAN_SKELETON: 'CommonSimType' = ...
+    INFANT_HUMAN_PLANT_SIM: 'CommonSimType' = ...
+    INFANT_HUMAN_WEREWOLF: 'CommonSimType' = ...
+
     BABY_HUMAN: 'CommonSimType' = ...
     BABY_HUMAN_VAMPIRE: 'CommonSimType' = ...
     BABY_HUMAN_GHOST: 'CommonSimType' = ...
@@ -255,8 +267,8 @@ class CommonSimType(CommonIntFlags):
     CHILD_FOX_WEREWOLF: 'CommonSimType' = ...
 
     @classmethod
-    def get_all(cls, include_teen_young_adult_and_elder: bool = False, include_baby: bool = False, include_separate_child_dog_types: bool = False, exclude_values: Iterator['CommonSimType'] = None) -> Tuple['CommonSimType']:
-        """get_all(include_teen_young_adult_and_elder=False, include_baby=False, include_separate_child_dog_types=False, exclude_values=None)
+    def get_all(cls, include_teen_young_adult_and_elder: bool = False, include_baby: bool = False, include_infant: bool = False, include_separate_child_dog_types: bool = False, exclude_values: Iterator['CommonSimType'] = None) -> Tuple['CommonSimType']:
+        """get_all(include_teen_young_adult_and_elder=False, include_baby=False, include_infant=False, include_separate_child_dog_types=False, exclude_values=None)
 
         Retrieve a collection of all Sim Types.
 
@@ -264,6 +276,8 @@ class CommonSimType(CommonIntFlags):
         :type include_teen_young_adult_and_elder: bool, optional
         :param include_baby: If set to True, the BABY Sim Type will be included in the result. If False, the BABY Sim Type will not be included. Default is False.
         :type include_baby: bool, optional
+        :param include_infant: If set to True, the INFANT Sim Type will be included in the result. If False, the INFANT Sim Type will not be included. Default is False.
+        :type include_infant: bool, optional
         :param include_separate_child_dog_types: If set to True, the Child Dog Sim Types (CHILD_LARGE_DOG, CHILD_SMALL_DOG, etc.) will be included in the result. If False, they will not be included. Default is False.
         :type include_separate_child_dog_types: bool, optional
         :param exclude_values: These values will be excluded. If set to None, NONE will be excluded automatically. Default is None.
@@ -495,6 +509,21 @@ class CommonSimType(CommonIntFlags):
                 CommonSimType.BABY_HUMAN_SKELETON,
                 CommonSimType.BABY_HUMAN_PLANT_SIM,
                 CommonSimType.BABY_HUMAN_WEREWOLF,
+            )
+        if include_infant:
+            sim_types: Tuple[CommonSimType, ...] = (
+                *sim_types,
+                CommonSimType.INFANT_HUMAN,
+                CommonSimType.INFANT_HUMAN_VAMPIRE,
+                CommonSimType.INFANT_HUMAN_GHOST,
+                CommonSimType.INFANT_HUMAN_ALIEN,
+                CommonSimType.INFANT_HUMAN_MERMAID,
+                CommonSimType.INFANT_HUMAN_WITCH,
+                CommonSimType.INFANT_HUMAN_ROBOT,
+                CommonSimType.INFANT_HUMAN_SCARECROW,
+                CommonSimType.INFANT_HUMAN_SKELETON,
+                CommonSimType.INFANT_HUMAN_PLANT_SIM,
+                CommonSimType.INFANT_HUMAN_WEREWOLF,
             )
         if include_separate_child_dog_types:
             sim_types: Tuple[CommonSimType, ...] = (
