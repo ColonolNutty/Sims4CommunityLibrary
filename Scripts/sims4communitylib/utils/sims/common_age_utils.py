@@ -203,7 +203,6 @@ class CommonAgeUtils:
             return False
         if current_age == approximate_age:
             return True
-        sim_info._relationship_tracker.update_bits_on_age_up(current_age)
         sim_info.change_age(age, current_age)
         services.get_event_manager().process_event(TestEvent.AgedUp, sim_info=sim_info)
         school_data = sim_info.get_school_data()
@@ -237,6 +236,7 @@ class CommonAgeUtils:
         age_transition.apply_aging_transition_loot(sim_info)
         sim_info._create_additional_statistics()
         sim_info._apply_life_skill_traits()
+        sim_info._relationship_tracker.update_compatibilities()
         return CommonAgeUtils.get_age(sim_info) == age or CommonAgeUtils.get_age(sim_info, exact_age=True) == age
 
     @staticmethod

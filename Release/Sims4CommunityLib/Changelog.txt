@@ -1,3 +1,6 @@
+v2.6:
+- Fixed a few errors when cloning Sims.
+
 v2.5:
 - Added INFANT age to CommonAge
 - Updated CommonAgeUtils, CommonSimType, and CommonSimDemographics with the new INFANT age.

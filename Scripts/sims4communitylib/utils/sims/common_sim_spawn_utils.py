@@ -1150,7 +1150,7 @@ class CommonSimSpawnUtils:
         try:
             trait_tracker._load_in_progress = True
             trait_tracker._sim_info._update_age_trait(trait_tracker._sim_info.age)
-            pre_made_sim_needing_fixup = bool(trait_tracker._sim_info.premade_sim_template_id)
+            pre_made_sim_needing_fixup = bool(trait_tracker._sim_info.sim_template_id)
             for trait_instance_id in saved_trait_ids:
                 trait = trait_manager.get(trait_instance_id, None)
                 if trait is None:
@@ -1163,16 +1163,16 @@ class CommonSimSpawnUtils:
                         if skip_load and not (pre_made_sim_needing_fixup or trait.allow_from_gallery):
                             continue
                         else:
-                            trait_tracker._sim_info.add_trait(trait, from_load=True)
+                            trait_tracker._sim_info.add_trait(trait)
                 elif skip_load and not (pre_made_sim_needing_fixup or trait.allow_from_gallery):
                     continue
                 else:
-                    trait_tracker._sim_info.add_trait(trait, from_load=True)
+                    trait_tracker._sim_info.add_trait(trait)
             if trait_tracker.personality_traits or not trait_tracker._sim_info.is_baby:
                 possible_traits = [trait for trait in trait_manager.types.values() if trait.is_personality_trait and trait_tracker.can_add_trait(trait)]
                 if possible_traits:
                     chosen_trait = random.choice(possible_traits)
-                    trait_tracker._add_trait(chosen_trait, from_load=True)
+                    trait_tracker._add_trait(chosen_trait)
             trait_tracker._add_default_gender_option_traits()
             add_quirks(trait_tracker._sim_info)
             trait_tracker._sim_info.on_all_traits_loaded()
