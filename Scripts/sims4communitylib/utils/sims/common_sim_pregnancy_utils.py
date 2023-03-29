@@ -130,8 +130,8 @@ class CommonSimPregnancyUtils(HasClassLog):
         return CommonSimUtils.get_sim_info(partner_sim)
 
     @classmethod
-    def start_pregnancy(cls, sim_info: SimInfo, partner_sim_info: SimInfo, pregnancy_origin: PregnancyOrigin = PregnancyOrigin.DEFAULT) -> bool:
-        """start_pregnancy(sim_info, partner_sim_info, pregnancy_origin=PregnancyOrigin.DEFAULT)
+    def start_pregnancy(cls, sim_info: SimInfo, partner_sim_info: SimInfo, pregnancy_origin: PregnancyOrigin = PregnancyOrigin.DEFAULT, single_sim_is_allowed: bool = False) -> bool:
+        """start_pregnancy(sim_info, partner_sim_info, pregnancy_origin=PregnancyOrigin.DEFAULT, single_sim_is_allowed=False)
 
         Start a pregnancy between a Sim and a Partner Sim.
 
@@ -141,6 +141,8 @@ class CommonSimPregnancyUtils(HasClassLog):
         :type partner_sim_info: SimInfo
         :param pregnancy_origin: The origin of the pregnancy. Default is PregnancyOrigin.DEFAULT.
         :type pregnancy_origin: PregnancyOrigin, optional
+        :param single_sim_is_allowed: Set to True if single Sims are allowed to become pregnant on their own. Default is False.
+        :type single_sim_is_allowed: bool, optional
         :return: True, if the Sim is successfully impregnated by the Partner Sim. False, if not.
         :rtype: bool
         """
@@ -149,7 +151,7 @@ class CommonSimPregnancyUtils(HasClassLog):
         pregnancy_tracker = cls._get_pregnancy_tracker(sim_info)
         if pregnancy_tracker is None:
             return False
-        pregnancy_tracker.start_pregnancy(sim_info, partner_sim_info, pregnancy_origin=pregnancy_origin)
+        pregnancy_tracker.start_pregnancy(sim_info, partner_sim_info, pregnancy_origin=pregnancy_origin, single_sim_is_allowed=single_sim_is_allowed)
         pregnancy_tracker.clear_pregnancy_visuals()
         pregnancy_stat = cls.determine_pregnancy_statistic(sim_info)
         if pregnancy_stat is not None:
