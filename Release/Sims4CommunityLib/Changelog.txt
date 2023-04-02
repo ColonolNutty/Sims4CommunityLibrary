@@ -1,6 +1,6 @@
 v2.6:
 - Fixed a few errors when cloning Sims.
-- Added `single_sim_is_allowed` to the CommonSimPregnancyUtils.start_pregnancy function. This will allow starting pregnancies with a Single Sim if wanted.
+- Updated CommonSimPregnancyUtils.start_pregnancy to assume the pregnancy is by a Single Sim when the Sim and the Partner are the same Sim.
 
 v2.5:
 - Added INFANT age to CommonAge
