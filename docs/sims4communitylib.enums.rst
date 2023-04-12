@@ -86,6 +86,14 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Character Restrictions`
+------------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_character_restrictions.CommonCharacterRestriction
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Civic Policies (Street)`
 ------------------------------------------
 

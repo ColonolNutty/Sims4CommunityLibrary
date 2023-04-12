@@ -1,3 +1,7 @@
+v2.7:
+- Added an input option for showing multiple text fields
+- Added a dialog for showing multiple text fields.
+
 v2.6:
 - Fixed a few errors when cloning Sims.
 - Updated CommonSimPregnancyUtils.start_pregnancy to assume the pregnancy is by a Single Sim when the Sim and the Partner are the same Sim.

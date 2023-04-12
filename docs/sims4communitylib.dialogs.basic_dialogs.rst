@@ -73,6 +73,22 @@ Basic Dialogs
    :undoc-members:
    :show-inheritance:
 
+`Input Multi Text`
+-------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.dialogs.common_input_multi_text_dialog.CommonInputMultiTextDialog
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+`Input Text Field`
+-------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.dialogs.common_input_text_field.CommonInputTextField
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Input Integer`
 -------------------------------------------------------------
 

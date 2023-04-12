@@ -290,8 +290,8 @@ class CommonAgeUtils:
         :return: True, if the Sim is older than the specified Age or equal to the specified Age if `or_equal` is True. False, if not.
         :rtype: bool
         """
-        age = int(age)
-        sim_age = int(CommonAgeUtils.get_age(sim_info))
+        age = age
+        sim_age = CommonAgeUtils.get_age(sim_info)
         if or_equal:
             return sim_age >= age
         return sim_age > age
@@ -311,7 +311,7 @@ class CommonAgeUtils:
             return False
         if isinstance(age, CommonAge):
             age = CommonAge.convert_to_vanilla(age)
-        return int(age) == int(Age.BABY)
+        return age == Age.BABY
 
     @staticmethod
     def is_infant_age(age: Union[CommonAge, Age, int]) -> bool:
@@ -328,7 +328,7 @@ class CommonAgeUtils:
             return False
         if isinstance(age, CommonAge):
             age = CommonAge.convert_to_vanilla(age)
-        return int(age) == int(Age.INFANT)
+        return age == Age.INFANT
 
     @staticmethod
     def is_toddler_age(age: Union[CommonAge, Age, int]) -> bool:
@@ -345,7 +345,7 @@ class CommonAgeUtils:
             return False
         if isinstance(age, CommonAge):
             age = CommonAge.convert_to_vanilla(age)
-        return int(age) == int(Age.TODDLER)
+        return age == Age.TODDLER
 
     @staticmethod
     def is_child_age(age: Union[CommonAge, Age, int]) -> bool:
@@ -362,7 +362,7 @@ class CommonAgeUtils:
             return False
         if isinstance(age, CommonAge):
             age = CommonAge.convert_to_vanilla(age)
-        return int(age) == int(Age.CHILD)
+        return age == Age.CHILD
 
     @staticmethod
     def is_teen_age(age: Union[CommonAge, Age, int]) -> bool:
@@ -379,7 +379,7 @@ class CommonAgeUtils:
             return False
         if isinstance(age, CommonAge):
             age = CommonAge.convert_to_vanilla(age)
-        return int(age) == int(Age.TEEN)
+        return age == Age.TEEN
 
     @staticmethod
     def is_adult_age(age: Union[CommonAge, Age, int]) -> bool:
@@ -409,7 +409,7 @@ class CommonAgeUtils:
             return False
         if isinstance(age, CommonAge):
             age = CommonAge.convert_to_vanilla(age)
-        return int(age) == int(Age.YOUNGADULT)
+        return age == Age.YOUNGADULT
 
     @staticmethod
     def is_mature_adult_age(age: Union[CommonAge, Age, int]) -> bool:
@@ -426,7 +426,7 @@ class CommonAgeUtils:
             return False
         if isinstance(age, CommonAge):
             age = CommonAge.convert_to_vanilla(age)
-        return int(age) == int(Age.ADULT)
+        return age == Age.ADULT
 
     @staticmethod
     def is_elder_age(age: Union[CommonAge, Age, int]) -> bool:
@@ -443,7 +443,7 @@ class CommonAgeUtils:
             return False
         if isinstance(age, CommonAge):
             age = CommonAge.convert_to_vanilla(age)
-        return int(age) == int(Age.ELDER)
+        return age == Age.ELDER
 
     @staticmethod
     def is_baby_or_toddler_age(age: Union[CommonAge, Age, int]) -> bool:
