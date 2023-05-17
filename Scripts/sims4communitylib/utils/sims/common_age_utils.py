@@ -222,7 +222,8 @@ class CommonAgeUtils:
                             available_aspirations.append(aspiration_track)
                         elif sim_info.is_teen:
                             available_aspirations.append(aspiration_track)
-                sim_info.primary_aspiration = random.choice(available_aspirations)
+                if available_aspirations:
+                    sim_info.primary_aspiration = random.choice(available_aspirations)
             number_of_empty_trait_slots = sim_info.trait_tracker.empty_slot_number
             if number_of_empty_trait_slots:
                 # noinspection PyUnresolvedReferences

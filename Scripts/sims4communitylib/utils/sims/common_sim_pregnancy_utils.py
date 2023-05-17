@@ -30,6 +30,7 @@ from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
 from sims4communitylib.enums.statistics_enum import CommonStatisticId
 from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
 from sims4communitylib.utils.sims.common_sim_statistic_utils import CommonSimStatisticUtils
+from statistics.commodity import Commodity
 
 
 class CommonSimPregnancyUtils(HasClassLog):
@@ -285,6 +286,33 @@ class CommonSimPregnancyUtils(HasClassLog):
         return pregnancy_tracker.get_partner()
 
     @classmethod
+    def set_pregnancy_progress(cls, sim_info: SimInfo, value: float):
+        """set_pregnancy_progress(sim_info, value)
+
+        Set the pregnancy progress of a Sim.
+
+        :param sim_info: The Sim being checked.
+        :type sim_info: SimInfo
+        :param value: The value to set the progress to.
+        :type value: float
+        :return: The current progress of the pregnancy of a Sim.
+        :rtype: float
+        """
+        if value > 100.0:
+            value = 100.0
+        if value < 0.0:
+            value = 0.0
+        pregnancy_tracker = cls._get_pregnancy_tracker(sim_info)
+        if pregnancy_tracker is None or not cls.is_pregnant(sim_info):
+            return
+        pregnancy_commodity_type = pregnancy_tracker.PREGNANCY_COMMODITY_MAP.get(CommonSpeciesUtils.get_species(sim_info))
+        statistic_tracker = sim_info.get_tracker(pregnancy_commodity_type)
+        pregnancy_commodity: Commodity = statistic_tracker.get_statistic(pregnancy_commodity_type, add=False)
+        if not pregnancy_commodity:
+            return
+        pregnancy_commodity.set_value(value)
+
+    @classmethod
     def get_pregnancy_progress(cls, sim_info: SimInfo) -> float:
         """get_pregnancy_progress(sim_info)
 
@@ -532,6 +560,25 @@ def _common_command_stop_pregnancy(output: CommonConsoleCommandOutput, sim_info:
         output(f'SUCCESS: Successfully stopped the pregnancy of {sim_info}.')
     else:
         output(f'FAILED: Failed to stop the pregnancy of {sim_info}.')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.set_pregnancy_progress',
+    'Set the progress of a Sims pregnancy.',
+    command_arguments=(
+        CommonConsoleCommandArgument('value', 'Percentage', 'The percentage of progress.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to change.', is_optional=True, default_value='Active Sim'),
+    ),
+)
+def _common_command_set_pregnancy_progress(output: CommonConsoleCommandOutput, value: float, sim_info: SimInfo = None):
+    if sim_info is None:
+        return
+    output(f'Attempting to set pregnancy progress of {sim_info} to {value}.')
+    if not CommonSimPregnancyUtils.is_pregnant(sim_info):
+        output(f'{sim_info} is not pregnant.')
+        return
+    CommonSimPregnancyUtils.set_pregnancy_progress(sim_info, value)
 
 
 @CommonConsoleCommand(

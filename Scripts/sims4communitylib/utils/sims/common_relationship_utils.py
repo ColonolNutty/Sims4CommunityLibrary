@@ -846,6 +846,7 @@ def _common_print_relationship_bits(output: CommonConsoleCommandOutput, sim_info
     if sim_info is None:
         return
     output(f'Printing relationship bits of Sim {sim_info} with other Sims.')
+    log.debug(f'Printing relationship bits of Sim {sim_info} with other Sims.')
     sim_id_a = CommonSimUtils.get_sim_id(sim_info)
     text = ''
     for relationship in sim_info.relationship_tracker:
