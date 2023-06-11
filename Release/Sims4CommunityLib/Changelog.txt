@@ -4,6 +4,10 @@ v2.7:
 - Added a way to check Sim demographics for containing ANY value.
 - Fixed an issue with the returned value of `CommonSimPregnancyUtil.has_permission_for_pregnancies_with`
 - Fixed an issue when adding custom careers to Sims using the command.
+- Added custom events for when the zone spins up, when the loading animation finishes, and when the zone manager has started.
+- Fixed an issue where the sort rows option did not pass on to subsequent pages
+- The versions of mods will now all log into the S4CL Messages log at startup
+- Fixed an issue when checking if a Sim is contained with a list of demographic flags.
 
 v2.6:
 - Fixed a few errors when cloning Sims.
