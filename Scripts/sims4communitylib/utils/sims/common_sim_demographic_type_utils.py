@@ -63,15 +63,20 @@ class CommonSimDemographicTypeUtils(_HasS4CLClassLog):
         return tuple(values)
 
     @classmethod
-    def is_sim_contained_in_demographic_flags(cls, sim_info: SimInfo, demographic_flags: 'CommonSimDemographicType') -> bool:
+    def is_sim_contained_in_demographic_flags(cls, sim_info: SimInfo, demographic_flags: 'CommonSimDemographicType', match_all: bool = True) -> bool:
         """Determine if a Sim is contained in demographic flags."""
         sim_demographic_flags = cls.determine_sim_demographic_flags(sim_info)
         # from sims4communitylib.enums.common_sim_demographic_types import CommonSimDemographicType
         # if CommonBitwiseUtils.contains_any_flags(demographic_flags, CommonSimDemographicType.get_all_flags(exclude_values=(CommonSimDemographicType.CURRENTLY_CONTROLLED, CommonSimDemographicType.CONTROLLED, CommonSimDemographicType.HOUSEHOLD, CommonSimDemographicType.NON_HOUSEHOLD))):
         # demographic_flags must contain all the values from sim_demographic_flags. If WEREWOLF was not in demographic_flags but was in sim_demographic_flags, then this would return False.
-        if not CommonBitwiseUtils.contains_all_flags(demographic_flags, sim_demographic_flags):
-            cls.get_log().format_with_message('Sim failed top flags', sim=sim_info, demographic_flags=demographic_flags, sim_demographic_flags=sim_demographic_flags)
-            return False
+        if match_all:
+            if not CommonBitwiseUtils.contains_all_flags(demographic_flags, sim_demographic_flags):
+                cls.get_log().format_with_message('Sim failed to match all flags', sim=sim_info, demographic_flags=demographic_flags, sim_demographic_flags=sim_demographic_flags)
+                return False
+        else:
+            if not CommonBitwiseUtils.contains_any_flags(demographic_flags, sim_demographic_flags):
+                cls.get_log().format_with_message('Sim failed to match any flags', sim=sim_info, demographic_flags=demographic_flags, sim_demographic_flags=sim_demographic_flags)
+                return False
 
         # # Handle the non mutually exclusive flags.
         # from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
@@ -91,7 +96,7 @@ class CommonSimDemographicTypeUtils(_HasS4CLClassLog):
         return True
 
     @classmethod
-    def is_sim_contained_in_demographics(cls, sim_info: SimInfo, demographics: Tuple['CommonSimDemographicType']) -> bool:
+    def is_sim_contained_in_demographics(cls, sim_info: SimInfo, demographics: Tuple['CommonSimDemographicType'], match_all: bool = True) -> bool:
         """Determine if a Sim is contained in demographics"""
         sim_demographics = cls.determine_sim_demographics(sim_info)
 
@@ -112,12 +117,20 @@ class CommonSimDemographicTypeUtils(_HasS4CLClassLog):
         #     return True
 
         # demographics must contain all the values from sim_demographics. If WEREWOLF was not in demographics but was in sim_demographics, then this would return False.
-        for sim_demographic in sim_demographics:
-            if sim_demographic not in demographics:
-                cls.get_log().format_with_message('Sim failed all flags', sim=sim_info, demographics=demographics, sim_demographics=sim_demographics, missing_sim_demographic=sim_demographic)
-                return False
-        cls.get_log().format_with_message('Sim passed all flags', sim=sim_info, demographics=demographics, sim_demographics=sim_demographics)
-        return True
+        if match_all:
+            for sim_demographic in sim_demographics:
+                if sim_demographic not in demographics:
+                    cls.get_log().format_with_message('Sim failed all flags', sim=sim_info, demographics=demographics, sim_demographics=sim_demographics, missing_sim_demographic=sim_demographic)
+                    return False
+            cls.get_log().format_with_message('Sim passed all flags', sim=sim_info, demographics=demographics, sim_demographics=sim_demographics)
+            return True
+        else:
+            for sim_demographic in sim_demographics:
+                if sim_demographic in demographics:
+                    cls.get_log().format_with_message('Sim passed flags', sim=sim_info, demographics=demographics, sim_demographics=sim_demographics, matching_sim_demographic=sim_demographic)
+                    return True
+            cls.get_log().format_with_message('Sim failed all flags', sim=sim_info, demographics=demographics, sim_demographics=sim_demographics)
+            return False
 
     @classmethod
     def convert_to_age(cls, value: 'CommonSimDemographicType') -> 'CommonAge':

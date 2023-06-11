@@ -11,12 +11,16 @@ from server.client import Client
 from sims4communitylib.events.event_handling.common_event_registry import CommonEventRegistry
 from sims4communitylib.events.zone_spin.events.zone_early_load import S4CLZoneEarlyLoadEvent
 from sims4communitylib.events.zone_spin.events.zone_late_load import S4CLZoneLateLoadEvent
+from sims4communitylib.events.zone_spin.events.zone_manager_start_event import S4CLZoneManagerStartEvent
+from sims4communitylib.events.zone_spin.events.zone_post_load import \
+    S4CLZonePostLoadEvent
 from sims4communitylib.events.zone_spin.events.zone_save import S4CLZoneSaveEvent
 from sims4communitylib.events.zone_spin.events.zone_teardown import S4CLZoneTeardownEvent
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from zone import Zone
+from zone_manager import ZoneManager
 
 
 class CommonZoneSpinEventDispatcher(CommonService):
@@ -60,8 +64,14 @@ class CommonZoneSpinEventDispatcher(CommonService):
         CommonEventRegistry.get().dispatch(S4CLZoneTeardownEvent(zone, client, game_loaded=self.game_loaded, game_loading=self.game_loading))
         self._game_loading = True
 
-    def _on_zone_save(self, zone: Zone, save_slot_data: Any=None):
+    def _on_zone_save(self, zone: Zone, save_slot_data: Any = None):
         CommonEventRegistry.get().dispatch(S4CLZoneSaveEvent(zone, save_slot_data=save_slot_data, game_loaded=self.game_loaded, game_loading=self.game_loading))
+
+    def _on_loading_screen_animation_finished(self, zone: Zone):
+        CommonEventRegistry.get().dispatch(S4CLZonePostLoadEvent(zone, game_loaded=self.game_loaded, game_loading=self.game_loading))
+
+    def _on_zone_manager_start(self, zone_manager: ZoneManager):
+        CommonEventRegistry.get().dispatch(S4CLZoneManagerStartEvent(zone_manager))
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Zone, Zone.load_zone.__name__, handle_exceptions=False)
@@ -88,3 +98,17 @@ def _common_on_zone_teardown(original, self: Zone, client):
 def _common_on_zone_save(original, self: Zone, *args, **kwargs):
     CommonZoneSpinEventDispatcher.get()._on_zone_save(self, *args, **kwargs)
     return original(self, *args, **kwargs)
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Zone, Zone.on_loading_screen_animation_finished.__name__, handle_exceptions=False)
+def _common_on_loading_screen_animation_finished(original, self: Zone, *args, **kwargs):
+    original_result = original(self, *args, **kwargs)
+    CommonZoneSpinEventDispatcher.get()._on_loading_screen_animation_finished(self)
+    return original_result
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), ZoneManager, ZoneManager.start.__name__, handle_exceptions=False)
+def _common_on_zone_manager_start(original, self: ZoneManager, *args, **kwargs):
+    original_result = original(self, *args, **kwargs)
+    CommonZoneSpinEventDispatcher.get()._on_zone_manager_start(self)
+    return original_result

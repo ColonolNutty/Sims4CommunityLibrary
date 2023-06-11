@@ -598,14 +598,15 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
             (career_level_index, _, picked_track) = CommonCareerUtils.determine_entry_level_into_career_from_user_level(career, user_level)
             picked_track: TunableCareerTrack = picked_track
             career_level = CommonCareerTrackUtils.get_career_level_by_index(picked_track, career_level_index)
-        else:
-            if career_level is None:
-                entry_level_values = cls.determine_entry_level_into_career_for_sim(sim_info, career, use_career_history=use_career_history)
-                cls.get_log().format_with_message('Got entry level values', entry_level_values=entry_level_values)
-                (career_level_index, _, picked_track) = entry_level_values
-                picked_track: TunableCareerTrack = picked_track
-                career_level = CommonCareerTrackUtils.get_career_level_by_index(picked_track, career_level_index)
-                cls.get_log().format_with_message('Got career level.', career_level=career_level_index, returned_user_level=_, picked_track=picked_track)
+        elif career_level is None:
+            entry_level_values = tuple(cls.determine_entry_level_into_career_for_sim(sim_info, career, use_career_history=use_career_history))
+            cls.get_log().format_with_message('Got entry level values', entry_level_values=entry_level_values)
+            if len(entry_level_values) == 1:
+                entry_level_values = entry_level_values[0]
+            (career_level_index, _, picked_track) = entry_level_values
+            picked_track: TunableCareerTrack = picked_track
+            career_level = CommonCareerTrackUtils.get_career_level_by_index(picked_track, career_level_index)
+            cls.get_log().format_with_message('Got career level.', career_level=career_level_index, returned_user_level=_, picked_track=picked_track)
 
         if career_level is None:
             cls.get_log().format_with_message('No career level found.', sim=sim_info, career_history=career_tracker.career_history, career=career)

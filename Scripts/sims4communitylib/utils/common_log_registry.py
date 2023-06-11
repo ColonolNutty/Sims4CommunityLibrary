@@ -12,9 +12,12 @@ from pprint import pformat
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
 from sims4communitylib.exceptions.common_stacktrace_utils import CommonStacktraceUtil
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
+from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.common_io_utils import CommonIOUtils
 from sims4communitylib.utils.common_log_utils import CommonLogUtils
+
+_log = None
 
 
 class CommonMessageType(CommonInt):
@@ -632,13 +635,13 @@ class CommonLogRegistry(CommonService):
         if log_name in S4CLConfiguration().enable_logs:
             log.enable(message_types=S4CLConfiguration().enable_logs[log_name])
         self._registered_logs[mod_name][log_name] = log
-        if first_time_log and mod_identifier is not None:
-            log.enable()
+        if first_time_log and mod_identifier is not None and _log is not None:
+            _log.enable()
             if isinstance(mod_identifier, CommonModIdentity):
-                log.debug(f'{mod_identifier.name} Version "{mod_identifier.version}" Detected.')
+                _log.debug(f'{mod_identifier.name} Version "{mod_identifier.version}" Detected.')
             else:
-                log.debug(f'{mod_identifier} Detected.')
-            log.disable()
+                _log.debug(f'{mod_identifier} Detected.')
+            _log.disable()
         return log
 
     def _delete_old_log_files(self) -> None:
@@ -798,3 +801,7 @@ class CommonLogRegistry(CommonService):
             for log_name in self._registered_logs[mod_name]:
                 self._registered_logs[mod_name][log_name].disable()
         return True
+
+
+# noinspection PyRedeclaration
+_log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_log_registry')

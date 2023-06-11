@@ -86,6 +86,9 @@ class CommonLogUtils:
         :rtype: str
         """
         # return os.environ['TS4_MODS_FOLDER']
+        documents_path = os.path.dirname(CommonLogUtils.get_mods_location_path())
+        if os.path.exists(documents_path):
+            return documents_path
         from sims4communitylib.modinfo import ModInfo
         root_file = os.path.normpath(os.path.dirname(os.path.realpath(ModInfo.get_identity().file_path))).replace(os.sep, '/')
         root_file_split = root_file.split('/')
@@ -107,10 +110,9 @@ class CommonLogUtils:
         :return: The file path to 'Documents\Electronic Arts\The Sims 4\Mods' folder.
         :rtype: str
         """
-        sims_documents_location = CommonLogUtils.get_sims_documents_location_path()
-        if sims_documents_location == '':
-            return ''
-        return os.path.join(sims_documents_location, 'Mods')
+        current_file_path = os.path.dirname(os.path.abspath(__file__))
+        mods_folder = os.path.join(current_file_path.partition(f"{os.sep}Mods{os.sep}")[0], 'Mods')
+        return mods_folder
 
     @staticmethod
     def get_mod_logs_location_path() -> str:

@@ -264,11 +264,11 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                 self.log.debug('Choice made.')
                 if choice == CommonDialogNavigationButtonTag.NEXT:
                     self.log.debug('Next chosen.')
-                    self.show(on_chosen=on_chosen, picker_type=picker_type, page=page + 1, sim_info=sim_info, categories=categories)
+                    self.show(on_chosen=on_chosen, picker_type=picker_type, page=page + 1, sim_info=sim_info, categories=categories, sort_rows=sort_rows)
                     return True
                 elif choice == CommonDialogNavigationButtonTag.PREVIOUS:
                     self.log.debug('Previous chosen.')
-                    self.show(on_chosen=on_chosen, picker_type=picker_type, page=page - 1, sim_info=sim_info, categories=categories)
+                    self.show(on_chosen=on_chosen, picker_type=picker_type, page=page - 1, sim_info=sim_info, categories=categories, sort_rows=sort_rows)
                     return True
                 self.log.format_with_message('Choose Object Choice made.', choice=choice)
                 result = on_chosen(choice, outcome)
@@ -389,7 +389,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                 self.log.format_with_message('Adding Previous row.', page=page, number_of_pages=number_of_pages)
                 previous_choice = ObjectPickerRow(
                     option_id=len(self.rows) + 2,
-                    name=CommonLocalizationUtils.create_localized_string(CommonStringId.PREVIOUS),
+                    name=CommonLocalizationUtils.create_localized_string(CommonStringId.S4CL_EXCLAMATION_EXCLAMATION_STRING, tokens=(CommonStringId.PREVIOUS,)),
                     row_description=None,
                     row_tooltip=CommonLocalizationUtils.create_localized_tooltip(CommonStringId.PREVIOUS),
                     icon=CommonIconUtils.load_arrow_left_icon(),
@@ -403,7 +403,7 @@ class CommonChooseObjectDialog(CommonChooseDialog):
                 self.log.format_with_message('Adding Next row.', page=page, number_of_pages=number_of_pages)
                 next_choice = ObjectPickerRow(
                     option_id=len(self.rows) + 1,
-                    name=CommonLocalizationUtils.create_localized_string(CommonStringId.NEXT),
+                    name=CommonLocalizationUtils.create_localized_string(CommonStringId.S4CL_EXCLAMATION_EXCLAMATION_STRING, tokens=(CommonStringId.NEXT,)),
                     row_description=None,
                     row_tooltip=CommonLocalizationUtils.create_localized_tooltip(CommonStringId.NEXT),
                     icon=CommonIconUtils.load_arrow_right_icon(),

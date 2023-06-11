@@ -109,7 +109,7 @@ class CommonSimPregnancyUtils(HasClassLog):
         romantic_relationships_result = CommonRelationshipUtils.has_permission_for_romantic_relationship_with(sim_info_a, sim_info_b)
         if not romantic_relationships_result:
             return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for pregnancies with {sim_info_b}. {romantic_relationships_result}')
-        return CommonTestResult(False, reason=f'{sim_info_a} has permission for pregnancies with {sim_info_b}.')
+        return CommonTestResult(True, reason=f'{sim_info_a} has permission for pregnancies with {sim_info_b}.')
 
     @classmethod
     def get_pregnancy_partner(cls, sim_info: SimInfo) -> Union[SimInfo, None]:

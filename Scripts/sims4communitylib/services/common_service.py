@@ -13,12 +13,12 @@ ServiceType = TypeVar('ServiceType', bound=object)
 class _Singleton(type):
     def __init__(cls, *args, **kwargs) -> None:
         super(_Singleton, cls).__init__(*args, **kwargs)
-        cls.__instance = None
+        cls._instances = {}
 
     def __call__(cls, *args, **kwargs) -> 'CommonService':
-        if cls.__instance is None:
-            cls.__instance = super(_Singleton, cls).__call__(*args, **kwargs)
-        return cls.__instance
+        if cls not in cls._instances:
+            cls._instances[cls] = super(_Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
 
 
 class CommonService(metaclass=_Singleton):
