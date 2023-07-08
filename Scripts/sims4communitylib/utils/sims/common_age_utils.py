@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import random
-from typing import Union
+from typing import Union, Iterator
 
 import services
 from event_testing.test_events import TestEvent
@@ -23,8 +23,8 @@ class CommonAgeUtils:
     """Utilities for manipulating Ages of Sims.
 
     """
-    @staticmethod
-    def get_age(sim_info: SimInfo, exact_age: bool = False) -> Union[Age, int, None]:
+    @classmethod
+    def get_age(cls, sim_info: SimInfo, exact_age: bool = False) -> Union[Age, int, None]:
         """get_age(sim_info, exact_age=False)
 
         Retrieve the Age of a Sim.
@@ -54,10 +54,10 @@ class CommonAgeUtils:
             return None
         if exact_age:
             return age
-        return CommonAgeUtils.convert_to_approximate_age(age)
+        return cls.convert_to_approximate_age(age)
 
-    @staticmethod
-    def convert_to_approximate_age(age: Union[CommonAge, Age, int]) -> Age:
+    @classmethod
+    def convert_to_approximate_age(cls, age: Union[CommonAge, Age, int]) -> Age:
         """convert_to_approximate_age(age)
 
         Convert an age to an approximate Age value.
@@ -92,8 +92,8 @@ class CommonAgeUtils:
             return Age.ELDER
         return Age.INFANT
 
-    @staticmethod
-    def get_total_days_sim_has_been_in_their_current_age(sim_info: SimInfo) -> float:
+    @classmethod
+    def get_total_days_sim_has_been_in_their_current_age(cls, sim_info: SimInfo) -> float:
         """get_total_days_sim_has_been_in_their_current_age(sim_info)
 
         Retrieve the total number of days a Sim has been in their current Age.
@@ -105,8 +105,8 @@ class CommonAgeUtils:
         """
         return sim_info.age_progress
 
-    @staticmethod
-    def get_percentage_total_days_sim_has_been_in_their_current_age(sim_info: SimInfo) -> float:
+    @classmethod
+    def get_percentage_total_days_sim_has_been_in_their_current_age(cls, sim_info: SimInfo) -> float:
         """get_percentage_total_days_sim_has_been_in_their_current_age(sim_info)
 
         Retrieve the percentage total days a Sim has been in their current age.
@@ -118,8 +118,8 @@ class CommonAgeUtils:
         """
         return sim_info.age_progress/sim_info._age_time*sim_info.AGE_PROGRESS_BAR_FACTOR
 
-    @staticmethod
-    def get_total_days_until_sim_ages_up(sim_info: SimInfo) -> int:
+    @classmethod
+    def get_total_days_until_sim_ages_up(cls, sim_info: SimInfo) -> int:
         """get_total_days_until_sim_ages_up(sim_info)
 
         Retrieve the total number of days a Sim has left until they age up.
@@ -131,8 +131,8 @@ class CommonAgeUtils:
         """
         return sim_info.days_until_ready_to_age()
 
-    @staticmethod
-    def get_total_days_to_age_up(sim_info: SimInfo) -> float:
+    @classmethod
+    def get_total_days_to_age_up(cls, sim_info: SimInfo) -> float:
         """get_total_days_to_age_up(sim_info)
 
         Retrieve the total number of days required for the next age of a Sim to be required. (Not to be confused with the amount of days they have left)
@@ -143,12 +143,12 @@ class CommonAgeUtils:
         :rtype: float
         """
         aging_service = services.get_aging_service()
-        sim_age = CommonAgeUtils.get_age(sim_info, exact_age=False)
+        sim_age = cls.get_age(sim_info, exact_age=False)
         age_transition_data = aging_service.get_age_transition_data(sim_age)
         return sim_info._age_time/age_transition_data.get_age_duration(sim_info)
 
-    @staticmethod
-    def set_total_days_sim_has_been_in_their_current_age(sim_info: SimInfo, days: float) -> None:
+    @classmethod
+    def set_total_days_sim_has_been_in_their_current_age(cls, sim_info: SimInfo, days: float) -> None:
         """set_total_days_sim_has_been_in_their_current_age(sim_info, days)
 
         Set the total number of days of progress made towards the next age of a Sim.
@@ -162,8 +162,8 @@ class CommonAgeUtils:
         new_age_value = min(delta_age, sim_info._age_time)
         sim_info._set_age_progress(new_age_value - sim_info.FILL_AGE_PROGRESS_BAR_BUFFER)
 
-    @staticmethod
-    def set_percentage_total_days_sim_has_been_in_their_current_age(sim_info: SimInfo, percentage_progress: float) -> None:
+    @classmethod
+    def set_percentage_total_days_sim_has_been_in_their_current_age(cls, sim_info: SimInfo, percentage_progress: float) -> None:
         """set_percentage_total_days_sim_has_been_in_their_current_age(sim_info, percentage_progress)
 
         Set the percentage total days a Sim has been in their current age.
@@ -175,12 +175,12 @@ class CommonAgeUtils:
         """
         if percentage_progress < 0:
             percentage_progress *= -1
-        delta_age = CommonAgeUtils.get_total_days_to_age_up(sim_info) * (percentage_progress / 100)
+        delta_age = cls.get_total_days_to_age_up(sim_info) * (percentage_progress / 100)
         new_age_value = min(delta_age, sim_info._age_time)
         sim_info._set_age_progress(new_age_value - sim_info.FILL_AGE_PROGRESS_BAR_BUFFER)
 
-    @staticmethod
-    def set_age(sim_info: SimInfo, age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def set_age(cls, sim_info: SimInfo, age: Union[CommonAge, Age, int]) -> bool:
         """set_age(sim_info, age)
 
         Set the Age of a Sim.
@@ -194,11 +194,11 @@ class CommonAgeUtils:
         """
         from sims4.resources import Types
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
-        age = CommonAgeUtils.convert_to_approximate_age(age)
+        age = cls.convert_to_approximate_age(age)
         if age is None:
             return False
-        current_age = CommonAgeUtils.get_age(sim_info, exact_age=False)
-        approximate_age = CommonAgeUtils.convert_to_approximate_age(age)
+        current_age = cls.get_age(sim_info, exact_age=False)
+        approximate_age = cls.convert_to_approximate_age(age)
         if current_age is None:
             return False
         if current_age == approximate_age:
@@ -238,10 +238,10 @@ class CommonAgeUtils:
         sim_info._create_additional_statistics()
         sim_info._apply_life_skill_traits()
         sim_info._relationship_tracker.update_compatibilities()
-        return CommonAgeUtils.get_age(sim_info) == age or CommonAgeUtils.get_age(sim_info, exact_age=True) == age
+        return cls.get_age(sim_info) == age or cls.get_age(sim_info, exact_age=True) == age
 
-    @staticmethod
-    def are_same_age(sim_info: SimInfo, other_sim_info: SimInfo) -> bool:
+    @classmethod
+    def are_same_age(cls, sim_info: SimInfo, other_sim_info: SimInfo) -> bool:
         """are_same_age(sim_info, other_sim_info)
 
         Determine if two Sims are the same Age.
@@ -253,10 +253,10 @@ class CommonAgeUtils:
         :return: True, if both Sims are the same Age.
         :rtype: bool
         """
-        return int(CommonAgeUtils.get_age(sim_info)) == int(CommonAgeUtils.get_age(other_sim_info))
+        return int(cls.get_age(sim_info)) == int(cls.get_age(other_sim_info))
 
-    @staticmethod
-    def is_younger_than(sim_info: SimInfo, age: Union[CommonAge, Age, int], or_equal: bool = False) -> bool:
+    @classmethod
+    def is_younger_than(cls, sim_info: SimInfo, age: Union[CommonAge, Age, int], or_equal: bool = False) -> bool:
         """is_younger_than(sim_info, age, or_equal=False)
 
         Determine if a Sim is younger than the specified Age.
@@ -271,13 +271,13 @@ class CommonAgeUtils:
         :rtype: bool
         """
         age = int(age)
-        sim_age = int(CommonAgeUtils.get_age(sim_info))
+        sim_age = int(cls.get_age(sim_info))
         if or_equal:
             return sim_age <= age
         return sim_age < age
 
-    @staticmethod
-    def is_older_than(sim_info: SimInfo, age: Union[CommonAge, Age, int], or_equal: bool = False) -> bool:
+    @classmethod
+    def is_older_than(cls, sim_info: SimInfo, age: Union[CommonAge, Age, int], or_equal: bool = False) -> bool:
         """is_older_than(sim_info, age, or_equal=False)
 
         Determine if a Sim is older than the specified Age.
@@ -292,13 +292,13 @@ class CommonAgeUtils:
         :rtype: bool
         """
         age = age
-        sim_age = CommonAgeUtils.get_age(sim_info)
+        sim_age = cls.get_age(sim_info)
         if or_equal:
             return sim_age >= age
         return sim_age > age
 
-    @staticmethod
-    def is_baby_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_baby_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_baby_age(age)
 
         Determine if an Age is a Baby.
@@ -314,8 +314,8 @@ class CommonAgeUtils:
             age = CommonAge.convert_to_vanilla(age)
         return age == Age.BABY
 
-    @staticmethod
-    def is_infant_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_infant_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_infant_age(age)
 
         Determine if an Age is an Infant.
@@ -331,8 +331,8 @@ class CommonAgeUtils:
             age = CommonAge.convert_to_vanilla(age)
         return age == Age.INFANT
 
-    @staticmethod
-    def is_toddler_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_toddler_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_toddler_age(age)
 
         Determine if an Age is a Toddler.
@@ -348,8 +348,8 @@ class CommonAgeUtils:
             age = CommonAge.convert_to_vanilla(age)
         return age == Age.TODDLER
 
-    @staticmethod
-    def is_child_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_child_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_child_age(age)
 
         Determine if an Age is a Child.
@@ -365,8 +365,8 @@ class CommonAgeUtils:
             age = CommonAge.convert_to_vanilla(age)
         return age == Age.CHILD
 
-    @staticmethod
-    def is_teen_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_teen_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_teen_age(age)
 
         Determine if an Age is a Teen.
@@ -382,8 +382,8 @@ class CommonAgeUtils:
             age = CommonAge.convert_to_vanilla(age)
         return age == Age.TEEN
 
-    @staticmethod
-    def is_adult_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_adult_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_adult_age(age)
 
         Determine if an Age is a Young Adult or an Adult.
@@ -393,10 +393,10 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_young_adult_age(age) or CommonAgeUtils.is_mature_adult_age(age)
+        return cls.is_young_adult_age(age) or cls.is_mature_adult_age(age)
 
-    @staticmethod
-    def is_young_adult_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_young_adult_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_young_adult_age(age)
 
         Determine if an Age is a Young Adult.
@@ -412,8 +412,8 @@ class CommonAgeUtils:
             age = CommonAge.convert_to_vanilla(age)
         return age == Age.YOUNGADULT
 
-    @staticmethod
-    def is_mature_adult_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_mature_adult_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_mature_adult_age(age)
 
         Determine if an Age is an Adult.
@@ -429,8 +429,8 @@ class CommonAgeUtils:
             age = CommonAge.convert_to_vanilla(age)
         return age == Age.ADULT
 
-    @staticmethod
-    def is_elder_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_elder_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_elder_age(age)
 
         Determine if an Age is an Elder.
@@ -446,8 +446,8 @@ class CommonAgeUtils:
             age = CommonAge.convert_to_vanilla(age)
         return age == Age.ELDER
 
-    @staticmethod
-    def is_baby_or_toddler_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_baby_or_toddler_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_baby_or_toddler_age(age)
 
         Determine if an age is Baby or Toddler.
@@ -457,10 +457,10 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_baby_age(age) or CommonAgeUtils.is_toddler_age(age)
+        return cls.is_baby_age(age) or cls.is_toddler_age(age)
 
-    @staticmethod
-    def is_baby_infant_or_toddler_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_baby_infant_or_toddler_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_baby_infant_or_toddler_age(age)
 
         Determine if an age is Baby or Toddler.
@@ -470,10 +470,10 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_baby_age(age) or CommonAgeUtils.is_infant_age(age) or CommonAgeUtils.is_toddler_age(age)
+        return cls.is_baby_age(age) or cls.is_infant_age(age) or cls.is_toddler_age(age)
 
-    @staticmethod
-    def is_baby_toddler_or_child_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_baby_toddler_or_child_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_baby_toddler_or_child_age(age)
 
         Determine if an age is Baby, Toddler, or Child.
@@ -483,10 +483,10 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_baby_age(age) or CommonAgeUtils.is_toddler_age(age) or CommonAgeUtils.is_child_age(age)
+        return cls.is_baby_age(age) or cls.is_toddler_age(age) or cls.is_child_age(age)
 
-    @staticmethod
-    def is_baby_infant_toddler_or_child_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_baby_infant_toddler_or_child_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_baby_infant_toddler_or_child_age(age)
 
         Determine if an age is Baby, Infant, Toddler, or Child.
@@ -496,10 +496,10 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_baby_age(age) or CommonAgeUtils.is_infant_age(age) or CommonAgeUtils.is_toddler_age(age) or CommonAgeUtils.is_child_age(age)
+        return cls.is_baby_age(age) or cls.is_infant_age(age) or cls.is_toddler_age(age) or cls.is_child_age(age)
 
-    @staticmethod
-    def is_toddler_or_child_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_toddler_or_child_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_toddler_or_child_age(age)
 
         Determine if an age is Toddler or Child.
@@ -509,10 +509,10 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_toddler_age(age) or CommonAgeUtils.is_child_age(age)
+        return cls.is_toddler_age(age) or cls.is_child_age(age)
 
-    @staticmethod
-    def is_child_or_teen_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_child_or_teen_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_child_or_teen_age(age)
 
         Determine if an age is Child or Teen.
@@ -522,10 +522,10 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_child_age(age) or CommonAgeUtils.is_teen_age(age)
+        return cls.is_child_age(age) or cls.is_teen_age(age)
 
-    @staticmethod
-    def is_teen_or_young_adult_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_teen_or_young_adult_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_teen_or_young_adult_age(age)
 
         Determine if an age is Teen or Young Adult.
@@ -535,10 +535,10 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_teen_age(age) or CommonAgeUtils.is_young_adult_age(age)
+        return cls.is_teen_age(age) or cls.is_young_adult_age(age)
 
-    @staticmethod
-    def is_teen_or_adult_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_teen_or_adult_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_teen_or_adult_age(age)
 
         Determine if an age is Teen, Young Adult, or Adult.
@@ -548,10 +548,10 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_teen_age(age) or CommonAgeUtils.is_adult_age(age)
+        return cls.is_teen_age(age) or cls.is_adult_age(age)
 
-    @staticmethod
-    def is_teen_adult_or_elder_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_teen_adult_or_elder_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_teen_adult_or_elder_age(age)
 
         Determine if an age is Teen, Young Adult, Adult, or Elder.
@@ -561,10 +561,10 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_teen_age(age) or CommonAgeUtils.is_adult_age(age) or CommonAgeUtils.is_elder_age(age)
+        return cls.is_teen_age(age) or cls.is_adult_age(age) or cls.is_elder_age(age)
 
-    @staticmethod
-    def is_adult_or_elder_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_adult_or_elder_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_adult_or_elder_age(age)
 
         Determine if an age is Young Adult, Adult, or Elder.
@@ -574,10 +574,10 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_adult_age(age) or CommonAgeUtils.is_elder_age(age)
+        return cls.is_adult_age(age) or cls.is_elder_age(age)
 
-    @staticmethod
-    def is_mature_adult_or_elder_age(age: Union[CommonAge, Age, int]) -> bool:
+    @classmethod
+    def is_mature_adult_or_elder_age(cls, age: Union[CommonAge, Age, int]) -> bool:
         """is_mature_adult_or_elder_age(age)
 
         Determine if an age is Adult or Elder.
@@ -587,78 +587,78 @@ class CommonAgeUtils:
         :return: True, if it is. False, if it is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_mature_adult_age(age) or CommonAgeUtils.is_elder_age(age)
+        return cls.is_mature_adult_age(age) or cls.is_elder_age(age)
 
-    @staticmethod
-    def is_baby(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_baby(cls, sim_info: SimInfo) -> bool:
         """is_baby(sim_info)
 
-        Determine if a sim is a Baby.
+        Determine if a Sim is a Baby.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_baby_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_baby_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_infant(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_infant(cls, sim_info: SimInfo) -> bool:
         """is_infant(sim_info)
 
-        Determine if a sim is an Infant.
+        Determine if a Sim is an Infant.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_infant_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_infant_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_toddler(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_toddler(cls, sim_info: SimInfo) -> bool:
         """is_toddler(sim_info)
 
-        Determine if a sim is a Toddler.
+        Determine if a Sim is a Toddler.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_toddler_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_toddler_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_child(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_child(cls, sim_info: SimInfo) -> bool:
         """is_child(sim_info)
 
-        Determine if a sim is a Child.
+        Determine if a Sim is a Child.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_child_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_child_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_teen(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_teen(cls, sim_info: SimInfo) -> bool:
         """is_teen(sim_info)
 
-        Determine if a sim is a Teen.
+        Determine if a Sim is a Teen.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_teen_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_teen_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_young_adult(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_young_adult(cls, sim_info: SimInfo) -> bool:
         """is_young_adult(sim_info)
 
-        Determine if a sim is an Young Adult.
+        Determine if a Sim is a Young Adult.
 
         .. note:: This function does not determine whether they are an Adult or not. Use "is_adult" to check for both.
 
@@ -667,13 +667,13 @@ class CommonAgeUtils:
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_young_adult_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_young_adult_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_mature_adult(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_mature_adult(cls, sim_info: SimInfo) -> bool:
         """is_mature_adult(sim_info)
 
-        Determine if a sim is an Adult.
+        Determine if a Sim is an Adult.
 
         .. note:: This function does not determine whether they are a Young Adult or not. Use 'is_adult' to check for both.
 
@@ -682,190 +682,190 @@ class CommonAgeUtils:
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_mature_adult_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_mature_adult_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_elder(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_elder(cls, sim_info: SimInfo) -> bool:
         """is_elder(sim_info)
 
-        Determine if a sim is an Elder.
+        Determine if a Sim is an Elder.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_elder_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_elder_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_adult(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_adult(cls, sim_info: SimInfo) -> bool:
         """is_adult(sim_info)
 
-        Determine if a sim is either a Young Adult or an Adult.
+        Determine if a Sim is either a Young Adult or an Adult.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_adult_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_adult_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_baby_or_toddler(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_baby_or_toddler(cls, sim_info: SimInfo) -> bool:
         """is_baby_or_toddler(sim_info)
 
-        Determine if a sim is a Baby or a Toddler.
+        Determine if a Sim is a Baby or a Toddler.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_baby_or_toddler_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_baby_or_toddler_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_baby_infant_or_toddler(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_baby_infant_or_toddler(cls, sim_info: SimInfo) -> bool:
         """is_baby_infant_or_toddler(sim_info)
 
-        Determine if a sim is a Baby, Infant, or a Toddler.
+        Determine if a Sim is a Baby, Infant, or a Toddler.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_baby_infant_or_toddler_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_baby_infant_or_toddler_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_toddler_or_child(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_toddler_or_child(cls, sim_info: SimInfo) -> bool:
         """is_toddler_or_child(sim_info)
 
-        Determine if a sim is a Toddler or a Child.
+        Determine if a Sim is a Toddler or a Child.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_toddler_or_child_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_toddler_or_child_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_baby_toddler_or_child(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_baby_toddler_or_child(cls, sim_info: SimInfo) -> bool:
         """is_baby_toddler_or_child(sim_info)
 
-        Determine if a sim is a Baby, a Toddler, or a Child.
+        Determine if a Sim is a Baby, a Toddler, or a Child.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_baby_toddler_or_child_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_baby_toddler_or_child_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_baby_infant_toddler_or_child(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_baby_infant_toddler_or_child(cls, sim_info: SimInfo) -> bool:
         """is_baby_infant_toddler_or_child(sim_info)
 
-        Determine if a sim is a Baby, Infant, a Toddler, or a Child.
+        Determine if a Sim is a Baby, Infant, a Toddler, or a Child.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_baby_infant_toddler_or_child_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_baby_infant_toddler_or_child_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_child_or_teen(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_child_or_teen(cls, sim_info: SimInfo) -> bool:
         """is_child_or_teen(sim_info)
 
-        Determine if a sim is a Child or a Teen.
+        Determine if a Sim is a Child or a Teen.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_child_or_teen_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_child_or_teen_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_teen_or_young_adult(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_teen_or_young_adult(cls, sim_info: SimInfo) -> bool:
         """is_teen_or_young_adult(sim_info)
 
-        Determine if a sim is a Teen or a Young Adult.
+        Determine if a Sim is a Teen or a Young Adult.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_teen_or_young_adult_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_teen_or_young_adult_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_teen_or_adult(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_teen_or_adult(cls, sim_info: SimInfo) -> bool:
         """is_teen_or_adult(sim_info)
 
-        Determine if a sim is a Teen, a Young Adult, or an Adult.
+        Determine if a Sim is a Teen, a Young Adult, or an Adult.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_teen_or_adult_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_teen_or_adult_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_teen_adult_or_elder(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_teen_adult_or_elder(cls, sim_info: SimInfo) -> bool:
         """is_teen_adult_or_elder(sim_info)
 
-        Determine if a sim is a Teen, a Young Adult, an Adult, or an Elder.
+        Determine if a Sim is a Teen, a Young Adult, an Adult, or an Elder.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_teen_adult_or_elder_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_teen_adult_or_elder_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_adult_or_elder(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_adult_or_elder(cls, sim_info: SimInfo) -> bool:
         """is_adult_or_elder(sim_info)
 
-        Determine if a sim is a Young Adult, an Adult, or an Elder.
+        Determine if a Sim is a Young Adult, an Adult, or an Elder.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_adult_or_elder_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_adult_or_elder_age(cls.get_age(sim_info))
 
-    @staticmethod
-    def is_mature_adult_or_elder(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_mature_adult_or_elder(cls, sim_info: SimInfo) -> bool:
         """is_mature_adult_or_elder(sim_info)
 
-        Determine if a sim is an Adult or an Elder.
+        Determine if a Sim is an Adult or an Elder.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
         :return: True, if the Sim is. False, if the Sim is not.
         :rtype: bool
         """
-        return CommonAgeUtils.is_mature_adult_or_elder_age(CommonAgeUtils.get_age(sim_info))
+        return cls.is_mature_adult_or_elder_age(cls.get_age(sim_info))
 
     # Obsolete Functionality
 
-    @staticmethod
-    def is_baby_child_or_toddler(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_baby_child_or_toddler(cls, sim_info: SimInfo) -> bool:
         """is_baby_child_or_toddler(sim_info)
 
         .. warning:: Obsolete: Don't use this function. Use the :func:'~is_baby_toddler_or_child' function instead.
 
         """
-        return CommonAgeUtils.is_baby_toddler_or_child(sim_info)
+        return cls.is_baby_toddler_or_child(sim_info)
 
-    @staticmethod
-    def is_age_available_for_sim(sim_info: SimInfo, age: CommonAge) -> bool:
+    @classmethod
+    def is_age_available_for_sim(cls, sim_info: SimInfo, age: CommonAge) -> bool:
         """is_age_available_for_sim(sim_info, age)
 
         Determine if an Age is available for a Sim.
@@ -894,8 +894,8 @@ class CommonAgeUtils:
         except:
             return False
 
-    @staticmethod
-    def has_age(sim_info: SimInfo, age: Union[CommonAge, Age, int], exact_age: bool = False) -> bool:
+    @classmethod
+    def has_age(cls, sim_info: SimInfo, age: Union[CommonAge, Age, int], exact_age: bool = False) -> bool:
         """has_age(sim_info, age, exact_age=False)
 
         Determine if a Sim has a matching Age.
@@ -909,10 +909,33 @@ class CommonAgeUtils:
         :return: True, if the age of the specified Sim matches the specified age. False, if not.
         :rtype: bool
         """
-        current_age = CommonAgeUtils.get_age(sim_info, exact_age=exact_age)
+        current_age = cls.get_age(sim_info, exact_age=exact_age)
         if current_age is None:
             return False
         return int(current_age) == int(age)
+
+    @classmethod
+    def has_any_age(cls, sim_info: SimInfo, ages: Iterator[Union[CommonAge, Age, int]], exact_age: bool = False) -> bool:
+        """has_any_age(sim_info, ages, exact_age=False)
+
+        Determine if a Sim has an Age matching any of the specified Ages.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param ages: The ages to check.
+        :type ages: Iterator[Union[CommonAge, Age, int]]
+        :param exact_age: If True, the Sims exact age will be used. If False, the Sims approximate age will be used. In most cases, this should be False. Default is False.
+        :type exact_age: bool, optional
+        :return: True, if the age of the specified Sim matches any of the specified ages. False, if not.
+        :rtype: bool
+        """
+        current_age = cls.get_age(sim_info, exact_age=exact_age)
+        if current_age is None:
+            return False
+        for age in ages:
+            if int(current_age) == int(age):
+                return True
+        return False
 
 
 # noinspection SpellCheckingInspection

@@ -570,7 +570,6 @@ class CommonOccultUtils(_HasS4CLClassLog):
             current_outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
             CommonOutfitUtils.set_outfit_dirty(sim_info, current_outfit_category_and_index[0])
             CommonOutfitUtils.set_current_outfit(sim_info, current_outfit_category_and_index)
-            return CommonExecutionResult(True, reason=f'{sim_info} is now a Scarecrow.')
         return CommonTraitUtils.remove_trait(sim_info, CommonTraitId.SCARECROW)
 
     @staticmethod

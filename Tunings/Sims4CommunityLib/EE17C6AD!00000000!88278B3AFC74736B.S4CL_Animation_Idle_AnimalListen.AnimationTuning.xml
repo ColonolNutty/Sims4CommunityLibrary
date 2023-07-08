@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<I c="AnimationElement" i="animation" m="animation.animation_element" n="S4CL_Animation_Idle_AnimalListen" s="9810963398709769067">
+  <T n="asm_key" p="InGame\Sage\S4CL_ASM_Idle_AnimalListen.interactionasm">02d5df13:00000000:BE265443B3B859FC</T>
+  <L n="begin_states">
+    <T>Listen</T>
+  </L>
+  <T n="target_name" o="true" />
+</I>

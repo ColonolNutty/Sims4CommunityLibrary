@@ -8,9 +8,12 @@ Copyright (c) COLONOLNUTTY
 from typing import Iterator, Union, Tuple
 
 from relationships.relationship import Relationship
+from relationships.relationship_bit import RelationshipBit
+from relationships.relationship_track import RelationshipTrack
 from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
 from sims4.resources import Types
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.relationship_bits_enum import CommonRelationshipBitId
 from sims4communitylib.enums.relationship_tracks_enum import CommonRelationshipTrackId
@@ -19,7 +22,6 @@ from sims4communitylib.services.commands.common_console_command import CommonCon
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
@@ -29,8 +31,8 @@ class CommonRelationshipUtils:
     """Utilities for manipulating relationship bits, tracks, etc.
 
     """
-    @staticmethod
-    def has_met(sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
+    @classmethod
+    def has_met(cls, sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
         """has_met(sim_info, target_sim_info)
 
         Determine if a Sim has met the Target Sim.
@@ -42,10 +44,10 @@ class CommonRelationshipUtils:
         :return: True, if both Sims have met each other. False, if not.
         :rtype: bool
         """
-        return CommonRelationshipUtils.has_relationship_bit_with_sim(sim_info, target_sim_info, CommonRelationshipBitId.HAS_MET)
+        return cls.has_relationship_bit_with_sim(sim_info, target_sim_info, CommonRelationshipBitId.HAS_MET)
 
-    @staticmethod
-    def are_blood_relatives(sim_info_a: SimInfo, sim_info_b: SimInfo) -> bool:
+    @classmethod
+    def are_blood_relatives(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> bool:
         """are_blood_relatives(sim_info_a, sim_info_b)
 
         Determine if two Sims are blood relatives.
@@ -61,8 +63,8 @@ class CommonRelationshipUtils:
             return False
         return not sim_info_a.incest_prevention_test(sim_info_b)
 
-    @staticmethod
-    def is_romantically_committed_to_any_sims(sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_romantically_committed_to_any_sims(cls, sim_info: SimInfo) -> bool:
         """is_romantically_committed_to_any_sims(sim_info)
 
         Determine if the Sim is romantically committed to any Sims.
@@ -72,10 +74,10 @@ class CommonRelationshipUtils:
         :return: True, if the Sim is romantically committed to any Sims. False, if not.
         :rtype: bool
         """
-        return any(CommonRelationshipUtils.get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info))
+        return any(cls.get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info))
 
-    @staticmethod
-    def is_friendly_with(sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_friendly_with(cls, sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
         """is_friendly_with(sim_info, target_sim_info)
 
         Determine if a Sim is friendly with a Target Sim.
@@ -90,9 +92,9 @@ class CommonRelationshipUtils:
         :rtype: bool
         """
         if CommonSpeciesUtils.is_animal(sim_info) and CommonSpeciesUtils.is_animal(target_sim_info):
-            return CommonRelationshipUtils.has_relationship_bit_with_sim(sim_info, target_sim_info, CommonRelationshipBitId.PET_TO_PET_FRIENDLY)\
-                   or CommonRelationshipUtils.has_relationship_bit_with_sim(target_sim_info, sim_info, CommonRelationshipBitId.PET_TO_PET_FRIENDLY)
-        return CommonRelationshipUtils.get_friendship_level(sim_info, target_sim_info) >= 30
+            return cls.has_relationship_bit_with_sim(sim_info, target_sim_info, CommonRelationshipBitId.PET_TO_PET_FRIENDLY)\
+                   or cls.has_relationship_bit_with_sim(target_sim_info, sim_info, CommonRelationshipBitId.PET_TO_PET_FRIENDLY)
+        return cls.get_friendship_level(sim_info, target_sim_info) >= 30
 
     @classmethod
     def is_romantic_with(cls, sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
@@ -130,8 +132,8 @@ class CommonRelationshipUtils:
         )
         return result
 
-    @staticmethod
-    def is_romantically_committed_to(sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
+    @classmethod
+    def is_romantically_committed_to(cls, sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
         """is_romantically_committed_to(sim_info, target_sim_info)
 
         Determine if a Sim is romantically committed to the Target Sim.
@@ -143,10 +145,10 @@ class CommonRelationshipUtils:
         :return: True, if the Sim is romantically committed to the Target Sim. False, if not.
         :rtype: bool
         """
-        return target_sim_info in CommonRelationshipUtils.get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info)
+        return target_sim_info in cls.get_sim_info_of_all_sims_romantically_committed_to_generator(sim_info)
 
-    @staticmethod
-    def get_friendship_level(sim_info: SimInfo, target_sim_info: SimInfo) -> float:
+    @classmethod
+    def get_friendship_level(cls, sim_info: SimInfo, target_sim_info: SimInfo) -> float:
         """get_friendship_level(sim_info, target_sim_info)
 
         Retrieve the level of Friendship between two Sims.
@@ -160,13 +162,13 @@ class CommonRelationshipUtils:
         :return: The current level of friendship between two Sims.
         :rtype: float
         """
-        track_id = CommonRelationshipUtils.get_friendship_relationship_track(sim_info, target_sim_info)
+        track_id = cls.get_friendship_relationship_track(sim_info, target_sim_info)
         if track_id is None:
             return 0.0
-        return CommonRelationshipUtils.get_relationship_level_of_sims(sim_info, target_sim_info, track_id)
+        return cls.get_relationship_level_of_sims(sim_info, target_sim_info, track_id)
 
-    @staticmethod
-    def get_romance_level(sim_info: SimInfo, target_sim_info: SimInfo) -> float:
+    @classmethod
+    def get_romance_level(cls, sim_info: SimInfo, target_sim_info: SimInfo) -> float:
         """get_romance_level(sim_info, target_sim_info)
 
         Retrieve the level of Romance between two Sims.
@@ -180,13 +182,13 @@ class CommonRelationshipUtils:
         :return: The current level of romance between two Sims.
         :rtype: float
         """
-        track_id = CommonRelationshipUtils.get_romance_relationship_track(sim_info, target_sim_info)
+        track_id = cls.get_romance_relationship_track(sim_info, target_sim_info)
         if track_id is None:
             return 0.0
-        return CommonRelationshipUtils.get_relationship_level_of_sims(sim_info, target_sim_info, track_id)
+        return cls.get_relationship_level_of_sims(sim_info, target_sim_info, track_id)
 
-    @staticmethod
-    def calculate_average_relationship_level(sim_info: SimInfo, target_sim_info: SimInfo) -> float:
+    @classmethod
+    def calculate_average_relationship_level(cls, sim_info: SimInfo, target_sim_info: SimInfo) -> float:
         """calculate_average_relationship_level(sim_info, target_sim_info)
 
         Calculate an average level for Friendship and Romance between two Sims.
@@ -207,7 +209,7 @@ class CommonRelationshipUtils:
         :return: The average level of friendship and romance between two Sims.
         :rtype: float
         """
-        return (CommonRelationshipUtils.get_friendship_level(sim_info, target_sim_info) + CommonRelationshipUtils.get_romance_level(sim_info, target_sim_info)) / 2
+        return (cls.get_friendship_level(sim_info, target_sim_info) + cls.get_romance_level(sim_info, target_sim_info)) / 2
 
     @classmethod
     def has_permission_for_romantic_relationships(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -235,7 +237,7 @@ class CommonRelationshipUtils:
         sim_b_permission_result = cls.has_permission_for_romantic_relationships(sim_info_b)
         if not sim_b_permission_result:
             return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_b_permission_result}')
-        if CommonRelationshipUtils.are_blood_relatives(sim_info_a, sim_info_b):
+        if cls.are_blood_relatives(sim_info_a, sim_info_b):
             return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} is a blood relative of {sim_info_b}.')
         if not CommonSpeciesUtils.are_same_species(sim_info_a, sim_info_b):
             return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.')
@@ -267,8 +269,13 @@ class CommonRelationshipUtils:
             return CommonTestResult(False, reason=f'{sim_info_a} has permission to be a Blood Relative of {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.')
         return CommonTestResult(True, reason=f'{sim_info_a} has permission to be a Blood Relative of {sim_info_b}.')
 
-    @staticmethod
-    def has_relationship_bit_with_any_sims(sim_info: SimInfo, relationship_bit_id: Union[int, CommonRelationshipBitId], instanced_only: bool = True) -> bool:
+    @classmethod
+    def has_relationship_bit_with_any_sims(
+        cls,
+        sim_info: SimInfo,
+        relationship_bit_id: Union[int, CommonRelationshipBitId],
+        instanced_only: bool = True
+    ) -> bool:
         """has_relationship_bit_with_any_sims(sim_info, relationship_bit_id, instance_only=True)
 
         Determine if a Sim has the specified relationship bit with any Sims.
@@ -282,10 +289,15 @@ class CommonRelationshipUtils:
         :return: True, if the Sim has the specified Relationship Bit with any Sims. False, if not.
         :rtype: bool
         """
-        return any(CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bit_generator(sim_info, relationship_bit_id, instanced_only=instanced_only))
+        return any(cls.get_sim_info_of_all_sims_with_relationship_bit_generator(sim_info, relationship_bit_id, instanced_only=instanced_only))
 
-    @staticmethod
-    def has_relationship_bits_with_any_sims(sim_info: SimInfo, relationship_bit_ids: Iterator[int], instanced_only: bool = True) -> bool:
+    @classmethod
+    def has_relationship_bits_with_any_sims(
+        cls,
+        sim_info: SimInfo,
+        relationship_bit_ids: Iterator[int],
+        instanced_only: bool = True
+    ) -> bool:
         """has_relationship_bits_with_any_sims(sim_info, relationship_bit_ids, instanced_only=True)
 
         Determine if a Sim has the specified relationship bits with any Sims.
@@ -299,10 +311,11 @@ class CommonRelationshipUtils:
         :return: True, if the Sim has any of the specified Relationship Bits with any Sims. False, if not.
         :rtype: bool
         """
-        return any(CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, relationship_bit_ids, instanced_only=instanced_only))
+        return any(cls.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, relationship_bit_ids, instanced_only=instanced_only))
 
-    @staticmethod
+    @classmethod
     def has_relationship_bit_with_sim(
+        cls,
         sim_info: SimInfo,
         target_sim_info: SimInfo,
         relationship_bit_id: Union[int, CommonRelationshipBitId],
@@ -320,10 +333,11 @@ class CommonRelationshipUtils:
         :return: True, if the Sim has the specified Relationship Bit with the Target Sim. False, if not.
         :rtype: bool
         """
-        return CommonRelationshipUtils.has_relationship_bits_with_sim(sim_info, target_sim_info, (relationship_bit_id,))
+        return cls.has_relationship_bits_with_sim(sim_info, target_sim_info, (relationship_bit_id,))
 
-    @staticmethod
+    @classmethod
     def has_relationship_bits_with_sim(
+        cls,
         sim_info: SimInfo,
         target_sim_info: SimInfo,
         relationship_bit_ids: Iterator[Union[int, CommonRelationshipBitId]],
@@ -349,8 +363,9 @@ class CommonRelationshipUtils:
                 return True
         return False
 
-    @staticmethod
+    @classmethod
     def get_relationship_level_of_sims(
+        cls,
         sim_info: SimInfo,
         target_sim_info: SimInfo,
         relationship_track_id: Union[int, CommonRelationshipTrackId]
@@ -368,14 +383,15 @@ class CommonRelationshipUtils:
         :return: The current level between two Sims for the specified Relationship Track.
         :rtype: float
         """
-        relationship_track = CommonResourceUtils.load_instance(Types.STATISTIC, relationship_track_id)
+        relationship_track = cls.load_relationship_track_by_id(relationship_track_id)
         if relationship_track is None:
             return 0.0
         target_sim_id = CommonSimUtils.get_sim_id(target_sim_info)
         return sim_info.relationship_tracker.get_relationship_score(target_sim_id, relationship_track)
 
-    @staticmethod
+    @classmethod
     def change_relationship_level_of_sims(
+        cls,
         sim_info: SimInfo,
         target_sim_info: SimInfo,
         relationship_track_id: Union[int, CommonRelationshipTrackId],
@@ -396,15 +412,16 @@ class CommonRelationshipUtils:
         :return: True, if the relationship track was changed successfully. False, if not.
         :rtype: bool
         """
-        relationship_track = CommonResourceUtils.load_instance(Types.STATISTIC, relationship_track_id)
+        relationship_track = cls.load_relationship_track_by_id(relationship_track_id)
         if relationship_track is None:
             return False
         target_sim_id = CommonSimUtils.get_sim_id(target_sim_info)
         sim_info.relationship_tracker.add_relationship_score(target_sim_id, level, relationship_track)
         return True
 
-    @staticmethod
+    @classmethod
     def set_relationship_level_of_sims(
+        cls,
         sim_info: SimInfo,
         target_sim_info: SimInfo,
         relationship_track_id: Union[int, CommonRelationshipTrackId],
@@ -425,15 +442,15 @@ class CommonRelationshipUtils:
         :return: True, if the relationship track was set successfully. False, if not.
         :rtype: bool
         """
-        relationship_track = CommonResourceUtils.load_instance(Types.STATISTIC, relationship_track_id)
+        relationship_track = cls.load_relationship_track_by_id(relationship_track_id)
         if relationship_track is None:
             return False
         target_sim_id = CommonSimUtils.get_sim_id(target_sim_info)
         sim_info.relationship_tracker.set_relationship_score(target_sim_id, level, relationship_track)
         return True
 
-    @staticmethod
-    def get_relationships_gen(sim_info: SimInfo) -> Iterator[Relationship]:
+    @classmethod
+    def get_relationships_gen(cls, sim_info: SimInfo) -> Iterator[Relationship]:
         """get_relationships_gen(sim_info)
 
         Retrieve all relationships a Sim has with other Sims.
@@ -448,12 +465,13 @@ class CommonRelationshipUtils:
         for relationship in sim_info.relationship_tracker:
             yield relationship
 
-    @staticmethod
+    @classmethod
     def add_relationship_bit(
+        cls,
         sim_info: SimInfo,
         target_sim_info: SimInfo,
         relationship_bit_id: Union[int, CommonRelationshipBitId]
-    ) -> bool:
+    ) -> CommonExecutionResult:
         """add_relationship_bit(sim_info, target_sim_info, relationship_bit_id)
 
         Add a relationship bit between two sims.
@@ -475,24 +493,25 @@ class CommonRelationshipUtils:
         :param relationship_bit_id: The identifier of the Relationship Bit to add.
         :type relationship_bit_id: Union[int, CommonRelationshipBitId]
         :return: True, if the relationship bit was added successfully. False, if not.
-        :rtype: bool
+        :rtype: CommonExecutionResult
         """
-        relationship_bit_instance = CommonResourceUtils.load_instance(Types.RELATIONSHIP_BIT, relationship_bit_id)
+        relationship_bit_instance = cls.load_relationship_bit_by_id(relationship_bit_id)
         if relationship_bit_instance is None:
-            return False
+            return CommonExecutionResult(False, f'Failed to locate relationship bit {relationship_bit_id}')
         target_sim_id = CommonSimUtils.get_sim_id(target_sim_info)
         relationship_tracker = sim_info.relationship_tracker
         if relationship_tracker is None:
-            return False
+            return CommonExecutionResult(False, f'{sim_info} did not have a relationship tracker.')
         relationship_tracker.add_relationship_bit(target_sim_id, relationship_bit_instance)
-        return True
+        return CommonExecutionResult.TRUE
 
-    @staticmethod
+    @classmethod
     def remove_relationship_bit(
+        cls,
         sim_info: SimInfo,
         target_sim_info: SimInfo,
         relationship_bit_id: Union[int, CommonRelationshipBitId]
-    ) -> bool:
+    ) -> CommonExecutionResult:
         """remove_relationship_bit(sim_info, target_sim_info, relationship_bit_id)
 
         Remove a relationship bit between two sims.
@@ -514,20 +533,21 @@ class CommonRelationshipUtils:
         :param relationship_bit_id: The identifier of the Relationship Bit to remove.
         :type relationship_bit_id: Union[int, CommonRelationshipBitId]
         :return: True, if the relationship bit was removed successfully. False, if not.
-        :rtype: bool
+        :rtype: CommonExecutionResult
         """
-        relationship_bit_instance = CommonResourceUtils.load_instance(Types.RELATIONSHIP_BIT, relationship_bit_id)
+        relationship_bit_instance = cls.load_relationship_bit_by_id(relationship_bit_id)
         if relationship_bit_instance is None:
-            return False
+            return CommonExecutionResult(False, f'Failed to locate relationship bit {relationship_bit_id}')
         target_sim_id = CommonSimUtils.get_sim_id(target_sim_info)
         relationship_tracker = sim_info.relationship_tracker
         if relationship_tracker is None:
-            return False
+            return CommonExecutionResult(False, f'{sim_info} did not have a relationship tracker.')
         relationship_tracker.remove_relationship_bit(target_sim_id, relationship_bit_instance)
-        return True
+        return CommonExecutionResult.TRUE
 
-    @staticmethod
+    @classmethod
     def remove_relationship_bit_from_all(
+        cls,
         sim_info: SimInfo,
         relationship_bit_id: Union[int, CommonRelationshipBitId]
     ) -> bool:
@@ -552,18 +572,18 @@ class CommonRelationshipUtils:
         :return: True, if the relationship bit was removed successfully. False, if not.
         :rtype: bool
         """
-        relationship_bit_instance = CommonResourceUtils.load_instance(Types.RELATIONSHIP_BIT, relationship_bit_id)
+        relationship_bit_instance = cls.load_relationship_bit_by_id(relationship_bit_id)
         if relationship_bit_instance is None:
             return False
         sim_id_a = CommonSimUtils.get_sim_id(sim_info)
-        for relationship in CommonRelationshipUtils.get_relationships_gen(sim_info):
+        for relationship in cls.get_relationships_gen(sim_info):
             sim_id_b = relationship.get_other_sim_id(sim_id_a)
             if relationship.has_bit(sim_id_a, relationship_bit_instance):
                 relationship.remove_bit(sim_id_a, sim_id_b, relationship_bit_instance)
         return True
 
-    @staticmethod
-    def get_sim_info_of_all_sims_with_relationship_bit_generator(sim_info: SimInfo, relationship_bit_id: Union[int, CommonRelationshipBitId], instanced_only: bool = True) -> Iterator[SimInfo]:
+    @classmethod
+    def get_sim_info_of_all_sims_with_relationship_bit_generator(cls, sim_info: SimInfo, relationship_bit_id: Union[int, CommonRelationshipBitId], instanced_only: bool = True) -> Iterator[SimInfo]:
         """get_sim_info_of_all_sims_with_relationship_bit_generator(sim_info, relationship_bit_id, instanced_only=True)
 
         Retrieve an Iterator of SimInfo for all Sims that have the specified relationship bit with the specified Sim.
@@ -587,10 +607,10 @@ class CommonRelationshipUtils:
         :return: An iterator of Sims that have the specified relationship bit with the specified Sim.
         :rtype: Iterator[SimInfo]
         """
-        return CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, (relationship_bit_id, ), instanced_only=instanced_only)
+        return cls.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, (relationship_bit_id, ), instanced_only=instanced_only)
 
-    @staticmethod
-    def get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info: SimInfo, relationship_bit_ids: Iterator[Union[int, CommonRelationshipBitId]], instanced_only: bool = True) -> Iterator[SimInfo]:
+    @classmethod
+    def get_sim_info_of_all_sims_with_relationship_bits_generator(cls, sim_info: SimInfo, relationship_bit_ids: Iterator[Union[int, CommonRelationshipBitId]], instanced_only: bool = True) -> Iterator[SimInfo]:
         """get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, relationship_bit_ids, instanced_only=True)
 
         Retrieve an Iterator of SimInfo for all Sims that have the specified relationship bits with the specified Sim.
@@ -627,15 +647,15 @@ class CommonRelationshipUtils:
             if instanced_only and CommonSimUtils.get_sim_instance(target_sim_info) is None:
                 continue
             for relationship_bit_id in relationship_bit_ids:
-                relationship_bit_instance = CommonResourceUtils.load_instance(Types.RELATIONSHIP_BIT, relationship_bit_id)
+                relationship_bit_instance = cls.load_relationship_bit_by_id(relationship_bit_id)
                 if relationship_bit_instance is None:
                     continue
                 if relationship.has_bit(sim_id, relationship_bit_instance):
                     yield target_sim_info
                     break
 
-    @staticmethod
-    def has_positive_romantic_combo_relationship_bit_with(sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
+    @classmethod
+    def has_positive_romantic_combo_relationship_bit_with(cls, sim_info: SimInfo, target_sim_info: SimInfo) -> bool:
         """has_positive_romantic_combo_relationship_bit_with(sim_info, target_sim_info)
 
         Determine if a Sim has a positive romantic combo with the Target Sim.
@@ -656,7 +676,7 @@ class CommonRelationshipUtils:
         :return: True, if the Sims have positive romantic combo relationship bits with each other. False, if not.
         :rtype: bool
         """
-        return CommonRelationshipUtils.has_relationship_bits_with_sim(sim_info, target_sim_info, (
+        return cls.has_relationship_bits_with_sim(sim_info, target_sim_info, (
             CommonRelationshipBitId.ROMANTIC_COMBO_SOUL_MATES,
             CommonRelationshipBitId.ROMANTIC_COMBO_LOVERS,
             CommonRelationshipBitId.ROMANTIC_COMBO_SWEETHEARTS,
@@ -688,7 +708,7 @@ class CommonRelationshipUtils:
         :rtype: Iterator[SimInfo]
         """
         romance_relationship_ids = cls.get_romantically_committed_relationship_bits()
-        for target_sim_info in CommonRelationshipUtils.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, romance_relationship_ids, instanced_only=instanced_only):
+        for target_sim_info in cls.get_sim_info_of_all_sims_with_relationship_bits_generator(sim_info, romance_relationship_ids, instanced_only=instanced_only):
             yield target_sim_info
 
     @classmethod
@@ -733,20 +753,73 @@ class CommonRelationshipUtils:
             return CommonRelationshipTrackId.ROMANCE
         return None
 
-    # These are here for backwards compatibility.
-    @staticmethod
-    def _determine_friendship_track(sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, int]:
-        result = CommonRelationshipUtils.get_friendship_relationship_track(sim_info_a, sim_info_b)
-        if result is None:
-            return -1
-        return result
+    @classmethod
+    def load_relationship_bit_by_id(cls, relationship_bit: Union[int, CommonRelationshipBitId, RelationshipBit]) -> Union[RelationshipBit, None]:
+        """load_relationship_bit_by_id(relationship_bit)
 
-    @staticmethod
-    def _determine_romance_track(sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, int]:
-        result = CommonRelationshipUtils.get_romance_relationship_track(sim_info_a, sim_info_b)
-        if result is None:
-            return -1
-        return result
+        Load an instance of a Relationship Bit by its identifier.
+
+        :param relationship_bit: The identifier of a Relationship Bit.
+        :type relationship_bit: Union[int, CommonRelationshipBitId, RelationshipBit]
+        :return: An instance of a Relationship Bit matching the decimal identifier or None if not found.
+        :rtype: Union[RelationshipBit, None]
+        """
+        if isinstance(relationship_bit, RelationshipBit):
+            return relationship_bit
+        # noinspection PyBroadException
+        try:
+            # noinspection PyCallingNonCallable
+            relationship_bit_instance = relationship_bit()
+            if isinstance(relationship_bit_instance, RelationshipBit):
+                # noinspection PyTypeChecker
+                return relationship_bit
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
+            relationship_bit: int = int(relationship_bit)
+        except:
+            # noinspection PyTypeChecker
+            relationship_bit: RelationshipBit = relationship_bit
+            return relationship_bit
+
+        from sims4.resources import Types
+        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+        return CommonResourceUtils.load_instance(Types.RELATIONSHIP_BIT, relationship_bit)
+
+    @classmethod
+    def load_relationship_track_by_id(cls, relationship_track: Union[int, CommonRelationshipTrackId, RelationshipTrack]) -> Union[RelationshipTrack, None]:
+        """load_relationship_track_by_id(relationship_track)
+
+        Load an instance of a Relationship Track by its identifier.
+
+        :param relationship_track: The identifier of a Relationship Track.
+        :type relationship_track: Union[int, CommonRelationshipTrackId, RelationshipTrack]
+        :return: An instance of a Relationship Track matching the decimal identifier or None if not found.
+        :rtype: Union[RelationshipTrack, None]
+        """
+        if isinstance(relationship_track, RelationshipTrack):
+            return relationship_track
+        # noinspection PyBroadException
+        try:
+            # noinspection PyCallingNonCallable
+            relationship_track_instance = relationship_track()
+            if isinstance(relationship_track_instance, RelationshipTrack):
+                # noinspection PyTypeChecker
+                return relationship_track
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
+            relationship_track: int = int(relationship_track)
+        except:
+            # noinspection PyTypeChecker
+            relationship_track: RelationshipTrack = relationship_track
+            return relationship_track
+
+        from sims4.resources import Types
+        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+        return CommonResourceUtils.load_instance(Types.STATISTIC, relationship_track)
 
 
 log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'common_relationship_commands')
@@ -923,3 +996,28 @@ def _common_meet_everyone(output: CommonConsoleCommandOutput):
             CommonRelationshipUtils.remove_relationship_bit(sim_info, target_sim_info, CommonRelationshipBitId.HAS_MET)
             CommonRelationshipUtils.remove_relationship_bit(target_sim_info, sim_info, CommonRelationshipBitId.HAS_MET)
     output(f'Done removing the Has Met relationship from {sim_pair_count} Sim pair(s).')
+
+
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.add_rel_bit',
+    'Add a relationship bit between two Sims.',
+    command_arguments=(
+        CommonConsoleCommandArgument('relationship_bit', 'Name or Id', 'The name or id of a relationship bit to add.'),
+        CommonConsoleCommandArgument('sim_a', 'Name or Id', 'The name of the first Sim. The relationship bit will be added from Sim A to Sim B.'),
+        CommonConsoleCommandArgument('sim_b', 'Name or Id', 'The name of the second Sim. The relationship bit will be added from Sim A to Sim B.')
+    ),
+    command_aliases=(
+        's4clib.add_relationship_bit',
+        's4clib.addrelationshipbit',
+        's4clib.addrelbit'
+    )
+)
+def _common_add_relationship_bit(output: CommonConsoleCommandOutput, relationship_bit: TunableInstanceParam(Types.RELATIONSHIP_BIT), sim_a: SimInfo, sim_b: SimInfo):
+    output(f'Adding relationship bit {relationship_bit} from {sim_a} to {sim_b}.')
+    result = CommonRelationshipUtils.add_relationship_bit(sim_a, sim_b, relationship_bit)
+    if result:
+        output('Successfully added relationship bit.')
+    else:
+        output(f'Failed to add relationship bit. {result}')

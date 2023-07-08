@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<I c="AnimationElement" i="animation" m="animation.animation_element" n="S4CL_Animation_PostureIdle_AnimalStand" s="12962560150643712864">
+  <T n="asm_key" p="InEP04\Sage\S4CL_ASM_PostureIdle_AnimalStand.interactionasm">02d5df13:00000000:AD79056A968B3D8F</T>
+  <L n="begin_states">
+    <T>Idle</T>
+  </L>
+</I>

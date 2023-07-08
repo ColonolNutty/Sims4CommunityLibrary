@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ASM name="S4CL_ASM_PostureIdle_AnimalStand" dcc="sage">
+  <Actor name="x" type="Sim" master="true" virtual="false" />
+  <Actor name="postureObject" type="Object" virtual="true" />
+  <Parameter name="x:age" type="enum" labels="baby,child,teen,youngadult,adult,elder,toddler" default="adult" />
+  <Parameter name="x:sex" type="enum" labels="male,female" default="male" />
+  <Parameter name="x:mood" type="enum" labels="happy,confident,angry,sad,bored,embarrassed,uncomfortable,playful,tense,focused,energized,flirty,fine,inspired,dazed" default="happy" />
+  <Parameter name="x:carryState" type="enum" labels="none,left,right,both" default="none" />
+  <Parameter name="x:is_reacting" type="bool" labels="" default="False" />
+  <Parameter name="x:species" type="enum" labels="human,dog,smalldog,cat,fox" default="dog" />
+  <Parameter name="postureObject:isMirroredPart" type="bool" labels="" default="False" />
+  <IkConfiguration name="ad_idle_breathe.ma">
+    <SourceFile name="ad_idle_breathe.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ad_idle_stand_look.ma">
+    <SourceFile name="ad_idle_stand_look.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ad_idle_sniffAroundAir.ma">
+    <SourceFile name="ad_idle_sniffAroundAir.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ad_idle_pawAtFloor.ma">
+    <SourceFile name="ad_idle_pawAtFloor.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ad_idle_stretch.ma">
+    <SourceFile name="ad_idle_stretch.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ac_idle_breathe.ma">
+    <SourceFile name="ac_idle_breathe.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a_idle_neutral_loop_3.ma">
+    <SourceFile name="a_idle_neutral_loop_3.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_01.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_01.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_02.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_02.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_03.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_03.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ax_idle_breathe.ma">
+    <SourceFile name="ax_idle_breathe.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ax_idle_pawAtFloor.ma">
+    <SourceFile name="ax_idle_pawAtFloor.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ax_idle_look.ma">
+    <SourceFile name="ax_idle_look.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ax_idle_sniffAroundAir.ma">
+    <SourceFile name="ax_idle_sniffAroundAir.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <PostureManifest actors="" />
+  <PostureManifest actors="x">
+    <Support family="stand" compatibility="FullBody" carry_left="*" carry_right="*" surface="*" />
+  </PostureManifest>
+  <State type="public" countlooptime="false" disableautostop="false" skippable="true" interrupt_this="true" name="Idle" focus="full body" facialoverlays="false" tailoverlays="true" />
+  <State type="private" skippable="false" interrupt_this="false" name="mirror" focus="full body" facialoverlays="false" tailoverlays="true" />
+  <Connection from="Idle" to="exit" />
+  <Connection from="entry" to="mirror" />
+  <Connection from="mirror" to="Idle" />
+  <State name="Idle" type="public" countlooptime="false" disableautostop="false" skippable="true" interrupt_this="true" focus="full body" facialoverlays="false" tailoverlays="true">
+    <description />
+    <MakeController>
+      <ParameterSelector parameter="x:species" unique_id="24">
+        <Choice value="human">
+          <PostureSelector parameter="x:posture" unique_id="10">
+            <Choice value="-stand-FullBody" track="normal" mask="">
+              <ParameterSelector parameter="x:age" unique_id="9">
+                <Choice value="baby" />
+                <Choice value="child">
+                  <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="4">
+                    <Choice weight="50" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=a_idle_neutral_loop_1_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a_idle_neutral_loop_3.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="1">
+                        <TransitionClassList />
+                      </Controller>
+                    </Choice>
+                    <Choice weight="50" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=a_idle_neutral_loop_2_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a_idle_neutral_loop_3.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="2">
+                        <TransitionClassList />
+                      </Controller>
+                    </Choice>
+                    <Choice weight="50" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=a_idle_neutral_loop_3_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a_idle_neutral_loop_3.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="3">
+                        <TransitionClassList />
+                      </Controller>
+                    </Choice>
+                  </RandomSelector>
+                </Choice>
+                <Choice value="teen">
+                  <Reference target="4" />
+                </Choice>
+                <Choice value="youngadult">
+                  <Reference target="4" />
+                </Choice>
+                <Choice value="adult">
+                  <Reference target="4" />
+                </Choice>
+                <Choice value="elder">
+                  <Reference target="4" />
+                </Choice>
+                <Choice value="toddler">
+                  <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="8">
+                    <Choice weight="50" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_01_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_01.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="5">
+                        <TransitionClassList />
+                      </Controller>
+                    </Choice>
+                    <Choice weight="50" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_02_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_02.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="6">
+                        <TransitionClassList />
+                      </Controller>
+                    </Choice>
+                    <Choice weight="50" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_03_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_03.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="7">
+                        <TransitionClassList />
+                      </Controller>
+                    </Choice>
+                  </RandomSelector>
+                </Choice>
+              </ParameterSelector>
+            </Choice>
+          </PostureSelector>
+        </Choice>
+        <Choice value="dog">
+          <CustomController name="Custom Controller" target="x" overridePosture="false" track="normal" transition_class_in="Default" transition_class_out="Default" unique_id="23">
+            <TransitionClassList />
+            <ControllerTree>
+              <Notice unique_id="22">
+                <BaseContent>
+                  <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="20">
+                    <Choice weight="50" avoidRepeat="False">
+                      <Clip clip="ad_idle_breathe_x" ik_configuration="ad_idle_breathe.ma" focus="full body" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="11" />
+                    </Choice>
+                    <Choice weight="50" avoidRepeat="False">
+                      <Clip clip="ad_idle_lookAround_x" ik_configuration="ad_idle_stand_look.ma" focus="none" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="12" />
+                    </Choice>
+                    <Choice weight="50" avoidRepeat="False">
+                      <Clip clip="ad_idle_lookLeft_x" ik_configuration="ad_idle_stand_look.ma" focus="none" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="13" />
+                    </Choice>
+                    <Choice weight="50" avoidRepeat="False">
+                      <Clip clip="ad_idle_lookRight_x" ik_configuration="ad_idle_stand_look.ma" focus="none" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="14" />
+                    </Choice>
+                    <Choice weight="32" avoidRepeat="False">
+                      <Clip clip="ad_idle_sniffAroundAir_x" ik_configuration="ad_idle_sniffAroundAir.ma" focus="none" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="15" />
+                    </Choice>
+                    <Choice weight="13" avoidRepeat="False">
+                      <ParameterSelector parameter="x:species" unique_id="18">
+                        <Choice value="human" />
+                        <Choice value="dog">
+                          <Clip clip="ad_idle_pawAtFloor_x" ik_configuration="ad_idle_pawAtFloor.ma" focus="none" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="16" />
+                        </Choice>
+                        <Choice value="smalldog">
+                          <Reference target="16" />
+                        </Choice>
+                        <Choice value="cat">
+                          <Clip clip="ac_idle_breathe_x" ik_configuration="ac_idle_breathe.ma" focus="full body" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="17" />
+                        </Choice>
+                      </ParameterSelector>
+                    </Choice>
+                    <Choice weight="9" avoidRepeat="False">
+                      <Clip clip="ad_idle_stretch_x" ik_configuration="ad_idle_stretch.ma" focus="none" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="19" />
+                    </Choice>
+                  </RandomSelector>
+                </BaseContent>
+                <NoticeLoop>
+                  <Clip clip="ad_idle_breathe_x" ik_configuration="ad_idle_breathe.ma" focus="full body" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="21" />
+                </NoticeLoop>
+              </Notice>
+            </ControllerTree>
+          </CustomController>
+        </Choice>
+        <Choice value="smalldog">
+          <Reference target="23" />
+        </Choice>
+        <Choice value="cat">
+          <Reference target="23" />
+        </Choice>
+        <Choice value="fox">
+		  <PostureSelector parameter="x:posture" unique_id="3000">
+			<Choice value="-stand-FullBody" track="normal" mask="">
+			  <CustomController name="Custom Controller" target="x" overridePosture="false" track="normal" transition_class_in="Default" transition_class_out="Default" unique_id="3001">
+				<TransitionClassList />
+				<ControllerTree>
+				  <Notice unique_id="3002">
+					<BaseContent>
+					  <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="3003">
+						<Choice weight="50" avoidRepeat="False">
+						  <Clip clip="ax_idle_breathe_x" ik_configuration="ax_idle_breathe.ma" focus="full body" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="3004" />
+						</Choice>
+						<Choice weight="50" avoidRepeat="False">
+						  <Clip clip="ax_idle_lookAround_x" ik_configuration="ax_idle_look.ma" focus="none" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="3005" />
+						</Choice>
+						<Choice weight="50" avoidRepeat="False">
+						  <Clip clip="ax_idle_lookLeft_x" ik_configuration="ax_idle_look.ma" focus="none" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="3006" />
+						</Choice>
+						<Choice weight="50" avoidRepeat="False">
+						  <Clip clip="ax_idle_lookRight_x" ik_configuration="ax_idle_look.ma" focus="none" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="3007" />
+						</Choice>
+						<Choice weight="32" avoidRepeat="False">
+						  <Clip clip="ax_idle_sniffAroundAir_x" ik_configuration="ax_idle_sniffAroundAir.ma" focus="none" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="3008" />
+						</Choice>
+						<Choice weight="13" avoidRepeat="False">
+						  <Clip clip="ax_idle_pawAtFloor_x" ik_configuration="ax_idle_pawAtFloor.ma" focus="none" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="3009" />
+						</Choice>
+					  </RandomSelector>
+					</BaseContent>
+					<NoticeLoop>
+					  <Clip clip="ax_idle_breathe_x" ik_configuration="ax_idle_breathe.ma" focus="full body" mirror="False" start_frame_offset="0" end_frame_offset="0" unique_id="3010" />
+					</NoticeLoop>
+				  </Notice>
+				</ControllerTree>
+			  </CustomController>
+			</Choice>
+		  </PostureSelector>
+        </Choice>
+      </ParameterSelector>
+    </MakeController>
+  </State>
+  <State name="mirror" type="private" skippable="false" interrupt_this="false" focus="full body" facialoverlays="false" tailoverlays="true">
+    <description />
+    <ParameterSelector parameter="postureObject:isMirroredPart" unique_id="26">
+      <Choice value="false" />
+      <Choice value="true">
+        <SetMirror target="x" mirror="true" unique_id="25" />
+      </Choice>
+    </ParameterSelector>
+  </State>
+</ASM>

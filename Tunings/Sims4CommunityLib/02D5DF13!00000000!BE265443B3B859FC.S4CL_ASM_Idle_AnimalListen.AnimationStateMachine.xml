@@ -1,0 +1,1203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ASM name="S4CL_ASM_Idle_AnimalListen" dcc="sage">
+  <Actor name="x" type="Sim" master="true" virtual="false" />
+  <Actor name="sitTemplate" type="Object" virtual="true" />
+  <Actor name="postureObject" type="Object" virtual="true" />
+  <Actor name="bathtub" type="Object" virtual="true" />
+  <Actor name="y" type="Sim" virtual="false" />
+  <Actor name="z" type="Sim" virtual="true" />
+  <Parameter name="x:age" type="enum" labels="baby,toddler,child,teen,youngadult,adult,elder" default="adult" />
+  <Parameter name="x:sex" type="enum" labels="male,female" default="male" />
+  <Parameter name="x:species" type="enum" labels="human,dog,smalldog,cat,fox" default="human" />
+  <Parameter name="x:mood" type="enum" labels="happy,confident,angry,sad,bored,embarrassed,uncomfortable,playful,tense,focused,energized,flirty,fine,inspired,dazed" default="fine" />
+  <Parameter name="sitTemplate:isMirroredPart" type="bool" labels="" default="False" />
+  <Parameter name="postureObject:isMirroredPart" type="bool" labels="" default="False" />
+  <Parameter name="y:age" type="enum" labels="baby,toddler,child,teen,youngadult,adult,elder" default="adult" />
+  <Parameter name="y:sex" type="enum" labels="male,female" default="male" />
+  <Parameter name="y:species" type="enum" labels="human,dog,smalldog,cat,fox" default="human" />
+  <Parameter name="z:age" type="enum" labels="baby,toddler,child,teen,youngadult,adult,elder" default="adult" />
+  <Parameter name="z:sex" type="enum" labels="male,female" default="male" />
+  <Parameter name="z:species" type="enum" labels="human,dog,smalldog,cat,fox" default="human" />
+  <IkConfiguration name="ad_idle_listen_loop2_sitOnGround.ma">
+    <SourceFile name="ad_idle_listen_loop2_sitOnGround.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ad_idle_listen_loop2_layDown.ma">
+    <SourceFile name="ad_idle_listen_loop2_layDown.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ad_idle_listen_loop1_layDown.ma">
+    <SourceFile name="ad_idle_listen_loop1_layDown.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ad_idle_listen_loop1.ma">
+    <SourceFile name="ad_idle_listen_loop1.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ad_idle_listen_loop2.ma">
+    <SourceFile name="ad_idle_listen_loop2.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ad_idle_listen_loop1_sitOnGround.ma">
+    <SourceFile name="ad_idle_listen_loop1_sitOnGround.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_happy.ma">
+    <SourceFile name="a2a_generic_GS_listen_happy.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_happy_seated.ma">
+    <SourceFile name="a2a_generic_GS_listen_happy_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_02_seatedHighChair.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_02_seatedHighChair.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_angry_seated.ma">
+    <SourceFile name="a2a_generic_GS_listen_angry_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_angry.ma">
+    <SourceFile name="a2a_generic_GS_listen_angry.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_bored_seated.ma">
+    <SourceFile name="a2a_generic_GS_listen_bored_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen.ma">
+    <SourceFile name="a2a_generic_GS_listen.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_bored.ma">
+    <SourceFile name="a2a_generic_GS_listen_bored.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_breath_carry.ma">
+    <SourceFile name="p2p_generic_GS_listen_breath_carry.ma">
+      <MapNamespace namespace="z" actor="z" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_sad_seated.ma">
+    <SourceFile name="a2a_generic_GS_listen_sad_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_sad.ma">
+    <SourceFile name="a2a_generic_GS_listen_sad.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_seated.ma">
+    <SourceFile name="a2a_generic_GS_listen_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_breath_seatedHighChair.ma">
+    <SourceFile name="p2p_generic_GS_listen_breath_seatedHighChair.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_03_seated.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_03_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_01_carry.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_01_carry.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="z" actor="z" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_03_seatedHighChair.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_03_seatedHighChair.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_breath_seated.ma">
+    <SourceFile name="p2p_generic_GS_listen_breath_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_01_seated.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_01_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_01.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_01.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_03_carry.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_03_carry.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="z" actor="z" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_02_carry.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_02_carry.ma">
+      <MapNamespace namespace="z" actor="z" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_02.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_02.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_01_seatedHighChair.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_01_seatedHighChair.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_02_seated.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_02_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_03.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_03.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_breath.ma">
+    <SourceFile name="p2p_generic_GS_listen_breath.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_happy.ma">
+    <SourceFile name="a2a_generic_GS_listen_happy.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_happy_seated.ma">
+    <SourceFile name="a2a_generic_GS_listen_happy_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_angry_seated.ma">
+    <SourceFile name="a2a_generic_GS_listen_angry_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_angry.ma">
+    <SourceFile name="a2a_generic_GS_listen_angry.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_bored_seated.ma">
+    <SourceFile name="a2a_generic_GS_listen_bored_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen.ma">
+    <SourceFile name="a2a_generic_GS_listen.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_bored.ma">
+    <SourceFile name="a2a_generic_GS_listen_bored.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_sad_seated.ma">
+    <SourceFile name="a2a_generic_GS_listen_sad_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_sad.ma">
+    <SourceFile name="a2a_generic_GS_listen_sad.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="a2a_generic_GS_listen_seated.ma">
+    <SourceFile name="a2a_generic_GS_listen_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ax_idle_listen_loop1.ma">
+    <SourceFile name="ax_idle_listen_loop1.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="ax_idle_listen_loop2.ma">
+    <SourceFile name="ax_idle_listen_loop2.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_breath.ma">
+    <SourceFile name="p2p_generic_GS_listen_breath.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_01.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_01.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_02.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_02.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_03.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_03.ma">
+      <MapNamespace namespace="x" actor="x" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_breath_seated.ma">
+    <SourceFile name="p2p_generic_GS_listen_breath_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_01_seated.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_01_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_02_seated.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_02_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <IkConfiguration name="p2p_generic_GS_listen_loop_03_seated.ma">
+    <SourceFile name="p2p_generic_GS_listen_loop_03_seated.ma">
+      <MapNamespace namespace="x" actor="x" />
+      <MapNamespace namespace="sitTemplate" actor="sitTemplate" />
+    </SourceFile>
+  </IkConfiguration>
+  <PostureManifest actors="" />
+  <PostureManifest actors="x">
+    <Support family="stand" compatibility="FullBody" carry_left="*" carry_right="*" surface="*" />
+    <Support family="stand" compatibility="UpperBody" carry_left="*" carry_right="*" surface="*" />
+    <Support family="sit" compatibility="FullBody" carry_left="*" carry_right="*" surface="*" />
+    <Support family="sit" compatibility="UpperBody" carry_left="*" carry_right="*" surface="*" />
+    <Support name="kneel" family="none" compatibility="UpperBody" carry_left="*" carry_right="*" surface="*" />
+    <Support family="movingStand" compatibility="UpperBody" carry_left="*" carry_right="*" surface="*" />
+    <Support name="bathTub_TakeBath" family="none" compatibility="FullBody" carry_left="*" carry_right="*" surface="*" />
+    <Support name="Bathtub_Bubblebath" family="none" compatibility="FullBody" carry_left="*" carry_right="*" surface="*" />
+    <Support name="sitIntimate" family="none" compatibility="FullBody" carry_left="*" carry_right="*" surface="*" />
+    <Support name="sitInHighChair" family="none" compatibility="FullBody" carry_left="*" carry_right="*" surface="*" />
+    <Support name="carried_sim" family="none" compatibility="FullBody" carry_left="-" carry_right="-" surface="*" />
+    <Support family="layDown" compatibility="FullBody" carry_left="*" carry_right="*" surface="*" />
+    <Support name="pet_sitIntimate" family="none" compatibility="FullBody" carry_left="-" carry_right="-" surface="*" />
+  </PostureManifest>
+  <PostureManifest actors="y" />
+  <PostureManifest actors="z" />
+  <State type="public" countlooptime="false" disableautostop="false" skippable="true" interrupt_this="true" name="Listen" focus="full body" facialoverlays="true" tailoverlays="true" />
+  <State type="private" skippable="false" interrupt_this="false" name="StopNormalPlus" focus="full body" facialoverlays="false" tailoverlays="true" />
+  <State type="private" skippable="false" interrupt_this="false" name="mirrored" focus="full body" facialoverlays="false" tailoverlays="true" />
+  <Connection from="Listen" to="StopNormalPlus" />
+  <Connection from="StopNormalPlus" to="exit" />
+  <Connection from="entry" to="mirrored" />
+  <Connection from="mirrored" to="Listen" />
+  <State name="Listen" type="public" countlooptime="false" disableautostop="false" skippable="true" interrupt_this="true" focus="full body" facialoverlays="true" tailoverlays="true">
+    <description />
+    <MakeController>
+      <ParameterSelector parameter="x:species" unique_id="109">
+        <Choice value="human">
+          <PostureSelector parameter="x:posture" unique_id="98">
+            <Choice value="Bathtub_Bubblebath--FullBody" track="normal" mask="">
+              <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="1">
+                <Choice weight="100" avoidRepeat="False" />
+                <Choice weight="100" avoidRepeat="False" />
+              </RandomSelector>
+            </Choice>
+            <Choice value="bathTub_TakeBath--FullBody" track="normal" mask="">
+              <Reference target="1" />
+            </Choice>
+            <Choice value="carried_sim--FullBody" track="normal" mask="">
+              <ParameterSelector parameter="x:age" unique_id="7">
+                <Choice value="baby" />
+                <Choice value="toddler">
+                  <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="6">
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_03_carry_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_03_carry.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="2">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_01_carry_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_01_carry.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="3">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_02_carry_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_02_carry.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="4">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_breath_carry_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_breath_carry.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="5">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                  </RandomSelector>
+                </Choice>
+                <Choice value="child" />
+                <Choice value="teen" />
+                <Choice value="youngadult" />
+                <Choice value="adult" />
+                <Choice value="elder" />
+              </ParameterSelector>
+            </Choice>
+            <Choice value="kneel--UpperBody" track="normal" mask="">
+              <ParameterSelector parameter="x:age" unique_id="49">
+                <Choice value="baby" />
+                <Choice value="toddler">
+                  <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="12">
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_03_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_03_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="8">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_breath_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_breath_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="9">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_02_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_02_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="10">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_01_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_01_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="11">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                  </RandomSelector>
+                </Choice>
+                <Choice value="child">
+                  <ParameterSelector parameter="x:mood" unique_id="48">
+                    <Choice value="happy">
+                      <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="19">
+                        <Choice weight="100" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_happy_breathe_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_happy_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="13">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_happy_01_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_happy_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="14">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_happy_02_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_happy_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="15">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_happy_03_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_happy_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="16">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_happy_04_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_happy_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="17">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_happy_05_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_happy_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="18">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                      </RandomSelector>
+                    </Choice>
+                    <Choice value="confident">
+                      <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="26">
+                        <Choice weight="100" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_breathe_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="20">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="50" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_loop1_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="21">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="50" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_loop2_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="22">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="50" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_loop3_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="23">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="50" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_loop4_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="24">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="100" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_loop5_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="25">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                      </RandomSelector>
+                    </Choice>
+                    <Choice value="angry">
+                      <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="33">
+                        <Choice weight="100" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_angry_breathe_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_angry_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="27">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_angry_01_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_angry_seated.ma" focus="body only" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="28">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_angry_02_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_angry_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="29">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_angry_03_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_angry_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="30">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_angry_04_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_angry_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="31">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_angry_05_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_angry_seated.ma" focus="body only" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="32">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                      </RandomSelector>
+                    </Choice>
+                    <Choice value="sad">
+                      <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="40">
+                        <Choice weight="100" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_sad_breathe_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_sad_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="34">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_sad_01_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_sad_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="35">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_sad_02_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_sad_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="36">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_sad_03_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_sad_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="37">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_sad_04_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_sad_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="38">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_sad_05_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_sad_seated.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="39">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                      </RandomSelector>
+                    </Choice>
+                    <Choice value="bored">
+                      <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="47">
+                        <Choice weight="100" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_bored_breathe_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_bored_seated.ma" focus="body only" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="41">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_bored_01_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_bored_seated.ma" focus="body only" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="42">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_bored_02_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_bored_seated.ma" focus="body only" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="43">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_bored_03_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_bored_seated.ma" focus="body only" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="44">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_bored_04_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_bored_seated.ma" focus="body only" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="45">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_bored_05_seated_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_bored_seated.ma" focus="body only" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="46">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                      </RandomSelector>
+                    </Choice>
+                    <Choice value="embarrassed">
+                      <Reference target="40" />
+                    </Choice>
+                    <Choice value="uncomfortable">
+                      <Reference target="40" />
+                    </Choice>
+                    <Choice value="playful">
+                      <Reference target="19" />
+                    </Choice>
+                    <Choice value="tense">
+                      <Reference target="33" />
+                    </Choice>
+                    <Choice value="focused">
+                      <Reference target="26" />
+                    </Choice>
+                    <Choice value="energized">
+                      <Reference target="19" />
+                    </Choice>
+                    <Choice value="flirty">
+                      <Reference target="26" />
+                    </Choice>
+                    <Choice value="fine">
+                      <Reference target="26" />
+                    </Choice>
+                    <Choice value="inspired">
+                      <Reference target="19" />
+                    </Choice>
+                    <Choice value="dazed">
+                      <Reference target="26" />
+                    </Choice>
+                  </ParameterSelector>
+                </Choice>
+                <Choice value="teen">
+                  <Reference target="48" />
+                </Choice>
+                <Choice value="youngadult">
+                  <Reference target="48" />
+                </Choice>
+                <Choice value="adult">
+                  <Reference target="48" />
+                </Choice>
+                <Choice value="elder">
+                  <Reference target="48" />
+                </Choice>
+              </ParameterSelector>
+            </Choice>
+            <Choice value="-layDown-FullBody" track="normal" mask="">
+              <Reference target="1" />
+            </Choice>
+            <Choice value="-movingStand-UpperBody" track="normalplus" mask="Trackmask_UpperBody">
+              <ParameterSelector parameter="x:age" unique_id="91">
+                <Choice value="baby" />
+                <Choice value="toddler">
+                  <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="54">
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_01_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_01.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="50">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_02_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_02.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="51">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_breath_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_breath.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="52">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_03_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_03.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="53">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                  </RandomSelector>
+                </Choice>
+                <Choice value="child">
+                  <ParameterSelector parameter="x:mood" unique_id="90">
+                    <Choice value="happy">
+                      <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="61">
+                        <Choice weight="100" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_happy_breathe_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_happy.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="55">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_happy_01_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_happy.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="56">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_happy_02_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_happy.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="57">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_happy_03_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_happy.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="58">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_happy_04_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_happy.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="59">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_happy_05_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_happy.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="60">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                      </RandomSelector>
+                    </Choice>
+                    <Choice value="confident">
+                      <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="68">
+                        <Choice weight="40" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_breathe_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="62">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="20" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_loop1_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="63">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="20" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_loop2_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="64">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="20" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_loop3_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="65">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="20" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_loop4_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="66">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="100" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_loop5_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="67">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                      </RandomSelector>
+                    </Choice>
+                    <Choice value="angry">
+                      <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="75">
+                        <Choice weight="100" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_angry_breathe_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_angry.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="69">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_angry_01_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_angry.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="70">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_angry_02_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_angry.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="71">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_angry_03_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_angry.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="72">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_angry_04_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_angry.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="73">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_angry_05_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_angry.ma" focus="body only" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="74">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                      </RandomSelector>
+                    </Choice>
+                    <Choice value="sad">
+                      <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="82">
+                        <Choice weight="100" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_sad_breathe_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_sad.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="76">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_sad_01_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_sad.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="77">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_sad_02_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_sad.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="78">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_sad_03_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_sad.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="79">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_sad_04_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_sad.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="80">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_sad_05_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_sad.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="81">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                      </RandomSelector>
+                    </Choice>
+                    <Choice value="bored">
+                      <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="89">
+                        <Choice weight="100" avoidRepeat="False">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_bored_breathe_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_bored.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="83">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_bored_01_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_bored.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="84">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_bored_02_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_bored.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="85">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_bored_03_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_bored.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="86">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_bored_04_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_bored.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="87">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                        <Choice weight="34" avoidRepeat="True">
+                          <Controller target="x" controller="@ClipController(clip=a2a_generic_GS_listen_bored_05_x, loop_count=#1)" overridePosture="false" mask="Trackmask_UpperBody" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a2a_generic_GS_listen_bored.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="88">
+                            <TransitionClassList>
+                              <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                            </TransitionClassList>
+                          </Controller>
+                        </Choice>
+                      </RandomSelector>
+                    </Choice>
+                    <Choice value="embarrassed">
+                      <Reference target="82" />
+                    </Choice>
+                    <Choice value="uncomfortable">
+                      <Reference target="82" />
+                    </Choice>
+                    <Choice value="playful">
+                      <Reference target="61" />
+                    </Choice>
+                    <Choice value="tense">
+                      <Reference target="75" />
+                    </Choice>
+                    <Choice value="focused">
+                      <Reference target="68" />
+                    </Choice>
+                    <Choice value="energized">
+                      <Reference target="61" />
+                    </Choice>
+                    <Choice value="flirty">
+                      <Reference target="68" />
+                    </Choice>
+                    <Choice value="fine">
+                      <Reference target="68" />
+                    </Choice>
+                    <Choice value="inspired">
+                      <Reference target="61" />
+                    </Choice>
+                    <Choice value="dazed">
+                      <Reference target="68" />
+                    </Choice>
+                  </ParameterSelector>
+                </Choice>
+                <Choice value="teen">
+                  <Reference target="90" />
+                </Choice>
+                <Choice value="youngadult">
+                  <Reference target="90" />
+                </Choice>
+                <Choice value="adult">
+                  <Reference target="90" />
+                </Choice>
+                <Choice value="elder">
+                  <Reference target="90" />
+                </Choice>
+              </ParameterSelector>
+            </Choice>
+            <Choice value="pet_sitIntimate--FullBody" track="normal" mask="">
+              <Reference target="1" />
+            </Choice>
+            <Choice value="-sit-FullBody" track="normal" mask="">
+              <Reference target="49" />
+            </Choice>
+            <Choice value="sitInHighChair--FullBody" track="normal" mask="">
+              <ParameterSelector parameter="x:age" unique_id="97">
+                <Choice value="baby" />
+                <Choice value="toddler">
+                  <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="96">
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_03_seatedHighChair_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_03_seatedHighChair.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="92">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_breath_seatedHighChair_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_breath_seatedHighChair.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="93">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_01_seatedHighChair_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_01_seatedHighChair.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="94">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                    <Choice weight="100" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_02_seatedHighChair_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_02_seatedHighChair.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="95">
+                        <TransitionClassList>
+                          <Transition transition_class_name="Default" transition_duration_in="0.2666667" use_custom_transition_in="true" transition_type_in="linear" transition_mask_in="" transition_duration_out="0.2666667" use_custom_transition_out="false" transition_type_out="linear" transition_mask_out="" />
+                        </TransitionClassList>
+                      </Controller>
+                    </Choice>
+                  </RandomSelector>
+                </Choice>
+                <Choice value="child" />
+                <Choice value="teen" />
+                <Choice value="youngadult" />
+                <Choice value="adult" />
+                <Choice value="elder" />
+              </ParameterSelector>
+            </Choice>
+            <Choice value="sitIntimate--FullBody" track="normal" mask="">
+              <Reference target="1" />
+            </Choice>
+            <Choice value="-sit-UpperBody" track="normal" mask="Trackmask_UpperBody">
+              <Reference target="49" />
+            </Choice>
+            <Choice value="-stand-FullBody" track="normal" mask="">
+              <Reference target="91" />
+            </Choice>
+            <Choice value="-stand-UpperBody" track="normal" mask="Trackmask_UpperBody">
+              <Reference target="91" />
+            </Choice>
+          </PostureSelector>
+        </Choice>
+        <Choice value="dog">
+          <PostureSelector parameter="x:posture" unique_id="108">
+            <Choice value="Bathtub_Bubblebath--FullBody" track="normal" mask="" />
+            <Choice value="bathTub_TakeBath--FullBody" track="normal" mask="" />
+            <Choice value="carried_sim--FullBody" track="normal" mask="" />
+            <Choice value="kneel--UpperBody" track="normal" mask="" />
+            <Choice value="-layDown-FullBody" track="normal" mask="">
+              <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="101">
+                <Choice weight="50" avoidRepeat="False">
+                  <Controller target="x" controller="@ClipController(clip=ad_idle_listen_loop1_layDown_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="ad_idle_listen_loop1_layDown.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" tailoverlays="False" timescale="1" unique_id="99">
+                    <TransitionClassList />
+                  </Controller>
+                </Choice>
+                <Choice weight="50" avoidRepeat="False">
+                  <Controller target="x" controller="@ClipController(clip=ad_idle_listen_loop2_layDown_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="ad_idle_listen_loop2_layDown.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" tailoverlays="False" timescale="1" unique_id="100">
+                    <TransitionClassList />
+                  </Controller>
+                </Choice>
+              </RandomSelector>
+            </Choice>
+            <Choice value="-movingStand-UpperBody" track="normalplus" mask="Trackmask_UpperBody" />
+            <Choice value="pet_sitIntimate--FullBody" track="normal" mask="" />
+            <Choice value="-sit-FullBody" track="normal" mask="">
+              <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="104">
+                <Choice weight="50" avoidRepeat="False">
+                  <Controller target="x" controller="@ClipController(clip=ad_idle_listen_loop1_sitOnGround_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="ad_idle_listen_loop1_sitOnGround.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" tailoverlays="False" timescale="1" unique_id="102">
+                    <TransitionClassList />
+                  </Controller>
+                </Choice>
+                <Choice weight="33" avoidRepeat="False">
+                  <Controller target="x" controller="@ClipController(clip=ad_idle_listen_loop2_sitOnGround_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="ad_idle_listen_loop2_sitOnGround.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" tailoverlays="False" timescale="1" unique_id="103">
+                    <TransitionClassList />
+                  </Controller>
+                </Choice>
+              </RandomSelector>
+            </Choice>
+            <Choice value="sitInHighChair--FullBody" track="normal" mask="" />
+            <Choice value="sitIntimate--FullBody" track="normal" mask="" />
+            <Choice value="-sit-UpperBody" track="normal" mask="Trackmask_UpperBody">
+              <Reference target="104" />
+            </Choice>
+            <Choice value="-stand-FullBody" track="normal" mask="">
+              <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="107">
+                <Choice weight="50" avoidRepeat="False">
+                  <Controller target="x" controller="@ClipController(clip=ad_idle_listen_loop1_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="ad_idle_listen_loop1.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="105">
+                    <TransitionClassList />
+                  </Controller>
+                </Choice>
+                <Choice weight="50" avoidRepeat="False">
+                  <Controller target="x" controller="@ClipController(clip=ad_idle_listen_loop2_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="ad_idle_listen_loop2.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="106">
+                    <TransitionClassList />
+                  </Controller>
+                </Choice>
+              </RandomSelector>
+            </Choice>
+            <Choice value="-stand-UpperBody" track="normal" mask="Trackmask_UpperBody">
+              <Reference target="107" />
+            </Choice>
+          </PostureSelector>
+        </Choice>
+        <Choice value="smalldog">
+          <Reference target="108" />
+        </Choice>
+        <Choice value="cat">
+          <Reference target="108" />
+        </Choice>
+        <Choice value="fox">
+          <PostureSelector parameter="x:posture" unique_id="3000">
+            <Choice value="-sit-FullBody" track="normal" mask="" />
+            <Choice value="-sit-UpperBody" track="normal" mask="Trackmask_UpperBody" />
+            <Choice value="-stand-FullBody" track="normal" mask="">
+              <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="3001">
+                <Choice weight="50" avoidRepeat="False">
+                  <Controller target="x" controller="@ClipController(clip=ax_idle_listen_loop1_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="ax_idle_listen_loop1.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="3002">
+                    <TransitionClassList />
+                  </Controller>
+                </Choice>
+                <Choice weight="50" avoidRepeat="False">
+                  <Controller target="x" controller="@ClipController(clip=ax_idle_listen_loop2_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="ax_idle_listen_loop2.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="3003">
+                    <TransitionClassList />
+                  </Controller>
+                </Choice>
+              </RandomSelector>
+            </Choice>
+            <Choice value="-stand-UpperBody" track="normal" mask="Trackmask_UpperBody">
+              <Reference target="3001" />
+            </Choice>
+          </PostureSelector>
+        </Choice>
+      </ParameterSelector>
+    </MakeController>
+  </State>
+  <State name="StopNormalPlus" type="private" skippable="false" interrupt_this="false" focus="full body" facialoverlays="false" tailoverlays="true">
+    <description />
+    <PostureSelector parameter="x:posture" unique_id="110">
+      <Choice value="Bathtub_Bubblebath--FullBody" track="normal" mask="" />
+      <Choice value="bathTub_TakeBath--FullBody" track="normal" mask="" />
+      <Choice value="carried_sim--FullBody" track="normal" mask="" />
+      <Choice value="kneel--UpperBody" track="normal" mask="" />
+      <Choice value="-layDown-FullBody" track="normal" mask="" />
+      <Choice value="-movingStand-UpperBody" track="normalplus" mask="Trackmask_UpperBody" />
+      <Choice value="pet_sitIntimate--FullBody" track="normal" mask="" />
+      <Choice value="-sit-FullBody" track="normal" mask="" />
+      <Choice value="sitInHighChair--FullBody" track="normal" mask="" />
+      <Choice value="sitIntimate--FullBody" track="normal" mask="" />
+      <Choice value="-sit-UpperBody" track="normal" mask="Trackmask_UpperBody" />
+      <Choice value="-stand-FullBody" track="normal" mask="" />
+      <Choice value="-stand-UpperBody" track="normal" mask="Trackmask_UpperBody" />
+    </PostureSelector>
+  </State>
+  <State name="mirrored" type="private" skippable="false" interrupt_this="false" focus="full body" facialoverlays="false" tailoverlays="true">
+    <description />
+    <ParameterSelector parameter="sitTemplate:isMirroredPart" unique_id="112">
+      <Choice value="false" />
+      <Choice value="true">
+        <SetMirror target="x" mirror="true" unique_id="111" />
+      </Choice>
+    </ParameterSelector>
+    <ParameterSelector parameter="postureObject:isMirroredPart" unique_id="114">
+      <Choice value="false" />
+      <Choice value="true">
+        <SetMirror target="x" mirror="true" unique_id="113" />
+      </Choice>
+    </ParameterSelector>
+  </State>
+</ASM>

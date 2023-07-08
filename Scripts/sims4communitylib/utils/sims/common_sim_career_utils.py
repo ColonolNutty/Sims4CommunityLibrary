@@ -378,13 +378,13 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
     def randomize_career(
         cls,
         sim_info: SimInfo,
-        randomize_career_level: bool=True,
-        remove_all_existing_careers: bool=True,
-        randomize_agency: bool=True,
-        use_career_history: bool=True,
-        force_out_of_retirement: bool=True,
-        force_quit_previous_jobs: bool=True,
-        check_availability: bool=True
+        randomize_career_level: bool = True,
+        remove_all_existing_careers: bool = True,
+        randomize_agency: bool = True,
+        use_career_history: bool = True,
+        force_out_of_retirement: bool = True,
+        force_quit_previous_jobs: bool = True,
+        check_availability: bool = True
     ) -> CommonExecutionResult:
         """set_random_career(\
             sim_info,\
@@ -494,24 +494,24 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
         cls,
         sim_info: SimInfo,
         career_identifier: Union[int, Career],
-        remove_all_existing_careers: bool=False,
-        randomize_agency: bool=True,
-        use_career_history: bool=True,
-        force_out_of_retirement: bool=False,
-        force_quit_previous_jobs: bool=False,
-        show_confirmation_dialog: bool=False,
-        user_level: int=None,
-        career_level: CareerLevel=None,
-        give_skipped_rewards: bool=True,
-        defer_rewards: bool=False,
-        show_post_quit_message: bool=True,
-        schedule_shift_override: CareerShiftType=CareerShiftType.ALL_DAY,
-        show_join_message: bool=True,
-        disallowed_reward_types: Tuple[RewardType]=(),
-        force_rewards_to_sim_info_inventory: bool=False,
-        defer_first_assignment: bool=False,
-        schedule_init_only: bool=False,
-        allow_outfit_generation: bool=True
+        remove_all_existing_careers: bool = False,
+        randomize_agency: bool = True,
+        use_career_history: bool = True,
+        force_out_of_retirement: bool = False,
+        force_quit_previous_jobs: bool = False,
+        show_confirmation_dialog: bool = False,
+        user_level: int = None,
+        career_level: CareerLevel = None,
+        give_skipped_rewards: bool = True,
+        defer_rewards: bool = False,
+        show_post_quit_message: bool = True,
+        schedule_shift_override: CareerShiftType = CareerShiftType.ALL_DAY,
+        show_join_message: bool = True,
+        disallowed_reward_types: Tuple[RewardType] = (),
+        force_rewards_to_sim_info_inventory: bool = False,
+        defer_first_assignment: bool = False,
+        schedule_init_only: bool = False,
+        allow_outfit_generation: bool = True
     ) -> CommonExecutionResult:
         """add_career(\
             sim_info,\
@@ -593,7 +593,7 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
             cls.get_log().format_with_message('Sim already had the specified career.', sim=sim_info, career=career)
             return CommonExecutionResult.TRUE
 
-        picked_track = None
+        picked_track: Union[TunableCareerTrack, None] = None
         if career_level is None and user_level is not None:
             (career_level_index, _, picked_track) = CommonCareerUtils.determine_entry_level_into_career_from_user_level(career, user_level)
             picked_track: TunableCareerTrack = picked_track
@@ -641,23 +641,23 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
         cls,
         career_tracker: CareerTracker,
         new_career: Career,
-        randomize_agency: bool=True,
-        use_career_history: bool=True,
-        force_out_of_retirement: bool=False,
-        force_quit_previous_jobs: bool=False,
-        show_confirmation_dialog=False,
-        user_level_override: int=None,
-        career_level_override: CareerLevel=None,
-        give_skipped_rewards: bool=True,
-        defer_rewards: bool=False,
-        post_quit_msg: bool=True,
-        schedule_shift_override=CareerShiftType.ALL_DAY,
-        show_join_msg: bool=True,
-        disallowed_reward_types: Tuple[RewardType]=(),
-        force_rewards_to_sim_info_inventory: bool=False,
-        defer_first_assignment: bool=False,
-        schedule_init_only: bool=False,
-        allow_outfit_generation: bool=True
+        randomize_agency: bool = True,
+        use_career_history: bool = True,
+        force_out_of_retirement: bool = False,
+        force_quit_previous_jobs: bool = False,
+        show_confirmation_dialog = False,
+        user_level_override: int = None,
+        career_level_override: CareerLevel = None,
+        give_skipped_rewards: bool = True,
+        defer_rewards: bool = False,
+        post_quit_msg: bool = True,
+        schedule_shift_override = CareerShiftType.ALL_DAY,
+        show_join_msg: bool = True,
+        disallowed_reward_types: Tuple[RewardType] = (),
+        force_rewards_to_sim_info_inventory: bool = False,
+        defer_first_assignment: bool = False,
+        schedule_init_only: bool = False,
+        allow_outfit_generation: bool = True
     ) -> CommonExecutionResult:
         if show_confirmation_dialog:
             (level, _, track) = new_career.get_career_entry_data(career_history=career_tracker._career_history, user_level_override=user_level_override, career_level_override=career_level_override)
@@ -765,8 +765,19 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
         return CommonExecutionResult.TRUE
 
     @classmethod
-    def remove_careers(cls, sim_info: SimInfo, show_post_quit_message: bool=False, update_ui_after_remove: bool=True, include_career_callback: Callable[[Career], bool]=None) -> None:
-        """remove_careers(sim_info, show_post_quit_message=False, update_ui_after_remove=True, include_career_callback=None)
+    def remove_careers(
+        cls,
+        sim_info: SimInfo,
+        show_post_quit_message: bool = False,
+        update_ui_after_remove: bool = True,
+        include_career_callback: Callable[[Career], bool] = None
+    ) -> None:
+        """remove_careers(\
+            sim_info,\
+            show_post_quit_message=False,\
+            update_ui_after_remove=True,\
+            include_career_callback=None\
+        )
 
         Remove Careers of a Sim.
 
@@ -795,19 +806,19 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
     def _join_career(
         cls,
         career: Career,
-        randomize_agency: bool=True,
-        career_history: CareerHistory=None,
-        user_level_override: int=None,
-        career_level_override: int=None,
-        give_skipped_rewards: bool=True,
-        defer_rewards: bool=False,
-        schedule_shift_override: CareerShiftType=CareerShiftType.ALL_DAY,
-        show_join_msg: bool=True,
-        disallowed_reward_types: Tuple[RewardType]=(),
-        force_rewards_to_sim_info_inventory: bool=False,
-        defer_first_assignment: bool=False,
-        schedule_init_only: bool=False,
-        allow_outfit_generation: bool=True
+        randomize_agency: bool = True,
+        career_history: CareerHistory = None,
+        user_level_override: int = None,
+        career_level_override: int = None,
+        give_skipped_rewards: bool = True,
+        defer_rewards: bool = False,
+        schedule_shift_override: CareerShiftType = CareerShiftType.ALL_DAY,
+        show_join_msg: bool = True,
+        disallowed_reward_types: Tuple[RewardType] = (),
+        force_rewards_to_sim_info_inventory: bool = False,
+        defer_first_assignment: bool = False,
+        schedule_init_only: bool = False,
+        allow_outfit_generation: bool = True
     ) -> CommonExecutionResult:
         (new_level, new_user_level, current_track) = career.get_career_entry_data(career_history=career_history, user_level_override=user_level_override, career_level_override=career_level_override)
         if defer_rewards:
@@ -818,7 +829,7 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
         career._user_level = new_user_level
         career._current_shift_type = schedule_shift_override
         if career_history is not None:
-            career._load_days_worked_commodities(career_history)
+            career._load_days_worked_commodities(career_history, current_track)
         career._reset_career_objectives(career._current_track, new_level)
         starting_level = career._sim_info.career_tracker.get_highest_level_reached(career.guid64)
         career._sim_info.career_tracker.update_history(career)
@@ -851,7 +862,12 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
         return CommonExecutionResult.TRUE
 
     @classmethod
-    def determine_entry_level_into_career_for_sim(cls, sim_info: SimInfo, career: Career, use_career_history: bool=True) -> Tuple[Union[int, None], Union[int, None], Union[TunableCareerTrack, None]]:
+    def determine_entry_level_into_career_for_sim(
+        cls,
+        sim_info: SimInfo,
+        career: Career,
+        use_career_history: bool = True
+    ) -> Tuple[Union[int, None], Union[int, None], Union[TunableCareerTrack, None]]:
         """determine_entry_level_into_career_for_sim(sim_info, career, use_career_history=True)
 
         Determine the entry level into a Career for a Sim.

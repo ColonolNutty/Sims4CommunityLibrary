@@ -426,7 +426,8 @@ class CommonConsoleCommandService(CommonService, HasClassLog):
                         output(f'Use the help command "{help_command_name} {name}" to see what arguments are needed!')
                         return False
                     if len(args) < num_of_required_arguments:
-                        output('Missing some arguments.')
+                        num_of_args = len(args)
+                        output(f'Missing some arguments. Specified Args: {num_of_args}, Required Args: {num_of_required_arguments}')
                         output(f'Use the help command "{help_command_name} {name}" to see what arguments are required!')
                         return False
                     kwargs['_account'] = _session_id
