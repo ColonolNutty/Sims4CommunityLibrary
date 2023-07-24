@@ -1286,6 +1286,7 @@ class CommonStatisticId(CommonInt):
     POLITE_HUNGER: 'CommonStatisticId' = 27956
     PREGNANCY: 'CommonStatisticId' = 16640
     PREGNANCY_CAT: 'CommonStatisticId' = 169190
+    PREGNANCY_HORSE: 'CommonStatisticId' = 323070
     PREGNANCY_CONTRACTION_MAX: 'CommonStatisticId' = 76975
     PREGNANCY_CONTRACTION_TIMER: 'CommonStatisticId' = 76973
     PREGNANCY_DISCOVERY: 'CommonStatisticId' = 16641

@@ -352,6 +352,102 @@ class _S4CLAutoApplyTraits:
                         CommonTraitUtils.add_trait(sim_info, CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_FOX)
                     else:
                         CommonTraitUtils.add_trait(sim_info, CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_FOX)
+        elif CommonSpeciesUtils.is_horse(sim_info):
+            # Main Trait
+            CommonTraitUtils.remove_trait(
+                sim_info,
+                CommonTraitId.S4CL_MAIN_TRAIT_HUMAN,
+                CommonTraitId.S4CL_MAIN_TRAIT_LARGE_DOG,
+                CommonTraitId.S4CL_MAIN_TRAIT_SMALL_DOG,
+                CommonTraitId.S4CL_MAIN_TRAIT_CAT,
+                CommonTraitId.S4CL_MAIN_TRAIT_FOX,
+            )
+            if not CommonTraitUtils.has_trait(sim_info, CommonTraitId.S4CL_MAIN_TRAIT_HORSE):
+                CommonTraitUtils.add_trait(sim_info, CommonTraitId.S4CL_MAIN_TRAIT_HORSE)
+            # Toilet Standing/Sitting/Unknown
+            CommonTraitUtils.remove_trait(
+                sim_info,
+                CommonTraitId.GENDER_OPTIONS_TOILET_STANDING,
+                CommonTraitId.GENDER_OPTIONS_TOILET_SITTING,
+                CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_LARGE_DOG,
+                CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_LARGE_DOG,
+                CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_SMALL_DOG,
+                CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_SMALL_DOG,
+                CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_CAT,
+                CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_CAT,
+                CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_FOX,
+                CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_FOX,
+            )
+            if not CommonTraitUtils.has_trait(sim_info,
+                                              CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_HORSE) \
+                    and not CommonTraitUtils.has_trait(sim_info,
+                                                       CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_HORSE) \
+                    and not CommonTraitUtils.has_trait(sim_info,
+                                                       CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_UNKNOWN):
+                if CommonGenderUtils.is_male(sim_info):
+                    CommonTraitUtils.add_trait(sim_info,
+                                               CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_HORSE)
+                else:
+                    CommonTraitUtils.add_trait(sim_info,
+                                               CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_HORSE)
+            # Can Impregnate
+            CommonTraitUtils.remove_trait(
+                sim_info,
+                CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE,
+                CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_LARGE_DOG,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_LARGE_DOG,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_SMALL_DOG,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_SMALL_DOG,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_CAT,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_CAT,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_FOX,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_FOX,
+            )
+            if not CommonTraitUtils.has_trait(sim_info,
+                                              CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_HORSE) \
+                    and not CommonTraitUtils.has_trait(sim_info,
+                                                       CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_HORSE):
+                if CommonGenderUtils.is_male(sim_info):
+                    if CommonTraitUtils.has_trait(sim_info,
+                                                  CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
+                        CommonTraitUtils.add_trait(sim_info,
+                                                   CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_HORSE)
+                    else:
+                        CommonTraitUtils.add_trait(sim_info,
+                                                   CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_HORSE)
+                else:
+                    CommonTraitUtils.add_trait(sim_info,
+                                               CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_HORSE)
+            # Can Be Impregnated
+            CommonTraitUtils.remove_trait(
+                sim_info,
+                CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED,
+                CommonTraitId.GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_LARGE_DOG,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_LARGE_DOG,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_SMALL_DOG,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_SMALL_DOG,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_CAT,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_CAT,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_FOX,
+                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_FOX,
+            )
+            if not CommonTraitUtils.has_trait(sim_info,
+                                              CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_HORSE) \
+                    and not CommonTraitUtils.has_trait(sim_info,
+                                                       CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_HORSE):
+                if CommonGenderUtils.is_male(sim_info):
+                    CommonTraitUtils.add_trait(sim_info,
+                                               CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_HORSE)
+                else:
+                    if CommonTraitUtils.has_trait(sim_info,
+                                                  CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
+                        CommonTraitUtils.add_trait(sim_info,
+                                                   CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_HORSE)
+                    else:
+                        CommonTraitUtils.add_trait(sim_info,
+                                                   CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_HORSE)
 
 
 @CommonEventRegistry.handle_events(ModInfo.get_identity())

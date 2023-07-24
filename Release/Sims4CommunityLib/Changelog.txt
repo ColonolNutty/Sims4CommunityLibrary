@@ -1,3 +1,7 @@
+v2.8:
+- Added Horse support to many places. (Motives, Species, Voices, Sim Types, Sim Demographics, etc.)
+- Updated the Traits, Buffs, Skills, Careers, and Tags enums with new values.
+
 v2.7:
 - Added an input option for showing multiple text fields
 - Added a dialog for showing multiple text fields.

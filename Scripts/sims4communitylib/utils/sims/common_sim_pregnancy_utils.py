@@ -383,6 +383,11 @@ class CommonSimPregnancyUtils(HasClassLog):
             if is_female:
                 log.debug('\'{}\' is Female.'.format(sim_name))
                 return CommonBuffId.PREGNANCY_IN_LABOR_PET_CAT
+        elif CommonSpeciesUtils.is_horse(sim_info):
+            log.debug('\'{}\' is a Horse.'.format(sim_name))
+            if is_female:
+                log.debug('\'{}\' is Female.'.format(sim_name))
+                return CommonBuffId.PREGNANCY_IN_LABOR_PET_HORSE
         log.debug('No appropriate Buff located to induce labor in \'{}\'.'.format(sim_name))
         return -1
 
@@ -426,6 +431,8 @@ class CommonSimPregnancyUtils(HasClassLog):
             return CommonStatisticId.PREGNANCY_CAT
         elif CommonSpeciesUtils.is_fox(sim_info):
             return CommonStatisticId.PREGNANCY
+        elif CommonSpeciesUtils.is_horse(sim_info):
+            return CommonStatisticId.PREGNANCY_HORSE
         return None
 
     @classmethod
@@ -449,6 +456,8 @@ class CommonSimPregnancyUtils(HasClassLog):
             return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_CAT
         elif CommonSpeciesUtils.is_fox(sim_info):
             return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_FOX
+        elif CommonSpeciesUtils.is_horse(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_HORSE
         return None
 
     @classmethod
@@ -472,6 +481,8 @@ class CommonSimPregnancyUtils(HasClassLog):
             return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_CAT
         elif CommonSpeciesUtils.is_fox(sim_info):
             return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_FOX
+        elif CommonSpeciesUtils.is_horse(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_HORSE
         return None
 
     @classmethod
@@ -495,6 +506,8 @@ class CommonSimPregnancyUtils(HasClassLog):
             return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_CAT
         elif CommonSpeciesUtils.is_fox(sim_info):
             return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_FOX
+        elif CommonSpeciesUtils.is_horse(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_HORSE
         return None
 
     @classmethod
@@ -518,6 +531,8 @@ class CommonSimPregnancyUtils(HasClassLog):
             return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_CAT
         elif CommonSpeciesUtils.is_fox(sim_info):
             return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_FOX
+        elif CommonSpeciesUtils.is_horse(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_HORSE
         return None
 
 

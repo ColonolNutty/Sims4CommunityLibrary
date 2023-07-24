@@ -72,6 +72,10 @@ class CommonExampleApplyBareFeetAppearanceModifier(AppearanceModifier):
             # Fox
             adult_fox_bare_feet_id = 277492
 
+            # Horse
+            adult_horse_bare_feet_id = 337140
+            child_horse_bare_feet_id = 343457
+
             bare_feet_cas_part_id = None
             if CommonAgeUtils.is_teen_adult_or_elder(original_unmodified_sim_info):
                 if CommonSpeciesUtils.is_human(original_unmodified_sim_info):
@@ -87,6 +91,8 @@ class CommonExampleApplyBareFeetAppearanceModifier(AppearanceModifier):
                     bare_feet_cas_part_id = adult_cat_bare_feet_id
                 elif CommonSpeciesUtils.is_fox(original_unmodified_sim_info):
                     bare_feet_cas_part_id = adult_fox_bare_feet_id
+                elif CommonSpeciesUtils.is_horse(original_unmodified_sim_info):
+                    bare_feet_cas_part_id = adult_horse_bare_feet_id
             elif CommonAgeUtils.is_child(original_unmodified_sim_info):
                 if CommonSpeciesUtils.is_human(original_unmodified_sim_info):
                     bare_feet_cas_part_id = child_human_bare_feet_id
@@ -94,6 +100,8 @@ class CommonExampleApplyBareFeetAppearanceModifier(AppearanceModifier):
                     bare_feet_cas_part_id = child_dog_bare_feet_id
                 elif CommonSpeciesUtils.is_cat(original_unmodified_sim_info):
                     bare_feet_cas_part_id = child_cat_bare_feet_id
+                elif CommonSpeciesUtils.is_horse(original_unmodified_sim_info):
+                    bare_feet_cas_part_id = child_horse_bare_feet_id
             elif CommonAgeUtils.is_toddler(original_unmodified_sim_info):
                 bare_feet_cas_part_id = toddler_human_bare_feet_id
 

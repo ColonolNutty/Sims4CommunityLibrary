@@ -44,6 +44,9 @@ class CommonInteractionId(CommonInt):
     FOX_STAND: 'CommonInteractionId' = 257164
     FOX_STAND_PASSIVE: 'CommonInteractionId' = 257160
 
+    HORSE_STAND: 'CommonInteractionId' = 120430
+    HORSE_STAND_PASSIVE: 'CommonInteractionId' = 120431
+
     # Deliver Baby
     DELIVER_BABY_CAT: 'CommonInteractionId' = 159901
     DELIVER_BABY_DOG: 'CommonInteractionId' = 159902

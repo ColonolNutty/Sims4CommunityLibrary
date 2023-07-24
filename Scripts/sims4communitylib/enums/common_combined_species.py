@@ -20,6 +20,7 @@ class CommonCombinedSpecies(CommonInt):
     DOG: 'CommonCombinedSpecies' = ...  # Large Dog, Small Dog
     CAT: 'CommonCombinedSpecies' = ...  # Cat
     FOX: 'CommonCombinedSpecies' = ...  # Fox
+    HORSE: 'CommonCombinedSpecies' = ...  # Horse
 
     @classmethod
     def convert_to_signature(cls, combined_species: 'CommonCombinedSpecies') -> str:
@@ -40,6 +41,7 @@ class CommonCombinedSpecies(CommonInt):
             CommonCombinedSpecies.DOG: 'Dog',
             CommonCombinedSpecies.CAT: 'Cat',
             CommonCombinedSpecies.FOX: 'Fox',
+            CommonCombinedSpecies.HORSE: 'Horse',
         }
         return mapping.get(combined_species, combined_species.name)
 
@@ -55,10 +57,10 @@ class CommonCombinedSpecies(CommonInt):
         :rtype: Tuple[str]
         """
         if combined_species == CommonCombinedSpecies.ANIMAL:
-            result: Tuple[str, ...] = (*cls.convert_to_enum_xml(CommonCombinedSpecies.DOG), *cls.convert_to_enum_xml(CommonCombinedSpecies.CAT), *cls.convert_to_enum_xml(CommonCombinedSpecies.FOX))
+            result: Tuple[str, ...] = (*cls.convert_to_enum_xml(CommonCombinedSpecies.DOG), *cls.convert_to_enum_xml(CommonCombinedSpecies.CAT), *cls.convert_to_enum_xml(CommonCombinedSpecies.FOX), *cls.convert_to_enum_xml(CommonCombinedSpecies.HORSE))
             return result
         if combined_species == CommonCombinedSpecies.PET:
-            result: Tuple[str, ...] = (*cls.convert_to_enum_xml(CommonCombinedSpecies.DOG), *cls.convert_to_enum_xml(CommonCombinedSpecies.CAT))
+            result: Tuple[str, ...] = (*cls.convert_to_enum_xml(CommonCombinedSpecies.DOG), *cls.convert_to_enum_xml(CommonCombinedSpecies.CAT), *cls.convert_to_enum_xml(CommonCombinedSpecies.HORSE))
             return result
         if combined_species == CommonCombinedSpecies.NON_PET:
             result: Tuple[str, ...] = (*cls.convert_to_enum_xml(CommonCombinedSpecies.HUMAN),)
@@ -69,6 +71,7 @@ class CommonCombinedSpecies(CommonInt):
             CommonCombinedSpecies.DOG: ('<E>DOG</E>',),
             CommonCombinedSpecies.CAT: ('<E>CAT</E>',),
             CommonCombinedSpecies.FOX: ('<E>FOX</E>',),
+            CommonCombinedSpecies.HORSE: ('<E>HORSE</E>',),
         }
         return mapping.get(combined_species, tuple())
 
@@ -88,5 +91,6 @@ class CommonCombinedSpecies(CommonInt):
             CommonCombinedSpecies.PET,
             CommonCombinedSpecies.DOG,
             CommonCombinedSpecies.CAT,
-            CommonCombinedSpecies.FOX
+            CommonCombinedSpecies.FOX,
+            CommonCombinedSpecies.HORSE
         )

@@ -168,6 +168,8 @@ class CommonSimInteractionUtils(HasClassLog):
             return CommonInteractionId.CAT_STAND
         elif CommonSpeciesUtils.is_fox(sim_info):
             return CommonInteractionId.FOX_STAND
+        elif CommonSpeciesUtils.is_horse(sim_info):
+            return CommonInteractionId.HORSE_STAND
         return -1
 
     @classmethod
@@ -190,6 +192,8 @@ class CommonSimInteractionUtils(HasClassLog):
             return CommonInteractionId.CAT_STAND_PASSIVE
         elif CommonSpeciesUtils.is_fox(sim_info):
             return CommonInteractionId.FOX_STAND_PASSIVE
+        elif CommonSpeciesUtils.is_horse(sim_info):
+            return CommonInteractionId.HORSE_STAND_PASSIVE
         return -1
 
     @classmethod

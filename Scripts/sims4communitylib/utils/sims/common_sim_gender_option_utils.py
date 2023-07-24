@@ -741,6 +741,8 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
             return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_CAT
         elif CommonSpeciesUtils.is_fox(sim_info):
             return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_FOX
+        elif CommonSpeciesUtils.is_horse(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_HORSE
         return None
 
     @staticmethod
@@ -764,6 +766,8 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
             return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_CAT
         elif CommonSpeciesUtils.is_fox(sim_info):
             return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_FOX
+        elif CommonSpeciesUtils.is_horse(sim_info):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_HORSE
         return None
 
     @classmethod

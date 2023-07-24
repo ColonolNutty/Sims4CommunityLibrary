@@ -268,6 +268,8 @@ class CommonSimDeathUtils(_HasS4CLClassLog):
                 return 159835  # death_OldAge_Cat
             elif CommonSpeciesUtils.is_dog(sim_info):
                 return 159868  # death_OldAge_Dog
+            elif CommonSpeciesUtils.is_horse(sim_info):
+                return 321074  # death_OldAge_Horse
             else:
                 return 265869  # death_OldAge_Fox
 

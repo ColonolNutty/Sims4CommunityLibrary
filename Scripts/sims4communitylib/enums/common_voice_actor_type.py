@@ -23,6 +23,8 @@ class CommonVoiceActorType(CommonInt):
     # Human
     TODDLER_HUMAN_AMBIGUOUS_1: 'CommonVoiceActorType' = 1635194332
 
+    INFANT_HUMAN_AMBIGUOUS_1: 'CommonVoiceActorType' = 1752637603
+
     CHILD_HUMAN_AMBIGUOUS_1: 'CommonVoiceActorType' = 1853303381
     CHILD_HUMAN_AMBIGUOUS_2: 'CommonVoiceActorType' = 1853303382
 
@@ -50,6 +52,10 @@ class CommonVoiceActorType(CommonInt):
 
     # Fox
     ADULT_FOX_AMBIGUOUS_1: 'CommonVoiceActorType' = 1886858530
+
+    # Horse
+    ADULT_HORSE_AMBIGUOUS_1: 'CommonVoiceActorType' = 1886858546
+    CHILD_HORSE_AMBIGUOUS_1: 'CommonVoiceActorType' = 1853303388
 
     @classmethod
     def get_all(cls, exclude_values: Iterator['CommonVoiceActorType'] = None) -> Tuple['CommonVoiceActorType']:
