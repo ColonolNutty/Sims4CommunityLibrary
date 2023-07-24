@@ -90,6 +90,8 @@ class CommonSpecies(CommonInt):
             return CommonSpecies.LARGE_DOG
         elif CommonSpeciesUtils.is_cat(sim_info):
             return CommonSpecies.CAT
+        elif CommonSpeciesUtils.is_horse(sim_info):
+            return CommonSpecies.HORSE
         return CommonSpecies.INVALID
 
     @staticmethod
@@ -172,7 +174,7 @@ class CommonSpecies(CommonInt):
             CommonSpecies.SMALL_DOG: CommonStringId.SMALL_DOG,
             CommonSpecies.CAT: CommonStringId.CAT,
             CommonSpecies.FOX: CommonStringId.FOX,
-            CommonSpecies.HORSE: CommonStringId.HORSE
+            CommonSpecies.HORSE: CommonStringId.HORSE,
         }
         if isinstance(value, int) and not isinstance(value, CommonSpecies):
             from sims4communitylib.utils.common_resource_utils import CommonResourceUtils

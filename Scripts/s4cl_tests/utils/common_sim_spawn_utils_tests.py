@@ -53,3 +53,13 @@ class _CommonSimSpawnUtilsTests:
         finally:
             CommonSimSpawnUtils.delete_sim(sim_info, source='S4CL Test Clean Up')
 
+    @staticmethod
+    @CommonTestService.test()
+    def _should_spawn_and_despawn_horse_sim_properly() -> None:
+        sim_info = CommonSimSpawnUtils.create_horse_sim_info(first_name='Tester', last_name='McTest', source='testing')
+        try:
+            CommonAssertionUtils.is_true(sim_info is not None)
+            CommonAssertionUtils.is_true(CommonSimSpawnUtils.despawn_sim(sim_info, cause='S4CL Testing Despawn.'))
+        finally:
+            CommonSimSpawnUtils.delete_sim(sim_info, source='S4CL Test Clean Up')
+

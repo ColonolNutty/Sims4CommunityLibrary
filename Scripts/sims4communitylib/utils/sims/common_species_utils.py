@@ -107,7 +107,7 @@ class CommonSpeciesUtils:
         :return: True, if the Species is a Pet Species (Large Dog, Small Dog, Cat). False, if not.
         :rtype: bool
         """
-        return CommonSpeciesUtils.is_dog_species(species) or CommonSpeciesUtils.is_cat_species(species)
+        return CommonSpeciesUtils.is_dog_species(species) or CommonSpeciesUtils.is_cat_species(species) or CommonSpeciesUtils.is_horse_species(species)
 
     @staticmethod
     def is_animal_species(species: Union[Species, int]) -> bool:
@@ -168,10 +168,25 @@ class CommonSpeciesUtils:
         return species == Species.FOX
 
     @staticmethod
+    def is_horse_species(species: Union[Species, int]) -> bool:
+        """is_horse_species(species)
+
+        Determine if a Species is a Horse.
+
+        :param species: The Species to check.
+        :type species: Union[Species, int]
+        :return: True, if the Species is a Horse Species. False, if not.
+        :rtype: bool
+        """
+        if not hasattr(Species, 'HORSE'):
+            return False
+        return species == Species.HORSE
+
+    @staticmethod
     def is_dog(sim_info: SimInfo) -> bool:
         """is_dog(sim_info)
 
-        Determine if a sim is a Dog.
+        Determine if a Sim is a Dog.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -184,7 +199,7 @@ class CommonSpeciesUtils:
     def is_human(sim_info: SimInfo) -> bool:
         """is_human(sim_info)
 
-        Determine if a sim is a Human.
+        Determine if a Sim is a Human.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -197,7 +212,7 @@ class CommonSpeciesUtils:
     def is_pet(sim_info: SimInfo) -> bool:
         """is_pet(sim_info)
 
-        Determine if a sim is a Pet.
+        Determine if a Sim is a Pet.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -210,7 +225,7 @@ class CommonSpeciesUtils:
     def is_animal(sim_info: SimInfo) -> bool:
         """is_animal(sim_info)
 
-        Determine if a sim is an Animal.
+        Determine if a Sim is an Animal.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -223,7 +238,7 @@ class CommonSpeciesUtils:
     def is_large_dog(sim_info: SimInfo) -> bool:
         """is_large_dog(sim_info)
 
-        Determine if a sim is a Large Dog.
+        Determine if a Sim is a Large Dog.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -238,7 +253,7 @@ class CommonSpeciesUtils:
     def is_small_dog(sim_info: SimInfo) -> bool:
         """is_small_dog(sim_info)
 
-        Determine if a sim is a Small Dog.
+        Determine if a Sim is a Small Dog.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -253,7 +268,7 @@ class CommonSpeciesUtils:
     def is_cat(sim_info: SimInfo) -> bool:
         """is_cat(sim_info)
 
-        Determine if a sim is a Cat.
+        Determine if a Sim is a Cat.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -268,7 +283,7 @@ class CommonSpeciesUtils:
     def is_fox(sim_info: SimInfo) -> bool:
         """is_fox(sim_info)
 
-        Determine if a sim is a Fox.
+        Determine if a Sim is a Fox.
 
         :param sim_info: The Sim to check.
         :type sim_info: SimInfo
@@ -276,3 +291,16 @@ class CommonSpeciesUtils:
         :rtype: bool
         """
         return CommonSpeciesUtils.is_fox_species(CommonSpeciesUtils.get_species(sim_info)) or CommonTraitUtils.has_trait(sim_info, CommonTraitId.SPECIES_FOX)
+
+    @staticmethod
+    def is_horse(sim_info: SimInfo) -> bool:
+        """is_horse(sim_info)
+
+        Determine if a Sim is a Horse.
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is a Horse. False, if not.
+        :rtype: bool
+        """
+        return CommonSpeciesUtils.is_horse_species(CommonSpeciesUtils.get_species(sim_info))

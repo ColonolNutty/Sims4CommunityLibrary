@@ -199,6 +199,7 @@ class CommonSimDemographicTypeUtils(_HasS4CLClassLog):
             CommonSimDemographicType.LARGE_DOG: CommonSpecies.LARGE_DOG,
             CommonSimDemographicType.CAT: CommonSpecies.CAT,
             CommonSimDemographicType.FOX: CommonSpecies.FOX,
+            CommonSimDemographicType.HORSE: CommonSpecies.HORSE,
         }
         return mapping.get(value, CommonSpecies.INVALID)
 
@@ -213,6 +214,7 @@ class CommonSimDemographicTypeUtils(_HasS4CLClassLog):
             CommonSpecies.LARGE_DOG: CommonSimDemographicType.LARGE_DOG,
             CommonSpecies.CAT: CommonSimDemographicType.CAT,
             CommonSpecies.FOX: CommonSimDemographicType.FOX,
+            CommonSpecies.HORSE: CommonSimDemographicType.HORSE,
         }
         return mapping.get(value, CommonSimDemographicType.NONE)
 
