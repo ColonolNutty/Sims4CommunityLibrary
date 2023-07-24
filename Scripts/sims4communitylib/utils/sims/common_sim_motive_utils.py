@@ -511,56 +511,64 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
                 CommonSpecies.CAT: CommonMotiveId.PET_CAT_HUNGER,
                 CommonSpecies.LARGE_DOG: CommonMotiveId.PET_DOG_HUNGER,
                 CommonSpecies.SMALL_DOG: CommonMotiveId.PET_DOG_HUNGER,
-                CommonSpecies.FOX: CommonMotiveId.HUNGER
+                CommonSpecies.FOX: CommonMotiveId.HUNGER,
+                CommonSpecies.HORSE: CommonMotiveId.PET_HORSE_HUNGER
             },
             CommonMotiveId.HYGIENE: {
                 CommonSpecies.HUMAN: CommonMotiveId.HYGIENE,
                 CommonSpecies.CAT: CommonMotiveId.PET_CAT_HYGIENE,
                 CommonSpecies.LARGE_DOG: CommonMotiveId.PET_DOG_HYGIENE,
                 CommonSpecies.SMALL_DOG: CommonMotiveId.PET_DOG_HYGIENE,
-                CommonSpecies.FOX: CommonMotiveId.ANIMAL_FOX_HYGIENE
+                CommonSpecies.FOX: CommonMotiveId.ANIMAL_FOX_HYGIENE,
+                CommonSpecies.HORSE: CommonMotiveId.PET_HORSE_HYGIENE
             },
             CommonMotiveId.MERMAID_HYDRATION: {
                 CommonSpecies.HUMAN: CommonMotiveId.HYGIENE,
                 CommonSpecies.CAT: CommonMotiveId.PET_CAT_HYGIENE,
                 CommonSpecies.LARGE_DOG: CommonMotiveId.PET_DOG_HYGIENE,
                 CommonSpecies.SMALL_DOG: CommonMotiveId.PET_DOG_HYGIENE,
-                CommonSpecies.FOX: CommonMotiveId.HYGIENE
+                CommonSpecies.FOX: CommonMotiveId.HYGIENE,
+                CommonSpecies.HORSE: CommonMotiveId.PET_HORSE_HYGIENE
             },
             CommonMotiveId.ENERGY: {
                 CommonSpecies.HUMAN: CommonMotiveId.ENERGY,
                 CommonSpecies.CAT: CommonMotiveId.PET_CAT_ENERGY,
                 CommonSpecies.LARGE_DOG: CommonMotiveId.PET_DOG_ENERGY,
                 CommonSpecies.SMALL_DOG: CommonMotiveId.PET_DOG_ENERGY,
-                CommonSpecies.FOX: CommonMotiveId.ENERGY
+                CommonSpecies.FOX: CommonMotiveId.ENERGY,
+                CommonSpecies.HORSE: CommonMotiveId.PET_HORSE_ENERGY
             },
             CommonMotiveId.BLADDER: {
                 CommonSpecies.HUMAN: CommonMotiveId.BLADDER,
                 CommonSpecies.CAT: CommonMotiveId.PET_CAT_BLADDER,
                 CommonSpecies.LARGE_DOG: CommonMotiveId.PET_DOG_BLADDER,
                 CommonSpecies.SMALL_DOG: CommonMotiveId.PET_DOG_BLADDER,
-                CommonSpecies.FOX: CommonMotiveId.ANIMAL_FOX_BLADDER
+                CommonSpecies.FOX: CommonMotiveId.ANIMAL_FOX_BLADDER,
+                CommonSpecies.HORSE: CommonMotiveId.PET_HORSE_BLADDER
             },
             CommonMotiveId.BOWEL: {
                 CommonSpecies.HUMAN: CommonMotiveId.BOWEL,
                 CommonSpecies.CAT: CommonMotiveId.PET_CAT_BOWEL,
                 CommonSpecies.LARGE_DOG: CommonMotiveId.PET_DOG_BOWEL,
                 CommonSpecies.SMALL_DOG: CommonMotiveId.PET_DOG_BOWEL,
-                CommonSpecies.FOX: CommonMotiveId.BOWEL
+                CommonSpecies.FOX: CommonMotiveId.BOWEL,
+                CommonSpecies.HORSE: CommonMotiveId.BOWEL
             },
             CommonMotiveId.SOCIAL: {
                 CommonSpecies.HUMAN: CommonMotiveId.SOCIAL,
                 CommonSpecies.CAT: CommonMotiveId.PET_CAT_AFFECTION,
                 CommonSpecies.LARGE_DOG: CommonMotiveId.PET_DOG_AFFECTION,
                 CommonSpecies.SMALL_DOG: CommonMotiveId.PET_DOG_AFFECTION,
-                CommonSpecies.FOX: CommonMotiveId.SOCIAL
+                CommonSpecies.FOX: CommonMotiveId.SOCIAL,
+                CommonSpecies.HORSE: CommonMotiveId.PET_HORSE_SOCIAL
             },
             CommonMotiveId.FUN: {
                 CommonSpecies.HUMAN: CommonMotiveId.FUN,
                 CommonSpecies.CAT: CommonMotiveId.PET_CAT_PLAY,
                 CommonSpecies.LARGE_DOG: CommonMotiveId.PET_DOG_PLAY,
                 CommonSpecies.SMALL_DOG: CommonMotiveId.PET_DOG_PLAY,
-                CommonSpecies.FOX: CommonMotiveId.FUN
+                CommonSpecies.FOX: CommonMotiveId.FUN,
+                CommonSpecies.HORSE: CommonMotiveId.PET_HORSE_FUN
             }
         }
         return CommonSimMotiveUtils._MOTIVE_MAPPINGS
