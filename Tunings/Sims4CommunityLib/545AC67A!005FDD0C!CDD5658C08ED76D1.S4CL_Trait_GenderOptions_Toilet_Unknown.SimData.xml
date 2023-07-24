@@ -27,6 +27,7 @@
         <T type="Int64">2</T>
         <T type="Int64">3</T>
         <T type="Int64">5</T>
+        <T type="Int64">6</T>
       </L>
       <L name="tags" />
       <T name="trait_description">0x00000000</T>

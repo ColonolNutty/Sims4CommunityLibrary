@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SimData version="0x00000101" u="0x00000000">
   <Instances>
-    <I name="S4CL_Main_Trait_Small_Dog" schema="Trait" type="Object">
-      <L name="ages">
-        <T type="Int64">4</T>
-        <T type="Int64">32</T>
-        <T type="Int64">64</T>
-      </L>
+    <I name="S4CL_Main_Trait" schema="Trait" type="Object">
+      <L name="ages" />
       <T name="cas_idle_asm_key">00000000-00000000-0000000000000000</T>
       <T name="cas_idle_asm_state"></T>
       <T name="cas_selected_icon">00000000-00000000-0000000000000000</T>
       <T name="cas_trait_asm_param">None</T>
       <L name="conflicting_traits">
-        <T type="TableSetReference">14622983050963926956</T>
         <T type="TableSetReference">16449767532803985357</T>
+        <T type="TableSetReference">5284118362600111737</T>
         <T type="TableSetReference">4108675957767251387</T>
         <T type="TableSetReference">4105586330092546052</T>
         <T type="TableSetReference">12344188029921703040</T>
       </L>
-      <T name="display_name">0x0FC85BE4</T>
+      <T name="display_name">0x857FAADC</T>
       <L name="genders" />
       <T name="icon">2F7D0004-00000000-5D28F4E5021590F3</T>
       <L name="tags" />

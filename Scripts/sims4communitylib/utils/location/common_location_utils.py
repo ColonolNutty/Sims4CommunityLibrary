@@ -14,7 +14,6 @@ from civic_policies.street_civic_policy_service import StreetService
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.math.common_surface_identifier import CommonSurfaceIdentifier
 from sims4communitylib.classes.math.common_vector3 import CommonVector3
-from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.common_region_id import CommonRegionId
 from world.region import Region
 from world.street import Street
@@ -50,6 +49,31 @@ class CommonLocationUtils:
         :rtype: Region
         """
         return services.current_region()
+
+    @classmethod
+    def get_current_region_id(cls) -> int:
+        """get_current_region_id()
+
+        Retrieve the id of the current region.
+
+        :return: The id of the current region.
+        :rtype: int
+        """
+        region = cls.get_current_region()
+        return cls.get_region_id(region)
+
+    @classmethod
+    def get_region_id(cls, region: Region) -> int:
+        """get_region_id(region)
+
+        Retrieve the id of a region.
+
+        :return: The id of a region.
+        :rtype: int
+        """
+        if region is None:
+            return 0
+        return getattr(region, 'guid64', 0)
 
     @classmethod
     def is_current_region(cls, region: Union[int, CommonRegionId, Region]) -> bool:
@@ -589,6 +613,78 @@ class CommonLocationUtils:
                 continue
             return False
         return True
+
+    @classmethod
+    def get_current_venue(cls) -> Venue:
+        """get_current_venue()
+
+        Retrieve the current venue.
+
+        :return: The current venue.
+        :rtype: Venue
+        """
+        return services.get_current_venue()
+
+    @classmethod
+    def get_current_venue_id(cls) -> int:
+        """get_current_venue_id()
+
+        Retrieve the id of the current venue.
+
+        :return: The id of the current venue.
+        :rtype: int
+        """
+        venue = cls.get_current_venue()
+        return cls.get_venue_id(venue)
+
+    @classmethod
+    def get_venue_id(cls, venue: Venue) -> int:
+        """get_venue_id(venue)
+
+        Retrieve the id of a venue.
+
+        :return: The id of a venue.
+        :rtype: int
+        """
+        if venue is None:
+            return 0
+        return getattr(venue, 'guid64', 0)
+
+    @classmethod
+    def load_venue_by_guid(cls, venue: Union[int, Venue]) -> Union[Venue, None]:
+        """load_venue_by_guid(venue)
+
+        Load an instance of a Region by its identifier.
+
+        :param venue: The identifier of a Venue.
+        :type venue: Union[int, Venue]
+        :return: An instance of a Venue matching the decimal identifier or None if not found.
+        :rtype: Union[Venue, None]
+        """
+        if venue is None:
+            return None
+        if isinstance(venue, Venue):
+            return venue
+        # noinspection PyBroadException
+        try:
+            # noinspection PyCallingNonCallable
+            venue_instance = venue()
+            if isinstance(venue_instance, Venue):
+                # noinspection PyTypeChecker
+                return venue
+        except:
+            pass
+        # noinspection PyBroadException
+        try:
+            venue: int = int(venue)
+        except:
+            # noinspection PyTypeChecker
+            venue: Venue = venue
+            return venue
+
+        from sims4.resources import Types
+        from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
+        return CommonResourceUtils.load_instance(Types.VENUE, venue)
 
     @classmethod
     def get_current_venue_type(cls) -> VenueTypes:

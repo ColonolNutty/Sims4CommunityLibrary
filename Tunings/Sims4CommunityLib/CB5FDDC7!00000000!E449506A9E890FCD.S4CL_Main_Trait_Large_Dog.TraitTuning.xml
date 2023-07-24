@@ -13,20 +13,11 @@
     <T>5284118362600111737<!--S4CL_Main_Trait_Small_Dog--></T>
     <T>4108675957767251387<!--S4CL_Main_Trait_Cat--></T>
     <T>4105586330092546052<!--S4CL_Main_Trait_Fox--></T>
-  </L>
-  <L n="super_affordances">
-    <T>5145499017874001819<!--S4CL_Debug_Induce_Labor--></T>
-    <T>741312864308659038<!--S4CL_Debug_Log_All_Interactions--></T>
-    <T>12481803320243318715<!--S4CL_Debug_Show_Active_Buffs--></T>
-    <T>5900237111545222349<!--S4CL_Debug_Show_Running_And_Queued_Interactions--></T>
-    <T>2108116777929577381<!--S4CL_Debug_Show_Traits--></T>
-    <T>10355438442708473961<!--S4CL_Debug_Show_Running_Situations--></T>
-    <T>13483495329565765760<!--S4CL_Interaction_Debug_Log_All_Game_Tags--></T>
-    <T>15058010603771996272<!--S4CL_Interaction_Debug_Change_Object_States--></T>
+    <T>12344188029921703040<!--S4CL_Main_Trait_Horse--></T>
   </L>
   <T n="buffs_add_on_spawn_only">False</T>
-  <T n="display_name">0x857FAADC<!--S4CL Main Trait--></T>
-  <T n="display_name_gender_neutral">0x857FAADC<!--S4CL Main Trait--></T>
+  <T n="display_name">0xA1AE5A4C<!--S4CL Main Trait (Large Dog)--></T>
+  <T n="display_name_gender_neutral">0xA1AE5A4C<!--S4CL Main Trait (Large Dog)--></T>
   <T p="TraitIcon" n="icon">2f7d0004:00000000:5D28F4E5021590F3</T>
   <T n="trait_description">0xF3BE1E0A<!--This trait adds interactions from Sims 4 Community Library to this Sim.--></T>
   <T n="trait_origin_description">0x4A8DC6B8<!--(From Sims 4 Community Library)--></T>

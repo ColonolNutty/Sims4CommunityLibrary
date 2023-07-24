@@ -65,6 +65,7 @@ class CommonStringId(CommonInt):
     LARGE_DOG: 'CommonStringId' = 1545624565
     CAT: 'CommonStringId' = 1720023562
     FOX: 'CommonStringId' = 0xCE739947
+    HORSE: 'CommonStringId' = 0x773BB19E
 
     S4CL_ALIEN: 'CommonStringId' = 0x340EA312
     S4CL_GHOST: 'CommonStringId' = 0xEFCD14BE

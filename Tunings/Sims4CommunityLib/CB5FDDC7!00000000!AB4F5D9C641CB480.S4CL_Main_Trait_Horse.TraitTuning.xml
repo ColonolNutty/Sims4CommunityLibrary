@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<I c="Trait" i="trait" m="traits.traits" n="S4CL_Main_Trait_Small_Dog" s="5284118362600111737">
+<I c="Trait" i="trait" m="traits.traits" n="S4CL_Main_Trait_Horse" s="12344188029921703040">
   <L n="ages">
     <E>CHILD</E>
     <E>ADULT</E>
     <E>ELDER</E>
   </L>
   <L n="species">
-    <E>DOG</E>
+    <E>HORSE</E>
   </L>
   <L n="conflicting_traits">
     <T>14622983050963926956<!--S4CL_Main_Trait_Human--></T>
+    <T>5284118362600111737<!--S4CL_Main_Trait_Small_Dog--></T>
     <T>16449767532803985357<!--S4CL_Main_Trait_Large_Dog--></T>
     <T>4108675957767251387<!--S4CL_Main_Trait_Cat--></T>
     <T>4105586330092546052<!--S4CL_Main_Trait_Fox--></T>
-    <T>12344188029921703040<!--S4CL_Main_Trait_Horse--></T>
   </L>
   <T n="buffs_add_on_spawn_only">False</T>
-  <T n="display_name">0x0FC85BE4<!--S4CL Main Trait (Small Dog)--></T>
-  <T n="display_name_gender_neutral">0x0FC85BE4<!--S4CL Main Trait (Small Dog)--></T>
+  <T n="display_name">0x42586D60<!--S4CL Main Trait (Horse)--></T>
+  <T n="display_name_gender_neutral">0x42586D60<!--S4CL Main Trait (Horse)--></T>
   <T p="TraitIcon" n="icon">2f7d0004:00000000:5D28F4E5021590F3</T>
   <T n="trait_description">0xF3BE1E0A<!--This trait adds interactions from Sims 4 Community Library to this Sim.--></T>
   <T n="trait_origin_description">0x4A8DC6B8<!--(From Sims 4 Community Library)--></T>
