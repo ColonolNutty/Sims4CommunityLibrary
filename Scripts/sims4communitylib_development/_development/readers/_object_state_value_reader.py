@@ -22,5 +22,5 @@ def _common_log_object_state_values_ready_for_update(output: CommonConsoleComman
     output('Logging Object State Values')
     from sims4communitylib_development._development._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
     from sims4communitylib.enums.common_object_state_value_ids import CommonObjectStateValueId
-    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instances(Types.OBJECT_STATE, _S4CLReaderForUpdate.CONVERSIONS, CommonObjectStateValueId, skip_not_found=True)
+    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instance_types(Types.OBJECT_STATE, _S4CLReaderForUpdate.CONVERSIONS, CommonObjectStateValueId, skip_not_found=True)
     output(f'Finished logging Object State Values. {len(not_found_values)} values were not found.')

@@ -32,9 +32,11 @@ class _S4CLReaderForUpdate:
         'REGION_HIDDEN_FORGOTTENGROTTO': 'FORGOTTEN_GROTTO',
         'REGION_HIDDEN_MAGIC_VENUE': 'MAGIC_VENUE',
         'REGION_HIDDEN_SLYVANGLADE': 'SLYVAN_GLADE',
+        'REGION_RESIDENTIAL_BAYAREA': 'BAY_AREA',
         'REGION_RESIDENTIAL_CITYLIFE': 'CITY_LIFE',
         'REGION_RESIDENTIAL_COTTAGEWORLD': 'COTTAGE_WORLD',
         'REGION_RESIDENTIAL_ECOWORLD': 'ECO_WORLD',
+        'REGION_RESIDENTIAL_EP14WORLD': 'CHESTNUT_RIDGE',
         'REGION_RESIDENTIAL_FAMEWORLD': 'FAME_WORLD',
         'REGION_RESIDENTIAL_HIGHSCHOOLWORLD': 'HIGH_SCHOOL_WORLD',
         'REGION_RESIDENTIAL_ISLANDWORLD': 'ISLAND_WORLD',
@@ -58,5 +60,5 @@ def _common_log_ready_for_update(output: CommonConsoleCommandOutput) -> None:
     output('Logging Region')
     from sims4communitylib_development._development._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
     from sims4communitylib.enums.common_region_id import CommonRegionId
-    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instances(Types.REGION, _S4CLReaderForUpdate.CONVERSIONS, CommonRegionId, skip_not_found=True)
+    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instance_types(Types.REGION, _S4CLReaderForUpdate.CONVERSIONS, CommonRegionId, skip_not_found=True)
     output(f'Finished logging Regions. {len(not_found_values)} values were not found.')

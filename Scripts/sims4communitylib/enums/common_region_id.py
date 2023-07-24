@@ -16,8 +16,10 @@ class CommonRegionId(CommonInt):
     ACTING_STUDIO: 'CommonRegionId' = 190064
     ALIEN_WORLD: 'CommonRegionId' = 108705
     BATUU: 'CommonRegionId' = 231104
+    BAY_AREA: 'CommonRegionId' = 302872
     CAMPING_FOREST: 'CommonRegionId' = 104096
     CAREER_DOCTOR_CLINIC: 'CommonRegionId' = 109306
+    CHESTNUT_RIDGE: 'CommonRegionId' = 311185
     CITY_LIFE: 'CommonRegionId' = 134252
     COTTAGE_WORLD: 'CommonRegionId' = 257397
     ECO_WORLD: 'CommonRegionId' = 228200

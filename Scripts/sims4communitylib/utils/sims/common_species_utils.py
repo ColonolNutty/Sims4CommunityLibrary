@@ -303,4 +303,4 @@ class CommonSpeciesUtils:
         :return: True, if the Sim is a Horse. False, if not.
         :rtype: bool
         """
-        return CommonSpeciesUtils.is_horse_species(CommonSpeciesUtils.get_species(sim_info))
+        return CommonSpeciesUtils.is_horse_species(CommonSpeciesUtils.get_species(sim_info)) or CommonTraitUtils.has_trait(sim_info, CommonTraitId.SPECIES_HORSE)

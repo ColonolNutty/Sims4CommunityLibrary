@@ -44,5 +44,5 @@ def _common_log_instances_ready_for_update(output: CommonConsoleCommandOutput, t
         output(f'ERROR: {type_str} is not a valid type.')
         return
     from sims4communitylib_development._development._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
-    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instances(instance_type, _S4CLReaderForUpdate.CONVERSIONS, CommonInstanceId, skip_not_found=True)
+    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instance_types(instance_type, _S4CLReaderForUpdate.CONVERSIONS, CommonInstanceId, skip_not_found=True)
     output(f'Finished logging {type_str}. {len(not_found_values)} values were not found.')

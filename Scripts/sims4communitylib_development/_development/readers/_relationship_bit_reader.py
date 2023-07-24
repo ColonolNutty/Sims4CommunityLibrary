@@ -521,5 +521,5 @@ def _common_log_relationship_bits_ready_for_update(output: CommonConsoleCommandO
     output('Logging Relationship Bits')
     from sims4communitylib_development._development._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
     from sims4communitylib.enums.relationship_bits_enum import CommonRelationshipBitId
-    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instances(Types.RELATIONSHIP_BIT, _S4CLReaderForUpdate.CONVERSIONS, CommonRelationshipBitId, skip_not_found=True)
+    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instance_types(Types.RELATIONSHIP_BIT, _S4CLReaderForUpdate.CONVERSIONS, CommonRelationshipBitId, skip_not_found=True)
     output(f'Finished logging Relationship Bits. {len(not_found_values)} values were not found.')

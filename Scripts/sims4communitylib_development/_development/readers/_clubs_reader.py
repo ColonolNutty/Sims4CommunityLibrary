@@ -22,5 +22,5 @@ def _common_log_ready_for_update(output: CommonConsoleCommandOutput) -> None:
     output('Logging Values')
     from sims4communitylib_development._development._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
     from sims4communitylib.enums.clubs_enum import CommonClubInteractionGroupId
-    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instances(Types.CLUB_INTERACTION_GROUP, _S4CLReaderForUpdate.CONVERSIONS, CommonClubInteractionGroupId, skip_not_found=True)
+    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instance_types(Types.CLUB_INTERACTION_GROUP, _S4CLReaderForUpdate.CONVERSIONS, CommonClubInteractionGroupId, skip_not_found=True)
     output(f'Finished logging Values. {len(not_found_values)} values were not found.')

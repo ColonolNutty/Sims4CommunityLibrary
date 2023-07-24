@@ -54,6 +54,8 @@ class _S4CLReaderForUpdate:
         'CAREER_ADULT_CRIMINAL': 'CRIMINAL',
         'CAREER_ADULT_CULINARY': 'CULINARY',
         'CAREER_ADULT_ENTERTAINER': 'ENTERTAINER',
+        'CAREER_ADULT_EP14WORLD_NPC_HORSETRAINER': 'NPC_CHESTNUT_RIDGE_HORSE_TRAINER',
+        'CAREER_ADULT_EP14WORLD_NPC_MYSTERIOUSRANCHER': 'NPC_CHESTNUT_RIDGE_MYSTERIOUS_RANCHER',
         'CAREER_ADULT_FREELANCER_ARTIST': 'FREELANCER_WITH_AGENCY_ARTIST',
         'CAREER_ADULT_NPC_ADOPTIONOFFICER': 'NPC_SPECIAL_ADOPTION_OFFICER',
         'CAREER_ADULT_NPC_BARISTA': 'NPC_VENUE_BARISTA',
@@ -93,6 +95,7 @@ class _S4CLReaderForUpdate:
         'CAREER_ADULT_NPC_PRODUCER': 'NPC_ACTOR_CAREER_PRODUCER',
         'CAREER_ADULT_NPC_PROFESSORNPC_ARTS': 'NPC_UNIVERSITY_PROFESSOR_ARTS',
         'CAREER_ADULT_NPC_PROFESSORNPC_SCIENCE': 'NPC_UNIVERSITY_PROFESSOR_SCIENCE',
+        'CAREER_ADULT_NPC_RANCHHAND': 'NPC_RANCH_HAND',
         'CAREER_ADULT_NPC_RANGER': 'NPC_SPECIAL_RANGER',
         'CAREER_ADULT_NPC_REFLEXOLOGIST': 'NPC_VENUE_REFLEXOLOGIST',
         'CAREER_ADULT_NPC_REPAIR': 'NPC_SERVICES_REPAIR',
@@ -150,5 +153,5 @@ def _common_log_careers_ready_for_update(output: CommonConsoleCommandOutput) -> 
     output('Logging Careers')
     from sims4communitylib_development._development._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
     from sims4communitylib.enums.common_career_ids import CommonCareerId
-    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instances(Types.CAREER, _S4CLReaderForUpdate.CONVERSIONS, CommonCareerId, skip_not_found=True)
+    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instance_types(Types.CAREER, _S4CLReaderForUpdate.CONVERSIONS, CommonCareerId, skip_not_found=True)
     output(f'Finished logging Careers. {len(not_found_values)} values were not found.')

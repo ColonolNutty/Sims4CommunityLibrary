@@ -69,5 +69,5 @@ def _common_log_weather_events_ready_for_update(output: CommonConsoleCommandOutp
     output('Logging Weather Events')
     from sims4communitylib_development._development._s4cl_enum_value_update_utils import _S4CLEnumValueUpdateUtils
     from sims4communitylib.enums.common_weather_event_ids import CommonWeatherEventId
-    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instances(Types.WEATHER_EVENT, _S4CLReaderForUpdate.CONVERSIONS, CommonWeatherEventId, skip_not_found=True)
+    not_found_values = _S4CLEnumValueUpdateUtils()._read_values_from_instance_types(Types.WEATHER_EVENT, _S4CLReaderForUpdate.CONVERSIONS, CommonWeatherEventId, skip_not_found=True)
     output(f'Finished logging Weather Events. {len(not_found_values)} values were not found.')
