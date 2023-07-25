@@ -6,7 +6,7 @@
   <Parameter name="x:sex" type="enum" labels="male,female" default="male" />
   <Parameter name="x:mood" type="enum" labels="happy,confident,angry,sad,bored,embarrassed,uncomfortable,playful,tense,focused,energized,flirty,fine,inspired,dazed" default="happy" />
   <Parameter name="x:carryState" type="enum" labels="none,left,right,both" default="none" />
-  <Parameter name="x:is_reacting" type="bool" labels="" default="False" />
+  <Parameter name="x:is_reacting" type="bool" labels="True,False" default="False" />
   <Parameter name="x:species" type="enum" labels="human,dog,smalldog,cat,fox" default="dog" />
   <Parameter name="postureObject:isMirroredPart" type="bool" labels="" default="False" />
   <IkConfiguration name="ad_idle_breathe.ma">
@@ -92,65 +92,6 @@
     <description />
     <MakeController>
       <ParameterSelector parameter="x:species" unique_id="24">
-        <Choice value="human">
-          <PostureSelector parameter="x:posture" unique_id="10">
-            <Choice value="-stand-FullBody" track="normal" mask="">
-              <ParameterSelector parameter="x:age" unique_id="9">
-                <Choice value="baby" />
-                <Choice value="child">
-                  <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="4">
-                    <Choice weight="50" avoidRepeat="False">
-                      <Controller target="x" controller="@ClipController(clip=a_idle_neutral_loop_1_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a_idle_neutral_loop_3.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="1">
-                        <TransitionClassList />
-                      </Controller>
-                    </Choice>
-                    <Choice weight="50" avoidRepeat="False">
-                      <Controller target="x" controller="@ClipController(clip=a_idle_neutral_loop_2_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a_idle_neutral_loop_3.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="2">
-                        <TransitionClassList />
-                      </Controller>
-                    </Choice>
-                    <Choice weight="50" avoidRepeat="False">
-                      <Controller target="x" controller="@ClipController(clip=a_idle_neutral_loop_3_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a_idle_neutral_loop_3.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="3">
-                        <TransitionClassList />
-                      </Controller>
-                    </Choice>
-                  </RandomSelector>
-                </Choice>
-                <Choice value="teen">
-                  <Reference target="4" />
-                </Choice>
-                <Choice value="youngadult">
-                  <Reference target="4" />
-                </Choice>
-                <Choice value="adult">
-                  <Reference target="4" />
-                </Choice>
-                <Choice value="elder">
-                  <Reference target="4" />
-                </Choice>
-                <Choice value="toddler">
-                  <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="8">
-                    <Choice weight="50" avoidRepeat="False">
-                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_01_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_01.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="5">
-                        <TransitionClassList />
-                      </Controller>
-                    </Choice>
-                    <Choice weight="50" avoidRepeat="False">
-                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_02_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_02.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="6">
-                        <TransitionClassList />
-                      </Controller>
-                    </Choice>
-                    <Choice weight="50" avoidRepeat="False">
-                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_03_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_03.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="7">
-                        <TransitionClassList />
-                      </Controller>
-                    </Choice>
-                  </RandomSelector>
-                </Choice>
-              </ParameterSelector>
-            </Choice>
-          </PostureSelector>
-        </Choice>
         <Choice value="dog">
           <CustomController name="Custom Controller" target="x" overridePosture="false" track="normal" transition_class_in="Default" transition_class_out="Default" unique_id="23">
             <TransitionClassList />
@@ -242,6 +183,65 @@
 			  </CustomController>
 			</Choice>
 		  </PostureSelector>
+        </Choice>
+        <Choice value="human">
+          <PostureSelector parameter="x:posture" unique_id="10">
+            <Choice value="-stand-FullBody" track="normal" mask="">
+              <ParameterSelector parameter="x:age" unique_id="9">
+                <Choice value="baby" />
+                <Choice value="child">
+                  <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="4">
+                    <Choice weight="50" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=a_idle_neutral_loop_1_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a_idle_neutral_loop_3.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="1">
+                        <TransitionClassList />
+                      </Controller>
+                    </Choice>
+                    <Choice weight="50" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=a_idle_neutral_loop_2_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a_idle_neutral_loop_3.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="2">
+                        <TransitionClassList />
+                      </Controller>
+                    </Choice>
+                    <Choice weight="50" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=a_idle_neutral_loop_3_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="a_idle_neutral_loop_3.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="3">
+                        <TransitionClassList />
+                      </Controller>
+                    </Choice>
+                  </RandomSelector>
+                </Choice>
+                <Choice value="teen">
+                  <Reference target="4" />
+                </Choice>
+                <Choice value="youngadult">
+                  <Reference target="4" />
+                </Choice>
+                <Choice value="adult">
+                  <Reference target="4" />
+                </Choice>
+                <Choice value="elder">
+                  <Reference target="4" />
+                </Choice>
+                <Choice value="toddler">
+                  <RandomSelector repeatweight="1" allow_empty_choices="False" unique_id="8">
+                    <Choice weight="50" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_01_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_01.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="5">
+                        <TransitionClassList />
+                      </Controller>
+                    </Choice>
+                    <Choice weight="50" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_02_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_02.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="6">
+                        <TransitionClassList />
+                      </Controller>
+                    </Choice>
+                    <Choice weight="50" avoidRepeat="False">
+                      <Controller target="x" controller="@ClipController(clip=p2p_generic_GS_listen_loop_03_x, loop_count=#1)" overridePosture="false" mask="" track="normal" mirror_conditional="False" suppress_footsteps="False" transition_class_in="Default" transition_class_out="Default" ik_configuration="p2p_generic_GS_listen_loop_03.ma" focus="undefined" start_frame_offset="0" end_frame_offset="0" timescale="1" unique_id="7">
+                        <TransitionClassList />
+                      </Controller>
+                    </Choice>
+                  </RandomSelector>
+                </Choice>
+              </ParameterSelector>
+            </Choice>
+          </PostureSelector>
         </Choice>
       </ParameterSelector>
     </MakeController>

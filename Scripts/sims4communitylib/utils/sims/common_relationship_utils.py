@@ -266,7 +266,7 @@ class CommonRelationshipUtils:
         :rtype: CommonTestResult
         """
         if not CommonSpeciesUtils.are_same_species(sim_info_a, sim_info_b):
-            return CommonTestResult(False, reason=f'{sim_info_a} has permission to be a Blood Relative of {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.')
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission to be a Blood Relative of {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.')
         return CommonTestResult(True, reason=f'{sim_info_a} has permission to be a Blood Relative of {sim_info_b}.')
 
     @classmethod

@@ -480,20 +480,22 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
             add_trait_result = CommonTraitUtils.add_trait(sim_info, can_be_impregnated_trait)
             if not add_trait_result:
                 return add_trait_result
-            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
-            add_trait_result = CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
-            if not add_trait_result:
-                return add_trait_result
+            if not CommonSpeciesUtils.is_horse(sim_info):
+                CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
+                add_trait_result = CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
+                if not add_trait_result:
+                    return add_trait_result
         else:
             CommonTraitUtils.remove_trait(sim_info, can_be_impregnated_trait)
             add_trait_result = CommonTraitUtils.add_trait(sim_info, can_not_be_impregnated_trait)
             if not add_trait_result:
                 return add_trait_result
             if not CommonSimPregnancyUtils.can_impregnate(sim_info):
-                CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
-                add_trait_result = CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
-                if not add_trait_result:
-                    return add_trait_result
+                if not CommonSpeciesUtils.is_horse(sim_info):
+                    CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
+                    add_trait_result = CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
+                    if not add_trait_result:
+                        return add_trait_result
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender_options_can_be_impregnated(sim_info)
         return CommonExecutionResult.TRUE
@@ -528,20 +530,22 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
             add_trait_result = CommonTraitUtils.add_trait(sim_info, can_impregnate_trait)
             if not add_trait_result:
                 return add_trait_result
-            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
-            add_trait_result = CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
-            if not add_trait_result:
-                return add_trait_result
+            if not CommonSpeciesUtils.is_horse(sim_info):
+                CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
+                add_trait_result = CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
+                if not add_trait_result:
+                    return add_trait_result
         else:
             CommonTraitUtils.remove_trait(sim_info, can_impregnate_trait)
             add_trait_result = CommonTraitUtils.add_trait(sim_info, can_not_impregnate_trait)
             if not add_trait_result:
                 return add_trait_result
             if not CommonSimPregnancyUtils.can_be_impregnated(sim_info):
-                CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
-                add_trait_result = CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
-                if not add_trait_result:
-                    return add_trait_result
+                if not CommonSpeciesUtils.is_horse(sim_info):
+                    CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
+                    add_trait_result = CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
+                    if not add_trait_result:
+                        return add_trait_result
         from sims4communitylib.events.sim.common_sim_event_dispatcher import CommonSimEventDispatcherService
         CommonSimEventDispatcherService()._on_sim_change_gender_options_can_impregnate(sim_info)
         return CommonExecutionResult.TRUE
@@ -567,10 +571,11 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
         if not CommonSpeciesUtils.is_animal(sim_info):
             return CommonExecutionResult(False, reason=f'Sim is not an Animal.')
         if can_reproduce:
-            CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
-            add_trait_result = CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
-            if not add_trait_result:
-                return add_trait_result
+            if not CommonSpeciesUtils.is_horse(sim_info):
+                CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
+                add_trait_result = CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
+                if not add_trait_result:
+                    return add_trait_result
             if CommonGenderUtils.is_male(sim_info):
                 update_can_impregnate_result = CommonSimGenderOptionUtils.update_can_impregnate(sim_info, True)
                 if not update_can_impregnate_result:
@@ -587,9 +592,10 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
                     return update_can_be_impregnated_result
         else:
             CommonTraitUtils.remove_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE)
-            add_trait_result = CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
-            if not add_trait_result:
-                return add_trait_result
+            if not CommonSpeciesUtils.is_horse(sim_info):
+                add_trait_result = CommonTraitUtils.add_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE)
+                if not add_trait_result:
+                    return add_trait_result
             if CommonGenderUtils.is_male(sim_info):
                 update_can_impregnate_result = CommonSimGenderOptionUtils.update_can_impregnate(sim_info, False)
                 if not update_can_impregnate_result:

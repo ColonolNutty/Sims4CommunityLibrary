@@ -8,16 +8,16 @@
   <Actor name="z" type="Sim" virtual="true" />
   <Parameter name="x:age" type="enum" labels="baby,toddler,child,teen,youngadult,adult,elder" default="adult" />
   <Parameter name="x:sex" type="enum" labels="male,female" default="male" />
-  <Parameter name="x:species" type="enum" labels="human,dog,smalldog,cat,fox" default="human" />
+  <Parameter name="x:species" type="enum" labels="human,dog,smalldog,cat,fox" default="dog" />
   <Parameter name="x:mood" type="enum" labels="happy,confident,angry,sad,bored,embarrassed,uncomfortable,playful,tense,focused,energized,flirty,fine,inspired,dazed" default="fine" />
   <Parameter name="sitTemplate:isMirroredPart" type="bool" labels="" default="False" />
   <Parameter name="postureObject:isMirroredPart" type="bool" labels="" default="False" />
   <Parameter name="y:age" type="enum" labels="baby,toddler,child,teen,youngadult,adult,elder" default="adult" />
   <Parameter name="y:sex" type="enum" labels="male,female" default="male" />
-  <Parameter name="y:species" type="enum" labels="human,dog,smalldog,cat,fox" default="human" />
+  <Parameter name="y:species" type="enum" labels="human,dog,smalldog,cat,fox" default="dog" />
   <Parameter name="z:age" type="enum" labels="baby,toddler,child,teen,youngadult,adult,elder" default="adult" />
   <Parameter name="z:sex" type="enum" labels="male,female" default="male" />
-  <Parameter name="z:species" type="enum" labels="human,dog,smalldog,cat,fox" default="human" />
+  <Parameter name="z:species" type="enum" labels="human,dog,smalldog,cat,fox" default="dog" />
   <IkConfiguration name="ad_idle_listen_loop2_sitOnGround.ma">
     <SourceFile name="ad_idle_listen_loop2_sitOnGround.ma">
       <MapNamespace namespace="x" actor="x" />

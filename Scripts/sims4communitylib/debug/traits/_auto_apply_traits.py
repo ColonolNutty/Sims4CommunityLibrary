@@ -404,18 +404,11 @@ class _S4CLAutoApplyTraits:
                 CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_FOX,
                 CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_FOX,
             )
-            if not CommonTraitUtils.has_trait(sim_info,
-                                              CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_HORSE) \
-                    and not CommonTraitUtils.has_trait(sim_info,
-                                                       CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_HORSE):
+            if not CommonTraitUtils.has_trait(sim_info, CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_HORSE) \
+                    and not CommonTraitUtils.has_trait(sim_info, CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_HORSE):
                 if CommonGenderUtils.is_male(sim_info):
-                    if CommonTraitUtils.has_trait(sim_info,
-                                                  CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
-                        CommonTraitUtils.add_trait(sim_info,
-                                                   CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_HORSE)
-                    else:
-                        CommonTraitUtils.add_trait(sim_info,
-                                                   CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_HORSE)
+                    CommonTraitUtils.add_trait(sim_info,
+                                               CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_IMPREGNATE_HORSE)
                 else:
                     CommonTraitUtils.add_trait(sim_info,
                                                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_IMPREGNATE_HORSE)
@@ -441,13 +434,7 @@ class _S4CLAutoApplyTraits:
                     CommonTraitUtils.add_trait(sim_info,
                                                CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_HORSE)
                 else:
-                    if CommonTraitUtils.has_trait(sim_info,
-                                                  CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
-                        CommonTraitUtils.add_trait(sim_info,
-                                                   CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_HORSE)
-                    else:
-                        CommonTraitUtils.add_trait(sim_info,
-                                                   CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_NOT_BE_IMPREGNATED_HORSE)
+                    CommonTraitUtils.add_trait(sim_info, CommonTraitId.S4CL_GENDER_OPTIONS_PREGNANCY_CAN_BE_IMPREGNATED_HORSE)
 
 
 @CommonEventRegistry.handle_events(ModInfo.get_identity())

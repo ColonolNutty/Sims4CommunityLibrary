@@ -227,10 +227,11 @@ class CommonSimPregnancyUtils(HasClassLog):
         if can_not_be_impregnated_trait is None:
             return CommonTestResult(False, reason=f'No Cannot Be Impregnated trait was found for Sim {sim_info}.')
         if CommonSpeciesUtils.is_animal(sim_info):
-            if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
-                return CommonTestResult(False, reason=f'Animal Sim {sim_info} had the Cannot Reproduce trait.')
-            if not CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
-                return CommonTestResult(False, reason=f'Animal Sim {sim_info} did not have the Can Reproduce trait.')
+            if not CommonSpeciesUtils.is_horse(sim_info):
+                if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
+                    return CommonTestResult(False, reason=f'Animal Sim {sim_info} had the Cannot Reproduce trait.')
+                if not CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
+                    return CommonTestResult(False, reason=f'Animal Sim {sim_info} did not have the Can Reproduce trait.')
 
         if CommonTraitUtils.has_trait(sim_info, can_not_be_impregnated_trait):
             return CommonTestResult(False, reason=f'Sim had the Cannot Be Impregnated trait.')
@@ -258,10 +259,11 @@ class CommonSimPregnancyUtils(HasClassLog):
         if can_not_impregnate_trait is None:
             return CommonTestResult(False, reason=f'No Cannot Impregnate trait was found for Sim {sim_info}.')
         if CommonSpeciesUtils.is_animal(sim_info):
-            if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
-                return CommonTestResult(False, reason=f'Sim had the Cannot Reproduce trait.')
-            if not CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
-                return CommonTestResult(False, reason=f'Sim did not have the Can Reproduce trait.')
+            if not CommonSpeciesUtils.is_horse(sim_info):
+                if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
+                    return CommonTestResult(False, reason=f'Sim had the Cannot Reproduce trait.')
+                if not CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
+                    return CommonTestResult(False, reason=f'Sim did not have the Can Reproduce trait.')
 
         if CommonTraitUtils.has_trait(sim_info, can_not_impregnate_trait):
             return CommonTestResult(False, reason=f'Sim had the Cannot Impregnate trait.')
