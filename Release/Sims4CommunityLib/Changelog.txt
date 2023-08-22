@@ -1,6 +1,12 @@
 v2.8:
 - Added Horse support to many places. (Motives, Species, Voices, Sim Types, Sim Demographics, etc.)
 - Updated the Traits, Buffs, Skills, Careers, and Tags enums with new values.
+- Converted many CommonAgeUtils functions into class methods
+- Added has_any_age function to CommonAgeUtils
+- Fixed an issue when removing the Scarecrow occult in CommonOccultUtils, where it wouldn't fully remove the scarecrow traits
+- Converted many of the CommonRelationshipUtils functions to classmethods
+- Added a command to manually add relationship bits between Sims.
+- Fixed an issue when joining a career with a Sim.
 
 v2.7:
 - Added an input option for showing multiple text fields
