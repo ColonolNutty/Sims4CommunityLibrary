@@ -26,6 +26,8 @@ from sims4communitylib.services.commands.common_console_command import CommonCon
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_component_utils import CommonComponentUtils
+from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
+from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
@@ -568,3 +570,29 @@ def _common_print_buffs_on_sim(output: CommonConsoleCommandOutput, sim_info: Sim
         )
     finally:
         log.disable()
+
+# log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'buff_not_properly_adding_log')
+#
+# @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), BuffComponent, BuffComponent._can_add_buff_type.__name__)
+# def _common_can_add_buff_type(original, self, buff_type):
+#     if not buff_type.can_add(self.owner):
+#         log.format_with_message(f'Cannot add buff {buff_type}. Can Add')
+#         return (False, None)
+#     mood = buff_type.mood_type
+#     if mood is not None and mood.excluding_traits is not None and self.owner.trait_tracker.has_any_trait(mood.excluding_traits):
+#         log.format_with_message(f'Cannot add buff {buff_type}. MOOD', mood=mood, mood_excluding_traits=mood.excluding_traits)
+#         return (False, None)
+#     if buff_type.exclusive_index is None:
+#         log.format_with_message(f'Can add buff {buff_type}. Exclusive Index')
+#         return (True, None)
+#     for conflicting_buff_type in self._active_buffs:
+#         if conflicting_buff_type is buff_type:
+#             pass
+#         elif conflicting_buff_type.exclusive_index == buff_type.exclusive_index:
+#             if buff_type.exclusive_weight < conflicting_buff_type.exclusive_weight:
+#                 log.format_with_message(f'Cannot add buff {buff_type}. Conflicting buff.', buff_weight=buff_type.exclusive_weight, conflicting_buff_weight=conflicting_buff_type.exclusive_weight)
+#                 return (False, None)
+#             log.format_with_message(f'Cannot add buff {buff_type}. Conflicting buff 23432.', conflicting_buff_type=conflicting_buff_type)
+#             return (True, conflicting_buff_type)
+#     log.format_with_message(f'Can add buff {buff_type}.')
+#     return (True, None)

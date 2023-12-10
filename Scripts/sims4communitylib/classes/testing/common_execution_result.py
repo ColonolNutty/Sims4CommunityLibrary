@@ -92,7 +92,7 @@ class CommonExecutionResult(TestResult):
         :return: This CommonExecutionResult, but with a reversed result value.
         :rtype: CommonExecutionResult
         """
-        return CommonExecutionResult(not self.result, reason=self.reason, success_override=self._success, tooltip_text=self._tooltip_text, tooltip_tokens=self._tooltip_tokens)
+        return CommonExecutionResult(not self.result, reason=self.reason, success_override=self._success, tooltip_text=self._tooltip_text, tooltip_tokens=self._tooltip_tokens, icon=self.icon, influenced_by_active_mood=self.influence_by_active_mood, hide_tooltip=self._hide_tooltip)
 
     @property
     def is_success(self) -> bool:

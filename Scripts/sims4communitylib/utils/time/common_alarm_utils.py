@@ -48,11 +48,11 @@ class CommonAlarmUtils(HasClassLog):
         alarm_owner: Any,
         time_until_first_occurrence: TimeSpan,
         on_alarm_triggered_callback: Callable[['CommonAlarmHandle'], None],
-        should_repeat: bool=False,
-        time_until_repeat: TimeSpan=None,
-        accurate_repeat: bool=True,
-        persist_across_zone_loads: bool=False,
-        timeline: Timeline=None
+        should_repeat: bool = False,
+        time_until_repeat: TimeSpan = None,
+        accurate_repeat: bool = True,
+        persist_across_zone_loads: bool = False,
+        timeline: Timeline = None
     ) -> Union['CommonAlarmHandle', None]:
         """schedule_alarm(\
             alarm_owner,\
@@ -96,9 +96,16 @@ class CommonAlarmUtils(HasClassLog):
             initial_time = timeline.now
         else:
             initial_time = timeline.future
+
+        def _on_alarm_triggered(handle: CommonAlarmHandle):
+            try:
+                on_alarm_triggered_callback(handle)
+            except Exception as ex:
+                cls.get_log().format_error(f'An exception occurred when triggering alarm callback for {alarm_owner}.', alarm_owner=alarm_owner, exception=ex)
+
         return CommonAlarmHandle(
             alarm_owner,
-            on_alarm_triggered_callback,
+            _on_alarm_triggered,
             timeline,
             initial_time + time_until_first_occurrence,
             should_repeat=should_repeat,
@@ -114,7 +121,7 @@ class CommonAlarmUtils(HasClassLog):
         hour: int,
         minute: int,
         on_alarm_triggered: Callable[[CommonAlarmHandle], None],
-        persist_across_zone_loads: bool=False
+        persist_across_zone_loads: bool = False
     ) -> CommonAlarmHandle:
         """schedule_daily_alarm(\
             alarm_owner,\
@@ -147,7 +154,8 @@ class CommonAlarmUtils(HasClassLog):
             alarm_next_trigger_time += TimeSpan(sim_ticks_per_day())
 
         repeat_interval = TimeSpan(sim_ticks_per_day())
-        return CommonAlarmUtils.schedule_alarm(
+
+        return cls.schedule_alarm(
             alarm_owner,
             alarm_next_trigger_time,
             on_alarm_triggered,

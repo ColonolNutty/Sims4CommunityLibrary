@@ -682,3 +682,23 @@ class CommonSimLocationUtils:
 def _common_print_room_id(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
     room_id = CommonSimLocationUtils.get_current_room_id(sim_info)
     output(f'The current room id of {sim_info} is: {room_id}')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib_testing.print_is_inside',
+    'Print whether a Sim is considered as being inside or not.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to check.', is_optional=True, default_value='Active Sim'),
+    ),
+    show_with_help_command=False
+)
+def _common_print_room_id(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
+    output(f'Printing whether {sim_info} is inside building or not.')
+    if sim_info is None:
+        return
+    sim = CommonSimUtils.get_sim_instance(sim_info)
+    is_inside_building = sim.is_inside_building
+    output(f'{sim_info} is Inside Building? {is_inside_building}')
+    interaction_counts_as_inside = sim._is_running_interaction_counts_as_inside()
+    output(f'{sim_info} has interaction counts as inside? {interaction_counts_as_inside}.')

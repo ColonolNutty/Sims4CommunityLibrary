@@ -128,7 +128,7 @@ def _common_focus_on_object_command(output: CommonConsoleCommandOutput, game_obj
     's4clib.focus_on_sim',
     'Move the camera to focus on a Sim.',
     command_arguments=(
-        CommonConsoleCommandArgument('game_object', 'Game Object Id', 'The instance id of the object to focus on.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Name or Id', 'The instance id of the Sim to focus on.'),
     )
 )
 def _common_focus_on_sim_command(output: CommonConsoleCommandOutput, sim_info: SimInfo):

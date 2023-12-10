@@ -2984,6 +2984,18 @@ def _s4clib_spawn_random_sims(output: CommonConsoleCommandOutput, count: int = 5
     _s4cl_spawn_horse_sims(output, count=count, gender=CommonGender.FEMALE, age=CommonAge.ADULT)
 
 
+@CommonConsoleCommand(ModInfo.get_identity(), 's4clib_testing.spawn_sims', 'Spawn a number of Sims of each species.', command_arguments=(
+    CommonConsoleCommandArgument('count', 'Number', 'The number of Sims to spawn.', is_optional=True, default_value=1),
+    CommonConsoleCommandArgument('gender', 'CommonGender',
+                                 f'The spawned Sims will have this gender. Valid genders include: {CommonGender.get_comma_separated_names_string()}', is_optional=True, default_value=CommonGender.MALE.name if hasattr(CommonGender.MALE, 'name') else CommonGender.MALE),
+    CommonConsoleCommandArgument('age', 'CommonAge',
+                                 f'The spawned Sims will have this age. Valid ages include: {CommonAge.get_comma_separated_names_string()}', is_optional=True, default_value=CommonAge.ADULT.name if hasattr(CommonAge.ADULT, 'name') else CommonAge.ADULT)
+))
+def _s4clib_spawn_random_sims(output: CommonConsoleCommandOutput, count: int = 1, gender: CommonGender = CommonGender.MALE, age: CommonAge = CommonAge.ADULT):
+    for species in CommonSpecies.get_all():
+        _s4cl_spawn_sims(output, species=species, count=count, gender=gender, age=age)
+
+
 @CommonConsoleCommand(
     ModInfo.get_identity(),
     's4clib.purge_self',

@@ -6,6 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from sims.sim import Sim
+from sims.sim_info import SimInfo
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
@@ -57,3 +58,24 @@ def _common_fix_add_default_gender_option_traits_being_busted(original, self: Tr
                 continue
         if not self.has_trait(gender_option_trait):
             self._add_trait(gender_option_trait)
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.send_satisfaction_points_update.__name__)
+def _common_fix_missing_satisfaction_tracker_send_satisfaction_points_update(original, self: SimInfo, *_, **__):
+    if not self._satisfaction_tracker:
+        return
+    return original(self, *_, **__)
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.apply_satisfaction_points_delta.__name__)
+def _common_fix_missing_satisfaction_tracker_apply_satisfaction_points_delta(original, self: SimInfo, *_, **__):
+    if not self._satisfaction_tracker:
+        return
+    return original(self, *_, **__)
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.get_satisfaction_points.__name__)
+def _common_fix_missing_satisfaction_tracker_get_satisfaction_points(original, self: SimInfo, *_, **__):
+    if not self._satisfaction_tracker:
+        return 0
+    return original(self, *_, **__)
