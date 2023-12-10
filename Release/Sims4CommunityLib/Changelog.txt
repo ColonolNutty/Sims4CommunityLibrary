@@ -1,3 +1,10 @@
+v2.9:
+- Fixed an EA issue when sending satisfaction points
+- Fixed an EA issue when checking tuning attributes.
+- Passed the correct values to CommonExcutionResult
+- Fixed some text issues in some commands.
+- Added exception handling for Alarm Handles.
+
 v2.8:
 - Added Horse support to many places. (Motives, Species, Voices, Sim Types, Sim Demographics, etc.)
 - Updated the Traits, Buffs, Skills, Careers, and Tags enums with new values.
