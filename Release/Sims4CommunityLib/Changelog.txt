@@ -1,3 +1,7 @@
+v3.0:
+- Updated the injection code, this fix will fix a ton of issues with mods that inject into functions using S4CL.
+
+
 v2.9:
 - Fixed an EA issue when sending satisfaction points
 - Fixed an EA issue when checking tuning attributes.

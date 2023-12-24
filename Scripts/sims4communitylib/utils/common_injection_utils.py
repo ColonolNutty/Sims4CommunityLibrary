@@ -5,15 +5,42 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import inspect
 import os
 from functools import wraps
 from typing import Any, Callable, TYPE_CHECKING
+
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 
 if TYPE_CHECKING:
     from sims4communitylib.utils.common_log_registry import CommonLog
 ON_RTD = os.environ.get('READTHEDOCS', None) == 'True'
+
+
+class _TypeChecking:
+    # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring
+    @classmethod
+    def class_method(cls):
+        pass
+
+    # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring
+    def self_method(self):
+        pass
+
+    # noinspection PyPropertyDefinition,PyMissingTypeHints,PyMissingOrEmptyDocstring
+    @property
+    def property_type(self):
+        pass
+
+    # noinspection PyMissingTypeHints,PyMissingOrEmptyDocstring
+    @staticmethod
+    def static_method():
+        pass
+
+
+ClassMethodType = type(_TypeChecking.class_method)
+SelfMethodType = type(_TypeChecking.self_method)
+StaticMethodType = type(_TypeChecking.static_method)
+PropertyType = type(_TypeChecking.property_type)
 
 
 class CommonInjectionUtils:
@@ -32,7 +59,7 @@ class CommonInjectionUtils:
         return CommonInjectionUtils.inject_safely_into(None, target_object, target_function_name)
 
     @staticmethod
-    def inject_safely_into(mod_identity: CommonModIdentity, target_object: Any, target_function_name: str, handle_exceptions: bool=True) -> Callable:
+    def inject_safely_into(mod_identity: CommonModIdentity, target_object: Any, target_function_name: str, handle_exceptions: bool = True) -> Callable:
         """inject_safely_into(mod_identity, target_object, target_function_name, handle_exceptions=True)
 
         A decorator used to inject code into a function.
@@ -95,11 +122,88 @@ class CommonInjectionUtils:
             def _function_wrapper(original_function, new_function: Callable[..., Any]) -> Any:
                 # noinspection PyBroadException
                 try:
+                    if isinstance(original_function, ClassMethodType):
+                        original_function_func = original_function.__func__
+
+                        # noinspection PyDecorator
+                        @wraps(original_function)
+                        def _wrapped_class_function(cls, *args, **kwargs) -> Any:
+                            try:
+                                # noinspection PyMissingTypeHints
+                                def _do_original(*_, **__):
+                                    return original_function_func(cls, *_, **__)
+
+                                return new_function(_do_original, cls, *args, **kwargs)
+                            except Exception as ex:
+                                # noinspection PyBroadException
+                                try:
+                                    from sims4communitylib.exceptions.common_exceptions_handler import \
+                                        CommonExceptionHandler
+                                    CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while injecting into function \'{}\' of class \'{}\''.format(new_function.__name__, target_object.__name__), exception=ex)
+                                except Exception:
+                                    pass
+                                return original_function_func(cls, *args, **kwargs)
+                        return classmethod(_wrapped_class_function)
+
+                    if isinstance(original_function, SelfMethodType):
+                        @wraps(original_function)
+                        def _wrapped_self_function(self, *args, **kwargs) -> Any:
+                            try:
+                                return new_function(original_function, self, *args, **kwargs)
+                            except Exception as ex:
+                                # noinspection PyBroadException
+                                try:
+                                    from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+                                    CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while injecting into function \'{}\' of class \'{}\''.format(new_function.__name__, target_object.__name__), exception=ex)
+                                except Exception:
+                                    pass
+                                return original_function(self, *args, **kwargs)
+
+                        return _wrapped_self_function
+
+                    if isinstance(original_function, PropertyType):
+                        # noinspection PyTypeChecker
+                        @wraps(original_function)
+                        def _wrapped_property_function(self, *args, **kwargs) -> Any:
+                            try:
+                                return new_function(original_function.fget, self, *args, **kwargs)
+                            except Exception as ex:
+                                # noinspection PyBroadException
+                                try:
+                                    from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+                                    CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while injecting into function \'{}\' of class \'{}\''.format(new_function.__name__, target_object.__name__), exception=ex)
+                                except Exception:
+                                    pass
+                                return original_function(self, *args, **kwargs)
+
+                        return property(_wrapped_property_function)
+
+                    if isinstance(original_function, StaticMethodType):
+                        original_function_func = original_function.__func__
+
+                        # noinspection PyDecorator
+                        @wraps(original_function)
+                        def _wrapped_static_function(*args, **kwargs) -> Any:
+                            try:
+                                # noinspection PyMissingTypeHints
+                                def _do_original(*_, **__):
+                                    return original_function_func(*_, **__)
+
+                                return new_function(_do_original, *args, **kwargs)
+                            except Exception as ex:
+                                # noinspection PyBroadException
+                                try:
+                                    from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
+                                    CommonExceptionHandler.log_exception(mod_identity, 'Error occurred while injecting into function \'{}\' of class \'{}\''.format(new_function.__name__, target_object.__name__), exception=ex)
+                                except Exception:
+                                    pass
+                                return original_function_func(*args, **kwargs)
+
+                        return staticmethod(_wrapped_static_function)
+
                     @wraps(original_function)
-                    def _wrapped_function(*args, **kwargs) -> Any:
+                    def _wrapped_other_function(*args, **kwargs) -> Any:
                         try:
-                            if type(original_function) is property:
-                                return new_function(original_function.fget, *args, **kwargs)
                             return new_function(original_function, *args, **kwargs)
                         except Exception as ex:
                             # noinspection PyBroadException
@@ -109,28 +213,67 @@ class CommonInjectionUtils:
                             except Exception:
                                 pass
                             return original_function(*args, **kwargs)
-                    if inspect.ismethod(original_function):
-                        return classmethod(_wrapped_function)
-                    if type(original_function) is property:
-                        return property(_wrapped_function)
-                    return _wrapped_function
+
+                    return _wrapped_other_function
                 except:
                     def _func(*_, **__) -> Any:
                         pass
                     return _func
         else:
             def _function_wrapper(original_function, new_function: Callable[..., Any]) -> Any:
-                @wraps(original_function)
-                def _wrapped_function(*args, **kwargs) -> Any:
-                    if type(original_function) is property:
-                        return new_function(original_function.fget, *args, **kwargs)
-                    return new_function(original_function, *args, **kwargs)
+                # noinspection PyBroadException
+                try:
+                    if isinstance(original_function, ClassMethodType):
+                        original_function_func = original_function.__func__
 
-                if inspect.ismethod(original_function):
-                    return classmethod(_wrapped_function)
-                elif type(original_function) is property:
-                    return property(_wrapped_function)
-                return _wrapped_function
+                        # noinspection PyDecorator
+                        @wraps(original_function)
+                        def _wrapped_class_function(cls, *args, **kwargs) -> Any:
+                            # noinspection PyMissingTypeHints
+                            def _do_original(*_, **__):
+                                return original_function_func(cls, *_, **__)
+
+                            return new_function(_do_original, cls, *args, **kwargs)
+                        return classmethod(_wrapped_class_function)
+
+                    if isinstance(original_function, SelfMethodType):
+                        @wraps(original_function)
+                        def _wrapped_self_function(self, *args, **kwargs) -> Any:
+                            return new_function(original_function, self, *args, **kwargs)
+
+                        return _wrapped_self_function
+
+                    if isinstance(original_function, PropertyType):
+                        # noinspection PyTypeChecker
+                        @wraps(original_function)
+                        def _wrapped_property_function(self, *args, **kwargs) -> Any:
+                            return new_function(original_function.fget, self, *args, **kwargs)
+
+                        return property(_wrapped_property_function)
+
+                    if isinstance(original_function, StaticMethodType):
+                        original_function_func = original_function.__func__
+
+                        # noinspection PyDecorator
+                        @wraps(original_function)
+                        def _wrapped_static_function(*args, **kwargs) -> Any:
+                            # noinspection PyMissingTypeHints
+                            def _do_original(*_, **__):
+                                return original_function_func(*_, **__)
+
+                            return new_function(_do_original, *args, **kwargs)
+
+                        return staticmethod(_wrapped_static_function)
+
+                    @wraps(original_function)
+                    def _wrapped_other_function(*args, **kwargs) -> Any:
+                        return new_function(original_function, *args, **kwargs)
+
+                    return _wrapped_other_function
+                except:
+                    def _func(*_, **__) -> Any:
+                        pass
+                    return _func
 
         def _injected(wrap_function) -> Any:
             original_function = getattr(target_object, str(target_function_name))
@@ -139,7 +282,7 @@ class CommonInjectionUtils:
         return _injected
 
     @staticmethod
-    def inject_safely_into_function(mod_identity: CommonModIdentity, target_object: Any, target_function_name: str, callback: Callable[..., Any], replace_return: bool=False, handle_exceptions: bool=True) -> Callable:
+    def inject_safely_into_function(mod_identity: CommonModIdentity, target_object: Any, target_function_name: str, callback: Callable[..., Any], replace_return: bool = False, handle_exceptions: bool = True) -> Callable:
         """inject_safely_into_function(mod_identity, target_object, target_function_name, callback, replace_return=False, handle_exceptions=True)
 
         A decorator used to inject code into a function.
@@ -208,7 +351,7 @@ class CommonInjectionUtils:
         return _inject_and_invoke_callback
 
     @staticmethod
-    def inject_and_print_arguments(mod_identity: CommonModIdentity, target_object: Any, target_function_name: str, log: 'CommonLog', log_stack_trace: bool=False, handle_exceptions: bool=True) -> Callable:
+    def inject_and_print_arguments(mod_identity: CommonModIdentity, target_object: Any, target_function_name: str, log: 'CommonLog', log_stack_trace: bool = False, handle_exceptions: bool = True) -> Callable:
         """inject_and_print_arguments(mod_identity, target_object, target_function_name, log, log_stack_trace=False, handle_exceptions=True)
 
         A decorator used to inject code into a function and print any arguments or keyword arguments passed to it.

@@ -76,15 +76,15 @@ class CommonSimInventoryUtils:
                     yield inventory_object
 
     @classmethod
-    def add_to_inventory(cls, sim_info: SimInfo, object_id: int, count: int = 1, on_added: Callable[[GameObject], None] = CommonFunctionUtils.noop) -> bool:
+    def add_to_inventory(cls, sim_info: SimInfo, object_definition_id: int, count: int = 1, on_added: Callable[[GameObject], None] = CommonFunctionUtils.noop) -> bool:
         """add_to_inventory(sim_info, object_definition_id, count=1, on_added=CommonFunctionUtils.noop)
 
         Add a number of Newly Created Objects to the Inventory of a Sim.
 
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
-        :param object_id: The decimal identifier of an Object.
-        :type object_id: int
+        :param object_definition_id: The decimal identifier of an Object.
+        :type object_definition_id: int
         :param count: The number of the specified Object to add. Default is 1.
         :type count: int, optional
         :param on_added: A callback invoked when the object is added to the inventory.
@@ -102,7 +102,7 @@ class CommonSimInventoryUtils:
 
         success = True
         for _ in range(count):
-            game_object = CommonObjectSpawnUtils.spawn_object_on_lot(object_id, CommonLocation.empty(), post_object_spawned_callback=_post_create)
+            game_object = CommonObjectSpawnUtils.spawn_object_on_lot(object_definition_id, CommonLocation.empty(), post_object_spawned_callback=_post_create)
             if game_object is None:
                 success = False
         return success
