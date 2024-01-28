@@ -371,7 +371,7 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
                         return CommonExecutionResult(False, reason='Sim is already at the active event.')
                 career_event = random.choice(available_events)
 
-        career._on_career_event_accepted(career_event)
+        career.on_career_event_accepted(career_event)
         return CommonExecutionResult.TRUE
 
     @classmethod

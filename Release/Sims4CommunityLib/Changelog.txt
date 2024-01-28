@@ -1,3 +1,6 @@
+v3.1:
+- Fixed an issue when trying to start an active career event on the current lot.
+
 v3.0:
 - Updated the injection code, this fix will fix a ton of issues with mods that inject into functions using S4CL.
 

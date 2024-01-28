@@ -50,3 +50,4 @@ class CommonMotiveId(CommonInt):
     SERVO_DURABILITY: 'CommonMotiveId' = 218485  # motive_Robots_Durability
     MERMAID_HYDRATION: 'CommonMotiveId' = HYGIENE
     WITCH_MAGIC: 'CommonMotiveId' = 213024  # commodity_Motive_WitchOccult_Charge
+    WEREWOLF_FURY: 'CommonMotiveId' = 276223  # commodity_Motive_Werewolf_Fury
