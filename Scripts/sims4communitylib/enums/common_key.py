@@ -14,10 +14,12 @@ class CommonKey(CommonInt):
     # Windows Keys
     BACKSPACE: 'CommonKey' = 8
     TAB: 'CommonKey' = 9
+    NUM_PAD_OFF_5: 'CommonKey' = 12
     ENTER: 'CommonKey' = 13
     SHIFT: 'CommonKey' = 16  # Can be used for both Left and Right SHIFT
     CTRL: 'CommonKey' = 17  # Can be used for both Left and Right CTRL
     ALT: 'CommonKey' = 18  # Can be used for both Left and Right ALT
+    PAUSE: 'CommonKey' = 19
     CAPS_LOCK: 'CommonKey' = 20
     ESCAPE: 'CommonKey' = 27
     SPACE: 'CommonKey' = 32
@@ -29,6 +31,7 @@ class CommonKey(CommonInt):
     ARROW_UP: 'CommonKey' = 38
     ARROW_RIGHT: 'CommonKey' = 39
     ARROW_DOWN: 'CommonKey' = 40
+    SYSTEM_REQUEST: 'CommonKey' = 44
     INSERT: 'CommonKey' = 45
     DELETE: 'CommonKey' = 46
     KEY_0: 'CommonKey' = 48
@@ -67,6 +70,9 @@ class CommonKey(CommonInt):
     KEY_X: 'CommonKey' = 88
     KEY_Y: 'CommonKey' = 89
     KEY_Z: 'CommonKey' = 90
+    WINDOWS_LEFT: 'CommonKey' = 91
+    WINDOWS_RIGHT: 'CommonKey' = 92
+    APPLICATIONS: 'CommonKey' = 93
     NUM_PAD_0: 'CommonKey' = 96
     NUM_PAD_1: 'CommonKey' = 97
     NUM_PAD_2: 'CommonKey' = 98
@@ -95,6 +101,8 @@ class CommonKey(CommonInt):
     F10: 'CommonKey' = 121
     F11: 'CommonKey' = 122
     F12: 'CommonKey' = 123
+    NUM_LOCK: 'CommonKey' = 144
+    SCROLL_LOCK: 'CommonKey' = 145
     EQUAL: 'CommonKey' = 187
     SHIFT_LEFT: 'CommonKey' = 160
     SHIFT_RIGHT: 'CommonKey' = 161
