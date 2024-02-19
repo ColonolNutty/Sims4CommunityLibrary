@@ -38,13 +38,26 @@ class CommonJSONIOUtils:
         """
         if file_path is None or obj is None:
             return False
+        dir_name = os.path.dirname(file_path)
+        temp_file_name = 'temp' + os.path.basename(file_path)
+        temp_file_path = os.path.join(dir_name, temp_file_name)
         if encoder_class is not None:
             json_obj = json.dumps(obj, cls=encoder_class, indent=2)
         else:
             json_obj = json.dumps(obj, default=lambda o: o.serialize() if isinstance(o, CommonSerializable) else o.__dict__ if hasattr(o, '__dict__') else o, indent=2)
-        with open(file_path, mode='w+', buffering=buffering, encoding=encoding) as file:
+
+        with open(temp_file_path, mode='w+', buffering=buffering, encoding=encoding) as file:
             file.write(json_obj)
             file.flush()
+
+        # File is empty.
+        if os.stat(temp_file_path).st_size != 0:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+            os.rename(temp_file_path, file_path)
+        else:
+            os.remove(temp_file_path)
+            raise Exception(f'Failed to write file {file_path}, it wrote empty for some reason!')
         return True
 
     @staticmethod
@@ -69,6 +82,8 @@ class CommonJSONIOUtils:
         try:
             file_contents: str = CommonIOUtils.load_from_file(file_path, buffering=buffering, encoding=encoding)
             if file_contents is None:
+                return None
+            if len(file_contents) == 0:
                 return None
             return json.loads(file_contents, cls=decoder_class, object_hook=object_hook)
         except Exception as ex:

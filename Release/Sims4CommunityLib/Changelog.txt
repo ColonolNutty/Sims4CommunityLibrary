@@ -1,3 +1,7 @@
+v3.2:
+- Potentially fixed an issue when writing JSON files and failing to, resulting in empty JSON files.
+- Added a check to not load empty JSON files.
+
 v3.1:
 - Fixed an issue when trying to start an active career event on the current lot.
 
