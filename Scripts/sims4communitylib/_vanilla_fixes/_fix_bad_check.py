@@ -11,7 +11,7 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TuningAttrCleanupHelper, 'register_for_cleanup')
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TuningAttrCleanupHelper, '_register_for_cleanup_internal')
 def _common_fix_bad_check(original, self: TuningAttrCleanupHelper, *_, **__):
     if self._tracked_objects is None:
         self._tracked_objects = list()

@@ -983,7 +983,7 @@ def _common_meet_everyone(output: CommonConsoleCommandOutput):
     's4clib.unmeet_everyone',
     'Remove the Has Met Relationship Bit between all Sims.',
 )
-def _common_meet_everyone(output: CommonConsoleCommandOutput):
+def _common_unmeet_everyone(output: CommonConsoleCommandOutput):
     output('Attempting to make everyone unmeet everyone.')
     sim_pair_count = 0
     for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
