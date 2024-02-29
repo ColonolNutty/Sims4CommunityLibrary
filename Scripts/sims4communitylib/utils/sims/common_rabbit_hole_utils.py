@@ -44,6 +44,7 @@ class CommonRabbitHoleUtils:
             # noinspection PyCallingNonCallable
             rabbit_hole_instance = rabbit_hole()
             if isinstance(rabbit_hole_instance, RabbitHole):
+                # noinspection PyTypeChecker
                 return rabbit_hole
         except:
             pass
@@ -51,6 +52,7 @@ class CommonRabbitHoleUtils:
         try:
             rabbit_hole: int = int(rabbit_hole)
         except:
+            # noinspection PyTypeChecker
             rabbit_hole: RabbitHole = rabbit_hole
             return rabbit_hole
 

@@ -155,6 +155,7 @@ class CommonCareerUtils:
             # noinspection PyCallingNonCallable
             career_instance = career()
             if isinstance(career_instance, Career):
+                # noinspection PyTypeChecker
                 return career
         except:
             pass

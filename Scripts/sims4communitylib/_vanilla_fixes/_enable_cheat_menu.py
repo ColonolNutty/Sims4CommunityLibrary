@@ -20,7 +20,7 @@ from sims4communitylib.utils.resources.common_interaction_utils import CommonInt
 log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_extra_cheat_menu_log')
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), InteractionContext, InteractionContext.__init__.__name__)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), InteractionContext, '__init__')
 def _common_ensure_shift_held_is_true_when_it_should_be(original, self: InteractionContext, *_, **__):
     from sims4communitylib.s4cl_configuration import S4CLConfiguration
     cheat_service = services.get_cheat_service()
@@ -32,7 +32,8 @@ def _common_ensure_shift_held_is_true_when_it_should_be(original, self: Interact
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Sim, Sim.potential_relation_panel_interactions.__name__)
 def _common_ensure_proper_interactions_appear_in_relationship_panel(original, self: Sim, *args, **kwargs):
-    context = None
+    # noinspection PyTypeChecker
+    context: InteractionContext = None
     if len(args) == 1:
         context: InteractionContext = args[0]
     elif len(args) == 2:
@@ -70,6 +71,7 @@ def _common_ensure_proper_interactions_appear_in_relationship_panel(original, se
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Sim, Sim.potential_phone_interactions.__name__)
 def _common_ensure_proper_interactions_appear_in_phone_panel(original, self: Sim, *args, **kwargs):
+    # noinspection PyTypeChecker
     context = None
     if len(args) == 1:
         context: InteractionContext = args[0]

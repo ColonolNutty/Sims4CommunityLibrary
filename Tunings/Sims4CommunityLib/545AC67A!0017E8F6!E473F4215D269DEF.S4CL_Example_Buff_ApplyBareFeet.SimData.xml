@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SimData version="0x00000101" u="0x0000001F">
+<SimData version="0x00000101" u="0x00000000">
   <Instances>
     <I name="S4CL_Example_Buff_ApplyBareFeet" schema="Buff" type="Object">
       <T name="audio_sting_on_add">FD04E3BE-001407EC-8AF8B916CF64C646</T>

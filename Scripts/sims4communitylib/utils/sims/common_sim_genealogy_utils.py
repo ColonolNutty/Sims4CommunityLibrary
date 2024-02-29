@@ -264,6 +264,7 @@ class CommonSimGenealogyUtils:
             if CommonSimGenealogyUtils.is_mothers_mother_of(sim_info_a, sim_info_b):
                 CommonSimGenealogyUtils.remove_mothers_mother_relation(sim_info_b)
 
+        # noinspection PyTypeChecker
         relationship_bit_ids: Tuple[CommonRelationshipBitId] = (
             CommonRelationshipBitId.FAMILY_AUNT_UNCLE,
             CommonRelationshipBitId.FAMILY_SON_DAUGHTER,

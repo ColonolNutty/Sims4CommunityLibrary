@@ -239,6 +239,7 @@ class CommonSimVoiceUtils:
         from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
         from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
         if CommonAgeSpeciesUtils.is_teen_adult_or_elder_human(sim_info):
+            # noinspection PyTypeChecker
             result: Tuple[CommonVoiceActorType] = (
                 CommonVoiceActorType.MUTE,
                 CommonVoiceActorType.ADULT_HUMAN_AMBIGUOUS_1,
@@ -252,6 +253,7 @@ class CommonSimVoiceUtils:
                 CommonVoiceActorType.HONDO_OHNAKA_1,
             )
         elif CommonAgeSpeciesUtils.is_child_human(sim_info):
+            # noinspection PyTypeChecker
             result: Tuple[CommonVoiceActorType] = (
                 CommonVoiceActorType.MUTE,
                 CommonVoiceActorType.CHILD_HUMAN_AMBIGUOUS_1,
@@ -261,11 +263,13 @@ class CommonSimVoiceUtils:
                 CommonVoiceActorType.HONDO_OHNAKA_1,
             )
         elif CommonAgeSpeciesUtils.is_toddler_human(sim_info):
+            # noinspection PyTypeChecker
             result: Tuple[CommonVoiceActorType] = (
                 CommonVoiceActorType.MUTE,
                 CommonVoiceActorType.TODDLER_HUMAN_AMBIGUOUS_1,
             )
         elif CommonSpeciesUtils.is_large_dog(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            # noinspection PyTypeChecker
             result: Tuple[CommonVoiceActorType] = (
                 CommonVoiceActorType.MUTE,
                 CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_1,
@@ -274,11 +278,13 @@ class CommonSimVoiceUtils:
                 CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_4
             )
         elif CommonSpeciesUtils.is_large_dog(sim_info) and CommonAgeUtils.is_child(sim_info):
+            # noinspection PyTypeChecker
             result: Tuple[CommonVoiceActorType] = (
                 CommonVoiceActorType.MUTE,
                 CommonVoiceActorType.CHILD_DOG_AMBIGUOUS_1,
             )
         elif CommonSpeciesUtils.is_small_dog(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            # noinspection PyTypeChecker
             result: Tuple[CommonVoiceActorType] = (
                 CommonVoiceActorType.MUTE,
                 CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_1,
@@ -287,32 +293,38 @@ class CommonSimVoiceUtils:
                 CommonVoiceActorType.ADULT_DOG_AMBIGUOUS_4
             )
         elif CommonSpeciesUtils.is_small_dog(sim_info) and CommonAgeUtils.is_child(sim_info):
+            # noinspection PyTypeChecker
             result: Tuple[CommonVoiceActorType] = (
                 CommonVoiceActorType.MUTE,
                 CommonVoiceActorType.CHILD_DOG_AMBIGUOUS_1,
             )
         elif CommonSpeciesUtils.is_cat(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            # noinspection PyTypeChecker
             result: Tuple[CommonVoiceActorType] = (
                 CommonVoiceActorType.MUTE,
                 CommonVoiceActorType.ADULT_CAT_AMBIGUOUS_1,
                 CommonVoiceActorType.ADULT_CAT_AMBIGUOUS_2,
             )
         elif CommonSpeciesUtils.is_cat(sim_info) and CommonAgeUtils.is_child(sim_info):
+            # noinspection PyTypeChecker
             result: Tuple[CommonVoiceActorType] = (
                 CommonVoiceActorType.MUTE,
                 CommonVoiceActorType.CHILD_CAT_AMBIGUOUS_1,
             )
         elif CommonSpeciesUtils.is_fox(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            # noinspection PyTypeChecker
             result: Tuple[CommonVoiceActorType] = (
                 CommonVoiceActorType.MUTE,
                 CommonVoiceActorType.ADULT_FOX_AMBIGUOUS_1,
             )
         elif CommonSpeciesUtils.is_horse(sim_info) and CommonAgeUtils.is_teen_adult_or_elder(sim_info):
+            # noinspection PyTypeChecker
             result: Tuple[CommonVoiceActorType] = (
                 CommonVoiceActorType.MUTE,
                 CommonVoiceActorType.ADULT_HORSE_AMBIGUOUS_1,
             )
         elif CommonSpeciesUtils.is_horse(sim_info) and CommonAgeUtils.is_child(sim_info):
+            # noinspection PyTypeChecker
             result: Tuple[CommonVoiceActorType] = (
                 CommonVoiceActorType.MUTE,
                 CommonVoiceActorType.CHILD_HORSE_AMBIGUOUS_1,

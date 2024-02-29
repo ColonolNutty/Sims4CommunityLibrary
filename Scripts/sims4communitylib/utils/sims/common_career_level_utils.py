@@ -33,6 +33,7 @@ class CommonCareerLevelUtils:
             # noinspection PyCallingNonCallable
             career_level_instance = career_level_identifier()
             if isinstance(career_level_instance, CareerLevel):
+                # noinspection PyTypeChecker
                 return career_level_identifier
         except:
             pass
@@ -40,6 +41,7 @@ class CommonCareerLevelUtils:
         try:
             career_level_identifier: int = int(career_level_identifier)
         except:
+            # noinspection PyTypeChecker
             career_level_identifier: CareerLevel = career_level_identifier
             return career_level_identifier
 

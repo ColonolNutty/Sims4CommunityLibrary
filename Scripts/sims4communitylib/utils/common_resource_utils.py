@@ -370,13 +370,17 @@ class CommonResourceUtils:
         """
         from sims4.resources import TYPE_RES_DICT
         tuning_instance_key = CommonResourceUtils.get_resource_key(tuning_type, tuning_id)
+        # noinspection PyArgumentList
         tuning_loader = ETreeTuningLoader(class_type, '[{}] Dynamic Instance: {}'.format(mod_identity.name.replace(' ', '_'), class_type), loading_tag=LoadingTags.Instance)
+        # noinspection PyUnresolvedReferences
         tuning_loader.feed(BytesIO(tuning_contents.encode('utf-8')))
         if tuning_instance_key.type in TYPE_RES_DICT:
             res_ext = TYPE_RES_DICT[tuning_instance_key.type]
             mtg = get_manager()
+            # noinspection PyUnresolvedReferences
             mtg._tuning_resources[res_ext][tuning_instance_key.instance] = tuning_loader.root
         else:
+            # noinspection PyUnresolvedReferences
             cls = tuning_loader.module
             tuning_manage = CommonResourceUtils.get_instance_manager(tuning_type)
             tuning_manage.register_tuned_class(cls, tuning_instance_key)

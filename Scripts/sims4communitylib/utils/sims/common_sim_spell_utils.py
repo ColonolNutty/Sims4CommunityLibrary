@@ -179,6 +179,7 @@ class CommonSimSpellUtils:
             # noinspection PyCallingNonCallable
             spell_instance = spell()
             if isinstance(spell_instance, Spell):
+                # noinspection PyTypeChecker
                 return spell
         except:
             pass

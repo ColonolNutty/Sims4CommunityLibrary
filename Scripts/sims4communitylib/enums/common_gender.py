@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Dict, Union, Tuple, Iterator
+from typing import Union, Tuple, Iterator
 
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Gender

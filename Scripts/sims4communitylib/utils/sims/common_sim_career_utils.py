@@ -60,7 +60,7 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
         career_tracker = cls.get_career_tracker(sim_info)
         if career_tracker is None:
             return None
-        return career_tracker.get_career_by_category(career_category)
+        return next(career_tracker.get_careers_by_category_gen(career_category))
 
     @classmethod
     def get_all_careers_for_sim_gen(cls, sim_info: SimInfo, include_career_callback: Callable[[Career], bool]=None) -> Iterator[Career]:
@@ -212,6 +212,7 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
         """
         if sim_info is None:
             return None
+        # noinspection PyTypeChecker
         return sim_info.career_tracker
 
     @classmethod
@@ -456,6 +457,7 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
         :return: The result of testing for availability. True, if the Career is available for the specified Sim. False, if not.
         :rtype: CommonTestResult
         """
+        # noinspection PyTypeChecker
         non_playable_career_ids: Tuple[int] = (
             223698,  # University_BaseCareer
             231099,  # career_Batuu
@@ -467,6 +469,7 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
             260893,  # careers_VillagerHelp
             206791,  # careers_Adult_Freelancer_No_Agency
         )
+        # noinspection PyTypeChecker
         allowed_non_displayed_career_ids: Tuple[int] = (
             205686,  # career_Adult_Freelancer_Artist
             207568,  # careers_Adult_Freelancer_Agency_Programmer

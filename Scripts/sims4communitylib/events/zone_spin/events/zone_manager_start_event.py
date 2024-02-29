@@ -5,9 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from server.client import Client
 from sims4communitylib.events.event_handling.common_event import CommonEvent
-from zone import Zone
 from zone_manager import ZoneManager
 
 

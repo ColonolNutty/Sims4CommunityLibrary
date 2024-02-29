@@ -6,7 +6,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 import os
-from typing import Any, Tuple, Union
+from typing import Any, Tuple, Union, List
 
 from sims.outfits.outfit_enums import OutfitCategory, BodyTypeFlag, BodyType
 from sims.sim_info import SimInfo
@@ -238,7 +238,7 @@ class CommonAttachCASPartsAppearanceModifier(AppearanceModifier.BaseAppearanceMo
         raise NotImplementedError()
 
     # noinspection PyMissingOrEmptyDocstring
-    def modify_sim_info(self, source_sim_info: SimInfo, modified_sim_info: SimInfo, random_seed: int) -> BodyTypeFlag:
+    def modify_sim_info(self, source_sim_info: SimInfo, modified_sim_info: SimInfo, random_seed: int) -> Tuple[BodyTypeFlag, Union[List[int], None]]:
         try:
             if not hasattr(modified_sim_info, 'original_unmodified_sim_info'):
                 self.log.format_with_message('No Based On Sim Info found, using current source Sim!', original_unmodified_sim=source_sim_info)
@@ -261,14 +261,14 @@ class CommonAttachCASPartsAppearanceModifier(AppearanceModifier.BaseAppearanceMo
 
             if not body_types:
                 self.log.format_with_message('No body types were returned. Assuming BodyTypeFlag is NONE', sim=original_unmodified_sim_info, cas_part_ids_and_body_types=cas_parts)
-                return BodyTypeFlag.NONE
+                return BodyTypeFlag.NONE, None
             body_types = [CommonBodySlot.convert_to_vanilla(body_type) for body_type in body_types]
             body_type_flags = BodyTypeFlag.make_body_type_flag(*body_types)
             self.log.format_with_message('Done applying CAS Parts!', sim=original_unmodified_sim_info, cas_part_ids_and_body_types=cas_parts, body_type_flags=body_type_flags, body_types=body_types)
-            return body_type_flags
+            return body_type_flags, None
         except Exception as ex:
             self.log.error('An error occurred while applying selected part.', exception=ex)
-        return BodyTypeFlag.NONE
+        return BodyTypeFlag.NONE, None
 
     def _get_cas_parts(self, source_sim_info: SimInfo, modified_sim_info: SimInfo, original_unmodified_sim_info: SimInfo, random_seed: int) -> Tuple[CommonCASPart]:
         """_get_cas_parts(source_sim_info, modified_sim_info, original_unmodified_sim_info, random_seed)
@@ -345,7 +345,7 @@ if not ON_RTD:
             CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim to attach the buff to.', is_optional=True, default_value='Active Sim'),
         )
     )
-    def _s4cl_testing_apply_example_bare_feet_buff(output: CommonConsoleCommandOutput, sim_info: SimInfo=None):
+    def _s4cl_testing_apply_example_bare_feet_buff(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
         if sim_info is None:
             return False
         output(f'Toggling bare feet example buff on Sim {sim_info}.')

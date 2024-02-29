@@ -11,7 +11,6 @@ from interactions import ParticipantType
 from interactions.base.interaction import Interaction
 from interactions.context import InteractionContext
 from objects.game_object import GameObject
-from server.pick_info import PickInfo, PickType
 from sims.sim import Sim
 from sims4communitylib.classes.interactions.common_immediate_super_interaction import CommonImmediateSuperInteraction
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult

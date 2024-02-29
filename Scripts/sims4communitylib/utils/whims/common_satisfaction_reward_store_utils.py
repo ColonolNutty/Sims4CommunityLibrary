@@ -155,6 +155,7 @@ class CommonSatisfactionRewardStoreUtils:
             # noinspection PyCallingNonCallable
             reward_definition_id_instance = reward_definition_id()
             if isinstance(reward_definition_id_instance, Reward):
+                # noinspection PyTypeChecker
                 return reward_definition_id
         except:
             pass
@@ -162,6 +163,7 @@ class CommonSatisfactionRewardStoreUtils:
         try:
             reward_definition_id: int = int(reward_definition_id)
         except:
+            # noinspection PyTypeChecker
             reward_definition_id: Reward = reward_definition_id
             return reward_definition_id
 

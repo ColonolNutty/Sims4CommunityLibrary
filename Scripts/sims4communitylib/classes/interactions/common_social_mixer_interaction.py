@@ -12,7 +12,6 @@ from interactions.base.interaction import Interaction
 from postures.posture_state import PostureState
 from sims4communitylib.classes.interactions._common_interaction_custom_mixin import _CommonInteractionCustomMixin
 from sims4communitylib.classes.interactions._common_interaction_hooks_mixin import _CommonInteractionHooksMixin
-from sims4communitylib.utils.common_time_utils import CommonTimeUtils
 from sims4communitylib.utils.misc.common_text_utils import CommonTextUtils
 from singletons import DEFAULT
 from typing import Any, Union, Tuple, Set

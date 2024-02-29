@@ -549,6 +549,7 @@ class CommonSimBucksUtils:
             # noinspection PyCallingNonCallable
             perk_instance = perk()
             if isinstance(perk_instance, BucksPerk):
+                # noinspection PyTypeChecker
                 return perk
         except:
             pass

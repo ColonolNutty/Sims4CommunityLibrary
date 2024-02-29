@@ -129,6 +129,7 @@ class CommonCareerTrackUtils:
             # noinspection PyCallingNonCallable
             career_track_instance = career_track_identifier()
             if isinstance(career_track_instance, TunableCareerTrack):
+                # noinspection PyTypeChecker
                 return career_track_identifier
         except:
             pass
@@ -136,6 +137,7 @@ class CommonCareerTrackUtils:
         try:
             career_track_identifier: int = int(career_track_identifier)
         except:
+            # noinspection PyTypeChecker
             career_track_identifier: TunableCareerTrack = career_track_identifier
             return career_track_identifier
 

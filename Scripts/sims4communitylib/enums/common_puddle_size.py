@@ -7,7 +7,6 @@ Copyright (c) COLONOLNUTTY
 """
 from objects.puddles import PuddleSize
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
-from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 
 
 class CommonPuddleSize(CommonInt):

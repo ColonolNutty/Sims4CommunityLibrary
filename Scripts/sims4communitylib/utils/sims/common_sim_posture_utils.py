@@ -249,6 +249,7 @@ class CommonSimPostureUtils(_HasS4CLClassLog):
             # noinspection PyCallingNonCallable
             posture_instance = posture()
             if isinstance(posture_instance, Posture):
+                # noinspection PyTypeChecker
                 return posture
         except:
             pass
