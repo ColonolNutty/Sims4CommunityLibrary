@@ -1,3 +1,8 @@
+v3.3:
+- Added load_icon_by_id to CommonIconUtils.
+- Fixed an issue with missing arguments when calling on_outfit_update within CommonOutfitUtils.update_outfits
+- Fixed an issue when retrieving the Tuning name of a buff in CommonBuffUtils, where it would not give the proper name.
+
 v3.2:
 - Potentially fixed an issue when writing JSON files and failing to, resulting in empty JSON files.
 - Added a check to not load empty JSON files.

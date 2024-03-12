@@ -379,11 +379,7 @@ class CommonBuffUtils(_HasS4CLClassLog):
         """
         if buff is None:
             return None
-        # noinspection PyBroadException
-        try:
-            return buff.__class__.__name__ or ''
-        except:
-            return ''
+        return str(buff)
 
     @classmethod
     def get_buff_names(cls, buffs: Iterator[Buff]) -> Tuple[str]:

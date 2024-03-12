@@ -952,7 +952,7 @@ class CommonOutfitUtils(HasClassLog):
         :return: True, if the outfits were updated successfully. False, if not.
         :rtype: bool
         """
-        sim_info.on_outfit_changed(sim_info, CommonOutfitUtils.get_current_outfit(sim_info))
+        sim_info.on_outfit_changed(sim_info, CommonOutfitUtils.get_current_outfit(sim_info), CommonOutfitUtils.get_current_outfit(sim_info))
         CommonOutfitUtils.resend_outfits(sim_info)
         sim_info.appearance_tracker.evaluate_appearance_modifiers()
         return True
