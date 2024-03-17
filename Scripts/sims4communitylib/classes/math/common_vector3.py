@@ -5,7 +5,7 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union
+from typing import Union, Type, Dict, Any
 from protocolbuffers.Math_pb2 import Vector3 as MathPb2Vector3
 
 # noinspection PyBroadException
@@ -142,6 +142,19 @@ class CommonVector3:
         return CommonVector3(0.0, 0.0, 0.0)
 
     @staticmethod
+    def is_empty(vector: Union[Vector3, Vector3Immutable, MathPb2Vector3, 'CommonVector3']) -> bool:
+        """is_empty(vector)
+
+        Determine if a vector is empty or not.
+
+        :param vector: The vector to check.
+        :type vector: Union[Vector3, Vector3Immutable, MathPb2Vector3, CommonVector3]
+        :return: True, if the vector is empty. False, if not.
+        :rtype: bool
+        """
+        return vector.x == 0.0 and vector.y == 0.0 and vector.z == 0.0
+
+    @staticmethod
     def from_vector3(vector: Union[Vector3, Vector3Immutable, MathPb2Vector3, 'CommonVector3']) -> Union['CommonVector3', None]:
         """from_vector3(vector)
 
@@ -265,3 +278,20 @@ class CommonVector3:
 
     def __str__(self) -> str:
         pass
+
+    # noinspection PyMissingOrEmptyDocstring
+    @staticmethod
+    def serialize(vector: Union[Vector3, Vector3Immutable, MathPb2Vector3, 'CommonVector3']) -> Union[str, Dict[str, Any]]:
+        data = dict()
+        data['x'] = vector.x
+        data['y'] = vector.y
+        data['z'] = vector.z
+        return data
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def deserialize(cls: Type['CommonVector3'], data: Union[str, Dict[str, Any]]) -> Union['CommonVector3', None]:
+        x = data.get('x', 0.0)
+        y = data.get('y', 0.0)
+        z = data.get('z', 0.0)
+        return CommonVector3(x, y, z)

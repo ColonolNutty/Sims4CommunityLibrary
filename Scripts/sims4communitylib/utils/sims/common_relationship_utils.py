@@ -828,42 +828,6 @@ log.enable()
 
 @CommonConsoleCommand(
     ModInfo.get_identity(),
-    's4clib.add_relationship_bit',
-    'Add a relationship bit between two Sims.',
-    command_arguments=(
-        CommonConsoleCommandArgument('relationship_bit', 'Relationship Bit Id or Tuning Name', 'The decimal identifier or Tuning Name of the Relationship Bit to add.'),
-        CommonConsoleCommandArgument('target_sim_info', 'Sim Id or Name', 'The instance id or name of the Sim to add the relationship bit to.'),
-        CommonConsoleCommandArgument('source_sim_info', 'Sim Id or Name', 'The instance id or name of the Sim to add the relationship bit from.', is_optional=True, default_value='Active Sim'),
-    ),
-    command_aliases=(
-        's4clib.add_rel_bit',
-    )
-)
-def _common_add_relationship_bit(
-    output: CommonConsoleCommandOutput,
-    relationship_bit: TunableInstanceParam(Types.RELATIONSHIP_BIT),
-    target_sim_info: SimInfo,
-    source_sim_info: SimInfo = None
-):
-    if isinstance(relationship_bit, str):
-        output(f'ERROR: Invalid relationship bit specified \'{relationship_bit}\' or it was not found.')
-        return False
-    if target_sim_info is None:
-        output('ERROR: No Target was specified!')
-        return False
-    if source_sim_info is target_sim_info:
-        output('ERROR: Cannot add a relationship bit to the same Sim.')
-        return False
-    output(f'Attempting to add relationship bit {relationship_bit} between {source_sim_info} and {target_sim_info}')
-    if not CommonRelationshipUtils.add_relationship_bit(source_sim_info, target_sim_info, relationship_bit):
-        output(f'FAILURE: Failed to add relationship bit {relationship_bit} between {source_sim_info} and {target_sim_info}.')
-        return False
-    output(f'SUCCESS: Successfully added relationship bit {relationship_bit} between {source_sim_info} and {target_sim_info}.')
-    return True
-
-
-@CommonConsoleCommand(
-    ModInfo.get_identity(),
     's4clib.remove_relationship_bit',
     'Remove a relationship bit from a Sim.',
     command_arguments=(
@@ -1001,23 +965,32 @@ def _common_unmeet_everyone(output: CommonConsoleCommandOutput):
 # noinspection SpellCheckingInspection
 @CommonConsoleCommand(
     ModInfo.get_identity(),
-    's4clib.add_rel_bit',
-    'Add a relationship bit between two Sims.',
+    's4clib.add_relationship_bit',
+    'Add a relationship bit from Sim A to Sim B.',
     command_arguments=(
         CommonConsoleCommandArgument('relationship_bit', 'Name or Id', 'The name or id of a relationship bit to add.'),
         CommonConsoleCommandArgument('sim_a', 'Name or Id', 'The name of the first Sim. The relationship bit will be added from Sim A to Sim B.'),
         CommonConsoleCommandArgument('sim_b', 'Name or Id', 'The name of the second Sim. The relationship bit will be added from Sim A to Sim B.')
     ),
     command_aliases=(
-        's4clib.add_relationship_bit',
+        's4clib.add_rel_bit',
         's4clib.addrelationshipbit',
         's4clib.addrelbit'
     )
 )
-def _common_add_relationship_bit(output: CommonConsoleCommandOutput, relationship_bit: TunableInstanceParam(Types.RELATIONSHIP_BIT), sim_a: SimInfo, sim_b: SimInfo):
-    output(f'Adding relationship bit {relationship_bit} from {sim_a} to {sim_b}.')
-    result = CommonRelationshipUtils.add_relationship_bit(sim_a, sim_b, relationship_bit)
+def _common_add_relationship_bit(output: CommonConsoleCommandOutput, relationship_bit: TunableInstanceParam(Types.RELATIONSHIP_BIT), sim_info_a: SimInfo, sim_info_b: SimInfo):
+    if isinstance(relationship_bit, str):
+        output(f'ERROR: Invalid relationship bit specified \'{relationship_bit}\' or it was not found.')
+        return False
+    if sim_info_b is None:
+        output('ERROR: No Target was specified!')
+        return False
+    if sim_info_a is sim_info_b:
+        output('ERROR: Cannot add a relationship bit to the same Sim.')
+        return False
+    output(f'Attempting to add relationship bit {relationship_bit} from {sim_info_a} to {sim_info_b}.')
+    result = CommonRelationshipUtils.add_relationship_bit(sim_info_a, sim_info_b, relationship_bit)
     if result:
-        output('Successfully added relationship bit.')
+        output(f'SUCCESS: Successfully added relationship bit {relationship_bit} between {sim_info_a} and {sim_info_b}.')
     else:
-        output(f'Failed to add relationship bit. {result}')
+        output(f'FAILURE: Failed to add relationship bit {relationship_bit} between {sim_info_a} and {sim_info_b}. {result}')
