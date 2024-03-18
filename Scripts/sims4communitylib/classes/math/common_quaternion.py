@@ -96,7 +96,7 @@ except:
 class CommonQuaternion:
     """ A class that contains orientation data. """
 
-    def __init__(self, x: float, y: float, z: float, w: Any) -> None:
+    def __init__(self, x: float, y: float, z: float, w: float) -> None:
         if x is None:
             x = 0.0
         if y is None:
@@ -104,7 +104,7 @@ class CommonQuaternion:
         if z is None:
             z = 0.0
         if w is None:
-            w = 0.0
+            w = 1.0
         self._x = x
         self._y = y
         self._z = z
@@ -158,7 +158,7 @@ class CommonQuaternion:
     def w(self, value: float):
         self._w = value
 
-    def __new__(cls, x: float, y: float, z: float, w: Any) -> 'CommonQuaternion':
+    def __new__(cls, x: float, y: float, z: float, w: float) -> 'CommonQuaternion':
         if x is None:
             x = 0.0
         if y is None:
@@ -174,9 +174,22 @@ class CommonQuaternion:
     def empty() -> 'CommonQuaternion':
         """empty()
 
+        Deprecated, use "identity" instead.
+
         Create an empty quaternion.
 
         :return: An empty quaternion.
+        :rtype: CommonQuaternion
+        """
+        return CommonQuaternion.identity()
+
+    @staticmethod
+    def identity() -> 'CommonQuaternion':
+        """identity()
+
+        Create an identity quaternion.
+
+        :return: An identity quaternion.
         :rtype: CommonQuaternion
         """
         return CommonQuaternion(0.0, 0.0, 0.0, 1.0)
@@ -192,7 +205,8 @@ class CommonQuaternion:
         :return: True, if the quaternion is empty. False, if not.
         :rtype: bool
         """
-        return quaternion.x == 0.0 and quaternion.y == 0.0 and quaternion.z == 0.0 and quaternion.w == 1.0
+        quaternion_identity = CommonQuaternion.empty()
+        return quaternion.x == quaternion_identity.x and quaternion.y == quaternion_identity.y and quaternion.z == quaternion_identity.z and quaternion.w == quaternion_identity.w
 
     @staticmethod
     def from_quaternion(quaternion: Union[Quaternion, MathPb2Quaternion, 'CommonQuaternion']) -> Union['CommonQuaternion', None]:
