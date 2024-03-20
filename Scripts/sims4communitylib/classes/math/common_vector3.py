@@ -152,7 +152,8 @@ class CommonVector3:
         :return: True, if the vector is empty. False, if not.
         :rtype: bool
         """
-        return vector.x == 0.0 and vector.y == 0.0 and vector.z == 0.0
+        empty_vector = CommonVector3.empty()
+        return vector.x == empty_vector.x and vector.y == empty_vector.y and vector.z == empty_vector.z
 
     @staticmethod
     def from_vector3(vector: Union[Vector3, Vector3Immutable, MathPb2Vector3, 'CommonVector3']) -> Union['CommonVector3', None]:
