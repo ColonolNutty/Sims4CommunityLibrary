@@ -80,13 +80,13 @@ class CommonObjectUtils(_HasS4CLClassLog):
         return getattr(game_object, 'guid64', -1)
 
     @classmethod
-    def get_object_definition(cls, object_id: int, pack_safe: bool = False, get_fallback_definition_id: bool = True) -> Definition:
-        """get_object_definition(object_id, pack_safe=False, get_fallback_definition_id=True)
+    def get_object_definition(cls, game_object: Union[int, GameObject], pack_safe: bool = False, get_fallback_definition_id: bool = True) -> Definition:
+        """get_object_definition(game_object, pack_safe=False, get_fallback_definition_id=True)
 
         Retrieve the definition for an Object.
 
-        :param object_id: The decimal identifier of an Object.
-        :type object_id: int
+        :param game_object: The decimal identifier of an Object or a Game Object.
+        :type game_object: Union[int, GameObject]
         :param pack_safe: If true, objects will be searched for keeping package safety in mind. Default is False.
         :type pack_safe: bool, optional
         :param get_fallback_definition_id: Set True, to locate a fallback definition id. Default is True.
@@ -94,20 +94,22 @@ class CommonObjectUtils(_HasS4CLClassLog):
         :return: The definition of the object with the id.
         :rtype: Definition
         """
-        game_object = cls.get_game_object(object_id)
-        if game_object is not None:
-            if hasattr(game_object, 'definition') and game_object.definition is not None:
-                return game_object.definition
-        return services.definition_manager().get(object_id, pack_safe=pack_safe, get_fallback_definition_id=get_fallback_definition_id)
+        game_object_instance = cls.get_game_object(game_object)
+        if game_object_instance is not None:
+            if hasattr(game_object_instance, 'definition') and game_object_instance.definition is not None:
+                return game_object_instance.definition
+        if hasattr(game_object, 'definition') and game_object.definition is not None:
+            return game_object.definition
+        return services.definition_manager().get(game_object, pack_safe=pack_safe, get_fallback_definition_id=get_fallback_definition_id)
 
     @classmethod
-    def get_object_definition_id(cls, object_id: int, pack_safe: bool = False, get_fallback_definition_id: bool = True) -> Union[int, None]:
-        """get_object_definition_id(object_id, pack_safe=False, get_fallback_definition_id=True)
+    def get_object_definition_id(cls, game_object: Union[int, GameObject], pack_safe: bool = False, get_fallback_definition_id: bool = True) -> Union[int, None]:
+        """get_object_definition_id(game_object, pack_safe=False, get_fallback_definition_id=True)
 
         Retrieve the definition for an Object.
 
-        :param object_id: The decimal identifier of an Object.
-        :type object_id: int
+        :param game_object: The decimal identifier of an Object or a Game Object.
+        :type game_object: Union[int, GameObject]
         :param pack_safe: If true, objects will be searched for keeping package safety in mind. Default is False.
         :type pack_safe: bool, optional
         :param get_fallback_definition_id: Set True, to locate a fallback definition id. Default is True.
@@ -115,7 +117,7 @@ class CommonObjectUtils(_HasS4CLClassLog):
         :return: The id of the definition of the object with the id.
         :rtype: Union[int, None]
         """
-        definition = cls.get_object_definition(object_id, pack_safe=pack_safe, get_fallback_definition_id=get_fallback_definition_id)
+        definition = cls.get_object_definition(game_object, pack_safe=pack_safe, get_fallback_definition_id=get_fallback_definition_id)
         if definition is None:
             return None
         return definition.id

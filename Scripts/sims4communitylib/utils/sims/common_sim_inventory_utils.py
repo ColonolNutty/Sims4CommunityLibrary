@@ -12,6 +12,7 @@ from objects.game_object import GameObject
 from sims.sim_info import SimInfo
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.enums.types.component_types import CommonComponentType
+from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
@@ -23,8 +24,14 @@ from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtil
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
-class CommonSimInventoryUtils:
+class CommonSimInventoryUtils(_HasS4CLClassLog):
     """ Utilities for manipulating the inventory of Sims. """
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_log_identifier(cls) -> str:
+        return 's4cl_sim_inventory_utils'
+
     @classmethod
     def has_inventory(cls, sim_info: SimInfo) -> bool:
         """has_inventory(sim_info)
@@ -50,6 +57,49 @@ class CommonSimInventoryUtils:
         :rtype: Union[SimInventoryComponent, None]
         """
         return cls._get_inventory(sim_info)
+
+    @classmethod
+    def get_objects_in_inventory_by_definition_ids_gen(cls, sim_info: SimInfo, object_definition_ids: Tuple[int], include_object_callback: Callable[[GameObject], bool] = None) -> Iterator[GameObject]:
+        """get_objects_in_inventory_by_definition_id_gen(sim_info, object_definition_ids, include_object_callback=None)
+
+        Retrieve all Objects in the inventory of a Sim that match the definition ids.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param object_definition_ids: The Definition IDs of the objects to locate.
+        :type object_definition_ids: Tuple[int]
+        :param include_object_callback: If the result of this callback is True, the object will be included in the results. If set to None, All objects in the inventory will be included.
+        :type include_object_callback: Callable[[int], bool], optional
+        :return: An iterator containing the decimal identifiers for the objects in the inventory of a Sim.
+        :rtype: Iterator[GameObject]
+        """
+        log = cls.get_log()
+        log.format_with_message('Getting objects in inventory', sim=sim_info, object_definition_ids=object_definition_ids)
+        for game_object in cls.get_all_objects_in_inventory_gen(sim_info, include_object_callback=include_object_callback):
+            definition_id = CommonObjectUtils.get_object_definition_id(game_object)
+            log.format_with_message('Got definition id.', definition_id=definition_id, game_object=game_object)
+            if definition_id in object_definition_ids:
+                log.format_with_message('Definition found in objects.', definition_id=definition_id)
+                yield game_object
+            else:
+                log.format_with_message('Definition not found.', definition_id=definition_id)
+
+    @classmethod
+    def get_objects_in_inventory_by_definition_id_gen(cls, sim_info: SimInfo, object_definition_id: int, include_object_callback: Callable[[GameObject], bool] = None) -> Iterator[GameObject]:
+        """get_objects_in_inventory_by_definition_id_gen(sim_info, object_definition_id, include_object_callback=None)
+
+        Retrieve all Objects in the inventory of a Sim that match the definition id.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param object_definition_id: The Definition ID of the objects to locate.
+        :type object_definition_id: int
+        :param include_object_callback: If the result of this callback is True, the object will be included in the results. If set to None, All objects in the inventory will be included.
+        :type include_object_callback: Callable[[int], bool], optional
+        :return: An iterator containing the decimal identifiers for the objects in the inventory of a Sim.
+        :rtype: Iterator[GameObject]
+        """
+        yield from cls.get_objects_in_inventory_by_definition_ids_gen(sim_info, (object_definition_id,), include_object_callback=include_object_callback)
 
     @classmethod
     def get_all_objects_in_inventory_gen(cls, sim_info: SimInfo, include_object_callback: Callable[[GameObject], bool] = None) -> Iterator[GameObject]:
