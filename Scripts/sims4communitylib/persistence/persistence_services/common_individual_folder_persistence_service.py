@@ -46,7 +46,7 @@ class CommonIndividualFolderPersistenceService(CommonPersistenceService):
         log = CommonLogRegistry().register_log(mod_identity, f'{mod_identity.base_namespace}_{self.log_identifier}')
         folder_path = self._folder_path(mod_identity, identifier=identifier)
 
-        log.format_with_message('Loading data.', mod=mod_identity, folder_path=folder_path)
+        log.format_with_message('Loading data.', mod=mod_identity, folder_path=folder_path, identifier=identifier)
 
         if not os.path.exists(folder_path):
             log.format_with_message('No folder was found at path.', mod=mod_identity, folder_path=folder_path)
@@ -57,7 +57,7 @@ class CommonIndividualFolderPersistenceService(CommonPersistenceService):
         loaded_main_data: Dict[str, Any] = CommonJSONIOUtils.load_from_file(main_file_path)
         if loaded_main_data is None:
             log.format_with_message('Missing main data!', main_file_path=main_file_path)
-            return dict()
+            loaded_main_data = dict()
 
         file_names.append(self._main_file_name)
 

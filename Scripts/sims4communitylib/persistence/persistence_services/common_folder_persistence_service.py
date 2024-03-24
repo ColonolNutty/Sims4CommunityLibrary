@@ -71,7 +71,7 @@ class CommonFolderPersistenceService(CommonPersistenceService):
         loaded_main_data: Dict[str, Any] = CommonJSONIOUtils.load_from_file(main_file_path)
         if loaded_main_data is None:
             log.format_with_message('Missing main data!', main_file_path=main_file_path)
-            return dict()
+            loaded_main_data = dict()
 
         file_names.append(self._main_file_name)
 
