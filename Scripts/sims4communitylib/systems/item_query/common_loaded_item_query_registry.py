@@ -8,6 +8,7 @@ Copyright (c) COLONOLNUTTY
 import collections
 from typing import List, Dict, Any, Tuple, Set, Callable, Union, Iterator, TypeVar, Generic
 
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.systems.item_query.item_tests.common_loaded_item_test import CommonLoadedItemTest
 from sims4communitylib.systems.item_query.query.common_loaded_item_filter_request import CommonLoadedItemFilterRequest
 from sims4communitylib.systems.item_query.query.common_loaded_item_organizer import CommonLoadedItemOrganizer
@@ -123,6 +124,13 @@ class CommonLoadedItemQueryRegistry(CommonService, HasLog, Generic[CommonLoadedI
         if self.verbose_log.enabled:
             self.verbose_log.debug(f'Finished locating {self._item_name}s')
 
+    def _run_tests(self, item: CommonLoadedItemType, item_tests: Iterator[CommonLoadedItemTest]) -> CommonTestResult:
+        for _item_test in item_tests:
+            _result = _item_test.test_item(item)
+            if not _result:
+                return _result
+        return CommonTestResult.TRUE
+
     def _query_items(self, request: CommonLoadedItemFilterRequest, item_tests: Iterator[CommonLoadedItemTest]) -> Iterator[CommonLoadedItemType]:
         if self.log.enabled:
             self.log.format_with_message(f'Querying for {self._item_name}s using query', query=request, item_tests=item_tests)
@@ -139,12 +147,7 @@ class CommonLoadedItemQueryRegistry(CommonService, HasLog, Generic[CommonLoadedI
                 _item = self._registry.locate_by_identifier(_item_identifier)
                 if _item is None:
                     continue
-                _passes_tests = True
-                for _item_test in item_tests:
-                    _result = _item_test.test_item(_item)
-                    if not _result:
-                        _passes_tests = _result
-                        break
+                _passes_tests = self._run_tests(_item, item_tests)
                 if not _passes_tests:
                     if self.log.is_enabled:
                         self.log.format_with_message(f'{self._item_name} failed item test', item=_item.short_name, reason=_passes_tests.reason)
