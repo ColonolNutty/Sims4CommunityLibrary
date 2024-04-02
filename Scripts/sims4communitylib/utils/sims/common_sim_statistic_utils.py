@@ -154,6 +154,8 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         if statistic_instance is None:
             cls.get_log().format_with_message('No statistic found when loading statistic by id.', statistic=statistic, sim=sim_info)
             return None
+        if sim_info.get_tracker(statistic_instance) is None:
+            return None
         return sim_info.get_statistic(statistic_instance, add=add)
 
     # noinspection PyUnusedLocal

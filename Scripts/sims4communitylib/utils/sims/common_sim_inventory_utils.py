@@ -11,6 +11,7 @@ from objects.components.sim_inventory_component import SimInventoryComponent
 from objects.game_object import GameObject
 from sims.sim_info import SimInfo
 from sims4communitylib.classes.math.common_location import CommonLocation
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
@@ -126,7 +127,7 @@ class CommonSimInventoryUtils(_HasS4CLClassLog):
                     yield inventory_object
 
     @classmethod
-    def add_to_inventory(cls, sim_info: SimInfo, object_definition_id: int, count: int = 1, on_added: Callable[[GameObject], None] = CommonFunctionUtils.noop) -> bool:
+    def add_to_inventory(cls, sim_info: SimInfo, object_definition_id: int, count: int = 1, on_added: Callable[[GameObject], None] = CommonFunctionUtils.noop) -> CommonExecutionResult:
         """add_to_inventory(sim_info, object_definition_id, count=1, on_added=CommonFunctionUtils.noop)
 
         Add a number of Newly Created Objects to the Inventory of a Sim.
@@ -140,21 +141,22 @@ class CommonSimInventoryUtils(_HasS4CLClassLog):
         :param on_added: A callback invoked when the object is added to the inventory.
         :type on_added: Callable[[GameObject], None]
         :return: True, if the count of the specified Object were added successfully. False, it not.
-        :rtype: bool
+        :rtype: CommonExecutionResult
         """
-        if CommonSimInventoryUtils.has_inventory(sim_info):
-            return False
+        if not CommonSimInventoryUtils.has_inventory(sim_info):
+            return CommonExecutionResult(False, reason=f'{sim_info} has no inventory.')
 
         def _post_create(_game_object: GameObject) -> bool:
             move_result = CommonSimInventoryUtils.move_object_to_inventory(sim_info, _game_object)
             on_added(_game_object)
             return move_result
 
-        success = True
+        success = CommonExecutionResult.TRUE
+        count = int(count)
         for _ in range(count):
             game_object = CommonObjectSpawnUtils.spawn_object_on_lot(object_definition_id, CommonLocation.empty(), post_object_spawned_callback=_post_create)
             if game_object is None:
-                success = False
+                success = CommonExecutionResult(False, reason=f'Failed to create object {object_definition_id}')
         return success
 
     @classmethod
