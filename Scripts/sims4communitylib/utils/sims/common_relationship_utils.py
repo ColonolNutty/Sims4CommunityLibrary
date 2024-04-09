@@ -821,6 +821,21 @@ class CommonRelationshipUtils:
         from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
         return CommonResourceUtils.load_instance(Types.STATISTIC, relationship_track)
 
+    @classmethod
+    def get_relationship_bit_guid(cls, relationship_bit: Union[int, RelationshipBit]) -> Union[int, None]:
+        """get_relationship_bit_guid(relationship_bit)
+
+        Retrieve the GUID (Decimal Identifier) of a RelationshipBit.
+
+        :param relationship_bit: The identifier or instance of a RelationshipBit.
+        :type relationship_bit: Union[int, RelationshipBit]
+        :return: The decimal identifier of the RelationshipBit or None if the RelationshipBit does not have an id.
+        :rtype: Union[int, None]
+        """
+        if isinstance(relationship_bit, int):
+            return relationship_bit
+        return getattr(relationship_bit, 'guid64', None)
+
 
 log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'common_relationship_commands')
 log.enable()
@@ -858,7 +873,7 @@ def _common_remove_relationship_bit(
             return False
     else:
         output(f'Attempting to remove relationship bit {relationship_bit} between {source_sim_info} and {target_sim_info}')
-        if not CommonRelationshipUtils.add_relationship_bit(source_sim_info, target_sim_info, relationship_bit):
+        if not CommonRelationshipUtils.remove_relationship_bit(source_sim_info, target_sim_info, relationship_bit):
             output(f'FAILURE: Failed to remove relationship bit {relationship_bit} between {source_sim_info} and {target_sim_info}.')
             return False
     output(f'SUCCESS: Successfully removed relationship bit {relationship_bit} between {source_sim_info} and {target_sim_info}.')
@@ -994,3 +1009,42 @@ def _common_add_relationship_bit(output: CommonConsoleCommandOutput, relationshi
         output(f'SUCCESS: Successfully added relationship bit {relationship_bit} between {sim_info_a} and {sim_info_b}.')
     else:
         output(f'FAILURE: Failed to add relationship bit {relationship_bit} between {sim_info_a} and {sim_info_b}. {result}')
+
+
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.set_relationship_level',
+    'Set the level of a relationship from Sim A to Sim B.',
+    command_arguments=(
+        CommonConsoleCommandArgument('relationship_track', 'Name or Id', 'The name or id of a relationship track to modify.'),
+        CommonConsoleCommandArgument('sim_a', 'Name or Id', 'The name of the first Sim. The relationship track will be modified from Sim A to Sim B.'),
+        CommonConsoleCommandArgument('sim_b', 'Name or Id', 'The name of the second Sim. The relationship track will be modified from Sim A to Sim B.'),
+        CommonConsoleCommandArgument('amount', 'Number', 'The amount of value to set.')
+    ),
+    command_aliases=(
+        's4clib.setrelationshiplevel',
+    )
+)
+def _common_set_relationship_level(
+    output: CommonConsoleCommandOutput,
+    relationship_track: TunableInstanceParam(Types.STATISTIC),
+    sim_info_a: SimInfo,
+    sim_info_b: SimInfo,
+    amount: float
+):
+    if isinstance(relationship_track, str):
+        output(f'ERROR: Invalid relationship track specified \'{relationship_track}\' or it was not found.')
+        return False
+    if sim_info_b is None:
+        output('ERROR: No Target was specified!')
+        return False
+    if sim_info_a is sim_info_b:
+        output('ERROR: Cannot modify relationship level to the same Sim.')
+        return False
+    output(f'Attempting to modify relationship level of {relationship_track} from {sim_info_a} to {sim_info_b} to level {amount}.')
+    result = CommonRelationshipUtils.set_relationship_level_of_sims(sim_info_a, sim_info_b, relationship_track, amount)
+    if result:
+        output(f'SUCCESS: Successfully modified relationship level of {relationship_track} between {sim_info_a} and {sim_info_b}.')
+    else:
+        output(f'FAILURE: Failed to modify relationship level of {relationship_track} between {sim_info_a} and {sim_info_b}. {result}')

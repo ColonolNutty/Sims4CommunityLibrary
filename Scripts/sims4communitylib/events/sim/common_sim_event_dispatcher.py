@@ -12,6 +12,8 @@ from interactions.utils.death import DeathTracker, DeathType
 from objects.components.buff_component import BuffComponent
 from objects.game_object import GameObject
 from objects.script_object import ScriptObject
+from relationships.relationship import Relationship
+from relationships.relationship_bit import RelationshipBit
 from sims.aging.aging_mixin import AgingMixin
 from sims.occult.occult_enums import OccultType
 from sims.occult.occult_tracker import OccultTracker
@@ -48,6 +50,8 @@ from sims4communitylib.events.sim.events.sim_initialized import S4CLSimInitializ
 from sims4communitylib.events.sim.events.sim_loaded import S4CLSimLoadedEvent
 from sims4communitylib.events.sim.events.game_object_added_to_sim_inventory import S4CLGameObjectAddedToSimInventoryEvent
 from sims4communitylib.events.sim.events.game_object_pre_removed_from_sim_inventory import S4CLGameObjectPreRemovedFromSimInventoryEvent
+from sims4communitylib.events.sim.events.sim_relationship_bit_added import S4CLSimRelationshipBitAddedEvent
+from sims4communitylib.events.sim.events.sim_relationship_bit_removed import S4CLSimRelationshipBitRemovedEvent
 from sims4communitylib.events.sim.events.sim_removed_occult_type import S4CLSimRemovedOccultTypeEvent
 from sims4communitylib.events.sim.events.sim_revived import S4CLSimRevivedEvent
 from sims4communitylib.events.sim.events.sim_set_current_outfit import S4CLSimSetCurrentOutfitEvent
@@ -195,6 +199,24 @@ class CommonSimEventDispatcherService(CommonService):
         if sim_info is None:
             return
         CommonEventRegistry.get().dispatch(S4CLGameObjectPreRemovedFromSimInventoryEvent(sim_info, removed_game_object))
+
+    def _on_relationship_bit_added(self, sim_id_a: int, sim_id_b: int, relationship_bit: RelationshipBit) -> None:
+        sim_info_a = CommonSimUtils.get_sim_info(sim_id_a)
+        if sim_info_a is None:
+            return
+        sim_info_b = CommonSimUtils.get_sim_info(sim_id_b)
+        if sim_info_b is None:
+            return
+        CommonEventRegistry.get().dispatch(S4CLSimRelationshipBitAddedEvent(sim_info_a, sim_info_b, relationship_bit))
+
+    def _on_relationship_bit_removed(self, sim_id_a: int, sim_id_b: int, relationship_bit: RelationshipBit) -> None:
+        sim_info_a = CommonSimUtils.get_sim_info(sim_id_a)
+        if sim_info_a is None:
+            return
+        sim_info_b = CommonSimUtils.get_sim_info(sim_id_b)
+        if sim_info_b is None:
+            return
+        CommonEventRegistry.get().dispatch(S4CLSimRelationshipBitRemovedEvent(sim_info_a, sim_info_b, relationship_bit))
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), SimInfo, SimInfo.__init__.__name__, handle_exceptions=False)
@@ -344,4 +366,21 @@ def _common_on_object_removed_from_sim_inventory(original, self: Sim, obj: Scrip
     if isinstance(obj, GameObject):
         CommonSimEventDispatcherService.get()._on_object_removed_from_sim_inventory(self, obj)
     result = original(self, obj, *args, **kwargs)
+    return result
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Relationship, Relationship.add_relationship_bit.__name__)
+def _common_on_add_relationship_bit(original, self: Relationship, actor_sim_id: int, target_sim_id: int, bit_to_add: RelationshipBit, *_, **__):
+    result = original(self, actor_sim_id, target_sim_id, bit_to_add, *_, **__)
+    CommonSimEventDispatcherService()._on_relationship_bit_added(actor_sim_id, target_sim_id, bit_to_add)
+    return result
+
+
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Relationship, Relationship._remove_bit.__name__)
+def _common_on_remove_relationship_bit(original, self: Relationship, actor_sim_id: int, bit: RelationshipBit, *_, **__):
+    result = original(self, actor_sim_id, bit, *_, **__)
+    target_sim_id = self.sim_id_a
+    if actor_sim_id == self.sim_id_a:
+        target_sim_id = self.sim_id_b
+    CommonSimEventDispatcherService()._on_relationship_bit_removed(actor_sim_id, target_sim_id, bit)
     return result
