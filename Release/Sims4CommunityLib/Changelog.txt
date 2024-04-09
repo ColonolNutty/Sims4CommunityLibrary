@@ -2,6 +2,19 @@ v3.3:
 - Added load_icon_by_id to CommonIconUtils.
 - Fixed an issue with missing arguments when calling on_outfit_update within CommonOutfitUtils.update_outfits
 - Fixed an issue when retrieving the Tuning name of a buff in CommonBuffUtils, where it would not give the proper name.
+- Removed the duplicated "s4clib.add_relationship" command.
+- Added new functions to CommonQuaternion and CommonVector3
+- Deprecated the "empty" function in CommonQuaternion and added identity instead.
+- The CommonVector3 "is_empty" utilizes "empty" for value checking now.
+- Fixed an issue when retrieving the definition of objects.
+- get_object_definition and get_object_definition_id can now accept GameObject types.
+- Added functions to CommonSimInventoryUtils to retrieve objects using their definition ids.
+- Fixed a problem with the Individual Folder Persistence and Folder Persistence services where they would not load any data from the files if main.json file did not exist.
+- Added a way to override the _run_tests function within CommonLoadedItemQueryRegistry
+- Fixed an EA bug when resetting milestones for Sims without an aspiration tracker (Like NPCs)
+- Fixed an issue when getting a statistic for Sims without a statistic tracker.
+- CommonSimInventoryUtils.add_to_inventory now returns a CommonExecutionResult instead of a bool for clearer reasons for failure.
+- Fixed a bad check where we were checking if a Sim has an inventory to decide they dont have an inventory, instead of checking properly for the Sim to not have an inventory in CommonSimInventoryUtils.add_to_inventory
 
 v3.2:
 - Potentially fixed an issue when writing JSON files and failing to, resulting in empty JSON files.
