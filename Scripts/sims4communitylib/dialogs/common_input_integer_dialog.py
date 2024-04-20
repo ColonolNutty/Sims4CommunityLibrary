@@ -54,7 +54,7 @@ class CommonInputIntegerDialog(CommonDialog):
             title_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_SOME_TEXT_FOR_TESTING, text_color=CommonLocalizedStringColor.GREEN),)
             description_tokens = (CommonLocalizationUtils.create_localized_string(CommonStringId.TESTING_TEST_TEXT_WITH_SIM_FIRST_AND_LAST_NAME, tokens=(CommonSimUtils.get_active_sim_info(),), text_color=CommonLocalizedStringColor.BLUE),)
             from sims4communitylib.utils.common_icon_utils import CommonIconUtils
-            dialog = CommonInputFloatDialog(
+            dialog = CommonInputIntegerDialog(
                 CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
                 CommonStringId.TESTING_TEST_TEXT_WITH_STRING_TOKEN,
                 2,

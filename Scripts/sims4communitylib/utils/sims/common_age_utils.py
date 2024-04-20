@@ -11,7 +11,7 @@ from typing import Union, Iterator
 import services
 from event_testing.test_events import TestEvent
 from sims.sim_info import SimInfo
-from sims.sim_info_types import Age
+from sims.sim_info_types import Age, Species, SpeciesExtended
 from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
@@ -55,6 +55,54 @@ class CommonAgeUtils:
         if exact_age:
             return age
         return cls.convert_to_approximate_age(age)
+
+    @classmethod
+    def get_birth_age(cls, sim_info: SimInfo) -> Age:
+        """get_birth_age(sim_info)
+
+        Retrieve the Age that New Sims will be, if they are born from a specified Sim.
+
+        .. note:: Human Sims start at the BABY age. Pet Sims (Large Dog, Small Dog, Cat, Horse) start at the CHILD age. Fox Sims start at the ADULT age.
+
+        :param sim_info: The info of a Sim.
+        :type sim_info: SimInfo
+        :return: The Age that New Sims will be, if they are born from the specified Sim.
+        :rtype: Age
+        """
+        return sim_info.get_birth_age()
+
+    @classmethod
+    def get_birth_age_from_species(cls, species: Union[Species, SpeciesExtended, int]) -> Union[Age, None]:
+        """get_birth_age_from_species(species)
+
+        Retrieve the Age that New Sims will be, if they are born with a specified Species.
+
+        .. note:: The HUMAN species starts at the BABY age. The Pet species (Large Dog, Small Dog, Cat, Horse) start at the CHILD age. The FOX species starts at the ADULT age.
+
+        :param species: The species to retrieve information for.
+        :type species: Union[Species, SpeciesExtended, int]
+        :return: The Age that New Sims will be, if they are born with the specified Species or None if an Age is not found for the specified Species.
+        :rtype: Union[Age, None]
+        """
+        from sims.aging.aging_tuning import AgingTuning
+        cleaned_species = species
+        if cleaned_species == SpeciesExtended.SMALLDOG:
+            cleaned_species = Species.DOG
+        cleaned_species = Species(cleaned_species)
+        if cleaned_species in AgingTuning.AGING_DATA:
+            aging_data = AgingTuning.get_aging_data(cleaned_species)
+            return aging_data.get_birth_age()
+
+        if species == SpeciesExtended.HUMAN:
+            return Age.BABY
+
+        if species == SpeciesExtended.FOX:
+            return Age.ADULT
+
+        from sims4communitylib.utils.sims.common_species_utils import CommonSpeciesUtils
+        if CommonSpeciesUtils.is_animal_species(species) or species == SpeciesExtended.SMALLDOG:
+            return Age.CHILD
+        return None
 
     @classmethod
     def convert_to_approximate_age(cls, age: Union[CommonAge, Age, int]) -> Age:

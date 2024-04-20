@@ -138,22 +138,22 @@ class CommonSpecies(CommonInt):
         """
         if value is None or value == CommonSpecies.INVALID:
             return SpeciesExtended.INVALID
-        if isinstance(value, SpeciesExtended) or isinstance(value, Species):
+        if isinstance(value, CommonSpecies):
             # noinspection PyTypeChecker
             return value
         mapping = {
-            SpeciesExtended.HUMAN: CommonSpecies.HUMAN,
+            Species.HUMAN: CommonSpecies.HUMAN,
         }
         if hasattr(SpeciesExtended, 'SMALLDOG'):
             mapping[SpeciesExtended.SMALLDOG] = CommonSpecies.SMALL_DOG
-        if hasattr(SpeciesExtended, 'DOG'):
-            mapping[SpeciesExtended.DOG] = CommonSpecies.LARGE_DOG
-        if hasattr(SpeciesExtended, 'CAT'):
-            mapping[SpeciesExtended.CAT] = CommonSpecies.CAT
-        if hasattr(SpeciesExtended, 'FOX'):
-            mapping[SpeciesExtended.FOX] = CommonSpecies.FOX
-        if hasattr(SpeciesExtended, 'HORSE'):
-            mapping[SpeciesExtended.HORSE] = CommonSpecies.HORSE
+        if hasattr(Species, 'DOG'):
+            mapping[Species.DOG] = CommonSpecies.LARGE_DOG
+        if hasattr(Species, 'CAT'):
+            mapping[Species.CAT] = CommonSpecies.CAT
+        if hasattr(Species, 'FOX'):
+            mapping[Species.FOX] = CommonSpecies.FOX
+        if hasattr(Species, 'HORSE'):
+            mapping[Species.HORSE] = CommonSpecies.HORSE
         return mapping.get(value, CommonSpecies.INVALID)
 
     @staticmethod
@@ -182,5 +182,8 @@ class CommonSpecies(CommonInt):
             converted_value = CommonResourceUtils.get_enum_by_int_value(value, SpeciesExtended, default_value=None)
             if converted_value is None:
                 return str(value)
-            value = converted_value
+            value = CommonSpecies.convert_from_vanilla(converted_value)
+        if not isinstance(value, CommonSpecies):
+            # noinspection PyTypeChecker
+            value = CommonSpecies.convert_from_vanilla(value)
         return display_name_mapping.get(value, value.name if hasattr(value, 'name') else str(value))

@@ -14,6 +14,7 @@ from objects.game_object import GameObject
 from objects.script_object import ScriptObject
 from relationships.relationship import Relationship
 from relationships.relationship_bit import RelationshipBit
+from relationships.relationship_data import RelationshipData
 from sims.aging.aging_mixin import AgingMixin
 from sims.occult.occult_enums import OccultType
 from sims.occult.occult_tracker import OccultTracker
@@ -376,11 +377,9 @@ def _common_on_add_relationship_bit(original, self: Relationship, actor_sim_id: 
     return result
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Relationship, Relationship._remove_bit.__name__)
-def _common_on_remove_relationship_bit(original, self: Relationship, actor_sim_id: int, bit: RelationshipBit, *_, **__):
-    result = original(self, actor_sim_id, bit, *_, **__)
-    target_sim_id = self.sim_id_a
-    if actor_sim_id == self.sim_id_a:
-        target_sim_id = self.sim_id_b
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), RelationshipData, RelationshipData.remove_bit.__name__)
+def _common_on_remove_relationship_bit(original, self: RelationshipData, bit: RelationshipBit, *_, **__):
+    result = original(self, bit, *_, **__)
+    (actor_sim_id, target_sim_id) = self._sim_ids()
     CommonSimEventDispatcherService()._on_relationship_bit_removed(actor_sim_id, target_sim_id, bit)
     return result
