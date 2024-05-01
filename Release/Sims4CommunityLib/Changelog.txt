@@ -1,8 +1,15 @@
 v3.4:
+- Fixed an error when removing relationship bits via "s4clib.remove_relationship_bit" where it would try to add a relationship bit instead.
 - Added an event to occur whenever a Relationship Bit is added or removed from/to a Sim.
-- Fixed a conversion issue inside CommonSpecies.convert_to_localized_string_id
-- Added functions to CommonAgeUtils to retrieve the birth age of Sims by Sim Info and by Species.
-- Added functions for checking if a Species value is Large Dog or Small Dog inside CommonSpeciesUtils.
+- Fixed a conversion issue inside `CommonSpecies.convert_to_localized_string_id`
+- Added functions to `CommonAgeUtils` to retrieve the birth age of Sims by Sim Info and by Species.
+- Added functions for checking if a Species value is Large Dog or Small Dog inside `CommonSpeciesUtils`.
+- Added fit fat commands to modify fit and fat levels of Sims.
+- Added functions to `CommonSimBodyUtils` to control fit and fat levels
+- CommonConsoleCommand now automatically registers aliases without underscores.
+- Added utilities for getting all Sims that match a demographic and performing an action on all Sims that match a demographic.
+- Updated the Choose Sim Demographics dialog to enable hiding the All Sims and No Sims and also an option to not reopen the dialog when selections are made.
+- The current Sims 4 version is now logged to the S4CL log file on start up.
 
 v3.3:
 - Added load_icon_by_id to CommonIconUtils.
