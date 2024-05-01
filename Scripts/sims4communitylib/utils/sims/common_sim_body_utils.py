@@ -8,6 +8,10 @@ Copyright (c) COLONOLNUTTY
 from typing import Tuple
 
 from sims.sim_info import SimInfo
+from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
+    CommonConsoleCommandArgument
+from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -78,3 +82,53 @@ class CommonSimBodyUtils:
         if wading_interval is None:
             return 0, 0
         return wading_interval.lower_bound, wading_interval.upper_bound
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4cl.set_fit',
+    'Set the fit level of a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('level', 'Number', 'The level of fit to set on the Sim.', is_optional=False),
+        CommonConsoleCommandArgument('sim_info', 'Name or ID', 'The Sim to update.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4cl.set_fit_level',
+    )
+)
+def _common_set_fit_level(output: CommonConsoleCommandOutput, level: float, sim_info: SimInfo = None):
+    if sim_info is None:
+        output(f'No Sim found with {sim_info}')
+        return
+    output(f'Setting fit level of {sim_info} to {level}')
+    sim = CommonSimUtils.get_sim_instance(sim_info)
+    from objects.components.consumable_component import ConsumableComponent
+    sim.commodity_tracker.set_value(ConsumableComponent.FIT_COMMODITY, level)
+    sim_info._sim_ref().needs_fitness_update = True
+    sim_info.update_fitness_state()
+    output('Done')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4cl.set_fat',
+    'Set the fat level of a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('level', 'Number', 'The level of fat to set on the Sim.', is_optional=False),
+        CommonConsoleCommandArgument('sim_info', 'Name or ID', 'The Sim to update.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4cl.set_fat_level',
+    )
+)
+def _common_set_fat_level(output: CommonConsoleCommandOutput, level: float, sim_info: SimInfo = None):
+    if sim_info is None:
+        output(f'No Sim found with {sim_info}')
+        return
+    output(f'Setting fit level of {sim_info} to {level}')
+    sim = CommonSimUtils.get_sim_instance(sim_info)
+    from objects.components.consumable_component import ConsumableComponent
+    sim.commodity_tracker.set_value(ConsumableComponent.FAT_COMMODITY, level)
+    sim_info._sim_ref().needs_fitness_update = True
+    sim_info.update_fitness_state()
+    output('Done')

@@ -17,6 +17,23 @@ class CommonLogUtils:
     """
 
     @staticmethod
+    def get_sims_4_game_version() -> str:
+        """get_sims_4_game_version()
+
+        Retrieve the current game version of Sims 4.
+
+        :return: The current game version of Sims 4.
+        :rtype: str
+        """
+        the_sims_4_folder = CommonLogUtils.get_sims_documents_location_path()
+        filename = os.path.join(the_sims_4_folder, 'GameVersion.txt')
+        import re
+        with open(filename, 'rb') as fp:
+            v = fp.read().decode(errors='ignore')  # convert b to str and ignore errors
+            v = re.sub(r'[^0-9.]', '', v)  # in case of UTF-8 characters which survived 'ignore': replace everything with '' except of '0-9' and '.'
+        return v
+
+    @staticmethod
     def get_exceptions_file_path(mod_identifier: Union[str, CommonModIdentity], custom_file_path: str=None) -> str:
         """get_exceptions_file_path(mod_identifier, custom_file_path=None)
 
@@ -26,7 +43,7 @@ class CommonLogUtils:
         :type mod_identifier: Union[str, CommonModIdentity]
         :param custom_file_path: A custom file path relative to The Sims 4 folder. Example: Value is 'fake_path/to/directory', the final path would be 'The Sims 4/fake_path/to_directory'. Default is None.
         :type custom_file_path: str, optional
-        :return: An str file path to the Exceptions file.
+        :return: A file path to the Exceptions file.
         :rtype: str
         """
         return CommonLogUtils._get_file_name(mod_identifier, 'Exceptions', custom_file_path=custom_file_path)
@@ -41,7 +58,7 @@ class CommonLogUtils:
         :type mod_identifier: Union[str, CommonModIdentity]
         :param custom_file_path: A custom file path relative to The Sims 4 folder. Example: Value is 'fake_path/to/directory', the final path would be 'The Sims 4/fake_path/to_directory'. Default is None.
         :type custom_file_path: str, optional
-        :return: An str file path to the Messages file.
+        :return: A file path to the Messages file.
         :rtype: str
         """
         return CommonLogUtils._get_file_name(mod_identifier, 'Messages', custom_file_path=custom_file_path)
@@ -56,7 +73,7 @@ class CommonLogUtils:
         :type mod_identifier: Union[str, CommonModIdentity]
         :param custom_file_path: A custom file path relative to The Sims 4 folder. Example: Value is 'fake_path/to/directory', the final path would be 'The Sims 4/fake_path/to_directory'. Default is None.
         :type custom_file_path: str, optional
-        :return: An str file path to the Old Exceptions file.
+        :return: A file path to the Old Exceptions file.
         :rtype: str
         """
         return CommonLogUtils._get_old_file_path_name(mod_identifier, 'Exceptions', custom_file_path=custom_file_path)
@@ -71,7 +88,7 @@ class CommonLogUtils:
         :type mod_identifier: Union[str, CommonModIdentity]
         :param custom_file_path: A custom file path relative to The Sims 4 folder. Example: Value is 'fake_path/to/directory', the final path would be 'The Sims 4/fake_path/to_directory'. Default is None.
         :type custom_file_path: str, optional
-        :return: An str file path to the Old Messages file.
+        :return: A file path to the Old Messages file.
         :rtype: str
         """
         return CommonLogUtils._get_old_file_path_name(mod_identifier, 'Messages', custom_file_path=custom_file_path)

@@ -635,13 +635,24 @@ class CommonLogRegistry(CommonService):
         if log_name in S4CLConfiguration().enable_logs:
             log.enable(message_types=S4CLConfiguration().enable_logs[log_name])
         self._registered_logs[mod_name][log_name] = log
-        if first_time_log and mod_identifier is not None and _log is not None:
-            _log.enable()
-            if isinstance(mod_identifier, CommonModIdentity):
-                _log.debug(f'{mod_identifier.name} Version "{mod_identifier.version}" Detected.')
-            else:
-                _log.debug(f'{mod_identifier} Detected.')
-            _log.disable()
+        if first_time_log:
+            if mod_identifier is not None:
+                if _log is not None:
+                    _log.enable()
+                    if isinstance(mod_identifier, CommonModIdentity):
+                        _log.debug(f'{mod_identifier.name} Version "{mod_identifier.version}" Detected.')
+                    else:
+                        _log.debug(f'{mod_identifier} Detected.')
+                    _log.disable()
+                else:
+                    current_game_version = CommonLogUtils.get_sims_4_game_version()
+                    log.enable()
+                    log.debug(f'The Sims 4 Game Version "{current_game_version}" Detected.')
+                    if isinstance(mod_identifier, CommonModIdentity):
+                        log.debug(f'{mod_identifier.name} Version "{mod_identifier.version}" Detected.')
+                    else:
+                        log.debug(f'{mod_identifier} Detected.')
+                    log.disable()
         return log
 
     def _delete_old_log_files(self) -> None:

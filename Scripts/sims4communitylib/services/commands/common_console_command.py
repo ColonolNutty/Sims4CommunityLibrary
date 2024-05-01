@@ -151,6 +151,8 @@ class CommonConsoleCommand(metaclass=_CommonConsoleCommandMetaclass):
     .. note:: When a command is created, a Help command is also created for your Mod using the mod_identity.name (If it does not already exist) "<mod_name>.help". Use this command to display all commands that have been registered using CommonConsoleCommand.
 
     .. note:: To see an example command, run the command :class:`s4clib_testing.example_command` in the in-game console.
+    .. note:: If the command_name contains underscores, a variant of the command_name without underscores will be added to command_aliases. i.e. 's4cl.do_thing' will be added as 's4cl.dothing' to command_aliases.
+    .. note:: If any command_aliases contain underscores, variants of those command_aliases without underscores will be added to command_aliases. i.e. 's4cl.do_the_thing' will be added as 's4cl.dothething' to command_aliases.
 
     :Example usage:
 
@@ -187,16 +189,25 @@ class CommonConsoleCommand(metaclass=_CommonConsoleCommandMetaclass):
         mod_identity: CommonModIdentity,
         command_name: str,
         command_description: str,
-        command_aliases: Iterator[str]=(),
-        command_arguments: Iterator[CommonConsoleCommandArgument]=(),
-        command_type: CommandType=CommandType.Live,
-        command_restriction_flags: CommandRestrictionFlags=CommandRestrictionFlags.UNRESTRICTED,
-        required_pack_flags: Pack=None,
-        console_type: CommandType=None,
-        show_with_help_command: bool=True
+        command_aliases: Iterator[str] = (),
+        command_arguments: Iterator[CommonConsoleCommandArgument] = (),
+        command_type: CommandType = CommandType.Live,
+        command_restriction_flags: CommandRestrictionFlags = CommandRestrictionFlags.UNRESTRICTED,
+        required_pack_flags: Pack = None,
+        console_type: CommandType = None,
+        show_with_help_command: bool = True
     ) -> None:
         self.mod_identity = mod_identity
         self.command_name = command_name
+        command_without_underscores = command_name.replace('_', '')
+        new_command_aliases = list(command_aliases)
+        if command_without_underscores != command_name and command_without_underscores not in command_aliases:
+            new_command_aliases.append(command_without_underscores)
+        for command_alias in command_aliases:
+            command_alias_without_underscores = command_alias.replace('_', '')
+            if command_alias_without_underscores != command_alias and command_alias_without_underscores not in command_aliases:
+                new_command_aliases.append(command_alias_without_underscores)
+        command_aliases = new_command_aliases
         self.command_aliases = tuple(command_aliases)
         self.command_description = command_description
         self.command_type = command_type
