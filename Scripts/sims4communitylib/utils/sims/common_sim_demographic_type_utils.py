@@ -5,9 +5,11 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Tuple, TYPE_CHECKING, Dict, List
+from typing import Tuple, TYPE_CHECKING, Dict, List, Callable, Union, Iterator
 
 from sims.sim_info import SimInfo
+from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
+from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.utils.math.common_bitwise_utils import CommonBitwiseUtils
 from sims4communitylib.utils.sims.common_sim_occult_type_utils import CommonSimOccultTypeUtils
@@ -64,7 +66,19 @@ class CommonSimDemographicTypeUtils(_HasS4CLClassLog):
 
     @classmethod
     def is_sim_contained_in_demographic_flags(cls, sim_info: SimInfo, demographic_flags: 'CommonSimDemographicType', match_all: bool = True) -> bool:
-        """Determine if a Sim is contained in demographic flags."""
+        """is_sim_contained_in_demographic_flags(sim_info, demographic_flags, match_all=True)
+
+        Determine if a Sim is contained in demographic flags.
+
+        :param sim_info: The info of a Sim.
+        :type sim_info: SimInfo
+        :param demographic_flags: The flags of Sim Demographics to match.
+        :type demographic_flags: CommonSimDemographicType
+        :param match_all: If True, the Sim must be a match for all specified demographic flags. If False, the Sim can match any of the demographic flags. Default is True.
+        :type match_all: bool, optional
+        :return: True, if the Sim matches all (or any) of the Demographic Flags. False, if not.
+        :rtype: bool
+        """
         sim_demographic_flags = cls.determine_sim_demographic_flags(sim_info)
         # from sims4communitylib.enums.common_sim_demographic_types import CommonSimDemographicType
         # if CommonBitwiseUtils.contains_any_flags(demographic_flags, CommonSimDemographicType.get_all_flags(exclude_values=(CommonSimDemographicType.CURRENTLY_CONTROLLED, CommonSimDemographicType.CONTROLLED, CommonSimDemographicType.HOUSEHOLD, CommonSimDemographicType.NON_HOUSEHOLD))):
@@ -97,7 +111,19 @@ class CommonSimDemographicTypeUtils(_HasS4CLClassLog):
 
     @classmethod
     def is_sim_contained_in_demographics(cls, sim_info: SimInfo, demographics: Tuple['CommonSimDemographicType'], match_all: bool = True) -> bool:
-        """Determine if a Sim is contained in demographics"""
+        """is_sim_contained_in_demographic_flags(sim_info, demographics, match_all=True)
+
+        Determine if a Sim is contained in a collection of Sim demographics.
+
+        :param sim_info: The info of a Sim.
+        :type sim_info: SimInfo
+        :param demographics: A collection of Sim Demographics to match.
+        :type demographics: Tuple[CommonSimDemographicType]
+        :param match_all: If True, the Sim must be a match for all specified demographics. If False, the Sim can match any of the demographics. Default is True.
+        :type match_all: bool, optional
+        :return: True, if the Sim matches all (or any) of the Demographics. False, if not.
+        :rtype: bool
+        """
         sim_demographics = cls.determine_sim_demographics(sim_info)
 
         # # Handle the non mutually exclusive flags.
@@ -255,3 +281,127 @@ class CommonSimDemographicTypeUtils(_HasS4CLClassLog):
             CommonOccultType.NON_OCCULT: CommonSimDemographicType.NON_OCCULT,
         }
         return mapping.get(value, CommonSimDemographicType.NONE)
+
+    @classmethod
+    def get_all_sims_matching_demographics(
+        cls,
+        sim_demographics: Tuple['CommonSimDemographicType'],
+        include_sim_callback: Callable[[SimInfo], Union[bool, CommonExecutionResult, CommonTestResult]] = None,
+        instanced_only: bool = True
+    ) -> Iterator[SimInfo]:
+        """get_all_sims_matching_demographics(\
+            sim_demographics,\
+            include_sim_callback=None,\
+            instanced_only=True\
+        )
+
+        Get all Sims matching a collection of Sim Demographics.
+
+        :param sim_demographics: A collection of Sim demographics to match on.
+        :type sim_demographics: Tuple[CommonSimDemographicType]
+        :param include_sim_callback: If the result of this callback is True, the Sim will be available in the results. If set to None, All Sims will be available in the results.
+        :type include_sim_callback: Callable[[SimInfo], bool], optional
+        :param instanced_only: If True, only Sims that are currently loaded will be available in the results. Default is True.
+        :type instanced_only: bool, optional
+        :return: A generator of Sims matching the specified demographics.
+        :rtype: Iterator[SimInfo]
+        """
+        if instanced_only:
+            sim_info_gen = CommonSimUtils.get_instanced_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback)
+        else:
+            sim_info_gen = CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback)
+        for sim_info in sim_info_gen:
+            if cls.is_sim_contained_in_demographics(sim_info, sim_demographics):
+                yield sim_info
+
+    @classmethod
+    def get_all_sims_matching_demographic_flags(
+        cls,
+        sim_demographic_flags: 'CommonSimDemographicType',
+        include_sim_callback: Callable[[SimInfo], Union[bool, CommonExecutionResult, CommonTestResult]] = None,
+        instanced_only: bool = True
+    ) -> Iterator[SimInfo]:
+        """get_all_sims_matching_demographic_flags(\
+            sim_demographic_flags,\
+            include_sim_callback=None,\
+            instanced_only=True\
+        )
+
+        Get all Sims matching Sim Demographics Flags.
+
+        :param sim_demographic_flags: Flags of Sim Demographics to match on.
+        :type sim_demographic_flags: CommonSimDemographicType
+        :param include_sim_callback: If the result of this callback is True, the Sim will be available in the results. If set to None, All Sims will be available in the results.
+        :type include_sim_callback: Callable[[SimInfo], bool], optional
+        :param instanced_only: If True, only Sims that are currently loaded will be available in the results. Default is True.
+        :type instanced_only: bool, optional
+        :return: A generator of Sims matching the specified demographics.
+        :rtype: Iterator[SimInfo]
+        """
+        if instanced_only:
+            sim_info_gen = CommonSimUtils.get_instanced_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback)
+        else:
+            sim_info_gen = CommonSimUtils.get_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback)
+        for sim_info in sim_info_gen:
+            if cls.is_sim_contained_in_demographic_flags(sim_info, sim_demographic_flags):
+                yield sim_info
+
+    @classmethod
+    def perform_action_on_sims_matching_demographics(
+        cls,
+        sim_demographics: Tuple['CommonSimDemographicType'],
+        action: Callable[[SimInfo], None],
+        include_sim_callback: Callable[[SimInfo], Union[bool, CommonExecutionResult, CommonTestResult]] = None,
+        instanced_only: bool = True
+    ):
+        """perform_action_on_sims_matching_demographics(\
+            sim_demographics,\
+            action,\
+            include_sim_callback=None,\
+            instanced_only=True\
+        )
+
+        Perform an action on all Sims matching a collection of Sim Demographics.
+
+        :param sim_demographics: A collection of Sim demographics to match on.
+        :type sim_demographics: Tuple[CommonSimDemographicType]
+        :param action: A function invoked on each matching Sim.
+        :type action: Callable[[SimInfo], None]
+        :param include_sim_callback: If the result of this callback is True, the Sim will be available to have the action performed on them. If set to None, All Sims will be available to have the action performed on them.
+        :type include_sim_callback: Callable[[SimInfo], bool], optional
+        :param instanced_only: If True, only Sims that are currently loaded will be available. Default is True.
+        :type instanced_only: bool, optional
+        """
+        for sim_info in cls.get_all_sims_matching_demographics(sim_demographics, include_sim_callback=include_sim_callback, instanced_only=instanced_only):
+            if cls.is_sim_contained_in_demographics(sim_info, sim_demographics):
+                action(sim_info)
+
+    @classmethod
+    def perform_action_on_sims_matching_demographic_flags(
+        cls,
+        sim_demographic_flags: 'CommonSimDemographicType',
+        action: Callable[[SimInfo], None],
+        include_sim_callback: Callable[[SimInfo], Union[bool, CommonExecutionResult, CommonTestResult]] = None,
+        instanced_only: bool = True
+    ):
+        """perform_action_on_sims_matching_demographic_flags(\
+            sim_demographic_flags,\
+            action,\
+            include_sim_callback=None,\
+            instanced_only=True\
+        )
+
+        Perform an action on all Sims matching Sim Demographics Flags.
+
+        :param sim_demographic_flags: Flags of Sim Demographics to match on.
+        :type sim_demographic_flags: CommonSimDemographicType
+        :param action: A function invoked on each matching Sim.
+        :type action: Callable[[SimInfo], None]
+        :param include_sim_callback: If the result of this callback is True, the Sim will be available to have the action performed on them. If set to None, All Sims will be available to have the action performed on them.
+        :type include_sim_callback: Callable[[SimInfo], bool], optional
+        :param instanced_only: If True, only Sims that are currently loaded will be available to have the action performed on them. Default is True.
+        :type instanced_only: bool, optional
+        """
+        for sim_info in cls.get_all_sims_matching_demographic_flags(sim_demographic_flags, include_sim_callback=include_sim_callback, instanced_only=instanced_only):
+            if cls.is_sim_contained_in_demographic_flags(sim_info, sim_demographic_flags):
+                action(sim_info)
