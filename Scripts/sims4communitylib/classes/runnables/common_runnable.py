@@ -197,10 +197,10 @@ class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
                     self.stop(self.invalid_stop_reason, force_stop=True)
                     return on_initial_start_result
 
-            on_begin_result = self._on_begin()
-            if not on_begin_result:
-                self.log.format_error_with_message('On Begin Failed.', result=on_begin_result)
-                return on_begin_result
+            on_start_result = self._on_start()
+            if not on_start_result:
+                self.log.format_error_with_message('On Start Failed.', result=on_start_result)
+                return on_start_result
 
             self.log.debug('Finished starting runnable.')
             self._change_state(CommonRunnableStateType.RUNNING)
@@ -388,7 +388,7 @@ class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
     def _is_end_stop_reason(self, stop_reason: Union[int, CommonInt, CommonIntFlags]) -> bool:
         raise NotImplementedError()
 
-    def _on_begin(self, *_, **__) -> CommonExecutionResult:
+    def _on_start(self, *_, **__) -> CommonExecutionResult:
         return CommonExecutionResult.TRUE
 
     def _on_update(self, milliseconds_since_last_update: int, *_, **__) -> CommonExecutionResult:
