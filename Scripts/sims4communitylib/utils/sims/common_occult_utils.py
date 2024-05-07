@@ -531,6 +531,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
         if CommonCASUtils.attach_cas_part_to_all_outfits_of_sim(sim_info, CommonCASPart(chosen_id)):
             current_outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+            CommonOutfitUtils.trigger_outfit_generated(sim_info, current_outfit_category_and_index)
             CommonOutfitUtils.set_outfit_dirty(sim_info, current_outfit_category_and_index[0])
             CommonOutfitUtils.set_current_outfit(sim_info, current_outfit_category_and_index)
             return CommonExecutionResult(True, reason=f'{sim_info} is now a Scarecrow.')
@@ -568,6 +569,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
         if CommonCASUtils.detach_cas_parts_from_all_outfits_of_sim(sim_info, scarecrow_cas_parts):
             current_outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+            CommonOutfitUtils.trigger_outfit_generated(sim_info, current_outfit_category_and_index)
             CommonOutfitUtils.set_outfit_dirty(sim_info, current_outfit_category_and_index[0])
             CommonOutfitUtils.set_current_outfit(sim_info, current_outfit_category_and_index)
         return CommonTraitUtils.remove_trait(sim_info, CommonTraitId.SCARECROW)

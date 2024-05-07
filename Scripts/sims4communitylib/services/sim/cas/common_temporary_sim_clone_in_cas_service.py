@@ -161,8 +161,9 @@ class CommonEditSimCloneInCASService(CommonService, HasLog):
         # if CommonOccultUtils.has_any_occult(clone_sim_info):
         #     CommonOccultUtils.switch_to_occult_form(clone_sim_info, OccultType.HUMAN)
         if outfit_io.apply(apply_to_all_outfits_in_same_category=True, apply_to_outfit_category_and_index=self._outfit_category_and_index):
-            CommonOutfitUtils.set_outfit_dirty(clone_sim_info, self._outfit_category_and_index[0])
-            CommonOutfitUtils.set_current_outfit(clone_sim_info, self._outfit_category_and_index)
+            clone_sim_info.on_outfit_generated(*self._outfit_category_and_index)
+            clone_sim_info.set_outfit_dirty(self._outfit_category_and_index[0])
+            clone_sim_info.set_current_outfit(self._outfit_category_and_index)
 
     def _on_sim_clone_outfit_changed(
         self,

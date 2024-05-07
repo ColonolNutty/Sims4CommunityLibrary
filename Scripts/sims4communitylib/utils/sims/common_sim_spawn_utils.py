@@ -849,7 +849,9 @@ class CommonSimSpawnUtils:
         current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
         sim_info._base.outfit_type_and_index = current_outfit
         sim_info.resend_outfits()
+        sim_info.on_outfit_generated(*current_outfit)
         sim_info.set_outfit_dirty(current_outfit[0])
+        sim_info.set_current_outfit(current_outfit)
         sim_info._set_fit_fat()
         return sim_info
 

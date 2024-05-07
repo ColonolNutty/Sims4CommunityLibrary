@@ -337,6 +337,7 @@ class CommonSimOutfitIO(HasLog):
             self.sim_info._base.outfit_type_and_index = self._current_outfit_category_and_index
         self.log.format_with_message('Finished applying outfit changes.', sim=self.sim_info, outfit_category_and_index_applid_to=apply_to_outfit_category_and_index)
         if resend_outfits_after_apply:
+            CommonOutfitUtils.refresh_outfit(self.sim_info, outfit_category_and_index=self._current_outfit_category_and_index)
             return CommonOutfitUtils.resend_outfits(self.sim_info)
         return True
 
