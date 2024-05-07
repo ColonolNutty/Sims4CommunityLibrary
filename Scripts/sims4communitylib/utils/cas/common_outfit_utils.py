@@ -677,6 +677,38 @@ class CommonOutfitUtils(HasClassLog):
         return dict(zip(list(outfit_data.body_types), list(outfit_data.part_ids)))
 
     @classmethod
+    def refresh_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None):
+        """refresh_outfit(sim_info, outfit_category_and_index=None)
+
+        Refresh the outfit of a Sim.
+
+        :param sim_info: The info of a Sim.
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
+        :param outfit_category_and_index: The OutfitCategory and index to refresh. Default is the Sims current outfit.
+        :type outfit_category_and_index: Tuple[OutfitCategory, int], optional
+        """
+        if outfit_category_and_index is None:
+            outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
+        if not cls.has_outfit(sim_info, outfit_category_and_index):
+            return
+        cls.trigger_outfit_generated(sim_info, outfit_category_and_index)
+        cls.set_outfit_dirty(sim_info, outfit_category_and_index[0])
+        cls.set_current_outfit(sim_info, outfit_category_and_index)
+
+    @classmethod
+    def trigger_outfit_generated(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Tuple[OutfitCategory, int]):
+        """trigger_outfit_generated(sim_info, outfit_category_and_index)
+
+        Trigger the outfit generated callbacks for a Sim with an OutfitCategory and Index.
+
+        :param sim_info: The info of a Sim.
+        :type sim_info: Union[SimInfo, SimInfoBaseWrapper]
+        :param outfit_category_and_index: The OutfitCategory and index to send.
+        :type outfit_category_and_index: Tuple[OutfitCategory, int]
+        """
+        sim_info.on_outfit_generated(*outfit_category_and_index)
+
+    @classmethod
     def set_current_outfit(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category_and_index: Tuple[OutfitCategory, int]):
         """set_current_outfit(sim_info, outfit_category_and_index)
 
@@ -1072,50 +1104,45 @@ class CommonOutfitUtils(HasClassLog):
     @classmethod
     def _print_outfit(cls, sim_info: SimInfo, outfit_category: OutfitCategory, outfit_index: int, output: CommonConsoleCommandOutput):
         from sims4communitylib.services.sim.cas.common_sim_outfit_io import CommonSimOutfitIO
-        log = cls.get_log()
-        try:
-            log.enable()
-            if not isinstance(outfit_category, OutfitCategory):
+        if not isinstance(outfit_category, OutfitCategory):
+            # noinspection PyBroadException
+            try:
+                outfit_category = CommonResourceUtils.get_enum_by_int_value(int(outfit_category), OutfitCategory, default_value=outfit_category)
+            except:
+                output(f'ERROR: Failed to parse {outfit_category} as OutfitCategory.')
+                return
+
+        # noinspection PyBroadException
+        if hasattr(outfit_category, 'name'):
+            outfit_category_name = outfit_category.name
+        else:
+            outfit_category_name = outfit_category
+
+        output(f'Outfit Info for outfit ({outfit_category_name}, {outfit_index}) of Sim {sim_info}')
+        outfit_commands_log.debug(f'Outfit Info for outfit ({outfit_category_name}, {outfit_index}) of Sim {sim_info}')
+        outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=(outfit_category, outfit_index))
+        output(f'------Outfit: ({outfit_category_name}, {outfit_index})------')
+        outfit_commands_log.debug(f'------Outfit: ({outfit_category_name}, {outfit_index})------')
+        for (body_type, cas_part_id) in zip(outfit_io.body_types, outfit_io.cas_part_ids):
+            body_type_value = int(body_type)
+            if not isinstance(body_type, BodyType):
                 # noinspection PyBroadException
                 try:
-                    outfit_category = CommonResourceUtils.get_enum_by_int_value(int(outfit_category), OutfitCategory, default_value=outfit_category)
+                    body_type = CommonResourceUtils.get_enum_by_int_value(int(body_type), BodyType, default_value=body_type)
                 except:
-                    output(f'ERROR: Failed to parse {outfit_category} as OutfitCategory.')
-                    return
-
-            # noinspection PyBroadException
-            if hasattr(outfit_category, 'name'):
-                outfit_category_name = outfit_category.name
+                    output(f'    {str(body_type)} ({body_type_value}): {cas_part_id}')
+                    outfit_commands_log.debug(f'{str(body_type)} ({body_type_value}): {cas_part_id}')
+                    continue
+            if hasattr(body_type, 'name'):
+                body_type_name = body_type.name
             else:
-                outfit_category_name = outfit_category
-
-            output(f'Outfit Info for outfit ({outfit_category_name}, {outfit_index}) of Sim {sim_info}')
-            log.debug(f'Outfit Info for outfit ({outfit_category_name}, {outfit_index}) of Sim {sim_info}')
-            outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=(outfit_category, outfit_index))
-            output(f'------Outfit: ({outfit_category_name}, {outfit_index})------')
-            log.debug(f'------Outfit: ({outfit_category_name}, {outfit_index})------')
-            for (body_type, cas_part_id) in zip(outfit_io.body_types, outfit_io.cas_part_ids):
-                body_type_value = int(body_type)
-                if not isinstance(body_type, BodyType):
-                    # noinspection PyBroadException
-                    try:
-                        body_type = CommonResourceUtils.get_enum_by_int_value(int(body_type), BodyType, default_value=body_type)
-                    except:
-                        output(f'    {str(body_type)} ({body_type_value}): {cas_part_id}')
-                        log.debug(f'{str(body_type)} ({body_type_value}): {cas_part_id}')
-                        continue
-                if hasattr(body_type, 'name'):
-                    body_type_name = body_type.name
-                else:
-                    body_type_name = str(body_type)
-                output(f'    {body_type_name} ({body_type_value}): {cas_part_id}')
-                log.debug(f'{body_type_name} ({body_type_value}): {cas_part_id}')
-            output('----------------------------')
-            output('-')
-            log.debug('----------------------------')
-            log.debug('-')
-        finally:
-            log.disable()
+                body_type_name = str(body_type)
+            output(f'    {body_type_name} ({body_type_value}): {cas_part_id}')
+            outfit_commands_log.debug(f'{body_type_name} ({body_type_value}): {cas_part_id}')
+        output('----------------------------')
+        output('-')
+        outfit_commands_log.debug('----------------------------')
+        outfit_commands_log.debug('-')
 
     @classmethod
     def _parse_outfit_category_and_index_from_str(cls, output: CommonConsoleCommandOutput, outfit_category: str, outfit_index: int, sim_info: SimInfo = None, check_for_missing_outfit: bool = True, outfit_category_required: bool = False) -> Union[Tuple[OutfitCategory, int], None]:
@@ -1187,6 +1214,7 @@ def _s4clib_testing_print_outfit_tags(output: CommonConsoleCommandOutput, outfit
         outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
 
     output(f'Attempting to print all game tags of outfit ({outfit_category_and_index[0].name}, {outfit_category_and_index[1]}) for Sim {sim_info}.')
+    outfit_commands_log.debug(f'Printing all game tags of outfit ({outfit_category_and_index[0].name}, {outfit_category_and_index[1]}) for Sim {sim_info}.')
     outfit_commands_log.debug(f'-------Game Tags For Outfit Category:  ({outfit_category_and_index[0].name}, {outfit_category_and_index[1]})-------')
     tag_values = CommonOutfitUtils.get_all_outfit_tags(sim_info, outfit_category_and_index=outfit_category_and_index)
     cleaned_tag_names = list()
@@ -1226,6 +1254,7 @@ def _s4clib_testing_print_outfit_tags_by_cas_part(output: CommonConsoleCommandOu
     if outfit_category_and_index is None:
         outfit_category_and_index = CommonOutfitUtils.get_current_outfit(sim_info)
     output(f'Attempting to print game tags for each CAS Part in outfit ({outfit_category_and_index[0].name}, {outfit_category_and_index[1]}) for Sim {sim_info}.')
+    outfit_commands_log.debug(f'Printing all game tags for each CAS Part in outfit ({outfit_category_and_index[0].name}, {outfit_category_and_index[1]}) for Sim {sim_info}.')
     outfit_commands_log.debug(f'-------Game Tags For CAS Parts of Outfit Category:  ({outfit_category_and_index[0].name}, {outfit_category_and_index[1]})-------')
     tags_by_cas_part_id = CommonOutfitUtils.get_outfit_tags_by_cas_part_id(sim_info, outfit_category_and_index=outfit_category_and_index)
     for (cas_part_id, tag_values) in tags_by_cas_part_id.items():
@@ -1276,9 +1305,8 @@ def _s4clib_print_previous_outfit(output: CommonConsoleCommandOutput, sim_info: 
     if not previous_outfit:
         output(f'FAILED: No information about the previous outfit was found for {sim_info}')
         return
-    log = CommonOutfitUtils.get_log()
     output(f'Previous Outfit Info for {sim_info}')
-    log.debug(f'Previous Outfit Info for {sim_info}')
+    outfit_commands_log.debug(f'Previous Outfit Info for {sim_info}')
     CommonOutfitUtils._print_outfit(sim_info, previous_outfit[0], previous_outfit[1], output)
 
 
@@ -1321,45 +1349,40 @@ def _s4clib_print_outfits(output: CommonConsoleCommandOutput, show_missing_outfi
     if sim_info is None:
         output('ERROR: no Sim was specified or the specified Sim was not found!')
         return
-    log = CommonOutfitUtils.get_log()
-    try:
-        log.enable()
-        current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
-        current_outfit_category = current_outfit[0]
-        if not isinstance(current_outfit_category, OutfitCategory):
-            # noinspection PyBroadException
-            try:
-                current_outfit_category = CommonResourceUtils.get_enum_by_int_value(int(current_outfit_category), OutfitCategory, default_value=current_outfit_category)
-            except:
-                output(f'ERROR: Failed to parse {current_outfit_category} as Outfit Category.')
-                return
-
+    current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
+    current_outfit_category = current_outfit[0]
+    if not isinstance(current_outfit_category, OutfitCategory):
         # noinspection PyBroadException
-        if hasattr(current_outfit_category, 'name'):
-            current_outfit_category_name = current_outfit_category.name
-        else:
-            current_outfit_category_name = current_outfit_category
+        try:
+            current_outfit_category = CommonResourceUtils.get_enum_by_int_value(int(current_outfit_category), OutfitCategory, default_value=current_outfit_category)
+        except:
+            output(f'ERROR: Failed to parse {current_outfit_category} as Outfit Category.')
+            return
 
-        output(f'Outfit Info for {sim_info}, Current Outfit: ({current_outfit_category_name}, {current_outfit[1]})')
-        log.debug(f'Outfit Info for {sim_info}, Current Outfit: ({current_outfit_category_name}, {current_outfit[1]})')
-        output('------')
-        log.debug('------')
-        for outfit_category in CommonOutfitUtils.get_all_outfit_categories():
-            # noinspection PyBroadException
-            try:
-                outfit_category_name = outfit_category.name
-            except:
-                outfit_category_name = outfit_category
+    # noinspection PyBroadException
+    if hasattr(current_outfit_category, 'name'):
+        current_outfit_category_name = current_outfit_category.name
+    else:
+        current_outfit_category_name = current_outfit_category
 
-            for outfit_index in range(CommonOutfitUtils.get_maximum_number_of_outfits_for_category(outfit_category)):
-                if not CommonOutfitUtils.has_outfit(sim_info, (outfit_category, outfit_index)):
-                    if show_missing_outfit_info:
-                        output(f'MISSING: Sim {sim_info} did not have outfit ({outfit_category_name}, {outfit_index})')
-                        log.debug(f'MISSING: Sim {sim_info} did not have outfit ({outfit_category_name}, {outfit_index})')
-                    continue
-                CommonOutfitUtils._print_outfit(sim_info, outfit_category, outfit_index, output)
-    finally:
-        log.disable()
+    output(f'Outfit Info for {sim_info}, Current Outfit: ({current_outfit_category_name}, {current_outfit[1]})')
+    outfit_commands_log.debug(f'Outfit Info for {sim_info}, Current Outfit: ({current_outfit_category_name}, {current_outfit[1]})')
+    output('------')
+    outfit_commands_log.debug('------')
+    for outfit_category in CommonOutfitUtils.get_all_outfit_categories():
+        # noinspection PyBroadException
+        try:
+            outfit_category_name = outfit_category.name
+        except:
+            outfit_category_name = outfit_category
+
+        for outfit_index in range(CommonOutfitUtils.get_maximum_number_of_outfits_for_category(outfit_category)):
+            if not CommonOutfitUtils.has_outfit(sim_info, (outfit_category, outfit_index)):
+                if show_missing_outfit_info:
+                    output(f'MISSING: Sim {sim_info} did not have outfit ({outfit_category_name}, {outfit_index})')
+                    outfit_commands_log.debug(f'MISSING: Sim {sim_info} did not have outfit ({outfit_category_name}, {outfit_index})')
+                continue
+            CommonOutfitUtils._print_outfit(sim_info, outfit_category, outfit_index, output)
 
 
 @CommonConsoleCommand(

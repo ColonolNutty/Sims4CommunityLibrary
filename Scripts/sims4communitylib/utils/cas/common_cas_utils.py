@@ -235,6 +235,9 @@ class CommonCASUtils(_HasS4CLClassLog):
         sim_info._base.outfits = saved_outfits.SerializeToString()
         sim_info._base.outfit_type_and_index = current_outfit
         sim_info.resend_outfits()
+        sim_info.on_outfit_generated(*current_outfit)
+        sim_info.set_outfit_dirty(current_outfit[0])
+        sim_info.set_current_outfit(current_outfit)
         return True
 
     @classmethod
@@ -303,10 +306,13 @@ class CommonCASUtils(_HasS4CLClassLog):
             saved_outfit.parts.ids.extend(part_ids)
             saved_outfit.body_types_list = Outfits_pb2.BodyTypesList()
             # noinspection PyUnresolvedReferences
-            saved_outfit.body_types_list.body_types.extend(body_types)
+            saved_outfit.body_types_list.body_types.extend([int(body_type) for body_type in body_types])
         sim_info._base.outfits = saved_outfits.SerializeToString()
         sim_info._base.outfit_type_and_index = current_outfit
         sim_info.resend_outfits()
+        sim_info.on_outfit_generated(*current_outfit)
+        sim_info.set_outfit_dirty(current_outfit[0])
+        sim_info.set_current_outfit(current_outfit)
         return True
 
     @classmethod
@@ -367,6 +373,9 @@ class CommonCASUtils(_HasS4CLClassLog):
         sim_info._base.outfits = saved_outfits.SerializeToString()
         sim_info._base.outfit_type_and_index = current_outfit
         sim_info.resend_outfits()
+        sim_info.on_outfit_generated(*current_outfit)
+        sim_info.set_outfit_dirty(current_outfit[0])
+        sim_info.set_current_outfit(current_outfit)
         return True
 
     @classmethod
@@ -429,10 +438,13 @@ class CommonCASUtils(_HasS4CLClassLog):
             saved_outfit.parts.ids.extend(part_ids)
             saved_outfit.body_types_list = Outfits_pb2.BodyTypesList()
             # noinspection PyUnresolvedReferences
-            saved_outfit.body_types_list.body_types.extend(body_types)
+            saved_outfit.body_types_list.body_types.extend([int(body_type) for body_type in body_types])
         sim_info._base.outfits = saved_outfits.SerializeToString()
         sim_info._base.outfit_type_and_index = current_outfit
         sim_info.resend_outfits()
+        sim_info.on_outfit_generated(*current_outfit)
+        sim_info.set_outfit_dirty(current_outfit[0])
+        sim_info.set_current_outfit(current_outfit)
         return True
 
     # noinspection PyUnusedLocal
@@ -795,6 +807,9 @@ def _s4clib_attach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int
                 output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
                 return
 
+    if body_type_value == BodyType.NONE:
+        body_type_value = CommonCASUtils.get_body_type_of_cas_part(cas_part_id)
+
     output(f'Attempting to attach CAS Part \'{cas_part_id}\' to Sim {sim_info} at body location {body_type_value}')
     if CommonCASUtils.attach_cas_part_to_sim(sim_info, cas_part_id, body_type=body_type_value):
         output(f'SUCCESS: CAS Part has been successfully attached to Sim {sim_info}.')
@@ -839,10 +854,12 @@ def _s4clib_detach_cas_part(output: CommonConsoleCommandOutput, cas_part_id: int
             output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
             return
     else:
-        body_type_value = CommonResourceUtils.get_enum_by_name(body_type.upper(), BodyType, default_value=BodyType.NONE)
-        if body_type_value == BodyType.NONE:
-            output(f'ERROR: The specified body type is neither a number nor the name of a BodyType {body_type}')
-            return
+        body_type_value = CommonResourceUtils.get_enum_by_name(body_type.upper(), CommonBodySlot, default_value=None)
+        if body_type_value is None:
+            body_type_value = CommonResourceUtils.get_enum_by_name(body_type.upper(), BodyType, default_value=BodyType.NONE)
+
+    if body_type_value == BodyType.NONE:
+        body_type_value = CommonCASUtils.get_body_type_of_cas_part(cas_part_id)
     output(f'Attempting to detach CAS Part \'{cas_part_id}\' from Sim {sim_info} at Body Type(s) {body_type}')
     if CommonCASUtils.detach_cas_part_from_sim(sim_info, cas_part_id, body_type=body_type_value):
         output(f'SUCCESS: CAS Part has been successfully detached from Sim {sim_info}.')
