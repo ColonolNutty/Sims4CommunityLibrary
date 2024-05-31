@@ -1,3 +1,6 @@
+v3.5:
+- Fixed S4CL icons not showing when running Sims in DX11.
+
 v3.4:
 - Fixed an error when removing relationship bits via "s4clib.remove_relationship_bit" where it would try to add a relationship bit instead.
 - Added an event to occur whenever a Relationship Bit is added or removed from/to a Sim.
