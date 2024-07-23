@@ -12,9 +12,9 @@ from interactions.utils.death import DeathTracker, DeathType
 from objects.components.buff_component import BuffComponent
 from objects.game_object import GameObject
 from objects.script_object import ScriptObject
-from relationships.relationship import Relationship
+from relationships.relationship_objects.relationship import Relationship
 from relationships.relationship_bit import RelationshipBit
-from relationships.relationship_data import RelationshipData
+from relationships.data.relationship_data import RelationshipData
 from sims.aging.aging_mixin import AgingMixin
 from sims.occult.occult_enums import OccultType
 from sims.occult.occult_tracker import OccultTracker

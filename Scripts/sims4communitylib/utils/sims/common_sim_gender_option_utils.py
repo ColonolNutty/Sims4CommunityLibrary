@@ -7,7 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Union
 
-from sims.global_gender_preference_tuning import SexualityStatus, GlobalGenderPreferenceTuning
+from sims.global_gender_preference_tuning import ExploringOptionsStatus, GlobalGenderPreferenceTuning
 from sims.sim_info import SimInfo
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
@@ -787,7 +787,7 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
         :return: The result of the test. True, if the test passes. False, if not.
         :rtype: CommonTestResult
         """
-        return cls.has_sexuality_exploration_status(sim_info, SexualityStatus.EXPLORING)
+        return cls.has_sexuality_exploration_status(sim_info, ExploringOptionsStatus.EXPLORING)
 
     @classmethod
     def is_not_exploring_sexuality(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -800,10 +800,10 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
         :return: The result of the test. True, if the test passes. False, if not.
         :rtype: CommonTestResult
         """
-        return cls.has_sexuality_exploration_status(sim_info, SexualityStatus.NOT_EXPLORING)
+        return cls.has_sexuality_exploration_status(sim_info, ExploringOptionsStatus.NOT_EXPLORING)
 
     @classmethod
-    def has_sexuality_exploration_status(cls, sim_info: SimInfo, sexuality_status: SexualityStatus) -> CommonTestResult:
+    def has_sexuality_exploration_status(cls, sim_info: SimInfo, sexuality_status: ExploringOptionsStatus) -> CommonTestResult:
         """has_sexuality_exploration_status(sim_info, sexuality_status)
 
         Determine if a Sim has the specified exploration status for their sexuality.
@@ -811,7 +811,7 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param sexuality_status: The exploration status to check for.
-        :type sexuality_status: SexualityStatus
+        :type sexuality_status: ExploringOptionsStatus
         :return: The result of the test. True, if the test passes. False, if not.
         :rtype: CommonTestResult
         """
@@ -819,11 +819,11 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
             return CommonTestResult(False, reason=f'{sim_info} is None!')
         exploring_sexuality_trait = cls.get_sexuality_status_trait(sim_info, sexuality_status)
         if CommonTraitUtils.has_trait(sim_info, exploring_sexuality_trait):
-            if sexuality_status == SexualityStatus.EXPLORING:
+            if sexuality_status == ExploringOptionsStatus.EXPLORING:
                 return CommonTestResult(True, reason=f'{sim_info} is open to exploring their sexuality.')
             else:
                 return CommonTestResult(True, reason=f'{sim_info} is not open to exploring their sexuality.')
-        if sexuality_status == SexualityStatus.EXPLORING:
+        if sexuality_status == ExploringOptionsStatus.EXPLORING:
             return CommonTestResult(False, reason=f'{sim_info} is not open to exploring their sexuality.')
         else:
             return CommonTestResult(False, reason=f'{sim_info} is open to exploring their sexuality.')
@@ -844,12 +844,12 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
 
         if is_exploring:
             cls.get_log().format_with_message('Setting Sim to exploring sexuality.', sim=sim_info, is_exploring=is_exploring)
-            sexuality_status = SexualityStatus.EXPLORING
-            opposite_sexuality_status = SexualityStatus.NOT_EXPLORING
+            sexuality_status = ExploringOptionsStatus.EXPLORING
+            opposite_sexuality_status = ExploringOptionsStatus.NOT_EXPLORING
         else:
             cls.get_log().format_with_message('Setting Sim to not exploring sexuality.', sim=sim_info, is_exploring=is_exploring)
-            sexuality_status = SexualityStatus.NOT_EXPLORING
-            opposite_sexuality_status = SexualityStatus.EXPLORING
+            sexuality_status = ExploringOptionsStatus.NOT_EXPLORING
+            opposite_sexuality_status = ExploringOptionsStatus.EXPLORING
 
         to_remove_trait = cls.get_sexuality_status_trait(sim_info, opposite_sexuality_status)
         to_add_trait = cls.get_sexuality_status_trait(sim_info, sexuality_status)
@@ -864,7 +864,7 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def get_sexuality_status_trait(cls, sim_info: SimInfo, sexuality_status: SexualityStatus) -> Union[Trait, None]:
+    def get_sexuality_status_trait(cls, sim_info: SimInfo, sexuality_status: ExploringOptionsStatus) -> Union[Trait, None]:
         """get_sexuality_status_trait(sim_info, sexuality_status)
 
         Retrieve the trait associated with a sexuality status.
@@ -872,7 +872,7 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
         :param sim_info: An instance of the Sim to receive or be checked for the trait.
         :type sim_info: SimInfo
         :param sexuality_status: The sexuality status to look for.
-        :type sexuality_status: SexualityStatus
+        :type sexuality_status: ExploringOptionsStatus
         :return: The trait associated with the specified sexuality status or None if not found.
         :rtype: Union[Trait, None]
         """

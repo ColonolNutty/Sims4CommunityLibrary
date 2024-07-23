@@ -7,7 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Iterator, Union, Tuple
 
-from relationships.relationship import Relationship
+from relationships.relationship_objects.relationship import Relationship
 from relationships.relationship_bit import RelationshipBit
 from relationships.relationship_track import RelationshipTrack
 from server_commands.argument_helpers import TunableInstanceParam

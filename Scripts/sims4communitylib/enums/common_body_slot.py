@@ -55,7 +55,7 @@ class CommonBodySlot(CommonIntFlags):
     LIP_RING_RIGHT: 'CommonBodySlot' = 17
     LIPSTICK: 'CommonBodySlot' = 29
     LOWER_BODY: 'CommonBodySlot' = 7
-    MASCARA: 'CommonBodySlot' = 37
+    EYELASHES: 'CommonBodySlot' = 37
     MIDDLE_FINGER_LEFT: 'CommonBodySlot' = 26
     MIDDLE_FINGER_RIGHT: 'CommonBodySlot' = 27
     NECKLACE: 'CommonBodySlot' = 12
@@ -259,8 +259,8 @@ class CommonBodySlot(CommonIntFlags):
             mapping[CommonBodySlot.LIPSTICK] = BodyType.LIPS_TICK
         if hasattr(BodyType, 'LOWER_BODY'):
             mapping[CommonBodySlot.LOWER_BODY] = BodyType.LOWER_BODY
-        if hasattr(BodyType, 'MASCARA'):
-            mapping[CommonBodySlot.MASCARA] = BodyType.MASCARA
+        if hasattr(BodyType, 'EYELASHES'):
+            mapping[CommonBodySlot.EYELASHES] = BodyType.EYELASHES
         if hasattr(BodyType, 'MIDDLE_FINGER_LEFT'):
             mapping[CommonBodySlot.MIDDLE_FINGER_LEFT] = BodyType.MIDDLE_FINGER_LEFT
         if hasattr(BodyType, 'MIDDLE_FINGER_RIGHT'):
@@ -478,8 +478,8 @@ class CommonBodySlot(CommonIntFlags):
             mapping[BodyType.LIPS_TICK] = CommonBodySlot.LIPSTICK
         if hasattr(BodyType, 'LOWER_BODY'):
             mapping[BodyType.LOWER_BODY] = CommonBodySlot.LOWER_BODY
-        if hasattr(BodyType, 'MASCARA'):
-            mapping[BodyType.MASCARA] = CommonBodySlot.MASCARA
+        if hasattr(BodyType, 'EYELASHES'):
+            mapping[BodyType.EYELASHES] = CommonBodySlot.EYELASHES
         if hasattr(BodyType, 'MIDDLE_FINGER_LEFT'):
             mapping[BodyType.MIDDLE_FINGER_LEFT] = CommonBodySlot.MIDDLE_FINGER_LEFT
         if hasattr(BodyType, 'MIDDLE_FINGER_RIGHT'):
