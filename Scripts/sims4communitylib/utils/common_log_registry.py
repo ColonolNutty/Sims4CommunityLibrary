@@ -640,18 +640,18 @@ class CommonLogRegistry(CommonService):
                 if _log is not None:
                     _log.enable()
                     if isinstance(mod_identifier, CommonModIdentity):
-                        _log.debug(f'{mod_identifier.name} Version "{mod_identifier.version}" Detected.')
+                        _log.debug(f'{mod_identifier.name} Version "{mod_identifier.version}" detected.')
                     else:
-                        _log.debug(f'{mod_identifier} Detected.')
+                        _log.debug(f'{mod_identifier} detected.')
                     _log.disable()
                 else:
                     current_game_version = CommonLogUtils.get_sims_4_game_version()
                     log.enable()
-                    log.debug(f'The Sims 4 Game Version "{current_game_version}" Detected.')
+                    log.debug(f'The Sims 4 Game Version "{current_game_version}" detected.')
                     if isinstance(mod_identifier, CommonModIdentity):
-                        log.debug(f'{mod_identifier.name} Version "{mod_identifier.version}" Detected.')
+                        log.debug(f'{mod_identifier.name} Version "{mod_identifier.version}" detected.')
                     else:
-                        log.debug(f'{mod_identifier} Detected.')
+                        log.debug(f'{mod_identifier} detected.')
                     log.disable()
         return log
 
