@@ -1,3 +1,7 @@
+v3.6:
+- Fixed issues caused by the Sims 4 update.
+- Fixed a footprint id error in vanilla.
+
 v3.5:
 - Fixed S4CL icons not showing when running Sims in DX11.
 
