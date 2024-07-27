@@ -419,6 +419,15 @@ Sim Utilities
    :show-inheritance:
 
 *********************
+`Romantic Expectations`
+*********************
+
+.. autoclass:: sims4communitylib.utils.sims.common_sim_relationship_expectation_utils.CommonSimRelationshipExpectationUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*********************
 `Situations`
 *********************
 

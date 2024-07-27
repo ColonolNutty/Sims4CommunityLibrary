@@ -7,6 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 import os
 
+from animation.arb import Arb
 from buffs.appearance_modifier.appearance_modifier import AppearanceModifier
 from buffs.appearance_modifier.appearance_modifier_type import AppearanceModifierType
 from buffs.appearance_modifier.appearance_tracker import ModifierInfo
@@ -719,7 +720,8 @@ class CommonOutfitUtils(HasClassLog):
         :param outfit_category_and_index: The OutfitCategory and index to change to.
         :type outfit_category_and_index: Tuple[OutfitCategory, int]
         """
-        sim_info.try_set_current_outfit(outfit_category_and_index)
+        arb = Arb()
+        sim_info.try_set_current_outfit(outfit_category_and_index, arb=arb)
 
     @classmethod
     def set_outfit_dirty(cls, sim_info: Union[SimInfo, SimInfoBaseWrapper], outfit_category: OutfitCategory):
