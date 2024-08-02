@@ -15,8 +15,16 @@ class CommonBodySlot(CommonIntFlags):
     """Slots on the body of Sims that CAS Parts can be attached to."""
     NONE: 'CommonBodySlot' = 0
     ACNE: 'CommonBodySlot' = 72
+    ATTACHMENT_BACK: 'CommonBodySlot' = 88
+    BIRTHMARK_ARMS: 'CommonBodySlot' = 94
+    BIRTHMARK_FACE: 'CommonBodySlot' = 91
+    BIRTHMARK_LEGS: 'CommonBodySlot' = 98
+    BIRTHMARK_TORSO_BACK: 'CommonBodySlot' = 92
+    BIRTHMARK_TORSO_FRONT: 'CommonBodySlot' = 93
     BITE: 'CommonBodySlot' = 76
+    BLANKET: 'CommonBodySlot' = 104
     BLUSH: 'CommonBodySlot' = 32
+    BODY_FRECKLES: 'CommonBodySlot' = 77
     BODY_HAIR_ARM: 'CommonBodySlot' = 78
     BODY_HAIR_LEG: 'CommonBodySlot' = 79
     BODY_HAIR_TORSO_BACK: 'CommonBodySlot' = 81
@@ -27,6 +35,7 @@ class CommonBodySlot(CommonIntFlags):
     BODY_SCAR_LEG_RIGHT: 'CommonBodySlot' = 87
     BODY_SCAR_TORSO_BACK: 'CommonBodySlot' = 85
     BODY_SCAR_TORSO_FRONT: 'CommonBodySlot' = 84
+    BRIDLE: 'CommonBodySlot' = 102
     BROW_RING_LEFT: 'CommonBodySlot' = 20
     BROW_RING_RIGHT: 'CommonBodySlot' = 21
     CUMMERBUND: 'CommonBodySlot' = 9
@@ -38,6 +47,7 @@ class CommonBodySlot(CommonIntFlags):
     EYE_SHADOW: 'CommonBodySlot' = 30
     EYEBROWS: 'CommonBodySlot' = 34
     FACE_PAINT: 'CommonBodySlot' = 33
+    FACE_SCAR: 'CommonBodySlot' = 90
     FACIAL_HAIR: 'CommonBodySlot' = 28
     FINGERNAIL: 'CommonBodySlot' = 73
     FOREARM_SCAR: 'CommonBodySlot' = 71
@@ -47,8 +57,13 @@ class CommonBodySlot(CommonIntFlags):
     GLOVES: 'CommonBodySlot' = 13
     HAIR: 'CommonBodySlot' = 2
     HAIR_COLOR_OVERRIDE: 'CommonBodySlot' = 75
+    HAIR_FEATHERS: 'CommonBodySlot' = 109
+    HAIR_FORELOCK: 'CommonBodySlot' = 108
+    HAIR_MANE: 'CommonBodySlot' = 106
+    HAIR_TAIL: 'CommonBodySlot' = 107
     HAT: 'CommonBodySlot' = 1
     HEAD: 'CommonBodySlot' = 3
+    HORN: 'CommonBodySlot' = 110
     INDEX_FINGER_LEFT: 'CommonBodySlot' = 22
     INDEX_FINGER_RIGHT: 'CommonBodySlot' = 23
     LIP_RING_LEFT: 'CommonBodySlot' = 16
@@ -58,6 +73,9 @@ class CommonBodySlot(CommonIntFlags):
     EYELASHES: 'CommonBodySlot' = 37
     MIDDLE_FINGER_LEFT: 'CommonBodySlot' = 26
     MIDDLE_FINGER_RIGHT: 'CommonBodySlot' = 27
+    MOLE_BACK_UPPER: 'CommonBodySlot' = 97
+    MOLE_CHEST_UPPER: 'CommonBodySlot' = 96
+    MOLE_FACE: 'CommonBodySlot' = 95
     NECKLACE: 'CommonBodySlot' = 12
     NOSE_RING_LEFT: 'CommonBodySlot' = 18
     NOSE_RING_RIGHT: 'CommonBodySlot' = 19
@@ -68,8 +86,10 @@ class CommonBodySlot(CommonIntFlags):
     OCCULT_MOUTH: 'CommonBodySlot' = 67
     OCCULT_NECK_SCAR: 'CommonBodySlot' = 70
     OCCULT_RIGHT_CHEEK: 'CommonBodySlot' = 69
+    REINS: 'CommonBodySlot' = 103
     RING_FINGER_LEFT: 'CommonBodySlot' = 24
     RING_FINGER_RIGHT: 'CommonBodySlot' = 25
+    SADDLE: 'CommonBodySlot' = 101
     SHOES: 'CommonBodySlot' = 8
     SKIN_DETAIL_ACNE_PUBERTY: 'CommonBodySlot' = 89
     SKIN_DETAIL_CREASE_FOREHEAD: 'CommonBodySlot' = 38
@@ -77,6 +97,7 @@ class CommonBodySlot(CommonIntFlags):
     SKIN_DETAIL_DIMPLE_LEFT: 'CommonBodySlot' = 40
     SKIN_DETAIL_DIMPLE_RIGHT: 'CommonBodySlot' = 41
     SKIN_DETAIL_FRECKLES: 'CommonBodySlot' = 39
+    SKIN_DETAIL_HOOF_COLOR: 'CommonBodySlot' = 105
     SKIN_DETAIL_MOLE_CHEEK_LEFT: 'CommonBodySlot' = 55
     SKIN_DETAIL_MOLE_CHEEK_RIGHT: 'CommonBodySlot' = 56
     SKIN_DETAIL_MOLE_LIP_LEFT: 'CommonBodySlot' = 43
@@ -84,7 +105,10 @@ class CommonBodySlot(CommonIntFlags):
     SKIN_DETAIL_NOSE_COLOR: 'CommonBodySlot' = 62
     SKIN_OVERLAY: 'CommonBodySlot' = 58
     SOCKS: 'CommonBodySlot' = 36
+    STRETCH_MARKS_BACK: 'CommonBodySlot' = 100
+    STRETCH_MARKS_FRONT: 'CommonBodySlot' = 99
     TAIL: 'CommonBodySlot' = 61
+    TAIL_BASE: 'CommonBodySlot' = 111
     TATTOO_ARM_LOWER_LEFT: 'CommonBodySlot' = 45
     TATTOO_ARM_LOWER_RIGHT: 'CommonBodySlot' = 47
     TATTOO_ARM_UPPER_LEFT: 'CommonBodySlot' = 46
@@ -98,7 +122,6 @@ class CommonBodySlot(CommonIntFlags):
     TEETH: 'CommonBodySlot' = 4
     TIGHTS: 'CommonBodySlot' = 42
     TOENAIL: 'CommonBodySlot' = 74
-    UNUSED_1: 'CommonBodySlot' = 77
     UPPER_BODY: 'CommonBodySlot' = 6
     WRIST_LEFT: 'CommonBodySlot' = 14
     WRIST_RIGHT: 'CommonBodySlot' = 15
@@ -165,10 +188,32 @@ class CommonBodySlot(CommonIntFlags):
         mapping = dict()
         if hasattr(BodyType, 'ACNE'):
             mapping[CommonBodySlot.ACNE] = BodyType.ACNE
+        if hasattr(BodyType, 'ATTACHMENT_BACK'):
+            mapping[CommonBodySlot.ATTACHMENT_BACK] = BodyType.ATTACHMENT_BACK
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'BIRTHMARKARMS'):
+            mapping[CommonBodySlot.BIRTHMARK_ARMS] = BodyType.BIRTHMARKARMS
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'BIRTHMARKFACE'):
+            mapping[CommonBodySlot.BIRTHMARK_FACE] = BodyType.BIRTHMARKFACE
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'BIRTHMARKLEGS'):
+            mapping[CommonBodySlot.BIRTHMARK_LEGS] = BodyType.BIRTHMARKLEGS
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'BIRTHMARKTORSOBACK'):
+            mapping[CommonBodySlot.BIRTHMARK_TORSO_BACK] = BodyType.BIRTHMARKTORSOBACK
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'BIRTHMARKTORSOFRONT'):
+            mapping[CommonBodySlot.BIRTHMARK_TORSO_FRONT] = BodyType.BIRTHMARKTORSOFRONT
         if hasattr(BodyType, 'BITE'):
             mapping[CommonBodySlot.BITE] = BodyType.BITE
+        if hasattr(BodyType, 'BLANKET'):
+            mapping[CommonBodySlot.BLANKET] = BodyType.BLANKET
         if hasattr(BodyType, 'BLUSH'):
             mapping[CommonBodySlot.BLUSH] = BodyType.BLUSH
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'BODYFRECKLES'):
+            mapping[CommonBodySlot.BODY_FRECKLES] = BodyType.BODYFRECKLES
         # noinspection SpellCheckingInspection
         if hasattr(BodyType, 'BODYHAIR_ARM'):
             mapping[CommonBodySlot.BODY_HAIR_ARM] = BodyType.BODYHAIR_ARM
@@ -199,6 +244,8 @@ class CommonBodySlot(CommonIntFlags):
         # noinspection SpellCheckingInspection
         if hasattr(BodyType, 'BODYSCAR_TORSOFRONT'):
             mapping[CommonBodySlot.BODY_SCAR_TORSO_FRONT] = BodyType.BODYSCAR_TORSOFRONT
+        if hasattr(BodyType, 'BRIDLE'):
+            mapping[CommonBodySlot.BRIDLE] = BodyType.BRIDLE
         if hasattr(BodyType, 'BROW_RING_LEFT'):
             mapping[CommonBodySlot.BROW_RING_LEFT] = BodyType.BROW_RING_LEFT
         if hasattr(BodyType, 'BROW_RING_RIGHT'):
@@ -224,6 +271,9 @@ class CommonBodySlot(CommonIntFlags):
         # noinspection SpellCheckingInspection
         if hasattr(BodyType, 'FACEPAINT'):
             mapping[CommonBodySlot.FACE_PAINT] = BodyType.FACEPAINT
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'SCARFACE'):
+            mapping[CommonBodySlot.FACE_SCAR] = BodyType.SCARFACE
         if hasattr(BodyType, 'FACIAL_HAIR'):
             mapping[CommonBodySlot.FACIAL_HAIR] = BodyType.FACIAL_HAIR
         if hasattr(BodyType, 'FINGERNAIL'):
@@ -243,10 +293,25 @@ class CommonBodySlot(CommonIntFlags):
         # noinspection SpellCheckingInspection
         if hasattr(BodyType, 'HAIRCOLOR_OVERRIDE'):
             mapping[CommonBodySlot.HAIR_COLOR_OVERRIDE] = BodyType.HAIRCOLOR_OVERRIDE
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'HAIR_FEATHERS'):
+            mapping[CommonBodySlot.HAIR_FEATHERS] = BodyType.HAIR_FEATHERS
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'HAIR_FORELOCK'):
+            mapping[CommonBodySlot.HAIR_FORELOCK] = BodyType.HAIR_FORELOCK
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'HAIR_MANE'):
+            mapping[CommonBodySlot.HAIR_MANE] = BodyType.HAIR_MANE
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'HAIR_TAIL'):
+            mapping[CommonBodySlot.HAIR_TAIL] = BodyType.HAIR_TAIL
         if hasattr(BodyType, 'HAT'):
             mapping[CommonBodySlot.HAT] = BodyType.HAT
         if hasattr(BodyType, 'HEAD'):
             mapping[CommonBodySlot.HEAD] = BodyType.HEAD
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'HORN'):
+            mapping[CommonBodySlot.HORN] = BodyType.HORN
         if hasattr(BodyType, 'INDEX_FINGER_LEFT'):
             mapping[CommonBodySlot.INDEX_FINGER_LEFT] = BodyType.INDEX_FINGER_LEFT
         if hasattr(BodyType, 'INDEX_FINGER_RIGHT'):
@@ -265,6 +330,15 @@ class CommonBodySlot(CommonIntFlags):
             mapping[CommonBodySlot.MIDDLE_FINGER_LEFT] = BodyType.MIDDLE_FINGER_LEFT
         if hasattr(BodyType, 'MIDDLE_FINGER_RIGHT'):
             mapping[CommonBodySlot.MIDDLE_FINGER_RIGHT] = BodyType.MIDDLE_FINGER_RIGHT
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'MOLEBACKUPPER'):
+            mapping[CommonBodySlot.MOLE_BACK_UPPER] = BodyType.MOLEBACKUPPER
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'MOLECHESTUPPER'):
+            mapping[CommonBodySlot.MOLE_CHEST_UPPER] = BodyType.MOLECHESTUPPER
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'MOLEFACE'):
+            mapping[CommonBodySlot.MOLE_FACE] = BodyType.MOLEFACE
         if hasattr(BodyType, 'NECKLACE'):
             mapping[CommonBodySlot.NECKLACE] = BodyType.NECKLACE
         if hasattr(BodyType, 'NOSE_RING_LEFT'):
@@ -285,10 +359,14 @@ class CommonBodySlot(CommonIntFlags):
             mapping[CommonBodySlot.OCCULT_NECK_SCAR] = BodyType.OCCULT_NECK_SCAR
         if hasattr(BodyType, 'OCCULT_RIGHT_CHEEK'):
             mapping[CommonBodySlot.OCCULT_RIGHT_CHEEK] = BodyType.OCCULT_RIGHT_CHEEK
+        if hasattr(BodyType, 'REINS'):
+            mapping[CommonBodySlot.REINS] = BodyType.REINS
         if hasattr(BodyType, 'RING_FINGER_LEFT'):
             mapping[CommonBodySlot.RING_FINGER_LEFT] = BodyType.RING_FINGER_LEFT
         if hasattr(BodyType, 'RING_FINGER_RIGHT'):
             mapping[CommonBodySlot.RING_FINGER_RIGHT] = BodyType.RING_FINGER_RIGHT
+        if hasattr(BodyType, 'SADDLE'):
+            mapping[CommonBodySlot.SADDLE] = BodyType.SADDLE
         if hasattr(BodyType, 'SHOES'):
             mapping[CommonBodySlot.SHOES] = BodyType.SHOES
         # noinspection SpellCheckingInspection
@@ -310,6 +388,9 @@ class CommonBodySlot(CommonIntFlags):
         if hasattr(BodyType, 'SKINDETAIL_FRECKLES'):
             mapping[CommonBodySlot.SKIN_DETAIL_FRECKLES] = BodyType.SKINDETAIL_FRECKLES
         # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'SKINDETAIL_HOOF_COLOR'):
+            mapping[CommonBodySlot.SKIN_DETAIL_HOOF_COLOR] = BodyType.SKINDETAIL_HOOF_COLOR
+        # noinspection SpellCheckingInspection
         if hasattr(BodyType, 'SKINDETAIL_MOLE_CHEEK_LEFT'):
             mapping[CommonBodySlot.SKIN_DETAIL_MOLE_CHEEK_LEFT] = BodyType.SKINDETAIL_MOLE_CHEEK_LEFT
         # noinspection SpellCheckingInspection
@@ -328,8 +409,14 @@ class CommonBodySlot(CommonIntFlags):
             mapping[CommonBodySlot.SKIN_OVERLAY] = BodyType.SKIN_OVERLAY
         if hasattr(BodyType, 'SOCKS'):
             mapping[CommonBodySlot.SOCKS] = BodyType.SOCKS
+        if hasattr(BodyType, 'STRETCHMARKS_BACK'):
+            mapping[CommonBodySlot.STRETCH_MARKS_BACK] = BodyType.STRETCHMARKS_BACK
+        if hasattr(BodyType, 'STRETCHMARKS_FRONT'):
+            mapping[CommonBodySlot.STRETCH_MARKS_FRONT] = BodyType.STRETCHMARKS_FRONT
         if hasattr(BodyType, 'TAIL'):
             mapping[CommonBodySlot.TAIL] = BodyType.TAIL
+        if hasattr(BodyType, 'TAIL_BASE'):
+            mapping[CommonBodySlot.TAIL_BASE] = BodyType.TAIL_BASE
         if hasattr(BodyType, 'TATTOO_ARM_LOWER_LEFT'):
             mapping[CommonBodySlot.TATTOO_ARM_LOWER_LEFT] = BodyType.TATTOO_ARM_LOWER_LEFT
         if hasattr(BodyType, 'TATTOO_ARM_LOWER_RIGHT'):
@@ -356,8 +443,6 @@ class CommonBodySlot(CommonIntFlags):
             mapping[CommonBodySlot.TIGHTS] = BodyType.TIGHTS
         if hasattr(BodyType, 'TOENAIL'):
             mapping[CommonBodySlot.TOENAIL] = BodyType.TOENAIL
-        if hasattr(BodyType, 'UNUSED1'):
-            mapping[CommonBodySlot.UNUSED_1] = BodyType.UNUSED1
         if hasattr(BodyType, 'UPPER_BODY'):
             mapping[CommonBodySlot.UPPER_BODY] = BodyType.UPPER_BODY
         if hasattr(BodyType, 'WRIST_LEFT'):
@@ -384,10 +469,34 @@ class CommonBodySlot(CommonIntFlags):
         mapping = dict()
         if hasattr(BodyType, 'ACNE'):
             mapping[BodyType.ACNE] = CommonBodySlot.ACNE
+        if hasattr(BodyType, 'ATTACHMENT_BACK'):
+            mapping[BodyType.ATTACHMENT_BACK] = CommonBodySlot.ATTACHMENT_BACK
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'BIRTHMARKARMS'):
+            mapping[BodyType.BIRTHMARKARMS] = CommonBodySlot.BIRTHMARK_ARMS
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'BIRTHMARKFACE'):
+            mapping[BodyType.BIRTHMARKFACE] = CommonBodySlot.BIRTHMARK_FACE
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'BIRTHMARKLEGS'):
+            mapping[BodyType.BIRTHMARKLEGS] = CommonBodySlot.BIRTHMARK_LEGS
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'BIRTHMARKTORSOBACK'):
+            mapping[BodyType.BIRTHMARKTORSOBACK] = CommonBodySlot.BIRTHMARK_TORSO_BACK
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'BIRTHMARKTORSOFRONT'):
+            mapping[BodyType.BIRTHMARKTORSOFRONT] = CommonBodySlot.BIRTHMARK_TORSO_FRONT
         if hasattr(BodyType, 'BITE'):
             mapping[BodyType.BITE] = CommonBodySlot.BITE
+        if hasattr(BodyType, 'BLANKET'):
+            mapping[BodyType.BLANKET] = CommonBodySlot.BLANKET
         if hasattr(BodyType, 'BLUSH'):
             mapping[BodyType.BLUSH] = CommonBodySlot.BLUSH
+        if hasattr(BodyType, 'BRIDLE'):
+            mapping[BodyType.BRIDLE] = CommonBodySlot.BRIDLE
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'BODYFRECKLES'):
+            mapping[BodyType.BODYFRECKLES] = CommonBodySlot.BODY_FRECKLES
         # noinspection SpellCheckingInspection
         if hasattr(BodyType, 'BODYHAIR_ARM'):
             mapping[BodyType.BODYHAIR_ARM] = CommonBodySlot.BODY_HAIR_ARM
@@ -443,6 +552,9 @@ class CommonBodySlot(CommonIntFlags):
         # noinspection SpellCheckingInspection
         if hasattr(BodyType, 'FACEPAINT'):
             mapping[BodyType.FACEPAINT] = CommonBodySlot.FACE_PAINT
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'SCARFACE'):
+            mapping[BodyType.SCARFACE] = CommonBodySlot.FACE_SCAR
         if hasattr(BodyType, 'FACIAL_HAIR'):
             mapping[BodyType.FACIAL_HAIR] = CommonBodySlot.FACIAL_HAIR
         if hasattr(BodyType, 'FINGERNAIL'):
@@ -459,6 +571,14 @@ class CommonBodySlot(CommonIntFlags):
             mapping[BodyType.GLOVES] = CommonBodySlot.GLOVES
         if hasattr(BodyType, 'HAIR'):
             mapping[BodyType.HAIR] = CommonBodySlot.HAIR
+        if hasattr(BodyType, 'HAIR_FEATHERS'):
+            mapping[BodyType.HAIR_FEATHERS] = CommonBodySlot.HAIR_FEATHERS
+        if hasattr(BodyType, 'HAIR_FORELOCK'):
+            mapping[BodyType.HAIR_FORELOCK] = CommonBodySlot.HAIR_FORELOCK
+        if hasattr(BodyType, 'HAIR_MANE'):
+            mapping[BodyType.HAIR_MANE] = CommonBodySlot.HAIR_MANE
+        if hasattr(BodyType, 'HAIR_TAIL'):
+            mapping[BodyType.HAIR_TAIL] = CommonBodySlot.HAIR_TAIL
         # noinspection SpellCheckingInspection
         if hasattr(BodyType, 'HAIRCOLOR_OVERRIDE'):
             mapping[BodyType.HAIRCOLOR_OVERRIDE] = CommonBodySlot.HAIR_COLOR_OVERRIDE
@@ -466,6 +586,8 @@ class CommonBodySlot(CommonIntFlags):
             mapping[BodyType.HAT] = CommonBodySlot.HAT
         if hasattr(BodyType, 'HEAD'):
             mapping[BodyType.HEAD] = CommonBodySlot.HEAD
+        if hasattr(BodyType, 'HORN'):
+            mapping[BodyType.HORN] = CommonBodySlot.HORN
         if hasattr(BodyType, 'INDEX_FINGER_LEFT'):
             mapping[BodyType.INDEX_FINGER_LEFT] = CommonBodySlot.INDEX_FINGER_LEFT
         if hasattr(BodyType, 'INDEX_FINGER_RIGHT'):
@@ -484,6 +606,15 @@ class CommonBodySlot(CommonIntFlags):
             mapping[BodyType.MIDDLE_FINGER_LEFT] = CommonBodySlot.MIDDLE_FINGER_LEFT
         if hasattr(BodyType, 'MIDDLE_FINGER_RIGHT'):
             mapping[BodyType.MIDDLE_FINGER_RIGHT] = CommonBodySlot.MIDDLE_FINGER_RIGHT
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'MOLEBACKUPPER'):
+            mapping[BodyType.MOLEBACKUPPER] = CommonBodySlot.MOLE_BACK_UPPER
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'MOLECHESTUPPER'):
+            mapping[BodyType.MOLECHESTUPPER] = CommonBodySlot.MOLE_CHEST_UPPER
+        # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'MOLEFACE'):
+            mapping[BodyType.MOLEFACE] = CommonBodySlot.MOLE_FACE
         if hasattr(BodyType, 'NECKLACE'):
             mapping[BodyType.NECKLACE] = CommonBodySlot.NECKLACE
         if hasattr(BodyType, 'NOSE_RING_LEFT'):
@@ -504,10 +635,14 @@ class CommonBodySlot(CommonIntFlags):
             mapping[BodyType.OCCULT_NECK_SCAR] = CommonBodySlot.OCCULT_NECK_SCAR
         if hasattr(BodyType, 'OCCULT_RIGHT_CHEEK'):
             mapping[BodyType.OCCULT_RIGHT_CHEEK] = CommonBodySlot.OCCULT_RIGHT_CHEEK
+        if hasattr(BodyType, 'REINS'):
+            mapping[BodyType.REINS] = CommonBodySlot.REINS
         if hasattr(BodyType, 'RING_FINGER_LEFT'):
             mapping[BodyType.RING_FINGER_LEFT] = CommonBodySlot.RING_FINGER_LEFT
         if hasattr(BodyType, 'RING_FINGER_RIGHT'):
             mapping[BodyType.RING_FINGER_RIGHT] = CommonBodySlot.RING_FINGER_RIGHT
+        if hasattr(BodyType, 'SADDLE'):
+            mapping[BodyType.SADDLE] = CommonBodySlot.SADDLE
         if hasattr(BodyType, 'SHOES'):
             mapping[BodyType.SHOES] = CommonBodySlot.SHOES
         # noinspection SpellCheckingInspection
@@ -529,6 +664,9 @@ class CommonBodySlot(CommonIntFlags):
         if hasattr(BodyType, 'SKINDETAIL_FRECKLES'):
             mapping[BodyType.SKINDETAIL_FRECKLES] = CommonBodySlot.SKIN_DETAIL_FRECKLES
         # noinspection SpellCheckingInspection
+        if hasattr(BodyType, 'SKINDETAIL_HOOF_COLOR'):
+            mapping[BodyType.SKINDETAIL_HOOF_COLOR] = CommonBodySlot.SKIN_DETAIL_HOOF_COLOR
+        # noinspection SpellCheckingInspection
         if hasattr(BodyType, 'SKINDETAIL_MOLE_CHEEK_LEFT'):
             mapping[BodyType.SKINDETAIL_MOLE_CHEEK_LEFT] = CommonBodySlot.SKIN_DETAIL_MOLE_CHEEK_LEFT
         # noinspection SpellCheckingInspection
@@ -547,8 +685,14 @@ class CommonBodySlot(CommonIntFlags):
             mapping[BodyType.SKIN_OVERLAY] = CommonBodySlot.SKIN_OVERLAY
         if hasattr(BodyType, 'SOCKS'):
             mapping[BodyType.SOCKS] = CommonBodySlot.SOCKS
+        if hasattr(BodyType, 'STRETCHMARKS_BACK'):
+            mapping[BodyType.STRETCHMARKS_BACK] = CommonBodySlot.STRETCH_MARKS_BACK
+        if hasattr(BodyType, 'STRETCHMARKS_FRONT'):
+            mapping[BodyType.STRETCHMARKS_FRONT] = CommonBodySlot.STRETCH_MARKS_FRONT
         if hasattr(BodyType, 'TAIL'):
             mapping[BodyType.TAIL] = CommonBodySlot.TAIL
+        if hasattr(BodyType, 'TAIL_BASE'):
+            mapping[BodyType.TAIL_BASE] = CommonBodySlot.TAIL_BASE
         if hasattr(BodyType, 'TATTOO_ARM_LOWER_LEFT'):
             mapping[BodyType.TATTOO_ARM_LOWER_LEFT] = CommonBodySlot.TATTOO_ARM_LOWER_LEFT
         if hasattr(BodyType, 'TATTOO_ARM_LOWER_RIGHT'):
@@ -575,8 +719,6 @@ class CommonBodySlot(CommonIntFlags):
             mapping[BodyType.TIGHTS] = CommonBodySlot.TIGHTS
         if hasattr(BodyType, 'TOENAIL'):
             mapping[BodyType.TOENAIL] = CommonBodySlot.TOENAIL
-        if hasattr(BodyType, 'UNUSED1'):
-            mapping[BodyType.UNUSED1] = CommonBodySlot.UNUSED_1
         if hasattr(BodyType, 'UPPER_BODY'):
             mapping[BodyType.UPPER_BODY] = CommonBodySlot.UPPER_BODY
         if hasattr(BodyType, 'WRIST_LEFT'):
