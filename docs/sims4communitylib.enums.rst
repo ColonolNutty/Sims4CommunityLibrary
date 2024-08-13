@@ -174,6 +174,14 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Gender Preferences Types`
+-----------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_gender_preference_type.CommonGenderPreferenceType
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Icons`
 ------------------------------------------
 

@@ -1,3 +1,9 @@
+v3.7:
+- Updated CommonBuffId with new buffs
+- Updated CommonTraitId with new values.
+- Updated CommonBodySlot with new BodyType values.
+- Added new utility for Relationship Expectations. CommonSimRelationshipExpectationUtils
+
 v3.6:
 - Fixed issues caused by the Sims 4 update.
 - Fixed a footprint id error in vanilla.
