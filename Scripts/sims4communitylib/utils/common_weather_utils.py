@@ -19,7 +19,9 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
+from sims4communitylib.utils.common_time_utils import CommonTimeUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+from weather.weather_enums import PrecipitationType, WeatherEffectType
 from weather.weather_event import WeatherEvent
 from weather.weather_service import WeatherService
 
@@ -98,6 +100,50 @@ class CommonWeatherUtils:
         if weather_service is not None:
             return CommonTemperature.convert_from_vanilla(weather_service.get_weather_element_value(CommonWeatherEffectType.TEMPERATURE, default=CommonTemperature.WARM))
         return CommonTemperature.WARM
+
+    @classmethod
+    def get_current_wind_speed(cls) -> int:
+        """get_current_wind_speed()
+
+        Retrieve the current wind speed.
+
+        :return: The current speed of the wind.
+        :rtype: int
+        """
+        weather_service = cls.get_weather_service()
+        if weather_service is None:
+            return 0
+        return weather_service.get_weather_element_value(WeatherEffectType.WIND, time=CommonTimeUtils.get_current_date_and_time())
+
+    @classmethod
+    def get_current_precipitation_level(cls, precipitation_type: PrecipitationType) -> int:
+        """get_current_precipitation_level(precipitation_type)
+
+        Retrieve the current precipitation level.
+
+        :param precipitation_type: The type of precipitation to get.
+        :type precipitation_type: PrecipitationType
+        :return: The current precipitation level.
+        :rtype: int
+        """
+        weather_service = cls.get_weather_service()
+        if weather_service is None:
+            return 0
+        return weather_service.get_weather_element_value(precipitation_type, time=CommonTimeUtils.get_current_date_and_time())
+
+    @classmethod
+    def get_current_lightning_level(cls) -> int:
+        """get_current_lightning_level()
+
+        Retrieve the current lightning level.
+
+        :return: The current lightning level.
+        :rtype: int
+        """
+        weather_service = cls.get_weather_service()
+        if weather_service is None:
+            return 0
+        return weather_service.get_weather_element_value(WeatherEffectType.LIGHTNING, time=CommonTimeUtils.get_current_date_and_time())
 
     @classmethod
     def get_weather_cloud_type(cls) -> CommonCloudType:
@@ -199,7 +245,7 @@ def _common_set_weather(output: CommonConsoleCommandOutput, duration_in_hours: i
     )
 )
 def _common_set_weather(output: CommonConsoleCommandOutput, weather: TunableInstanceParam(Types.WEATHER_EVENT), duration_in_hours: int=6):
-    if not isinstance(weather, WeatherEvent):
+    if not weather or isinstance(weather, int) or isinstance(weather, float) or isinstance(weather, str):
         output(f'Weather \'{weather}\' was not found.')
         return False
     output(f'Changing the weather to {weather}')

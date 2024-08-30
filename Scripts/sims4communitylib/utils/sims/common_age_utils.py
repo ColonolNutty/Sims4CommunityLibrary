@@ -190,9 +190,8 @@ class CommonAgeUtils:
         :return: The total number of days required for the specified Sim to reach their next age.
         :rtype: float
         """
-        aging_service = services.get_aging_service()
         sim_age = cls.get_age(sim_info, exact_age=False)
-        age_transition_data = aging_service.get_age_transition_data(sim_age)
+        age_transition_data = sim_info.get_age_transition_data(sim_age)
         return sim_info._age_time/age_transition_data.get_age_duration(sim_info)
 
     @classmethod

@@ -168,6 +168,24 @@ class CommonRelationshipUtils:
         return cls.get_relationship_level_of_sims(sim_info, target_sim_info, track_id)
 
     @classmethod
+    def set_friendship_level(cls, sim_info: SimInfo, target_sim_info: SimInfo, level: float):
+        """set_friendship_level(sim_info, target_sim_info, level)
+
+        Set the level of Friendship between two Sims.
+
+        :param sim_info: The Sim to use.
+        :type sim_info: SimInfo
+        :param target_sim_info: The Target Sim to use.
+        :type target_sim_info: SimInfo
+        :param level: The new level of relationship between the Sims.
+        :type level: float
+        """
+        track_id = cls.get_friendship_relationship_track(sim_info, target_sim_info)
+        if track_id is None:
+            return
+        cls.set_relationship_level_of_sims(sim_info, target_sim_info, track_id, level)
+
+    @classmethod
     def get_romance_level(cls, sim_info: SimInfo, target_sim_info: SimInfo) -> float:
         """get_romance_level(sim_info, target_sim_info)
 
@@ -186,6 +204,24 @@ class CommonRelationshipUtils:
         if track_id is None:
             return 0.0
         return cls.get_relationship_level_of_sims(sim_info, target_sim_info, track_id)
+
+    @classmethod
+    def set_romance_level(cls, sim_info: SimInfo, target_sim_info: SimInfo, level: float):
+        """set_romance_level(sim_info, target_sim_info, level)
+
+        Set the level of Romance between two Sims.
+
+        :param sim_info: The Sim to use.
+        :type sim_info: SimInfo
+        :param target_sim_info: The Target Sim to use.
+        :type target_sim_info: SimInfo
+        :param level: The new level of relationship between the Sims.
+        :type level: float
+        """
+        track_id = cls.get_romance_relationship_track(sim_info, target_sim_info)
+        if track_id is None:
+            return
+        cls.set_relationship_level_of_sims(sim_info, target_sim_info, track_id, level)
 
     @classmethod
     def calculate_average_relationship_level(cls, sim_info: SimInfo, target_sim_info: SimInfo) -> float:
@@ -1009,6 +1045,48 @@ def _common_add_relationship_bit(output: CommonConsoleCommandOutput, relationshi
         output(f'SUCCESS: Successfully added relationship bit {relationship_bit} between {sim_info_a} and {sim_info_b}.')
     else:
         output(f'FAILURE: Failed to add relationship bit {relationship_bit} between {sim_info_a} and {sim_info_b}. {result}')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.reset_relationships',
+    'Reset the relationships of a Sim to all other Sims that they have met. Both Friendship and Romance will be set to zero.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Name or Id', 'The name or ID of a Sim. Default is the Active Sim.', is_optional=True, default_value='Active Sim'),
+    ),
+)
+def _common_reset_relationships(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
+    output(f'Attempting to reset the relationships of {sim_info}.')
+    sim_pair_count = 0
+    for target_sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
+        if sim_info is target_sim_info:
+            continue
+        if not CommonRelationshipUtils.has_met(sim_info, target_sim_info):
+            continue
+        sim_pair_count += 1
+        CommonRelationshipUtils.set_friendship_level(sim_info, target_sim_info, 0)
+        CommonRelationshipUtils.set_romance_level(sim_info, target_sim_info, 0)
+    output(f'Done resetting the relationships of {sim_pair_count} Sim pair(s).')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.reset_all_relationships',
+    'Set the relationships of all Sims to zero with all other Sims that they have already met. Both Friendship and Romance will be set to zero.'
+)
+def _common_reset_all_relationships(output: CommonConsoleCommandOutput):
+    output('Attempting to reset the relationships between all Sims.')
+    sim_pair_count = 0
+    for sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
+        for target_sim_info in CommonSimUtils.get_sim_info_for_all_sims_generator():
+            if sim_info is target_sim_info:
+                continue
+            if not CommonRelationshipUtils.has_met(sim_info, target_sim_info):
+                continue
+            sim_pair_count += 1
+            CommonRelationshipUtils.set_friendship_level(sim_info, target_sim_info, 0)
+            CommonRelationshipUtils.set_romance_level(sim_info, target_sim_info, 0)
+    output(f'Done resetting the relationships of {sim_pair_count} Sim pair(s).')
 
 
 # noinspection SpellCheckingInspection

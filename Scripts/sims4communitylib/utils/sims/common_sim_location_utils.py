@@ -481,6 +481,70 @@ class CommonSimLocationUtils:
         return sim.on_home_lot or (CommonLocationUtils.get_current_zone_id() == CommonHouseholdUtils.get_household_zone_id(sim_info) and CommonSimLocationUtils.is_on_current_lot(sim_info))
 
     @staticmethod
+    def is_outside(sim_info: SimInfo) -> bool:
+        """is_outside(sim_info)
+
+        Determine if a Sim is currently outside.
+
+        :param sim_info: The info of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is outside. False, if not.
+        :rtype: bool
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return False
+        return sim.is_outside
+
+    @classmethod
+    def is_inside(cls, sim_info: SimInfo) -> bool:
+        """is_inside(sim_info)
+
+        Determine if a Sim is currently inside.
+
+        :param sim_info: The info of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is inside. False, if not.
+        :rtype: bool
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return False
+        return not sim.is_outside
+
+    @classmethod
+    def is_inside_building(cls, sim_info: SimInfo) -> bool:
+        """is_inside_building(sim_info)
+
+        Determine if a Sim is currently inside a building.
+
+        :param sim_info: The info of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is inside a building. False, if not.
+        :rtype: bool
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return False
+        return not sim.is_inside_building
+
+    @classmethod
+    def is_in_shade(cls, sim_info: SimInfo) -> bool:
+        """is_in_shade(sim_info)
+
+        Determine if a Sim is currently in the shade.
+
+        :param sim_info: The info of a Sim.
+        :type sim_info: SimInfo
+        :return: True, if the Sim is in the shade. False, if not.
+        :rtype: bool
+        """
+        sim = CommonSimUtils.get_sim_instance(sim_info)
+        if sim is None:
+            return False
+        return not sim.is_in_shade
+
+    @staticmethod
     def send_to_position(sim_info: SimInfo, position: CommonVector3, level: int, go_here_interaction_id: int = None) -> CommonEnqueueResult:
         """send_to_position(sim_info, position, level, go_here_interaction_id=None)
 

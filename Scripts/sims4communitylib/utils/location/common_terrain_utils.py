@@ -10,5 +10,5 @@ from sims4communitylib.utils.terrain.common_terrain_location_utils import Common
 
 
 class CommonTerrainUtils(NewCommonTerrainLocationUtils):
-    """An obsolete utility for manipulating terrain location."""
+    """An obsolete utility for manipulating terrain location. Use CommonTerrainLocationUtils from sims4communitylib.utils.terrain.common_terrain_location_utils instead."""
     pass
