@@ -9,6 +9,7 @@ from distributor.shared_messages import IconInfoData
 from objects.game_object import GameObject
 from typing import Tuple, Set, Union, Iterator, List
 
+from objects.script_object import ScriptObject
 from sims4communitylib.enums.tags_enum import CommonGameTag
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.notifications.common_basic_notification import CommonBasicNotification
@@ -25,14 +26,29 @@ class CommonObjectTagUtils:
 
     """
 
-    @staticmethod
-    def has_game_tags(game_object: GameObject, tags: Iterator[Union[int, CommonGameTag]]) -> bool:
+    @classmethod
+    def has_game_tag(cls, game_object: Union[GameObject, ScriptObject], tag: Union[int, CommonGameTag]) -> bool:
+        """has_game_tag(game_object, tag)
+
+        Determine if an Object has the specified tag.
+
+        :param game_object: An instance of an Object.
+        :type game_object: Union[GameObject, ScriptObject]
+        :param tag: A tag to locate.
+        :type tag: Union[int, CommonGameTag]
+        :return: True, if the Object has the specified tag. False, if not.
+        :rtype: bool
+        """
+        return CommonObjectTagUtils.has_game_tags(game_object, (tag,))
+
+    @classmethod
+    def has_game_tags(cls, game_object: Union[GameObject, ScriptObject], tags: Iterator[Union[int, CommonGameTag]]) -> bool:
         """has_game_tags(game_object, tags)
 
         Determine if an Object has any of the specified tags.
 
         :param game_object: An instance of an Object.
-        :type game_object: GameObject
+        :type game_object: Union[GameObject, ScriptObject]
         :param tags: A collection of tags to locate.
         :type tags: Iterator[Union[int, CommonGameTag]]
         :return: True, if the Object has any of the specified tags. False, if not.
@@ -42,14 +58,14 @@ class CommonObjectTagUtils:
             return False
         return game_object.has_any_tag(tuple(tags))
 
-    @staticmethod
-    def get_game_tags(game_object: GameObject) -> Set[int]:
+    @classmethod
+    def get_game_tags(cls, game_object: Union[GameObject, ScriptObject]) -> Set[int]:
         """get_game_tags(game_object)
 
         Retrieve the tags of an Object.
 
         :param game_object: An instance of an Object.
-        :type game_object: GameObject
+        :type game_object: Union[GameObject, ScriptObject]
         :return: A collection of tags the Object has.
         :rtype: Set[int]
         """
@@ -57,14 +73,14 @@ class CommonObjectTagUtils:
             return set()
         return game_object.get_tags()
 
-    @staticmethod
-    def add_game_tags(game_object: GameObject, tags: Tuple[Union[int, CommonGameTag]], persist: bool = False) -> bool:
+    @classmethod
+    def add_game_tags(cls, game_object: Union[GameObject, ScriptObject], tags: Tuple[Union[int, CommonGameTag]], persist: bool = False) -> bool:
         """add_game_tags(game_object, tags, persist=False)
 
         Add tags to an Object.
 
         :param game_object: An instance of an Object.
-        :type game_object: GameObject
+        :type game_object: Union[GameObject, ScriptObject]
         :param tags: A collection of Game Tags to add.
         :type tags: Tuple[Union[int, CommonGameTag]]
         :param persist: If True, the Tags will persist to all instances of the Object. If False, the Tags will persist only to the specified Object. Default is False.
@@ -77,14 +93,14 @@ class CommonObjectTagUtils:
         game_object.append_tags(set(tags), persist=persist)
         return True
 
-    @staticmethod
-    def remove_game_tags(game_object: GameObject, tags: Tuple[Union[int, CommonGameTag]]) -> bool:
+    @classmethod
+    def remove_game_tags(cls, game_object: Union[GameObject, ScriptObject], tags: Tuple[Union[int, CommonGameTag]]) -> bool:
         """remove_game_tags(game_object, tags)
 
         Remove tags from an Object.
 
         :param game_object: An instance of an Object.
-        :type game_object: GameObject
+        :type game_object: Union[GameObject, ScriptObject]
         :param tags: A collection of Game Tags to remove.
         :type tags: Tuple[Union[int, CommonGameTag]]
         :return: True, if the Tags were successfully removed. False, if not.
@@ -95,8 +111,8 @@ class CommonObjectTagUtils:
         game_object.remove_dynamic_tags(set(tags))
         return True
 
-    @staticmethod
-    def _print_game_tags(game_object: GameObject) -> None:
+    @classmethod
+    def _print_game_tags(cls, game_object: Union[GameObject, ScriptObject]) -> None:
         obj_tags_list: List[str] = list()
         for obj_tag in CommonObjectTagUtils.get_game_tags(game_object):
             if not isinstance(obj_tag, CommonGameTag):

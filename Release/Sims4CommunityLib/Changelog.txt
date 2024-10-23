@@ -1,9 +1,13 @@
+v3.9:
+- Added a vanilla fix for the missing "death_object_assigned" attribute.
+
 v3.8:
 - Fixed the name of the Home body trait.
 - Added utilities to the weather utils for getting wind speed, precipitation levels, and lightning levels
 - Fixed an error in the get_total_days_to_age_up function
 - Added functions to CommonRelationshipUtils for setting friendship levels and romance levels.
 - Added functions to CommonSimLocationUtils for checking if a Sim is outside, inside, inside a building, or in the shade.
+- Added a vanilla fix for when a Household Template is missing on a Sim Filter.
 
 v3.7:
 - Updated CommonBuffId with new buffs
