@@ -52,12 +52,12 @@ class CommonTestResult(CommonExecutionResult):
     def __init__(
         self,
         result: bool,
-        reason: Union[str, None]=None,
-        tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator, CommonLocalizationUtils.LocalizedTooltip]=None,
-        tooltip_tokens: Iterator[Any]=(),
-        icon: Any=None,
-        influenced_by_active_mood: bool=False,
-        hide_tooltip: bool=False
+        reason: Union[str, None] = None,
+        tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator, CommonLocalizationUtils.LocalizedTooltip] = None,
+        tooltip_tokens: Iterator[Any] = (),
+        icon: Any = None,
+        influenced_by_active_mood: bool = False,
+        hide_tooltip: bool = False
     ) -> None:
         super().__init__(result, reason=reason, success_override=result, tooltip_text=tooltip_text, tooltip_tokens=tooltip_tokens, icon=icon, influenced_by_active_mood=influenced_by_active_mood, hide_tooltip=hide_tooltip)
 

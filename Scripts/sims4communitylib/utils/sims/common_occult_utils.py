@@ -48,8 +48,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
     def get_log_identifier(cls) -> str:
         return 'common_occult_utils'
 
-    @staticmethod
-    def get_all_occult_types_for_sim_gen(sim_info: SimInfo) -> Iterator[OccultType]:
+    @classmethod
+    def get_all_occult_types_for_sim_gen(cls, sim_info: SimInfo) -> Iterator[OccultType]:
         """get_all_occult_types_for_sim_gen(sim_info)
 
         Retrieve a generator of OccultType for all Occults of a Sim.
@@ -72,8 +72,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             if sim_occult_types & occult_type:
                 yield occult_type
 
-    @staticmethod
-    def get_sim_info_for_all_occults_gen(sim_info: SimInfo, exclude_occult_types: Iterator[OccultType]) -> Iterator[SimInfo]:
+    @classmethod
+    def get_sim_info_for_all_occults_gen(cls, sim_info: SimInfo, exclude_occult_types: Iterator[OccultType]) -> Iterator[SimInfo]:
         """get_sim_info_for_all_occults_gen(sim_info, exclude_occult_types)
 
         Retrieve a generator of SimInfo objects for all Occults of a sim.
@@ -103,8 +103,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
                 continue
             yield occult_sim_info
 
-    @staticmethod
-    def has_any_occult(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def has_any_occult(cls, sim_info: SimInfo) -> CommonTestResult:
         """has_any_occult(sim_info)
 
         Determine if a Sim has any Occult Types.
@@ -122,8 +122,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(True, reason=f'Sim had an occult type. {occult_type}')
         return CommonTestResult(False, reason=f'Sim did not have an occult type. {occult_type}')
 
-    @staticmethod
-    def has_occult_type(sim_info: SimInfo, occult_type: OccultType) -> CommonTestResult:
+    @classmethod
+    def has_occult_type(cls, sim_info: SimInfo, occult_type: OccultType) -> CommonTestResult:
         """has_occult_type(sim_info, occult_type)
 
         Determine if a Sim has an Occult Type.
@@ -141,8 +141,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(True, reason=f'Sim had occult type {occult_type}.')
         return CommonTestResult(False, reason=f'Sim did not have occult type {occult_type}')
 
-    @staticmethod
-    def has_occult_sim_info(sim_info: SimInfo, occult_type: OccultType) -> CommonTestResult:
+    @classmethod
+    def has_occult_sim_info(cls, sim_info: SimInfo, occult_type: OccultType) -> CommonTestResult:
         """has_occult_sim_info(sim_info, occult_type)
 
         Determine if a Sim has a SimInfo for an Occult.
@@ -162,8 +162,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(True, reason=f'Sim had a Sim Info for {occult_type}.')
         return CommonTestResult(False, reason=f'Sim did not have a Sim Info {occult_type}')
 
-    @staticmethod
-    def get_current_occult_sim_info(sim_info: SimInfo) -> Union[SimInfo, SimInfoBaseWrapper, None]:
+    @classmethod
+    def get_current_occult_sim_info(cls, sim_info: SimInfo) -> Union[SimInfo, SimInfoBaseWrapper, None]:
         """get_current_occult_sim_info(sim_info)
 
         Retrieve the SimInfo for the Occult the Sim is currently.
@@ -178,8 +178,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         current_occult_type = CommonOccultUtils.get_current_occult_type(sim_info)
         return CommonOccultUtils.get_occult_sim_info(sim_info, current_occult_type)
 
-    @staticmethod
-    def get_occult_sim_info(sim_info: SimInfo, occult_type: OccultType) -> Union[SimInfo, SimInfoBaseWrapper]:
+    @classmethod
+    def get_occult_sim_info(cls, sim_info: SimInfo, occult_type: OccultType) -> Union[SimInfo, SimInfoBaseWrapper]:
         """get_occult_sim_info(sim_info, occult_type)
 
         Retrieve the SimInfo for an Occult of a Sim.
@@ -198,8 +198,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         occult_sim_info = sim_info.occult_tracker.get_occult_sim_info(occult_type)
         return occult_sim_info
 
-    @staticmethod
-    def add_occult(sim_info: SimInfo, occult_type: CommonOccultType) -> CommonExecutionResult:
+    @classmethod
+    def add_occult(cls, sim_info: SimInfo, occult_type: CommonOccultType) -> CommonExecutionResult:
         """add_occult(sim_info, occult_type)
 
         Add an Occult Type to a Sim.
@@ -231,8 +231,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonExecutionResult(False, reason=f'The specified occult type did not have an add function. {occult_type.name}')
         return occult_type_add_mappings[occult_type](sim_info)
 
-    @staticmethod
-    def remove_occult(sim_info: SimInfo, occult_type: CommonOccultType) -> CommonExecutionResult:
+    @classmethod
+    def remove_occult(cls, sim_info: SimInfo, occult_type: CommonOccultType) -> CommonExecutionResult:
         """remove_occult(sim_info, occult_type)
 
         Remove an Occult Type from a Sim.
@@ -261,11 +261,11 @@ class CommonOccultUtils(_HasS4CLClassLog):
             CommonOccultType.WEREWOLF: CommonOccultUtils.remove_werewolf_occult
         }
         if occult_type not in occult_type_remove_mappings:
-            return CommonExecutionResult(False, reason=f'The specified occult type did not have a remove function. {occult_type.name}')
+            return CommonExecutionResult(False, reason=f'The specified occult type did not have a remove function, meaning it has not been implemented yet. {occult_type.name}')
         return occult_type_remove_mappings[occult_type](sim_info)
 
-    @staticmethod
-    def add_alien_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def add_alien_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """add_alien_occult(sim_info)
 
         Add the Alien Occult Type to a Sim.
@@ -334,8 +334,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 
-    @staticmethod
-    def remove_alien_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def remove_alien_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """remove_alien_occult(sim_info)
 
         Remove the Alien Occult Type from a Sim.
@@ -357,8 +357,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         sim_info.occult_tracker.remove_occult_type(OccultType.ALIEN)
         return CommonExecutionResult.TRUE
 
-    @staticmethod
-    def add_mermaid_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def add_mermaid_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """add_mermaid_occult(sim_info)
 
         Add the Mermaid Occult Type to a Sim.
@@ -382,8 +382,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 
-    @staticmethod
-    def remove_mermaid_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def remove_mermaid_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """remove_mermaid_occult(sim_info)
 
         Remove the Mermaid Occult Type from a Sim.
@@ -411,8 +411,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         CommonOccultUtils.switch_to_occult_form(sim_info, OccultType.HUMAN)
         return CommonTraitUtils.remove_traits(sim_info, traits)
 
-    @staticmethod
-    def add_plant_sim_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def add_plant_sim_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """add_plant_sim_occult(sim_info)
 
         Add the Plant Sim Occult Type to a Sim.
@@ -433,8 +433,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 
-    @staticmethod
-    def remove_plant_sim_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def remove_plant_sim_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """remove_plant_sim_occult(sim_info)
 
         Remove the Plant Sim Occult Type from a Sim.
@@ -454,8 +454,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return remove_result
         return CommonExecutionResult.TRUE
 
-    @staticmethod
-    def add_robot_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def add_robot_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """add_robot_occult(sim_info)
 
         Add the Robot Occult Type to a Sim.
@@ -475,8 +475,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return is_robot_result
         return CommonTraitUtils.add_trait(sim_info, CommonTraitId.OCCULT_ROBOT)
 
-    @staticmethod
-    def remove_robot_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def remove_robot_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """remove_robot_occult(sim_info)
 
         Remove the Robot Occult Type from a Sim.
@@ -538,8 +538,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         CommonSimAppearanceModifierUtils.evaluate_appearance_modifiers(sim_info)
         return CommonExecutionResult(False, reason=f'Failed to turn {sim_info} into a Scarecrow.')
 
-    @staticmethod
-    def remove_scarecrow_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def remove_scarecrow_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """remove_scarecrow_occult(sim_info)
 
         Remove the Scarecrow Occult Type from a Sim.
@@ -574,8 +574,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             CommonOutfitUtils.set_current_outfit(sim_info, current_outfit_category_and_index)
         return CommonTraitUtils.remove_trait(sim_info, CommonTraitId.SCARECROW)
 
-    @staticmethod
-    def add_skeleton_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def add_skeleton_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """add_skeleton_occult(sim_info)
 
         Add the Skeleton Occult Type to a Sim.
@@ -599,8 +599,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 
-    @staticmethod
-    def remove_skeleton_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def remove_skeleton_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """remove_skeleton_occult(sim_info)
 
         Remove the Skeleton Occult Type from a Sim.
@@ -624,8 +624,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 
-    @staticmethod
-    def add_vampire_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def add_vampire_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """add_vampire_occult(sim_info)
 
         Add the Vampire Occult Type to a Sim.
@@ -649,8 +649,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 
-    @staticmethod
-    def remove_vampire_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def remove_vampire_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """remove_vampire_occult(sim_info)
 
         Remove the Vampire Occult Type from a Sim.
@@ -681,8 +681,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 
-    @staticmethod
-    def add_witch_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def add_witch_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """add_witch_occult(sim_info)
 
         Add the Witch Occult Type to a Sim.
@@ -706,8 +706,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 
-    @staticmethod
-    def remove_witch_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def remove_witch_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """remove_witch_occult(sim_info)
 
         Remove the Witch Occult Type from a Sim.
@@ -734,8 +734,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 
-    @staticmethod
-    def add_werewolf_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def add_werewolf_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """add_werewolf_occult(sim_info)
 
         Add the Werewolf Occult Type to a Sim.
@@ -759,8 +759,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 
-    @staticmethod
-    def remove_werewolf_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def remove_werewolf_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """remove_werewolf_occult(sim_info)
 
         Remove the Werewolf Occult Type from a Sim.
@@ -786,8 +786,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonExecutionResult.TRUE
         return CommonExecutionResult.FALSE
 
-    @staticmethod
-    def add_all_occults(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def add_all_occults(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """add_all_occults(sim_info)
 
         Add all Occult Types to a Sim. i.e. Make them an Alien, a Vampire, a Witch, etc.
@@ -810,8 +810,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
                 return add_result
         return CommonExecutionResult.TRUE
 
-    @staticmethod
-    def remove_all_occults(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def remove_all_occults(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """remove_all_occults(sim_info)
 
         Remove all Occult Types from a Sim. i.e. Make them a Non-Occult only.
@@ -844,8 +844,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
                 return remove_result
         return CommonExecutionResult.TRUE
 
-    @staticmethod
-    def switch_to_occult_form(sim_info: SimInfo, occult_type: Union[OccultType, CommonOccultType]) -> CommonExecutionResult:
+    @classmethod
+    def switch_to_occult_form(cls, sim_info: SimInfo, occult_type: Union[OccultType, CommonOccultType]) -> CommonExecutionResult:
         """switch_to_occult_form(sim_info, occult_type)
 
         Switch a Sim to an Occult Form.
@@ -866,12 +866,12 @@ class CommonOccultUtils(_HasS4CLClassLog):
         else:
             vanilla_occult_type = occult_type
         # noinspection PyPropertyAccess
-        sim_info.occult_tracker.set_pending_occult_type(sim_info.current_occult_types)
+        sim_info.occult_tracker.set_pending_occult_type(vanilla_occult_type)
         sim_info.occult_tracker.switch_to_occult_type(vanilla_occult_type)
         return CommonExecutionResult.TRUE
 
-    @staticmethod
-    def is_vampire(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_vampire(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_vampire(sim_info)
 
         Determine if a Sim is a Vampire.
@@ -888,8 +888,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return is_vampire_available_result
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_VAMPIRE) or CommonOccultUtils.has_occult_type(sim_info, OccultType.VAMPIRE)
 
-    @staticmethod
-    def is_alien(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_alien(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_alien(sim_info)
 
         Determine if a Sim is an Alien.
@@ -906,8 +906,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return is_alien_available_result
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_ALIEN) or CommonOccultUtils.has_occult_type(sim_info, OccultType.ALIEN)
 
-    @staticmethod
-    def is_plant_sim(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_plant_sim(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_plant_sim(sim_info)
 
         Determine if a Sim is a Plant Sim.
@@ -924,8 +924,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return is_plant_sim_available_result
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.PLANT_SIM)
 
-    @staticmethod
-    def is_ghost(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_ghost(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_ghost(sim_info)
 
         Determine if a Sim is a Ghost.
@@ -946,8 +946,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
                 return CommonTestResult.TRUE
         return CommonTestResult(False, reason=f'Sim is not a ghost.')
 
-    @staticmethod
-    def is_scarecrow(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_scarecrow(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_scarecrow(sim_info)
 
         Determine if a Sim is a Scarecrow.
@@ -966,8 +966,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(True, reason=f'{sim_info} is a Scarecrow.')
         return CommonTestResult(False, reason=f'{sim_info} is not a Scarecrow.')
 
-    @staticmethod
-    def is_robot(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_robot(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_robot(sim_info)
 
         Determine if a Sim is a Robot.
@@ -989,8 +989,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
                 return CommonTestResult.TRUE
         return CommonTestResult(False, reason=f'Sim is not a robot.')
     
-    @staticmethod
-    def is_skeleton(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_skeleton(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_skeleton(sim_info)
 
         Determine if a Sim is a Skeleton.
@@ -1017,8 +1017,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
                 return CommonTestResult.TRUE
         return CommonTestResult(False, reason=f'Sim is not a skeleton.')
 
-    @staticmethod
-    def is_werewolf(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_werewolf(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_werewolf(sim_info)
 
         Determine if a Sim is a Werewolf
@@ -1039,8 +1039,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(True, reason=f'Sim had the Werewolf occult type.')
         return CommonTestResult(False, reason=f'Sim ')
 
-    @staticmethod
-    def is_witch(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_witch(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_witch(sim_info)
 
         Determine if a Sim is a Witch
@@ -1061,8 +1061,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(True, reason=f'Sim had the Witch occult type.')
         return CommonTestResult(False, reason=f'Sim is not a Witch.')
 
-    @staticmethod
-    def is_mermaid(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_mermaid(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_mermaid(sim_info)
 
         Determine if a Sim is a Mermaid
@@ -1083,8 +1083,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(True, reason=f'Sim had the Mermaid occult type.')
         return CommonTestResult(False, reason=f'Sim is not a Witch.')
 
-    @staticmethod
-    def is_in_mermaid_form(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_in_mermaid_form(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_in_mermaid_form(sim_info)
 
         Determine if a Sim is in Mermaid Form (The Sim has a visible Tail).
@@ -1103,8 +1103,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(True, reason=f'Sim is currently in Mermaid Form.')
         return CommonTestResult(False, reason=f'Sim is not in Mermaid Form.')
 
-    @staticmethod
-    def is_mermaid_in_mermaid_form(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_mermaid_in_mermaid_form(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_mermaid_in_mermaid_form(sim_info)
 
         Determine if a Sim is a Mermaid and is in Mermaid Form (Their Tail is visible).
@@ -1127,8 +1127,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return is_in_mermaid_form_result
         return CommonTestResult.TRUE
 
-    @staticmethod
-    def is_currently_human(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def is_currently_human(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """is_currently_human(sim_info)
 
         Determine if a Sim is currently in their Human form (regardless of their Occult type).
@@ -1144,8 +1144,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.is_currently_a_non_occult(sim_info)
 
-    @staticmethod
-    def is_currently_a_non_occult(sim_info: SimInfo) -> CommonExecutionResult:
+    @classmethod
+    def is_currently_a_non_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
         """is_currently_a_non_occult(sim_info)
 
         Determine if a Sim is currently in a Non-Occult form (regardless of their Occult type).
@@ -1164,8 +1164,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonExecutionResult(True, reason='Sim is currently a Human.')
         return CommonExecutionResult(False, reason='Sim is not currently a Human.')
 
-    @staticmethod
-    def is_currently_a_mermaid(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_currently_a_mermaid(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_currently_a_mermaid(sim_info)
 
         Determine if a Sim is currently in a Mermaid form. (Not disguised)
@@ -1179,8 +1179,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.is_in_mermaid_form(sim_info)
 
-    @staticmethod
-    def is_currently_a_robot(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_currently_a_robot(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_currently_a_robot(sim_info)
 
         Determine if a Sim is currently in their Robot form.
@@ -1196,8 +1196,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.is_robot(sim_info)
 
-    @staticmethod
-    def is_currently_a_scarecrow(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_currently_a_scarecrow(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_currently_a_scarecrow(sim_info)
 
         Determine if a Sim is currently in their Scarecrow form.
@@ -1213,8 +1213,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.is_scarecrow(sim_info)
 
-    @staticmethod
-    def is_currently_a_skeleton(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_currently_a_skeleton(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_currently_a_skeleton(sim_info)
 
         Determine if a Sim is currently in their Skeleton form.
@@ -1230,8 +1230,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.is_skeleton(sim_info)
 
-    @staticmethod
-    def is_currently_a_plant_sim(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_currently_a_plant_sim(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_currently_a_plant_sim(sim_info)
 
         Determine if a Sim is currently in their Plant Sim form.
@@ -1247,8 +1247,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.is_plant_sim(sim_info)
 
-    @staticmethod
-    def is_currently_a_ghost(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_currently_a_ghost(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_currently_a_ghost(sim_info)
 
         Determine if a Sim is currently in their Ghost form.
@@ -1264,8 +1264,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             raise AssertionError('Argument sim_info was None')
         return CommonOccultUtils.is_ghost(sim_info)
 
-    @staticmethod
-    def is_currently_a_vampire(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_currently_a_vampire(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_currently_a_vampire(sim_info)
 
         Determine if a Sim is currently in their Vampire form. (Not disguised)
@@ -1284,8 +1284,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(True, reason='Sim is currently a Vampire.')
         return CommonTestResult(False, reason='Sim is not currently a Vampire.')
 
-    @staticmethod
-    def is_currently_an_alien(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_currently_an_alien(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_currently_an_alien(sim_info)
 
         Determine if a Sim is currently in their Alien form. (Not disguised)
@@ -1304,8 +1304,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(True, reason='Sim is currently an Alien.')
         return CommonTestResult(False, reason='Sim is not currently an Alien.')
 
-    @staticmethod
-    def is_currently_a_werewolf(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_currently_a_werewolf(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_currently_a_werewolf(sim_info)
 
         Determine if a Sim is currently in their Werewolf form.
@@ -1319,8 +1319,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             raise AssertionError('Argument sim_info was None')
         return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_WEREWOLF_WEREFORM)
 
-    @staticmethod
-    def is_currently_a_witch(sim_info: SimInfo) -> CommonTestResult:
+    @classmethod
+    def is_currently_a_witch(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_currently_a_witch(sim_info)
 
         Determine if a Sim is currently in their Witch form. (Not disguised)
@@ -1339,8 +1339,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(True, reason='Sim is currently a Witch.')
         return CommonTestResult(False, reason='Sim is not currently a Witch.')
 
-    @staticmethod
-    def get_sim_info_of_all_occults_gen(sim_info: SimInfo, *exclude_occult_types: OccultType) -> Iterator[SimInfo]:
+    @classmethod
+    def get_sim_info_of_all_occults_gen(cls, sim_info: SimInfo, *exclude_occult_types: OccultType) -> Iterator[SimInfo]:
         """get_sim_info_of_all_occults_gen(sim_info, *exclude_occult_types)
 
         Retrieve a generator of SimInfo objects for all Occults of a sim.
@@ -1387,12 +1387,12 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult.TRUE
         return CommonTestResult.FALSE
 
-    @staticmethod
-    def _has_occult_trait(sim_info: SimInfo, trait_id: Union[int, CommonTraitId]) -> bool:
+    @classmethod
+    def _has_occult_trait(cls, sim_info: SimInfo, trait_id: Union[int, CommonTraitId]) -> bool:
         return CommonOccultUtils._has_occult_traits(sim_info, (trait_id,))
 
-    @staticmethod
-    def _has_occult_traits(sim_info: SimInfo, trait_ids: Iterator[Union[int, CommonTraitId]]) -> bool:
+    @classmethod
+    def _has_occult_traits(cls, sim_info: SimInfo, trait_ids: Iterator[Union[int, CommonTraitId]]) -> bool:
         if sim_info is None:
             return False
         equipped_traits = CommonTraitUtils.get_equipped_traits(sim_info)
@@ -1402,8 +1402,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
                 return True
         return False
 
-    @staticmethod
-    def get_current_occult_type(sim_info: SimInfo) -> Union[OccultType, None]:
+    @classmethod
+    def get_current_occult_type(cls, sim_info: SimInfo) -> Union[OccultType, None]:
         """get_current_occult_type(sim_info)
 
         Retrieve the current occult type of the Sim.
@@ -1422,8 +1422,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         # noinspection PyPropertyAccess
         return OccultType(sim_info.current_occult_types)
 
-    @staticmethod
-    def is_occult_available(occult_type: CommonOccultType) -> CommonTestResult:
+    @classmethod
+    def is_occult_available(cls, occult_type: CommonOccultType) -> CommonTestResult:
         """is_occult_available(occult_type)
 
         Determine if an Occult is available for us.
@@ -1453,8 +1453,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(False, reason=f'Occult Type {occult_type} is not available because it is not a valid occult type.')
         return occult_type_mappings[occult_type]()
 
-    @staticmethod
-    def is_alien_occult_available() -> CommonTestResult:
+    @classmethod
+    def is_alien_occult_available(cls) -> CommonTestResult:
         """is_alien_occult_available()
 
         Determine if the Alien Occult is available.
@@ -1468,8 +1468,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(False, reason='The Alien trait is not available.')
         return CommonTestResult.TRUE
 
-    @staticmethod
-    def is_mermaid_occult_available() -> CommonTestResult:
+    @classmethod
+    def is_mermaid_occult_available(cls) -> CommonTestResult:
         """is_mermaid_occult_available()
 
         Determine if the Mermaid Occult is available.
@@ -1483,8 +1483,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(False, reason='The Mermaid trait is not available.')
         return CommonTestResult.TRUE
 
-    @staticmethod
-    def is_robot_occult_available() -> CommonTestResult:
+    @classmethod
+    def is_robot_occult_available(cls) -> CommonTestResult:
         """is_robot_occult_available()
 
         Determine if the Robot Occult is available.
@@ -1498,8 +1498,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(False, reason='The Robot trait is not available.')
         return CommonTestResult.TRUE
 
-    @staticmethod
-    def is_scarecrow_occult_available() -> CommonTestResult:
+    @classmethod
+    def is_scarecrow_occult_available(cls) -> CommonTestResult:
         """is_scarecrow_occult_available()
 
         Determine if the Scarecrow Occult is available.
@@ -1511,8 +1511,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(False, reason='The Scarecrow trait is not available.')
         return CommonTestResult.TRUE
 
-    @staticmethod
-    def is_skeleton_occult_available() -> CommonTestResult:
+    @classmethod
+    def is_skeleton_occult_available(cls) -> CommonTestResult:
         """is_skeleton_occult_available()
 
         Determine if the Skeleton Occult is available.
@@ -1524,8 +1524,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(False, reason='The Skeleton trait is not available.')
         return CommonTestResult.TRUE
 
-    @staticmethod
-    def is_vampire_occult_available() -> CommonTestResult:
+    @classmethod
+    def is_vampire_occult_available(cls) -> CommonTestResult:
         """is_vampire_occult_available()
 
         Determine if the Vampire Occult is available.
@@ -1539,8 +1539,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(False, reason='The Vampire trait is not available.')
         return CommonTestResult.TRUE
 
-    @staticmethod
-    def is_witch_occult_available() -> CommonTestResult:
+    @classmethod
+    def is_witch_occult_available(cls) -> CommonTestResult:
         """is_witch_occult_available()
 
         Determine if the Witch Occult is available.
@@ -1554,8 +1554,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(False, reason='The Witch trait is not available.')
         return CommonTestResult.TRUE
 
-    @staticmethod
-    def is_plant_sim_occult_available() -> CommonTestResult:
+    @classmethod
+    def is_plant_sim_occult_available(cls) -> CommonTestResult:
         """is_plant_sim_occult_available()
 
         Determine if the Plant Sim Occult is available.
@@ -1567,8 +1567,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(False, reason='The Plant Sim trait is not available.')
         return CommonTestResult.TRUE
 
-    @staticmethod
-    def is_werewolf_occult_available() -> CommonTestResult:
+    @classmethod
+    def is_werewolf_occult_available(cls) -> CommonTestResult:
         """is_werewolf_occult_available()
 
         Determine if the Werewolf Occult is available.
@@ -1582,8 +1582,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(False, reason='The Werewolf trait is not available.')
         return CommonTestResult.TRUE
 
-    @staticmethod
-    def is_ghost_occult_available() -> CommonTestResult:
+    @classmethod
+    def is_ghost_occult_available(cls) -> CommonTestResult:
         """is_ghost_occult_available()
 
         Determine if the Ghost Occult is available.
@@ -1632,8 +1632,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
                 return CommonTestResult.TRUE
         return CommonTestResult(False, reason='No Ghost traits were available.')
 
-    @staticmethod
-    def _get_occult_types(sim_info: SimInfo) -> OccultType:
+    @classmethod
+    def _get_occult_types(cls, sim_info: SimInfo) -> OccultType:
         if not hasattr(sim_info, 'occult_types'):
             if not hasattr(sim_info, '_base') or not hasattr(sim_info._base, 'occult_types'):
                 return CommonOccultUtils.get_current_occult_type(sim_info) or OccultType.HUMAN

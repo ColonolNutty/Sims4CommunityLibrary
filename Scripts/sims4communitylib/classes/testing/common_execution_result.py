@@ -54,13 +54,13 @@ class CommonExecutionResult(TestResult):
     def __init__(
         self,
         result: Any,
-        reason: Union[str, None]=None,
-        success_override: bool=None,
-        tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator, CommonLocalizationUtils.LocalizedTooltip]=None,
-        tooltip_tokens: Iterator[Any]=(),
-        icon: Any=None,
-        influenced_by_active_mood: bool=False,
-        hide_tooltip: bool=False
+        reason: Union[str, None] = None,
+        success_override: bool = None,
+        tooltip_text: Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator, CommonLocalizationUtils.LocalizedTooltip] = None,
+        tooltip_tokens: Iterator[Any] = (),
+        icon: Any = None,
+        influenced_by_active_mood: bool = False,
+        hide_tooltip: bool = False
     ) -> None:
         self._tooltip_text = None
         self._tooltip_tokens = None
@@ -81,6 +81,16 @@ class CommonExecutionResult(TestResult):
             else:
                 success_override = False
         self._success = success_override
+
+    @property
+    def tooltip_text(self) -> Union[int, str, LocalizedString, CommonStringId, CommonLocalizedStringSeparator, CommonLocalizationUtils.LocalizedTooltip]:
+        """The text of the tooltip."""
+        return self._tooltip_text
+
+    @property
+    def tooltip_tokens(self) -> Iterator[Any]:
+        """The tokens of the tooltip."""
+        return self._tooltip_tokens
 
     def reverse_result(self) -> 'CommonExecutionResult':
         """reverse_result()

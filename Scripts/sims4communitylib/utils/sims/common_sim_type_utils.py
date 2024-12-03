@@ -2317,6 +2317,40 @@ class CommonSimTypeUtils:
         return CommonTraitUtils.has_any_traits(sim_info, trait_ids)
 
     @staticmethod
+    def is_batuu_alien(sim_info: SimInfo) -> CommonTestResult:
+        """Determine if a Sim is a Batuu Alien.
+
+        .. note::
+
+            Alien Sims:
+
+            - Bith
+            - Twilek
+            - Weequay
+            - Abednedo
+            - Mirialan
+            - Zabrak
+
+        :param sim_info: The Sim to check.
+        :type sim_info: SimInfo
+        :return: The result of testing. True, if the Sim is a Batuu Alien. False, if not.
+        :rtype: CommonTestResult
+        """
+        if sim_info is None:
+            raise AssertionError('Sim Info was None!')
+        from sims4communitylib.enums.traits_enum import CommonTraitId
+        from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
+        trait_ids = (
+            CommonTraitId.BATUU_ALIEN_BITH,  # trait_Batuu_Alien_Bith
+            CommonTraitId.BATUU_ALIEN_TWILEK,  # trait_Batuu_Alien_Twilek
+            CommonTraitId.BATUU_ALIEN_WEEQUAY,  # trait_Batuu_Alien_Weequay
+            CommonTraitId.BATUU_ALIEN_ABEDNEDO,  # trait_Batuu_Alien_Abednedo
+            CommonTraitId.BATUU_ALIEN_MIRIALAN,  # trait_Batuu_Alien_Mirialan
+            CommonTraitId.BATUU_ALIEN_ZABRAK,  # trait_Batuu_Alien_Zabrak
+        )
+        return CommonTraitUtils.has_any_traits(sim_info, trait_ids)
+
+    @staticmethod
     def is_occult(sim_info: SimInfo, combine_teen_young_adult_and_elder_age: bool = True, combine_child_dog_types: bool = True) -> bool:
         """is_occult(sim_info, combine_teen_young_adult_and_elder_age=True, combine_child_dog_types=True)
 

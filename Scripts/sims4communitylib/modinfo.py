@@ -32,4 +32,4 @@ class ModInfo(CommonModInfo):
 
     @property
     def _version(self) -> str:
-        return '3.9'
+        return '3.10'
