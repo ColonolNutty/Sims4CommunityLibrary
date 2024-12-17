@@ -356,6 +356,8 @@ class CommonSimLocationUtils:
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             return False
+        if sim.posture is None:
+            return False
         return script_object.is_connected(sim)
 
     # noinspection PyUnusedLocal

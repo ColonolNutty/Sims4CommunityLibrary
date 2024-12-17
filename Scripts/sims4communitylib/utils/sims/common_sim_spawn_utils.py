@@ -597,6 +597,10 @@ class CommonSimSpawnUtils:
             create_and_place_baby(sim_info, position=position_to_spawn_at, routing_surface=routing_surface_to_spawn)
         else:
             SimSpawner.spawn_sim(sim_info, sim_location=location, sim_position=position, **kwargs)
+
+        household = CommonHouseholdUtils.get_household(sim_info)
+        if household and CommonSimUtils.get_sim_instance(sim_info) is None:
+            sim_info.inject_into_inactive_zone(household.home_zone_id)
         return True
 
     @classmethod
