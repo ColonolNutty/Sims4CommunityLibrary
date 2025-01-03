@@ -1,3 +1,10 @@
+v3.10:
+- Fixed a vanilla issue when saving commodities.
+- Fixed an issue when switching occults using switch_to_occult
+- Changed all functions in CommonOccultUtils to class methods
+- Added properties to attach_cas_part to toggle setting setting the current outfit.
+- Added a function to check if a Sim is a Batuu alien inside CommonSimTypeUtils.
+
 v3.9:
 - Added a vanilla fix for the missing "death_object_assigned" attribute.
 
