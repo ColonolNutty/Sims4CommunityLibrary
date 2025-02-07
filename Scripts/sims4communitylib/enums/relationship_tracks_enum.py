@@ -19,5 +19,6 @@ class CommonRelationshipTrackId(CommonInt):
     MISCHIEF: 'CommonRelationshipTrackId' = 26920
     RIVALRY: 'CommonRelationshipTrackId' = 161999
     ROMANCE: 'CommonRelationshipTrackId' = 16651
+    ROMANCE_SATISFACTION: 'CommonRelationshipTrackId' = 362100
     SIM_TO_PET_FRIENDSHIP: 'CommonRelationshipTrackId' = 159228
     SMART_HUB_FRIENDSHIP: 'CommonRelationshipTrackId' = 203686

@@ -34,7 +34,7 @@ class CommonSimGenealogyUtils:
         return sim_info._genealogy_tracker
 
     @staticmethod
-    def set_as_father_of(sim_info: SimInfo, new_child_sim_info: SimInfo, propagate: bool=False) -> bool:
+    def set_as_father_of(sim_info: SimInfo, new_child_sim_info: SimInfo, propagate: bool = False) -> bool:
         """set_as_father_of(sim_info, new_child_sim_info, propagate=False)
 
         Set a Sim to be the Father of another Sim.
@@ -58,7 +58,7 @@ class CommonSimGenealogyUtils:
         return True
 
     @staticmethod
-    def set_as_mother_of(sim_info: SimInfo, new_child_sim_info: SimInfo, propagate: bool=False) -> bool:
+    def set_as_mother_of(sim_info: SimInfo, new_child_sim_info: SimInfo, propagate: bool = False) -> bool:
         """set_as_mother_of(sim_info, new_child_sim_info, propagate=False)
 
         Set a Sim to be the Mother of another Sim.

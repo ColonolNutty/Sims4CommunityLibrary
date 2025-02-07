@@ -62,7 +62,7 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return CommonTestResult(False, reason=f'Sim did not have a mapped motive {motive_id}')
+            return CommonTestResult(False, reason=f'{sim_info} did not have a mapped motive {motive_id}')
         cls.get_log().format_with_message('Mapped motive id, checking if Sim has the motive.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, sim=sim_info)
         return CommonSimStatisticUtils.has_statistic(sim_info, mapped_motive_id)
 

@@ -59,7 +59,7 @@ class CommonSimRabbitHoleUtils:
         sim_id = CommonSimUtils.get_sim_id(sim_info)
         existing_rabbit_hole_id = cls.get_first_rabbit_hole_id_for_sim(sim_info)
         if existing_rabbit_hole_id is not None:
-            return CommonTestResult(False, reason='Sim is already in a rabbit hole.')
+            return CommonTestResult(False, reason=f'{sim_info} is already in a rabbit hole.')
         rabbit_hole_service = CommonRabbitHoleUtils.get_rabbit_hole_service()
         rabbit_hole_id = rabbit_hole_service.put_sim_in_managed_rabbithole(sim_info, rabbit_hole_type=rabbit_hole)
 
@@ -71,7 +71,7 @@ class CommonSimRabbitHoleUtils:
 
                 rabbit_hole_service.set_rabbit_hole_expiration_callback(sim_id, rabbit_hole_id, _on_exit_rabbit_hole)
             return CommonTestResult.TRUE
-        return CommonTestResult(False, reason='Failed to put the Sim into the rabbit hole.')
+        return CommonTestResult(False, reason=f'Failed to put the {sim_info} into the rabbit hole.')
 
     @classmethod
     def try_remove_sim_from_rabbit_hole(cls, sim_info: SimInfo, on_remove_from_rabbit_hole_result_callback: Callable[[SimInfo, bool], None] = None) -> CommonTestResult:

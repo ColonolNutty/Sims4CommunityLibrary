@@ -6,6 +6,8 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 Copyright (c) COLONOLNUTTY
 """
 from typing import Callable, Iterator, Union, Tuple
+
+from crafting.recipe import Recipe
 from interactions.base.create_object_interaction import ObjectDefinition
 from objects.components.sim_inventory_component import SimInventoryComponent
 from objects.game_object import GameObject
@@ -22,6 +24,7 @@ from sims4communitylib.utils.common_component_utils import CommonComponentUtils
 from sims4communitylib.utils.common_function_utils import CommonFunctionUtils
 from sims4communitylib.utils.objects.common_object_spawn_utils import CommonObjectSpawnUtils
 from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
+from sims4communitylib.utils.resources.common_recipe_utils import CommonRecipeUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -393,4 +396,65 @@ def _s4clib_testing_add_object_to_inventory(output: CommonConsoleCommandOutput, 
         output(f'SUCCESS: Successfully added object with definition id {object_definition_id} to Sim {sim_info}')
     else:
         output(f'FAILED: Failed to add object with definition id {object_definition_id} to Sim {sim_info}')
+    output('Done adding object to the inventory of the Sim.')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.add_servo_ingredients',
+    'Add the ingredients needed to craft a Servo to the inventory of a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to add the ingredients to.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.give_servo_ingredients',
+    )
+)
+def _s4clib_testing_add_servo_ingredients(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
+    servo_recipe_id = 221691  # recipe_RoboticsTable_HumanoidRobot
+    recipe = CommonRecipeUtils.load_recipe_by_guid(servo_recipe_id)
+    if recipe is None:
+        output('No recipe found for Servos.')
+        return
+    output(f'Adding ingredients required to make a Servo to inventory of {sim_info}')
+    ingredients_list = recipe.use_ingredients.ingredient_list
+
+    for ingredient_factory in ingredients_list:
+        ingredient_requirement = ingredient_factory()
+        if not hasattr(ingredient_requirement, '_definition'):
+            continue
+        number_required = ingredient_requirement.count_required
+        ingredient_definition = ingredient_requirement.get_definition()
+        ingredient_definition_id = ingredient_definition.id
+        CommonSimInventoryUtils.add_to_inventory(sim_info, ingredient_definition_id, number_required)
+    output('Done adding object to the inventory of the Sim.')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.give_ingredients_for_recipe',
+    'Add ingredients for a recipe. (Only works with recipes that do not use tags!)',
+    command_arguments=(
+        CommonConsoleCommandArgument('recipe', 'Decimal Identifier', 'The decimal identifier of the Recipe for the ingredients to add.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of the Sim to add the ingredients to.', is_optional=True, default_value='Active Sim'),
+    ),
+    command_aliases=(
+        's4clib.give_ingredients',
+    )
+)
+def _s4clib_testing_add_object_to_inventory(output: CommonConsoleCommandOutput, recipe: Recipe, sim_info: SimInfo = None):
+    if recipe is None or not isinstance(recipe, Recipe):
+        output(f'No recipe found for {recipe}.')
+        return
+    output(f'Adding ingredients required to make a {recipe} to inventory of {sim_info}')
+    ingredients_list = recipe.use_ingredients.ingredient_list
+
+    for ingredient_factory in ingredients_list:
+        ingredient_requirement = ingredient_factory()
+        if not hasattr(ingredient_requirement, '_definition'):
+            continue
+        number_required = ingredient_requirement.count_required
+        ingredient_definition = ingredient_requirement.get_definition()
+        ingredient_definition_id = ingredient_definition.id
+        CommonSimInventoryUtils.add_to_inventory(sim_info, ingredient_definition_id, number_required)
     output('Done adding object to the inventory of the Sim.')

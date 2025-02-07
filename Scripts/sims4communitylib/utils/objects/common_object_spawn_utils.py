@@ -460,3 +460,4 @@ def _common_destroy_object(output: CommonConsoleCommandOutput, game_object: Game
     else:
         output(f'FAILED: Failed to schedule object {game_object} for destruction.')
     output(f'Done destroying or scheduling the destruction of object {game_object}.')
+

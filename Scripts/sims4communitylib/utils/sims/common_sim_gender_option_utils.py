@@ -184,18 +184,18 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
-            return CommonTestResult(False, reason=f'Sim has the Cannot Reproduce trait.')
+            return CommonTestResult(False, reason=f'{sim_info} has the Cannot Reproduce trait.')
         if CommonSimGenderOptionUtils.can_not_impregnate(sim_info) and CommonSimGenderOptionUtils.can_not_be_impregnated(sim_info):
-            return CommonTestResult(False, reason=f'Sim can neither impregnate nor be impregnated.')
+            return CommonTestResult(False, reason=f'{sim_info} can neither impregnate nor be impregnated.')
         if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
-            return CommonTestResult(True, reason=f'Sim has the Can Reproduce trait.')
+            return CommonTestResult(True, reason=f'{sim_info} has the Can Reproduce trait.')
         can_impregnate_result = CommonSimGenderOptionUtils.can_impregnate(sim_info)
         if can_impregnate_result:
             return can_impregnate_result
         can_be_impregnated_result = CommonSimGenderOptionUtils.can_be_impregnated(sim_info)
         if can_be_impregnated_result:
             return can_be_impregnated_result
-        return CommonTestResult(False, reason=f'Sim can neither impregnate nor be impregnated.')
+        return CommonTestResult(False, reason=f'{sim_info} can neither impregnate nor be impregnated.')
 
     @staticmethod
     def can_not_reproduce(sim_info: SimInfo) -> CommonTestResult:
@@ -227,7 +227,7 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
         """
         toilet_standing_trait = CommonSimGenderOptionUtils.determine_toilet_standing_trait(sim_info)
         if toilet_standing_trait is None:
-            return CommonTestResult(False, reason='No toilet standing trait was found for Sim.')
+            return CommonTestResult(False, reason=f'No toilet standing trait was found for {sim_info}.')
         return CommonTraitUtils.has_trait(sim_info, toilet_standing_trait)
 
     @staticmethod
@@ -243,7 +243,7 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
         """
         toilet_sitting_trait = CommonSimGenderOptionUtils.determine_toilet_sitting_trait(sim_info)
         if toilet_sitting_trait is None:
-            return CommonTestResult(False, reason='No toilet sitting trait was found for Sim.')
+            return CommonTestResult(False, reason=f'No toilet sitting trait was found for {sim_info}.')
         return CommonTraitUtils.has_trait(sim_info, toilet_sitting_trait)
 
     @staticmethod
@@ -261,15 +261,15 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
         """
         if CommonGenderUtils.is_female(sim_info):
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.BREASTS_FORCE_OFF):
-                return CommonTestResult(False, reason=f'Sim does not have breasts. They are Female and have the Breasts Force Off trait.')
+                return CommonTestResult(False, reason=f'{sim_info} does not have breasts. They are Female and have the Breasts Force Off trait.')
             else:
                 return CommonTestResult(True, reason=f'Sim has breasts. They are Female and they do not have the Breasts Force Off trait.')
         if CommonGenderUtils.is_male(sim_info):
             if CommonTraitUtils.has_trait(sim_info, CommonTraitId.BREASTS_FORCE_ON):
                 return CommonTestResult(True, reason=f'Sim has breasts. They are Male and they have the Breasts Force On trait.')
             else:
-                return CommonTestResult(False, reason=f'Sim does not have breasts. They are Male and they do not have the Breasts Force On trait.')
-        return CommonTestResult(False, reason=f'Sim does not have breasts. They are neither Male nor Female.')
+                return CommonTestResult(False, reason=f'{sim_info} does not have breasts. They are Male and they do not have the Breasts Force On trait.')
+        return CommonTestResult(False, reason=f'{sim_info} does not have breasts. They are neither Male nor Female.')
 
     @staticmethod
     def update_gender_options_to_vanilla_male(sim_info: SimInfo, return_on_failure: bool = False) -> CommonExecutionResult:

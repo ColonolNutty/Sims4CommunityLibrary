@@ -17,6 +17,7 @@ from sims4communitylib.dtos.common_cas_part import CommonCASPart
 from sims4communitylib.enums.buffs_enum import CommonBuffId
 from sims4communitylib.enums.common_bucks_types import CommonBucksType
 from sims4communitylib.enums.common_occult_type import CommonOccultType
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
@@ -119,8 +120,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         from sims4communitylib.utils.sims.common_sim_occult_type_utils import CommonSimOccultTypeUtils
         occult_type = CommonSimOccultTypeUtils.determine_occult_type(sim_info)
         if occult_type not in (CommonOccultType.NON_OCCULT, CommonOccultType.NONE):
-            return CommonTestResult(True, reason=f'Sim had an occult type. {occult_type}')
-        return CommonTestResult(False, reason=f'Sim did not have an occult type. {occult_type}')
+            return CommonTestResult(True, reason=f'{sim_info} is not an Occult Sim.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_AN_OCCULT_SIM, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} has occult type. {occult_type}', tooltip_text=CommonStringId.S4CL_SIM_HAS_OCCULT_TYPE, tooltip_tokens=(sim_info, str(occult_type)))
 
     @classmethod
     def has_occult_type(cls, sim_info: SimInfo, occult_type: OccultType) -> CommonTestResult:
@@ -138,8 +139,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if bool(CommonOccultUtils._get_occult_types(sim_info) & occult_type):
-            return CommonTestResult(True, reason=f'Sim had occult type {occult_type}.')
-        return CommonTestResult(False, reason=f'Sim did not have occult type {occult_type}')
+            return CommonTestResult(True, reason=f'{sim_info} has occult type {occult_type}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_OCCULT_TYPE, tooltip_tokens=(sim_info, CommonOccultType.convert_to_localized_string_id(occult_type)))
+        return CommonTestResult(False, reason=f'{sim_info} did not have occult type {occult_type}', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_OCCULT_TYPE, tooltip_tokens=(sim_info, CommonOccultType.convert_to_localized_string_id(occult_type)))
 
     @classmethod
     def has_occult_sim_info(cls, sim_info: SimInfo, occult_type: OccultType) -> CommonTestResult:
@@ -157,10 +158,10 @@ class CommonOccultUtils(_HasS4CLClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not hasattr(sim_info, 'occult_tracker') or sim_info.occult_tracker is None:
-            return CommonTestResult(False, reason='Sim did not have an occult tracker, thus they did not have any occult types.')
+            return CommonTestResult(False, reason=f'{sim_info} did not have an occult tracker, thus they did not have any occult types.')
         if sim_info.occult_tracker.has_occult_type(occult_type):
-            return CommonTestResult(True, reason=f'Sim had a Sim Info for {occult_type}.')
-        return CommonTestResult(False, reason=f'Sim did not have a Sim Info {occult_type}')
+            return CommonTestResult(True, reason=f'{sim_info} has a Sim Info for Occult Type {occult_type}. (Meaning the Occult has an alternative form.)')
+        return CommonTestResult(False, reason=f'{sim_info} did not have a Sim Info Occult Type {occult_type}. (Meaning the Occult likely does not have an alternative form.)')
 
     @classmethod
     def get_current_occult_sim_info(cls, sim_info: SimInfo) -> Union[SimInfo, SimInfoBaseWrapper, None]:
@@ -228,7 +229,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
             CommonOccultType.WEREWOLF: CommonOccultUtils.add_werewolf_occult
         }
         if occult_type not in occult_type_add_mappings:
-            return CommonExecutionResult(False, reason=f'The specified occult type did not have an add function. {occult_type.name}')
+            return CommonExecutionResult(False, reason=f'{occult_type.name} did not have an add function, meaning it has not been implemented yet.', tooltip_text=CommonStringId.OCCULT_TYPE_DID_NOT_HAVE_AN_ADD_FUNCTION, tooltip_tokens=(CommonOccultType.convert_to_localized_string_id(occult_type),))
         return occult_type_add_mappings[occult_type](sim_info)
 
     @classmethod
@@ -261,7 +262,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
             CommonOccultType.WEREWOLF: CommonOccultUtils.remove_werewolf_occult
         }
         if occult_type not in occult_type_remove_mappings:
-            return CommonExecutionResult(False, reason=f'The specified occult type did not have a remove function, meaning it has not been implemented yet. {occult_type.name}')
+            return CommonExecutionResult(False, reason=f'{occult_type.name} did not have a remove function, meaning it has not been implemented yet.', tooltip_text=CommonStringId.OCCULT_TYPE_DID_NOT_HAVE_A_REMOVE_FUNCTION, tooltip_tokens=(CommonOccultType.convert_to_localized_string_id(occult_type),))
         return occult_type_remove_mappings[occult_type](sim_info)
 
     @classmethod
@@ -517,7 +518,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return is_scarecrow_result
 
         if not CommonTraitUtils.add_trait(sim_info, CommonTraitId.SCARECROW):
-            return CommonTestResult(False, reason=f'Failed to add scarecrow trait to {sim_info}.')
+            return CommonTestResult(False, reason=f'Failed to add scarecrow trait to {sim_info}.', hide_tooltip=True)
 
         scarecrow_cas_part_ids = (
             # yuBody_EP05ScareCrow_Gray
@@ -534,9 +535,9 @@ class CommonOccultUtils(_HasS4CLClassLog):
             CommonOutfitUtils.trigger_outfit_generated(sim_info, current_outfit_category_and_index)
             CommonOutfitUtils.set_outfit_dirty(sim_info, current_outfit_category_and_index[0])
             CommonOutfitUtils.set_current_outfit(sim_info, current_outfit_category_and_index)
-            return CommonExecutionResult(True, reason=f'{sim_info} is now a Scarecrow.')
+            return CommonExecutionResult.TRUE
         CommonSimAppearanceModifierUtils.evaluate_appearance_modifiers(sim_info)
-        return CommonExecutionResult(False, reason=f'Failed to turn {sim_info} into a Scarecrow.')
+        return CommonExecutionResult.FALSE
 
     @classmethod
     def remove_scarecrow_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
@@ -862,7 +863,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         if isinstance(occult_type, CommonOccultType):
             vanilla_occult_type = CommonOccultType.convert_to_vanilla(occult_type)
             if vanilla_occult_type is None:
-                return CommonExecutionResult(False, reason=f'Sim failed to switch to occult type {occult_type.name}')
+                return CommonExecutionResult(False, reason=f'{sim_info} failed to switch to occult type {occult_type.name}')
         else:
             vanilla_occult_type = occult_type
         # noinspection PyPropertyAccess
@@ -886,7 +887,11 @@ class CommonOccultUtils(_HasS4CLClassLog):
         is_vampire_available_result = CommonOccultUtils.is_vampire_occult_available()
         if not is_vampire_available_result:
             return is_vampire_available_result
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_VAMPIRE) or CommonOccultUtils.has_occult_type(sim_info, OccultType.VAMPIRE)
+        if CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_VAMPIRE) or CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_ALIEN):
+            return CommonTestResult(True, reason=f'{sim_info} is a Vampire. They had Occult Vampire Trait.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_VAMPIRE, tooltip_tokens=(sim_info,))
+        if CommonOccultUtils.has_occult_type(sim_info, OccultType.VAMPIRE):
+            return CommonTestResult(True, reason=f'{sim_info} is a Vampire. They had Occult Type Vampire.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_VAMPIRE, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not a Vampire.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_A_VAMPIRE, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_alien(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -904,7 +909,11 @@ class CommonOccultUtils(_HasS4CLClassLog):
         is_alien_available_result = CommonOccultUtils.is_alien_occult_available()
         if not is_alien_available_result:
             return is_alien_available_result
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_ALIEN) or CommonOccultUtils.has_occult_type(sim_info, OccultType.ALIEN)
+        if CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_ALIEN) or CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_ALIEN):
+            return CommonTestResult(True, reason=f'{sim_info} is an Alien. They had Occult Alien Trait.', tooltip_text=CommonStringId.S4CL_SIM_IS_AN_ALIEN, tooltip_tokens=(sim_info,))
+        if CommonOccultUtils.has_occult_type(sim_info, OccultType.ALIEN):
+            return CommonTestResult(True, reason=f'{sim_info} is an Alien. They had Occult Type Alien.', tooltip_text=CommonStringId.S4CL_SIM_IS_AN_ALIEN, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not an Alien.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_AN_ALIEN, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_plant_sim(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -922,7 +931,9 @@ class CommonOccultUtils(_HasS4CLClassLog):
         is_plant_sim_available_result = CommonOccultUtils.is_plant_sim_occult_available()
         if not is_plant_sim_available_result:
             return is_plant_sim_available_result
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.PLANT_SIM)
+        if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PLANT_SIM):
+            return CommonTestResult(False, reason=f'{sim_info} is a Plant Sim.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_PLANT_SIM, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not a Plant Sim.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_A_PLANT_SIM, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_ghost(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -943,8 +954,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         equipped_sim_traits = CommonTraitUtils.get_equipped_traits(sim_info)
         for trait in equipped_sim_traits:
             if CommonTraitUtils.is_ghost_trait(trait):
-                return CommonTestResult.TRUE
-        return CommonTestResult(False, reason=f'Sim is not a ghost.')
+                return CommonTestResult(False, reason=f'{sim_info} is a Ghost.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_GHOST, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not a Ghost.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_A_GHOST, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_scarecrow(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -963,8 +974,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         if not is_scarecrow_available_result:
             return is_scarecrow_available_result
         if CommonTraitUtils.has_trait(sim_info, CommonTraitId.SCARECROW):
-            return CommonTestResult(True, reason=f'{sim_info} is a Scarecrow.')
-        return CommonTestResult(False, reason=f'{sim_info} is not a Scarecrow.')
+            return CommonTestResult(True, reason=f'{sim_info} is a Scarecrow.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_SCARECROW, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not a Scarecrow.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_A_SCARECROW, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_robot(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -986,8 +997,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         for trait in equipped_sim_traits:
             trait_type = getattr(trait, 'trait_type', -1)
             if trait_type == TraitType.ROBOT:
-                return CommonTestResult.TRUE
-        return CommonTestResult(False, reason=f'Sim is not a robot.')
+                return CommonTestResult(True, reason=f'{sim_info} is a Robot.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_ROBOT, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not a Robot.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_A_ROBOT, tooltip_tokens=(sim_info,))
     
     @classmethod
     def is_skeleton(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -1014,8 +1025,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         for trait in equipped_sim_traits:
             trait_id = CommonTraitUtils.get_trait_id(trait)
             if trait_id in skeleton_trait_ids:
-                return CommonTestResult.TRUE
-        return CommonTestResult(False, reason=f'Sim is not a skeleton.')
+                return CommonTestResult(True, reason=f'{sim_info} is a Skeleton.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_SKELETON, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not a Skeleton.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_A_SKELETON, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_werewolf(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -1034,10 +1045,10 @@ class CommonOccultUtils(_HasS4CLClassLog):
         if not is_werewolf_available_result:
             return is_werewolf_available_result
         if CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_WEREWOLF):
-            return CommonTestResult(True, reason=f'Sim had the Werewolf occult trait.')
+            return CommonTestResult(True, reason=f'{sim_info} is a Werewolf. They had Occult Werewolf Trait.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_WEREWOLF, tooltip_tokens=(sim_info,))
         if CommonOccultUtils.has_occult_type(sim_info, OccultType.WEREWOLF):
-            return CommonTestResult(True, reason=f'Sim had the Werewolf occult type.')
-        return CommonTestResult(False, reason=f'Sim ')
+            return CommonTestResult(True, reason=f'{sim_info} is a Werewolf. They had Occult Type Werewolf.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_WEREWOLF, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not a Werewolf.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_A_WEREWOLF, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_witch(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -1056,10 +1067,10 @@ class CommonOccultUtils(_HasS4CLClassLog):
         if not is_witch_available_result:
             return is_witch_available_result
         if CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_WITCH):
-            return CommonTestResult(True, reason=f'Sim had the Witch occult trait.')
+            return CommonTestResult(True, reason=f'{sim_info} is a Witch. They had Occult Witch Trait.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_WITCH, tooltip_tokens=(sim_info,))
         if CommonOccultUtils.has_occult_type(sim_info, OccultType.WITCH):
-            return CommonTestResult(True, reason=f'Sim had the Witch occult type.')
-        return CommonTestResult(False, reason=f'Sim is not a Witch.')
+            return CommonTestResult(True, reason=f'{sim_info} is a Witch. They had Occult Type Witch.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_WITCH, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not a Witch.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_A_WITCH, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_mermaid(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -1078,10 +1089,10 @@ class CommonOccultUtils(_HasS4CLClassLog):
         if not is_mermaid_available_result:
             return is_mermaid_available_result
         if CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_MERMAID):
-            return CommonTestResult(True, reason=f'Sim had the Mermaid occult trait.')
+            return CommonTestResult(True, reason=f'{sim_info} is a Mermaid. They had Occult Mermaid Trait.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_MERMAID, tooltip_tokens=(sim_info,))
         if CommonOccultUtils.has_occult_type(sim_info, OccultType.MERMAID):
-            return CommonTestResult(True, reason=f'Sim had the Mermaid occult type.')
-        return CommonTestResult(False, reason=f'Sim is not a Witch.')
+            return CommonTestResult(True, reason=f'{sim_info} is a Mermaid. They had Occult Type Mermaid.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_MERMAID, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not a Mermaid.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_A_MERMAID, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_in_mermaid_form(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -1100,8 +1111,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         if not is_mermaid_available_result:
             return is_mermaid_available_result
         if CommonOccultUtils.get_current_occult_type(sim_info) == OccultType.MERMAID:
-            return CommonTestResult(True, reason=f'Sim is currently in Mermaid Form.')
-        return CommonTestResult(False, reason=f'Sim is not in Mermaid Form.')
+            return CommonTestResult(True, reason=f'{sim_info} is currently in Mermaid Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_IN_MERMAID_FORM, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not currently in Mermaid Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_NOT_IN_MERMAID_FORM, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_mermaid_in_mermaid_form(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -1125,7 +1136,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         is_in_mermaid_form_result = CommonOccultUtils.is_in_mermaid_form(sim_info)
         if not is_in_mermaid_form_result:
             return is_in_mermaid_form_result
-        return CommonTestResult.TRUE
+        return is_in_mermaid_form_result
 
     @classmethod
     def is_currently_human(cls, sim_info: SimInfo) -> CommonExecutionResult:
@@ -1158,11 +1169,11 @@ class CommonOccultUtils(_HasS4CLClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not hasattr(OccultType, 'HUMAN'):
-            return CommonExecutionResult(False, reason='Humans do not exist. They are a myth! (At least in this persons game)')
+            return CommonExecutionResult(False, reason='Humans (i.e. Non Occult Sims) do not exist. They are a myth! (At least in this game, possibly missing DLC or bugged Mods?)', tooltip_text=CommonStringId.S4CL_HUMAN_OCCULT_DOES_NOT_EXIST, tooltip_tokens=(sim_info,))
         current_occult = CommonOccultUtils.get_current_occult_type(sim_info)
         if current_occult == OccultType.HUMAN:
-            return CommonExecutionResult(True, reason='Sim is currently a Human.')
-        return CommonExecutionResult(False, reason='Sim is not currently a Human.')
+            return CommonExecutionResult(True, reason=f'{sim_info} is currently in Non Occult Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_IN_NON_OCCULT_FORM, tooltip_tokens=(sim_info,))
+        return CommonExecutionResult(False, reason=f'{sim_info} is currently in Occult Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_IN_OCCULT_FORM, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_currently_a_mermaid(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -1281,8 +1292,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         if not is_vampire_available_result:
             return is_vampire_available_result
         if CommonOccultUtils.get_current_occult_type(sim_info) == OccultType.VAMPIRE:
-            return CommonTestResult(True, reason='Sim is currently a Vampire.')
-        return CommonTestResult(False, reason='Sim is not currently a Vampire.')
+            return CommonTestResult(True, reason=f'{sim_info} is currently in Vampire Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_IN_VAMPIRE_FORM, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not currently in Vampire Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_NOT_IN_VAMPIRE_FORM, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_currently_an_alien(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -1301,8 +1312,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         if not is_alien_available_result:
             return is_alien_available_result
         if CommonOccultUtils.get_current_occult_type(sim_info) == OccultType.ALIEN:
-            return CommonTestResult(True, reason='Sim is currently an Alien.')
-        return CommonTestResult(False, reason='Sim is not currently an Alien.')
+            return CommonTestResult(True, reason=f'{sim_info} is currently in Alien Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_IN_ALIEN_FORM, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not currently in Alien Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_NOT_IN_ALIEN_FORM, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_currently_a_werewolf(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -1317,7 +1328,9 @@ class CommonOccultUtils(_HasS4CLClassLog):
         """
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
-        return CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_WEREWOLF_WEREFORM)
+        if CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_WEREWOLF_WEREFORM):
+            return CommonTestResult(True, reason=f'{sim_info} is currently in Werewolf Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_IN_WEREWOLF_FORM, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not currently in Werewolf Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_NOT_IN_WEREWOLF_FORM, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_currently_a_witch(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -1336,8 +1349,8 @@ class CommonOccultUtils(_HasS4CLClassLog):
         if not is_witch_available_result:
             return is_witch_available_result
         if CommonOccultUtils.get_current_occult_type(sim_info) == OccultType.WITCH:
-            return CommonTestResult(True, reason='Sim is currently a Witch.')
-        return CommonTestResult(False, reason='Sim is not currently a Witch.')
+            return CommonTestResult(True, reason=f'{sim_info} is currently in Witch Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_IN_WITCH_FORM, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not currently in Witch Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_NOT_IN_WITCH_FORM, tooltip_tokens=(sim_info,))
 
     @classmethod
     def get_sim_info_of_all_occults_gen(cls, sim_info: SimInfo, *exclude_occult_types: OccultType) -> Iterator[SimInfo]:
@@ -1463,9 +1476,9 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if not hasattr(OccultType, 'ALIEN'):
-            return CommonTestResult(False, reason='Aliens do not exist. They are a myth! (At least in this persons game, OccultType did not contain ALIEN)')
+            return CommonTestResult(False, reason='Aliens do not exist. They are a myth! (At least in this game, possibly missing DLC or bugged Mods?)', tooltip_text=CommonStringId.S4CL_ALIEN_OCCULT_DOES_NOT_EXIST)
         if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_ALIEN):
-            return CommonTestResult(False, reason='The Alien trait is not available.')
+            return CommonTestResult(False, reason='The Alien trait is not available.', tooltip_text=CommonStringId.S4CL_ALIEN_TRAIT_DOES_NOT_EXIST)
         return CommonTestResult.TRUE
 
     @classmethod
@@ -1478,9 +1491,9 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if not hasattr(OccultType, 'MERMAID'):
-            return CommonTestResult(False, reason='Mermaids do not exist. They are a myth! (At least in this persons game, OccultType did not contain MERMAID)')
+            return CommonTestResult(False, reason='Mermaids do not exist. They are a myth! (At least in this game, possibly missing DLC or bugged Mods?)', tooltip_text=CommonStringId.S4CL_MERMAID_OCCULT_DOES_NOT_EXIST)
         if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_MERMAID):
-            return CommonTestResult(False, reason='The Mermaid trait is not available.')
+            return CommonTestResult(False, reason='The Mermaid trait is not available.', tooltip_text=CommonStringId.S4CL_MERMAID_TRAIT_DOES_NOT_EXIST)
         return CommonTestResult.TRUE
 
     @classmethod
@@ -1493,9 +1506,9 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if not hasattr(TraitType, 'ROBOT'):
-            return CommonTestResult(False, reason='Robots do not exist. They are a myth! (At least in this persons game, TraitType did not contain ROBOT)')
+            return CommonTestResult(False, reason='Robots do not exist. They are a myth! (At least in this game, possibly missing DLC or bugged Mods?)', tooltip_text=CommonStringId.S4CL_ROBOT_OCCULT_DOES_NOT_EXIST)
         if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_ROBOT):
-            return CommonTestResult(False, reason='The Robot trait is not available.')
+            return CommonTestResult(False, reason='The Robot trait is not available.', tooltip_text=CommonStringId.S4CL_ROBOT_TRAIT_DOES_NOT_EXIST)
         return CommonTestResult.TRUE
 
     @classmethod
@@ -1508,7 +1521,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if not CommonTraitUtils.is_trait_available(CommonTraitId.SCARECROW):
-            return CommonTestResult(False, reason='The Scarecrow trait is not available.')
+            return CommonTestResult(False, reason='Scarecrows do not exist. They are a myth! (At least in this game, possibly missing DLC or bugged Mods?)', tooltip_text=CommonStringId.S4CL_SCARECROW_OCCULT_DOES_NOT_EXIST)
         return CommonTestResult.TRUE
 
     @classmethod
@@ -1521,7 +1534,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if not CommonTraitUtils.is_trait_available(CommonTraitId.HIDDEN_SKELETON):
-            return CommonTestResult(False, reason='The Skeleton trait is not available.')
+            return CommonTestResult(False, reason='Skeletons do not exist. They are a myth! (At least in this game, possibly missing DLC or bugged Mods?)', tooltip_text=CommonStringId.S4CL_SKELETON_OCCULT_DOES_NOT_EXIST)
         return CommonTestResult.TRUE
 
     @classmethod
@@ -1534,9 +1547,9 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if not hasattr(OccultType, 'VAMPIRE'):
-            return CommonTestResult(False, reason='Vampires do not exist. They are a myth! (At least in this persons game, OccultType did not contain VAMPIRE)')
+            return CommonTestResult(False, reason='Vampires do not exist. They are a myth! (At least in this game, possibly missing DLC or bugged Mods?)', tooltip_text=CommonStringId.S4CL_VAMPIRE_OCCULT_DOES_NOT_EXIST)
         if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_VAMPIRE):
-            return CommonTestResult(False, reason='The Vampire trait is not available.')
+            return CommonTestResult(False, reason='The Vampire trait is not available.', tooltip_text=CommonStringId.S4CL_VAMPIRE_TRAIT_DOES_NOT_EXIST)
         return CommonTestResult.TRUE
 
     @classmethod
@@ -1549,9 +1562,9 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if not hasattr(OccultType, 'WITCH'):
-            return CommonTestResult(False, reason='Witches do not exist. They are a myth! (At least in this persons game, OccultType did not contain WITCH)')
+            return CommonTestResult(False, reason='Witches do not exist. They are a myth! (At least in this game, possibly missing DLC or bugged Mods?)', tooltip_text=CommonStringId.S4CL_WITCH_OCCULT_DOES_NOT_EXIST)
         if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_WITCH):
-            return CommonTestResult(False, reason='The Witch trait is not available.')
+            return CommonTestResult(False, reason='The Witch trait is not available.', tooltip_text=CommonStringId.S4CL_WITCH_TRAIT_DOES_NOT_EXIST)
         return CommonTestResult.TRUE
 
     @classmethod
@@ -1564,7 +1577,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if not CommonTraitUtils.is_trait_available(CommonTraitId.PLANT_SIM):
-            return CommonTestResult(False, reason='The Plant Sim trait is not available.')
+            return CommonTestResult(False, reason='Plant Sims do not exist. They are a myth! (At least in this game, possibly missing DLC or bugged Mods?)', tooltip_text=CommonStringId.S4CL_PLANT_OCCULT_DOES_NOT_EXIST)
         return CommonTestResult.TRUE
 
     @classmethod
@@ -1577,9 +1590,9 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if not hasattr(OccultType, 'WEREWOLF'):
-            return CommonTestResult(False, reason='Werewolves do not exist. They are a myth! (At least in this persons game, OccultType did not contain WEREWOLF)')
+            return CommonTestResult(False, reason='Werewolves do not exist. They are a myth! (At least in this game, possibly missing DLC or bugged Mods?)', tooltip_text=CommonStringId.S4CL_WEREWOLF_OCCULT_DOES_NOT_EXIST)
         if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_WEREWOLF):
-            return CommonTestResult(False, reason='The Werewolf trait is not available.')
+            return CommonTestResult(False, reason='The Werewolf trait is not available.', tooltip_text=CommonStringId.S4CL_WEREWOLF_TRAIT_DOES_NOT_EXIST)
         return CommonTestResult.TRUE
 
     @classmethod
@@ -1592,7 +1605,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if not hasattr(TraitType, 'GHOST'):
-            return CommonTestResult(False, reason='Ghosts do not exist. They are a myth! (At least in this persons game, TraitType did not contain GHOST)')
+            return CommonTestResult(False, reason='Ghosts do not exist. They are a myth! (At least in this game, possibly missing DLC or bugged Mods?)', tooltip_text=CommonStringId.S4CL_GHOST_OCCULT_DOES_NOT_EXIST)
         ghost_traits = (
             CommonTraitId.GHOST_ANGER,
             CommonTraitId.GHOST_ANIMAL_OBJECTS_KILLER_CHICKEN,
@@ -1630,7 +1643,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         for ghost_trait in ghost_traits:
             if CommonTraitUtils.is_trait_available(ghost_trait):
                 return CommonTestResult.TRUE
-        return CommonTestResult(False, reason='No Ghost traits were available.')
+        return CommonTestResult(False, reason='No Ghost traits were available.', tooltip_text=CommonStringId.S4CL_NO_GHOST_TRAITS_EXISTED)
 
     @classmethod
     def _get_occult_types(cls, sim_info: SimInfo) -> OccultType:

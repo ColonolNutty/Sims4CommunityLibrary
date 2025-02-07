@@ -201,14 +201,13 @@ class CommonConsoleCommand(metaclass=_CommonConsoleCommandMetaclass):
         self.command_name = command_name
         command_without_underscores = command_name.replace('_', '')
         new_command_aliases = list(command_aliases)
-        if command_without_underscores != command_name and command_without_underscores not in command_aliases:
+        if command_without_underscores != command_name and command_without_underscores not in new_command_aliases:
             new_command_aliases.append(command_without_underscores)
         for command_alias in command_aliases:
             command_alias_without_underscores = command_alias.replace('_', '')
-            if command_alias_without_underscores != command_alias and command_alias_without_underscores not in command_aliases:
+            if command_alias_without_underscores != command_alias and command_alias_without_underscores not in new_command_aliases:
                 new_command_aliases.append(command_alias_without_underscores)
-        command_aliases = new_command_aliases
-        self.command_aliases = tuple(command_aliases)
+        self.command_aliases = tuple(new_command_aliases)
         self.command_description = command_description
         self.command_type = command_type
         self.command_restriction_flags = command_restriction_flags

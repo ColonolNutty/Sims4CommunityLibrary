@@ -17,6 +17,7 @@ from sims4communitylib.classes.testing.common_execution_result import CommonExec
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.relationship_bits_enum import CommonRelationshipBitId
 from sims4communitylib.enums.relationship_tracks_enum import CommonRelationshipTrackId
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
@@ -47,6 +48,146 @@ class CommonRelationshipUtils:
         return cls.has_relationship_bit_with_sim(sim_info, target_sim_info, CommonRelationshipBitId.HAS_MET)
 
     @classmethod
+    def get_all_family_relationship_bit_ids(cls) -> Tuple[CommonRelationshipBitId, ...]:
+        """get_all_family_relationship_bit_ids()
+
+        Retrieve a collection of Family Relationship Bits.
+
+        .. note:: This collection includes things like Step Siblings and Cousins.
+        .. note:: This collection does not include Husband and Wife.
+
+        :return: A collection of relationship bits.
+        :rtype: Tuple[CommonRelationshipBitId, ...]
+        """
+        return (
+            *cls.get_direct_relation_family_relationship_bit_ids(),
+            CommonRelationshipBitId.FAMILY_COUSIN,
+            CommonRelationshipBitId.FAMILY_STEP_SIBLING,
+        )
+
+    @classmethod
+    def get_direct_relation_family_relationship_bit_ids(cls) -> Tuple[CommonRelationshipBitId, ...]:
+        """get_direct_relation_family_relationship_bit_ids()
+
+        Retrieve a collection of Family Relationship Bits.
+
+        .. note:: This collection does not include things like Step Siblings and Cousins.
+        .. note:: This collection does not include Husband and Wife.
+
+        :return: A collection of relationship bits.
+        :rtype: Tuple[CommonRelationshipBitId, ...]
+        """
+        return (
+            CommonRelationshipBitId.FAMILY_AUNT_UNCLE,
+            CommonRelationshipBitId.FAMILY_BROTHER_SISTER,
+            CommonRelationshipBitId.FAMILY_GRANDCHILD,
+            CommonRelationshipBitId.FAMILY_GRANDPARENT,
+            CommonRelationshipBitId.FAMILY_NIECE_NEPHEW,
+            CommonRelationshipBitId.FAMILY_PARENT,
+            CommonRelationshipBitId.FAMILY_SON_DAUGHTER
+        )
+
+    @classmethod
+    def is_any_family_relative_of(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> bool:
+        """is_any_family_relative_of(sim_info_a, sim_info_b)
+
+        Determine if Sim A is any family relative of Sim B.
+
+        .. note:: This includes only Family Relationship Bits, this does not check for blood relations.
+        .. note:: This includes Step relations or Cousins too.
+
+        :param sim_info_a: An instance of a Sim.
+        :type sim_info_a: SimInfo
+        :param sim_info_b: An instance of a Sim.
+        :type sim_info_b: SimInfo
+        :return: True, if Sim A is a direct family relative of Sim B. False, if not.
+        :rtype: bool
+        """
+        relationship_bit_ids = cls.get_all_family_relationship_bit_ids()
+        return CommonRelationshipUtils.has_relationship_bits_with_sim(
+            sim_info_b,
+            sim_info_a,
+            relationship_bit_ids
+        )
+
+    @classmethod
+    def are_any_family_relatives(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> bool:
+        """are_any_family_relatives(sim_info_a, sim_info_b)
+
+        Determine if two Sims are any family relatives.
+
+        .. note:: This includes only Family Relationship Bits, this does not check for blood relations.
+        .. note:: This includes Step relations or Cousins too.
+
+        :param sim_info_a: An instance of a Sim.
+        :type sim_info_a: SimInfo
+        :param sim_info_b: An instance of a Sim.
+        :type sim_info_b: SimInfo
+        :return: True, if Sim A and Sim B are any family relatives. False, if not.
+        :rtype: bool
+        """
+        relationship_bit_ids = cls.get_all_family_relationship_bit_ids()
+        return CommonRelationshipUtils.has_relationship_bits_with_sim(
+            sim_info_a,
+            sim_info_b,
+            relationship_bit_ids
+        ) or CommonRelationshipUtils.has_relationship_bits_with_sim(
+            sim_info_b,
+            sim_info_a,
+            relationship_bit_ids
+        )
+
+    @classmethod
+    def is_direct_family_relative_of(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> bool:
+        """is_direct_family_relative_of(sim_info_a, sim_info_b)
+
+        Determine if Sim A is a direct family relative to Sim B.
+
+        .. note:: This includes only Family Relationship Bits, this does not check for blood relations.
+        .. note:: This does not consider Step relations or Cousins.
+
+        :param sim_info_a: An instance of a Sim.
+        :type sim_info_a: SimInfo
+        :param sim_info_b: An instance of a Sim.
+        :type sim_info_b: SimInfo
+        :return: True, if Sim A is a direct family relative of Sim B. False, if not.
+        :rtype: bool
+        """
+        relationship_bit_ids = cls.get_direct_relation_family_relationship_bit_ids()
+        return CommonRelationshipUtils.has_relationship_bits_with_sim(
+            sim_info_b,
+            sim_info_a,
+            relationship_bit_ids
+        )
+
+    @classmethod
+    def are_direct_family_relatives(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> bool:
+        """are_direct_family_relatives(sim_info_a, sim_info_b)
+
+        Determine if two Sims are direct family relatives.
+
+        .. note:: This includes only Family Relationship Bits, this does not check for blood relations.
+        .. note:: This does not consider Step relations or Cousins.
+
+        :param sim_info_a: An instance of a Sim.
+        :type sim_info_a: SimInfo
+        :param sim_info_b: An instance of a Sim.
+        :type sim_info_b: SimInfo
+        :return: True, if Sim A and Sim B are direct family relatives. False, if not.
+        :rtype: bool
+        """
+        relationship_bit_ids = cls.get_direct_relation_family_relationship_bit_ids()
+        return CommonRelationshipUtils.has_relationship_bits_with_sim(
+            sim_info_a,
+            sim_info_b,
+            relationship_bit_ids
+        ) or CommonRelationshipUtils.has_relationship_bits_with_sim(
+            sim_info_b,
+            sim_info_a,
+            relationship_bit_ids
+        )
+
+    @classmethod
     def are_blood_relatives(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> bool:
         """are_blood_relatives(sim_info_a, sim_info_b)
 
@@ -61,7 +202,17 @@ class CommonRelationshipUtils:
         """
         if sim_info_a is None or sim_info_b is None:
             return False
-        return not sim_info_a.incest_prevention_test(sim_info_b)
+        sim_info_a_family_sim_ids = sim_info_a.get_family_sim_ids(include_self=True)
+        if not sim_info_a_family_sim_ids:
+            return False
+        sim_info_b_family_sim_ids = sim_info_b.get_family_sim_ids(include_self=True)
+        if not sim_info_b_family_sim_ids:
+            return False
+        common_family_sim_ids = set(sim_info_a_family_sim_ids) & set(sim_info_b_family_sim_ids)
+        common_family_sim_ids.discard(None)
+        if not common_family_sim_ids:
+            return False
+        return True
 
     @classmethod
     def is_romantically_committed_to_any_sims(cls, sim_info: SimInfo) -> bool:
@@ -224,6 +375,44 @@ class CommonRelationshipUtils:
         cls.set_relationship_level_of_sims(sim_info, target_sim_info, track_id, level)
 
     @classmethod
+    def get_romantic_satisfaction_level(cls, sim_info: SimInfo, target_sim_info: SimInfo) -> float:
+        """get_romantic_satisfaction_level(sim_info, target_sim_info)
+
+        Retrieve the level of Romantic Satisfaction between two Sims.
+
+        .. note:: The return will be "0.0" if a romance satisfaction track is not found.
+
+        :param sim_info: The Sim to use.
+        :type sim_info: SimInfo
+        :param target_sim_info: The Target Sim to use.
+        :type target_sim_info: SimInfo
+        :return: The current level of Romantic Satisfaction between two Sims.
+        :rtype: float
+        """
+        track_id = cls.get_romantic_satisfaction_track(sim_info, target_sim_info)
+        if track_id is None:
+            return 0.0
+        return cls.get_relationship_level_of_sims(sim_info, target_sim_info, track_id)
+
+    @classmethod
+    def set_romantic_satisfaction_level(cls, sim_info: SimInfo, target_sim_info: SimInfo, level: float):
+        """set_romantic_satisfaction_level(sim_info, target_sim_info, level)
+
+        Set the level of Romantic Satisfaction between two Sims.
+
+        :param sim_info: The Sim to use.
+        :type sim_info: SimInfo
+        :param target_sim_info: The Target Sim to use.
+        :type target_sim_info: SimInfo
+        :param level: The new level of Romantic Satisfaction between the Sims.
+        :type level: float
+        """
+        track_id = cls.get_romantic_satisfaction_track(sim_info, target_sim_info)
+        if track_id is None:
+            return
+        cls.set_relationship_level_of_sims(sim_info, target_sim_info, track_id, level)
+
+    @classmethod
     def calculate_average_relationship_level(cls, sim_info: SimInfo, target_sim_info: SimInfo) -> float:
         """calculate_average_relationship_level(sim_info, target_sim_info)
 
@@ -261,30 +450,32 @@ class CommonRelationshipUtils:
         :rtype: CommonTestResult
         """
         if not CommonAgeUtils.is_teen_adult_or_elder(sim_info):
-            return CommonTestResult(False, reason=f'{sim_info} does not have permission for romantic relationships. They are neither a Teen, Adult, nor Elder Sim.')
-        return CommonTestResult(True, reason=f'{sim_info} has permission for romantic relationships.')
+            return CommonTestResult(False, reason=f'{sim_info} does not have permission for romantic relationships. They are neither a Teen, Adult, nor Elder Sim.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_ROMANTIC_RELATIONSHIP_WITH_SIM_SIM_IS_NOT_A_TEEN_ADULT_ELDER, tooltip_tokens=(sim_info,))
+        return CommonTestResult(True, reason=f'{sim_info} has permission for romantic relationships.', hide_tooltip=True)
 
     @classmethod
     def has_permission_for_romantic_relationship_with(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> CommonTestResult:
         """Determine if two Sims are allowed to have a Romantic relationship together."""
         sim_a_permission_result = cls.has_permission_for_romantic_relationships(sim_info_a)
         if not sim_a_permission_result:
-            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_a_permission_result}')
+            return sim_a_permission_result
         sim_b_permission_result = cls.has_permission_for_romantic_relationships(sim_info_b)
         if not sim_b_permission_result:
-            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_b_permission_result}')
+            return sim_b_permission_result
         if cls.are_blood_relatives(sim_info_a, sim_info_b):
-            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} is a blood relative of {sim_info_b}.')
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} is a blood relative of {sim_info_b}.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_ROMANTIC_RELATIONSHIP_WITH_SIM_SIM_IS_A_BLOOD_RELATIVE_OF_SIM, tooltip_tokens=(CommonSimUtils.get_sim_instance(sim_info_a), sim_info_b))
+        if cls.are_any_family_relatives(sim_info_a, sim_info_b):
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} is a familial relative of {sim_info_b}.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_ROMANTIC_RELATIONSHIP_WITH_SIM_SIM_IS_A_FAMILIAL_RELATIVE_OF_SIM, tooltip_tokens=(sim_info_a, sim_info_b))
         if not CommonSpeciesUtils.are_same_species(sim_info_a, sim_info_b):
-            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.')
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_ROMANTIC_RELATIONSHIP_WITH_SIM_SIM_IS_A_DIFFERENT_SPECIES_FROM_SIM, tooltip_tokens=(sim_info_a, sim_info_b))
         if CommonAgeUtils.is_teen(sim_info_a) and CommonAgeUtils.is_teen(sim_info_b):
-            return CommonTestResult(True, reason=f'{sim_info_a} has permission for a romantic relationship with {sim_info_b}.')
+            return CommonTestResult(True, reason=f'{sim_info_a} has permission for a romantic relationship with {sim_info_b}.', hide_tooltip=True)
         if CommonAgeUtils.is_teen(sim_info_a):
             if not CommonAgeUtils.is_teen(sim_info_b):
-                return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} is a Teen Sim and {sim_info_b} is an Adult or Elder Sim.')
+                return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} is a Teen Sim and {sim_info_b} is an Adult or Elder Sim.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_ROMANTIC_RELATIONSHIP_WITH_SIM_SIM_IS_A_TEEN_AND_SIM_IS_AN_ADULT_OR_ELDER, tooltip_tokens=(sim_info_a, sim_info_b))
         elif CommonAgeUtils.is_teen(sim_info_b):
-            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} is an Adult or Elder Sim and {sim_info_b} is a Teen Sim.')
-        return CommonTestResult(True, reason=f'{sim_info_a} has permission for a romantic relationship with {sim_info_b}.')
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} is an Adult or Elder Sim and {sim_info_b} is a Teen Sim.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_ROMANTIC_RELATIONSHIP_WITH_SIM_SIM_IS_AN_ADULT_OR_ELDER_AND_SIM_IS_A_TEEN, tooltip_tokens=(sim_info_a, sim_info_b))
+        return CommonTestResult(True, reason=f'{sim_info_a} has permission for a romantic relationship with {sim_info_b}.', hide_tooltip=True)
 
     @classmethod
     def has_permission_to_be_blood_relative_of(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> CommonTestResult:
@@ -302,8 +493,8 @@ class CommonRelationshipUtils:
         :rtype: CommonTestResult
         """
         if not CommonSpeciesUtils.are_same_species(sim_info_a, sim_info_b):
-            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission to be a Blood Relative of {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.')
-        return CommonTestResult(True, reason=f'{sim_info_a} has permission to be a Blood Relative of {sim_info_b}.')
+            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission to be a Blood Relative of {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_TO_BE_A_BLOOD_RELATIVE_OF_SIM_SIM_IS_A_DIFFERENT_SPECIES_FROM_SIM, tooltip_tokens=(sim_info_a, sim_info_b))
+        return CommonTestResult(True, reason=f'{sim_info_a} has permission to be a Blood Relative of {sim_info_b}.', hide_tooltip=True)
 
     @classmethod
     def has_relationship_bit_with_any_sims(
@@ -790,6 +981,23 @@ class CommonRelationshipUtils:
         return None
 
     @classmethod
+    def get_romantic_satisfaction_track(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> Union[CommonRelationshipTrackId, None]:
+        """get_romantic_satisfaction_track(sim_info_a, sim_info_b)
+
+        Get an appropriate Romantic Satisfaction Relationship Track between Sim A and Sim B.
+
+        :param sim_info_a: An instance of a Sim.
+        :type sim_info_a: SimInfo
+        :param sim_info_b: An instance of a Sim.
+        :type sim_info_b: SimInfo
+        :return: The decimal identifier of the Romantic Satisfaction Relationship Track appropriate for Sim A to have with Sim B or None if not found.
+        :rtype: Union[CommonRelationshipTrackId, None]
+        """
+        if CommonSpeciesUtils.is_human(sim_info_a) and CommonSpeciesUtils.is_human(sim_info_b):
+            return CommonRelationshipTrackId.ROMANCE_SATISFACTION
+        return None
+
+    @classmethod
     def load_relationship_bit_by_id(cls, relationship_bit: Union[int, CommonRelationshipBitId, RelationshipBit]) -> Union[RelationshipBit, None]:
         """load_relationship_bit_by_id(relationship_bit)
 
@@ -1126,3 +1334,35 @@ def _common_set_relationship_level(
         output(f'SUCCESS: Successfully modified relationship level of {relationship_track} between {sim_info_a} and {sim_info_b}.')
     else:
         output(f'FAILURE: Failed to modify relationship level of {relationship_track} between {sim_info_a} and {sim_info_b}. {result}')
+
+
+# noinspection SpellCheckingInspection
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.set_romantic_satisfaction',
+    'Set the level of a romantic satisfaction between Sim A to Sim B.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_a', 'Name or Id', 'The name of the first Sim. The romantic satisfaction will be modified from Sim A to Sim B.'),
+        CommonConsoleCommandArgument('sim_b', 'Name or Id', 'The name of the second Sim. The romantic satisfaction will be modified from Sim A to Sim B.'),
+        CommonConsoleCommandArgument('amount', 'Number', 'The amount of value to set (Maximum is 75 and Minimum is -75).')
+    ),
+    command_aliases=(
+        's4clib.setromanticsatisfaction',
+    )
+)
+def _common_set_romantic_satisfaction_level(
+    output: CommonConsoleCommandOutput,
+    sim_info_a: SimInfo,
+    sim_info_b: SimInfo,
+    amount: float
+):
+    if sim_info_b is None:
+        output('ERROR: No Target was specified!')
+        return False
+    if sim_info_a is sim_info_b:
+        output('ERROR: Cannot modify romantic satisfaction to the same Sim.')
+        return False
+    output(f'Attempting to modify Romantic Satisfaction from {sim_info_a} and {sim_info_b} to level {amount}.')
+    CommonRelationshipUtils.set_romantic_satisfaction_level(sim_info_a, sim_info_b, amount)
+    output(f'SUCCESS: Successfully modified Romantic Satisfaction from {sim_info_a} to {sim_info_b}.')
+    output(f'Please note, Romantic Satisfaction is one way, run the command and reverse the Sims to change it for {sim_info_b} to {sim_info_a}')

@@ -147,16 +147,17 @@ class CommonOccultType(CommonInt):
         return mapping.get(value, value)
 
     @staticmethod
-    def convert_to_localized_string_id(value: 'CommonOccultType') -> Union[int, str, CommonStringId, LocalizedString]:
+    def convert_to_localized_string_id(value: Union['CommonOccultType', OccultType]) -> Union[int, str, CommonStringId, LocalizedString]:
         """convert_to_localized_string_id(value)
 
         Convert a CommonOccultType into a Localized String identifier.
 
         :param value: An instance of a CommonOccultType
-        :type value: CommonOccultType
+        :type value: Union[CommonOccultType, OccultType]
         :return: The specified CommonOccultType translated to a localized string identifier. If no localized string id is found, the name property of the value will be used instead.
         :rtype: Union[int, str, CommonStringId, LocalizedString]
         """
+        value = CommonOccultType.convert_from_vanilla(value)
         mapping: Dict[CommonOccultType, CommonStringId] = {
             CommonOccultType.NONE: CommonStringId.S4CL_NONE,
             CommonOccultType.ALIEN: CommonStringId.S4CL_ALIEN,

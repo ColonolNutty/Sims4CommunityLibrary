@@ -565,7 +565,7 @@ class CommonSimLocationUtils:
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return CommonEnqueueResult(CommonTestResult(False, reason='No Sim was specified to be sent.'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason='No Sim was specified to be sent to the position.'), CommonExecutionResult.NONE)
         from server_commands.sim_commands import _build_terrain_interaction_target_and_context, CommandTuning
         if position is None:
             return CommonEnqueueResult(CommonTestResult(False, reason='No Position specified to send the Sim to!'), CommonExecutionResult.NONE)

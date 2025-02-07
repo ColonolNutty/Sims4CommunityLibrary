@@ -56,7 +56,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         statistic = cls.get_statistic(sim_info, statistic, add=False)
         if statistic is not None:
             return CommonTestResult(True, reason=f'Sim had statistic {statistic}.')
-        return CommonTestResult(False, reason=f'Sim did not have statistic {statistic}.')
+        return CommonTestResult(False, reason=f'{sim_info} did not have statistic {statistic}.')
 
     @classmethod
     def has_statistics(cls, sim_info: SimInfo, statistics: Iterator[Union[int, CommonStatisticId, BaseStatistic]]) -> CommonTestResult:
@@ -75,7 +75,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
             result = cls.has_statistic(sim_info, statistic)
             if result:
                 return result
-        return CommonTestResult(False, reason=f'Sim did not have any of the specified statistics.')
+        return CommonTestResult(False, reason=f'{sim_info} did not have any of the specified statistics.')
 
     # noinspection PyUnusedLocal
     @classmethod
@@ -105,7 +105,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         statistic_instance = cls.get_statistic(sim_info, statistic_id, add=add)
         if statistic_instance is None:
             cls.get_log().format_with_message('No statistic found on Sim when checking locked.', statistic=statistic, statistic_id=statistic_id, sim=sim_info)
-            return CommonTestResult(False, reason=f'Sim did not have statistic {statistic}.')
+            return CommonTestResult(False, reason=f'{sim_info} did not have statistic {statistic}.')
         if sim_info.is_locked(statistic_instance):
             return CommonTestResult(True, reason='Statistic is locked.')
         return CommonTestResult(False, reason='Statistic is not locked.')

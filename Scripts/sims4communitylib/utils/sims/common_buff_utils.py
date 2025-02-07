@@ -150,14 +150,14 @@ class CommonBuffUtils(_HasS4CLClassLog):
             if _buff is None:
                 continue
             if buff_component.has_buff(_buff):
-                return CommonTestResult(True, reason=f'{sim_info} has buff {_buff}.')
+                return CommonTestResult(True, reason=f'{sim_info} has buff {_buff}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_BUFF, tooltip_tokens=(sim_info, str(_buff)))
         return CommonTestResult(False, reason=f'{sim_info} does not have any buff(s) {buffs}.')
 
     @classmethod
     def has_all_buffs(cls, sim_info: SimInfo, buffs: Iterator[Union[int, CommonBuffId, Buff]]) -> CommonTestResult:
         """has_all_buffs(sim_info, buffs)
 
-        Determine if the Sim has all of the specified buffs.
+        Determine if the Sim has all the specified buffs.
 
         :param sim_info: The Sim being checked.
         :type sim_info: SimInfo
@@ -180,8 +180,8 @@ class CommonBuffUtils(_HasS4CLClassLog):
             if _buff is None:
                 continue
             if not buff_component.has_buff(_buff):
-                return CommonTestResult(False, reason=f'{sim_info} does not have buff {_buff}.')
-        return CommonTestResult(True, reason=f'{sim_info} has all buffs {buffs}.')
+                return CommonTestResult(False, reason=f'{sim_info} does not have buff {_buff}.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_BUFF, tooltip_tokens=(sim_info, str(_buff)))
+        return CommonTestResult(True, reason=f'{sim_info} has all buffs {buffs}.', hide_tooltip=True)
 
     @classmethod
     def get_buffs(cls, sim_info: SimInfo) -> List[Buff]:

@@ -53,6 +53,8 @@ class CommonLocalizationUtils:
         """
         if isinstance(tooltip_text, CommonLocalizationUtils.LocalizedTooltip):
             return tooltip_text
+        if tooltip_tokens is None:
+            tooltip_tokens = tuple()
         return CommonLocalizationUtils.LocalizedTooltip(tooltip_text, *tuple(tooltip_tokens))
 
     @staticmethod
@@ -74,6 +76,8 @@ class CommonLocalizationUtils:
         """
         if identifier is None:
             return CommonLocalizationUtils.create_localized_string(CommonStringId.STRING_NOT_FOUND_WITH_IDENTIFIER, tokens=('None',), text_color=text_color)
+        if tokens is None:
+            tokens = tuple()
         if localize_tokens:
             tokens = tuple(CommonLocalizationUtils._normalize_tokens(*tokens))
         if isinstance(identifier, LocalizedString) and hasattr(identifier, 'tokens'):

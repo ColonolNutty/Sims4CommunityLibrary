@@ -44,7 +44,7 @@ class CommonSimVoiceUtils:
         if CommonSimVoiceUtils.get_voice_actor(sim_info):
             return CommonTestResult.TRUE
         voice_actor_str = voice_actor.name if hasattr(voice_actor, 'name') else str(voice_actor)
-        return CommonTestResult(False, reason=f'Sim did not have voice actor {voice_actor_str}')
+        return CommonTestResult(False, reason=f'{sim_info} did not have voice actor {voice_actor_str}')
 
     @staticmethod
     def has_voice_pitch(sim_info: SimInfo, voice_pitch: float) -> CommonTestResult:
@@ -61,7 +61,7 @@ class CommonSimVoiceUtils:
         """
         if CommonSimVoiceUtils.get_voice_pitch(sim_info) == voice_pitch:
             return CommonTestResult.TRUE
-        return CommonTestResult(False, reason=f'Sim did not have voice pitch {voice_pitch}')
+        return CommonTestResult(False, reason=f'{sim_info} did not have voice pitch {voice_pitch}')
 
     @staticmethod
     def get_voice_pitch(sim_info: SimInfo) -> float:

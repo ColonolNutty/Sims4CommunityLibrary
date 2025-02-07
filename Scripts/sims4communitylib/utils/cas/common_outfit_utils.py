@@ -18,6 +18,7 @@ from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4.utils import classproperty
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.buffs_enum import CommonBuffId
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.tags_enum import CommonGameTag
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
@@ -96,8 +97,8 @@ class CommonOutfitUtils(HasClassLog):
         :rtype: CommonTestResult
         """
         if not CommonAgeUtils.is_teen_adult_or_elder(sim_info):
-            return CommonTestResult(False, reason=f'{sim_info} does not have permission to change to Nude. They are neither an Adult nor Elder Sim.')
-        return CommonTestResult(True, reason=f'{sim_info} has permission to change to their Nude outfit.')
+            return CommonTestResult(False, reason=f'{sim_info} does not have permission to change to Nude. They are neither a Teen, Adult, Young Adult, nor Elder Sim.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_TO_CHANGE_INTO_NUDE_SIM_IS_NOT_A_TEEN_ADULT_ELDER, tooltip_tokens=(sim_info,))
+        return CommonTestResult(True, reason=f'{sim_info} has permission to change to their Nude outfit.', hide_tooltip=True)
 
     @classmethod
     def is_every_day_category(cls, outfit_category: OutfitCategory) -> bool:

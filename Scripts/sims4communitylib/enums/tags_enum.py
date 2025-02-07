@@ -3610,7 +3610,7 @@ class CommonGameTag(CommonInt):
     NUDE_PART_MALE_WITH_BREAST: 'CommonGameTag' = 1541
     OBJECT_BAR: 'CommonGameTag' = 349
     OBJECT_MURAL: 'CommonGameTag' = 55363
-    OCCULT_ALIEN: 'CommonGameTag' = 12319
+    OCCULT_ALIEN: 'CommonGameTag' = 3005
     OCCULT_HUMAN: 'CommonGameTag' = 1310
     OCCULT_MERMAID: 'CommonGameTag' = 2208
     OCCULT_VAMPIRE: 'CommonGameTag' = 1677
