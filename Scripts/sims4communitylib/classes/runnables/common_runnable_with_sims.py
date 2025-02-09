@@ -138,7 +138,7 @@ class CommonRunnableWithSims(CommonRunnable[CommonRunnableContextWithSimsType], 
         :rtype: CommonExecutionResult
         """
         if self.has_sim_context(sim_context.sim_info):
-            return CommonExecutionResult(False, reason=f'Sim {sim_context.sim_info} is already a part of the runnable.')
+            return CommonExecutionResult(False, reason=f'Sim {sim_context.sim_info} is already a part of the runnable. {self.__class__.__name__}', hide_tooltip=True)
         add_result = self.context.add_sim_context(sim_context)
         if not add_result:
             return add_result
@@ -183,5 +183,5 @@ class CommonRunnableWithSims(CommonRunnable[CommonRunnableContextWithSimsType], 
         """
         sim_context = self.get_sim_context(sim_info)
         if sim_context is None:
-            return CommonExecutionResult(False, reason=f'Sim {sim_info} did not have a Sim context!')
+            return CommonExecutionResult(False, reason=f'Sim {sim_info} did not have a Sim context! {self.__class__.__name__}', hide_tooltip=True)
         return self.remove_sim_context(sim_context, remove_reason, *_, restart_after_remove=restart_after_remove, **__)

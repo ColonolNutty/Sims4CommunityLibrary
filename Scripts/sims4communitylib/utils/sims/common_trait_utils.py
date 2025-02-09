@@ -17,6 +17,7 @@ from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4.resources import Types
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
@@ -1037,30 +1038,30 @@ class CommonTraitUtils(_HasS4CLClassLog):
                 if __trait is None:
                     continue
                 if sim_info.has_trait(__trait):
-                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.')
+                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_TRAIT, tooltip_tokens=(sim_info, str(__trait)))
         elif isinstance(sim_info, SimInfoBaseWrapper):
             sim_info: SimInfoBaseWrapper = sim_info
             any_traits = cls.get_trait_ids(sim_info)
             if not any_traits:
-                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.')
+                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_ANY_TRAITS, tooltip_tokens=(sim_info,))
             for _trait in trait:
                 __trait = cls.get_trait_id(_trait)
                 if __trait is None:
                     continue
                 if _trait in any_traits:
-                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.')
+                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_TRAIT, tooltip_tokens=(sim_info, str(__trait)))
         elif isinstance(sim_info, PregnancyOffspringData):
             sim_info: PregnancyOffspringData = sim_info
             any_traits = [cls.get_trait_id(trait) for trait in sim_info.traits]
             if not any_traits:
-                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.')
+                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_ANY_TRAITS, tooltip_tokens=(sim_info,))
             for _trait in trait:
                 __trait = cls.get_trait_id(_trait)
                 if __trait is None:
                     continue
                 if _trait in any_traits:
-                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.')
-        return CommonTestResult(False, reason=f'{sim_info} does not have trait(s) {trait}')
+                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_TRAIT, tooltip_tokens=(sim_info, str(__trait)))
+        return CommonTestResult(False, reason=f'{sim_info} does not have trait(s) {trait}', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_TRAITS, tooltip_tokens=(sim_info, str(trait)))
 
     @classmethod
     def has_any_traits(cls, sim_info: SimInfo, traits: Iterator[Union[int, CommonTraitId, Trait]]) -> CommonTestResult:
@@ -1078,37 +1079,37 @@ class CommonTraitUtils(_HasS4CLClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not traits:
-            return CommonTestResult(False, reason='No traits were specified.')
+            return CommonTestResult(False, reason='No traits were specified.', hide_tooltip=True)
         if isinstance(sim_info, SimInfo):
             for trait in traits:
                 _trait = cls.load_trait_by_id(trait)
                 if _trait is None:
                     continue
                 if sim_info.has_trait(_trait):
-                    return CommonTestResult(True, reason=f'{sim_info} has trait {_trait}.')
+                    return CommonTestResult(True, reason=f'{sim_info} has trait {_trait}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_TRAIT, tooltip_tokens=(sim_info, str(__trait)))
         elif isinstance(sim_info, SimInfoBaseWrapper):
             sim_info: SimInfoBaseWrapper = sim_info
             any_traits = cls.get_trait_ids(sim_info)
             if not any_traits:
-                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.')
+                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_ANY_TRAITS, tooltip_tokens=(sim_info,))
             for _trait in traits:
                 __trait = cls.get_trait_id(_trait)
                 if __trait is None:
                     continue
                 if _trait in any_traits:
-                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.')
+                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_TRAIT, tooltip_tokens=(sim_info, str(__trait)))
         elif isinstance(sim_info, PregnancyOffspringData):
             sim_info: PregnancyOffspringData = sim_info
             any_traits = [cls.get_trait_id(trait) for trait in sim_info.traits]
             if not any_traits:
-                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.')
+                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_ANY_TRAITS, tooltip_tokens=(sim_info,))
             for _trait in traits:
                 __trait = cls.get_trait_id(_trait)
                 if __trait is None:
                     continue
                 if _trait in any_traits:
-                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.')
-        return CommonTestResult(False, reason=f'{sim_info} does not have any trait(s) {traits}.')
+                    return CommonTestResult(True, reason=f'{sim_info} has trait {__trait}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_TRAIT, tooltip_tokens=(sim_info, str(__trait)))
+        return CommonTestResult(False, reason=f'{sim_info} does not have any trait(s) {traits}.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_TRAITS, tooltip_tokens=(sim_info, str(trait)))
 
     @classmethod
     def has_all_traits(cls, sim_info: SimInfo, traits: Iterator[Union[int, CommonTraitId, Trait]]) -> CommonTestResult:
@@ -1126,37 +1127,37 @@ class CommonTraitUtils(_HasS4CLClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not traits:
-            return CommonTestResult(False, reason='No traits were specified.')
+            return CommonTestResult(False, reason='No traits were specified.', hide_tooltip=True)
         if isinstance(sim_info, SimInfo):
             for trait in traits:
                 _trait = cls.load_trait_by_id(trait)
                 if _trait is None:
                     continue
                 if not sim_info.has_trait(_trait):
-                    return CommonTestResult(False, reason=f'{sim_info} does not have trait {_trait}.')
+                    return CommonTestResult(False, reason=f'{sim_info} does not have trait {_trait}.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_TRAIT, tooltip_tokens=(sim_info, str(_trait)))
         elif isinstance(sim_info, SimInfoBaseWrapper):
             sim_info: SimInfoBaseWrapper = sim_info
             any_traits = cls.get_trait_ids(sim_info)
             if not any_traits:
-                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.')
+                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_ANY_TRAITS, tooltip_tokens=(sim_info,))
             for _trait in traits:
                 __trait = cls.get_trait_id(_trait)
                 if __trait is None:
                     continue
                 if _trait not in any_traits:
-                    return CommonTestResult(False, reason=f'{sim_info} does not have trait {_trait}.')
+                    return CommonTestResult(False, reason=f'{sim_info} does not have trait {_trait}.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_TRAIT, tooltip_tokens=(sim_info, str(_trait)))
         elif isinstance(sim_info, PregnancyOffspringData):
             sim_info: PregnancyOffspringData = sim_info
             any_traits = cls.get_trait_ids(sim_info)
             if not any_traits:
-                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.')
+                return CommonTestResult(False, reason=f'{sim_info} does not have any traits.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_ANY_TRAITS, tooltip_tokens=(sim_info,))
             for _trait in traits:
                 __trait = cls.get_trait_id(_trait)
                 if __trait is None:
                     continue
                 if _trait not in any_traits:
-                    return CommonTestResult(False, reason=f'{sim_info} does not have trait {_trait}.')
-        return CommonTestResult(True, reason=f'{sim_info} has all traits {traits}.')
+                    return CommonTestResult(False, reason=f'{sim_info} does not have trait {_trait}.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_TRAIT, tooltip_tokens=(sim_info, str(_trait)))
+        return CommonTestResult(True, reason=f'{sim_info} has all traits {traits}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_ALL_TRAITS, tooltip_tokens=(sim_info, str(traits)))
 
     @classmethod
     def is_conflicting_trait(cls, sim_info: SimInfo, trait_id: Union[int, CommonTraitId, Trait]) -> CommonTestResult:
@@ -1173,7 +1174,7 @@ class CommonTraitUtils(_HasS4CLClassLog):
         """
         trait_to_check = cls.load_trait_by_id(trait_id)
         if trait_to_check is None:
-            return CommonTestResult(False, reason=f'Trait {trait_id} did not exist, thus it cannot conflict.')
+            return CommonTestResult(False, reason=f'Trait {trait_id} did not exist, thus it cannot conflict.', hide_tooltip=True)
         from traits.trait_tracker import TraitTracker
         trait_tracker: TraitTracker = sim_info.trait_tracker
         return trait_tracker.is_conflicting(trait_to_check)
@@ -1346,10 +1347,10 @@ class CommonTraitUtils(_HasS4CLClassLog):
                 cls.get_log().format_with_message('Successfully added trait.', sim=sim_info, trait=trait, trait_id=trait_id)
         if not success:
             failed_to_add_traits_str = ', '.join([cls.get_trait_name(trait) or str(trait) if isinstance(trait, Trait) else str(trait) for trait in failed_to_add_traits])
-            return CommonExecutionResult(False, reason=f'Failed to add traits to {sim_info}. {failed_to_add_traits_str}')
+            return CommonExecutionResult(False, reason=f'Failed to add traits to {sim_info}. {failed_to_add_traits_str}', tooltip_text=CommonStringId.S4CL_FAILED_TO_ADD_TRAITS_TO_SIM, tooltip_tokens=(sim_info, failed_to_add_traits_str))
         if not has_any:
-            return CommonExecutionResult(True, reason=f'Finished "adding" traits to {sim_info}, but none of the specified traits were loaded.')
-        return CommonExecutionResult.TRUE
+            return CommonExecutionResult(True, reason=f'Finished "adding" traits to {sim_info}, but none of the specified traits were loaded.', tooltip_text=CommonStringId.S4CL_TRAITS_WERE_ADDED_TO_SIM_BUT_NONE_WERE_LOADED, tooltip_tokens=(sim_info,))
+        return CommonExecutionResult(True, reason=f'Successfully added traits to {sim_info}.', tooltip_text=CommonStringId.S4CL_SUCCESSFULLY_ADDED_TRAITS_TO_SIM, tooltip_tokens=(sim_info,))
 
     @classmethod
     def remove_trait(cls, sim_info: SimInfo, *trait: Union[int, CommonTraitId, Trait]) -> CommonExecutionResult:
@@ -1397,10 +1398,10 @@ class CommonTraitUtils(_HasS4CLClassLog):
 
         if not success:
             failed_to_remove_traits_str = ', '.join([cls.get_trait_name(trait) or str(trait) if isinstance(trait, Trait) else str(trait) for trait in failed_to_remove_traits])
-            return CommonExecutionResult(False, reason=f'Failed to remove traits. {failed_to_remove_traits_str}')
+            return CommonExecutionResult(False, reason=f'Failed to remove traits from {sim_info}. {failed_to_remove_traits_str}', tooltip_text=CommonStringId.S4CL_FAILED_TO_REMOVE_TRAITS_FROM_SIM, tooltip_tokens=(sim_info, failed_to_remove_traits_str))
         if not has_any_loaded:
-            return CommonExecutionResult(True, reason='Finished "removing" traits, but none of the specified traits were loaded.')
-        return CommonExecutionResult.TRUE
+            return CommonExecutionResult(True, reason=f'Finished "removing" traits from {sim_info}, but none of the specified traits were loaded.', tooltip_text=CommonStringId.S4CL_TRAITS_WERE_REMOVED_FROM_SIM_BUT_NONE_WERE_LOADED, tooltip_tokens=(sim_info,))
+        return CommonExecutionResult(True, reason=f'Successfully removed traits from {sim_info}.', tooltip_text=CommonStringId.S4CL_SUCCESSFULLY_REMOVED_TRAITS_FROM_SIM, tooltip_tokens=(sim_info,))
 
     @classmethod
     def swap_traits(cls, sim_info: SimInfo, trait_id_one: Union[int, CommonTraitId, Trait], trait_id_two: Union[int, CommonTraitId, Trait]) -> CommonExecutionResult:
@@ -1425,14 +1426,14 @@ class CommonTraitUtils(_HasS4CLClassLog):
             cls.remove_trait(sim_info, trait_id_one)
             if not cls.has_trait(sim_info, trait_id_two):
                 return cls.add_trait(sim_info, trait_id_two)
-            return CommonExecutionResult.TRUE
+            return CommonExecutionResult(True, reason=f'Successfully swapped Traits {trait_id_one} and {trait_id_two} on {sim_info}.', tooltip_text=CommonStringId.S4CL_SUCCESSFULLY_SWAP_TRAIT_AND_TRAIT_ON_SIM, tooltip_tokens=(str(trait_id_one), str(trait_id_two), sim_info))
         # Has Trait Two
         elif cls.has_trait(sim_info, trait_id_two):
             cls.remove_trait(sim_info, trait_id_two)
             if not cls.has_trait(sim_info, trait_id_one):
                 return cls.add_trait(sim_info, trait_id_one)
-            return CommonExecutionResult.TRUE
-        return CommonExecutionResult(False, reason=f'Sim had neither Trait One {trait_id_one} nor Trait Two {trait_id_two}.')
+            return CommonExecutionResult(True, reason=f'Successfully swapped Traits {trait_id_two} and {trait_id_one} on {sim_info}.', tooltip_text=CommonStringId.S4CL_SUCCESSFULLY_SWAP_TRAIT_AND_TRAIT_ON_SIM, tooltip_tokens=(str(trait_id_two), str(trait_id_one), sim_info))
+        return CommonExecutionResult(False, reason=f'{sim_info} had neither Trait One {trait_id_one} nor Trait Two {trait_id_two}.', tooltip_text=CommonStringId.S4CL_SIM_HAD_NEITHER_TRAIT_NOR_TRAIT_TO_SWAP, tooltip_tokens=(sim_info, str(trait_id_one), str(trait_id_two)))
 
     @classmethod
     def add_trait_to_all_sims(cls, trait_id: Union[int, CommonTraitId, Trait], include_sim_callback: Callable[[SimInfo], bool] = None):

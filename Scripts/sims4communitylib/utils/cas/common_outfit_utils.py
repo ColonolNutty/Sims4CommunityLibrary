@@ -98,7 +98,7 @@ class CommonOutfitUtils(HasClassLog):
         """
         if not CommonAgeUtils.is_teen_adult_or_elder(sim_info):
             return CommonTestResult(False, reason=f'{sim_info} does not have permission to change to Nude. They are neither a Teen, Adult, Young Adult, nor Elder Sim.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_TO_CHANGE_INTO_NUDE_SIM_IS_NOT_A_TEEN_ADULT_ELDER, tooltip_tokens=(sim_info,))
-        return CommonTestResult(True, reason=f'{sim_info} has permission to change to their Nude outfit.', hide_tooltip=True)
+        return CommonTestResult(True, reason=f'{sim_info} has permission to change to their Nude outfit.', tooltip_text=CommonStringId.S4CL_SIM_HAS_PERMISSION_TO_CHANGE_INTO_NUDE, tooltip_tokens=(sim_info,))
 
     @classmethod
     def is_every_day_category(cls, outfit_category: OutfitCategory) -> bool:

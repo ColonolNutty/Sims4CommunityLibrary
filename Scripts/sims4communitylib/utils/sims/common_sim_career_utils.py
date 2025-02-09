@@ -21,6 +21,7 @@ from sims.sim_info import SimInfo
 from sims4.resources import Types
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
@@ -266,15 +267,15 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
             return cls.start_active_career_on_current_lot(career)
 
         if services.get_persistence_service().is_save_locked():
-            return CommonExecutionResult(False, reason='Currently save locked.')
+            return CommonExecutionResult(False, reason='Currently save locked.', tooltip_text=CommonStringId.S4CL_CURRENTLY_SAVE_LOCKED)
         if not services.get_career_service().enabled:
-            return CommonExecutionResult(False, reason='Career service is not enabled.')
+            return CommonExecutionResult(False, reason='Career service is not enabled.', hide_tooltip=True)
         from date_and_time import create_time_span
         start_time = CommonTimeUtils.get_current_date_and_time()
         end_time = start_time + create_time_span(hours=10)
 
         if start_time > end_time:
-            return CommonExecutionResult(False, reason='Start time is greater than end time.')
+            return CommonExecutionResult(False, reason='Start time is greater than end time.', hide_tooltip=True)
 
         career._at_work = False
         career._career_session_extended = False
@@ -320,17 +321,17 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
         if career is None:
             raise AssertionError('career was None.')
         if not career.is_active:
-            return CommonExecutionResult(False, reason='Career is not an active career.')
+            return CommonExecutionResult(False, reason='Career is not an active career.', tooltip_text=CommonStringId.S4CL_CAREER_IS_NOT_AN_ACTIVE_CAREER)
         if services.get_persistence_service().is_save_locked():
-            return CommonExecutionResult(False, reason='Currently save locked.')
+            return CommonExecutionResult(False, reason='Currently save locked.', tooltip_text=CommonStringId.S4CL_CURRENTLY_SAVE_LOCKED)
         if not services.get_career_service().enabled:
-            return CommonExecutionResult(False, reason='Career service is not enabled.')
+            return CommonExecutionResult(False, reason='Career service is not enabled.', hide_tooltip=True)
         from date_and_time import create_time_span
         start_time = CommonTimeUtils.get_current_date_and_time()
         end_time = start_time + create_time_span(hours=10)
 
         if start_time > end_time:
-            return CommonExecutionResult(False, reason='Start time is greater than end time.')
+            return CommonExecutionResult(False, reason='Start time is greater than end time.', hide_tooltip=True)
 
         career._at_work = False
         career._career_session_extended = False
@@ -351,7 +352,7 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
             career.reset_homework_help()
 
         if career._sim_info.is_npc:
-            return CommonExecutionResult(False, reason='Sim is an NPC, NPCs are not allowed to start active careers.')
+            return CommonExecutionResult(False, reason='Sim is an NPC, NPCs are not allowed to start active careers.', tooltip_text=CommonStringId.S4CL_SIM_IS_AN_NPC_AND_CANNOT_START_ACTIVE_CAREERS, tooltip_tokens=(career._sim_info,))
 
         import careers.career_base
         current_gig = career.get_current_gig()
@@ -365,11 +366,11 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
                 resolver = SingleSimResolver(career._sim_info)
                 available_events = tuple(event for event in career.career_events if career.is_career_event_on_cooldown(event) or event.tests.run_tests(resolver))
                 if not available_events:
-                    return CommonExecutionResult(False, reason='No events were available.')
+                    return CommonExecutionResult(False, reason='No events were available.', tooltip_text=CommonStringId.S4CL_NO_EVENTS_WERE_AVAILABLE)
                 household = career._sim_info.household
                 for sim_info in household.sim_info_gen():
                     if cls.is_taking_part_in_active_career_event(sim_info):
-                        return CommonExecutionResult(False, reason='Sim is already at the active event.')
+                        return CommonExecutionResult(False, reason=f'{sim_info} is already at the active event.', tooltip_text=CommonStringId.S4CL_SIM_IS_ALREADY_AT_ACTIVE_EVENT, tooltip_tokens=(sim_info,))
                 career_event = random.choice(available_events)
 
         career.on_career_event_accepted(career_event)
@@ -429,7 +430,7 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
 
         all_careers = tuple(CommonCareerUtils.get_all_careers_generator(include_career_callback=_career_is_available))
         if not all_careers:
-            return CommonExecutionResult(False, reason='No careers found to be available for Sim.')
+            return CommonExecutionResult(False, reason=f'No careers found to be available for {sim_info}.', tooltip_text=CommonStringId.S4CL_NO_CAREERS_FOUND_AVAILABLE_FOR_SIM, tooltip_tokens=(sim_info,))
         cls.get_log().format_with_message('Found all available careers.', careers=sorted([f'{career.__name__} ({CommonCareerUtils.get_career_guid(career)})' for career in all_careers], key=lambda x: x))
         chosen_career = random.choice(all_careers)
         career_level = None
@@ -440,10 +441,10 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
         result = cls.add_career(sim_info, chosen_career, randomize_agency=randomize_agency, career_level=career_level, use_career_history=use_career_history, force_out_of_retirement=force_out_of_retirement, force_quit_previous_jobs=force_quit_previous_jobs)
         if not result:
             return result
-        return CommonExecutionResult(True, reason=f'{chosen_career.__name__}')
+        return CommonExecutionResult(True, reason=f'Added Career {chosen_career.__name__} to {sim_info}.', tooltip_text=CommonStringId.S4CL_ADDED_CAREER_TO_SIM, tooltip_tokens=(chosen_career.__name__, sim_info))
 
     @classmethod
-    def is_career_available_for_sim(cls, sim_info: SimInfo, career: Career, from_join: bool=False) -> CommonTestResult:
+    def is_career_available_for_sim(cls, sim_info: SimInfo, career: Career, from_join: bool = False) -> CommonTestResult:
         """is_career_available_for_sim(sim_info, career, from_join=False)
 
         Determine if a Career is available for a Sim.
@@ -480,16 +481,16 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
         )
         if not CommonSimTypeUtils.is_non_player_sim(sim_info):
             if 'npc' in career.__name__.lower():
-                return CommonTestResult(False, reason='The Career is an NPC career and the Sim is not an NPC.')
+                return CommonTestResult(False, reason=f'{career.__name__} is an NPC career and {sim_info} is not an NPC.', tooltip_text=CommonStringId.S4CL_CAREER_IS_NPC_ONLY_CAREER_AND_SIM_IS_NOT_NPC, tooltip_tokens=(career.__name__, sim_info))
         career_guid = CommonCareerUtils.get_career_guid(career)
         if career_guid in non_playable_career_ids:
-            return CommonTestResult(False, reason='Career is non playable.')
+            return CommonTestResult(False, reason=f'Career {career.__name__} is non playable.', tooltip_text=CommonStringId.S4CL_CAREER_IS_MARKED_AS_NON_PLAYABLE, tooltip_tokens=(career.__name__,))
         valid_result = career.is_valid_career(sim_info=sim_info, from_join=from_join)
         if not valid_result:
             return valid_result
         if career_guid not in allowed_non_displayed_career_ids:
             if from_join and not career.show_career_in_join_career_picker:
-                return CommonTestResult(False, reason='Career is not joinable through normal means.')
+                return CommonTestResult(False, reason=f'Career {career.__name__} is not joinable through normal means.', tooltip_text=CommonStringId.S4CL_CAREER_IS_NOT_JOINABLE_THROUGH_NORMAL_MEANS, tooltip_tokens=(career.__name__,))
         return CommonTestResult.TRUE
 
     @classmethod
@@ -585,13 +586,13 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
         :rtype: CommonExecutionResult
         """
         if sim_info is None or career_identifier is None:
-            return CommonExecutionResult(False, reason=f'Sim or Career Identifier was None Sim: {sim_info} ID: {career_identifier}.')
+            return CommonExecutionResult(False, reason=f'Sim or Career Identifier was None Sim: {sim_info} ID: {career_identifier}.', hide_tooltip=True)
         if remove_all_existing_careers:
             cls.remove_careers(sim_info)
         career = CommonCareerUtils.load_career_by_guid(career_identifier)
         career_tracker = cls.get_career_tracker(sim_info)
         if career_tracker is None:
-            return CommonExecutionResult(False, reason=f'The Sim did not have a career tracker. {sim_info}')
+            return CommonExecutionResult(False, reason=f'The Sim did not have a career tracker. {sim_info}', hide_tooltip=True)
         if career_tracker.has_career_by_uid(CommonCareerUtils.get_career_guid(career)):
             cls.get_log().format_with_message('Sim already had the specified career.', sim=sim_info, career=career)
             return CommonExecutionResult.TRUE
@@ -613,7 +614,7 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
 
         if career_level is None:
             cls.get_log().format_with_message('No career level found.', sim=sim_info, career_history=career_tracker.career_history, career=career)
-            return CommonExecutionResult(False, reason=f'Failed to locate career level for Sim {sim_info}, Career {career}, and Career History {career_tracker.career_history}.')
+            return CommonExecutionResult(False, reason=f'Failed to locate career level for Sim {sim_info}, Career {career}, and Career History {career_tracker.career_history}.', hide_tooltip=True)
 
         cls.get_log().format_with_message('Adding new career.', picked_track=picked_track, career_level=career_level, sim=sim_info, career=career)
         new_career = career_level.career(sim_info)
@@ -694,7 +695,7 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
                 if not force_out_of_retirement:
                     career_tracker._retirement.send_dialog(Career.UNRETIRE_DIALOG, career_level_tuning.get_title(career_tracker._sim_info), icon_override=DEFAULT, on_response=lambda dialog: _on_unretire_confirmation_dialog_response(dialog))
                     cls.get_log().format_with_message('Sim is retired.')
-                    return CommonExecutionResult(False, reason='Sim was retired.')
+                    return CommonExecutionResult(False, reason=f'{career_tracker._sim_info} is retired.', tooltip_text=CommonStringId.S4CL_SIM_IS_RETIRED, tooltip_tokens=(career_tracker._sim_info,))
 
             if new_career.can_quit:
                 def _on_quit_confirmation_dialog_response(dialog, _disallowed_reward_types: Tuple[RewardType]=disallowed_reward_types) -> None:
@@ -730,14 +731,14 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
                         switch_jobs_dialog = Career.SWITCH_MANY_JOBS_DIALOG
                     career.send_career_message(switch_jobs_dialog, career_level_tuning.get_title(career_tracker._sim_info), icon_override=DEFAULT, on_response=lambda dialog: _on_quit_confirmation_dialog_response(dialog, _disallowed_reward_types=(RewardType.MONEY,)))
                     cls.get_log().format_with_message('Sim has quittable careers. Too many jobs!')
-                    return CommonExecutionResult(False, reason='Sim had existing jobs, they need to be quit before.')
+                    return CommonExecutionResult(False, reason=f'{career_tracker._sim_info} has existing jobs, they need to be quit before a new one may be added.', tooltip_text=CommonStringId.S4CL_SIM_HAS_EXISTING_JOBS_NEED_TO_QUIT_THEM_BEFORE_ADDING_NEW_ONES, tooltip_tokens=(career_tracker._sim_info,))
 
         cls.get_log().format_with_message('Doing end retirement.')
         career_tracker.end_retirement()
         career_tracker.remove_custom_career_data(send_update=False)
         if new_career.guid64 in career_tracker._careers:
             cls.get_log().format_with_message('Attempting to add career that Sim is already in.', career=new_career, sim=career_tracker._sim_info)
-            return CommonExecutionResult(False, reason='Sim already had the career.')
+            return CommonExecutionResult(False, reason=f'{career_tracker._sim_info} already has career {new_career}.', tooltip_text=CommonStringId.S4CL_SIM_ALREADY_HAS_CAREER, tooltip_tokens=(career_tracker._sim_info, str(new_career)))
         if new_career.can_quit:
             career_tracker.quit_quittable_careers(post_quit_msg=post_quit_msg, schedule_shift_type=schedule_shift_override)
         career_tracker._careers[new_career.guid64] = new_career

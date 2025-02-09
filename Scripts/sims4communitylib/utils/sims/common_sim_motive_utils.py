@@ -16,6 +16,7 @@ from sims4communitylib.classes.testing.common_execution_result import CommonExec
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.enums.enumtypes.common_int import CommonInt
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
@@ -58,11 +59,11 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
-            return CommonTestResult(False, reason='sim_info was None.')
+            return CommonTestResult(False, reason='sim_info was None.', hide_tooltip=True)
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return CommonTestResult(False, reason=f'{sim_info} did not have a mapped motive {motive_id}')
+            return CommonTestResult(False, reason=f'{sim_info} did not have a mapped motive {motive_id}', tooltip_text=CommonStringId.S4CL_SIM_DID_NOT_HAVE_A_MAPPED_MOTIVE, tooltip_tokens=(sim_info, str(motive_id)))
         cls.get_log().format_with_message('Mapped motive id, checking if Sim has the motive.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, sim=sim_info)
         return CommonSimStatisticUtils.has_statistic(sim_info, mapped_motive_id)
 
@@ -83,11 +84,11 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, reason='sim_info was None.')
+            return CommonExecutionResult(False, reason='sim_info was None.', hide_tooltip=True)
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, reason=f'Sim did not have motive {motive_id}')
+            return CommonExecutionResult(False, reason=f'{sim_info} did not have motive {motive_id}', tooltip_text=CommonStringId.S4CL_SIM_DID_NOT_HAVE_MOTIVE, tooltip_tokens=(sim_info, str(motive_id)))
         cls.get_log().format_with_message('Mapped motive id, setting the level for it on Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, level=level, sim=sim_info)
         return CommonSimStatisticUtils.set_statistic_value(sim_info, mapped_motive_id, level, add=True)
 
@@ -123,11 +124,11 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, reason='sim_info was None.')
+            return CommonExecutionResult(False, reason='sim_info was None.', hide_tooltip=True)
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, reason=f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
+            return CommonTestResult(False, reason=f'{sim_info} did not have a mapped motive {motive_id}', tooltip_text=CommonStringId.S4CL_SIM_DID_NOT_HAVE_A_MAPPED_MOTIVE, tooltip_tokens=(sim_info, str(motive_id)))
         cls.get_log().format_with_message('Mapped motive id, Adding to it for Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, amount=amount, sim=sim_info)
         return CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount, add=True)
 
@@ -148,11 +149,11 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, reason='sim_info was None.')
+            return CommonExecutionResult(False, reason='sim_info was None.', hide_tooltip=True)
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, reason=f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
+            return CommonTestResult(False, reason=f'{sim_info} did not have a mapped motive {motive_id}', tooltip_text=CommonStringId.S4CL_SIM_DID_NOT_HAVE_A_MAPPED_MOTIVE, tooltip_tokens=(sim_info, str(motive_id)))
         cls.get_log().format_with_message('Mapped motive id, Subtracting from it for Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, amount=amount, sim=sim_info)
         return CommonSimStatisticUtils.add_statistic_value(sim_info, mapped_motive_id, amount * -1.0, add=True)
 
@@ -435,13 +436,13 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return CommonTestResult(False, reason=f'The motive {motive_id} did not map to any known motive for the Sim {sim_info}.')
+            return CommonTestResult(False, reason=f'{sim_info} did not have a mapped motive {motive_id}', tooltip_text=CommonStringId.S4CL_SIM_DID_NOT_HAVE_A_MAPPED_MOTIVE, tooltip_tokens=(sim_info, str(motive_id)))
         motive_instance = CommonSimStatisticUtils.get_statistic(sim_info, mapped_motive_id)
         if motive_instance is None:
-            return CommonTestResult(False, reason=f'No motive found for id {mapped_motive_id}.')
+            return CommonTestResult(False, reason=f'No motive found for id {mapped_motive_id}.', tooltip_text=CommonStringId.S4CL_NO_MOTIVE_FOUND_FOR_ID, tooltip_tokens=(str(mapped_motive_id),))
         if sim_info.is_locked(motive_instance):
-            return CommonTestResult(True, reason=f'Motive {mapped_motive_id} is locked for Sim {sim_info}')
-        return CommonTestResult(False, reason=f'Motive {mapped_motive_id} is not locked for Sim {sim_info}')
+            return CommonTestResult(True, reason=f'Motive {mapped_motive_id} is locked for Sim {sim_info}', tooltip_text=CommonStringId.S4CL_MOTIVE_IS_LOCKED_FOR_SIM, tooltip_tokens=(str(mapped_motive_id), sim_info))
+        return CommonTestResult(False, reason=f'Motive {mapped_motive_id} is not locked for Sim {sim_info}', tooltip_text=CommonStringId.S4CL_MOTIVE_IS_NOT_LOCKED_FOR_SIM, tooltip_tokens=(str(mapped_motive_id), sim_info))
 
     @classmethod
     def set_all_motives_max(cls, sim_info: SimInfo) -> CommonExecutionResult:
@@ -455,10 +456,10 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            return CommonExecutionResult(False, reason='sim_info was None.')
+            return CommonExecutionResult(False, reason='sim_info was None.', hide_tooltip=True)
         client_id = services.client_manager().get_first_client_id()
         commands.execute('stats.fill_commodities {}'.format(CommonSimUtils.get_sim_id(sim_info)), client_id)
-        return CommonExecutionResult(True, reason=f'Successfully set all motives to their max levels for Sim {sim_info}')
+        return CommonExecutionResult(True, reason=f'Successfully set all motives to their max levels for Sim {sim_info}', tooltip_text=CommonStringId.S4CL_SUCCESSFULLY_SET_ALL_MOTIVES_TO_MAX_FOR_SIM, tooltip_tokens=(sim_info,))
 
     @classmethod
     def _get_motive_level(cls, sim_info: SimInfo, motive_id: Union[CommonMotiveId, CommonInt, int]) -> float:

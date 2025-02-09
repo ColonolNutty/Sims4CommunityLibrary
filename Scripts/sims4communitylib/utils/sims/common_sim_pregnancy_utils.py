@@ -20,6 +20,7 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
+from sims4communitylib.utils.localization.common_localization_utils import CommonLocalizationUtils
 from sims4communitylib.utils.objects.common_object_state_utils import CommonObjectStateUtils
 from sims4communitylib.utils.sims.common_age_utils import CommonAgeUtils
 from sims4communitylib.utils.sims.common_buff_utils import CommonBuffUtils
@@ -78,8 +79,8 @@ class CommonSimPregnancyUtils(HasClassLog):
         :rtype: CommonTestResult
         """
         if CommonAgeUtils.is_adult_or_elder(sim_info):
-            return CommonTestResult(True, reason=f'{sim_info} has permission for pregnancies. They are either an Adult or an Elder Sim.')
-        return CommonTestResult(False, reason=f'{sim_info} does not have permission for pregnancies. They are neither an Adult nor an Elder Sim.')
+            return CommonTestResult(True, reason=f'{sim_info} has permission for pregnancies. They are either an Adult or an Elder Sim.', tooltip_text=CommonStringId.S4CL_SIM_HAS_PERMISSION_FOR_PREGNANCIES_NOT_ADULT_OR_ELDER, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} does not have permission for pregnancies. They are neither an Adult nor an Elder Sim.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_PREGNANCIES_NOT_ADULT_OR_ELDER, tooltip_tokens=(sim_info,))
 
     @classmethod
     def has_permission_for_pregnancies_with(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> CommonTestResult:
@@ -98,18 +99,74 @@ class CommonSimPregnancyUtils(HasClassLog):
         """
         sim_a_has_permission = cls.has_permission_for_pregnancies(sim_info_a)
         if not sim_a_has_permission:
-            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for pregnancies with {sim_info_b}. {sim_a_has_permission}')
+            return CommonTestResult(
+                False,
+                reason=f'{sim_info_a} does not have permission for pregnancies with {sim_info_b}. {sim_a_has_permission.reason}',
+                tooltip_text=CommonStringId.STRING_COMMA_SPACE_STRING,
+                tooltip_tokens=(
+                    CommonLocalizationUtils.create_localized_tooltip(
+                        CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_PREGNANCIES_WITH_SIM,
+                        tooltip_tokens=(sim_info_a, sim_info_b)
+                    ),
+                    CommonLocalizationUtils.create_localized_tooltip(
+                        sim_a_has_permission.tooltip_text,
+                        tooltip_tokens=sim_a_has_permission.tooltip_tokens
+                    )
+                )
+            )
         sim_b_has_permission = cls.has_permission_for_pregnancies(sim_info_b)
         if not sim_b_has_permission:
-            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for pregnancies with {sim_info_b}. {sim_b_has_permission}')
+            return CommonTestResult(
+                False,
+                reason=f'{sim_info_a} does not have permission for pregnancies with {sim_info_b}. {sim_b_has_permission.reason}',
+                tooltip_text=CommonStringId.STRING_COMMA_SPACE_STRING,
+                tooltip_tokens=(
+                    CommonLocalizationUtils.create_localized_tooltip(
+                        CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_PREGNANCIES_WITH_SIM,
+                        tooltip_tokens=(sim_info_a, sim_info_b)
+                    ),
+                    CommonLocalizationUtils.create_localized_tooltip(
+                        sim_b_has_permission.tooltip_text,
+                        tooltip_tokens=sim_b_has_permission.tooltip_tokens
+                    )
+                )
+            )
         if not CommonSpeciesUtils.are_same_species(sim_info_a, sim_info_b):
             # If both Sims are dogs, that is an ok combination, even though their species do not match.
             if not CommonSpeciesUtils.is_dog(sim_info_a) or not CommonSpeciesUtils.is_dog(sim_info_b):
-                return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for pregnancies with {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.')
+                return CommonTestResult(
+                    False,
+                    reason=f'{sim_info_a} does not have permission for pregnancies with {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.',
+                    tooltip_text=CommonStringId.STRING_COMMA_SPACE_STRING,
+                    tooltip_tokens=(
+                        CommonLocalizationUtils.create_localized_tooltip(
+                            CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_PREGNANCIES_WITH_SIM,
+                            tooltip_tokens=(sim_info_a, sim_info_b)
+                        ),
+                        CommonLocalizationUtils.create_localized_tooltip(
+                            CommonStringId.S4CL_SIM_IS_NOT_THE_SAME_SPECIES_AS_SIM,
+                            tooltip_tokens=(sim_info_a, sim_info_b)
+                        )
+                    )
+                )
         romantic_relationships_result = CommonRelationshipUtils.has_permission_for_romantic_relationship_with(sim_info_a, sim_info_b)
         if not romantic_relationships_result:
-            return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for pregnancies with {sim_info_b}. {romantic_relationships_result}')
-        return CommonTestResult(True, reason=f'{sim_info_a} has permission for pregnancies with {sim_info_b}.')
+            return CommonTestResult(
+                False,
+                reason=f'{sim_info_a} does not have permission for pregnancies with {sim_info_b}. {romantic_relationships_result.reason}',
+                tooltip_text=CommonStringId.STRING_COMMA_SPACE_STRING,
+                tooltip_tokens=(
+                    CommonLocalizationUtils.create_localized_tooltip(
+                        CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_PREGNANCIES_WITH_SIM,
+                        tooltip_tokens=(sim_info_a, sim_info_b)
+                    ),
+                    CommonLocalizationUtils.create_localized_tooltip(
+                        romantic_relationships_result.tooltip_text,
+                        tooltip_tokens=romantic_relationships_result.tooltip_tokens
+                    )
+                )
+            )
+        return CommonTestResult(True, reason=f'{sim_info_a} has permission for pregnancies with {sim_info_b}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_PERMISSION_FOR_PREGNANCIES_WITH_SIM, tooltip_tokens=(sim_info_a, sim_info_b))
 
     @classmethod
     def get_pregnancy_partner(cls, sim_info: SimInfo) -> Union[SimInfo, None]:
@@ -223,21 +280,21 @@ class CommonSimPregnancyUtils(HasClassLog):
         can_be_impregnated_trait = cls.determine_can_be_impregnated_trait(sim_info)
         can_not_be_impregnated_trait = cls.determine_can_not_be_impregnated_trait(sim_info)
         if can_be_impregnated_trait is None:
-            return CommonTestResult(False, reason=f'No Can Be Impregnated trait was found for Sim {sim_info}.')
+            return CommonTestResult(False, reason=f'No Can Be Impregnated trait was found for Sim {sim_info}.', tooltip_text=CommonStringId.S4CL_NO_CAN_BE_IMPREGNATED_TRAIT_FOUND_FOR_SIM, tooltip_tokens=(sim_info,))
         if can_not_be_impregnated_trait is None:
-            return CommonTestResult(False, reason=f'No Cannot Be Impregnated trait was found for Sim {sim_info}.')
+            return CommonTestResult(False, reason=f'No Cannot Be Impregnated trait was found for Sim {sim_info}.', tooltip_text=CommonStringId.S4CL_NO_CANNOT_BE_IMPREGNATED_TRAIT_FOUND_FOR_SIM, tooltip_tokens=(sim_info,))
         if CommonSpeciesUtils.is_animal(sim_info):
             if not CommonSpeciesUtils.is_horse(sim_info):
                 if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
-                    return CommonTestResult(False, reason=f'Animal Sim {sim_info} had the Cannot Reproduce trait.')
+                    return CommonTestResult(False, reason=f'Animal Sim {sim_info} had the Cannot Reproduce trait.', tooltip_text=CommonStringId.S4CL_SIM_HAS_THE_CANNOT_REPRODUCE_TRAIT, tooltip_tokens=(sim_info,))
                 if not CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
-                    return CommonTestResult(False, reason=f'Animal Sim {sim_info} did not have the Can Reproduce trait.')
+                    return CommonTestResult(False, reason=f'Animal Sim {sim_info} did not have the Can Reproduce trait.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_THE_CAN_REPRODUCE_TRAIT, tooltip_tokens=(sim_info,))
 
         if CommonTraitUtils.has_trait(sim_info, can_not_be_impregnated_trait):
-            return CommonTestResult(False, reason=f'{sim_info} had the Cannot Be Impregnated trait.')
+            return CommonTestResult(False, reason=f'{sim_info} had the Cannot Be Impregnated trait.', tooltip_text=CommonStringId.S4CL_SIM_HAS_THE_CANNOT_BE_IMPREGNATED_TRAIT, tooltip_tokens=(sim_info,))
         if not CommonTraitUtils.has_trait(sim_info, can_be_impregnated_trait):
-            return CommonTestResult(False, reason=f'{sim_info} did not have the Can Be Impregnated trait.')
-        return CommonTestResult(True, reason=f'Sim can be impregnated by other Sims.')
+            return CommonTestResult(False, reason=f'{sim_info} did not have the Can Be Impregnated trait.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_THE_CAN_BE_IMPREGNATED_TRAIT, tooltip_tokens=(sim_info,))
+        return CommonTestResult(True, reason=f'{sim_info} can be impregnated by other Sims.', tooltip_text=CommonStringId.S4CL_SIM_CAN_BE_IMPREGNATED_BY_OTHER_SIMS, tooltip_tokens=(sim_info,))
 
     @classmethod
     def can_impregnate(cls, sim_info: SimInfo) -> CommonTestResult:
@@ -255,21 +312,21 @@ class CommonSimPregnancyUtils(HasClassLog):
         can_impregnate_trait = cls.determine_can_impregnate_trait(sim_info)
         can_not_impregnate_trait = cls.determine_can_not_impregnate_trait(sim_info)
         if can_impregnate_trait is None:
-            return CommonTestResult(False, reason=f'No Can Impregnate trait was found for Sim {sim_info}.')
+            return CommonTestResult(False, reason=f'No Can Impregnate trait was found for Sim {sim_info}.', tooltip_text=CommonStringId.S4CL_NO_CAN_IMPREGNATE_TRAIT_FOUND_FOR_SIM, tooltip_tokens=(sim_info,))
         if can_not_impregnate_trait is None:
-            return CommonTestResult(False, reason=f'No Cannot Impregnate trait was found for Sim {sim_info}.')
+            return CommonTestResult(False, reason=f'No Cannot Impregnate trait was found for Sim {sim_info}.', tooltip_text=CommonStringId.S4CL_NO_CANNOT_IMPREGNATE_TRAIT_FOUND_FOR_SIM, tooltip_tokens=(sim_info,))
         if CommonSpeciesUtils.is_animal(sim_info):
             if not CommonSpeciesUtils.is_horse(sim_info):
                 if CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_NOT_REPRODUCE):
-                    return CommonTestResult(False, reason=f'{sim_info} had the Cannot Reproduce trait.')
+                    return CommonTestResult(False, reason=f'{sim_info} had the Cannot Reproduce trait.', tooltip_text=CommonStringId.S4CL_SIM_HAS_THE_CANNOT_REPRODUCE_TRAIT, tooltip_tokens=(sim_info,))
                 if not CommonTraitUtils.has_trait(sim_info, CommonTraitId.PREGNANCY_OPTIONS_PET_CAN_REPRODUCE):
-                    return CommonTestResult(False, reason=f'{sim_info} did not have the Can Reproduce trait.')
+                    return CommonTestResult(False, reason=f'{sim_info} did not have the Can Reproduce trait.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_THE_CAN_REPRODUCE_TRAIT, tooltip_tokens=(sim_info,))
 
         if CommonTraitUtils.has_trait(sim_info, can_not_impregnate_trait):
-            return CommonTestResult(False, reason=f'{sim_info} had the Cannot Impregnate trait.')
+            return CommonTestResult(False, reason=f'{sim_info} had the Cannot Impregnate trait.', tooltip_text=CommonStringId.S4CL_SIM_HAS_THE_CANNOT_IMPREGNATE_TRAIT, tooltip_tokens=(sim_info,))
         if not CommonTraitUtils.has_trait(sim_info, can_impregnate_trait):
-            return CommonTestResult(False, reason=f'{sim_info} did not have the Can Impregnate trait')
-        return CommonTestResult(True, reason=f'Sim can impregnate other Sims.')
+            return CommonTestResult(False, reason=f'{sim_info} did not have the Can Impregnate trait', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_THE_CAN_IMPREGNATE_TRAIT, tooltip_tokens=(sim_info,))
+        return CommonTestResult(True, reason=f'{sim_info} can impregnate other Sims.', tooltip_text=CommonStringId.S4CL_SIM_CAN_IMPREGNATE_OTHER_SIMS, tooltip_tokens=(sim_info,))
 
     @classmethod
     def get_partner_of_pregnant_sim(cls, sim_info: SimInfo) -> Union[SimInfo, None]:

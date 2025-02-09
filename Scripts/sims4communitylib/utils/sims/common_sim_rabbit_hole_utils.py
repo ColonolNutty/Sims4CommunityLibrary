@@ -11,6 +11,7 @@ from rabbit_hole.rabbit_hole import RabbitHole
 from services.rabbit_hole_service import RabbitHoleService
 from sims.sim_info import SimInfo
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.utils.sims.common_rabbit_hole_utils import CommonRabbitHoleUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
@@ -52,16 +53,17 @@ class CommonSimRabbitHoleUtils:
         """
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
-        rabbit_hole = CommonRabbitHoleUtils.load_rabbit_hole_by_id(rabbit_hole)
-        if rabbit_hole is None:
-            return CommonTestResult(False, reason='RabbitHole was None.')
+        rabbit_hole_instance = CommonRabbitHoleUtils.load_rabbit_hole_by_id(rabbit_hole)
+        if rabbit_hole_instance is None:
+            return CommonTestResult(False, reason='RabbitHole was None.', hide_tooltip=True)
 
         sim_id = CommonSimUtils.get_sim_id(sim_info)
         existing_rabbit_hole_id = cls.get_first_rabbit_hole_id_for_sim(sim_info)
         if existing_rabbit_hole_id is not None:
-            return CommonTestResult(False, reason=f'{sim_info} is already in a rabbit hole.')
+            return CommonTestResult(False, reason=f'{sim_info} is already in a rabbit hole.', tooltip_text=CommonStringId.S4CL_SIM_IS_ALREADY_IN_A_RABBIT_HOLE, tooltip_tokens=(sim_info,))
         rabbit_hole_service = CommonRabbitHoleUtils.get_rabbit_hole_service()
-        rabbit_hole_id = rabbit_hole_service.put_sim_in_managed_rabbithole(sim_info, rabbit_hole_type=rabbit_hole)
+        # noinspection PyTypeChecker
+        rabbit_hole_id = rabbit_hole_service.put_sim_in_managed_rabbithole(sim_info, rabbit_hole_type=rabbit_hole_instance)
 
         if rabbit_hole_id is not None:
             if on_exit_rabbit_hole_callback is not None:
@@ -71,7 +73,7 @@ class CommonSimRabbitHoleUtils:
 
                 rabbit_hole_service.set_rabbit_hole_expiration_callback(sim_id, rabbit_hole_id, _on_exit_rabbit_hole)
             return CommonTestResult.TRUE
-        return CommonTestResult(False, reason=f'Failed to put the {sim_info} into the rabbit hole.')
+        return CommonTestResult(False, reason=f'Failed to put {sim_info} into the rabbit hole.', tooltip_text=CommonStringId.S4CL_FAILED_TO_PUT_SIM_INTO_A_RABBIT_HOLE, tooltip_tokens=(sim_info,))
 
     @classmethod
     def try_remove_sim_from_rabbit_hole(cls, sim_info: SimInfo, on_remove_from_rabbit_hole_result_callback: Callable[[SimInfo, bool], None] = None) -> CommonTestResult:

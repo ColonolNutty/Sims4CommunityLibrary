@@ -139,7 +139,7 @@ class CommonRunnableContext(CommonSerializable, HasClassLog):
         :return: True, if successful. False, if not.
         :rtype: CommonExecutionResult
         """
-        self.log.format_with_message('Restarting context.', reason=restart_reason)
+        self.log.format_with_message(f'Restarting context. {self.__class__.__name__}', reason=restart_reason)
         return self._restart(restart_reason, *_, **__)
 
     def teardown(self, teardown_reason: Union[int, CommonInt, CommonIntFlags], *_, **__) -> CommonExecutionResult:
@@ -152,7 +152,7 @@ class CommonRunnableContext(CommonSerializable, HasClassLog):
         :return: True, if successful. False, if not.
         :rtype: CommonExecutionResult
         """
-        self.log.format_with_message('Tearing down context.', reason=teardown_reason)
+        self.log.format_with_message(f'Tearing down context. {self.__class__.__name__}', reason=teardown_reason)
         return self._teardown(teardown_reason, *_, **__)
 
     # -------------------------Hooks Start-------------------------

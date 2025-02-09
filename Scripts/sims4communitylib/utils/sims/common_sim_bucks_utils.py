@@ -17,6 +17,7 @@ from sims4.resources import Types
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.common_bucks_types import CommonBucksType
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
@@ -45,16 +46,16 @@ class CommonSimBucksUtils:
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be locked.')
+            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be locked.', hide_tooltip=True)
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}')
+            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}', hide_tooltip=True)
         for perk in cls.get_locked_perks_gen(sim_info, bucks_type):
             if cls.has_perk_unlocked(sim_info, perk):
-                return CommonExecutionResult(True, reason=f'Perk {perk} is already unlocked.')
+                return CommonExecutionResult(True, reason=f'Perk {perk} is already unlocked.', tooltip_text=CommonStringId.S4CL_SIM_HAS_PERK_UNLOCKED, tooltip_tokens=(sim_info, str(perk)))
             perk = cls.load_perk_by_guid(perk)
             if perk is None:
-                return CommonExecutionResult(False, reason=f'Failed to locate perk by id {perk}')
+                return CommonExecutionResult(False, reason=f'Failed to locate perk by id {perk}', hide_tooltip=True)
             modified_for_cost = False
             if no_cost:
                 if not cls.can_afford_perk(sim_info, perk):
@@ -96,13 +97,13 @@ class CommonSimBucksUtils:
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be removed.')
+            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be removed.', hide_tooltip=True)
         vanilla_bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
         if vanilla_bucks_type is None:
-            return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.')
+            return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.', hide_tooltip=True)
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=False)
         if bucks_tracker is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}')
+            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}', hide_tooltip=True)
         bucks_tracker.lock_all_perks(vanilla_bucks_type, refund_cost=refund_cost or remove_perk_points)
         if remove_perk_points:
             cls.set_bucks(sim_info, bucks_type, 0, reason=reason, **__)
@@ -127,13 +128,13 @@ class CommonSimBucksUtils:
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be locked.')
+            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be locked.', hide_tooltip=True)
         vanilla_bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
         if vanilla_bucks_type is None:
-            return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.')
+            return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.', hide_tooltip=True)
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}')
+            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}', hide_tooltip=True)
         bucks_tracker.lock_all_perks(vanilla_bucks_type, refund_cost=refund_cost)
         return CommonExecutionResult.TRUE
 
@@ -154,19 +155,19 @@ class CommonSimBucksUtils:
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return CommonTestResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be locked.')
+            return CommonTestResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before any of their perks can be unlocked.', hide_tooltip=True)
         perk = cls.load_perk_by_guid(perk)
         if perk is None:
-            return CommonTestResult(False, reason=f'Failed to locate perk by id {perk}')
+            return CommonTestResult(False, reason=f'Failed to locate perk by id {perk}', hide_tooltip=True)
         bucks_type = cls.get_perk_bucks_type(perk)
         if bucks_type is None:
-            return CommonTestResult(False, reason=f'Bucks Type {bucks_type} was not valid.')
+            return CommonTestResult(False, reason=f'Perk {perk} had no Bucks Type specified.', hide_tooltip=True)
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
-            return CommonTestResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}')
+            return CommonTestResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}', hide_tooltip=True)
         if bucks_tracker.is_perk_unlocked(perk):
-            return CommonTestResult(True, reason=f'{sim_info} has perk {perk} unlocked.')
-        return CommonTestResult(False, reason=f'{sim_info} does not have perk {perk} unlocked.')
+            return CommonTestResult(True, reason=f'{sim_info} has perk {perk} unlocked.', tooltip_text=CommonStringId.S4CL_SIM_HAS_PERK_UNLOCKED, tooltip_tokens=(sim_info, str(perk)))
+        return CommonTestResult(False, reason=f'{sim_info} does not have perk {perk} unlocked.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERK_UNLOCKED, tooltip_tokens=(sim_info, str(perk)))
 
     @classmethod
     def has_perk_locked(cls, sim_info: SimInfo, perk: Union[BucksPerk, int]) -> CommonTestResult:
@@ -185,19 +186,19 @@ class CommonSimBucksUtils:
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return CommonTestResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be locked.')
+            return CommonTestResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before any of their perks can be locked.', hide_tooltip=True)
         perk = cls.load_perk_by_guid(perk)
         if perk is None:
-            return CommonTestResult(False, reason=f'Failed to locate perk by id {perk}')
+            return CommonTestResult(False, reason=f'Failed to locate perk by id {perk}', hide_tooltip=True)
         bucks_type = cls.get_perk_bucks_type(perk)
         if bucks_type is None:
-            return CommonTestResult(False, reason=f'Bucks Type {bucks_type} was not valid.')
+            return CommonTestResult(False, reason=f'Perk {perk} had no Bucks Type specified.', hide_tooltip=True)
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
-            return CommonTestResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}')
+            return CommonTestResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}', hide_tooltip=True)
         if not bucks_tracker.is_perk_unlocked(perk):
-            return CommonTestResult(True, reason=f'{sim_info} has perk {perk} locked.')
-        return CommonTestResult(False, reason=f'{sim_info} does not have perk {perk} locked.')
+            return CommonTestResult(True, reason=f'{sim_info} has perk {perk} locked.', tooltip_text=CommonStringId.S4CL_SIM_HAS_PERK_LOCKED, tooltip_tokens=(sim_info, str(perk)))
+        return CommonTestResult(False, reason=f'{sim_info} does not have perk {perk} locked.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERK_LOCKED, tooltip_tokens=(sim_info, str(perk)))
 
     @classmethod
     def lock_perk(cls, sim_info: SimInfo, perk: Union[BucksPerk, int], refund_cost: bool = True) -> CommonExecutionResult:
@@ -218,16 +219,16 @@ class CommonSimBucksUtils:
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be locked.')
+            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be locked.', hide_tooltip=True)
         perk = cls.load_perk_by_guid(perk)
         if perk is None:
-            return CommonExecutionResult(False, reason=f'Failed to locate perk by id {perk}')
+            return CommonExecutionResult(False, reason=f'Failed to locate perk by id {perk}', hide_tooltip=True)
         bucks_type = cls.get_perk_bucks_type(perk)
         if bucks_type is None:
-            return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.')
+            return CommonExecutionResult(False, reason=f'Perk {perk} had no Bucks Type specified.', hide_tooltip=True)
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}')
+            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}', hide_tooltip=True)
         bucks_tracker.lock_perk(perk, refund_cost=refund_cost)
         return CommonExecutionResult.TRUE
 
@@ -249,21 +250,21 @@ class CommonSimBucksUtils:
         :rtype: CommonExecutionResult
         """
         if cls.has_perk_unlocked(sim_info, perk):
-            return CommonExecutionResult(True, reason=f'Perk {perk} is already unlocked.')
+            return CommonExecutionResult(True, reason=f'Perk {perk} is already unlocked.', hide_tooltip=True)
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be locked.')
+            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before all of their perks can be locked.', hide_tooltip=True)
         perk = cls.load_perk_by_guid(perk)
         if perk is None:
-            return CommonExecutionResult(False, reason=f'Failed to locate perk by id {perk}')
+            return CommonExecutionResult(False, reason=f'Failed to locate perk by id {perk}', hide_tooltip=True)
         bucks_type = cls.get_perk_bucks_type(perk)
         if bucks_type is None:
-            return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.')
+            return CommonExecutionResult(False, reason=f'Perk {perk} had no Bucks Type specified.', hide_tooltip=True)
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}')
+            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}', hide_tooltip=True)
         if cls.has_perk_unlocked(sim_info, perk):
-            return CommonExecutionResult(True, reason=f'Perk {perk} is already unlocked.')
+            return CommonExecutionResult(True, reason=f'Perk {perk} is already unlocked.', tooltip_text=CommonStringId.S4CL_SIM_HAS_PERK_UNLOCKED, tooltip_tokens=(sim_info, str(perk)))
         modified_for_cost = False
         if no_cost:
             if not cls.can_afford_perk(sim_info, perk):
@@ -273,7 +274,7 @@ class CommonSimBucksUtils:
                     return modify_result
                 modified_for_cost = True
         elif not cls.can_afford_perk(sim_info, perk):
-            return CommonExecutionResult(False, reason=f'{sim_info} cannot afford perk {perk}.')
+            return CommonExecutionResult(False, reason=f'{sim_info} cannot afford perk {perk}.', tooltip_text=CommonStringId.S4CL_SIM_CANNOT_AFFORD_PERK, tooltip_tokens=(sim_info, str(perk)))
         if bucks_tracker.pay_for_and_unlock_perk(perk):
             if not modified_for_cost:
                 unlock_cost = cls.get_perk_unlock_cost(perk)
@@ -297,18 +298,18 @@ class CommonSimBucksUtils:
         """
         perk = cls.load_perk_by_guid(perk)
         if perk is None:
-            return CommonTestResult(False, reason=f'Failed to locate perk by id {perk}')
+            return CommonTestResult(False, reason=f'Failed to locate perk by id {perk}', hide_tooltip=True)
         bucks_type = cls.get_perk_bucks_type(perk)
         if bucks_type == CommonBucksType.INVALID:
-            return CommonTestResult(False, reason=f'Failed to determine the bucks type of the perk {perk}')
+            return CommonTestResult(False, reason=f'Perk {perk} had no Bucks Type specified.', hide_tooltip=True)
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=False)
         if bucks_tracker is None:
-            return CommonTestResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}')
+            return CommonTestResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}', hide_tooltip=True)
         bucks_amount = cls.get_bucks_amount(sim_info, bucks_type)
         perk_cost = cls.get_perk_unlock_cost(perk)
         if bucks_amount < perk_cost:
-            return CommonTestResult(False, reason=f'{sim_info} cannot afford perk {perk}.')
-        return CommonTestResult(True, reason=f'{sim_info} can afford perk {perk}.')
+            return CommonTestResult(False, reason=f'{sim_info} cannot afford perk {perk}.', tooltip_text=CommonStringId.S4CL_SIM_CANNOT_AFFORD_PERK, tooltip_tokens=(sim_info, str(perk)))
+        return CommonTestResult(True, reason=f'{sim_info} can afford perk {perk}.', tooltip_text=CommonStringId.S4CL_SIM_CAN_AFFORD_PERK, tooltip_tokens=(sim_info, str(perk)))
 
     @classmethod
     def get_available_perks_gen(cls, sim_info: SimInfo, bucks_type: Union[CommonBucksType, BucksType]) -> Iterator[BucksPerk]:
@@ -423,13 +424,13 @@ class CommonSimBucksUtils:
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before their perk points can be modified.')
+            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before their perk points can be modified.', hide_tooltip=True)
         vanilla_bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
         if vanilla_bucks_type is None:
-            return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.')
+            return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.', hide_tooltip=True)
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}')
+            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}', hide_tooltip=True)
         current_bucks_count = cls.get_bucks_amount(sim_info, bucks_type)
         if amount < 0 and ((amount * -1) > current_bucks_count):
             amount = -current_bucks_count
@@ -457,13 +458,13 @@ class CommonSimBucksUtils:
         """
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before their perk points can be modified.')
+            return CommonExecutionResult(False, reason=f'{sim_info} is not currently spawned. They need to be spawned before their perk points can be modified.', hide_tooltip=True)
         vanilla_bucks_type = CommonBucksType.convert_to_vanilla(bucks_type)
         if vanilla_bucks_type is None:
-            return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.')
+            return CommonExecutionResult(False, reason=f'Bucks Type {bucks_type} was not valid.', hide_tooltip=True)
         bucks_tracker: BucksTrackerBase = cls.get_bucks_tracker(sim_info, bucks_type, add_if_none=True)
         if bucks_tracker is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}')
+            return CommonExecutionResult(False, reason=f'{sim_info} does not have a tracker for the specified bucks. {bucks_type}', hide_tooltip=True)
         if amount < 0:
             amount = 0
         current_bucks_amount = cls.get_bucks_amount(sim_info, bucks_type)

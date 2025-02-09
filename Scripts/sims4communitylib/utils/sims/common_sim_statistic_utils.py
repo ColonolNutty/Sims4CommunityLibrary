@@ -15,6 +15,7 @@ from sims4.resources import Types
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.statistics_enum import CommonStatisticId
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
@@ -55,8 +56,8 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         """
         statistic = cls.get_statistic(sim_info, statistic, add=False)
         if statistic is not None:
-            return CommonTestResult(True, reason=f'Sim had statistic {statistic}.')
-        return CommonTestResult(False, reason=f'{sim_info} did not have statistic {statistic}.')
+            return CommonTestResult(True, reason=f'{sim_info} has statistic {statistic}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_STATISTIC, tooltip_tokens=(sim_info, str(statistic)))
+        return CommonTestResult(False, reason=f'{sim_info} does not have statistic {statistic}.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_STATISTIC, tooltip_tokens=(sim_info, str(statistic)))
 
     @classmethod
     def has_statistics(cls, sim_info: SimInfo, statistics: Iterator[Union[int, CommonStatisticId, BaseStatistic]]) -> CommonTestResult:
@@ -75,7 +76,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
             result = cls.has_statistic(sim_info, statistic)
             if result:
                 return result
-        return CommonTestResult(False, reason=f'{sim_info} did not have any of the specified statistics.')
+        return CommonTestResult(False, reason=f'{sim_info} did not have any of the specified statistics.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_STATISTICS, tooltip_tokens=(sim_info, ', '.join([str(stati) for stati in statistics])))
 
     # noinspection PyUnusedLocal
     @classmethod
@@ -97,18 +98,18 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', statistic=statistic, sim=sim_info)
-            return CommonTestResult(False, reason='sim_info was None.')
+            return CommonTestResult(False, reason='sim_info was None.', hide_tooltip=True)
         statistic_id = CommonStatisticUtils.get_statistic_id(statistic)
         if statistic_id is None:
             cls.get_log().format_with_message('No statistic found when checking locked.', statistic=statistic, sim=sim_info)
-            return CommonTestResult(False, reason='The specified statistic did not exist.')
+            return CommonTestResult(False, reason='The specified statistic did not exist.', hide_tooltip=True)
         statistic_instance = cls.get_statistic(sim_info, statistic_id, add=add)
         if statistic_instance is None:
             cls.get_log().format_with_message('No statistic found on Sim when checking locked.', statistic=statistic, statistic_id=statistic_id, sim=sim_info)
-            return CommonTestResult(False, reason=f'{sim_info} did not have statistic {statistic}.')
+            return CommonTestResult(False, reason=f'{sim_info} did not have statistic {statistic}.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_STATISTIC, tooltip_tokens=(sim_info, str(statistic)))
         if sim_info.is_locked(statistic_instance):
-            return CommonTestResult(True, reason='Statistic is locked.')
-        return CommonTestResult(False, reason='Statistic is not locked.')
+            return CommonTestResult(True, reason=f'Statistic {statistic} is locked for {sim_info}.', tooltip_text=CommonStringId.S4CL_STATISTIC_IS_LOCKED_FOR_SIM, tooltip_tokens=(str(statistic), sim_info))
+        return CommonTestResult(False, reason=f'Statistic {statistic} is not locked for {sim_info}.', tooltip_text=CommonStringId.S4CL_STATISTIC_IS_NOT_LOCKED_FOR_SIM, tooltip_tokens=(str(statistic), sim_info))
 
     @classmethod
     def get_statistic_level(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic]) -> float:
@@ -218,7 +219,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', statistic=statistic, sim=sim_info)
-            return CommonExecutionResult(False, reason='sim_info was None.')
+            return CommonExecutionResult(False, reason='sim_info was None.', hide_tooltip=True)
         result = cls.is_statistic_locked(sim_info, statistic, add=add)
         if result:
             cls.get_log().format_with_message('Statistic is locked and thus cannot be set.', statistic=statistic, sim=sim_info)
@@ -226,7 +227,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         statistic_instance = CommonStatisticUtils.load_statistic_by_id(statistic)
         if statistic_instance is None:
             cls.get_log().format_with_message('No statistic found when setting value.', statistic=statistic, sim=sim_info)
-            return CommonExecutionResult(False, reason='The specified statistic did not exist.')
+            return CommonExecutionResult(False, reason='The specified statistic did not exist.', hide_tooltip=True)
         sim_info.set_stat_value(statistic_instance, value)
         return CommonExecutionResult.TRUE
 
@@ -272,7 +273,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         """
         if sim_info is None:
             cls.get_log().format_with_message('sim_info was None!', statistic=statistic, sim=sim_info)
-            return CommonExecutionResult(False, reason='sim_info was None.')
+            return CommonExecutionResult(False, reason='sim_info was None.', hide_tooltip=True)
         result = cls.is_statistic_locked(sim_info, statistic, add=add)
         if result:
             cls.get_log().format_with_message('Statistic is locked and thus cannot be set.', statistic=statistic, sim=sim_info)
@@ -280,9 +281,9 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
         statistic_instance = cls.get_statistic(sim_info, statistic, add=add)
         if statistic_instance is None:
             cls.get_log().format_with_message('No statistic found on Sim when setting statistic user value.', statistic=statistic, sim=sim_info)
-            return CommonExecutionResult(False, reason='The specified statistic did not exist.')
+            return CommonExecutionResult(False, reason='The specified statistic did not exist.', hide_tooltip=True)
         statistic_instance.set_user_value(value)
-        return CommonExecutionResult(True, reason=f'Statistic {statistic} level successfully set on Sim {sim_info}.')
+        return CommonExecutionResult(True, reason=f'Statistic {statistic} level successfully set on Sim {sim_info}.', tooltip_text=CommonStringId.S4CL_STATISTIC_LEVEL_SET_ON_SIM, tooltip_tokens=(str(statistic), sim_info))
 
     # noinspection PyUnusedLocal
     @classmethod

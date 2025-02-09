@@ -156,12 +156,12 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if sim_info is None:
-            raise AssertionError('Argument sim_info was None')
+            return CommonTestResult(False, reason=f'sim_info was None!', hide_tooltip=True)
         if not hasattr(sim_info, 'occult_tracker') or sim_info.occult_tracker is None:
-            return CommonTestResult(False, reason=f'{sim_info} did not have an occult tracker, thus they did not have any occult types.')
+            return CommonTestResult(False, reason=f'{sim_info} did not have an occult tracker, thus they did not have any occult types.', hide_tooltip=True)
         if sim_info.occult_tracker.has_occult_type(occult_type):
-            return CommonTestResult(True, reason=f'{sim_info} has a Sim Info for Occult Type {occult_type}. (Meaning the Occult has an alternative form.)')
-        return CommonTestResult(False, reason=f'{sim_info} did not have a Sim Info Occult Type {occult_type}. (Meaning the Occult likely does not have an alternative form.)')
+            return CommonTestResult(True, reason=f'{sim_info} has a Sim Info for Occult Type {occult_type}. (Meaning the Occult has an alternative form.)', tooltip_text=CommonStringId.S4CL_SIM_HAS_OCCULT_SIM_INFO_FOR_OCCULT_TYPE, tooltip_tokens=(sim_info, CommonOccultType.convert_to_localized_string_id(occult_type)))
+        return CommonTestResult(False, reason=f'{sim_info} did not have a Sim Info Occult Type {occult_type}. (Meaning the Occult likely does not have an alternative form.)', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_OCCULT_SIM_INFO_FOR_OCCULT_TYPE, tooltip_tokens=(sim_info, CommonOccultType.convert_to_localized_string_id(occult_type)))
 
     @classmethod
     def get_current_occult_sim_info(cls, sim_info: SimInfo) -> Union[SimInfo, SimInfoBaseWrapper, None]:
@@ -229,7 +229,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
             CommonOccultType.WEREWOLF: CommonOccultUtils.add_werewolf_occult
         }
         if occult_type not in occult_type_add_mappings:
-            return CommonExecutionResult(False, reason=f'{occult_type.name} did not have an add function, meaning it has not been implemented yet.', tooltip_text=CommonStringId.OCCULT_TYPE_DID_NOT_HAVE_AN_ADD_FUNCTION, tooltip_tokens=(CommonOccultType.convert_to_localized_string_id(occult_type),))
+            return CommonExecutionResult(False, reason=f'{occult_type.name} did not have an add function, meaning it has not been implemented yet.', tooltip_text=CommonStringId.S4CL_OCCULT_TYPE_DID_NOT_HAVE_AN_ADD_FUNCTION, tooltip_tokens=(CommonOccultType.convert_to_localized_string_id(occult_type),))
         return occult_type_add_mappings[occult_type](sim_info)
 
     @classmethod
@@ -262,7 +262,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
             CommonOccultType.WEREWOLF: CommonOccultUtils.remove_werewolf_occult
         }
         if occult_type not in occult_type_remove_mappings:
-            return CommonExecutionResult(False, reason=f'{occult_type.name} did not have a remove function, meaning it has not been implemented yet.', tooltip_text=CommonStringId.OCCULT_TYPE_DID_NOT_HAVE_A_REMOVE_FUNCTION, tooltip_tokens=(CommonOccultType.convert_to_localized_string_id(occult_type),))
+            return CommonExecutionResult(False, reason=f'{occult_type.name} did not have a remove function, meaning it has not been implemented yet.', tooltip_text=CommonStringId.S4CL_OCCULT_TYPE_DID_NOT_HAVE_A_REMOVE_FUNCTION, tooltip_tokens=(CommonOccultType.convert_to_localized_string_id(occult_type),))
         return occult_type_remove_mappings[occult_type](sim_info)
 
     @classmethod
@@ -859,11 +859,11 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :rtype: CommonExecutionResult
         """
         if sim_info is None:
-            raise AssertionError('Argument sim_info was None')
+            return CommonTestResult(False, reason='sim_info was None!', hide_tooltip=True)
         if isinstance(occult_type, CommonOccultType):
             vanilla_occult_type = CommonOccultType.convert_to_vanilla(occult_type)
             if vanilla_occult_type is None:
-                return CommonExecutionResult(False, reason=f'{sim_info} failed to switch to occult type {occult_type.name}')
+                return CommonExecutionResult(False, reason=f'{sim_info} failed to switch to occult type {occult_type.name}. Occult Type has no vanilla type associated with it.', tooltip_text=CommonStringId.S4CL_SIM_FAILED_TO_SWITCH_TO_OCCULT_TYPE_VANILLA_OCCULT_TYPE_DOES_NOT_EXIST, tooltip_tokens=(sim_info, CommonOccultType.convert_to_localized_string_id(occult_type)))
         else:
             vanilla_occult_type = occult_type
         # noinspection PyPropertyAccess
@@ -1449,7 +1449,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if occult_type == CommonOccultType.NON_OCCULT:
-            return CommonTestResult(True, reason='Obviously the Non Occult "occult type" is available, what did you expect?')
+            return CommonTestResult(True, reason='Obviously the Non Occult "occult type" is available, what did you expect?', hide_tooltip=True)
         occult_type_mappings = {
             CommonOccultType.ALIEN: CommonOccultUtils.is_alien_occult_available,
             CommonOccultType.MERMAID: CommonOccultUtils.is_mermaid_occult_available,
@@ -1463,7 +1463,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
             CommonOccultType.WEREWOLF: CommonOccultUtils.is_werewolf_occult_available,
         }
         if occult_type not in occult_type_mappings:
-            return CommonTestResult(False, reason=f'Occult Type {occult_type} is not available because it is not a valid occult type.')
+            return CommonTestResult(False, reason=f'Occult Type {occult_type} is not available because it is not a valid occult type or it has not been implemented yet.', tooltip_text=CommonStringId.S4CL_OCCULT_TYPE_IS_NOT_AVAILABLE_OR_SUPPORT_FOR_IT_HAS_NOT_BEEN_IMPLEMENTED, tooltip_tokens=(CommonOccultType.convert_to_localized_string_id(occult_type),))
         return occult_type_mappings[occult_type]()
 
     @classmethod

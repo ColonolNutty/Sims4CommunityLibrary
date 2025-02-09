@@ -19,6 +19,7 @@ from sims4communitylib.classes.testing.common_execution_result import CommonExec
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.common_death_types import CommonDeathType
 from sims4communitylib.enums.common_region_id import CommonRegionId
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
@@ -63,8 +64,8 @@ class CommonSimDeathUtils(_HasS4CLClassLog):
         :rtype: CommonTestResult
         """
         if cls.get_death_type(sim_info) != CommonDeathType.NONE:
-            return CommonTestResult(True, reason=f'{sim_info} is dead.')
-        return CommonTestResult(False, reason=f'{sim_info} is not dead.')
+            return CommonTestResult(True, reason=f'{sim_info} is dead.', tooltip_text=CommonStringId.S4CL_SIM_IS_DEAD, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not dead.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_DEAD, tooltip_tokens=(sim_info,))
 
     @classmethod
     def get_sim_info_for_all_dead_sims_generator(
@@ -128,11 +129,12 @@ class CommonSimDeathUtils(_HasS4CLClassLog):
             is_off_lot_death = False
         death_tracker = cls.get_death_tracker(sim_info)
         if death_tracker is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} did not have a death tracker.')
-        if cls.is_dead(sim_info):
-            return CommonExecutionResult(True, reason=f'{sim_info} is already dead.')
+            return CommonExecutionResult(False, reason=f'{sim_info} did not have a death tracker.', hide_tooltip=True)
+        is_dead_result = cls.is_dead(sim_info)
+        if is_dead_result:
+            return is_dead_result
         if death_tracker.is_ghost:
-            return CommonExecutionResult(False, reason=f'{sim_info} is already a ghost.')
+            return CommonExecutionResult(False, reason=f'{sim_info} is already a ghost.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_GHOST, tooltip_tokens=(sim_info,))
         death_type = CommonDeathType.convert_from_vanilla(death_type)
         if not is_off_lot_death:
             def _on_object_spawned(_death_object: Union[GameObject, None]) -> None:
@@ -325,9 +327,9 @@ class CommonSimDeathUtils(_HasS4CLClassLog):
         """
         death_tracker = cls.get_death_tracker(sim_info)
         if death_tracker is None:
-            return CommonExecutionResult(False, reason=f'{sim_info} did not have a death tracker.')
+            return CommonExecutionResult(False, reason=f'{sim_info} did not have a death tracker.', hide_tooltip=True)
         if death_tracker.death_type is None:
-            return CommonExecutionResult(True, reason=f'{sim_info} is not dead.')
+            return CommonExecutionResult(True, reason=f'{sim_info} is not dead.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_DEAD, tooltip_tokens=(sim_info,))
         urn_object_id = Ghost.get_urnstone_for_sim_id(CommonSimUtils.get_sim_id(sim_info))
         death_tracker.clear_death_type()
         Ghost.remove_ghost_from_sim(sim_info)

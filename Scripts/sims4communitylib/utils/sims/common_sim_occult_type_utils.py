@@ -11,6 +11,7 @@ from sims.occult.occult_enums import OccultType
 from sims.sim_info import SimInfo
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
 from sims4communitylib.enums.common_occult_type import CommonOccultType
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
@@ -94,7 +95,7 @@ class CommonSimOccultTypeUtils:
             CommonOccultType.WEREWOLF: CommonOccultUtils.is_werewolf
         }
         if occult_type not in occult_type_mappings:
-            return CommonTestResult(False, reason=f'A check for the specified occult type was not found. {occult_type}.')
+            return CommonTestResult(False, reason=f'A check for the specified occult type was not found. {occult_type}.', tooltip_text=CommonStringId.S4CL_OCCULT_TYPE_IS_NOT_AVAILABLE_OR_SUPPORT_FOR_IT_HAS_NOT_BEEN_IMPLEMENTED, tooltip_tokens=(CommonOccultType.convert_to_localized_string_id(occult_type),))
         return occult_type_mappings[occult_type](sim_info)
 
     @staticmethod
@@ -128,7 +129,7 @@ class CommonSimOccultTypeUtils:
             CommonOccultType.WEREWOLF: CommonOccultUtils.is_currently_a_werewolf
         }
         if occult_type not in occult_type_mappings:
-            return CommonTestResult(False, reason=f'A check for the specified occult type was not found. {occult_type}.')
+            return CommonTestResult(False, reason=f'A check for the specified occult type was not found. {occult_type}.', tooltip_text=CommonStringId.S4CL_OCCULT_TYPE_IS_NOT_AVAILABLE_OR_SUPPORT_FOR_IT_HAS_NOT_BEEN_IMPLEMENTED, tooltip_tokens=(CommonOccultType.convert_to_localized_string_id(occult_type),))
         return occult_type_mappings[occult_type](sim_info)
 
     @staticmethod

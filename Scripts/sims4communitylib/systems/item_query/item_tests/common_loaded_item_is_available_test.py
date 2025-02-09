@@ -28,5 +28,5 @@ class CommonLoadedItemIsAvailableTest(CommonLoadedItemTest[CommonLoadedItem]):
     # noinspection PyMissingOrEmptyDocstring
     def test_item(self, item: CommonLoadedItem) -> CommonTestResult:
         if not item.is_available:
-            return CommonTestResult(False, reason='Item is not available.')
+            return CommonTestResult(False, reason=f'Item is not available. {self.__class__.__name__}', hide_tooltip=True)
         return CommonTestResult.TRUE

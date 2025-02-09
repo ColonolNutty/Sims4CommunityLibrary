@@ -592,29 +592,29 @@ class CommonSimInteractionUtils(HasClassLog):
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             log.format_with_message('No Sim instance for Sim.', sim=sim_info)
-            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}', hide_tooltip=True), CommonExecutionResult.NONE)
         if sim.si_state is None:
             log.format_with_message('No Super Interaction State available for Sim.', sim=sim_info)
-            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Super Interaction State available for Sim {sim_info}'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Super Interaction State available for Sim {sim_info}', hide_tooltip=True), CommonExecutionResult.NONE)
         if sim.queue is None:
             log.format_with_message('No Queue found for Sim.', sim=sim_info)
-            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Queue found for Sim {sim_info}'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Queue found for Sim {sim_info}', hide_tooltip=True), CommonExecutionResult.NONE)
         # noinspection PyPropertyAccess
         if sim.posture_state is None:
             log.format_with_message('No Posture State found for Sim.', sim=sim_info)
-            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Posture State found for Sim {sim_info}'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Posture State found for Sim {sim_info}', hide_tooltip=True), CommonExecutionResult.NONE)
         if sim.posture is None:
             log.format_with_message('No Posture found for Sim.', sim=sim_info)
-            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Posture found for Sim {sim_info}'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Posture found for Sim {sim_info}', hide_tooltip=True), CommonExecutionResult.NONE)
 
         interaction_instance = CommonInteractionUtils.load_interaction_by_id(interaction_id)
         if interaction_instance is None:
             log.format_with_message('No interaction found with id.', id=interaction_id)
-            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'No interaction was found with id {interaction_id}.'))
+            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'No interaction was found with id {interaction_id}.', hide_tooltip=True))
 
         if skip_if_running and cls.has_interaction_running_or_queued(sim_info, interaction_id):
             log.debug('Skipping queue because it is already running.')
-            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'Interaction was already running or queued {interaction_id}.'))
+            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'Interaction was already running or queued {interaction_id}.', hide_tooltip=True))
 
         interaction_context = interaction_context or cls.create_interaction_context(
             sim_info,
@@ -691,7 +691,7 @@ class CommonSimInteractionUtils(HasClassLog):
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             log.format_with_message('No sim instance for super interaction.', sim=sim_info)
-            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}', hide_tooltip=True), CommonExecutionResult.NONE)
 
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
             target = CommonSimUtils.get_sim_instance(target)
@@ -700,7 +700,7 @@ class CommonSimInteractionUtils(HasClassLog):
         super_interaction_instance = CommonInteractionUtils.load_interaction_by_id(super_interaction_id)
         if super_interaction_instance is None:
             log.format_with_message('No super interaction instance found for id.', super_interaction_id=super_interaction_id)
-            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'No super interaction was found with id {super_interaction_id}.'))
+            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'No super interaction was found with id {super_interaction_id}.', hide_tooltip=True))
 
         result = sim.push_super_affordance(
             super_interaction_instance,
@@ -767,12 +767,12 @@ class CommonSimInteractionUtils(HasClassLog):
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             log.format_with_message('No sim instance for super interaction.', sim=sim_info)
-            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}', hide_tooltip=True), CommonExecutionResult.NONE)
 
         social_mixer_affordance_instance = CommonInteractionUtils.load_interaction_by_id(social_mixer_interaction_id)
         if social_mixer_affordance_instance is None:
             log.format_with_message('No social mixer affordance instance found with id.', interaction_id=social_mixer_interaction_id)
-            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'No social mixer interaction was found with id {social_mixer_interaction_id}.'))
+            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'No social mixer interaction was found with id {social_mixer_interaction_id}.', hide_tooltip=True))
 
         interaction_context = interaction_context or cls.create_interaction_context(sim_info)
         # noinspection PyTypeChecker
@@ -803,7 +803,7 @@ class CommonSimInteractionUtils(HasClassLog):
                 )
                 if not si_result:
                     log.format_with_message('Failed to locate existing super interaction.', super_interaction=super_interaction)
-                    return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason='No Existing Super Interaction was found.'))
+                    return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason='No Existing Super Interaction was found.', hide_tooltip=True))
                 log.format_with_message('Found si result', si_result=si_result)
                 super_interaction = si_result.interaction
                 log.format_with_message('Found si interaction', si_interaction=super_interaction)
@@ -882,30 +882,30 @@ class CommonSimInteractionUtils(HasClassLog):
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             log.format_with_message('No sim instance for mixer interaction.', sim=sim_info)
-            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}', hide_tooltip=True), CommonExecutionResult.NONE)
         if sim.si_state is None:
             log.format_with_message('No Super Interaction State available for Sim.', sim=sim_info)
-            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Super Interaction State available for Sim {sim_info}'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Super Interaction State available for Sim {sim_info}', hide_tooltip=True), CommonExecutionResult.NONE)
         if sim.queue is None:
             log.format_with_message('No Queue found for Sim.', sim=sim_info)
-            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Queue found for Sim {sim_info}'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Queue found for Sim {sim_info}', hide_tooltip=True), CommonExecutionResult.NONE)
         # noinspection PyPropertyAccess
         if sim.posture_state is None:
             log.format_with_message('No Posture State found for Sim.', sim=sim_info)
-            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Posture State found for Sim {sim_info}'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Posture State found for Sim {sim_info}', hide_tooltip=True), CommonExecutionResult.NONE)
         if sim.posture is None:
             log.format_with_message('No Posture found for Sim.', sim=sim_info)
-            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Posture found for Sim {sim_info}'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason=f'No Posture found for Sim {sim_info}', hide_tooltip=True), CommonExecutionResult.NONE)
         mixer_interaction_instance = CommonInteractionUtils.load_interaction_by_id(mixer_interaction_id)
         if mixer_interaction_instance is None:
             log.debug('No mixer interaction instance found.')
-            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'No mixer interaction found {mixer_interaction_id}'))
+            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'No mixer interaction found {mixer_interaction_id}', hide_tooltip=True))
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
             target = CommonSimUtils.get_sim_instance(target)
         source_interaction = sim.posture.source_interaction
         if source_interaction is None:
             log.debug('Sim did not have a source interaction.')
-            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'No source interaction found on Sim {sim_info}'))
+            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'No source interaction found on Sim {sim_info}', hide_tooltip=True))
 
         if hasattr(mixer_interaction_instance, 'lock_out_time') and mixer_interaction_instance.lock_out_time:
             log.debug('Using Sim specific lock out time.')
@@ -916,7 +916,7 @@ class CommonSimInteractionUtils(HasClassLog):
 
         if sim_specific_lockout and sim.is_sub_action_locked_out(mixer_interaction_instance):
             log.debug('Sim was locked out of performing the mixer interaction.')
-            return CommonEnqueueResult(CommonTestResult(False, reason=f'{sim_info} is currently locked out of doing the mixer interaction, they must wait before they can do it again.'), CommonExecutionResult.NONE)
+            return CommonEnqueueResult(CommonTestResult(False, reason=f'{sim_info} is currently locked out of doing the mixer interaction, they must wait before they can do it again.', hide_tooltip=True), CommonExecutionResult.NONE)
 
         super_interaction_instance = source_interaction.super_affordance
         interaction_context = interaction_context or cls.create_interaction_context(sim_info)
@@ -986,25 +986,25 @@ class CommonSimInteractionUtils(HasClassLog):
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             log.format_with_message('No Sim instance for Sim.', sim=sim_info)
-            return CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}')
+            return CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}', hide_tooltip=True)
         if sim.si_state is None:
             log.format_with_message('No Super Interaction State available for Sim.', sim=sim_info)
-            return CommonTestResult(False, reason=f'No Super Interaction State available for Sim {sim_info}')
+            return CommonTestResult(False, reason=f'No Super Interaction State available for Sim {sim_info}', hide_tooltip=True)
         if sim.queue is None:
             log.format_with_message('No Queue found for Sim.', sim=sim_info)
-            return CommonTestResult(False, reason=f'No Queue found for Sim {sim_info}')
+            return CommonTestResult(False, reason=f'No Queue found for Sim {sim_info}', hide_tooltip=True)
         # noinspection PyPropertyAccess
         if sim.posture_state is None:
             log.format_with_message('No Posture State found for Sim.', sim=sim_info)
-            return CommonTestResult(False, reason=f'No Posture State found for Sim {sim_info}')
+            return CommonTestResult(False, reason=f'No Posture State found for Sim {sim_info}', hide_tooltip=True)
         if sim.posture is None:
             log.format_with_message('No Posture found for Sim.', sim=sim_info)
-            return CommonTestResult(False, reason=f'No Posture found for Sim {sim_info}')
+            return CommonTestResult(False, reason=f'No Posture found for Sim {sim_info}', hide_tooltip=True)
 
         interaction_instance = CommonInteractionUtils.load_interaction_by_id(interaction_id)
         if interaction_instance is None:
             log.format_with_message('No interaction found with id.', id=interaction_id)
-            return CommonTestResult(False, reason=f'No mixer interaction found {interaction_id}')
+            return CommonTestResult(False, reason=f'No mixer interaction found {interaction_id}', hide_tooltip=True)
 
         interaction_context = interaction_context or cls.create_interaction_context(
             sim_info,
@@ -1081,12 +1081,12 @@ class CommonSimInteractionUtils(HasClassLog):
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             log.debug('No sim instance for super interaction.')
-            return CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}')
+            return CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}', hide_tooltip=True)
 
         super_interaction_instance = CommonInteractionUtils.load_interaction_by_id(super_interaction_id)
         if super_interaction_instance is None:
             log.format_with_message('No super interaction instance found for id.', super_interaction_id=super_interaction_id)
-            return CommonTestResult(False, reason=f'No super interaction found {super_interaction_id}')
+            return CommonTestResult(False, reason=f'No super interaction found {super_interaction_id}', hide_tooltip=True)
 
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
             target = CommonSimUtils.get_sim_instance(target)
@@ -1156,7 +1156,7 @@ class CommonSimInteractionUtils(HasClassLog):
         social_mixer_affordance_instance = CommonInteractionUtils.load_interaction_by_id(social_mixer_interaction_id)
         if social_mixer_affordance_instance is None:
             log.debug('No social mixer affordance instance found with id.')
-            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'No social mixer interaction found {social_mixer_interaction_id}'))
+            return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason=f'No social mixer interaction found {social_mixer_interaction_id}', hide_tooltip=True))
 
         interaction_context = interaction_context or cls.create_interaction_context(sim_info)
         # noinspection PyTypeChecker
@@ -1187,7 +1187,7 @@ class CommonSimInteractionUtils(HasClassLog):
                 )
                 if not si_result:
                     log.format_with_message('Failed to locate existing super interaction.', super_interaction=super_interaction)
-                    return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason='No Existing Super Interaction was found.'))
+                    return CommonEnqueueResult(CommonTestResult.TRUE, CommonExecutionResult(False, reason='No Existing Super Interaction was found.', hide_tooltip=True))
                 log.format_with_message('Found si result', si_result=si_result)
                 super_interaction = si_result.interaction
                 log.format_with_message('Found si interaction', si_interaction=super_interaction)
@@ -1263,21 +1263,21 @@ class CommonSimInteractionUtils(HasClassLog):
         sim = CommonSimUtils.get_sim_instance(sim_info)
         if sim is None:
             log.format_with_message('No Sim instance for Sim.', sim=sim_info)
-            return CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}')
+            return CommonTestResult(False, reason=f'No Sim instance for Sim {sim_info}', hide_tooltip=True)
         if sim.posture is None:
             log.format_with_message('No Posture found for Sim.', sim=sim_info)
-            return CommonTestResult(False, reason=f'No Posture found for Sim {sim_info}')
+            return CommonTestResult(False, reason=f'No Posture found for Sim {sim_info}', hide_tooltip=True)
 
         if target is not None and CommonTypeUtils.is_sim_or_sim_info(target):
             target = CommonSimUtils.get_sim_instance(target)
         mixer_interaction_instance = CommonInteractionUtils.load_interaction_by_id(mixer_interaction_id)
         if mixer_interaction_instance is None:
             log.format_with_message('No mixer interaction instance found.', mixer_interaction_id=mixer_interaction_id)
-            return CommonTestResult(False, reason=f'No mixer interaction found {mixer_interaction_id}')
+            return CommonTestResult(False, reason=f'No mixer interaction found {mixer_interaction_id}', hide_tooltip=True)
         source_interaction = sim.posture.source_interaction
         if source_interaction is None:
             log.debug('Sim did not have a source interaction.')
-            return CommonTestResult(False, reason=f'No source interaction found on Sim {sim_info}')
+            return CommonTestResult(False, reason=f'No source interaction found on Sim {sim_info}', hide_tooltip=True)
         if hasattr(mixer_interaction_instance, 'lock_out_time') and mixer_interaction_instance.lock_out_time:
             log.debug('Using Sim specific lock out time.')
             sim_specific_lockout = mixer_interaction_instance.lock_out_time.target_based_lock_out
@@ -1287,7 +1287,7 @@ class CommonSimInteractionUtils(HasClassLog):
 
         if sim_specific_lockout and sim.is_sub_action_locked_out(mixer_interaction_instance):
             log.debug('Sim was locked out of performing the mixer interaction.')
-            return CommonTestResult(False, reason=f'{sim_info} is currently locked out of doing the mixer interaction, they must wait before they can do it again.')
+            return CommonTestResult(False, reason=f'{sim_info} is currently locked out of doing the mixer interaction, they must wait before they can do it again.', hide_tooltip=True)
 
         super_interaction_instance = source_interaction.super_affordance
         interaction_context = interaction_context or cls.create_interaction_context(sim_info)

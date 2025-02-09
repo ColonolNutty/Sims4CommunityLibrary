@@ -11,6 +11,7 @@ from sims.funds import FamilyFunds
 from sims.sim_info import SimInfo
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.enums.common_currency_modify_reasons import CommonCurrencyModifyReason
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
@@ -56,7 +57,7 @@ class CommonSimCurrencyUtils:
         """
         household_funds = cls.get_household_funds(sim_info)
         if household_funds is None:
-            return CommonExecutionResult(False, reason='The Sim was not a part of a household that has funds.')
+            return CommonExecutionResult(False, reason=f'{sim_info} was not a part of a household that has funds.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_PART_OF_A_HOUSEHOLD_THAT_HAS_FUNDS, tooltip_tokens=(sim_info,))
         household_funds.add(amount, reason, **kwargs)
         return CommonExecutionResult.TRUE
 

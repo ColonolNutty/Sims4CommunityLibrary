@@ -13,6 +13,7 @@ from sims4communitylib.enums.common_age import CommonAge
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.enums.common_voice_actor_type import CommonVoiceActorType
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
@@ -41,10 +42,15 @@ class CommonSimVoiceUtils:
         :return: The result of testing. True, if the Sim has the specified voice actor. False, if not.
         :rtype: CommonTestResult
         """
-        if CommonSimVoiceUtils.get_voice_actor(sim_info):
-            return CommonTestResult.TRUE
+        current_voice_actor = CommonSimVoiceUtils.get_voice_actor(sim_info)
+        if current_voice_actor is None:
+            current_voice_actor_str = 'None'
+        else:
+            current_voice_actor_str = current_voice_actor.name if hasattr(current_voice_actor, 'name') else str(current_voice_actor)
+        if int(current_voice_actor) == int(voice_actor):
+            return CommonTestResult(True, reason=f'{sim_info} has voice actor {current_voice_actor_str}', tooltip_text=CommonStringId.S4CL_SIM_HAS_VOICE_ACTOR, tooltip_tokens=(sim_info, current_voice_actor_str))
         voice_actor_str = voice_actor.name if hasattr(voice_actor, 'name') else str(voice_actor)
-        return CommonTestResult(False, reason=f'{sim_info} did not have voice actor {voice_actor_str}')
+        return CommonTestResult(False, reason=f'{sim_info} does not have voice actor {voice_actor_str}. It was {current_voice_actor_str}', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_VOICE_ACTOR_IT_WAS_ACTOR, tooltip_tokens=(sim_info, voice_actor_str, current_voice_actor_str))
 
     @staticmethod
     def has_voice_pitch(sim_info: SimInfo, voice_pitch: float) -> CommonTestResult:
@@ -59,9 +65,10 @@ class CommonSimVoiceUtils:
         :return: The result of testing. True, if the Sim has the specified voice pitch. False, if not.
         :rtype: CommonTestResult
         """
-        if CommonSimVoiceUtils.get_voice_pitch(sim_info) == voice_pitch:
-            return CommonTestResult.TRUE
-        return CommonTestResult(False, reason=f'{sim_info} did not have voice pitch {voice_pitch}')
+        current_voice_pitch = CommonSimVoiceUtils.get_voice_pitch(sim_info)
+        if current_voice_pitch == voice_pitch:
+            return CommonTestResult(True, reason=f'{sim_info} has voice pitch {voice_pitch}', tooltip_text=CommonStringId.S4CL_SIM_HAS_VOICE_PITCH, tooltip_tokens=(sim_info, str(voice_pitch)))
+        return CommonTestResult(False, reason=f'{sim_info} did not have voice pitch {voice_pitch}', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_VOICE_PITCH_IT_WAS_PITCH, tooltip_tokens=(sim_info, str(voice_pitch), str(current_voice_pitch)))
 
     @staticmethod
     def get_voice_pitch(sim_info: SimInfo) -> float:
@@ -182,7 +189,7 @@ class CommonSimVoiceUtils:
             return CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_HORSE_AMBIGUOUS_1)
         elif CommonSpeciesUtils.is_horse(sim_info) and CommonAgeUtils.is_child(sim_info):
             return CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_HORSE_AMBIGUOUS_1)
-        return CommonExecutionResult(False, reason=f'Failed to locate a default male voice actor for Sim {sim_info}')
+        return CommonExecutionResult(False, reason=f'Failed to locate a default male voice actor for Sim {sim_info}', tooltip_text=CommonStringId.S4CL_FAILED_TO_LOCATE_DEFAULT_MALE_VOICE_ACTOR_FOR_SIM, tooltip_tokens=(sim_info,))
 
     @staticmethod
     def set_to_default_female_voice(sim_info: SimInfo) -> CommonExecutionResult:
@@ -222,7 +229,7 @@ class CommonSimVoiceUtils:
             return CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.ADULT_HORSE_AMBIGUOUS_1)
         elif CommonSpeciesUtils.is_horse(sim_info) and CommonAgeUtils.is_child(sim_info):
             return CommonSimVoiceUtils.set_voice_actor(sim_info, CommonVoiceActorType.CHILD_HORSE_AMBIGUOUS_1)
-        return CommonExecutionResult(False, reason=f'Failed to locate a default female voice actor for Sim {sim_info}')
+        return CommonExecutionResult(False, reason=f'Failed to locate a default female voice actor for Sim {sim_info}', tooltip_text=CommonStringId.S4CL_FAILED_TO_LOCATE_DEFAULT_FEMALE_VOICE_ACTOR_FOR_SIM, tooltip_tokens=(sim_info,))
 
     @staticmethod
     def determine_available_voice_types(sim_info: SimInfo) -> Tuple[CommonVoiceActorType]:

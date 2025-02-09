@@ -469,13 +469,13 @@ class CommonRelationshipUtils:
         if not CommonSpeciesUtils.are_same_species(sim_info_a, sim_info_b):
             return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_ROMANTIC_RELATIONSHIP_WITH_SIM_SIM_IS_A_DIFFERENT_SPECIES_FROM_SIM, tooltip_tokens=(sim_info_a, sim_info_b))
         if CommonAgeUtils.is_teen(sim_info_a) and CommonAgeUtils.is_teen(sim_info_b):
-            return CommonTestResult(True, reason=f'{sim_info_a} has permission for a romantic relationship with {sim_info_b}.', hide_tooltip=True)
+            return CommonTestResult(True, reason=f'{sim_info_a} has permission for a romantic relationship with {sim_info_b}, they are both Teen Sims.', hide_tooltip=True)
         if CommonAgeUtils.is_teen(sim_info_a):
             if not CommonAgeUtils.is_teen(sim_info_b):
                 return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} is a Teen Sim and {sim_info_b} is an Adult or Elder Sim.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_ROMANTIC_RELATIONSHIP_WITH_SIM_SIM_IS_A_TEEN_AND_SIM_IS_AN_ADULT_OR_ELDER, tooltip_tokens=(sim_info_a, sim_info_b))
         elif CommonAgeUtils.is_teen(sim_info_b):
             return CommonTestResult(False, reason=f'{sim_info_a} does not have permission for a romantic relationship with {sim_info_b}. {sim_info_a} is an Adult or Elder Sim and {sim_info_b} is a Teen Sim.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_FOR_ROMANTIC_RELATIONSHIP_WITH_SIM_SIM_IS_AN_ADULT_OR_ELDER_AND_SIM_IS_A_TEEN, tooltip_tokens=(sim_info_a, sim_info_b))
-        return CommonTestResult(True, reason=f'{sim_info_a} has permission for a romantic relationship with {sim_info_b}.', hide_tooltip=True)
+        return CommonTestResult(True, reason=f'{sim_info_a} has permission for a romantic relationship with {sim_info_b}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_PERMISSION_FOR_ROMANTIC_RELATIONSHIP_WITH_SIM, tooltip_tokens=(sim_info_a, sim_info_b))
 
     @classmethod
     def has_permission_to_be_blood_relative_of(cls, sim_info_a: SimInfo, sim_info_b: SimInfo) -> CommonTestResult:
@@ -494,7 +494,7 @@ class CommonRelationshipUtils:
         """
         if not CommonSpeciesUtils.are_same_species(sim_info_a, sim_info_b):
             return CommonTestResult(False, reason=f'{sim_info_a} does not have permission to be a Blood Relative of {sim_info_b}. {sim_info_a} and {sim_info_b} are not the same species.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_PERMISSION_TO_BE_A_BLOOD_RELATIVE_OF_SIM_SIM_IS_A_DIFFERENT_SPECIES_FROM_SIM, tooltip_tokens=(sim_info_a, sim_info_b))
-        return CommonTestResult(True, reason=f'{sim_info_a} has permission to be a Blood Relative of {sim_info_b}.', hide_tooltip=True)
+        return CommonTestResult(True, reason=f'{sim_info_a} has permission to be a Blood Relative of {sim_info_b}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_PERMISSION_TO_BE_BLOOD_RELATIVE_OF_SIM, tooltip_tokens=(sim_info_a, sim_info_b))
 
     @classmethod
     def has_relationship_bit_with_any_sims(

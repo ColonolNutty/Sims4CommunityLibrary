@@ -14,6 +14,7 @@ from objects.game_object import GameObject
 from sims.sim_info import SimInfo
 from sims4communitylib.classes.math.common_location import CommonLocation
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.types.component_types import CommonComponentType
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
 from sims4communitylib.modinfo import ModInfo
@@ -147,7 +148,7 @@ class CommonSimInventoryUtils(_HasS4CLClassLog):
         :rtype: CommonExecutionResult
         """
         if not CommonSimInventoryUtils.has_inventory(sim_info):
-            return CommonExecutionResult(False, reason=f'{sim_info} has no inventory.')
+            return CommonExecutionResult(False, reason=f'{sim_info} has no inventory.', tooltip_text=CommonStringId.S4CL_SIM_HAS_NO_INVENTORY, tooltip_tokens=(sim_info,))
 
         def _post_create(_game_object: GameObject) -> bool:
             move_result = CommonSimInventoryUtils.move_object_to_inventory(sim_info, _game_object)
@@ -159,7 +160,7 @@ class CommonSimInventoryUtils(_HasS4CLClassLog):
         for _ in range(count):
             game_object = CommonObjectSpawnUtils.spawn_object_on_lot(object_definition_id, CommonLocation.empty(), post_object_spawned_callback=_post_create)
             if game_object is None:
-                success = CommonExecutionResult(False, reason=f'Failed to create object {object_definition_id}')
+                success = CommonExecutionResult(False, reason=f'Failed to create object with definition id {object_definition_id}', tooltip_text=CommonStringId.S4CL_FAILED_TO_CREATE_OBJECT_BY_DEFINITION_ID, tooltip_tokens=(str(object_definition_id),))
         return success
 
     @classmethod

@@ -130,7 +130,7 @@ class CommonInteractionEventDispatcherService(CommonService, HasLog):
             return None
         try:
             if not CommonEventRegistry().dispatch(S4CLInteractionQueuedEvent(interaction, interaction_queue)):
-                return CommonTestResult(False, reason='Interaction \'{}\' Failed to Queue'.format(pformat(interaction)))
+                return CommonTestResult(False, reason='Interaction \'{}\' Failed to Queue'.format(pformat(interaction)), hide_tooltip=True)
         except Exception as ex:
             CommonExceptionHandler.log_exception(
                 None,
@@ -358,7 +358,7 @@ def _common_on_interaction_queued(original, self, interaction: Interaction, *_, 
     return CommonTestResult(False, reason='Interaction \'{}\' with short name \'{}\' Failed to Queue'.format(
         pformat(interaction),
         CommonInteractionUtils.get_interaction_short_name(interaction)
-    ))
+    ), hide_tooltip=True)
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Interaction, Interaction.store_result_for_outcome.__name__)

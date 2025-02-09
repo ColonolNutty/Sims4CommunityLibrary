@@ -95,15 +95,15 @@ class CommonLoadedItem(CommonSerializable, HasClassLog):
         """ Determine if the item has any of the specified tags. """
         for tag in tags:
             if self.has_tag(tag):
-                return CommonTestResult(True, reason=f'Has tag {tag}')
+                return CommonTestResult(True, reason=f'Has tag {tag} {self.__class__.__name__}', hide_tooltip=True)
         tags_text = ', '.join([str(tag) for tag in tags])
-        return CommonTestResult(False, reason=f'Missing tags {tags_text}')
+        return CommonTestResult(False, reason=f'Missing tags {tags_text} {self.__class__.__name__}', hide_tooltip=True)
 
     def has_all_tags(self, tags: Iterator[Any]) -> CommonTestResult:
         """ Determine if the item has all the specified tags. """
         for tag in tags:
             if not self.has_tag(tag):
-                return CommonTestResult(False, reason=f'Missing tag {tag}')
+                return CommonTestResult(False, reason=f'Missing tag {tag} {self.__class__.__name__}', hide_tooltip=True)
         return CommonTestResult.TRUE
 
     def add_tag(self, tag: Any):

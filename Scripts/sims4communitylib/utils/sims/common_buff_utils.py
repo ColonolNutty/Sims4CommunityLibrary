@@ -139,9 +139,9 @@ class CommonBuffUtils(_HasS4CLClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not buffs:
-            return CommonTestResult(False, reason='No buffs were specified.')
+            return CommonTestResult(False, reason='No buffs were specified.', hide_tooltip=True)
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
-            return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
+            return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.', hide_tooltip=True)
         from objects.components.buff_component import BuffComponent
         buff_component: BuffComponent = CommonComponentUtils.get_component(sim_info, CommonComponentType.BUFF)
         for buff in buffs:
@@ -151,7 +151,7 @@ class CommonBuffUtils(_HasS4CLClassLog):
                 continue
             if buff_component.has_buff(_buff):
                 return CommonTestResult(True, reason=f'{sim_info} has buff {_buff}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_BUFF, tooltip_tokens=(sim_info, str(_buff)))
-        return CommonTestResult(False, reason=f'{sim_info} does not have any buff(s) {buffs}.')
+        return CommonTestResult(False, reason=f'{sim_info} does not have any buff(s) {buffs}.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_BUFFS, tooltip_tokens=(sim_info, str(buffs)))
 
     @classmethod
     def has_all_buffs(cls, sim_info: SimInfo, buffs: Iterator[Union[int, CommonBuffId, Buff]]) -> CommonTestResult:
@@ -169,9 +169,9 @@ class CommonBuffUtils(_HasS4CLClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not buffs:
-            return CommonTestResult(False, reason='No buffs were specified.')
+            return CommonTestResult(False, reason='No buffs were specified.', hide_tooltip=True)
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
-            return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
+            return CommonTestResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.', hide_tooltip=True)
         from objects.components.buff_component import BuffComponent
         buff_component: BuffComponent = CommonComponentUtils.get_component(sim_info, CommonComponentType.BUFF, return_type=BuffComponent)
         for buff in buffs:
@@ -181,7 +181,7 @@ class CommonBuffUtils(_HasS4CLClassLog):
                 continue
             if not buff_component.has_buff(_buff):
                 return CommonTestResult(False, reason=f'{sim_info} does not have buff {_buff}.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_BUFF, tooltip_tokens=(sim_info, str(_buff)))
-        return CommonTestResult(True, reason=f'{sim_info} has all buffs {buffs}.', hide_tooltip=True)
+        return CommonTestResult(True, reason=f'{sim_info} has all buffs {buffs}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_ALL_BUFFS, tooltip_tokens=(sim_info, str(buffs)))
 
     @classmethod
     def get_buffs(cls, sim_info: SimInfo) -> List[Buff]:
@@ -267,7 +267,7 @@ class CommonBuffUtils(_HasS4CLClassLog):
             raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
             cls.get_log().format_with_message('Failed to add Buff to Sim. They did not have a Buff component!', buffs=buffs, sim=sim_info, buff_reason=buff_reason)
-            return CommonExecutionResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
+            return CommonExecutionResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.', hide_tooltip=True)
         localized_buff_reason = None
         if buff_reason is not None:
             localized_buff_reason = CommonLocalizationUtils.create_localized_string(buff_reason)
@@ -291,10 +291,10 @@ class CommonBuffUtils(_HasS4CLClassLog):
         cls.get_log().format_with_message('Finished adding buffs to Sim.', buffs=buffs, sim=sim_info, buff_reason=buff_reason, success=success, has_any_loaded=has_any_loaded, failed_to_add_buffs=failed_to_add_buffs)
         if not success:
             failed_to_add_buffs_str = ', '.join([cls.get_buff_name(buff) or str(buff) if isinstance(buff, Buff) else str(buff) for buff in failed_to_add_buffs])
-            return CommonExecutionResult(False, reason=f'Failed to add buffs. {failed_to_add_buffs_str}')
+            return CommonExecutionResult(False, reason=f'Failed to add buffs. {failed_to_add_buffs_str}', tooltip_text=CommonStringId.S4CL_FAILED_TO_ADD_BUFFS_TO_SIM, tooltip_tokens=(sim_info, failed_to_add_buffs_str))
         if not has_any_loaded:
-            return CommonExecutionResult(True, reason='Finished "adding" buffs, but none of the specified buffs were loaded.')
-        return CommonExecutionResult.TRUE
+            return CommonExecutionResult(True, reason=f'Finished "adding" buffs to {sim_info}, but none of the specified buffs were loaded.', tooltip_text=CommonStringId.S4CL_BUFFS_WERE_ADDED_TO_SIM_BUT_NONE_WERE_LOADED, tooltip_tokens=(sim_info,))
+        return CommonExecutionResult(True, reason=f'Successfully added buffs to {sim_info}.', tooltip_text=CommonStringId.S4CL_SUCCESSFULLY_ADDED_BUFFS_TO_SIM, tooltip_tokens=(sim_info,))
 
     @classmethod
     def remove_buff(cls, sim_info: SimInfo, *buff: Union[int, CommonBuffId, Buff]) -> CommonExecutionResult:
@@ -327,7 +327,7 @@ class CommonBuffUtils(_HasS4CLClassLog):
         if sim_info is None:
             raise AssertionError('Argument sim_info was None')
         if not CommonComponentUtils.has_component(sim_info, CommonComponentType.BUFF):
-            return CommonExecutionResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.')
+            return CommonExecutionResult(False, reason=f'Target Sim {sim_info} did not have a Buff Component.', hide_tooltip=True)
         has_any_loaded = False
         success = True
         failed_to_remove_buffs = list()
@@ -346,10 +346,10 @@ class CommonBuffUtils(_HasS4CLClassLog):
 
         if not success:
             failed_to_remove_buffs_str = ', '.join([cls.get_buff_name(buff) or str(buff) if isinstance(buff, Buff) else str(buff) for buff in failed_to_remove_buffs])
-            return CommonExecutionResult(False, reason=f'Failed to remove buffs. {failed_to_remove_buffs_str}')
+            return CommonExecutionResult(False, reason=f'Failed to remove buffs from {sim_info}. {failed_to_remove_buffs_str}', tooltip_text=CommonStringId.S4CL_FAILED_TO_REMOVE_BUFFS_FROM_SIM, tooltip_tokens=(sim_info, failed_to_remove_buffs_str))
         if not has_any_loaded:
-            return CommonExecutionResult(True, reason='Finished "removing" buffs, but none of the specified buffs were loaded.')
-        return CommonExecutionResult.TRUE
+            return CommonExecutionResult(True, reason=f'Finished "removing" buffs from {sim_info}, but none of the specified buffs were loaded.', tooltip_text=CommonStringId.S4CL_BUFFS_WERE_REMOVED_FROM_SIM_BUT_NONE_WERE_LOADED, tooltip_tokens=(sim_info,))
+        return CommonExecutionResult(True, reason=f'Successfully removed buffs from {sim_info}.', tooltip_text=CommonStringId.S4CL_SUCCESSFULLY_REMOVED_BUFFS_FROM_SIM, tooltip_tokens=(sim_info,))
 
     @classmethod
     def get_buff_id(cls, buff_identifier: Union[int, Buff]) -> Union[int, None]:

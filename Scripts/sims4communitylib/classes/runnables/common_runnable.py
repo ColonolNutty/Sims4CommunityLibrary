@@ -162,7 +162,7 @@ class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
             self._is_ended = False
             if self.is_starting:
                 self.log.debug('Failed to start runnable, Already starting!')
-                return CommonExecutionResult(True, reason='Runnable Is Already starting')
+                return CommonExecutionResult(True, reason=f'Runnable is already starting {self.__class__.__name__}', hide_tooltip=True)
 
             on_initialize_result = self._on_initialize(*_, **__)
             if not on_initialize_result:
@@ -210,7 +210,7 @@ class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
             self.log.error('Error occurred while starting runnable.', exception=ex)
             self._expect_reset = False
             self.stop(self.invalid_stop_reason, force_stop=True)
-            return CommonExecutionResult(False, reason=f'An error occurred while starting {ex}.')
+            return CommonExecutionResult(False, reason=f'An error occurred while starting {self.__class__.__name__} {ex}.', hide_tooltip=True)
 
     # noinspection PyUnusedLocal
     def should_update(self, milliseconds_since_last_update: int) -> CommonExecutionResult:
@@ -240,18 +240,18 @@ class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
         try:
             if self._is_ended:
                 self.verbose_log.debug('Failed to update runnable, it has already ended.')
-                return CommonExecutionResult(False, reason='Has already ended.')
+                return CommonExecutionResult(False, reason=f'Runnable has already ended. {self.__class__.__name__}', hide_tooltip=True)
 
             if self._await_stop:
                 self.verbose_log.debug('Failed to update runnable, it is awaiting a stop.')
                 self.stop(self._await_stop_reason)
-                return CommonExecutionResult(False, reason='Runnable is waiting to stop.')
+                return CommonExecutionResult(False, reason=f'Runnable is waiting to stop {self.__class__.__name__}.', hide_tooltip=True)
 
             if self.is_waiting_for_start:
                 if self._has_finished_waiting_to_start(milliseconds_since_last_update, *_, **__):
                     self.log.format_with_message('Finished waiting to start. Attempting to start runnable now.')
                     self.restart(self.start_after_wait_reason)
-                    return CommonExecutionResult(True, reason='Finished Waiting for runnable to begin. We still do not want to update.')
+                    return CommonExecutionResult(True, reason=f'Finished Waiting for runnable to begin. We still do not want to update. {self.__class__.__name__}', hide_tooltip=True)
 
                 on_continue_waiting_result = self._on_continue_waiting_to_start()
                 if not on_continue_waiting_result:
@@ -260,11 +260,11 @@ class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
                     return on_continue_waiting_result
 
                 self.log.format_with_message('Waiting for runnable to start.')
-                return CommonExecutionResult(True, reason='Waiting for runnable to start.')
+                return CommonExecutionResult(True, reason=f'Waiting for runnable to start. {self.__class__.__name__}', hide_tooltip=True)
 
             if not self.is_running or self.is_stopping or self.is_stopped:
                 self.verbose_log.format_with_message('Failed to update runnable, it is either not running, it is stopping, or it is stopped.', running=self.is_running, stopping=self.is_stopping)
-                return CommonExecutionResult(False, reason='Runnable is not running.')
+                return CommonExecutionResult(False, reason=f'Runnable is not running. {self.__class__.__name__}', hide_tooltip=True)
 
             self.verbose_log.format_with_message(
                 'Updating Runnable',
@@ -286,7 +286,7 @@ class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
             self.log.error('Error occurred while updating runnable.', exception=ex)
             self._expect_reset = False
             self.stop(self.invalid_stop_reason, force_stop=True)
-            return CommonExecutionResult(False, reason=f'An error occurred while updating {ex}.')
+            return CommonExecutionResult(False, reason=f'An error occurred while updating runnable {self.__class__.__name__} {ex}.', hide_tooltip=True)
 
     def stop(self, stop_reason: Union[int, CommonInt, CommonIntFlags], *_, force_stop: bool = False, **__) -> CommonExecutionResult:
         """stop(stop_reason, force_stop=False)
@@ -303,7 +303,7 @@ class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
         try:
             if not force_stop and self.is_stopping:
                 self.log.format_with_message('Failed to stop, runnable is already stopping.', stop_reason=stop_reason)
-                return CommonExecutionResult(True, reason='Already stopping.')
+                return CommonExecutionResult(True, reason=f'Runnable is already stopping. {self.__class__.__name__}', hide_tooltip=True)
 
             if self._expect_reset:
                 self.log.format_with_message('Failed to stop, runnable is expected to be restarting.', stop_reason=stop_reason)
@@ -343,7 +343,7 @@ class CommonRunnable(HasClassLog, Generic[CommonRunnableContextType]):
             self._expect_reset = False
             if stop_reason != self.invalid_stop_reason:
                 self.stop(self.invalid_stop_reason, force_stop=True)
-            return CommonExecutionResult(False, reason=f'An error occurred while stopping {ex}.')
+            return CommonExecutionResult(False, reason=f'An error occurred while stopping runnable {self.__class__.__name__} {ex}.', hide_tooltip=True)
         finally:
             self._change_state(CommonRunnableStateType.STOPPED)
             self._expect_reset = False

@@ -11,6 +11,7 @@ from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
 from sims4.resources import Types
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
+from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
@@ -56,12 +57,12 @@ class CommonSimSpellUtils:
         from sims4communitylib.utils.sims.common_sim_unlock_utils import CommonSimUnlockUtils
         unlock_tracker = CommonSimUnlockUtils.get_unlock_tracker(sim_info)
         if unlock_tracker is None:
-            return CommonExecutionResult(False, reason=f'Failed to locate the unlock tracker for {sim_info}')
+            return CommonExecutionResult(False, reason=f'Failed to locate the unlock tracker for {sim_info}', hide_tooltip=True)
         for spell in spells:
             spell_id = spell
             spell = cls.load_spell_by_id(spell)
             if spell is None:
-                return CommonExecutionResult(False, reason=f'Spell not found by id {spell_id}.')
+                return CommonExecutionResult(False, reason=f'Spell not found by id {spell_id}.', hide_tooltip=True)
             unlock_tracker.add_unlock(spell, None, mark_as_new=mark_as_new)
         return CommonExecutionResult.TRUE
 
@@ -79,7 +80,7 @@ class CommonSimSpellUtils:
         from sims4communitylib.utils.sims.common_sim_unlock_utils import CommonSimUnlockUtils
         unlock_tracker = CommonSimUnlockUtils.get_unlock_tracker(sim_info)
         if unlock_tracker is None:
-            return CommonExecutionResult(False, reason=f'Failed to locate the unlock tracker for {sim_info}')
+            return CommonExecutionResult(False, reason=f'Failed to locate the unlock tracker for {sim_info}', hide_tooltip=True)
         spells: Tuple[Spell] = tuple(CommonResourceUtils.load_all_instance_values(Types.SPELL, return_type=Spell))
         return cls.add_spells(sim_info, spells)
 
@@ -114,19 +115,19 @@ class CommonSimSpellUtils:
         from sims4communitylib.utils.sims.common_sim_unlock_utils import CommonSimUnlockUtils
         unlock_tracker = CommonSimUnlockUtils.get_unlock_tracker(sim_info)
         if unlock_tracker is None:
-            return CommonExecutionResult(False, reason=f'Failed to locate the unlock tracker for {sim_info}')
+            return CommonExecutionResult(False, reason=f'Failed to locate the unlock tracker for {sim_info}', hide_tooltip=True)
         for spell in spells:
             spell_id = spell
             spell = cls.load_spell_by_id(spell)
             if spell is None:
-                return CommonExecutionResult(False, reason=f'Spell not found by id {spell_id}.')
+                return CommonExecutionResult(False, reason=f'Spell not found by id {spell_id}.', hide_tooltip=True)
             found_unlock = None
             for unlock in unlock_tracker._unlocks:
                 if unlock.tuning_class == spell:
                     found_unlock = unlock
                     break
             if not found_unlock:
-                return CommonExecutionResult(False, reason=f'Sim did not have spell {spell} unlocked.')
+                return CommonExecutionResult(False, reason=f'{sim_info} did not have spell {spell} unlocked.', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_KNOW_SPELL, tooltip_tokens=(sim_info, str(spell)))
             unlock_tracker._unlocks.remove(found_unlock)
             if spell in unlock_tracker._marked_new_unlocks:
                 unlock_tracker._marked_new_unlocks.remove(spell)
@@ -157,7 +158,7 @@ class CommonSimSpellUtils:
         from sims4communitylib.utils.sims.common_sim_unlock_utils import CommonSimUnlockUtils
         unlock_tracker = CommonSimUnlockUtils.get_unlock_tracker(sim_info)
         if unlock_tracker is None:
-            return CommonExecutionResult(False, reason=f'Failed to locate the unlock tracker for {sim_info}')
+            return CommonExecutionResult(False, reason=f'Failed to locate the unlock tracker for {sim_info}', hide_tooltip=True)
         spells: Tuple[Spell] = tuple(CommonResourceUtils.load_all_instance_values(Types.SPELL, return_type=Spell))
         return cls.remove_spells(sim_info, spells)
 
