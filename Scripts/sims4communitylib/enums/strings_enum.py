@@ -665,3 +665,14 @@ class CommonStringId(CommonInt):
     S4CL_SUCCESSFULLY_SWAP_TRAIT_AND_TRAIT_ON_SIM = 0x73EDC3F2
     # Tokens: {0.Sim} {1.String} (Trait) {2.String} (Trait)
     S4CL_SIM_HAD_NEITHER_TRAIT_NOR_TRAIT_TO_SWAP = 0x21B4FF57
+
+    # Tokens: {0.String} (Object) {1.String} (Statistic)
+    S4CL_OBJECT_HAS_STATISTIC = 0x522611E5
+    # Tokens: {0.String} (Object) {1.String} (Statistic)
+    S4CL_OBJECT_DOES_NOT_HAVE_STATISTIC = 0x25E75833
+    # Tokens: {0.String} (Object) {1.String} (Statistics)
+    S4CL_OBJECT_DOES_NOT_HAVE_ANY_STATISTICS = 0x5B6F6BFA
+    # Tokens: {0.String} (Object) {1.String} (Statistic)
+    S4CL_OBJECT_HAS_STATISTIC_LOCKED = 0xF5038611
+    # Tokens: {0.String} (Object) {1.String} (Statistic)
+    S4CL_OBJECT_HAS_STATISTIC_UNLOCKED = 0xE4CF1826

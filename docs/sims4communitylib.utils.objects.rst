@@ -107,6 +107,15 @@ Object Utilities
    :show-inheritance:
 
 *************************
+`Object Statistics`
+*************************
+
+.. autoclass:: sims4communitylib.utils.objects.common_object_statistic_utils.CommonObjectStatisticUtils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+*************************
 `Interactions`
 *************************
 
