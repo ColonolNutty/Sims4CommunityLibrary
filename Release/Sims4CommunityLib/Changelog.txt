@@ -1,3 +1,7 @@
+v3.11:
+- Moved many Strings from the code into the string tables.
+- Added new utility CommonObjectStatisticUtils.
+
 v3.10:
 - Fixed a vanilla issue when saving commodities.
 - Fixed an issue when switching occults using switch_to_occult

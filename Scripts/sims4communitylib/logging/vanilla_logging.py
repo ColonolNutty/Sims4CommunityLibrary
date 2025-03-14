@@ -49,7 +49,7 @@ class _CommonVanillaLogOverride(CommonService):
         """ Disable logs. """
         self.logs_enabled = False
 
-    def _log(self, log_name: str, message: str, *args, level, owner=None, **kwargs) -> Any:
+    def _log(self, log_name: str, message: str, *args, level=None, owner=None, **kwargs) -> Any:
         if not self.logs_enabled:
             return
         message = self._append_time(log_name, message)
@@ -164,10 +164,10 @@ def _common_disable_vanilla_logs(output: CommonConsoleCommandOutput):
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, 'log', handle_exceptions=False)
-def _common_logger_log(original, self, message, *args, level, owner=None, **kwargs) -> Any:
+def _common_logger_log(original, self, message, *args, level=None, owner=None, **kwargs) -> Any:
     log_name = self.group
-    _CommonVanillaLogOverride()._log(log_name, message, *args, level, owner=owner or self.default_owner, **kwargs)
-    return original(self, message, *args, level, owner=owner, **kwargs)
+    _CommonVanillaLogOverride()._log(log_name, message, *args, level=level, owner=owner or self.default_owner, **kwargs)
+    return original(self, message, *args, level=level, owner=owner, **kwargs)
 
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Logger, 'debug', handle_exceptions=False)

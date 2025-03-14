@@ -46,19 +46,21 @@ class CommonDialogOptionContext:
     :type is_enabled: bool, optional
     :param is_selected: If True, the dialog option will already be selected in the dialog. If False, the dialog option will not be selected in the dialog.
     :type is_selected: bool, optional
+    :param tag_list: A list of tags that can be used when organizing the option. Default is no tags.
+    :type tag_list: Iterator[str], optional
     """
     def __init__(
         self,
         title_identifier: Union[int, str, LocalizedString, CommonStringId],
         description_identifier: Union[int, str, LocalizedString, CommonStringId],
-        title_tokens: Iterator[Any]=(),
-        description_tokens: Iterator[Any]=(),
-        tooltip_text_identifier: Union[int, str, LocalizedString, CommonStringId]=None,
-        tooltip_tokens: Iterator[Any]=(),
-        icon: Any=None,
-        is_enabled: bool=True,
-        is_selected: bool=False,
-        tag_list: Iterator[str]=()
+        title_tokens: Iterator[Any] = (),
+        description_tokens: Iterator[Any] = (),
+        tooltip_text_identifier: Union[int, str, LocalizedString, CommonStringId] = None,
+        tooltip_tokens: Iterator[Any] = (),
+        icon: Any = None,
+        is_enabled: bool = True,
+        is_selected: bool = False,
+        tag_list: Iterator[str] = ()
     ):
         self._title = CommonLocalizationUtils.create_localized_string(title_identifier, tokens=tuple(title_tokens))
         self._description = CommonLocalizationUtils.create_localized_string(description_identifier, tokens=tuple(description_tokens))

@@ -64,10 +64,13 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.common_service import CommonService
 from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
 from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
+from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from statistics.skill import Skill
 from traits.trait_tracker import TraitTracker
 from traits.traits import Trait
+
+log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_sim_event_dispatcher')
 
 
 class CommonSimEventDispatcherService(CommonService):
@@ -372,8 +375,12 @@ def _common_on_object_removed_from_sim_inventory(original, self: Sim, obj: Scrip
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), Relationship, Relationship.add_relationship_bit.__name__)
 def _common_on_add_relationship_bit(original, self: Relationship, actor_sim_id: int, target_sim_id: int, bit_to_add: RelationshipBit, *_, **__):
-    result = original(self, actor_sim_id, target_sim_id, bit_to_add, *_, **__)
-    CommonSimEventDispatcherService()._on_relationship_bit_added(actor_sim_id, target_sim_id, bit_to_add)
+    try:
+        result = original(self, actor_sim_id, target_sim_id, bit_to_add, *_, **__)
+        CommonSimEventDispatcherService()._on_relationship_bit_added(actor_sim_id, target_sim_id, bit_to_add)
+    except Exception as ex:
+        log.format_error_with_message('Error occurred when adding relationship bit.', bit_to_add=bit_to_add, source_sim=CommonSimUtils.get_sim_info(actor_sim_id), target_sim=CommonSimUtils.get_sim_info(target_sim_id), exception=ex)
+        raise ex
     return result
 
 

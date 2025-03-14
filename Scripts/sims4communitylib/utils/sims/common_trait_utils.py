@@ -1086,7 +1086,7 @@ class CommonTraitUtils(_HasS4CLClassLog):
                 if _trait is None:
                     continue
                 if sim_info.has_trait(_trait):
-                    return CommonTestResult(True, reason=f'{sim_info} has trait {_trait}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_TRAIT, tooltip_tokens=(sim_info, str(__trait)))
+                    return CommonTestResult(True, reason=f'{sim_info} has trait {_trait}.', tooltip_text=CommonStringId.S4CL_SIM_HAS_TRAIT, tooltip_tokens=(sim_info, str(_trait)))
         elif isinstance(sim_info, SimInfoBaseWrapper):
             sim_info: SimInfoBaseWrapper = sim_info
             any_traits = cls.get_trait_ids(sim_info)
