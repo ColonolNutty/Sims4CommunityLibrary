@@ -15,8 +15,11 @@ class _S4CLReaderForUpdate:
     # noinspection SpellCheckingInspection
     CONVERSIONS = {
         'ANGER': 'ANGER',
+        'BEETLES': 'BEETLES',
+        'BROKENHEART': 'BROKEN_HEART',
         'CLIMBINGROUTE': 'CLIMBING_ROUTE',
         'COWPLANT': 'COW_PLANT',
+        'CROW': 'CROW',
         'DEATHFLOWERARRANGEMENT': 'DEATH_FLOWER_ARRANGEMENT',
         'DROWN': 'DROWN',
         'ELDEREXHAUSTION': 'ELDER_EXHAUSTION',
@@ -31,6 +34,7 @@ class _S4CLReaderForUpdate:
         'LAUGHTER': 'LAUGHTER',
         'LIGHTNING': 'LIGHTNING',
         'METEORITE': 'METEORITE',
+        'MOLDSYSTEM': 'MOLD_SYSTEM',
         'MOTHERPLANT': 'MOTHER_PLANT',
         'MURPHYBED': 'MURPHY_BED',
         'OLD AGE': 'OLD_AGE',

@@ -192,8 +192,11 @@ class CommonCASUtils(_HasS4CLClassLog):
         cas_part_body_types = [int(CommonBodySlot.convert_to_vanilla(cas_part.body_type)) for cas_part in cas_parts]
         from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
         current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
+        current_outfit_data = sim_info.get_outfit(current_outfit[0], current_outfit[1])
         from protocolbuffers import S4Common_pb2, Outfits_pb2
         saved_outfits = sim_info.save_outfits()
+        made_changes = False
+        made_changes_to_current_outfit = False
         for saved_outfit in saved_outfits.outfits:
             # noinspection PyUnresolvedReferences
             saved_outfit_parts = dict(zip(list(saved_outfit.body_types_list.body_types), list(saved_outfit.parts.ids)))
@@ -207,9 +210,18 @@ class CommonCASUtils(_HasS4CLClassLog):
                     # Remove the existing body types that match the ones we are replacing.
                     handled_body_types.append(body_type_int)
                     part = cas_parts_by_body_type[body_type_int]
+                    if not CommonCASUtils.is_cas_part_loaded(part.cas_part_id):
+                        # Check if the CAS Part is actually loaded before attempting to attach it.
+                        body_types.append(body_type)
+                        part_ids.append(part_id)
+                        continue
                     _log.format_with_message('Replacing body type with CAS Part', original_body_type=body_type, cas_part=part, original_part_id=part_id)
                     body_types.append(CommonBodySlot.convert_to_vanilla(part.body_type))
                     part_ids.append(part.cas_part_id)
+                    if part_id != part.cas_part_id:
+                        if int(saved_outfit.outfit_id) == int(current_outfit_data.outfit_id):
+                            made_changes_to_current_outfit = True
+                        made_changes = True
                     continue
                 _log.format_with_message('Keeping body type.', original_body_type=body_type, cas_part_body_types=cas_part_body_types, original_part_id=part_id)
                 body_types.append(body_type)
@@ -221,8 +233,15 @@ class CommonCASUtils(_HasS4CLClassLog):
                 cas_part_body_type = CommonBodySlot.convert_to_vanilla(cas_part.body_type)
                 if int(cas_part_body_type) in handled_body_types:
                     continue
-                body_types.append(cas_part_body_type)
-                part_ids.append(cas_part.cas_part_id)
+                if cas_part.cas_part_id not in part_ids:
+                    if not CommonCASUtils.is_cas_part_loaded(cas_part.cas_part_id):
+                        # Check if the CAS Part is actually loaded before attempting to attach it.
+                        continue
+                    body_types.append(cas_part_body_type)
+                    part_ids.append(cas_part.cas_part_id)
+                    if int(saved_outfit.outfit_id) == int(current_outfit_data.outfit_id):
+                        made_changes_to_current_outfit = True
+                    made_changes = True
 
             _log.format_with_message('After modify parts.', outfit_category=saved_outfit.category, body_types=body_types, part_ids=part_ids)
 
@@ -233,12 +252,16 @@ class CommonCASUtils(_HasS4CLClassLog):
             saved_outfit.body_types_list = Outfits_pb2.BodyTypesList()
             # noinspection PyUnresolvedReferences
             saved_outfit.body_types_list.body_types.extend([int(body_type) for body_type in body_types])
-        sim_info._base.outfits = saved_outfits.SerializeToString()
-        sim_info._base.outfit_type_and_index = current_outfit
-        sim_info.resend_outfits()
-        sim_info.on_outfit_generated(*current_outfit)
-        sim_info.set_outfit_dirty(current_outfit[0])
-        sim_info.set_current_outfit(current_outfit)
+        if made_changes:
+            sim_info._base.outfits = saved_outfits.SerializeToString()
+        if made_changes_to_current_outfit:
+            sim_info._base.outfit_type_and_index = current_outfit
+        if made_changes:
+            sim_info.resend_outfits()
+        if made_changes_to_current_outfit:
+            sim_info.on_outfit_generated(*current_outfit)
+            sim_info.set_outfit_dirty(current_outfit[0])
+            sim_info.set_current_outfit(current_outfit)
         return True
 
     @classmethod
@@ -260,7 +283,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return cls.attach_cas_parts_to_outfit_of_sim(sim_info, (cas_part,), outfit_category_and_index=outfit_category_and_index)
 
     @classmethod
-    def attach_cas_parts_to_outfit_of_sim(cls, sim_info: SimInfo, cas_parts: Iterator[CommonCASPart], outfit_category_and_index: Tuple[OutfitCategory, int] = None, set_outfit: bool = True) -> bool:
+    def attach_cas_parts_to_outfit_of_sim(cls, sim_info: SimInfo, cas_parts: Iterator[CommonCASPart], outfit_category_and_index: Tuple[OutfitCategory, int] = None) -> bool:
         """attach_cas_parts_to_outfit_of_sim(sim_info, cas_parts, outfit_category_and_index=None)
 
         Attach CAS parts to an outfit of a Sim.
@@ -276,16 +299,21 @@ class CommonCASUtils(_HasS4CLClassLog):
         """
         stop_watch = CommonStopWatch()
         try:
+            _log = cls.get_log()
             stop_watch.start()
             from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
             current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
             if outfit_category_and_index is None:
                 outfit_category_and_index = current_outfit
             existing_outfit_data = sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
+            cas_parts_by_body_type = dict()
+            for cas_part in cas_parts:
+                cas_parts_by_body_type[int(CommonBodySlot.convert_to_vanilla(cas_part.body_type))] = cas_part
             cas_part_body_types = [int(CommonBodySlot.convert_to_vanilla(cas_part.body_type)) for cas_part in cas_parts]
             from protocolbuffers import S4Common_pb2, Outfits_pb2
             saved_outfits = sim_info.save_outfits()
             cls.get_log().format_with_message('Got Saved Outfits', time_milliseconds=stop_watch.interval_milliseconds())
+            made_changes = False
             for saved_outfit in saved_outfits.outfits:
                 if int(saved_outfit.outfit_id) != int(existing_outfit_data.outfit_id):
                     continue
@@ -293,17 +321,40 @@ class CommonCASUtils(_HasS4CLClassLog):
                 saved_outfit_parts = dict(zip(list(saved_outfit.body_types_list.body_types), list(saved_outfit.parts.ids)))
                 body_types = list()
                 part_ids = list()
+                handled_body_types: List[int] = list()
                 for (body_type, part_id) in saved_outfit_parts.items():
+                    body_type_int = int(body_type)
                     if int(body_type) in cas_part_body_types:
                         # Remove the existing body types that match the ones we are replacing.
+                        handled_body_types.append(body_type_int)
+                        part = cas_parts_by_body_type[body_type_int]
+                        if not CommonCASUtils.is_cas_part_loaded(part.cas_part_id):
+                            # Check if the CAS Part is actually loaded before attempting to attach it.
+                            body_types.append(body_type)
+                            part_ids.append(part_id)
+                            continue
+                        _log.format_with_message('Replacing body type with CAS Part', original_body_type=body_type, cas_part=part, original_part_id=part_id)
+                        body_types.append(CommonBodySlot.convert_to_vanilla(part.body_type))
+                        part_ids.append(part.cas_part_id)
+                        if part_id != part.cas_part_id:
+                            made_changes = True
                         continue
                     body_types.append(body_type)
                     part_ids.append(part_id)
 
                 # Add the new cas parts and their body types.
                 for cas_part in cas_parts:
+                    cas_part_body_type = CommonBodySlot.convert_to_vanilla(cas_part.body_type)
+                    if int(cas_part_body_type) in handled_body_types:
+                        continue
+                    if cas_part.cas_part_id in part_ids:
+                        continue
+                    if not CommonCASUtils.is_cas_part_loaded(cas_part.cas_part_id):
+                        # Check if the CAS Part is actually loaded before attempting to attach it.
+                        continue
                     body_types.append(CommonBodySlot.convert_to_vanilla(cas_part.body_type))
                     part_ids.append(cas_part.cas_part_id)
+                    made_changes = True
 
                 # Save the parts.
                 saved_outfit.parts = S4Common_pb2.IdList()
@@ -312,6 +363,9 @@ class CommonCASUtils(_HasS4CLClassLog):
                 saved_outfit.body_types_list = Outfits_pb2.BodyTypesList()
                 # noinspection PyUnresolvedReferences
                 saved_outfit.body_types_list.body_types.extend([int(body_type) for body_type in body_types])
+            if not made_changes:
+                cls.get_log().format_with_message('No Changes were made.')
+                return True
             cls.get_log().format_with_message('Finished updating Saved Outfits. Setting outfits.', time_milliseconds=stop_watch.interval_milliseconds())
             sim_info._base.outfits = saved_outfits.SerializeToString()
             sim_info._base.outfit_type_and_index = current_outfit
@@ -355,8 +409,10 @@ class CommonCASUtils(_HasS4CLClassLog):
         cas_part_ids = tuple([cas_part.cas_part_id for cas_part in cas_parts])
         from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
         current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
+        existing_outfit_data = sim_info.get_outfit(current_outfit[0], current_outfit[1])
         from protocolbuffers import S4Common_pb2, Outfits_pb2
         saved_outfits = sim_info.save_outfits()
+        made_changes_to_current_outfit = False
         for saved_outfit in saved_outfits.outfits:
             # noinspection PyUnresolvedReferences
             saved_outfit_parts = dict(zip(list(saved_outfit.body_types_list.body_types), list(saved_outfit.parts.ids)))
@@ -366,6 +422,8 @@ class CommonCASUtils(_HasS4CLClassLog):
             for (body_type, part_id) in saved_outfit_parts.items():
                 if part_id in cas_part_ids:
                     # Remove cas_part_ids
+                    if int(saved_outfit.outfit_id) == int(existing_outfit_data.outfit_id):
+                        made_changes_to_current_outfit = True
                     continue
                 _log.format_with_message('Keeping body type.', original_body_type=body_type, original_part_id=part_id)
                 body_types.append(body_type)
@@ -381,11 +439,13 @@ class CommonCASUtils(_HasS4CLClassLog):
             # noinspection PyUnresolvedReferences
             saved_outfit.body_types_list.body_types.extend([int(body_type) for body_type in body_types])
         sim_info._base.outfits = saved_outfits.SerializeToString()
-        sim_info._base.outfit_type_and_index = current_outfit
+        if made_changes_to_current_outfit:
+            sim_info._base.outfit_type_and_index = current_outfit
         sim_info.resend_outfits()
-        sim_info.on_outfit_generated(*current_outfit)
-        sim_info.set_outfit_dirty(current_outfit[0])
-        sim_info.set_current_outfit(current_outfit)
+        if made_changes_to_current_outfit:
+            sim_info.on_outfit_generated(*current_outfit)
+            sim_info.set_outfit_dirty(current_outfit[0])
+            sim_info.set_current_outfit(current_outfit)
         return True
 
     @classmethod
@@ -428,6 +488,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         cas_part_ids = [cas_part.cas_part_id for cas_part in cas_parts]
         from protocolbuffers import S4Common_pb2, Outfits_pb2
         saved_outfits = sim_info.save_outfits()
+        made_changes = False
         for saved_outfit in saved_outfits.outfits:
             if int(saved_outfit.outfit_id) != int(existing_outfit_data.outfit_id):
                 continue
@@ -438,6 +499,7 @@ class CommonCASUtils(_HasS4CLClassLog):
             for (body_type, part_id) in saved_outfit_parts.items():
                 if part_id in cas_part_ids:
                     # Remove the CAS Part Id.
+                    made_changes = True
                     continue
                 body_types.append(body_type)
                 part_ids.append(part_id)
@@ -449,6 +511,8 @@ class CommonCASUtils(_HasS4CLClassLog):
             saved_outfit.body_types_list = Outfits_pb2.BodyTypesList()
             # noinspection PyUnresolvedReferences
             saved_outfit.body_types_list.body_types.extend([int(body_type) for body_type in body_types])
+        if not made_changes:
+            return True
         sim_info._base.outfits = saved_outfits.SerializeToString()
         sim_info._base.outfit_type_and_index = current_outfit
         sim_info.resend_outfits()
@@ -663,7 +727,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return outfit_io.get_body_type_cas_part_is_attached_to(cas_part_id)
 
     @classmethod
-    def get_cas_part_id_at_body_type(cls, sim_info: SimInfo, body_type: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int] = None, mod_identity: CommonModIdentity = None) -> int:
+    def get_cas_part_id_at_body_type(cls, sim_info: SimInfo, body_type: Union[CommonBodySlot, BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int] = None, mod_identity: CommonModIdentity = None) -> int:
         """get_cas_part_id_at_body_type(sim_info, body_type, outfit_category_and_index=None, mod_identity=None)
 
         Retrieve the CAS part identifier attached to the specified BodyType within a Sims outfit.
@@ -671,7 +735,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         :param sim_info: The SimInfo of the Sim to check.
         :type sim_info: SimInfo
         :param body_type: The BodyType to check.
-        :type body_type: Union[BodyType, int]
+        :type body_type: Union[CommonBodySlot, BodyType, int]
         :param outfit_category_and_index: The outfit category and index of the Sims outfit to check. Default is the Sims current outfit.
         :type outfit_category_and_index: Tuple[OutfitCategory, int], optional
         :param mod_identity: The identity of the mod performing the function. Default is None. Optional, but highly recommended!
@@ -679,6 +743,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         :return: The CAS part identifier attached to the specified BodyType or -1 if the BodyType is not found.
         :rtype: int
         """
+        body_type = CommonBodySlot.convert_to_vanilla(body_type)
         cls.get_log().format_with_message('Checking if CAS part is attached to Sim.', sim=sim_info, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
         outfit_io = CommonSimOutfitIO(sim_info, outfit_category_and_index=outfit_category_and_index, mod_identity=mod_identity)
         return outfit_io.get_cas_part_at_body_type(body_type)

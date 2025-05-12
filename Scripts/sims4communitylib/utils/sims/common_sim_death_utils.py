@@ -330,10 +330,10 @@ class CommonSimDeathUtils(_HasS4CLClassLog):
             return CommonExecutionResult(False, reason=f'{sim_info} did not have a death tracker.', hide_tooltip=True)
         if death_tracker.death_type is None:
             return CommonExecutionResult(True, reason=f'{sim_info} is not dead.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_DEAD, tooltip_tokens=(sim_info,))
-        urn_object_id = Ghost.get_urnstone_for_sim_id(CommonSimUtils.get_sim_id(sim_info))
+        urn_game_object = Ghost.get_urnstone_for_sim_id(CommonSimUtils.get_sim_id(sim_info))
         death_tracker.clear_death_type()
         Ghost.remove_ghost_from_sim(sim_info)
-        game_object = CommonObjectUtils.get_game_object(urn_object_id)
+        game_object = CommonObjectUtils.get_game_object(urn_game_object)
         CommonObjectSpawnUtils.schedule_object_for_destroy(game_object)
         return CommonExecutionResult.TRUE
 

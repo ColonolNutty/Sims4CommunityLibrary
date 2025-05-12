@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<I c="LootActions" i="action" m="interactions.utils.loot" n="S4CL_Loot_Situation_Burglar" s="8288151420394453877">
+<!--loot_Situation_Firefighter_Phone-->
+  <L n="loot_actions">
+    <V t="create_situation">
+      <U n="create_situation">
+        <U n="chance">
+          <T n="base_chance">100</T>
+        </U>
+        <U n="create_situation">
+          <T n="invite_actor">False</T>
+          <T n="invite_household_sims_on_active_lot">False</T>
+          <T n="invite_picked_sims">False</T>
+          <T n="invite_target_sim">False</T>
+          <T n="situation">424927<!--situation_Burglar--></T>
+          <T n="user_facing">False</T>
+        </U>
+      </U>
+    </V>
+  </L>
+</I>

@@ -5,6 +5,8 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+from typing import Union
+
 from sims.sim_info import SimInfo
 from statistics.mood import Mood
 from sims4communitylib.enums.moods_enum import CommonMoodId
@@ -248,10 +250,18 @@ class CommonMoodUtils:
         :return: True, if the Sim has the specified Mood. False, if the Sim does not.
         :rtype: bool
         """
-        return CommonMoodUtils.get_current_mood_id(sim_info) == mood_id
+        if not hasattr(sim_info, 'get_mood'):
+            return False
+        try:
+            current_mood_id = CommonMoodUtils.get_current_mood_id(sim_info)
+            if current_mood_id == -1:
+                return False
+            return current_mood_id == mood_id
+        except AttributeError:
+            return False
 
     @staticmethod
-    def get_current_mood(sim_info: SimInfo) -> Mood:
+    def get_current_mood(sim_info: SimInfo) -> Union[Mood, None]:
         """get_current_mood(sim_info)
 
         Retrieve the current mood for the specified Sim.
@@ -261,7 +271,12 @@ class CommonMoodUtils:
         :return: The current Mood of the Sim.
         :rtype: Mood
         """
-        return sim_info.get_mood()
+        if not hasattr(sim_info, 'get_mood'):
+            return None
+        try:
+            return sim_info.get_mood()
+        except AttributeError:
+            return None
 
     @staticmethod
     def get_current_mood_id(sim_info: SimInfo) -> int:
@@ -274,4 +289,9 @@ class CommonMoodUtils:
         :return: The identifier of the current Mood of the Sim.
         :rtype: int
         """
-        return getattr(CommonMoodUtils.get_current_mood(sim_info), 'guid64', -1)
+        if not hasattr(sim_info, 'get_mood'):
+            return -1
+        current_mood = CommonMoodUtils.get_current_mood(sim_info)
+        if current_mood is None:
+            return -1
+        return getattr(current_mood, 'guid64', -1)

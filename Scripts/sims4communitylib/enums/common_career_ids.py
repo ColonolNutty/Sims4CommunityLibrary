@@ -143,3 +143,17 @@ class CommonCareerId(CommonInt):
     VOLUNTEER_SCOUTING: 'CommonCareerId' = 186513
     VOLUNTEER_SOCCER_TEAM: 'CommonCareerId' = 220913
     WRITER: 'CommonCareerId' = 27933
+
+    ACTIVE_REAPER: 'CommonCareerId' = 377623
+    MORTICIAN: 'CommonCareerId' = 377586
+    PART_TIME_HANDY_PERSON: 'CommonCareerId' = 353302
+    ROMANCE_CONSULTANT: 'CommonCareerId' = 366724
+    NPC_VENUE_BAKERY_STALL: 'CommonCareerId' = 402986
+    NPC_VENUE_POTTERY_STALL: 'CommonCareerId' = 402988
+    NPC_VENUE_SWEET_STALL: 'CommonCareerId' = 402987
+    NPC_POLICE: 'CommonCareerId' = 421754
+    NPC_SHADY_NPC: 'CommonCareerId' = 400748
+    NPC_VENUE_TATTOO_ARTIST: 'CommonCareerId' = 404169
+    ALICE_TREE_ALICE_QUEST: 'CommonCareerId' = 386484
+    SMALL_BUSINESS_EMPLOYEE: 'CommonCareerId' = 400290
+    NPC_TAROT_HELP: 'CommonCareerId' = 388211

@@ -15,6 +15,7 @@ from sims4communitylib.utils.misc.common_fire_utils import CommonFireUtils
 from sims4communitylib.utils.objects.common_object_location_utils import CommonObjectLocationUtils
 from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
 from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
+from sims4communitylib.utils.sims.common_sim_loot_action_utils import CommonSimLootActionUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 
@@ -85,3 +86,17 @@ def _common_burn_it(output: CommonConsoleCommandOutput, game_object: GameObject)
         output(f'{game_object} has been set ablaze. You might want to run now.')
     else:
         output(f'For some reason {game_object} failed to catch fire.')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.trigger_burglar',
+    'The time to steal is now.',
+    show_with_help_command=False
+)
+def _common_burgle_it(output: CommonConsoleCommandOutput):
+    output(f'Do you smell valuables?')
+    sim_info = CommonSimUtils.get_active_sim_info()
+    burglar_loot = 8288151420394453877  # S4CL_Loot_Situation_Burglar
+    CommonSimLootActionUtils.apply_loot_actions_by_id_to_sim(burglar_loot, sim_info)
+    output('Done, burglar will show at midnight.')

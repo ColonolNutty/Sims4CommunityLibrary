@@ -21,6 +21,7 @@ class CommonRegionId(CommonInt):
     CAREER_DOCTOR_CLINIC: 'CommonRegionId' = 109306
     CHESTNUT_RIDGE: 'CommonRegionId' = 311185
     CITY_LIFE: 'CommonRegionId' = 134252
+    CIUDAD_ENAMORADA: 'CommonRegionId' = 362425
     COTTAGE_WORLD: 'CommonRegionId' = 257397
     ECO_WORLD: 'CommonRegionId' = 228200
     FAME_WORLD: 'CommonRegionId' = 195493
@@ -32,10 +33,12 @@ class CommonRegionId(CommonInt):
     MAGIC_WORLD: 'CommonRegionId' = 216626
     MOUNTAIN_WORLD: 'CommonRegionId' = 238454
     NEW_CREST: 'CommonRegionId' = 119917
+    NORDHAVEN: 'CommonRegionId' = 379402
     NORTH_EUROPE: 'CommonRegionId' = 123129
     OASIS_SPRINGS: 'CommonRegionId' = 104065
     PET_WORLD: 'CommonRegionId' = 166547
     POLICE_STATION: 'CommonRegionId' = 108706
+    RAVENWOOD: 'CommonRegionId' = 372551
     RETAIL: 'CommonRegionId' = 108704
     SCIENCE_LAB: 'CommonRegionId' = 108707
     SLYVAN_GLADE: 'CommonRegionId' = 104063
@@ -46,8 +49,10 @@ class CommonRegionId(CommonInt):
     TEST_WORLD_MAGALOG: 'CommonRegionId' = 104067
     TEST_WORLD_MEGA_LOTS: 'CommonRegionId' = 131195
     TEST_WORLD_PERFORMANCE: 'CommonRegionId' = 104068
+    TOMARANGE: 'CommonRegionId' = 337554
     UNIVERSITY_WORLD: 'CommonRegionId' = 208814
     VAMPIRE_WORLD: 'CommonRegionId' = 152175
     WEDDING_WORLD: 'CommonRegionId' = 272129
     WILLOW_CREEK: 'CommonRegionId' = 104064
     WOLF_TOWN: 'CommonRegionId' = 285909
+

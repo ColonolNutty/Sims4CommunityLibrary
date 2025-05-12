@@ -131,6 +131,8 @@ class CommonOccultType(CommonInt):
         :return: The specified value translated to CommonOccultType. The value will be returned if it cannot be translated.
         :rtype: Union['CommonOccultType', OccultType, int]
         """
+        if isinstance(value, CommonOccultType):
+            return value
         mapping: Dict[OccultType, CommonOccultType] = dict()
         if hasattr(OccultType, 'HUMAN'):
             mapping[OccultType.HUMAN] = CommonOccultType.NON_OCCULT

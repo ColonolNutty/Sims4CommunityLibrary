@@ -88,7 +88,11 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         mapped_motive_id: int = cls._map_motive_id(sim_info, motive_id)
         if mapped_motive_id == -1:
             cls.get_log().format_with_message('Failed to map motive id!', motive_id=motive_id, sim=sim_info)
-            return CommonExecutionResult(False, reason=f'{sim_info} did not have motive {motive_id}', tooltip_text=CommonStringId.S4CL_SIM_DID_NOT_HAVE_MOTIVE, tooltip_tokens=(sim_info, str(motive_id)))
+            return CommonTestResult(False, reason=f'{sim_info} did not have a mapped motive {motive_id}', tooltip_text=CommonStringId.S4CL_SIM_DID_NOT_HAVE_A_MAPPED_MOTIVE, tooltip_tokens=(sim_info, str(motive_id)))
+        if not cls.has_motive(sim_info, motive_id):
+            return CommonExecutionResult(False, reason=f'{sim_info} does not have motive {motive_id}.', tooltip_text=CommonStringId.S4CL_SIM_DID_NOT_HAVE_MOTIVE, tooltip_tokens=(sim_info, str(motive_id)))
+        if cls.is_motive_locked(sim_info, motive_id):
+            return CommonExecutionResult(True, reason='The motive is currently locked.', hide_tooltip=True)
         cls.get_log().format_with_message('Mapped motive id, setting the level for it on Sim.', motive_id=motive_id, mapped_motive_id=mapped_motive_id, level=level, sim=sim_info)
         return CommonSimStatisticUtils.set_statistic_value(sim_info, mapped_motive_id, level, add=True)
 
@@ -440,6 +444,8 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         motive_instance = CommonSimStatisticUtils.get_statistic(sim_info, mapped_motive_id)
         if motive_instance is None:
             return CommonTestResult(False, reason=f'No motive found for id {mapped_motive_id}.', tooltip_text=CommonStringId.S4CL_NO_MOTIVE_FOUND_FOR_ID, tooltip_tokens=(str(mapped_motive_id),))
+        if not cls.has_motive(sim_info, motive_id):
+            return CommonTestResult(False, reason=f'{sim_info} does not have motive {motive_id}.', tooltip_text=CommonStringId.S4CL_SIM_DID_NOT_HAVE_MOTIVE, tooltip_tokens=(sim_info, str(motive_id)))
         if sim_info.is_locked(motive_instance):
             return CommonTestResult(True, reason=f'Motive {mapped_motive_id} is locked for Sim {sim_info}', tooltip_text=CommonStringId.S4CL_MOTIVE_IS_LOCKED_FOR_SIM, tooltip_tokens=(str(mapped_motive_id), sim_info))
         return CommonTestResult(False, reason=f'Motive {mapped_motive_id} is not locked for Sim {sim_info}', tooltip_text=CommonStringId.S4CL_MOTIVE_IS_NOT_LOCKED_FOR_SIM, tooltip_tokens=(str(mapped_motive_id), sim_info))
@@ -499,7 +505,17 @@ class CommonSimMotiveUtils(_HasS4CLClassLog):
         motive_species_mapping: Dict[CommonSpecies, CommonMotiveId] = motive_mappings[motive_id]
 
         species = CommonSpecies.get_species(sim_info)
-        return motive_species_mapping.get(species, motive_id)
+        mapped_motive_id = motive_species_mapping.get(species, motive_id)
+
+        if mapped_motive_id == CommonMotiveId.HUNGER:
+            if CommonOccultUtils.is_vampire(sim_info):
+                mapped_motive_id = CommonMotiveId.VAMPIRE_THIRST
+            elif CommonOccultUtils.is_plant_sim(sim_info):
+                mapped_motive_id = CommonMotiveId.PLANT_SIM_WATER
+        if mapped_motive_id == CommonMotiveId.HYGIENE:
+            if CommonOccultUtils.is_mermaid(sim_info):
+                mapped_motive_id = CommonMotiveId.MERMAID_HYDRATION
+        return mapped_motive_id
 
     @classmethod
     def _get_motive_mappings(cls) -> Dict[Union[CommonMotiveId, CommonInt, int], Dict[CommonSpecies, Union[CommonMotiveId, CommonInt, int]]]:
