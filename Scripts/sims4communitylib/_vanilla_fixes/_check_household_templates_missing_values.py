@@ -15,7 +15,7 @@ from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_template_error_catcher')
 
 
-@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TunableSimFilter, TunableSimFilter.create_template_matching_sim_creator.__name__, handle_exceptions=False)
+@CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), TunableSimFilter, 'create_template_matching_sim_creator', handle_exceptions=False)
 def _common_give_details_when_templates_missing(original, cls, sim_creator) -> Any:
     try:
         if cls._household_templates_override and None in cls._household_templates_override:

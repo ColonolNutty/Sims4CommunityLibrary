@@ -80,7 +80,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def is_statistic_locked(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=False, add: bool= False) -> CommonTestResult:
+    def is_statistic_locked(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool = False, add: bool = False) -> CommonTestResult:
         """is_statistic_locked(sim_info, statistic, add_dynamic=False, add=False)
 
         Determine if a statistic is locked for the specified Sim.
@@ -132,7 +132,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def get_statistic(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=False, add: bool=False) -> Union[BaseStatistic, None]:
+    def get_statistic(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool = False, add: bool = False) -> Union[BaseStatistic, None]:
         """get_statistic(sim_info, statistic, statistic, add_dynamic=False, add=False)
 
         Retrieve a Statistic for the specified Sim.
@@ -161,7 +161,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def get_statistic_value(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=False, add: bool=False) -> float:
+    def get_statistic_value(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool = False, add: bool = False) -> float:
         """get_statistic_value(sim_info, statistic, add_dynamic=False, add=False)
 
         Retrieve the Value of a Statistic for the specified Sim.
@@ -199,7 +199,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def set_statistic_value(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> CommonExecutionResult:
+    def set_statistic_value(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool = True, add: bool = True) -> CommonExecutionResult:
         """set_statistic_value(sim_info, statistic, value, add_dynamic=True, add=True)
 
         Set the Value of a Statistic for the specified Sim.
@@ -233,7 +233,27 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def set_statistic_level(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add: bool=True) -> CommonExecutionResult:
+    def set_statistic_value_to_max(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool = True, add: bool = True) -> CommonExecutionResult:
+        """set_statistic_value_to_max(sim_info, statistic, add_dynamic=True, add=True)
+
+        Set the Value of a Statistic for the specified Sim to its max value.
+
+        :param sim_info: The Sim to modify.
+        :type sim_info: SimInfo
+        :param statistic: The identifier of the statistic to add a value to.
+        :type statistic: Union[int, CommonStatisticId, BaseStatistic]
+        :param add_dynamic: OBSOLETE: Add the statistic component to the Sim. This argument is no longer used and will be ignored.
+        :type add_dynamic: bool, optional
+        :param add: Whether to add the statistic to the Sim.
+        :type add: bool, optional
+        :return: The result of setting the statistic value. True, if successful. False, if not.
+        :rtype: CommonExecutionResult
+        """
+        return cls.set_statistic_value(sim_info, statistic, CommonStatisticUtils.get_statistic_max_value(statistic), add_dynamic=add_dynamic, add=add)
+
+    # noinspection PyUnusedLocal
+    @classmethod
+    def set_statistic_level(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add: bool = True) -> CommonExecutionResult:
         """set_statistic_level(sim_info, statistic, value, add_dynamic=True, add=True)
 
         Set the Level of a Statistic for the specified Sim.
@@ -253,7 +273,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def set_statistic_user_value(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> CommonExecutionResult:
+    def set_statistic_user_value(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool = True, add: bool = True) -> CommonExecutionResult:
         """set_statistic_user_value(sim_info, statistic, value, add_dynamic=True, add=True)
 
         Set the User Value of a Statistic for the specified Sim.
@@ -287,7 +307,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def add_statistic_value(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> CommonExecutionResult:
+    def add_statistic_value(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool = True, add: bool = True) -> CommonExecutionResult:
         """add_statistic_value(sim_info, statistic, value, add_dynamic=True, add=True)
 
         Change the Value of a Statistic for the specified Sim.
@@ -334,7 +354,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def add_statistic_modifier(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True):
+    def add_statistic_modifier(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool = True, add: bool = True):
         """add_statistic_modifier(sim_info, statistic, value, add_dynamic=True, add=True)
 
         Add a Modifier to the specified Statistic for the specified Sim.
@@ -365,7 +385,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def remove_statistic_modifier(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool=True, add: bool=True) -> bool:
+    def remove_statistic_modifier(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], value: float, add_dynamic: bool = True, add: bool = True) -> bool:
         """remove_statistic_modifier(sim_info, statistic, value, add_dynamic=True, add=True)
 
         Remove a Modifier from a Sim by value.
@@ -413,7 +433,7 @@ class CommonSimStatisticUtils(_HasS4CLClassLog):
 
     # noinspection PyUnusedLocal
     @classmethod
-    def remove_all_statistic_modifiers_for_statistic(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool=True, add: bool=True) -> bool:
+    def remove_all_statistic_modifiers_for_statistic(cls, sim_info: SimInfo, statistic: Union[int, CommonStatisticId, BaseStatistic], add_dynamic: bool = True, add: bool = True) -> bool:
         """remove_all_statistic_modifiers_for_statistic(sim_info, statistic, add_dynamic=True, add=True)
 
         Remove all Modifiers from the specified Statistic for the specified Sim.

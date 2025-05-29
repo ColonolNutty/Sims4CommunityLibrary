@@ -142,8 +142,15 @@ def _common_apply_loot_action_to_sim(output: CommonConsoleCommandOutput, loot_ac
         output(f'Invalid loot_action_id specified. You specified "{loot_action_id}".')
         return
     output(f'Applying Loot Action {loot_action_id} to Sim {sim_info}')
-    CommonSimLootActionUtils.apply_loot_actions_by_id_to_sim(loot_action_id, sim_info)
-    output('Done')
+    result = CommonSimLootActionUtils.apply_loot_actions_by_id_to_sim(loot_action_id, sim_info)
+    if result:
+        output('Success')
+    else:
+        loot_actions = CommonLootActionUtils.load_loot_actions_by_id(loot_action_id)
+        if loot_actions is None:
+            output(f'Failed, no loot action found with id {loot_action_id}')
+            return
+        output('Failed')
 
 
 @CommonConsoleCommand(
@@ -161,5 +168,12 @@ def _common_apply_loot_action_to_sim(output: CommonConsoleCommandOutput, loot_ac
         output(f'Invalid loot_action_id specified. You specified "{loot_action_id}".')
         return
     output(f'Applying Loot Action {loot_action_id} to Sim {source_sim_info} toward {target_sim_info}')
-    CommonSimLootActionUtils.apply_loot_actions_by_id_to_duo_sims(loot_action_id, source_sim_info, target_sim_info)
-    output('Done')
+    result = CommonSimLootActionUtils.apply_loot_actions_by_id_to_duo_sims(loot_action_id, source_sim_info, target_sim_info)
+    if result:
+        output('Success')
+    else:
+        loot_actions = CommonLootActionUtils.load_loot_actions_by_id(loot_action_id)
+        if loot_actions is None:
+            output(f'Failed, no loot action found with id {loot_action_id}')
+            return
+        output('Failed')

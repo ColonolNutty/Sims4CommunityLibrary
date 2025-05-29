@@ -113,7 +113,7 @@ class CommonSimNameUtils:
         :rtype: str
         """
         full_name = '{} {}'.format(CommonSimNameUtils.get_first_name(sim_info), CommonSimNameUtils.get_last_name(sim_info)).strip()
-        if full_name == '':
+        if full_name == ' ':
             full_name = 'No Name'
         return full_name
 

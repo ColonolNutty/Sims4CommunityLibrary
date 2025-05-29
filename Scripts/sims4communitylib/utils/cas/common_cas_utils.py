@@ -193,6 +193,9 @@ class CommonCASUtils(_HasS4CLClassLog):
         from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
         current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
         current_outfit_data = sim_info.get_outfit(current_outfit[0], current_outfit[1])
+        if current_outfit_data is None:
+            _log.format_with_message('No current outfit on the Sim', sim=sim_info, current_outfit=current_outfit)
+            return False
         from protocolbuffers import S4Common_pb2, Outfits_pb2
         saved_outfits = sim_info.save_outfits()
         made_changes = False
@@ -306,6 +309,9 @@ class CommonCASUtils(_HasS4CLClassLog):
             if outfit_category_and_index is None:
                 outfit_category_and_index = current_outfit
             existing_outfit_data = sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
+            if existing_outfit_data is None:
+                _log.format_with_message('No current outfit on the Sim', sim=sim_info, current_outfit=outfit_category_and_index)
+                return False
             cas_parts_by_body_type = dict()
             for cas_part in cas_parts:
                 cas_parts_by_body_type[int(CommonBodySlot.convert_to_vanilla(cas_part.body_type))] = cas_part
@@ -410,6 +416,9 @@ class CommonCASUtils(_HasS4CLClassLog):
         from sims4communitylib.utils.cas.common_outfit_utils import CommonOutfitUtils
         current_outfit = CommonOutfitUtils.get_current_outfit(sim_info)
         existing_outfit_data = sim_info.get_outfit(current_outfit[0], current_outfit[1])
+        if existing_outfit_data is None:
+            _log.format_with_message('No current outfit on the Sim', sim=sim_info, current_outfit=current_outfit)
+            return False
         from protocolbuffers import S4Common_pb2, Outfits_pb2
         saved_outfits = sim_info.save_outfits()
         made_changes_to_current_outfit = False
@@ -485,6 +494,9 @@ class CommonCASUtils(_HasS4CLClassLog):
         if outfit_category_and_index is None:
             outfit_category_and_index = current_outfit
         existing_outfit_data = sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
+        if existing_outfit_data is None:
+            _log.format_with_message('No current outfit on the Sim', sim=sim_info, current_outfit=outfit_category_and_index)
+            return False
         cas_part_ids = [cas_part.cas_part_id for cas_part in cas_parts]
         from protocolbuffers import S4Common_pb2, Outfits_pb2
         saved_outfits = sim_info.save_outfits()

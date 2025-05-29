@@ -17,6 +17,7 @@ To see the readme and the actual code, take a look at the repository on `Github`
    sims4communitylib.classes.enums
    sims4communitylib.classes.filters
    sims4communitylib.classes.interactions
+   sims4communitylib.classes.loot_actions
    sims4communitylib.classes.math
    sims4communitylib.classes.misc
    sims4communitylib.classes.options
@@ -24,6 +25,7 @@ To see the readme and the actual code, take a look at the repository on `Github`
    sims4communitylib.classes.runnables
    sims4communitylib.classes.serialization
    sims4communitylib.classes.test_based_scores
+   sims4communitylib.classes.testing
    sims4communitylib.classes.time
    sims4communitylib.conditionals
    sims4communitylib.dialogs

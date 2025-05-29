@@ -676,3 +676,8 @@ class CommonStringId(CommonInt):
     S4CL_OBJECT_HAS_STATISTIC_LOCKED = 0xF5038611
     # Tokens: {0.String} (Object) {1.String} (Statistic)
     S4CL_OBJECT_HAS_STATISTIC_UNLOCKED = 0xE4CF1826
+
+    # Tokens: {0.String} (ParticipantType Subject)
+    S4CL_NO_SUBJECTS_FOUND_FOR_TYPE = 0x0FAF1E80
+    # Tokens: {0.String} (ParticipantType Target)
+    S4CL_NO_TARGETS_FOUND_FOR_TYPE = 0x83301807

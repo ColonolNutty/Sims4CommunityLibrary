@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<I c="S4CLTestSetInstance" i="snippet" m="sims4communitylib.classes.common_test_set_instance" n="S4CL_TestSetInstance_ExampleTest_IsNotHuman_Actor" s="9931650771161685529">
+  <L n="test">
+    <L>
+      <V t="sim_is_human">
+        <U n="sim_is_human">
+          <T n="invert">True</T>
+          <E n="subject">Actor</E>
+          <V n="tooltip" t="enabled">
+            <T n="enabled">0x6E2D9480<!--{0.SimFirstName} is Human.--></T>
+          </V>
+        </U>
+      </V>
+    </L>
+  </L>
+</I>
