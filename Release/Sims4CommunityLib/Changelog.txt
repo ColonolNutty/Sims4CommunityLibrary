@@ -1,6 +1,23 @@
 v3.11:
 - Moved many Strings from the code into the string tables.
 - Added new utility CommonObjectStatisticUtils.
+- Moved alot of strings to the S4CL string tables
+- Added a vanilla fix for Sims spamming the bunny app, causing the game to lag immensely.
+- When checking for romance permissions, familial relationship bits are now checked in addition to the blood relations.
+- Added CommonObjectStatisticUtils
+- Added a Choose CAS Parts Dialog
+- Updated careers, death types, occult types, region ids, moods, skills, tags, and traits with new values
+- Fixed an issue with infinite looping in CommonCASUtils
+- Added commands to apply loot actions to Sims
+- Added checks to prevent setting motive values on Sims that don't have a motive
+- Added checks to prevent setting motives that are not even in the game.
+- Fixed an issue when getting the mood of Sims
+- Added a command to trigger vanilla burglars.
+- Fixed an issue when getting the display name of occults where it was giving the wrong display name.
+- Fixed an error caused by recent patch (5/27/2025)
+- Added CommonTestSetInstance for custom testing.
+- Added CommonLootActions for custom loot actions.
+- Added a function to set a statistic value to max.
 
 v3.10:
 - Fixed a vanilla issue when saving commodities.
