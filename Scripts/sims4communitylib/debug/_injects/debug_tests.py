@@ -13,7 +13,7 @@ from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
 log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_run_tests')
-log.enable()
+# log.enable()
 
 
 # @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), CompoundTestList, CompoundTestList.run_tests.__name__)

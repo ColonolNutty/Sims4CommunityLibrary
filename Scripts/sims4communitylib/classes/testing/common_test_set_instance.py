@@ -62,6 +62,7 @@ class CommonTunableTestSetBase(CompoundTestListLoadingMixin):
 class CommonTunableTestSet(CommonTunableTestSetBase, is_fragment=True):
     """A tunable set of tests."""
     def __init__(self, tunable_test_variant_class: Type[CommonTunableTestVariant] = CommonTunableTestVariant, test_locked_args=None, **kwargs) -> None:
+        test_locked_args = test_locked_args or dict()
         super().__init__(tunable_test_variant_class, test_locked_args=test_locked_args, **kwargs)
 
 
@@ -90,6 +91,7 @@ class S4CLTunableTestVariant(CommonTunableTestVariant):
 class S4CLTunableTestSet(CommonTunableTestSet):
     """A tunable test set for S4CL. This instance is used within other types of custom Tunables, such as custom LootActions."""
     def __init__(self, tunable_test_variant_class: Type[S4CLTunableTestVariant] = S4CLTunableTestVariant, test_locked_args=None, **kwargs) -> None:
+        test_locked_args = test_locked_args or dict()
         super().__init__(tunable_test_variant_class=tunable_test_variant_class, test_locked_args=test_locked_args, **kwargs)
 
 
