@@ -1,3 +1,6 @@
+v3.12:
+- Fixed a slight issue with test set instances.
+
 v3.11.1:
 - Fixed an error with household templates.
 

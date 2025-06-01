@@ -11,8 +11,7 @@ from typing import Any, Dict, Type
 
 from event_testing.tests import TestSetInstance, CompoundTestList, \
     CompoundTestListLoadingMixin, _get_debug_loaded_tuning_callbak, _verify_tooltip_tuning, TunableTestVariant
-from sims4.tuning.tunable import HasTunableSingletonFactory
-import sims4.resources
+from sims4.tuning.tunable import TunableList
 
 
 class CommonTunableTestVariant(TunableTestVariant):
@@ -41,7 +40,7 @@ class CommonTunableTestSetBase(CompoundTestListLoadingMixin):
         super().__init__(
             description=description,
             callback=_get_debug_loaded_tuning_callbak(self._on_tunable_loaded_callback, callback),
-            tunable=sims4.tuning.tunable.TunableList(
+            tunable=TunableList(
                 description='\n                             A list of tests.  All of these must pass for the\n                             group to pass.\n                             ',
                 tunable=self._get_tunable_test_variant_class()(
                     test_locked_args=test_locked_args
@@ -62,8 +61,7 @@ class CommonTunableTestSetBase(CompoundTestListLoadingMixin):
 class CommonTunableTestSet(CommonTunableTestSetBase, is_fragment=True):
     """A tunable set of tests."""
     def __init__(self, tunable_test_variant_class: Type[CommonTunableTestVariant] = CommonTunableTestVariant, test_locked_args=None, **kwargs) -> None:
-        test_locked_args = test_locked_args or dict()
-        super().__init__(tunable_test_variant_class, test_locked_args=test_locked_args, **kwargs)
+        super().__init__(tunable_test_variant_class=tunable_test_variant_class, test_locked_args=test_locked_args, **kwargs)
 
 
 class CommonTunableTestSetWithTooltip(CommonTunableTestSetBase):
@@ -91,7 +89,6 @@ class S4CLTunableTestVariant(CommonTunableTestVariant):
 class S4CLTunableTestSet(CommonTunableTestSet):
     """A tunable test set for S4CL. This instance is used within other types of custom Tunables, such as custom LootActions."""
     def __init__(self, tunable_test_variant_class: Type[S4CLTunableTestVariant] = S4CLTunableTestVariant, test_locked_args=None, **kwargs) -> None:
-        test_locked_args = test_locked_args or dict()
         super().__init__(tunable_test_variant_class=tunable_test_variant_class, test_locked_args=test_locked_args, **kwargs)
 
 
