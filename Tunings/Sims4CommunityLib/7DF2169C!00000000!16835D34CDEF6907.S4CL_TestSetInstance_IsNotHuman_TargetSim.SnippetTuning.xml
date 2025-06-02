@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<I c="S4CLTestSetInstance" i="snippet" m="sims4communitylib.classes.testing.common_test_set_instance" n="S4CL_TestSetInstance_IsNotHuman_TargetSim" s="1622242772158212359">
+  <L n="test">
+    <L>
+      <V t="sim_is_human">
+        <U n="sim_is_human">
+          <T n="invert">True</T>
+          <E n="subject">TargetSim</E>
+        </U>
+      </V>
+    </L>
+  </L>
+</I>

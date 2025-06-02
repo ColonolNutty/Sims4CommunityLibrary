@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<I c="S4CLTestSetInstance" i="snippet" m="sims4communitylib.classes.testing.common_test_set_instance" n="S4CL_TestSetInstance_IsNotInActiveHousehold_TargetSim" s="7797757312667995274">
+  <L n="test">
+    <L>
+      <V t="sim_is_in_active_household">
+        <U n="sim_is_in_active_household">
+          <T n="invert">True</T>
+          <E n="subject">TargetSim</E>
+        </U>
+      </V>
+    </L>
+  </L>
+</I>

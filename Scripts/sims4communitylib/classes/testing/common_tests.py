@@ -18,6 +18,7 @@ from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
+from sims4communitylib.utils.sims.common_household_utils import CommonHouseholdUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
 
@@ -222,8 +223,32 @@ class _S4CLSimIsHumanTest(CommonSubjectTest):
         result = CommonSpeciesUtils.is_human(sim_info)
         if self.invert:
             if result:
-                return CommonTestResult(False, reason=f'{sim_info} is Human', tooltip_text=tooltip, tooltip_tokens=(sim_info,))
+                return CommonTestResult(False, reason=f'{sim_info} is Human', tooltip_text=tooltip, tooltip_tokens=(sim_info,), hide_tooltip=True)
         else:
             if not result:
-                return CommonTestResult(False, reason=f'{sim_info} is not Human', tooltip_text=tooltip, tooltip_tokens=(sim_info,))
+                return CommonTestResult(False, reason=f'{sim_info} is not Human', tooltip_text=tooltip, tooltip_tokens=(sim_info,), hide_tooltip=True)
+        return CommonTestResult.TRUE
+
+
+class _S4CLSimIsInActiveHouseholdTest(CommonSubjectTest):
+    """Tests if a Sim is in the active household."""
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_mod_identity(cls) -> CommonModIdentity:
+        return ModInfo.get_identity()
+
+    # noinspection PyMissingOrEmptyDocstring
+    @classmethod
+    def get_log_identifier(cls) -> str:
+        return 's4cl_sim_is_in_active_household'
+
+    def _run_subject_sim_test(self, sim_info: SimInfo, *args, tooltip=None, **kwargs) -> CommonTestResult:
+        self.log.format_with_message('Got sim', sim=sim_info)
+        result = CommonHouseholdUtils.is_part_of_active_household(sim_info)
+        if self.invert:
+            if result:
+                return CommonTestResult(False, reason=f'{sim_info} is part of the active household.', tooltip_text=tooltip, tooltip_tokens=(sim_info,), hide_tooltip=True)
+        else:
+            if not result:
+                return CommonTestResult(False, reason=f'{sim_info} is not part of the active household.', tooltip_text=tooltip, tooltip_tokens=(sim_info,), hide_tooltip=True)
         return CommonTestResult.TRUE

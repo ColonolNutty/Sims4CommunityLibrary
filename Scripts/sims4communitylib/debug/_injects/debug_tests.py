@@ -7,7 +7,9 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Any
 
+from event_testing.tests import CompoundTestList, TestList
 from sims4communitylib.modinfo import ModInfo
+from sims4communitylib.utils.common_injection_utils import CommonInjectionUtils
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
 
 log = CommonLogRegistry().register_log(ModInfo.get_identity(), 's4cl_run_tests')

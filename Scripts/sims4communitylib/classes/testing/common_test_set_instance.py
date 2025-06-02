@@ -79,8 +79,10 @@ class S4CLTunableTestVariant(CommonTunableTestVariant):
 
     def _get_test_variants(self) -> Dict[str, Any]:
         from sims4communitylib.classes.testing.common_tests import _S4CLSimIsHumanTest
+        from sims4communitylib.classes.testing.common_tests import _S4CLSimIsInActiveHouseholdTest
         items = {
-            'sim_is_human': _S4CLSimIsHumanTest.TunableFactory
+            'sim_is_human': _S4CLSimIsHumanTest.TunableFactory,
+            'sim_is_in_active_household': _S4CLSimIsInActiveHouseholdTest.TunableFactory
         }
         items.update(super()._get_test_variants())
         return items
