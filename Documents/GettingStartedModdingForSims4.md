@@ -44,7 +44,7 @@ Tools you will need:
       1. Open the Tools menu at the top
       2. Click the `Hash Generator` option.
       3. Enter the name of your tuning file (with no spaces, use underscores instead) into the `Text` box under `Hash Text`
-        - At this point, you should see a unique `FNV64` identifier for your tuning file. (It is generated based on the text, entering the same text will result in the same identifier.
+        - At this point, you should see a unique `FNV64` identifier for your tuning file. (It is generated based on the text, entering the same text will result in the same identifier.)
       4. Copy the `FNV64` value to the clipboard.
       5. Back in your package file, right click the imported vanilla tuning file, click `Duplicate`
       6. Enter the copied `FNV64` value into the `Instance` field. Leave the `Group` field alone.
