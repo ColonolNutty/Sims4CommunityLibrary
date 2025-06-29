@@ -64,7 +64,7 @@ class CommonSimInventoryUtils(_HasS4CLClassLog):
         return cls._get_inventory(sim_info)
 
     @classmethod
-    def get_objects_in_inventory_by_definition_ids_gen(cls, sim_info: SimInfo, object_definition_ids: Tuple[int], include_object_callback: Callable[[GameObject], bool] = None) -> Iterator[GameObject]:
+    def get_objects_in_inventory_by_definition_ids_gen(cls, sim_info: SimInfo, object_definition_ids: Tuple[int, ...], include_object_callback: Callable[[GameObject], bool] = None) -> Iterator[GameObject]:
         """get_objects_in_inventory_by_definition_id_gen(sim_info, object_definition_ids, include_object_callback=None)
 
         Retrieve all Objects in the inventory of a Sim that match the definition ids.

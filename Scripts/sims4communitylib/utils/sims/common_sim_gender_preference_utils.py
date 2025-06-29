@@ -12,6 +12,7 @@ from sims.sim_info import SimInfo
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.common_gender_preference_type import CommonGenderPreferenceType
+from sims4communitylib.enums.statistics_enum import CommonStatisticId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
@@ -48,6 +49,14 @@ class CommonSimGenderPreferenceUtils:
         else:
             attraction_traits_map = GlobalGenderPreferenceTuning.WOOHOO_PREFERENCE_TRAITS_MAPPING
         vanilla_gender = CommonGender.convert_to_vanilla(gender)
+        if preference_type == CommonGenderPreferenceType.ROMANTIC or preference_type == GenderPreferenceType.ROMANTIC:
+            gender_preference_stat_type = GlobalGenderPreferenceTuning.GENDER_PREFERENCE.get(vanilla_gender)
+            if is_attracted_to_gender:
+                new_value = gender_preference_stat_type.max_value
+            else:
+                new_value = gender_preference_stat_type.min_value
+            sim_info.set_stat_value(gender_preference_stat_type, new_value)
+
         if is_attracted_to_gender is None:
             traits_to_remove = (
                 attraction_traits_map[vanilla_gender].not_attracted_trait,
@@ -67,12 +76,6 @@ class CommonSimGenderPreferenceUtils:
         add_result = CommonTraitUtils.add_trait(sim_info, trait_to_add)
         if not add_result:
             return add_result
-        gender_preference_stat_type = GlobalGenderPreferenceTuning.GENDER_PREFERENCE.get(vanilla_gender)
-        if is_attracted_to_gender:
-            new_value = gender_preference_stat_type.max_value
-        else:
-            new_value = gender_preference_stat_type.min_value
-        sim_info.set_stat_value(gender_preference_stat_type, new_value)
         return CommonExecutionResult.TRUE
 
     @classmethod

@@ -203,22 +203,22 @@ class CommonLocalizationUtils:
         return _create_localized_string(identifier, *tokens)
 
     @staticmethod
-    def colorize(localized_string: LocalizedString, text_color: CommonLocalizedStringColor=CommonLocalizedStringColor.DEFAULT) -> LocalizedString:
+    def colorize(localized_string: Union[LocalizedString, CommonStringId], text_color: CommonLocalizedStringColor = CommonLocalizedStringColor.DEFAULT) -> LocalizedString:
         """colorize(localized_string, text_color=CommonLocalizedStringColor.DEFAULT)
 
         Set the text color of a LocalizedString.
 
         :param localized_string: The LocalizedString to set the text color of.
-        :type localized_string: LocalizedString
+        :type localized_string: Union[LocalizedString, CommonStringId]
         :param text_color: The text will become this color.
         :type text_color: CommonLocalizedStringColor
         :return: A LocalizedString with text in the specified color.
         :rtype: LocalizedString
         """
         if text_color == CommonLocalizedStringColor.DEFAULT:
-            return localized_string
+            return CommonLocalizationUtils.create_localized_string(localized_string)
         if not hasattr(text_color, 'value'):
-            return localized_string
+            return CommonLocalizationUtils.create_localized_string(localized_string)
         return CommonLocalizationUtils.create_localized_string(text_color.value, tokens=(localized_string,))
 
     @staticmethod
