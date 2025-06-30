@@ -1,3 +1,6 @@
+v3.14:
+- Fixed an infinite loop in the colorize function.
+
 v3.13:
 - Fixed an issue when updating Sexual Orientation Woohoo Preferences via CommonSimGenderPreferenceUtils.set_preference_for_gender where it would update Romantic Preferences too.
 - Added a vanilla fix for Premade Sim households when premade Sim info stops existing in Tunings.
