@@ -216,9 +216,11 @@ class CommonLocalizationUtils:
         :rtype: LocalizedString
         """
         if text_color == CommonLocalizedStringColor.DEFAULT:
-            return CommonLocalizationUtils.create_localized_string(localized_string)
+            # Calling create_localized_string here will cause infinite loop.
+            return localized_string
         if not hasattr(text_color, 'value'):
-            return CommonLocalizationUtils.create_localized_string(localized_string)
+            # Calling create_localized_string here will cause infinite loop.
+            return localized_string
         return CommonLocalizationUtils.create_localized_string(text_color.value, tokens=(localized_string,))
 
     @staticmethod
