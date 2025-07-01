@@ -12,7 +12,6 @@ from sims.sim_info import SimInfo
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.enums.common_gender import CommonGender
 from sims4communitylib.enums.common_gender_preference_type import CommonGenderPreferenceType
-from sims4communitylib.enums.statistics_enum import CommonStatisticId
 from sims4communitylib.exceptions.common_exceptions_handler import CommonExceptionHandler
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
