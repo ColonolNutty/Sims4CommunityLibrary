@@ -20,6 +20,7 @@ class CommonOccultType(CommonInt):
     """
     NONE: 'CommonOccultType' = ...
     ALIEN: 'CommonOccultType' = ...
+    FAIRY: 'CommonOccultType' = ...
     GHOST: 'CommonOccultType' = ...
     MERMAID: 'CommonOccultType' = ...
     NON_OCCULT: 'CommonOccultType' = ...
@@ -131,22 +132,8 @@ class CommonOccultType(CommonInt):
         :return: The specified value translated to CommonOccultType. The value will be returned if it cannot be translated.
         :rtype: Union['CommonOccultType', OccultType, int]
         """
-        if isinstance(value, CommonOccultType):
-            return value
-        mapping: Dict[OccultType, CommonOccultType] = dict()
-        if hasattr(OccultType, 'HUMAN'):
-            mapping[OccultType.HUMAN] = CommonOccultType.NON_OCCULT
-        if hasattr(OccultType, 'ALIEN'):
-            mapping[OccultType.ALIEN] = CommonOccultType.ALIEN
-        if hasattr(OccultType, 'VAMPIRE'):
-            mapping[OccultType.VAMPIRE] = CommonOccultType.VAMPIRE
-        if hasattr(OccultType, 'MERMAID'):
-            mapping[OccultType.MERMAID] = CommonOccultType.MERMAID
-        if hasattr(OccultType, 'WITCH'):
-            mapping[OccultType.WITCH] = CommonOccultType.WITCH
-        if hasattr(OccultType, 'WEREWOLF'):
-            mapping[OccultType.WEREWOLF] = CommonOccultType.WEREWOLF
-        return mapping.get(value, value)
+        from sims4communitylib.utils.sims.common_sim_occult_type_utils import CommonSimOccultTypeUtils
+        return CommonSimOccultTypeUtils.convert_custom_type_from_vanilla(value)
 
     @staticmethod
     def convert_to_localized_string_id(value: Union['CommonOccultType', OccultType]) -> Union[int, str, CommonStringId, LocalizedString]:
@@ -163,6 +150,7 @@ class CommonOccultType(CommonInt):
         mapping: Dict[CommonOccultType, CommonStringId] = {
             CommonOccultType.NONE: CommonStringId.S4CL_NONE,
             CommonOccultType.ALIEN: CommonStringId.S4CL_ALIEN,
+            CommonOccultType.FAIRY: CommonStringId.S4CL_FAIRY,
             CommonOccultType.MERMAID: CommonStringId.S4CL_MERMAID,
             CommonOccultType.ROBOT: CommonStringId.S4CL_ROBOT,
             CommonOccultType.SCARECROW: CommonStringId.S4CL_SCARECROW,

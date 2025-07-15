@@ -31,6 +31,7 @@ class CommonCareerId(CommonInt):
     EDUCATION: 'CommonCareerId' = 219591
     ENGINEER: 'CommonCareerId' = 217872
     ENTERTAINER: 'CommonCareerId' = 27929
+    EP19_QUESTS: 'CommonCareerId' = 424758
     FREELANCER_WITH_AGENCY_ARTIST: 'CommonCareerId' = 205686
     FREELANCER_WITH_AGENCY_FASHION_PHOTOGRAPHER: 'CommonCareerId' = 214782
     FREELANCER_WITH_AGENCY_MAKER: 'CommonCareerId' = 232809
@@ -42,6 +43,7 @@ class CommonCareerId(CommonInt):
     INTERIOR_DECORATOR: 'CommonCareerId' = 257934
     LAW: 'CommonCareerId' = 223298
     MILITARY: 'CommonCareerId' = 202483
+    NATUROPATH: 'CommonCareerId' = 439108
     NPC_ACTOR_CAREER_CAMERA_OPERATOR: 'CommonCareerId' = 196625
     NPC_ACTOR_CAREER_HAIR_AND_MAKEUP_STYLIST: 'CommonCareerId' = 195951
     NPC_ACTOR_CAREER_PRODUCER: 'CommonCareerId' = 196627
@@ -86,6 +88,7 @@ class CommonCareerId(CommonInt):
     NPC_STRANGER_VILLE_SCIENTIST: 'CommonCareerId' = 205705
     NPC_UNIVERSITY_PROFESSOR_ARTS: 'CommonCareerId' = 224750
     NPC_UNIVERSITY_PROFESSOR_SCIENCE: 'CommonCareerId' = 224751
+    NPC_VENUE_APOTHECARY_SHOP: 'CommonCareerId' = 441266
     NPC_VENUE_BARISTA: 'CommonCareerId' = 122270
     NPC_VENUE_BARTENDER: 'CommonCareerId' = 109458
     NPC_VENUE_BARTENDER_COMPANY: 'CommonCareerId' = 130590
@@ -93,6 +96,7 @@ class CommonCareerId(CommonInt):
     NPC_VENUE_COMMUNITY_GARDENER: 'CommonCareerId' = 112083
     NPC_VENUE_CURIO_SHOP_OWNER: 'CommonCareerId' = 206662
     NPC_VENUE_DJ: 'CommonCareerId' = 122818
+    NPC_VENUE_GNOME_SHOP: 'CommonCareerId' = 441239
     NPC_VENUE_LANDLORD: 'CommonCareerId' = 143653
     NPC_VENUE_LIBRARIAN: 'CommonCareerId' = 112015
     NPC_VENUE_MASSAGE_THERAPIST: 'CommonCareerId' = 118550

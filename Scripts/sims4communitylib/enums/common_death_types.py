@@ -25,6 +25,7 @@ class CommonDeathType(CommonInt):
     ELDER_EXHAUSTION: 'CommonDeathType' = ...
     ELECTROCUTION: 'CommonDeathType' = ...
     EMBARRASSMENT: 'CommonDeathType' = ...
+    EMOTIONAL_STARVATION: 'CommonDeathType' = ...
     FIRE: 'CommonDeathType' = ...
     FLIES: 'CommonDeathType' = ...
     FROZEN: 'CommonDeathType' = ...
@@ -49,8 +50,8 @@ class CommonDeathType(CommonInt):
     VENDING_MACHINE: 'CommonDeathType' = ...
     WITCH_OVERLOAD: 'CommonDeathType' = ...
 
-    @staticmethod
-    def get_random() -> 'CommonDeathType':
+    @classmethod
+    def get_random(cls) -> 'CommonDeathType':
         """get_random()
 
         Retrieve a random death type.
@@ -60,8 +61,8 @@ class CommonDeathType(CommonInt):
         """
         return CommonDeathType.convert_from_vanilla(DeathType.get_random_death_type())
 
-    @staticmethod
-    def convert_to_vanilla(value: Union['CommonDeathType', int, DeathType]) -> Union[DeathType, 'CommonDeathType', int]:
+    @classmethod
+    def convert_to_vanilla(cls, value: Union['CommonDeathType', int, DeathType]) -> Union[DeathType, 'CommonDeathType', int]:
         """convert_to_vanilla(value)
 
         Convert a CommonDeathType into the vanilla DeathType enum.
@@ -92,6 +93,8 @@ class CommonDeathType(CommonInt):
             mapping[CommonDeathType.ELDER_EXHAUSTION] = DeathType.ElderExhaustion
         if hasattr(DeathType, 'Embarrassment'):
             mapping[CommonDeathType.EMBARRASSMENT] = DeathType.Embarrassment
+        if hasattr(DeathType, 'EmotionalStarvation'):
+            mapping[CommonDeathType.EMOTIONAL_STARVATION] = DeathType.EmotionalStarvation
         if hasattr(DeathType, 'Fire'):
             mapping[CommonDeathType.FIRE] = DeathType.Fire
         if hasattr(DeathType, 'Drown'):
@@ -147,8 +150,8 @@ class CommonDeathType(CommonInt):
 
         return mapping.get(value, DeathType.NONE)
 
-    @staticmethod
-    def convert_from_vanilla(value: Union[DeathType, int, 'CommonDeathType']) -> Union['CommonDeathType', DeathType, int]:
+    @classmethod
+    def convert_from_vanilla(cls, value: Union[DeathType, int, 'CommonDeathType']) -> Union['CommonDeathType', DeathType, int]:
         """convert_from_vanilla(value)
 
         Convert a DeathType into a CommonDeathType enum.
@@ -179,6 +182,8 @@ class CommonDeathType(CommonInt):
             mapping[DeathType.ElderExhaustion] = CommonDeathType.ELDER_EXHAUSTION
         if hasattr(DeathType, 'Embarrassment'):
             mapping[DeathType.Embarrassment] = CommonDeathType.EMBARRASSMENT
+        if hasattr(DeathType, 'EmotionalStarvation'):
+            mapping[DeathType.EmotionalStarvation] = CommonDeathType.EMOTIONAL_STARVATION
         if hasattr(DeathType, 'Fire'):
             mapping[DeathType.Fire] = CommonDeathType.FIRE
         if hasattr(DeathType, 'Drown'):

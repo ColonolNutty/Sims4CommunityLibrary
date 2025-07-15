@@ -28,6 +28,7 @@ class CommonRegionId(CommonInt):
     FORGOTTEN_GROTTO: 'CommonRegionId' = 104062
     HIGH_SCHOOL_WORLD: 'CommonRegionId' = 272365
     ISLAND_WORLD: 'CommonRegionId' = 208308
+    INNISGREEN: 'CommonRegionId' = 421095
     JUNGLE: 'CommonRegionId' = 173593
     MAGIC_VENUE: 'CommonRegionId' = 219134
     MAGIC_WORLD: 'CommonRegionId' = 216626

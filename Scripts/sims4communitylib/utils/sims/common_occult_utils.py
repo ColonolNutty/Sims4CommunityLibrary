@@ -8,7 +8,9 @@ Copyright (c) COLONOLNUTTY
 import random
 from typing import Iterator, Tuple, Union
 
+from cas.cas import OutfitOverrideOptionFlags
 from sims.occult.occult_enums import OccultType
+from sims.outfits.outfit_enums import BodyType
 from sims.sim_info import SimInfo
 from sims.sim_info_base_wrapper import SimInfoBaseWrapper
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
@@ -159,6 +161,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(False, reason=f'sim_info was None!', hide_tooltip=True)
         if not hasattr(sim_info, 'occult_tracker') or sim_info.occult_tracker is None:
             return CommonTestResult(False, reason=f'{sim_info} did not have an occult tracker, thus they did not have any occult types.', hide_tooltip=True)
+        occult_type = CommonOccultType.convert_to_vanilla(occult_type)
         if sim_info.occult_tracker.has_occult_type(occult_type):
             return CommonTestResult(True, reason=f'{sim_info} has a Sim Info for Occult Type {occult_type}. (Meaning the Occult has an alternative form.)', tooltip_text=CommonStringId.S4CL_SIM_HAS_OCCULT_SIM_INFO_FOR_OCCULT_TYPE, tooltip_tokens=(sim_info, CommonOccultType.convert_to_localized_string_id(occult_type)))
         return CommonTestResult(False, reason=f'{sim_info} did not have a Sim Info Occult Type {occult_type}. (Meaning the Occult likely does not have an alternative form.)', tooltip_text=CommonStringId.S4CL_SIM_DOES_NOT_HAVE_OCCULT_SIM_INFO_FOR_OCCULT_TYPE, tooltip_tokens=(sim_info, CommonOccultType.convert_to_localized_string_id(occult_type)))
@@ -219,6 +222,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return is_occult_available_result
         occult_type_add_mappings = {
             CommonOccultType.ALIEN: CommonOccultUtils.add_alien_occult,
+            CommonOccultType.FAIRY: CommonOccultUtils.add_fairy_occult,
             CommonOccultType.MERMAID: CommonOccultUtils.add_mermaid_occult,
             CommonOccultType.PLANT_SIM: CommonOccultUtils.add_plant_sim_occult,
             CommonOccultType.ROBOT: CommonOccultUtils.add_robot_occult,
@@ -252,6 +256,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return is_occult_available_result.reverse_result()
         occult_type_remove_mappings = {
             CommonOccultType.ALIEN: CommonOccultUtils.remove_alien_occult,
+            CommonOccultType.FAIRY: CommonOccultUtils.remove_fairy_occult,
             CommonOccultType.MERMAID: CommonOccultUtils.remove_mermaid_occult,
             CommonOccultType.PLANT_SIM: CommonOccultUtils.remove_plant_sim_occult,
             CommonOccultType.ROBOT: CommonOccultUtils.remove_robot_occult,
@@ -409,6 +414,78 @@ class CommonOccultUtils(_HasS4CLClassLog):
             CommonTraitId.OCCULT_MERMAID_TYAE,
             CommonTraitId.OCCULT_MERMAID,
         )
+        CommonOccultUtils.switch_to_occult_form(sim_info, OccultType.HUMAN)
+        return CommonTraitUtils.remove_traits(sim_info, traits)
+
+    @classmethod
+    def add_fairy_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
+        """add_fairy_occult(sim_info)
+
+        Add the Fairy Occult Type to a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The result of adding the Fairy occult. True, if the Sim has successfully become a Fairy. False, if not.
+        :rtype: CommonExecutionResult
+        """
+        if sim_info is None:
+            raise AssertionError('Argument sim_info was None')
+        is_fairy_available_result = CommonOccultUtils.is_fairy_occult_available()
+        if not is_fairy_available_result:
+            return is_fairy_available_result
+        is_fairy_result = CommonOccultUtils.is_fairy(sim_info)
+        if is_fairy_result:
+            return is_fairy_result
+        # loot_FairyOccult_AddOccult
+        add_loot_action_id = 420057
+        if CommonSimLootActionUtils.apply_loot_actions_by_id_to_sim(add_loot_action_id, sim_info):
+            return CommonExecutionResult.TRUE
+        return CommonExecutionResult.FALSE
+
+    @classmethod
+    def remove_fairy_occult(cls, sim_info: SimInfo) -> CommonExecutionResult:
+        """remove_fairy_occult(sim_info)
+
+        Remove the Fairy Occult Type from a Sim.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The result of removing the Fairy occult. True, if the Fairy Occult Type has been successfully removed from the specified Sim. False, if not.
+        :rtype: CommonExecutionResult
+        """
+        if sim_info is None:
+            raise AssertionError('Argument sim_info was None')
+        is_fairy_available_result = CommonOccultUtils.is_fairy_occult_available()
+        if not is_fairy_available_result:
+            return is_fairy_available_result.reverse_result()
+        is_fairy_result = CommonOccultUtils.is_fairy(sim_info)
+        if not is_fairy_result:
+            return is_fairy_result.reverse_result()
+        traits: Tuple[Union[int, CommonTraitId], ...] = (
+            CommonTraitId.OCCULT_FAIRY_ALL_AGES,
+            CommonTraitId.OCCULT_FAIRY_TYAE,
+            CommonTraitId.OCCULT_FAIRY_FAIRY_FORM,
+            CommonTraitId.OCCULT_FAIRY_FLYING_DISALLOWED,
+            CommonTraitId.OCCULT_FAIRY_FLYING_WALK_STYLE,
+            CommonTraitId.OCCULT_FAIRY_HIGH_FAE_LINEAGE,
+        )
+        try:
+            from cas.cas import remove_caspart_by_bodytype
+            subject = sim_info
+            occult_sim_info = subject.occult_tracker._sim_info_map[OccultType.FAIRY]
+            if occult_sim_info is not None:
+                modified_sim_info = SimInfoBaseWrapper(gender=subject.gender, age=subject.age, species=subject.species, first_name=subject.first_name, last_name=subject.last_name, breed_name=subject.breed_name, full_name_key=subject.full_name_key, breed_name_key=subject.breed_name_key)
+                remove_caspart_by_bodytype(subject._base, modified_sim_info._base, BodyType.WINGS, True, True)
+                option_flags = OutfitOverrideOptionFlags.DEFAULT
+                from cas.cas import apply_siminfo_override
+                apply_siminfo_override(subject._base, modified_sim_info._base, subject._base, option_flags)
+                apply_siminfo_override(occult_sim_info._base, modified_sim_info._base, occult_sim_info._base, option_flags)
+                occult_human_sim_info = subject.occult_tracker._sim_info_map[OccultType.HUMAN]
+                if occult_human_sim_info is not None:
+                    occult_human_sim_info.pelt_layers = modified_sim_info.pelt_layers
+                    occult_human_sim_info._base.pelt_layers = modified_sim_info._base.pelt_layers
+        except Exception as ex:
+            cls.get_log().format_error_with_message('Failed to remove fairy wings from Sim.', sim=sim_info, exception=ex)
         CommonOccultUtils.switch_to_occult_form(sim_info, OccultType.HUMAN)
         return CommonTraitUtils.remove_traits(sim_info, traits)
 
@@ -916,6 +993,28 @@ class CommonOccultUtils(_HasS4CLClassLog):
         return CommonTestResult(False, reason=f'{sim_info} is not an Alien.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_AN_ALIEN, tooltip_tokens=(sim_info,))
 
     @classmethod
+    def is_fairy(cls, sim_info: SimInfo) -> CommonTestResult:
+        """is_fairy(sim_info)
+
+        Determine if a Sim is a Fairy.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The result of testing. True, if the Sim is a Fairy. False, if not.
+        :rtype: CommonExecutionResult
+        """
+        if sim_info is None:
+            raise AssertionError('Argument sim_info was None')
+        is_fairy_available_result = CommonOccultUtils.is_fairy_occult_available()
+        if not is_fairy_available_result:
+            return is_fairy_available_result
+        if CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_FAIRY_ALL_AGES) or CommonOccultUtils._has_occult_trait(sim_info, CommonTraitId.OCCULT_FAIRY_ALL_AGES):
+            return CommonTestResult(True, reason=f'{sim_info} is a Fairy. They had Occult Fairy Trait.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_FAIRY, tooltip_tokens=(sim_info,))
+        if CommonOccultUtils.has_occult_type(sim_info, OccultType.FAIRY):
+            return CommonTestResult(True, reason=f'{sim_info} is a Fairy. They had Occult Type Fairy.', tooltip_text=CommonStringId.S4CL_SIM_IS_A_FAIRY, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not a Fairy.', tooltip_text=CommonStringId.S4CL_SIM_IS_NOT_A_FAIRY, tooltip_tokens=(sim_info,))
+
+    @classmethod
     def is_plant_sim(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_plant_sim(sim_info)
 
@@ -1316,6 +1415,23 @@ class CommonOccultUtils(_HasS4CLClassLog):
         return CommonTestResult(False, reason=f'{sim_info} is not currently in Alien Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_NOT_IN_ALIEN_FORM, tooltip_tokens=(sim_info,))
 
     @classmethod
+    def is_currently_a_fairy(cls, sim_info: SimInfo) -> CommonTestResult:
+        """is_currently_a_fairy(sim_info)
+
+        Determine if a Sim is currently in their Fairy form.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :return: The result of testing. True, if the Sim is currently in their Fairy form. False, if not.
+        :rtype: CommonTestResult
+        """
+        if sim_info is None:
+            raise AssertionError('Argument sim_info was None')
+        if CommonTraitUtils.has_trait(sim_info, CommonTraitId.OCCULT_FAIRY_FAIRY_FORM):
+            return CommonTestResult(True, reason=f'{sim_info} is currently in Fairy Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_IN_FAIRY_FORM, tooltip_tokens=(sim_info,))
+        return CommonTestResult(False, reason=f'{sim_info} is not currently in Fairy Form.', tooltip_text=CommonStringId.S4CL_SIM_IS_CURRENTLY_NOT_IN_FAIRY_FORM, tooltip_tokens=(sim_info,))
+
+    @classmethod
     def is_currently_a_werewolf(cls, sim_info: SimInfo) -> CommonTestResult:
         """is_currently_a_werewolf(sim_info)
 
@@ -1452,6 +1568,7 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(True, reason='Obviously the Non Occult "occult type" is available, what did you expect?', hide_tooltip=True)
         occult_type_mappings = {
             CommonOccultType.ALIEN: CommonOccultUtils.is_alien_occult_available,
+            CommonOccultType.FAIRY: CommonOccultUtils.is_fairy_occult_available,
             CommonOccultType.MERMAID: CommonOccultUtils.is_mermaid_occult_available,
             CommonOccultType.ROBOT: CommonOccultUtils.is_robot_occult_available,
             CommonOccultType.SCARECROW: CommonOccultUtils.is_scarecrow_occult_available,
@@ -1479,6 +1596,21 @@ class CommonOccultUtils(_HasS4CLClassLog):
             return CommonTestResult(False, reason='Aliens do not exist. They are a myth! (At least in this game, possibly missing DLC or bugged Mods?)', tooltip_text=CommonStringId.S4CL_ALIEN_OCCULT_DOES_NOT_EXIST)
         if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_ALIEN):
             return CommonTestResult(False, reason='The Alien trait is not available.', tooltip_text=CommonStringId.S4CL_ALIEN_TRAIT_DOES_NOT_EXIST)
+        return CommonTestResult.TRUE
+
+    @classmethod
+    def is_fairy_occult_available(cls) -> CommonTestResult:
+        """is_fairy_occult_available()
+
+        Determine if the Fairy Occult is available.
+
+        :return: The result of testing. True, if the Fairy Occult is available.. False, if not.
+        :rtype: CommonTestResult
+        """
+        if not hasattr(OccultType, 'FAIRY'):
+            return CommonTestResult(False, reason='Fairies do not exist. They are a myth! (At least in this game, possibly missing DLC or bugged Mods?)', tooltip_text=CommonStringId.S4CL_FAIRY_OCCULT_DOES_NOT_EXIST)
+        if not CommonTraitUtils.is_trait_available(CommonTraitId.OCCULT_FAIRY_ALL_AGES):
+            return CommonTestResult(False, reason='The Fairy trait is not available.', tooltip_text=CommonStringId.S4CL_FAIRY_TRAIT_DOES_NOT_EXIST)
         return CommonTestResult.TRUE
 
     @classmethod

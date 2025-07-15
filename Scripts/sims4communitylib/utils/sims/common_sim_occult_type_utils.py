@@ -84,6 +84,7 @@ class CommonSimOccultTypeUtils:
         from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
         occult_type_mappings: Dict[CommonOccultType, Callable[[SimInfo], CommonTestResult]] = {
             CommonOccultType.ALIEN: CommonOccultUtils.is_alien,
+            CommonOccultType.FAIRY: CommonOccultUtils.is_fairy,
             CommonOccultType.MERMAID: CommonOccultUtils.is_mermaid,
             CommonOccultType.ROBOT: CommonOccultUtils.is_robot,
             CommonOccultType.SCARECROW: CommonOccultUtils.is_scarecrow,
@@ -118,6 +119,7 @@ class CommonSimOccultTypeUtils:
         from sims4communitylib.utils.sims.common_occult_utils import CommonOccultUtils
         occult_type_mappings: Dict[CommonOccultType, Callable[[SimInfo], CommonTestResult]] = {
             CommonOccultType.ALIEN: CommonOccultUtils.is_currently_an_alien,
+            CommonOccultType.FAIRY: CommonOccultUtils.is_currently_a_fairy,
             CommonOccultType.MERMAID: CommonOccultUtils.is_currently_a_mermaid,
             CommonOccultType.ROBOT: CommonOccultUtils.is_currently_a_robot,
             CommonOccultType.SCARECROW: CommonOccultUtils.is_currently_a_scarecrow,
@@ -164,6 +166,8 @@ class CommonSimOccultTypeUtils:
             return CommonOccultType.WITCH
         elif CommonOccultUtils.is_werewolf(sim_info):
             return CommonOccultType.WEREWOLF
+        elif CommonOccultUtils.is_fairy(sim_info):
+            return CommonOccultType.FAIRY
         return CommonOccultType.NON_OCCULT
 
     @staticmethod
@@ -199,10 +203,12 @@ class CommonSimOccultTypeUtils:
             return CommonOccultType.GHOST
         elif CommonOccultUtils.is_skeleton(sim_info):
             return CommonOccultType.SKELETON
+        elif CommonOccultUtils.is_currently_a_fairy(sim_info):
+            return CommonOccultType.FAIRY
         return CommonOccultType.NON_OCCULT
 
     @staticmethod
-    def convert_to_vanilla(occult_type: 'CommonOccultType') -> Union[OccultType, None]:
+    def convert_to_vanilla(occult_type: CommonOccultType) -> Union[OccultType, None]:
         """convert_to_vanilla(occult_type)
 
         Convert CommonOccultType into OccultType.
@@ -217,7 +223,20 @@ class CommonSimOccultTypeUtils:
         return CommonSimOccultTypeUtils.convert_custom_type_to_vanilla(occult_type)
 
     @staticmethod
-    def convert_custom_type_to_vanilla(occult_type: 'CommonOccultType') -> Union[OccultType, None]:
+    def convert_from_vanilla(occult_type: OccultType) -> Union[CommonOccultType, None]:
+        """convert_from_vanilla(occult_type)
+
+        Convert an OccultType into CommonOccultType.
+
+        :param occult_type: An instance of an OccultType
+        :type occult_type: OccultType
+        :return: The specified OccultType translated to CommonOccultType, or None if the value could not be translated.
+        :rtype: Union[CommonOccultType, None]
+        """
+        return CommonSimOccultTypeUtils.convert_custom_type_from_vanilla(occult_type)
+
+    @staticmethod
+    def convert_custom_type_to_vanilla(occult_type: CommonOccultType) -> Union[OccultType, None]:
         """convert_custom_type_to_vanilla(occult_type)
 
         Convert a CommonOccultType into OccultType.
@@ -236,12 +255,45 @@ class CommonSimOccultTypeUtils:
         conversion_mapping: Dict[CommonOccultType, OccultType] = {
             CommonOccultType.NON_OCCULT: OccultType.HUMAN,
             CommonOccultType.ALIEN: OccultType.ALIEN if hasattr(OccultType, 'ALIEN') else None,
+            CommonOccultType.FAIRY: OccultType.FAIRY if hasattr(OccultType, 'FAIRY') else None,
             CommonOccultType.MERMAID: OccultType.MERMAID if hasattr(OccultType, 'MERMAID') else None,
             CommonOccultType.VAMPIRE: OccultType.VAMPIRE if hasattr(OccultType, 'VAMPIRE') else None,
             CommonOccultType.WITCH: OccultType.WITCH if hasattr(OccultType, 'WITCH') else None,
             CommonOccultType.WEREWOLF: OccultType.WEREWOLF if hasattr(OccultType, 'WEREWOLF') else None
         }
         return conversion_mapping.get(occult_type, None)
+
+    @staticmethod
+    def convert_custom_type_from_vanilla(occult_type: OccultType) -> Union[CommonOccultType, None]:
+        """convert_custom_type_from_vanilla(occult_type)
+
+        Convert an OccultType into CommonOccultType.
+
+        :param occult_type: An instance of an OccultType
+        :type occult_type: OccultType
+        :return: The specified OccultType translated to CommonOccultType, or None if the value could not be translated.
+        :rtype: Union[CommonOccultType, None]
+        """
+        if occult_type is None or occult_type == CommonOccultType.NONE:
+            return None
+        if isinstance(occult_type, CommonOccultType):
+            return occult_type
+        mapping: Dict[OccultType, CommonOccultType] = dict()
+        if hasattr(OccultType, 'HUMAN'):
+            mapping[OccultType.HUMAN] = CommonOccultType.NON_OCCULT
+        if hasattr(OccultType, 'ALIEN'):
+            mapping[OccultType.ALIEN] = CommonOccultType.ALIEN
+        if hasattr(OccultType, 'FAIRY'):
+            mapping[OccultType.FAIRY] = CommonOccultType.FAIRY
+        if hasattr(OccultType, 'VAMPIRE'):
+            mapping[OccultType.VAMPIRE] = CommonOccultType.VAMPIRE
+        if hasattr(OccultType, 'MERMAID'):
+            mapping[OccultType.MERMAID] = CommonOccultType.MERMAID
+        if hasattr(OccultType, 'WITCH'):
+            mapping[OccultType.WITCH] = CommonOccultType.WITCH
+        if hasattr(OccultType, 'WEREWOLF'):
+            mapping[OccultType.WEREWOLF] = CommonOccultType.WEREWOLF
+        return mapping.get(occult_type, occult_type)
 
 
 # noinspection SpellCheckingInspection

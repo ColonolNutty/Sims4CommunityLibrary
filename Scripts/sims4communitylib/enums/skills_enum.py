@@ -14,6 +14,7 @@ class CommonSkillId(CommonInt):
     """
     INVALID: 'CommonSkillId' = 0
     ACTING: 'CommonSkillId' = 194727
+    APOTHECARY: 'CommonSkillId' = 439222
     ARCHAEOLOGY: 'CommonSkillId' = 174237
     BAKING: 'CommonSkillId' = 104198
     BOWLING: 'CommonSkillId' = 158659
@@ -60,6 +61,7 @@ class CommonSkillId(CommonInt):
     MIXOLOGY: 'CommonSkillId' = 16695
     MOTOR: 'CommonSkillId' = 16720
     MOVEMENT: 'CommonSkillId' = 136140
+    NATURAL_LIVING: 'CommonSkillId' = 434909
     PAINTING: 'CommonSkillId' = 16708
     PARENTING: 'CommonSkillId' = 160504
     PET_TRAINING: 'CommonSkillId' = 161220

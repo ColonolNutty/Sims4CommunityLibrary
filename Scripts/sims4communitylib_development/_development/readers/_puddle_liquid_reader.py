@@ -14,8 +14,11 @@ from sims4communitylib.services.commands.common_console_command_output import Co
 class _S4CLReaderForUpdate:
     # noinspection SpellCheckingInspection
     CONVERSIONS = {
+        'ACID': 'ACID',
         'GREENGOO': 'GREEN_GOO',
-        'DARK MATTER': 'DARK_MATTER'
+        'DARK MATTER': 'DARK_MATTER',
+        'MUD': 'MUD',
+        'VOMIT': 'VOMIT'
     }
 
 

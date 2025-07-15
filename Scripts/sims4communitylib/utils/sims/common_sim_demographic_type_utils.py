@@ -251,6 +251,7 @@ class CommonSimDemographicTypeUtils(_HasS4CLClassLog):
         from sims4communitylib.enums.common_occult_type import CommonOccultType
         mapping: Dict[CommonSimDemographicType, CommonOccultType] = {
             CommonSimDemographicType.ALIEN: CommonOccultType.ALIEN,
+            CommonSimDemographicType.FAIRY: CommonOccultType.FAIRY,
             CommonSimDemographicType.MERMAID: CommonOccultType.MERMAID,
             CommonSimDemographicType.ROBOT: CommonOccultType.ROBOT,
             CommonSimDemographicType.SKELETON: CommonOccultType.SKELETON,
@@ -270,6 +271,7 @@ class CommonSimDemographicTypeUtils(_HasS4CLClassLog):
         from sims4communitylib.enums.common_occult_type import CommonOccultType
         mapping: Dict[CommonOccultType, CommonSimDemographicType] = {
             CommonOccultType.ALIEN: CommonSimDemographicType.ALIEN,
+            CommonOccultType.FAIRY: CommonSimDemographicType.FAIRY,
             CommonOccultType.MERMAID: CommonSimDemographicType.MERMAID,
             CommonOccultType.ROBOT: CommonSimDemographicType.ROBOT,
             CommonOccultType.SKELETON: CommonSimDemographicType.SKELETON,

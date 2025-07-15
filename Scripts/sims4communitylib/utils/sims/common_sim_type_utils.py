@@ -56,6 +56,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ELDER_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ELDER_HUMAN_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ELDER_HUMAN_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ELDER_HUMAN_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ELDER_HUMAN_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ELDER_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_HUMAN_ROBOT,
@@ -69,6 +70,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_HUMAN_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_HUMAN_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_HUMAN_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_HUMAN_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_HUMAN_ROBOT,
@@ -82,6 +84,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.YOUNG_ADULT_HUMAN_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.YOUNG_ADULT_HUMAN_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.YOUNG_ADULT_HUMAN_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.YOUNG_ADULT_HUMAN_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.YOUNG_ADULT_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.YOUNG_ADULT_HUMAN_ROBOT,
@@ -95,6 +98,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.TEEN_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.TEEN_HUMAN_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.TEEN_HUMAN_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.TEEN_HUMAN_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.TEEN_HUMAN_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.TEEN_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.TEEN_HUMAN_ROBOT,
@@ -108,6 +112,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_HUMAN_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_HUMAN_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_HUMAN_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_HUMAN_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_HUMAN_ROBOT,
@@ -121,6 +126,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.TODDLER_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.TODDLER_HUMAN_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.TODDLER_HUMAN_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.TODDLER_HUMAN_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.TODDLER_HUMAN_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.TODDLER_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.TODDLER_HUMAN_ROBOT,
@@ -134,6 +140,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.INFANT_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.INFANT_HUMAN_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.INFANT_HUMAN_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.INFANT_HUMAN_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.INFANT_HUMAN_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.INFANT_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.INFANT_HUMAN_ROBOT,
@@ -147,6 +154,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.BABY_HUMAN_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.BABY_HUMAN_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.BABY_HUMAN_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.BABY_HUMAN_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.BABY_HUMAN_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.BABY_HUMAN_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.BABY_HUMAN_ROBOT,
@@ -162,6 +170,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ELDER_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ELDER_SMALL_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ELDER_SMALL_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ELDER_SMALL_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ELDER_SMALL_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ELDER_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_SMALL_DOG_ROBOT,
@@ -175,6 +184,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_SMALL_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_SMALL_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_SMALL_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_SMALL_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_SMALL_DOG_ROBOT,
@@ -188,6 +198,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_SMALL_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_SMALL_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_SMALL_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_SMALL_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_SMALL_DOG_ROBOT,
@@ -201,6 +212,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_SMALL_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_SMALL_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_SMALL_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_SMALL_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_SMALL_DOG_ROBOT,
@@ -214,6 +226,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_SMALL_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_SMALL_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_SMALL_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_SMALL_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_SMALL_DOG_ROBOT,
@@ -227,6 +240,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_SMALL_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_SMALL_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_SMALL_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_SMALL_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_SMALL_DOG_ROBOT,
@@ -240,6 +254,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_SMALL_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_SMALL_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_SMALL_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_SMALL_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_SMALL_DOG_ROBOT,
@@ -253,6 +268,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_SMALL_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_SMALL_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_SMALL_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_SMALL_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_SMALL_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_SMALL_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_SMALL_DOG_ROBOT,
@@ -268,6 +284,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ELDER_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ELDER_LARGE_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ELDER_LARGE_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ELDER_LARGE_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ELDER_LARGE_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ELDER_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_LARGE_DOG_ROBOT,
@@ -281,6 +298,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_LARGE_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_LARGE_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_LARGE_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_LARGE_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_LARGE_DOG_ROBOT,
@@ -294,6 +312,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_LARGE_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_LARGE_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_LARGE_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_LARGE_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_LARGE_DOG_ROBOT,
@@ -307,6 +326,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_LARGE_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_LARGE_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_LARGE_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_LARGE_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_LARGE_DOG_ROBOT,
@@ -320,6 +340,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_LARGE_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_LARGE_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_LARGE_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_LARGE_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_LARGE_DOG_ROBOT,
@@ -333,6 +354,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_LARGE_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_LARGE_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_LARGE_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_LARGE_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_LARGE_DOG_ROBOT,
@@ -346,6 +368,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_LARGE_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_LARGE_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_LARGE_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_LARGE_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_LARGE_DOG_ROBOT,
@@ -359,6 +382,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_LARGE_DOG_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_LARGE_DOG_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_LARGE_DOG_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_LARGE_DOG_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_LARGE_DOG_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_LARGE_DOG_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_LARGE_DOG_ROBOT,
@@ -374,6 +398,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ELDER_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ELDER_CAT_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ELDER_CAT_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ELDER_CAT_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ELDER_CAT_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ELDER_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_CAT_ROBOT,
@@ -387,6 +412,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_CAT_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_CAT_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_CAT_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_CAT_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_CAT_ROBOT,
@@ -400,6 +426,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_CAT_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_CAT_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_CAT_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_CAT_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_CAT_ROBOT,
@@ -413,6 +440,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_CAT_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_CAT_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_CAT_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_CAT_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_CAT_ROBOT,
@@ -426,6 +454,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_CAT_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_CAT_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_CAT_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_CAT_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_CAT_ROBOT,
@@ -439,6 +468,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_CAT_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_CAT_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_CAT_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_CAT_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_CAT_ROBOT,
@@ -452,6 +482,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_CAT_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_CAT_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_CAT_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_CAT_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_CAT_ROBOT,
@@ -465,6 +496,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_CAT_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_CAT_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_CAT_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_CAT_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_CAT_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_CAT_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_CAT_ROBOT,
@@ -480,6 +512,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ELDER_FOX_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ELDER_FOX_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ELDER_FOX_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ELDER_FOX_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ELDER_FOX_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ELDER_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_FOX_ROBOT,
@@ -493,6 +526,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_FOX_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_FOX_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_FOX_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_FOX_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_FOX_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_FOX_ROBOT,
@@ -506,6 +540,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_FOX_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_FOX_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_FOX_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_FOX_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_FOX_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_FOX_ROBOT,
@@ -519,6 +554,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_FOX_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_FOX_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_FOX_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_FOX_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_FOX_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_FOX_ROBOT,
@@ -532,6 +568,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_FOX_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_FOX_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_FOX_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_FOX_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_FOX_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_FOX_ROBOT,
@@ -545,6 +582,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_FOX_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_FOX_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_FOX_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_FOX_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_FOX_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_FOX_ROBOT,
@@ -558,6 +596,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_FOX_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_FOX_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_FOX_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_FOX_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_FOX_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_FOX_ROBOT,
@@ -571,6 +610,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_FOX_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_FOX_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_FOX_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_FOX_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_FOX_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_FOX_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_FOX_ROBOT,
@@ -586,6 +626,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ELDER_HORSE_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ELDER_HORSE_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ELDER_HORSE_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ELDER_HORSE_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ELDER_HORSE_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ELDER_HORSE_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ELDER_HORSE_ROBOT,
@@ -599,6 +640,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_HORSE_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_HORSE_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_HORSE_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_HORSE_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_HORSE_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_HORSE_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_HORSE_ROBOT,
@@ -612,6 +654,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_HORSE_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_HORSE_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_HORSE_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_HORSE_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_HORSE_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_HORSE_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_HORSE_ROBOT,
@@ -625,6 +668,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.ADULT_HORSE_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.ADULT_HORSE_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.ADULT_HORSE_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.ADULT_HORSE_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.ADULT_HORSE_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.ADULT_HORSE_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.ADULT_HORSE_ROBOT,
@@ -638,6 +682,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_HORSE_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_HORSE_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_HORSE_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_HORSE_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_HORSE_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_HORSE_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_HORSE_ROBOT,
@@ -651,6 +696,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_HORSE_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_HORSE_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_HORSE_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_HORSE_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_HORSE_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_HORSE_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_HORSE_ROBOT,
@@ -664,6 +710,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_HORSE_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_HORSE_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_HORSE_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_HORSE_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_HORSE_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_HORSE_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_HORSE_ROBOT,
@@ -677,6 +724,7 @@ class CommonSimTypeUtils:
                 CommonOccultType.VAMPIRE: CommonSimType.CHILD_HORSE_VAMPIRE,
                 CommonOccultType.GHOST: CommonSimType.CHILD_HORSE_GHOST,
                 CommonOccultType.ALIEN: CommonSimType.CHILD_HORSE_ALIEN,
+                CommonOccultType.FAIRY: CommonSimType.CHILD_HORSE_FAIRY,
                 CommonOccultType.MERMAID: CommonSimType.CHILD_HORSE_MERMAID,
                 CommonOccultType.WITCH: CommonSimType.CHILD_HORSE_WITCH,
                 CommonOccultType.ROBOT: CommonSimType.CHILD_HORSE_ROBOT,
@@ -701,6 +749,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HUMAN_SKELETON: 'ElHuSk',
         CommonSimType.ELDER_HUMAN_PLANT_SIM: 'ElHuPls',
         CommonSimType.ELDER_HUMAN_WEREWOLF: 'ElHuWerWlf',
+        CommonSimType.ELDER_HUMAN_FAIRY: 'ElHuFry',
         # Adult
         CommonSimType.ADULT_HUMAN: 'AdHu',
         CommonSimType.ADULT_HUMAN_VAMPIRE: 'AdHuVa',
@@ -713,6 +762,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HUMAN_SKELETON: 'AdHuSk',
         CommonSimType.ADULT_HUMAN_PLANT_SIM: 'AdHuPls',
         CommonSimType.ADULT_HUMAN_WEREWOLF: 'AdHuWerWlf',
+        CommonSimType.ADULT_HUMAN_FAIRY: 'AdHuFry',
         # Young Adult
         CommonSimType.YOUNG_ADULT_HUMAN: 'YadHu',
         CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE: 'YadHuVa',
@@ -725,6 +775,7 @@ class CommonSimTypeUtils:
         CommonSimType.YOUNG_ADULT_HUMAN_SKELETON: 'YadHuSk',
         CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM: 'YadHuPls',
         CommonSimType.YOUNG_ADULT_HUMAN_WEREWOLF: 'YadHuWerWlf',
+        CommonSimType.YOUNG_ADULT_HUMAN_FAIRY: 'YadHuFry',
         # Teen
         CommonSimType.TEEN_HUMAN: 'TnHu',
         CommonSimType.TEEN_HUMAN_VAMPIRE: 'TnHuVa',
@@ -737,6 +788,7 @@ class CommonSimTypeUtils:
         CommonSimType.TEEN_HUMAN_SKELETON: 'TnHuSk',
         CommonSimType.TEEN_HUMAN_PLANT_SIM: 'TnHuPls',
         CommonSimType.TEEN_HUMAN_WEREWOLF: 'TnHuWerWlf',
+        CommonSimType.TEEN_HUMAN_FAIRY: 'TnHuFry',
         # Child
         CommonSimType.CHILD_HUMAN: 'ChldHu',
         CommonSimType.CHILD_HUMAN_VAMPIRE: 'ChldHuVa',
@@ -749,6 +801,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HUMAN_SKELETON: 'ChldHuSk',
         CommonSimType.CHILD_HUMAN_PLANT_SIM: 'ChldHuPls',
         CommonSimType.CHILD_HUMAN_WEREWOLF: 'ChldHuWerWlf',
+        CommonSimType.CHILD_HUMAN_FAIRY: 'ChldHuFry',
         # Toddler
         CommonSimType.TODDLER_HUMAN: 'TdlrHu',
         CommonSimType.TODDLER_HUMAN_VAMPIRE: 'TdlrHuVa',
@@ -761,6 +814,7 @@ class CommonSimTypeUtils:
         CommonSimType.TODDLER_HUMAN_SKELETON: 'TdlrHuSk',
         CommonSimType.TODDLER_HUMAN_PLANT_SIM: 'TdlrHuPls',
         CommonSimType.TODDLER_HUMAN_WEREWOLF: 'TdlrHuWerWlf',
+        CommonSimType.TODDLER_HUMAN_FAIRY: 'TdlrHuFry',
         # Infant
         CommonSimType.INFANT_HUMAN: 'InfntHu',
         CommonSimType.INFANT_HUMAN_VAMPIRE: 'InfntHuVa',
@@ -773,6 +827,7 @@ class CommonSimTypeUtils:
         CommonSimType.INFANT_HUMAN_SKELETON: 'InfntHuSk',
         CommonSimType.INFANT_HUMAN_PLANT_SIM: 'InfntHuPls',
         CommonSimType.INFANT_HUMAN_WEREWOLF: 'InfntHuWerWlf',
+        CommonSimType.INFANT_HUMAN_FAIRY: 'InfntHuFry',
         # Baby
         CommonSimType.BABY_HUMAN: 'BbyHu',
         CommonSimType.BABY_HUMAN_VAMPIRE: 'BbyHuVa',
@@ -785,6 +840,7 @@ class CommonSimTypeUtils:
         CommonSimType.BABY_HUMAN_SKELETON: 'BbyHuSk',
         CommonSimType.BABY_HUMAN_PLANT_SIM: 'BbyHuPls',
         CommonSimType.BABY_HUMAN_WEREWOLF: 'BbyHuWerWlf',
+        CommonSimType.BABY_HUMAN_FAIRY: 'BbyHuFry',
 
         # Child Dog
         CommonSimType.CHILD_DOG: 'ChldDg',
@@ -798,6 +854,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_DOG_SKELETON: 'ChldDgSk',
         CommonSimType.CHILD_DOG_PLANT_SIM: 'ChldDgPls',
         CommonSimType.CHILD_DOG_WEREWOLF: 'ChldDgWerWlf',
+        CommonSimType.CHILD_DOG_FAIRY: 'ChldDgFry',
 
         # Small Dog
         # Elder
@@ -812,6 +869,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_SMALL_DOG_SKELETON: 'ElSdSk',
         CommonSimType.ELDER_SMALL_DOG_PLANT_SIM: 'ElSdPls',
         CommonSimType.ELDER_SMALL_DOG_WEREWOLF: 'ElSdWerWlf',
+        CommonSimType.ELDER_SMALL_DOG_FAIRY: 'ElSdFry',
         # Adult
         CommonSimType.ADULT_SMALL_DOG: 'AdSd',
         CommonSimType.ADULT_SMALL_DOG_VAMPIRE: 'AdSdVa',
@@ -824,6 +882,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_SMALL_DOG_SKELETON: 'AdSdSk',
         CommonSimType.ADULT_SMALL_DOG_PLANT_SIM: 'AdSdPls',
         CommonSimType.ADULT_SMALL_DOG_WEREWOLF: 'AdSdWerWlf',
+        CommonSimType.ADULT_SMALL_DOG_FAIRY: 'AdSdFry',
         # Child
         CommonSimType.CHILD_SMALL_DOG: 'ChldSd',
         CommonSimType.CHILD_SMALL_DOG_VAMPIRE: 'ChldSdVa',
@@ -836,6 +895,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_SMALL_DOG_SKELETON: 'ChldSdSk',
         CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: 'ChldSdPls',
         CommonSimType.CHILD_SMALL_DOG_WEREWOLF: 'ChldSdWerWlf',
+        CommonSimType.CHILD_SMALL_DOG_FAIRY: 'ChldSdFry',
 
         # Large Dog
         # Elder
@@ -850,6 +910,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_LARGE_DOG_SKELETON: 'ElLdSk',
         CommonSimType.ELDER_LARGE_DOG_PLANT_SIM: 'ElLdPls',
         CommonSimType.ELDER_LARGE_DOG_WEREWOLF: 'ElLdWerWlf',
+        CommonSimType.ELDER_LARGE_DOG_FAIRY: 'ElLdFry',
         # Adult
         CommonSimType.ADULT_LARGE_DOG: 'AdLd',
         CommonSimType.ADULT_LARGE_DOG_VAMPIRE: 'AdLdVa',
@@ -862,6 +923,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_LARGE_DOG_SKELETON: 'AdLdSk',
         CommonSimType.ADULT_LARGE_DOG_PLANT_SIM: 'AdLdPls',
         CommonSimType.ADULT_LARGE_DOG_WEREWOLF: 'AdLdWerWlf',
+        CommonSimType.ADULT_LARGE_DOG_FAIRY: 'AdLdFry',
         # Child
         CommonSimType.CHILD_LARGE_DOG: 'ChldLd',
         CommonSimType.CHILD_LARGE_DOG_VAMPIRE: 'ChldLdVa',
@@ -874,6 +936,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_LARGE_DOG_SKELETON: 'ChldLdSk',
         CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: 'ChldLdPls',
         CommonSimType.CHILD_LARGE_DOG_WEREWOLF: 'ChldLdWerWlf',
+        CommonSimType.CHILD_LARGE_DOG_FAIRY: 'ChldLdFry',
 
         # Cat
         # Elder
@@ -888,6 +951,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_CAT_SKELETON: 'ElCatSk',
         CommonSimType.ELDER_CAT_PLANT_SIM: 'ElCatPls',
         CommonSimType.ELDER_CAT_WEREWOLF: 'ElCatWerWlf',
+        CommonSimType.ELDER_CAT_FAIRY: 'ElCatFry',
         # Adult
         CommonSimType.ADULT_CAT: 'AdCat',
         CommonSimType.ADULT_CAT_VAMPIRE: 'AdCatVa',
@@ -900,6 +964,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_CAT_SKELETON: 'AdCatSk',
         CommonSimType.ADULT_CAT_PLANT_SIM: 'AdCatPls',
         CommonSimType.ADULT_CAT_WEREWOLF: 'AdCatWerWlf',
+        CommonSimType.ADULT_CAT_FAIRY: 'AdCatFry',
         # Child
         CommonSimType.CHILD_CAT: 'ChldCat',
         CommonSimType.CHILD_CAT_VAMPIRE: 'ChldCatVa',
@@ -912,6 +977,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_SKELETON: 'ChldCatSk',
         CommonSimType.CHILD_CAT_PLANT_SIM: 'ChldCatPls',
         CommonSimType.CHILD_CAT_WEREWOLF: 'ChldCatWerWlf',
+        CommonSimType.CHILD_CAT_FAIRY: 'ChldCatFry',
 
         # Fox
         # Elder
@@ -926,6 +992,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_FOX_SKELETON: 'ElFoxSk',
         CommonSimType.ELDER_FOX_PLANT_SIM: 'ElFoxPls',
         CommonSimType.ELDER_FOX_WEREWOLF: 'ElFoxWerWlf',
+        CommonSimType.ELDER_FOX_FAIRY: 'ElFoxFry',
         # Adult
         CommonSimType.ADULT_FOX: 'AdFox',
         CommonSimType.ADULT_FOX_VAMPIRE: 'AdFoxVa',
@@ -938,6 +1005,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_FOX_SKELETON: 'AdFoxSk',
         CommonSimType.ADULT_FOX_PLANT_SIM: 'AdFoxPls',
         CommonSimType.ADULT_FOX_WEREWOLF: 'AdFoxWerWlf',
+        CommonSimType.ADULT_FOX_FAIRY: 'AdFoxFry',
         # Child
         CommonSimType.CHILD_FOX: 'ChldFox',
         CommonSimType.CHILD_FOX_VAMPIRE: 'ChldFoxVa',
@@ -950,6 +1018,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_FOX_SKELETON: 'ChldFoxSk',
         CommonSimType.CHILD_FOX_PLANT_SIM: 'ChldFoxPls',
         CommonSimType.CHILD_FOX_WEREWOLF: 'ChldFoxWerWlf',
+        CommonSimType.CHILD_FOX_FAIRY: 'ChldFoxFry',
 
         # Horse
         # Elder
@@ -964,6 +1033,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HORSE_SKELETON: 'ElHrsSk',
         CommonSimType.ELDER_HORSE_PLANT_SIM: 'ElHrsPls',
         CommonSimType.ELDER_HORSE_WEREWOLF: 'ElHrsWerWlf',
+        CommonSimType.ELDER_HORSE_FAIRY: 'ElHrsFry',
         # Adult
         CommonSimType.ADULT_HORSE: 'AdHrs',
         CommonSimType.ADULT_HORSE_VAMPIRE: 'AdHrsVa',
@@ -976,6 +1046,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HORSE_SKELETON: 'AdHrsSk',
         CommonSimType.ADULT_HORSE_PLANT_SIM: 'AdHrsPls',
         CommonSimType.ADULT_HORSE_WEREWOLF: 'AdHrsWerWlf',
+        CommonSimType.ADULT_HORSE_FAIRY: 'AdHrsFry',
         # Child
         CommonSimType.CHILD_HORSE: 'ChldHrs',
         CommonSimType.CHILD_HORSE_VAMPIRE: 'ChldHrsVa',
@@ -988,6 +1059,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HORSE_SKELETON: 'ChldHrsSk',
         CommonSimType.CHILD_HORSE_PLANT_SIM: 'ChldHrsPls',
         CommonSimType.CHILD_HORSE_WEREWOLF: 'ChldHrsWerWlf',
+        CommonSimType.CHILD_HORSE_FAIRY: 'ChldHrsFry',
     }
 
     _OCCULT_SIM_TYPE_TO_NON_OCCULT_SIM_TYPE_MAPPING: Dict[CommonSimType, CommonSimType] = {
@@ -1004,6 +1076,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HUMAN_SKELETON: CommonSimType.ELDER_HUMAN,
         CommonSimType.ELDER_HUMAN_PLANT_SIM: CommonSimType.ELDER_HUMAN,
         CommonSimType.ELDER_HUMAN_WEREWOLF: CommonSimType.ELDER_HUMAN,
+        CommonSimType.ELDER_HUMAN_FAIRY: CommonSimType.ELDER_HUMAN,
         # Adult
         CommonSimType.ADULT_HUMAN: CommonSimType.ADULT_HUMAN,
         CommonSimType.ADULT_HUMAN_VAMPIRE: CommonSimType.ADULT_HUMAN,
@@ -1016,6 +1089,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HUMAN_SKELETON: CommonSimType.ADULT_HUMAN,
         CommonSimType.ADULT_HUMAN_PLANT_SIM: CommonSimType.ADULT_HUMAN,
         CommonSimType.ADULT_HUMAN_WEREWOLF: CommonSimType.ADULT_HUMAN,
+        CommonSimType.ADULT_HUMAN_FAIRY: CommonSimType.ADULT_HUMAN,
         # Young Adult
         CommonSimType.YOUNG_ADULT_HUMAN: CommonSimType.YOUNG_ADULT_HUMAN,
         CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE: CommonSimType.YOUNG_ADULT_HUMAN,
@@ -1028,6 +1102,7 @@ class CommonSimTypeUtils:
         CommonSimType.YOUNG_ADULT_HUMAN_SKELETON: CommonSimType.YOUNG_ADULT_HUMAN,
         CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM: CommonSimType.YOUNG_ADULT_HUMAN,
         CommonSimType.YOUNG_ADULT_HUMAN_WEREWOLF: CommonSimType.YOUNG_ADULT_HUMAN,
+        CommonSimType.YOUNG_ADULT_HUMAN_FAIRY: CommonSimType.YOUNG_ADULT_HUMAN,
         # Teen
         CommonSimType.TEEN_HUMAN: CommonSimType.TEEN_HUMAN,
         CommonSimType.TEEN_HUMAN_VAMPIRE: CommonSimType.TEEN_HUMAN,
@@ -1040,6 +1115,7 @@ class CommonSimTypeUtils:
         CommonSimType.TEEN_HUMAN_SKELETON: CommonSimType.TEEN_HUMAN,
         CommonSimType.TEEN_HUMAN_PLANT_SIM: CommonSimType.TEEN_HUMAN,
         CommonSimType.TEEN_HUMAN_WEREWOLF: CommonSimType.TEEN_HUMAN,
+        CommonSimType.TEEN_HUMAN_FAIRY: CommonSimType.TEEN_HUMAN,
         # Child
         CommonSimType.CHILD_HUMAN: CommonSimType.CHILD_HUMAN,
         CommonSimType.CHILD_HUMAN_VAMPIRE: CommonSimType.CHILD_HUMAN,
@@ -1052,6 +1128,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HUMAN_SKELETON: CommonSimType.CHILD_HUMAN,
         CommonSimType.CHILD_HUMAN_PLANT_SIM: CommonSimType.CHILD_HUMAN,
         CommonSimType.CHILD_HUMAN_WEREWOLF: CommonSimType.CHILD_HUMAN,
+        CommonSimType.CHILD_HUMAN_FAIRY: CommonSimType.CHILD_HUMAN,
         # Toddler
         CommonSimType.TODDLER_HUMAN: CommonSimType.TODDLER_HUMAN,
         CommonSimType.TODDLER_HUMAN_VAMPIRE: CommonSimType.TODDLER_HUMAN,
@@ -1064,6 +1141,7 @@ class CommonSimTypeUtils:
         CommonSimType.TODDLER_HUMAN_SKELETON: CommonSimType.TODDLER_HUMAN,
         CommonSimType.TODDLER_HUMAN_PLANT_SIM: CommonSimType.TODDLER_HUMAN,
         CommonSimType.TODDLER_HUMAN_WEREWOLF: CommonSimType.TODDLER_HUMAN,
+        CommonSimType.TODDLER_HUMAN_FAIRY: CommonSimType.TODDLER_HUMAN,
         # Infant
         CommonSimType.INFANT_HUMAN: CommonSimType.INFANT_HUMAN,
         CommonSimType.INFANT_HUMAN_VAMPIRE: CommonSimType.INFANT_HUMAN,
@@ -1076,6 +1154,7 @@ class CommonSimTypeUtils:
         CommonSimType.INFANT_HUMAN_SKELETON: CommonSimType.INFANT_HUMAN,
         CommonSimType.INFANT_HUMAN_PLANT_SIM: CommonSimType.INFANT_HUMAN,
         CommonSimType.INFANT_HUMAN_WEREWOLF: CommonSimType.INFANT_HUMAN,
+        CommonSimType.INFANT_HUMAN_FAIRY: CommonSimType.INFANT_HUMAN,
 
         # Baby
         CommonSimType.BABY_HUMAN: CommonSimType.BABY_HUMAN,
@@ -1089,6 +1168,7 @@ class CommonSimTypeUtils:
         CommonSimType.BABY_HUMAN_SKELETON: CommonSimType.BABY_HUMAN,
         CommonSimType.BABY_HUMAN_PLANT_SIM: CommonSimType.BABY_HUMAN,
         CommonSimType.BABY_HUMAN_WEREWOLF: CommonSimType.BABY_HUMAN,
+        CommonSimType.BABY_HUMAN_FAIRY: CommonSimType.BABY_HUMAN,
 
         # Dog
         # Child
@@ -1103,6 +1183,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_DOG_SKELETON: CommonSimType.CHILD_DOG,
         CommonSimType.CHILD_DOG_PLANT_SIM: CommonSimType.CHILD_DOG,
         CommonSimType.CHILD_DOG_WEREWOLF: CommonSimType.CHILD_DOG,
+        CommonSimType.CHILD_DOG_FAIRY: CommonSimType.CHILD_DOG,
 
         # Small Dog
         # Elder
@@ -1117,6 +1198,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_SMALL_DOG_SKELETON: CommonSimType.ELDER_SMALL_DOG,
         CommonSimType.ELDER_SMALL_DOG_PLANT_SIM: CommonSimType.ELDER_SMALL_DOG,
         CommonSimType.ELDER_SMALL_DOG_WEREWOLF: CommonSimType.ELDER_SMALL_DOG,
+        CommonSimType.ELDER_SMALL_DOG_FAIRY: CommonSimType.ELDER_SMALL_DOG,
         # Adult
         CommonSimType.ADULT_SMALL_DOG: CommonSimType.ADULT_SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_VAMPIRE: CommonSimType.ADULT_SMALL_DOG,
@@ -1129,6 +1211,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_SMALL_DOG_SKELETON: CommonSimType.ADULT_SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_PLANT_SIM: CommonSimType.ADULT_SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_WEREWOLF: CommonSimType.ADULT_SMALL_DOG,
+        CommonSimType.ADULT_SMALL_DOG_FAIRY: CommonSimType.ADULT_SMALL_DOG,
         # Child
         CommonSimType.CHILD_SMALL_DOG: CommonSimType.CHILD_SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonSimType.CHILD_SMALL_DOG,
@@ -1141,6 +1224,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_SMALL_DOG_SKELETON: CommonSimType.CHILD_SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: CommonSimType.CHILD_SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_WEREWOLF: CommonSimType.CHILD_SMALL_DOG,
+        CommonSimType.CHILD_SMALL_DOG_FAIRY: CommonSimType.CHILD_SMALL_DOG,
 
         # Large Dog
         # Elder
@@ -1155,6 +1239,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_LARGE_DOG_SKELETON: CommonSimType.ELDER_LARGE_DOG,
         CommonSimType.ELDER_LARGE_DOG_PLANT_SIM: CommonSimType.ELDER_LARGE_DOG,
         CommonSimType.ELDER_LARGE_DOG_WEREWOLF: CommonSimType.ELDER_LARGE_DOG,
+        CommonSimType.ELDER_LARGE_DOG_FAIRY: CommonSimType.ELDER_LARGE_DOG,
         # Adult
         CommonSimType.ADULT_LARGE_DOG: CommonSimType.ADULT_LARGE_DOG,
         CommonSimType.ADULT_LARGE_DOG_VAMPIRE: CommonSimType.ADULT_LARGE_DOG,
@@ -1167,6 +1252,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_LARGE_DOG_SKELETON: CommonSimType.ADULT_LARGE_DOG,
         CommonSimType.ADULT_LARGE_DOG_PLANT_SIM: CommonSimType.ADULT_LARGE_DOG,
         CommonSimType.ADULT_LARGE_DOG_WEREWOLF: CommonSimType.ADULT_LARGE_DOG,
+        CommonSimType.ADULT_LARGE_DOG_FAIRY: CommonSimType.ADULT_LARGE_DOG,
         # Child
         CommonSimType.CHILD_LARGE_DOG: CommonSimType.CHILD_LARGE_DOG,
         CommonSimType.CHILD_LARGE_DOG_VAMPIRE: CommonSimType.CHILD_LARGE_DOG,
@@ -1179,6 +1265,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_LARGE_DOG_SKELETON: CommonSimType.CHILD_LARGE_DOG,
         CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: CommonSimType.CHILD_LARGE_DOG,
         CommonSimType.CHILD_LARGE_DOG_WEREWOLF: CommonSimType.CHILD_LARGE_DOG,
+        CommonSimType.CHILD_LARGE_DOG_FAIRY: CommonSimType.CHILD_LARGE_DOG,
 
         # Cat
         # Elder
@@ -1193,6 +1280,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_CAT_SKELETON: CommonSimType.ELDER_CAT,
         CommonSimType.ELDER_CAT_PLANT_SIM: CommonSimType.ELDER_CAT,
         CommonSimType.ELDER_CAT_WEREWOLF: CommonSimType.ELDER_CAT,
+        CommonSimType.ELDER_CAT_FAIRY: CommonSimType.ELDER_CAT,
         # Adult
         CommonSimType.ADULT_CAT: CommonSimType.ADULT_CAT,
         CommonSimType.ADULT_CAT_VAMPIRE: CommonSimType.ADULT_CAT,
@@ -1205,6 +1293,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_CAT_SKELETON: CommonSimType.ADULT_CAT,
         CommonSimType.ADULT_CAT_PLANT_SIM: CommonSimType.ADULT_CAT,
         CommonSimType.ADULT_CAT_WEREWOLF: CommonSimType.ADULT_CAT,
+        CommonSimType.ADULT_CAT_FAIRY: CommonSimType.ADULT_CAT,
         # Child
         CommonSimType.CHILD_CAT: CommonSimType.CHILD_CAT,
         CommonSimType.CHILD_CAT_VAMPIRE: CommonSimType.CHILD_CAT,
@@ -1217,6 +1306,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_SKELETON: CommonSimType.CHILD_CAT,
         CommonSimType.CHILD_CAT_PLANT_SIM: CommonSimType.CHILD_CAT,
         CommonSimType.CHILD_CAT_WEREWOLF: CommonSimType.CHILD_CAT,
+        CommonSimType.CHILD_CAT_FAIRY: CommonSimType.CHILD_CAT,
 
         # Fox
         # Elder
@@ -1231,6 +1321,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_FOX_SKELETON: CommonSimType.ELDER_FOX,
         CommonSimType.ELDER_FOX_PLANT_SIM: CommonSimType.ELDER_FOX,
         CommonSimType.ELDER_FOX_WEREWOLF: CommonSimType.ELDER_FOX,
+        CommonSimType.ELDER_FOX_FAIRY: CommonSimType.ELDER_FOX,
         # Adult
         CommonSimType.ADULT_FOX: CommonSimType.ADULT_FOX,
         CommonSimType.ADULT_FOX_VAMPIRE: CommonSimType.ADULT_FOX,
@@ -1243,6 +1334,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_FOX_SKELETON: CommonSimType.ADULT_FOX,
         CommonSimType.ADULT_FOX_PLANT_SIM: CommonSimType.ADULT_FOX,
         CommonSimType.ADULT_FOX_WEREWOLF: CommonSimType.ADULT_FOX,
+        CommonSimType.ADULT_FOX_FAIRY: CommonSimType.ADULT_FOX,
         # Child
         CommonSimType.CHILD_FOX: CommonSimType.CHILD_FOX,
         CommonSimType.CHILD_FOX_VAMPIRE: CommonSimType.CHILD_FOX,
@@ -1255,6 +1347,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_FOX_SKELETON: CommonSimType.CHILD_FOX,
         CommonSimType.CHILD_FOX_PLANT_SIM: CommonSimType.CHILD_FOX,
         CommonSimType.CHILD_FOX_WEREWOLF: CommonSimType.CHILD_FOX,
+        CommonSimType.CHILD_FOX_FAIRY: CommonSimType.CHILD_FOX,
 
         # Horse
         # Elder
@@ -1269,6 +1362,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HORSE_SKELETON: CommonSimType.ELDER_HORSE,
         CommonSimType.ELDER_HORSE_PLANT_SIM: CommonSimType.ELDER_HORSE,
         CommonSimType.ELDER_HORSE_WEREWOLF: CommonSimType.ELDER_HORSE,
+        CommonSimType.ELDER_HORSE_FAIRY: CommonSimType.ELDER_HORSE,
         # Adult
         CommonSimType.ADULT_HORSE: CommonSimType.ADULT_HORSE,
         CommonSimType.ADULT_HORSE_VAMPIRE: CommonSimType.ADULT_HORSE,
@@ -1281,6 +1375,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HORSE_SKELETON: CommonSimType.ADULT_HORSE,
         CommonSimType.ADULT_HORSE_PLANT_SIM: CommonSimType.ADULT_HORSE,
         CommonSimType.ADULT_HORSE_WEREWOLF: CommonSimType.ADULT_HORSE,
+        CommonSimType.ADULT_HORSE_FAIRY: CommonSimType.ADULT_HORSE,
         # Child
         CommonSimType.CHILD_HORSE: CommonSimType.CHILD_HORSE,
         CommonSimType.CHILD_HORSE_VAMPIRE: CommonSimType.CHILD_HORSE,
@@ -1293,6 +1388,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HORSE_SKELETON: CommonSimType.CHILD_HORSE,
         CommonSimType.CHILD_HORSE_PLANT_SIM: CommonSimType.CHILD_HORSE,
         CommonSimType.CHILD_HORSE_WEREWOLF: CommonSimType.CHILD_HORSE,
+        CommonSimType.CHILD_HORSE_FAIRY: CommonSimType.CHILD_HORSE,
     }
 
     _OCCULT_SIM_TYPE_TO_OCCULT_TYPE_MAPPING: Dict[CommonSimType, CommonOccultType] = {
@@ -1309,6 +1405,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ELDER_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.ELDER_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.ELDER_HUMAN_FAIRY: CommonOccultType.FAIRY,
         # Adult
         CommonSimType.ADULT_HUMAN: CommonOccultType.NON_OCCULT,
         CommonSimType.ADULT_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1321,6 +1418,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ADULT_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.ADULT_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.ADULT_HUMAN_FAIRY: CommonOccultType.FAIRY,
         # Young Adult
         CommonSimType.YOUNG_ADULT_HUMAN: CommonOccultType.NON_OCCULT,
         CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1333,6 +1431,7 @@ class CommonSimTypeUtils:
         CommonSimType.YOUNG_ADULT_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.YOUNG_ADULT_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.YOUNG_ADULT_HUMAN_FAIRY: CommonOccultType.FAIRY,
         # Teen
         CommonSimType.TEEN_HUMAN: CommonOccultType.NON_OCCULT,
         CommonSimType.TEEN_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1345,6 +1444,7 @@ class CommonSimTypeUtils:
         CommonSimType.TEEN_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.TEEN_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.TEEN_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.TEEN_HUMAN_FAIRY: CommonOccultType.FAIRY,
         # Child
         CommonSimType.CHILD_HUMAN: CommonOccultType.NON_OCCULT,
         CommonSimType.CHILD_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1357,6 +1457,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.CHILD_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.CHILD_HUMAN_FAIRY: CommonOccultType.FAIRY,
         # Toddler
         CommonSimType.TODDLER_HUMAN: CommonOccultType.NON_OCCULT,
         CommonSimType.TODDLER_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1369,6 +1470,7 @@ class CommonSimTypeUtils:
         CommonSimType.TODDLER_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.TODDLER_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.TODDLER_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.TODDLER_HUMAN_FAIRY: CommonOccultType.FAIRY,
         # Infant
         CommonSimType.INFANT_HUMAN: CommonOccultType.NON_OCCULT,
         CommonSimType.INFANT_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1381,6 +1483,7 @@ class CommonSimTypeUtils:
         CommonSimType.INFANT_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.INFANT_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.INFANT_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.INFANT_HUMAN_FAIRY: CommonOccultType.FAIRY,
         # Baby
         CommonSimType.BABY_HUMAN: CommonOccultType.NON_OCCULT,
         CommonSimType.BABY_HUMAN_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1393,6 +1496,7 @@ class CommonSimTypeUtils:
         CommonSimType.BABY_HUMAN_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.BABY_HUMAN_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.BABY_HUMAN_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.BABY_HUMAN_FAIRY: CommonOccultType.FAIRY,
 
         # Dog
         # Child
@@ -1407,6 +1511,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.CHILD_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.CHILD_DOG_FAIRY: CommonOccultType.FAIRY,
 
         # Small Dog
         # Elder
@@ -1421,6 +1526,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_SMALL_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ELDER_SMALL_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.ELDER_SMALL_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.ELDER_SMALL_DOG_FAIRY: CommonOccultType.FAIRY,
         # Adult
         CommonSimType.ADULT_SMALL_DOG: CommonOccultType.NON_OCCULT,
         CommonSimType.ADULT_SMALL_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1433,6 +1539,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_SMALL_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ADULT_SMALL_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.ADULT_SMALL_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.ADULT_SMALL_DOG_FAIRY: CommonOccultType.FAIRY,
         # Child
         CommonSimType.CHILD_SMALL_DOG: CommonOccultType.NON_OCCULT,
         CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1445,6 +1552,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_SMALL_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.CHILD_SMALL_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.CHILD_SMALL_DOG_FAIRY: CommonOccultType.FAIRY,
 
         # Large Dog
         # Elder
@@ -1459,6 +1567,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_LARGE_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ELDER_LARGE_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.ELDER_LARGE_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.ELDER_LARGE_DOG_FAIRY: CommonOccultType.FAIRY,
         # Adult
         CommonSimType.ADULT_LARGE_DOG: CommonOccultType.NON_OCCULT,
         CommonSimType.ADULT_LARGE_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1471,6 +1580,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_LARGE_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ADULT_LARGE_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.ADULT_LARGE_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.ADULT_LARGE_DOG_FAIRY: CommonOccultType.FAIRY,
         # Child
         CommonSimType.CHILD_LARGE_DOG: CommonOccultType.NON_OCCULT,
         CommonSimType.CHILD_LARGE_DOG_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1483,6 +1593,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_LARGE_DOG_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.CHILD_LARGE_DOG_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.CHILD_LARGE_DOG_FAIRY: CommonOccultType.FAIRY,
 
         # Cat
         # Elder
@@ -1497,6 +1608,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_CAT_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ELDER_CAT_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.ELDER_CAT_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.ELDER_CAT_FAIRY: CommonOccultType.FAIRY,
         # Adult
         CommonSimType.ADULT_CAT: CommonOccultType.NON_OCCULT,
         CommonSimType.ADULT_CAT_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1509,6 +1621,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_CAT_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ADULT_CAT_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.ADULT_CAT_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.ADULT_CAT_FAIRY: CommonOccultType.FAIRY,
         # Child
         CommonSimType.CHILD_CAT: CommonOccultType.NON_OCCULT,
         CommonSimType.CHILD_CAT_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1521,6 +1634,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_CAT_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.CHILD_CAT_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.CHILD_CAT_FAIRY: CommonOccultType.FAIRY,
 
         # Fox
         # Elder
@@ -1535,6 +1649,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_FOX_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ELDER_FOX_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.ELDER_FOX_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.ELDER_FOX_FAIRY: CommonOccultType.FAIRY,
         # Adult
         CommonSimType.ADULT_FOX: CommonOccultType.NON_OCCULT,
         CommonSimType.ADULT_FOX_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1547,6 +1662,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_FOX_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ADULT_FOX_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.ADULT_FOX_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.ADULT_FOX_FAIRY: CommonOccultType.FAIRY,
         # Child
         CommonSimType.CHILD_FOX: CommonOccultType.NON_OCCULT,
         CommonSimType.CHILD_FOX_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1559,6 +1675,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_FOX_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_FOX_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.CHILD_FOX_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.CHILD_FOX_FAIRY: CommonOccultType.FAIRY,
 
         # Horse
         # Elder
@@ -1573,6 +1690,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HORSE_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ELDER_HORSE_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.ELDER_HORSE_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.ELDER_HORSE_FAIRY: CommonOccultType.FAIRY,
         # Adult
         CommonSimType.ADULT_HORSE: CommonOccultType.NON_OCCULT,
         CommonSimType.ADULT_HORSE_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1585,6 +1703,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HORSE_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.ADULT_HORSE_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.ADULT_HORSE_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.ADULT_HORSE_FAIRY: CommonOccultType.FAIRY,
         # Child
         CommonSimType.CHILD_HORSE: CommonOccultType.NON_OCCULT,
         CommonSimType.CHILD_HORSE_VAMPIRE: CommonOccultType.VAMPIRE,
@@ -1597,6 +1716,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HORSE_SKELETON: CommonOccultType.SKELETON,
         CommonSimType.CHILD_HORSE_PLANT_SIM: CommonOccultType.PLANT_SIM,
         CommonSimType.CHILD_HORSE_WEREWOLF: CommonOccultType.WEREWOLF,
+        CommonSimType.CHILD_HORSE_FAIRY: CommonOccultType.FAIRY,
     }
 
     _OCCULT_SIM_TYPE_TO_AGE_MAPPING: Dict[CommonSimType, CommonAge] = {
@@ -1613,6 +1733,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HUMAN_SKELETON: CommonAge.ELDER,
         CommonSimType.ELDER_HUMAN_PLANT_SIM: CommonAge.ELDER,
         CommonSimType.ELDER_HUMAN_WEREWOLF: CommonAge.ELDER,
+        CommonSimType.ELDER_HUMAN_FAIRY: CommonAge.ELDER,
         # Adult
         CommonSimType.ADULT_HUMAN: CommonAge.ADULT,
         CommonSimType.ADULT_HUMAN_VAMPIRE: CommonAge.ADULT,
@@ -1625,6 +1746,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HUMAN_SKELETON: CommonAge.ADULT,
         CommonSimType.ADULT_HUMAN_PLANT_SIM: CommonAge.ADULT,
         CommonSimType.ADULT_HUMAN_WEREWOLF: CommonAge.ADULT,
+        CommonSimType.ADULT_HUMAN_FAIRY: CommonAge.ADULT,
         # Young Adult
         CommonSimType.YOUNG_ADULT_HUMAN: CommonAge.YOUNGADULT,
         CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE: CommonAge.YOUNGADULT,
@@ -1637,6 +1759,7 @@ class CommonSimTypeUtils:
         CommonSimType.YOUNG_ADULT_HUMAN_SKELETON: CommonAge.YOUNGADULT,
         CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM: CommonAge.YOUNGADULT,
         CommonSimType.YOUNG_ADULT_HUMAN_WEREWOLF: CommonAge.YOUNGADULT,
+        CommonSimType.YOUNG_ADULT_HUMAN_FAIRY: CommonAge.YOUNGADULT,
         # Teen
         CommonSimType.TEEN_HUMAN: CommonAge.TEEN,
         CommonSimType.TEEN_HUMAN_VAMPIRE: CommonAge.TEEN,
@@ -1649,6 +1772,7 @@ class CommonSimTypeUtils:
         CommonSimType.TEEN_HUMAN_SKELETON: CommonAge.TEEN,
         CommonSimType.TEEN_HUMAN_PLANT_SIM: CommonAge.TEEN,
         CommonSimType.TEEN_HUMAN_WEREWOLF: CommonAge.TEEN,
+        CommonSimType.TEEN_HUMAN_FAIRY: CommonAge.TEEN,
         # Child
         CommonSimType.CHILD_HUMAN: CommonAge.CHILD,
         CommonSimType.CHILD_HUMAN_VAMPIRE: CommonAge.CHILD,
@@ -1661,6 +1785,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HUMAN_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_HUMAN_PLANT_SIM: CommonAge.CHILD,
         CommonSimType.CHILD_HUMAN_WEREWOLF: CommonAge.CHILD,
+        CommonSimType.CHILD_HUMAN_FAIRY: CommonAge.CHILD,
         # Toddler
         CommonSimType.TODDLER_HUMAN: CommonAge.TODDLER,
         CommonSimType.TODDLER_HUMAN_VAMPIRE: CommonAge.TODDLER,
@@ -1673,6 +1798,7 @@ class CommonSimTypeUtils:
         CommonSimType.TODDLER_HUMAN_SKELETON: CommonAge.TODDLER,
         CommonSimType.TODDLER_HUMAN_PLANT_SIM: CommonAge.TODDLER,
         CommonSimType.TODDLER_HUMAN_WEREWOLF: CommonAge.TODDLER,
+        CommonSimType.TODDLER_HUMAN_FAIRY: CommonAge.TODDLER,
         # Infant
         CommonSimType.INFANT_HUMAN: CommonAge.INFANT,
         CommonSimType.INFANT_HUMAN_VAMPIRE: CommonAge.INFANT,
@@ -1685,6 +1811,7 @@ class CommonSimTypeUtils:
         CommonSimType.INFANT_HUMAN_SKELETON: CommonAge.INFANT,
         CommonSimType.INFANT_HUMAN_PLANT_SIM: CommonAge.INFANT,
         CommonSimType.INFANT_HUMAN_WEREWOLF: CommonAge.INFANT,
+        CommonSimType.INFANT_HUMAN_FAIRY: CommonAge.INFANT,
         # Baby
         CommonSimType.BABY_HUMAN: CommonAge.BABY,
         CommonSimType.BABY_HUMAN_VAMPIRE: CommonAge.BABY,
@@ -1697,6 +1824,7 @@ class CommonSimTypeUtils:
         CommonSimType.BABY_HUMAN_SKELETON: CommonAge.BABY,
         CommonSimType.BABY_HUMAN_PLANT_SIM: CommonAge.BABY,
         CommonSimType.BABY_HUMAN_WEREWOLF: CommonAge.BABY,
+        CommonSimType.BABY_HUMAN_FAIRY: CommonAge.BABY,
 
         # Dog
         # Child
@@ -1711,6 +1839,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_DOG_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_DOG_PLANT_SIM: CommonAge.CHILD,
         CommonSimType.CHILD_DOG_WEREWOLF: CommonAge.CHILD,
+        CommonSimType.CHILD_DOG_FAIRY: CommonAge.CHILD,
 
         # Small Dog
         # Elder
@@ -1725,6 +1854,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_SMALL_DOG_SKELETON: CommonAge.ELDER,
         CommonSimType.ELDER_SMALL_DOG_PLANT_SIM: CommonAge.ELDER,
         CommonSimType.ELDER_SMALL_DOG_WEREWOLF: CommonAge.ELDER,
+        CommonSimType.ELDER_SMALL_DOG_FAIRY: CommonAge.ELDER,
         # Adult
         CommonSimType.ADULT_SMALL_DOG: CommonAge.ADULT,
         CommonSimType.ADULT_SMALL_DOG_VAMPIRE: CommonAge.ADULT,
@@ -1737,6 +1867,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_SMALL_DOG_SKELETON: CommonAge.ADULT,
         CommonSimType.ADULT_SMALL_DOG_PLANT_SIM: CommonAge.ADULT,
         CommonSimType.ADULT_SMALL_DOG_WEREWOLF: CommonAge.ADULT,
+        CommonSimType.ADULT_SMALL_DOG_FAIRY: CommonAge.ADULT,
         # Child
         CommonSimType.CHILD_SMALL_DOG: CommonAge.CHILD,
         CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonAge.CHILD,
@@ -1749,6 +1880,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_SMALL_DOG_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: CommonAge.CHILD,
         CommonSimType.CHILD_SMALL_DOG_WEREWOLF: CommonAge.CHILD,
+        CommonSimType.CHILD_SMALL_DOG_FAIRY: CommonAge.CHILD,
 
         # Large Dog
         # Elder
@@ -1763,6 +1895,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_LARGE_DOG_SKELETON: CommonAge.ELDER,
         CommonSimType.ELDER_LARGE_DOG_PLANT_SIM: CommonAge.ELDER,
         CommonSimType.ELDER_LARGE_DOG_WEREWOLF: CommonAge.ELDER,
+        CommonSimType.ELDER_LARGE_DOG_FAIRY: CommonAge.ELDER,
         # Adult
         CommonSimType.ADULT_LARGE_DOG: CommonAge.ADULT,
         CommonSimType.ADULT_LARGE_DOG_VAMPIRE: CommonAge.ADULT,
@@ -1775,6 +1908,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_LARGE_DOG_SKELETON: CommonAge.ADULT,
         CommonSimType.ADULT_LARGE_DOG_PLANT_SIM: CommonAge.ADULT,
         CommonSimType.ADULT_LARGE_DOG_WEREWOLF: CommonAge.ADULT,
+        CommonSimType.ADULT_LARGE_DOG_FAIRY: CommonAge.ADULT,
         # Child
         CommonSimType.CHILD_LARGE_DOG: CommonAge.CHILD,
         CommonSimType.CHILD_LARGE_DOG_VAMPIRE: CommonAge.CHILD,
@@ -1787,6 +1921,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_LARGE_DOG_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: CommonAge.CHILD,
         CommonSimType.CHILD_LARGE_DOG_WEREWOLF: CommonAge.CHILD,
+        CommonSimType.CHILD_LARGE_DOG_FAIRY: CommonAge.CHILD,
 
         # Cat
         # Elder
@@ -1801,6 +1936,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_CAT_SKELETON: CommonAge.ELDER,
         CommonSimType.ELDER_CAT_PLANT_SIM: CommonAge.ELDER,
         CommonSimType.ELDER_CAT_WEREWOLF: CommonAge.ELDER,
+        CommonSimType.ELDER_CAT_FAIRY: CommonAge.ELDER,
         # Adult
         CommonSimType.ADULT_CAT: CommonAge.ADULT,
         CommonSimType.ADULT_CAT_VAMPIRE: CommonAge.ADULT,
@@ -1813,6 +1949,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_CAT_SKELETON: CommonAge.ADULT,
         CommonSimType.ADULT_CAT_PLANT_SIM: CommonAge.ADULT,
         CommonSimType.ADULT_CAT_WEREWOLF: CommonAge.ADULT,
+        CommonSimType.ADULT_CAT_FAIRY: CommonAge.ADULT,
         # Child
         CommonSimType.CHILD_CAT: CommonAge.CHILD,
         CommonSimType.CHILD_CAT_VAMPIRE: CommonAge.CHILD,
@@ -1825,6 +1962,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_CAT_PLANT_SIM: CommonAge.CHILD,
         CommonSimType.CHILD_CAT_WEREWOLF: CommonAge.CHILD,
+        CommonSimType.CHILD_CAT_FAIRY: CommonAge.CHILD,
 
         # Fox
         # Elder
@@ -1839,6 +1977,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_FOX_SKELETON: CommonAge.ELDER,
         CommonSimType.ELDER_FOX_PLANT_SIM: CommonAge.ELDER,
         CommonSimType.ELDER_FOX_WEREWOLF: CommonAge.ELDER,
+        CommonSimType.ELDER_FOX_FAIRY: CommonAge.ELDER,
         # Adult
         CommonSimType.ADULT_FOX: CommonAge.ADULT,
         CommonSimType.ADULT_FOX_VAMPIRE: CommonAge.ADULT,
@@ -1851,6 +1990,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_FOX_SKELETON: CommonAge.ADULT,
         CommonSimType.ADULT_FOX_PLANT_SIM: CommonAge.ADULT,
         CommonSimType.ADULT_FOX_WEREWOLF: CommonAge.ADULT,
+        CommonSimType.ADULT_FOX_FAIRY: CommonAge.ADULT,
         # Child
         CommonSimType.CHILD_FOX: CommonAge.CHILD,
         CommonSimType.CHILD_FOX_VAMPIRE: CommonAge.CHILD,
@@ -1863,6 +2003,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_FOX_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_FOX_PLANT_SIM: CommonAge.CHILD,
         CommonSimType.CHILD_FOX_WEREWOLF: CommonAge.CHILD,
+        CommonSimType.CHILD_FOX_FAIRY: CommonAge.CHILD,
 
         # Horse
         # Elder
@@ -1877,6 +2018,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HORSE_SKELETON: CommonAge.ELDER,
         CommonSimType.ELDER_HORSE_PLANT_SIM: CommonAge.ELDER,
         CommonSimType.ELDER_HORSE_WEREWOLF: CommonAge.ELDER,
+        CommonSimType.ELDER_HORSE_FAIRY: CommonAge.ELDER,
         # Adult
         CommonSimType.ADULT_HORSE: CommonAge.ADULT,
         CommonSimType.ADULT_HORSE_VAMPIRE: CommonAge.ADULT,
@@ -1889,6 +2031,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HORSE_SKELETON: CommonAge.ADULT,
         CommonSimType.ADULT_HORSE_PLANT_SIM: CommonAge.ADULT,
         CommonSimType.ADULT_HORSE_WEREWOLF: CommonAge.ADULT,
+        CommonSimType.ADULT_HORSE_FAIRY: CommonAge.ADULT,
         # Child
         CommonSimType.CHILD_HORSE: CommonAge.CHILD,
         CommonSimType.CHILD_HORSE_VAMPIRE: CommonAge.CHILD,
@@ -1901,6 +2044,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HORSE_SKELETON: CommonAge.CHILD,
         CommonSimType.CHILD_HORSE_PLANT_SIM: CommonAge.CHILD,
         CommonSimType.CHILD_HORSE_WEREWOLF: CommonAge.CHILD,
+        CommonSimType.CHILD_HORSE_FAIRY: CommonAge.CHILD,
     }
 
     _OCCULT_SIM_TYPE_TO_SPECIES_MAPPING: Dict[CommonSimType, CommonSpecies] = {
@@ -1917,6 +2061,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.ELDER_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
         CommonSimType.ELDER_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
+        CommonSimType.ELDER_HUMAN_FAIRY: CommonSpecies.HUMAN,
         # Adult
         CommonSimType.ADULT_HUMAN: CommonSpecies.HUMAN,
         CommonSimType.ADULT_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
@@ -1929,6 +2074,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.ADULT_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
         CommonSimType.ADULT_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
+        CommonSimType.ADULT_HUMAN_FAIRY: CommonSpecies.HUMAN,
         # Young Adult
         CommonSimType.YOUNG_ADULT_HUMAN: CommonSpecies.HUMAN,
         CommonSimType.YOUNG_ADULT_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
@@ -1941,6 +2087,7 @@ class CommonSimTypeUtils:
         CommonSimType.YOUNG_ADULT_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.YOUNG_ADULT_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
         CommonSimType.YOUNG_ADULT_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
+        CommonSimType.YOUNG_ADULT_HUMAN_FAIRY: CommonSpecies.HUMAN,
         # Teen
         CommonSimType.TEEN_HUMAN: CommonSpecies.HUMAN,
         CommonSimType.TEEN_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
@@ -1953,6 +2100,7 @@ class CommonSimTypeUtils:
         CommonSimType.TEEN_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.TEEN_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
         CommonSimType.TEEN_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
+        CommonSimType.TEEN_HUMAN_FAIRY: CommonSpecies.HUMAN,
         # Child
         CommonSimType.CHILD_HUMAN: CommonSpecies.HUMAN,
         CommonSimType.CHILD_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
@@ -1965,6 +2113,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.CHILD_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
         CommonSimType.CHILD_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
+        CommonSimType.CHILD_HUMAN_FAIRY: CommonSpecies.HUMAN,
         # Toddler
         CommonSimType.TODDLER_HUMAN: CommonSpecies.HUMAN,
         CommonSimType.TODDLER_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
@@ -1977,6 +2126,7 @@ class CommonSimTypeUtils:
         CommonSimType.TODDLER_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.TODDLER_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
         CommonSimType.TODDLER_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
+        CommonSimType.TODDLER_HUMAN_FAIRY: CommonSpecies.HUMAN,
         # Infant
         CommonSimType.INFANT_HUMAN: CommonSpecies.HUMAN,
         CommonSimType.INFANT_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
@@ -1989,6 +2139,7 @@ class CommonSimTypeUtils:
         CommonSimType.INFANT_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.INFANT_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
         CommonSimType.INFANT_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
+        CommonSimType.INFANT_HUMAN_FAIRY: CommonSpecies.HUMAN,
         # Baby
         CommonSimType.BABY_HUMAN: CommonSpecies.HUMAN,
         CommonSimType.BABY_HUMAN_VAMPIRE: CommonSpecies.HUMAN,
@@ -2001,6 +2152,7 @@ class CommonSimTypeUtils:
         CommonSimType.BABY_HUMAN_SKELETON: CommonSpecies.HUMAN,
         CommonSimType.BABY_HUMAN_PLANT_SIM: CommonSpecies.HUMAN,
         CommonSimType.BABY_HUMAN_WEREWOLF: CommonSpecies.HUMAN,
+        CommonSimType.BABY_HUMAN_FAIRY: CommonSpecies.HUMAN,
 
         # Dog
         # Small Dog
@@ -2016,6 +2168,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_SMALL_DOG_SKELETON: CommonSpecies.SMALL_DOG,
         CommonSimType.ELDER_SMALL_DOG_PLANT_SIM: CommonSpecies.SMALL_DOG,
         CommonSimType.ELDER_SMALL_DOG_WEREWOLF: CommonSpecies.SMALL_DOG,
+        CommonSimType.ELDER_SMALL_DOG_FAIRY: CommonSpecies.SMALL_DOG,
         # Adult
         CommonSimType.ADULT_SMALL_DOG: CommonSpecies.SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_VAMPIRE: CommonSpecies.SMALL_DOG,
@@ -2028,6 +2181,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_SMALL_DOG_SKELETON: CommonSpecies.SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_PLANT_SIM: CommonSpecies.SMALL_DOG,
         CommonSimType.ADULT_SMALL_DOG_WEREWOLF: CommonSpecies.SMALL_DOG,
+        CommonSimType.ADULT_SMALL_DOG_FAIRY: CommonSpecies.SMALL_DOG,
         # Child
         CommonSimType.CHILD_SMALL_DOG: CommonSpecies.SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_VAMPIRE: CommonSpecies.SMALL_DOG,
@@ -2040,6 +2194,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_SMALL_DOG_SKELETON: CommonSpecies.SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_PLANT_SIM: CommonSpecies.SMALL_DOG,
         CommonSimType.CHILD_SMALL_DOG_WEREWOLF: CommonSpecies.SMALL_DOG,
+        CommonSimType.CHILD_SMALL_DOG_FAIRY: CommonSpecies.SMALL_DOG,
 
         # Child
         CommonSimType.CHILD_DOG: CommonSpecies.LARGE_DOG,
@@ -2053,6 +2208,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_DOG_SKELETON: CommonSpecies.LARGE_DOG,
         CommonSimType.CHILD_DOG_PLANT_SIM: CommonSpecies.LARGE_DOG,
         CommonSimType.CHILD_DOG_WEREWOLF: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_DOG_FAIRY: CommonSpecies.LARGE_DOG,
 
         # Large Dog
         # Elder
@@ -2067,6 +2223,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_LARGE_DOG_SKELETON: CommonSpecies.LARGE_DOG,
         CommonSimType.ELDER_LARGE_DOG_PLANT_SIM: CommonSpecies.LARGE_DOG,
         CommonSimType.ELDER_LARGE_DOG_WEREWOLF: CommonSpecies.LARGE_DOG,
+        CommonSimType.ELDER_LARGE_DOG_FAIRY: CommonSpecies.LARGE_DOG,
         # Adult
         CommonSimType.ADULT_LARGE_DOG: CommonSpecies.LARGE_DOG,
         CommonSimType.ADULT_LARGE_DOG_VAMPIRE: CommonSpecies.LARGE_DOG,
@@ -2079,6 +2236,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_LARGE_DOG_SKELETON: CommonSpecies.LARGE_DOG,
         CommonSimType.ADULT_LARGE_DOG_PLANT_SIM: CommonSpecies.LARGE_DOG,
         CommonSimType.ADULT_LARGE_DOG_WEREWOLF: CommonSpecies.LARGE_DOG,
+        CommonSimType.ADULT_LARGE_DOG_FAIRY: CommonSpecies.LARGE_DOG,
         # Child
         CommonSimType.CHILD_LARGE_DOG: CommonSpecies.LARGE_DOG,
         CommonSimType.CHILD_LARGE_DOG_VAMPIRE: CommonSpecies.LARGE_DOG,
@@ -2091,6 +2249,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_LARGE_DOG_SKELETON: CommonSpecies.LARGE_DOG,
         CommonSimType.CHILD_LARGE_DOG_PLANT_SIM: CommonSpecies.LARGE_DOG,
         CommonSimType.CHILD_LARGE_DOG_WEREWOLF: CommonSpecies.LARGE_DOG,
+        CommonSimType.CHILD_LARGE_DOG_FAIRY: CommonSpecies.LARGE_DOG,
 
         # Cat
         # Elder
@@ -2105,6 +2264,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_CAT_SKELETON: CommonSpecies.CAT,
         CommonSimType.ELDER_CAT_PLANT_SIM: CommonSpecies.CAT,
         CommonSimType.ELDER_CAT_WEREWOLF: CommonSpecies.CAT,
+        CommonSimType.ELDER_CAT_FAIRY: CommonSpecies.CAT,
         # Adult
         CommonSimType.ADULT_CAT: CommonSpecies.CAT,
         CommonSimType.ADULT_CAT_VAMPIRE: CommonSpecies.CAT,
@@ -2117,6 +2277,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_CAT_SKELETON: CommonSpecies.CAT,
         CommonSimType.ADULT_CAT_PLANT_SIM: CommonSpecies.CAT,
         CommonSimType.ADULT_CAT_WEREWOLF: CommonSpecies.CAT,
+        CommonSimType.ADULT_CAT_FAIRY: CommonSpecies.CAT,
         # Child
         CommonSimType.CHILD_CAT: CommonSpecies.CAT,
         CommonSimType.CHILD_CAT_VAMPIRE: CommonSpecies.CAT,
@@ -2129,6 +2290,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_CAT_SKELETON: CommonSpecies.CAT,
         CommonSimType.CHILD_CAT_PLANT_SIM: CommonSpecies.CAT,
         CommonSimType.CHILD_CAT_WEREWOLF: CommonSpecies.CAT,
+        CommonSimType.CHILD_CAT_FAIRY: CommonSpecies.CAT,
 
         # Fox
         # Elder
@@ -2143,6 +2305,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_FOX_SKELETON: CommonSpecies.FOX,
         CommonSimType.ELDER_FOX_PLANT_SIM: CommonSpecies.FOX,
         CommonSimType.ELDER_FOX_WEREWOLF: CommonSpecies.FOX,
+        CommonSimType.ELDER_FOX_FAIRY: CommonSpecies.FOX,
         # Adult
         CommonSimType.ADULT_FOX: CommonSpecies.FOX,
         CommonSimType.ADULT_FOX_VAMPIRE: CommonSpecies.FOX,
@@ -2155,6 +2318,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_FOX_SKELETON: CommonSpecies.FOX,
         CommonSimType.ADULT_FOX_PLANT_SIM: CommonSpecies.FOX,
         CommonSimType.ADULT_FOX_WEREWOLF: CommonSpecies.FOX,
+        CommonSimType.ADULT_FOX_FAIRY: CommonSpecies.FOX,
         # Child
         CommonSimType.CHILD_FOX: CommonSpecies.FOX,
         CommonSimType.CHILD_FOX_VAMPIRE: CommonSpecies.FOX,
@@ -2167,6 +2331,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_FOX_SKELETON: CommonSpecies.FOX,
         CommonSimType.CHILD_FOX_PLANT_SIM: CommonSpecies.FOX,
         CommonSimType.CHILD_FOX_WEREWOLF: CommonSpecies.FOX,
+        CommonSimType.CHILD_FOX_FAIRY: CommonSpecies.FOX,
 
         # Horse
         # Elder
@@ -2181,6 +2346,7 @@ class CommonSimTypeUtils:
         CommonSimType.ELDER_HORSE_SKELETON: CommonSpecies.HORSE,
         CommonSimType.ELDER_HORSE_PLANT_SIM: CommonSpecies.HORSE,
         CommonSimType.ELDER_HORSE_WEREWOLF: CommonSpecies.HORSE,
+        CommonSimType.ELDER_HORSE_FAIRY: CommonSpecies.HORSE,
         # Adult
         CommonSimType.ADULT_HORSE: CommonSpecies.HORSE,
         CommonSimType.ADULT_HORSE_VAMPIRE: CommonSpecies.HORSE,
@@ -2193,6 +2359,7 @@ class CommonSimTypeUtils:
         CommonSimType.ADULT_HORSE_SKELETON: CommonSpecies.HORSE,
         CommonSimType.ADULT_HORSE_PLANT_SIM: CommonSpecies.HORSE,
         CommonSimType.ADULT_HORSE_WEREWOLF: CommonSpecies.HORSE,
+        CommonSimType.ADULT_HORSE_FAIRY: CommonSpecies.HORSE,
         # Child
         CommonSimType.CHILD_HORSE: CommonSpecies.HORSE,
         CommonSimType.CHILD_HORSE_VAMPIRE: CommonSpecies.HORSE,
@@ -2205,6 +2372,7 @@ class CommonSimTypeUtils:
         CommonSimType.CHILD_HORSE_SKELETON: CommonSpecies.HORSE,
         CommonSimType.CHILD_HORSE_PLANT_SIM: CommonSpecies.HORSE,
         CommonSimType.CHILD_HORSE_WEREWOLF: CommonSpecies.HORSE,
+        CommonSimType.CHILD_HORSE_FAIRY: CommonSpecies.HORSE,
     }
 
     @staticmethod
