@@ -125,6 +125,9 @@ class CommonBodySlot(CommonIntFlags):
     UPPER_BODY: 'CommonBodySlot' = 6
     WRIST_LEFT: 'CommonBodySlot' = 14
     WRIST_RIGHT: 'CommonBodySlot' = 15
+    WINGS: 'CommonBodySlot' = 114
+    HEAD_DECORATION = 115
+    SKIN_SPECULARITY = 116
 
     @classmethod
     def get_all(cls, exclude_values: Iterator['CommonBodySlot'] = None) -> Tuple['CommonBodySlot']:
@@ -449,6 +452,12 @@ class CommonBodySlot(CommonIntFlags):
             mapping[CommonBodySlot.WRIST_LEFT] = BodyType.WRIST_LEFT
         if hasattr(BodyType, 'WRIST_RIGHT'):
             mapping[CommonBodySlot.WRIST_RIGHT] = BodyType.WRIST_RIGHT
+        if hasattr(BodyType, 'WINGS'):
+            mapping[CommonBodySlot.WINGS] = BodyType.WINGS
+        if hasattr(BodyType, 'HEADDECO'):
+            mapping[CommonBodySlot.HEAD_DECORATION] = BodyType.HEADDECO
+        if hasattr(BodyType, 'SKINSPECULARITY'):
+            mapping[CommonBodySlot.SKIN_SPECULARITY] = BodyType.SKINSPECULARITY
         return mapping.get(value, value)
 
     @staticmethod
@@ -725,4 +734,10 @@ class CommonBodySlot(CommonIntFlags):
             mapping[BodyType.WRIST_LEFT] = CommonBodySlot.WRIST_LEFT
         if hasattr(BodyType, 'WRIST_RIGHT'):
             mapping[BodyType.WRIST_RIGHT] = CommonBodySlot.WRIST_RIGHT
+        if hasattr(BodyType, 'WINGS'):
+            mapping[BodyType.WINGS] = CommonBodySlot.WINGS
+        if hasattr(BodyType, 'HEADDECO'):
+            mapping[BodyType.HEADDECO] = CommonBodySlot.HEAD_DECORATION
+        if hasattr(BodyType, 'SKINSPECULARITY'):
+            mapping[BodyType.SKINSPECULARITY] = CommonBodySlot.SKIN_SPECULARITY
         return mapping.get(value, value)

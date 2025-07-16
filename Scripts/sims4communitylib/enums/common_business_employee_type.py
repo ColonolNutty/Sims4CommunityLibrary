@@ -19,6 +19,7 @@ class CommonBusinessEmployeeType(CommonInt):
     RESTAURANT_WAITSTAFF: 'CommonBusinessEmployeeType' = ...
     RESTAURANT_HOST: 'CommonBusinessEmployeeType' = ...
     VET: 'CommonBusinessEmployeeType' = ...
+    SMALL_BUSINESS_HELP: 'CommonBusinessEmployeeType' = ...
 
     @classmethod
     def get_all(cls, exclude_values: Iterator['CommonBusinessEmployeeType'] = None) -> Tuple['CommonBusinessEmployeeType']:
@@ -90,6 +91,8 @@ class CommonBusinessEmployeeType(CommonInt):
             mapping[CommonBusinessEmployeeType.RESTAURANT_HOST] = BusinessEmployeeType.RESTAURANT_HOST
         if hasattr(BusinessEmployeeType, 'VET'):
             mapping[CommonBusinessEmployeeType.VET] = BusinessEmployeeType.VET
+        if hasattr(BusinessEmployeeType, 'SMALL_BUSINESS_HELP'):
+            mapping[CommonBusinessEmployeeType.SMALL_BUSINESS_HELP] = BusinessEmployeeType.SMALL_BUSINESS_HELP
         return mapping.get(value, BusinessEmployeeType.INVALID)
 
     @staticmethod
@@ -118,5 +121,7 @@ class CommonBusinessEmployeeType(CommonInt):
             mapping[BusinessEmployeeType.RESTAURANT_HOST] = CommonBusinessEmployeeType.RESTAURANT_HOST
         if hasattr(BusinessEmployeeType, 'VET'):
             mapping[BusinessEmployeeType.VET] = CommonBusinessEmployeeType.VET
+        if hasattr(BusinessEmployeeType, 'SMALL_BUSINESS_HELP'):
+            mapping[BusinessEmployeeType.SMALL_BUSINESS_HELP] = CommonBusinessEmployeeType.SMALL_BUSINESS_HELP
         return mapping.get(value, CommonBusinessEmployeeType.INVALID)
 

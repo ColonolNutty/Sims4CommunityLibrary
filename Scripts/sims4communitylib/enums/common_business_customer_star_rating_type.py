@@ -24,6 +24,10 @@ class CommonBusinessCustomerStarRatingType(CommonInt):
     STRESS_LEVEL: 'CommonBusinessCustomerStarRatingType' = ...
     SERVICE_VALUE: 'CommonBusinessCustomerStarRatingType' = ...
     SERVICE_QUALITY: 'CommonBusinessCustomerStarRatingType' = ...
+    CUSTOMER_RELATIONSHIP: 'CommonBusinessCustomerStarRatingType' = ...
+    ACTIVITIES_COMPLETED: 'CommonBusinessCustomerStarRatingType' = ...
+    PRICING: 'CommonBusinessCustomerStarRatingType' = ...
+    QUALITY: 'CommonBusinessCustomerStarRatingType' = ...
 
     @classmethod
     def get_all(cls, exclude_values: Iterator['CommonBusinessCustomerStarRatingType'] = None) -> Tuple['CommonBusinessCustomerStarRatingType']:
@@ -105,6 +109,14 @@ class CommonBusinessCustomerStarRatingType(CommonInt):
             mapping[CommonBusinessCustomerStarRatingType.SERVICE_VALUE] = BusinessCustomerStarRatingBuffBuckets.SERVICE_VALUE
         if hasattr(BusinessCustomerStarRatingBuffBuckets, 'SERVICE_QUALITY'):
             mapping[CommonBusinessCustomerStarRatingType.SERVICE_QUALITY] = BusinessCustomerStarRatingBuffBuckets.SERVICE_QUALITY
+        if hasattr(BusinessCustomerStarRatingBuffBuckets, 'CUSTOMER_RELATIONSHIP'):
+            mapping[CommonBusinessCustomerStarRatingType.CUSTOMER_RELATIONSHIP] = BusinessCustomerStarRatingBuffBuckets.CUSTOMER_RELATIONSHIP
+        if hasattr(BusinessCustomerStarRatingBuffBuckets, 'ACTIVITIES_COMPLETED'):
+            mapping[CommonBusinessCustomerStarRatingType.ACTIVITIES_COMPLETED] = BusinessCustomerStarRatingBuffBuckets.ACTIVITIES_COMPLETED
+        if hasattr(BusinessCustomerStarRatingBuffBuckets, 'PRICING'):
+            mapping[CommonBusinessCustomerStarRatingType.PRICING] = BusinessCustomerStarRatingBuffBuckets.PRICING
+        if hasattr(BusinessCustomerStarRatingBuffBuckets, 'QUALITY'):
+            mapping[CommonBusinessCustomerStarRatingType.QUALITY] = BusinessCustomerStarRatingBuffBuckets.QUALITY
         return mapping.get(value, BusinessCustomerStarRatingBuffBuckets.INVALID)
 
     @staticmethod
@@ -143,6 +155,14 @@ class CommonBusinessCustomerStarRatingType(CommonInt):
             mapping[BusinessCustomerStarRatingBuffBuckets.SERVICE_VALUE] = CommonBusinessCustomerStarRatingType.SERVICE_VALUE
         if hasattr(BusinessCustomerStarRatingBuffBuckets, 'SERVICE_QUALITY'):
             mapping[BusinessCustomerStarRatingBuffBuckets.SERVICE_QUALITY] = CommonBusinessCustomerStarRatingType.SERVICE_QUALITY
+        if hasattr(BusinessCustomerStarRatingBuffBuckets, 'CUSTOMER_RELATIONSHIP'):
+            mapping[BusinessCustomerStarRatingBuffBuckets.CUSTOMER_RELATIONSHIP] = CommonBusinessCustomerStarRatingType.CUSTOMER_RELATIONSHIP
+        if hasattr(BusinessCustomerStarRatingBuffBuckets, 'ACTIVITIES_COMPLETED'):
+            mapping[BusinessCustomerStarRatingBuffBuckets.ACTIVITIES_COMPLETED] = CommonBusinessCustomerStarRatingType.ACTIVITIES_COMPLETED
+        if hasattr(BusinessCustomerStarRatingBuffBuckets, 'PRICING'):
+            mapping[BusinessCustomerStarRatingBuffBuckets.PRICING] = CommonBusinessCustomerStarRatingType.PRICING
+        if hasattr(BusinessCustomerStarRatingBuffBuckets, 'QUALITY'):
+            mapping[BusinessCustomerStarRatingBuffBuckets.QUALITY] = CommonBusinessCustomerStarRatingType.QUALITY
         return mapping.get(value, CommonBusinessCustomerStarRatingType.INVALID)
 
 

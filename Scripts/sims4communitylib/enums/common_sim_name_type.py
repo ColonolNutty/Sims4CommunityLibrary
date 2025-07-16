@@ -42,6 +42,9 @@ class CommonSimNameType(CommonInt):
     STAR_WARS_FIRST_ORDER: 'CommonSimNameType' = ...
     STAR_WARS_STORM_TROOPER: 'CommonSimNameType' = ...
     FOX: 'CommonSimNameType' = ...
+    HORSE: 'CommonSimNameType' = ...
+    SOUTH_EAST_ASIAN: 'CommonSimNameType' = ...
+    NATIVE_AMERICAN: 'CommonSimNameType' = ...
 
     @classmethod
     def get_all(cls, exclude_values: Iterator['CommonSimNameType'] = None) -> Tuple['CommonSimNameType']:
@@ -159,6 +162,12 @@ class CommonSimNameType(CommonInt):
             mapping[CommonSimNameType.FOX] = SimNameType.Fox
         if hasattr(SimNameType, 'FashionMarketplace_Name'):
             mapping[CommonSimNameType.MARKETPLACE_FASHION_NAME] = SimNameType.FashionMarketplace_Name
+        if hasattr(SimNameType, 'Horse'):
+            mapping[CommonSimNameType.HORSE] = SimNameType.Horse
+        if hasattr(SimNameType, 'SoutheastAsian'):
+            mapping[CommonSimNameType.SOUTH_EAST_ASIAN] = SimNameType.SoutheastAsian
+        if hasattr(SimNameType, 'NativeAmerican'):
+            mapping[CommonSimNameType.NATIVE_AMERICAN] = SimNameType.NativeAmerican
         return mapping.get(value, SimNameType.DEFAULT)
 
     @classmethod
@@ -233,4 +242,10 @@ class CommonSimNameType(CommonInt):
             mapping[SimNameType.Fox] = CommonSimNameType.FOX
         if hasattr(SimNameType, 'FashionMarketplace_Name'):
             mapping[SimNameType.FashionMarketplace_Name] = CommonSimNameType.MARKETPLACE_FASHION_NAME
+        if hasattr(SimNameType, 'Horse'):
+            mapping[SimNameType.Horse] = CommonSimNameType.HORSE
+        if hasattr(SimNameType, 'SoutheastAsian'):
+            mapping[SimNameType.SoutheastAsian] = CommonSimNameType.SOUTH_EAST_ASIAN
+        if hasattr(SimNameType, 'NativeAmerican'):
+            mapping[SimNameType.NativeAmerican] = CommonSimNameType.NATIVE_AMERICAN
         return mapping.get(value, CommonSimNameType.DEFAULT)

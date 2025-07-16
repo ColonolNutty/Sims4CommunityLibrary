@@ -29,6 +29,10 @@ class CommonBucksType(CommonInt):
     GALACTIC_CREDIT: 'CommonBucksType' = ...
     WEREWOLF_ABILITY: 'CommonBucksType' = ...
     WEREWOLF_ABILITY_QUEST: 'CommonBucksType' = ...
+    GHOST_POWERS_ABILITY: 'CommonBucksType' = ...
+    BUSINESS_PERK: 'CommonBucksType' = ...
+    CUSTOMER_SATISFACTION: 'CommonBucksType' = ...
+    FAIRY_PERK: 'CommonBucksType' = ...
 
     @classmethod
     def get_all(cls, exclude_values: Iterator['CommonBucksType'] = None) -> Tuple['CommonBucksType']:
@@ -120,6 +124,14 @@ class CommonBucksType(CommonInt):
             mapping[CommonBucksType.WEREWOLF_ABILITY] = BucksType.WerewolfAbilityBucks
         if hasattr(BucksType, 'WerewolfQuestAbilityBucks'):
             mapping[CommonBucksType.WEREWOLF_ABILITY_QUEST] = BucksType.WerewolfQuestAbilityBucks
+        if hasattr(BucksType, 'GhostPowersAbilityBucks'):
+            mapping[CommonBucksType.GHOST_POWERS_ABILITY] = BucksType.GhostPowersAbilityBucks
+        if hasattr(BucksType, 'BusinessPerkBucks'):
+            mapping[CommonBucksType.BUSINESS_PERK] = BucksType.BusinessPerkBucks
+        if hasattr(BucksType, 'CustomerSatisfactionBucks'):
+            mapping[CommonBucksType.CUSTOMER_SATISFACTION] = BucksType.CustomerSatisfactionBucks
+        if hasattr(BucksType, 'FairyPerkBucks'):
+            mapping[CommonBucksType.FAIRY_PERK] = BucksType.FairyPerkBucks
         return mapping.get(value, None)
 
     @staticmethod
@@ -168,6 +180,14 @@ class CommonBucksType(CommonInt):
             mapping[BucksType.WerewolfAbilityBucks] = CommonBucksType.WEREWOLF_ABILITY
         if hasattr(BucksType, 'WerewolfQuestAbilityBucks'):
             mapping[BucksType.WerewolfQuestAbilityBucks] = CommonBucksType.WEREWOLF_ABILITY_QUEST
+        if hasattr(BucksType, 'GhostPowersAbilityBucks'):
+            mapping[BucksType.GhostPowersAbilityBucks] = CommonBucksType.GHOST_POWERS_ABILITY
+        if hasattr(BucksType, 'BusinessPerkBucks'):
+            mapping[BucksType.BusinessPerkBucks] = CommonBucksType.BUSINESS_PERK
+        if hasattr(BucksType, 'CustomerSatisfactionBucks'):
+            mapping[BucksType.CustomerSatisfactionBucks] = CommonBucksType.CUSTOMER_SATISFACTION
+        if hasattr(BucksType, 'FairyPerkBucks'):
+            mapping[BucksType.FairyPerkBucks] = CommonBucksType.FAIRY_PERK
         return mapping.get(value, value)
 
     @staticmethod

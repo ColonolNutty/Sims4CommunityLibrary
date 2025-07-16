@@ -51,3 +51,4 @@ class CommonMotiveId(CommonInt):
     MERMAID_HYDRATION: 'CommonMotiveId' = HYGIENE
     WITCH_MAGIC: 'CommonMotiveId' = 213024  # commodity_Motive_WitchOccult_Charge
     WEREWOLF_FURY: 'CommonMotiveId' = 276223  # commodity_Motive_Werewolf_Fury
+    FAIRY_EMOTIONAL_FORCE: 'CommonMotiveId' = 420035  # commodity_Motive_FairyOccult_EmotionalAppetite
