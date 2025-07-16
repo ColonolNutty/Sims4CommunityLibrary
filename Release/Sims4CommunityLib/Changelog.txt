@@ -1,3 +1,7 @@
+v3.15:
+- Updated Buffs, Traits, Careers, Death Type, Puddles, Regions, Skills, Body Slot, Bucks Types, Customer Star Rating Types, Employee Types, Sim Name Types, and Motives with new enum values.
+- Added Fairy Occult support
+
 v3.14:
 - Fixed an infinite loop in the colorize function.
 
