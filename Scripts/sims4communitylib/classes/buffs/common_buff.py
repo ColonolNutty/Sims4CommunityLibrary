@@ -5,12 +5,17 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-from typing import Union
+from typing import Union, TYPE_CHECKING
 from buffs.buff import Buff
 from sims.sim import Sim
+from sims.sim_info import SimInfo
 from sims4communitylib.logging.has_class_log import HasClassLog
 from sims4communitylib.mod_support.mod_identity import CommonModIdentity
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+
+if TYPE_CHECKING:
+    # noinspection PyUnresolvedReferences
+    from interactions.utils.loot import Interaction, Loot, LootAction
 
 
 class CommonBuff(Buff, HasClassLog):
@@ -39,9 +44,18 @@ class CommonBuff(Buff, HasClassLog):
         """
         return CommonSimUtils.get_sim_instance(self._owner)
 
+    @property
+    def sim_info(self) -> Union[SimInfo, None]:
+        """Retrieve the SimInfo that owns the Buff.
+
+        :return: The info of the Sim that owns the Buff.
+        :rtype: SimInfo
+        """
+        return CommonSimUtils.get_sim_info(self._owner)
+
     # noinspection PyMissingOrEmptyDocstring
-    def on_add(self, from_load: bool=False, apply_buff_loot: bool=True):
-        """on_add(from_load=False, apply_buff_loot=True)
+    def on_add(self, *_, from_load: bool = False, apply_buff_loot: bool = True, buff_source: Union['Interaction', 'Loot', 'LootAction'] = None, **__):
+        """on_add(from_load=False, apply_buff_loot=True, buff_source=None)
 
         A function that occurs upon a Buff being added to a Sim.
 
@@ -49,14 +63,16 @@ class CommonBuff(Buff, HasClassLog):
         :type from_load: bool, optional
         :param apply_buff_loot: If True, Loot will be applied when the Buff is added. Default is True.
         :type apply_buff_loot: bool, optional
+        :param buff_source: The source of the buff. Default is No Source.
+        :type buff_source: Union[Interaction, Loot, LootAction], optional
         """
-        super().on_add(from_load=from_load, apply_buff_loot=apply_buff_loot)
+        super().on_add(*_, from_load=from_load, apply_buff_loot=apply_buff_loot, buff_source=buff_source, **__)
         try:
-            self.on_added(self.sim, from_load=from_load, apply_buff_loot=apply_buff_loot)
+            self.on_added(self.sim, *_, from_load=from_load, apply_buff_loot=apply_buff_loot, buff_source=buff_source)
         except Exception as ex:
             self.log.error('Error occurred while running buff \'{}\' on_added.'.format(self.__class__.__name__), exception=ex)
 
-    def on_remove(self, apply_loot_on_remove: bool=True):
+    def on_remove(self, *_, apply_loot_on_remove: bool = True, **__):
         """on_remove(apply_loot_on_remove=True)
 
         A function that occurs upon a Buff being removed from a Sim.
@@ -64,16 +80,16 @@ class CommonBuff(Buff, HasClassLog):
         :param apply_loot_on_remove: If True, Loot will be applied after the Buff is removed. If False, it won't. Default is True.
         :type apply_loot_on_remove: bool, optional
         """
-        super().on_remove(apply_loot_on_remove=apply_loot_on_remove)
+        super().on_remove(*_, apply_loot_on_remove=apply_loot_on_remove, **__)
         try:
-            self.on_removed(self.sim, apply_loot_on_remove=apply_loot_on_remove)
+            self.on_removed(self.sim, *_, apply_loot_on_remove=apply_loot_on_remove, **__)
         except Exception as ex:
             self.log.error('Error occurred while running buff \'{}\' on_removed.'.format(self.__class__.__name__), exception=ex)
 
     # The following functions are hooks into various parts of a buff, override them in your own buff to provide custom functionality.
 
-    def on_added(self, owner: Sim, from_load: bool=False, apply_buff_loot: bool=True):
-        """on_added(owner, from_load=False, apply_buff_loot=True)
+    def on_added(self, owner: Sim, *_, from_load: bool = False, apply_buff_loot: bool = True, buff_source: Union['Interaction', 'Loot', 'LootAction'] = None, **__):
+        """on_added(owner, *_, from_load=False, apply_buff_loot=True, buff_source=None, **__)
 
         A hook that occurs upon the Buff being added to the Sim.
 
@@ -83,11 +99,13 @@ class CommonBuff(Buff, HasClassLog):
         :type from_load: bool, optional
         :param apply_buff_loot: If True, Loot was applied when the Buff was added. Default is True.
         :type apply_buff_loot: bool, optional
+        :param buff_source: The source of the buff. Default is No Source.
+        :type buff_source: Union[Interaction, Loot, LootAction], optional
         """
         pass
 
-    def on_removed(self, owner: Sim, apply_loot_on_remove: bool=True):
-        """on_removed(owner, apply_loot_on_remove=True)
+    def on_removed(self, owner: Sim, *_, apply_loot_on_remove: bool = True, **__):
+        """on_removed(owner, *_, apply_loot_on_remove=True, **__)
 
         A hook that occurs upon the Buff being removed from the Sim.
 

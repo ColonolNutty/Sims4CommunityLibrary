@@ -5,12 +5,21 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
+import services
+from aspirations.aspiration_tuning import Aspiration, AspirationBasic
+from aspirations.aspiration_types import AspriationType
+from event_testing.objective_tuning import Objective
+from event_testing.resolver import DataResolver
 from objects.game_object import GameObject
+from server_commands.argument_helpers import TunableInstanceParam
+from sims.sim_info import SimInfo
+from sims4.resources import Types
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
+from sims4communitylib.utils.common_resource_utils import CommonResourceUtils
 from sims4communitylib.utils.misc.common_fire_utils import CommonFireUtils
 from sims4communitylib.utils.objects.common_object_location_utils import CommonObjectLocationUtils
 from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
@@ -100,3 +109,60 @@ def _common_burgle_it(output: CommonConsoleCommandOutput):
     burglar_loot = 8288151420394453877  # S4CL_Loot_Situation_Burglar
     CommonSimLootActionUtils.apply_loot_actions_by_id_to_sim(burglar_loot, sim_info)
     output('Done, burglar will show at midnight.')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.print_rig',
+    'Print rig information for a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim to attach the buff to.', is_optional=True, default_value='Active Sim'),
+    ),
+    show_with_help_command=False
+)
+def _common_burgle_it(output: CommonConsoleCommandOutput, sim_info: SimInfo = None):
+    output(f'Printing Rig for {sim_info}')
+    sim = CommonSimUtils.get_sim_instance(sim_info)
+    rig_hash64 = sim.rig.hash64
+    rig_instance = sim.rig.instance
+    current_sim_info = sim.sim_info
+    log.format_with_message('All things on rig', rig_dir=dir(sim.rig), rig64=rig_hash64, rig_instance=rig_instance, rig_key=sim_info.rig_key, current_rig_key=current_sim_info.rig_key)
+    output(f'Rig Hash 64: {rig_hash64}')
+    output(f'Rig Instance: {rig_instance}')
+    output(f'Rig Key: {sim_info.rig_key}')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.complete_objective',
+    'Complete an objective for an aspiration.',
+    command_arguments=(
+        CommonConsoleCommandArgument('objective', 'Objective Id or Name', 'The name or instance id of a Sim to attach the buff to.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim to attach the buff to.', is_optional=True, default_value='Active Sim'),
+    ),
+    show_with_help_command=False
+)
+def _common_complete_objective(output: CommonConsoleCommandOutput, objective: TunableInstanceParam(Types.OBJECTIVE), sim_info: SimInfo = None):
+    if sim_info is None:
+        output('No Sim specified')
+        return
+    if objective is None:
+        output('No objective specified.')
+        return
+    output(f'Completing objective {objective} for Sim {sim_info}')
+    aspiration_tracker = sim_info.aspiration_tracker
+    for (key, aspiration) in CommonResourceUtils.load_all_instances(Types.ASPIRATION, return_type=AspirationBasic):
+        aspiration: AspirationBasic = aspiration
+        log.format_with_message(f'Checking Aspiration {aspiration}')
+        if aspiration.aspiration_type == AspriationType.FULL_ASPIRATION and aspiration.do_not_register_events_on_load and not aspiration_tracker.aspiration_in_sequence(aspiration):
+            continue
+            # log.format_with_message(f'Not a full aspiration {aspiration} do not register {aspiration.do_not_register_events_on_load} ')
+        else:
+            for asp_objective in aspiration_tracker.get_objectives(aspiration):
+                if asp_objective == objective:
+                    log.format_with_message(f'Found the objective {asp_objective} on {aspiration}.')
+                    aspiration_tracker.handle_event(aspiration, None, DataResolver(sim_info), debug_objectives_to_force_complete=[objective])
+                # else:
+                #     log.format_with_message(f'Objective not a match {asp_objective}')
+    log.format_with_message('Done')
+    output(f'Completed {objective} on {sim_info}')
