@@ -7,6 +7,7 @@ Copyright (c) COLONOLNUTTY
 """
 from typing import Union
 
+from distributor.ops import FocusCamera, CancelFocusCamera
 from objects.game_object import GameObject
 from server.client import Client
 from sims.sim_info import SimInfo
@@ -15,6 +16,7 @@ from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
 from sims4communitylib.services.commands.common_console_command_output import CommonConsoleCommandOutput
+from sims4communitylib.utils.common_omega_utils import CommonOmegaUtils
 from sims4communitylib.utils.common_type_utils import CommonTypeUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 
@@ -103,6 +105,72 @@ class CommonCameraUtils:
         """
         from camera import cancel_focus
         cancel_focus(object=game_object)
+
+    @classmethod
+    def local_start_focus_on_sim(cls, sim_info: SimInfo, follow: bool = True, client: Client = None):
+        """local_start_focus_on_sim(sim_info)
+
+        Focus the player camera on a Sim using local messaging for compatibility with S4MP.
+
+        :param sim_info: The SimInfo of the Sim to focus the camera on.
+        :type sim_info: SimInfo
+        :param follow: If True, the camera will follow the object after focusing on it. If False, the camera will not follow the object after focusing on it. Default is True.
+        :type follow: bool, optional
+        :param client: The client to focus on the Sim. If None, the active client will be used. Default is None.
+        :type client: Client, optional
+        """
+
+        camera_focus_op = FocusCamera(id=sim_info.id, follow_mode=follow)
+
+        CommonOmegaUtils.send_view_update_message(camera_focus_op, client=client)
+
+    @classmethod
+    def local_start_focus_on_position(cls, position: CommonVector3, client: Client = None):
+        """local_start_focus_on_position(position)
+
+        Focus the player camera on a position using local messaging for compatibility with S4MP.
+
+        :param position: The position to focus the camera on.
+        :type position: CommonVector3
+        :param client: The client to focus on the position. If None, the active client will be used. Default is None.
+        :type client: Client, optional
+        """
+
+        camera_focus_op = FocusCamera()
+        camera_focus_op.set_position(position)
+
+        CommonOmegaUtils.send_view_update_message(camera_focus_op, client=client)
+
+    @classmethod
+    def local_start_focus_on_object(cls, game_object: GameObject, follow: bool = True, client: Client = None):
+        """local_start_focus_on_object(game_object)
+
+        Focus the player camera on a game object using local messaging for compatibility with S4MP.
+
+        :param game_object: The object to focus on.
+        :type game_object: GameObject
+        :param follow: If True, the camera will follow the object after focusing on it. If False, the camera will not follow the object after focusing on it. Default is True.
+        :type follow: bool, optional
+        :param client: The client to focus on the Sim. If None, the active client will be used. Default is None.
+        :type client: Client, optional
+        """
+
+        camera_focus_op = FocusCamera(id=game_object.id, follow_mode=follow)
+
+        CommonOmegaUtils.send_view_update_message(camera_focus_op, client=client)
+
+    @classmethod
+    def local_stop_focus_on_object(cls, game_object: GameObject):
+        """local_stop_focus_on_object(game_object)
+
+        Stop focusing the player camera on a game object.
+
+        :param game_object: The object to stop focusing on.
+        :type game_object: GameObject
+        """
+        camera_stop_focus_op = CancelFocusCamera(id=game_object.id)
+
+        CommonOmegaUtils.send_view_update_message(camera_stop_focus_op)
 
 
 @CommonConsoleCommand(
