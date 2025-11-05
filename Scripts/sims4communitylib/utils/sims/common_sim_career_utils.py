@@ -87,6 +87,25 @@ class CommonSimCareerUtils(_HasS4CLClassLog):
             yield career
 
     @classmethod
+    def get_first_career(cls, sim_info: SimInfo, include_career_callback: Callable[[Career], bool] = None) -> Union[Career, None]:
+        """get_first_career(sim_info, include_career_callback=None)
+
+        Retrieve the first Career a Sim has.
+
+        :param sim_info: An instance of a Sim.
+        :type sim_info: SimInfo
+        :param include_career_callback: If the result of this callback is True, the Career of the Sim will be considered in the result. If set to None, All Careers of the Sim will be considered. Default is None.
+        :type include_career_callback: Callable[[Career], bool], optional
+        :return: The first career the Sim has, or None if they do not have a career.
+        :rtype: Union[Career, None]
+        """
+        if sim_info is None:
+            return None
+        for career in cls.get_all_careers_for_sim_gen(sim_info, include_career_callback=include_career_callback):
+            return career
+        return None
+
+    @classmethod
     def has_career(cls, sim_info: SimInfo, career_identifier: Union[int, Career]) -> bool:
         """has_career_by_guid(sim_info, career)
 

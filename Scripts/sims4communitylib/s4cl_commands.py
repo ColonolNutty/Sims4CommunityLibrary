@@ -5,15 +5,14 @@ https://creativecommons.org/licenses/by/4.0/legalcode
 
 Copyright (c) COLONOLNUTTY
 """
-import services
-from aspirations.aspiration_tuning import Aspiration, AspirationBasic
+from aspirations.aspiration_tuning import AspirationBasic
 from aspirations.aspiration_types import AspriationType
-from event_testing.objective_tuning import Objective
 from event_testing.resolver import DataResolver
 from objects.game_object import GameObject
 from server_commands.argument_helpers import TunableInstanceParam
 from sims.sim_info import SimInfo
 from sims4.resources import Types
+from sims4communitylib.enums.statistics_enum import CommonStatisticId
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.services.commands.common_console_command import CommonConsoleCommand, \
     CommonConsoleCommandArgument
@@ -25,6 +24,7 @@ from sims4communitylib.utils.objects.common_object_location_utils import CommonO
 from sims4communitylib.utils.objects.common_object_utils import CommonObjectUtils
 from sims4communitylib.utils.sims.common_sim_location_utils import CommonSimLocationUtils
 from sims4communitylib.utils.sims.common_sim_loot_action_utils import CommonSimLootActionUtils
+from sims4communitylib.utils.sims.common_sim_statistic_utils import CommonSimStatisticUtils
 from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
 from sims4communitylib.utils.sims.common_trait_utils import CommonTraitUtils
 
@@ -138,9 +138,8 @@ def _common_burgle_it(output: CommonConsoleCommandOutput, sim_info: SimInfo = No
     'Complete an objective for an aspiration.',
     command_arguments=(
         CommonConsoleCommandArgument('objective', 'Objective Id or Name', 'The name or instance id of a Sim to attach the buff to.'),
-        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim to attach the buff to.', is_optional=True, default_value='Active Sim'),
-    ),
-    show_with_help_command=False
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim to complete the objective for.', is_optional=True, default_value='Active Sim'),
+    )
 )
 def _common_complete_objective(output: CommonConsoleCommandOutput, objective: TunableInstanceParam(Types.OBJECTIVE), sim_info: SimInfo = None):
     if sim_info is None:
@@ -154,6 +153,7 @@ def _common_complete_objective(output: CommonConsoleCommandOutput, objective: Tu
     for (key, aspiration) in CommonResourceUtils.load_all_instances(Types.ASPIRATION, return_type=AspirationBasic):
         aspiration: AspirationBasic = aspiration
         log.format_with_message(f'Checking Aspiration {aspiration}')
+        # noinspection PyUnresolvedReferences
         if aspiration.aspiration_type == AspriationType.FULL_ASPIRATION and aspiration.do_not_register_events_on_load and not aspiration_tracker.aspiration_in_sequence(aspiration):
             continue
             # log.format_with_message(f'Not a full aspiration {aspiration} do not register {aspiration.do_not_register_events_on_load} ')
@@ -166,3 +166,31 @@ def _common_complete_objective(output: CommonConsoleCommandOutput, objective: Tu
                 #     log.format_with_message(f'Objective not a match {asp_objective}')
     log.format_with_message('Done')
     output(f'Completed {objective} on {sim_info}')
+
+
+@CommonConsoleCommand(
+    ModInfo.get_identity(),
+    's4clib.set_fame_level',
+    'Set the fame level of a Sim.',
+    command_arguments=(
+        CommonConsoleCommandArgument('fame_level', 'Value 0 through 5', 'The level of fame to set the Sim to.'),
+        CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim to set the fame level of.', is_optional=True, default_value='Active Sim'),
+    )
+)
+def _common_set_fame_level(output: CommonConsoleCommandOutput, fame_level: int, sim_info: SimInfo = None):
+    if not (0 <= fame_level <= 5):
+        output('Fame Level must be between 0 and 5.')
+        return
+    output(f'Setting the fame level of {sim_info} to star level {fame_level}')
+    fame_level_mapping = {
+        0: 0,  # level starts at 0
+        1: 462,  # level starts at 162
+        2: 1037,  # level starts at 837
+        3: 2117,  # level starts at 1917
+        4: 3534,  # level starts at 3334
+        5: 5321  # level starts at 5021
+    }
+
+    fame_level_value = fame_level_mapping.get(fame_level)
+    CommonSimStatisticUtils.set_statistic_value(sim_info, CommonStatisticId.RANKED_FAME, fame_level_value)
+    output('Done')

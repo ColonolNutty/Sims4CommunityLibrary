@@ -283,10 +283,12 @@ class CommonHouseholdUtils(HasClassLog):
                 continue
             return household
         if not create_on_missing:
-            log.debug('No household found matching name \'{}\'.'.format(name))
+            log.debug(f'No household found matching name \'{name}\'.')
             return None
         log.debug('No household found, creating one.')
-        return cls.create_empty_household(starting_funds=starting_funds, as_hidden_household=as_hidden_household)
+        empty_household = cls.create_empty_household(starting_funds=starting_funds, as_hidden_household=as_hidden_household)
+        empty_household.name = name
+        return empty_household
 
     @classmethod
     def locate_households_by_name_generator(cls, name: str, allow_partial_match: bool = False) -> Iterator[Household]:
@@ -303,16 +305,16 @@ class CommonHouseholdUtils(HasClassLog):
         """
         log = cls.get_log()
         if allow_partial_match:
-            log.debug('Locating households containing name: \'{}\''.format(name))
+            log.debug(f'Locating households containing name: \'{name}\'')
         else:
-            log.debug('Locating households with name: \'{}\''.format(name))
+            log.debug(f'Locating households with name: \'{name}\'')
         for household in cls.get_all_households_generator():
             if household is None:
                 continue
             # noinspection PyPropertyAccess
             household_name = household.name
             # noinspection PyPropertyAccess
-            log.debug('Checking household \'{}\' for match.'.format(household_name))
+            log.debug(f'Checking household \'{household_name}\' for match.')
             if household_name is None:
                 continue
             if allow_partial_match:
@@ -684,9 +686,9 @@ class CommonHouseholdUtils(HasClassLog):
         """
         log = cls.get_log()
         if allow_partial_match:
-            log.debug('Attempting to delete households containing name \'{}\'.'.format(name))
+            log.debug(f'Attempting to delete households containing name \'{name}\'.')
         else:
-            log.debug('Attempting to delete households with name \'{}\'.'.format(name))
+            log.debug(f'Attempting to delete households with name \'{name}\'.')
         all_completed = True
         for household in cls.locate_households_by_name_generator(name, allow_partial_match=allow_partial_match):
             if household is None:

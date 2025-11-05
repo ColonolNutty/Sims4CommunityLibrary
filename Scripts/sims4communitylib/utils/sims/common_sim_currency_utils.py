@@ -110,7 +110,7 @@ class CommonSimCurrencyUtils:
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim.', is_optional=True, default_value='Active Sim'),
     )
 )
-def _common_add_simoleons(output: CommonConsoleCommandOutput, amount: int, sim_info: SimInfo=None):
+def _common_add_simoleons(output: CommonConsoleCommandOutput, amount: int, sim_info: SimInfo = None):
     if sim_info is None:
         return False
     result = CommonSimCurrencyUtils.add_simoleons_to_household(sim_info, amount, CommonCurrencyModifyReason.CHEAT)
@@ -130,12 +130,12 @@ def _common_add_simoleons(output: CommonConsoleCommandOutput, amount: int, sim_i
         CommonConsoleCommandArgument('sim_info', 'Sim Id or Name', 'The name or instance id of a Sim.', is_optional=True, default_value='Active Sim'),
     )
 )
-def _common_add_simoleons(output: CommonConsoleCommandOutput, amount: int, sim_info: SimInfo=None):
+def _common_remove_simoleons(output: CommonConsoleCommandOutput, amount: int, sim_info: SimInfo = None):
     if sim_info is None:
         return False
-    result = CommonSimCurrencyUtils.add_simoleons_to_household(sim_info, amount, CommonCurrencyModifyReason.CHEAT)
-    if result:
-        output(f'SUCCESS: Successfully removed currency from Sim {sim_info}')
+    result = CommonSimCurrencyUtils.remove_simoleons_from_household(sim_info, amount, CommonCurrencyModifyReason.CHEAT)
+    if result != amount:
+        output(f'SUCCESS: Successfully removed currency from Sim {sim_info}, {result} was left over.')
         return True
-    output(f'FAILED: Failed to remove currency from Sim {sim_info}. {result.reason}')
+    output(f'FAILED: Failed to remove currency from Sim {sim_info}. Could not remove {result} Simoleons')
     return False

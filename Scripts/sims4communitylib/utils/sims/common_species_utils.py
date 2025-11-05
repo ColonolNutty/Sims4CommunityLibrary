@@ -9,6 +9,7 @@ from typing import Union
 
 from sims.sim_info import SimInfo
 from sims.sim_info_types import Species, SpeciesExtended
+from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.modinfo import ModInfo
 from sims4communitylib.utils.common_log_registry import CommonLogRegistry
@@ -41,7 +42,7 @@ class CommonSpeciesUtils:
         return None
 
     @classmethod
-    def set_species(cls, sim_info: SimInfo, species: Union[Species, SpeciesExtended, int]) -> bool:
+    def set_species(cls, sim_info: SimInfo, species: Union[CommonSpecies, Species, SpeciesExtended, int]) -> bool:
         """set_species(sim_info, species)
 
         Set the Species of a sim.
@@ -49,7 +50,7 @@ class CommonSpeciesUtils:
         :param sim_info: The Sim to set the Species of.
         :type sim_info: SimInfo
         :param species: The Species to set the Sim to.
-        :type species: Union[Species, SpeciesExtended, int]
+        :type species: Union[CommonSpecies, Species, SpeciesExtended, int]
         :return: True, if successful. False, if not.
         :rtype: bool
         """
@@ -82,135 +83,141 @@ class CommonSpeciesUtils:
         return species_one == species_two
 
     @classmethod
-    def is_human_species(cls, species: Union[Species, SpeciesExtended, int]) -> bool:
+    def is_human_species(cls, species: Union[CommonSpecies, Species, SpeciesExtended, int]) -> bool:
         """is_human_species(species)
 
         Determine if a Species is a Human.
 
         :param species: The Species to check.
-        :type species: Union[Species, SpeciesExtended, int]
+        :type species: Union[CommonSpecies, Species, SpeciesExtended, int]
         :return: True, if the Species is Human. False, if not.
         :rtype: bool
         """
         if not hasattr(Species, 'HUMAN'):
             return False
-        return species == Species.HUMAN or species == SpeciesExtended.HUMAN
+        species = CommonSpecies.convert_to_vanilla(species)
+        return species in (Species.HUMAN, SpeciesExtended.HUMAN)
 
     @classmethod
-    def is_pet_species(cls, species: Union[Species, SpeciesExtended, int]) -> bool:
+    def is_pet_species(cls, species: Union[CommonSpecies, Species, SpeciesExtended, int]) -> bool:
         """is_pet_species(species)
 
         Determine if a Species is a Pet.
 
         :param species: The Species to check.
-        :type species: Union[Species, SpeciesExtended, int]
+        :type species: Union[CommonSpecies, Species, SpeciesExtended, int]
         :return: True, if the Species is a Pet Species (Large Dog, Small Dog, Cat). False, if not.
         :rtype: bool
         """
         return cls.is_dog_species(species) or cls.is_cat_species(species) or cls.is_horse_species(species)
 
     @classmethod
-    def is_animal_species(cls, species: Union[Species, SpeciesExtended, int]) -> bool:
+    def is_animal_species(cls, species: Union[CommonSpecies, Species, SpeciesExtended, int]) -> bool:
         """is_animal_species(species)
 
         Determine if a Species is an Animal.
 
         :param species: The Species to check.
-        :type species: Union[Species, SpeciesExtended, int]
+        :type species: Union[CommonSpecies, Species, SpeciesExtended, int]
         :return: True, if the Species is an Animal Species (Large Dog, Small Dog, Cat, or Fox). False, if not.
         :rtype: bool
         """
         return cls.is_pet_species(species) or cls.is_fox_species(species)
 
     @classmethod
-    def is_dog_species(cls, species: Union[Species, SpeciesExtended, int]) -> bool:
+    def is_dog_species(cls, species: Union[CommonSpecies, Species, SpeciesExtended, int]) -> bool:
         """is_dog_species(species)
 
         Determine if a Species is a Dog.
 
         :param species: The Species to check.
-        :type species: Union[Species, SpeciesExtended, int]
+        :type species: Union[CommonSpecies, Species, SpeciesExtended, int]
         :return: True, if the Species is a Dog Species (Large Dog, Small Dog). False, if not.
         :rtype: bool
         """
         return cls.is_large_dog_species(species) or cls.is_small_dog_species(species)
 
     @classmethod
-    def is_large_dog_species(cls, species: Union[Species, SpeciesExtended, int]) -> bool:
+    def is_large_dog_species(cls, species: Union[CommonSpecies, Species, SpeciesExtended, int]) -> bool:
         """is_large_dog_species(species)
 
         Determine if a Species is a Large Dog.
 
         :param species: The Species to check.
-        :type species: Union[Species, SpeciesExtended, int]
+        :type species: Union[CommonSpecies, Species, SpeciesExtended, int]
         :return: True, if the Species is a Large Dog Species. False, if not.
         :rtype: bool
         """
         if hasattr(Species, 'DOG'):
-            if species == Species.DOG or species == SpeciesExtended.DOG:
+            species = CommonSpecies.convert_to_vanilla(species)
+            if species in (Species.DOG, SpeciesExtended.DOG):
                 return True
         return False
 
     @classmethod
-    def is_small_dog_species(cls, species: Union[Species, SpeciesExtended, int]) -> bool:
+    def is_small_dog_species(cls, species: Union[CommonSpecies, Species, SpeciesExtended, int]) -> bool:
         """is_small_dog_species(species)
 
         Determine if a Species is a Small Dog.
 
         :param species: The Species to check.
-        :type species: Union[Species, SpeciesExtended, int]
+        :type species: Union[CommonSpecies, Species, SpeciesExtended, int]
         :return: True, if the Species is a Small Dog Species. False, if not.
         :rtype: bool
         """
         if hasattr(SpeciesExtended, 'SMALLDOG'):
+            species = CommonSpecies.convert_to_vanilla(species)
             if species == SpeciesExtended.SMALLDOG:
                 return True
         return False
 
     @classmethod
-    def is_cat_species(cls, species: Union[Species, SpeciesExtended, int]) -> bool:
+    def is_cat_species(cls, species: Union[CommonSpecies, Species, SpeciesExtended, int]) -> bool:
         """is_cat_species(species)
 
         Determine if a Species is a Cat.
 
         :param species: The Species to check.
-        :type species: Union[Species, SpeciesExtended, int]
+        :type species: Union[CommonSpecies, Species, SpeciesExtended, int]
         :return: True, if the Species is a Cat Species. False, if not.
         :rtype: bool
         """
         if not hasattr(Species, 'CAT'):
             return False
-        return species == Species.CAT or species == SpeciesExtended.CAT
+        species = CommonSpecies.convert_to_vanilla(species)
+        return species in (Species.CAT, SpeciesExtended.CAT)
 
     @classmethod
-    def is_fox_species(cls, species: Union[Species, SpeciesExtended, int]) -> bool:
+    def is_fox_species(cls, species: Union[CommonSpecies, Species, SpeciesExtended, int]) -> bool:
         """is_fox_species(species)
 
         Determine if a Species is a Fox.
 
         :param species: The Species to check.
-        :type species: Union[Species, SpeciesExtended, int]
+        :type species: Union[CommonSpecies, Species, SpeciesExtended, int]
         :return: True, if the Species is a Fox Species. False, if not.
         :rtype: bool
         """
         if not hasattr(Species, 'FOX'):
             return False
-        return species == Species.FOX or species == SpeciesExtended.FOX
+        species = CommonSpecies.convert_to_vanilla(species)
+        return species in (Species.FOX, SpeciesExtended.FOX)
 
     @classmethod
-    def is_horse_species(cls, species: Union[Species, SpeciesExtended, int]) -> bool:
+    def is_horse_species(cls, species: Union[CommonSpecies, Species, SpeciesExtended, int]) -> bool:
         """is_horse_species(species)
 
         Determine if a Species is a Horse.
 
         :param species: The Species to check.
-        :type species: Union[Species, SpeciesExtended, int]
+        :type species: Union[CommonSpecies, Species, SpeciesExtended, int]
         :return: True, if the Species is a Horse Species. False, if not.
         :rtype: bool
         """
         if not hasattr(Species, 'HORSE'):
             return False
-        return species == Species.HORSE or species == SpeciesExtended.HORSE
+        species = CommonSpecies.convert_to_vanilla(species)
+        return species in (Species.HORSE, SpeciesExtended.HORSE)
 
     @classmethod
     def is_dog(cls, sim_info: SimInfo) -> bool:

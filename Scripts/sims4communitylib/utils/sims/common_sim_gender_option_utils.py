@@ -9,8 +9,10 @@ from typing import Union
 
 from sims.global_gender_preference_tuning import ExploringOptionsStatus, GlobalGenderPreferenceTuning
 from sims.sim_info import SimInfo
+from sims.sim_info_types import Species, SpeciesExtended
 from sims4communitylib.classes.testing.common_execution_result import CommonExecutionResult
 from sims4communitylib.classes.testing.common_test_result import CommonTestResult
+from sims4communitylib.enums.common_species import CommonSpecies
 from sims4communitylib.enums.strings_enum import CommonStringId
 from sims4communitylib.enums.traits_enum import CommonTraitId
 from sims4communitylib.logging._has_s4cl_class_log import _HasS4CLClassLog
@@ -738,19 +740,7 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
         :return: The trait that would indicate the Sim uses the toilet while standing or None if no trait is found.
         :rtype: Union[CommonTraitId, None]
         """
-        if CommonSpeciesUtils.is_human(sim_info):
-            return CommonTraitId.GENDER_OPTIONS_TOILET_STANDING
-        elif CommonSpeciesUtils.is_large_dog(sim_info):
-            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_LARGE_DOG
-        elif CommonSpeciesUtils.is_small_dog(sim_info):
-            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_SMALL_DOG
-        elif CommonSpeciesUtils.is_cat(sim_info):
-            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_CAT
-        elif CommonSpeciesUtils.is_fox(sim_info):
-            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_FOX
-        elif CommonSpeciesUtils.is_horse(sim_info):
-            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_HORSE
-        return None
+        return CommonSimGenderOptionUtils.determine_toilet_standing_trait_by_species(CommonSpecies.get_species(sim_info))
 
     @staticmethod
     def determine_toilet_sitting_trait(sim_info: SimInfo) -> Union[CommonTraitId, None]:
@@ -763,17 +753,55 @@ class CommonSimGenderOptionUtils(_HasS4CLClassLog):
         :return: The trait that would indicate the Sim uses the toilet while sitting or None if no trait is found.
         :rtype: Union[CommonTraitId, None]
         """
-        if CommonSpeciesUtils.is_human(sim_info):
+        return CommonSimGenderOptionUtils.determine_toilet_sitting_trait_by_species(CommonSpecies.get_species(sim_info))
+
+    @staticmethod
+    def determine_toilet_standing_trait_by_species(species: Union[CommonSpecies, Species, SpeciesExtended, int]) -> Union[CommonTraitId, None]:
+        """determine_toilet_standing_trait_by_species(species)
+
+        Determine the trait that would indicate a Sim uses the toilet while standing.
+
+        :param species: The species to get the trait for.
+        :type species: Union[CommonSpecies, Species, SpeciesExtended, int]
+        :return: The trait that would indicate the Sim uses the toilet while standing or None if no trait is found.
+        :rtype: Union[CommonTraitId, None]
+        """
+        if CommonSpeciesUtils.is_human_species(species):
+            return CommonTraitId.GENDER_OPTIONS_TOILET_STANDING
+        elif CommonSpeciesUtils.is_large_dog_species(species):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_LARGE_DOG
+        elif CommonSpeciesUtils.is_small_dog_species(species):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_SMALL_DOG
+        elif CommonSpeciesUtils.is_cat_species(species):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_CAT
+        elif CommonSpeciesUtils.is_fox_species(species):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_FOX
+        elif CommonSpeciesUtils.is_horse_species(species):
+            return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_STANDING_HORSE
+        return None
+
+    @staticmethod
+    def determine_toilet_sitting_trait_by_species(species: Union[CommonSpecies, Species, SpeciesExtended, int]) -> Union[CommonTraitId, None]:
+        """determine_toilet_sitting_trait_by_species(species)
+
+        Determine the trait that would indicate a Sim uses the toilet while sitting.
+
+        :param species: The species to get the trait for.
+        :type species: Union[CommonSpecies, Species, SpeciesExtended, int]
+        :return: The trait that would indicate the Sim uses the toilet while sitting or None if no trait is found.
+        :rtype: Union[CommonTraitId, None]
+        """
+        if CommonSpeciesUtils.is_human_species(species):
             return CommonTraitId.GENDER_OPTIONS_TOILET_SITTING
-        elif CommonSpeciesUtils.is_large_dog(sim_info):
+        elif CommonSpeciesUtils.is_large_dog_species(species):
             return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_LARGE_DOG
-        elif CommonSpeciesUtils.is_small_dog(sim_info):
+        elif CommonSpeciesUtils.is_small_dog_species(species):
             return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_SMALL_DOG
-        elif CommonSpeciesUtils.is_cat(sim_info):
+        elif CommonSpeciesUtils.is_cat_species(species):
             return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_CAT
-        elif CommonSpeciesUtils.is_fox(sim_info):
+        elif CommonSpeciesUtils.is_fox_species(species):
             return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_FOX
-        elif CommonSpeciesUtils.is_horse(sim_info):
+        elif CommonSpeciesUtils.is_horse_species(species):
             return CommonTraitId.S4CL_GENDER_OPTIONS_TOILET_SITTING_HORSE
         return None
 

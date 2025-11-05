@@ -95,6 +95,26 @@ class CommonSimUtils:
         return cls.get_active_sim_info() is sim_info
 
     @classmethod
+    def is_instanced(cls, sim_info: SimInfo, allow_hidden_flags: HiddenReasonFlag = ALL_HIDDEN_REASONS) -> bool:
+        """is_instanced(\
+            sim_info,\
+            allow_hidden_flags=ALL_HIDDEN_REASONS\
+         )
+
+        Determine if a Sim is instanced.
+
+        .. note:: Only SimInfo with a Sim instance (:func:`~get_sim_instance`) are considered as instanced. In other words, if a Sim does not have a Sim instance, it means they are not loaded on the current lot.
+
+        :param sim_info: The info of a Sim.
+        :type sim_info: SimInfo
+        :param allow_hidden_flags: Flags to indicate the types of hidden Sims to consider as being instanced. Default is ALL_HIDDEN_REASONS
+        :type allow_hidden_flags: HiddenReasonFlag, optional
+        :return: True, if the Sim is instanced. False, if not.
+        :rtype: bool
+        """
+        return cls.get_sim_instance(sim_info, allow_hidden_flags=allow_hidden_flags) is not None
+
+    @classmethod
     def get_sim_info_of_sim_with_name(cls, first_name: str, last_name: str) -> Union[SimInfo, None]:
         """get_sim_info_of_sim_with_name(first_name, last_name)
 
@@ -224,7 +244,7 @@ class CommonSimUtils:
     ) -> Iterator[SimInfo]:
         """get_instanced_sim_info_for_all_sims_generator(\
             include_sim_callback=None,\
-            allow_hidden_flags=HiddenReasonFlag.NONE\
+            allow_hidden_flags=ALL_HIDDEN_REASONS\
          )
 
         Retrieve a SimInfo object for each and every Sim.
@@ -239,7 +259,7 @@ class CommonSimUtils:
         :rtype: Iterator[SimInfo]
         """
         def _is_instanced(_sim_info: SimInfo) -> bool:
-            return _sim_info.get_sim_instance(allow_hidden_flags=allow_hidden_flags) is not None
+            return cls.is_instanced(_sim_info, allow_hidden_flags=allow_hidden_flags)
 
         include_sim_callback = CommonFunctionUtils.run_predicates_as_one((_is_instanced, include_sim_callback))
         for sim_info in cls.get_sim_info_for_all_sims_generator(include_sim_callback=include_sim_callback):

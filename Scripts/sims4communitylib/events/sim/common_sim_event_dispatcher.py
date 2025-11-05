@@ -44,6 +44,7 @@ from sims4communitylib.events.sim.events.sim_changed_gender import S4CLSimChange
 from sims4communitylib.events.sim.events.sim_changed_occult_type import S4CLSimChangedOccultTypeEvent
 from sims4communitylib.events.sim.events.sim_changed_gender_options_can_be_impregnated import S4CLSimChangedGenderOptionsCanBeImpregnatedEvent
 from sims4communitylib.events.sim.events.sim_changed_gender_options_toilet_usage import S4CLSimChangedGenderOptionsToiletUsageEvent
+from sims4communitylib.events.sim.events.sim_changing_age import S4CLSimChangingAgeEvent
 from sims4communitylib.events.sim.events.sim_changing_occult_type import S4CLSimChangingOccultTypeEvent
 from sims4communitylib.events.sim.events.sim_died import S4CLSimDiedEvent
 from sims4communitylib.events.sim.events.sim_pre_despawned import S4CLSimPreDespawnedEvent
@@ -135,7 +136,11 @@ class CommonSimEventDispatcherService(CommonService):
     def _pre_sim_despawned(self, sim_info: SimInfo, *_, **__) -> bool:
         return CommonEventRegistry.get().dispatch(S4CLSimPreDespawnedEvent(sim_info))
 
-    def _on_sim_change_age(self, sim_info: SimInfo, new_age: Age, current_age: Age) -> bool:
+    def _on_sim_changing_age(self, sim_info: SimInfo, new_age: Age, current_age: Age, *_, **__) -> bool:
+        from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
+        return CommonEventRegistry.get().dispatch(S4CLSimChangingAgeEvent(CommonSimUtils.get_sim_info(sim_info), CommonAge.convert_from_vanilla(current_age), CommonAge.convert_from_vanilla(new_age)))
+
+    def _on_sim_change_age(self, sim_info: SimInfo, new_age: Age, current_age: Age, *_, **__) -> bool:
         from sims4communitylib.utils.sims.common_sim_utils import CommonSimUtils
         return CommonEventRegistry.get().dispatch(S4CLSimChangedAgeEvent(CommonSimUtils.get_sim_info(sim_info), CommonAge.convert_from_vanilla(current_age), CommonAge.convert_from_vanilla(new_age)))
 
@@ -291,6 +296,7 @@ def _common_on_sim_skill_level_up(original, self, *args, **kwargs) -> Any:
 
 @CommonInjectionUtils.inject_safely_into(ModInfo.get_identity(), AgingMixin, AgingMixin.change_age.__name__, handle_exceptions=False)
 def _common_on_sim_change_age(original, self, *args, **kwargs) -> Any:
+    CommonSimEventDispatcherService.get()._on_sim_changing_age(self, *args, **kwargs)
     result = original(self, *args, **kwargs)
     CommonSimEventDispatcherService.get()._on_sim_change_age(self, *args, **kwargs)
     return result

@@ -9,6 +9,7 @@ from typing import Union, Tuple
 
 from event_testing.resolver import Resolver
 from interactions.utils.loot import LootActions
+from sims4communitylib.enums.enumtypes.common_int import CommonInt
 
 
 class CommonLootActionUtils:
@@ -71,6 +72,46 @@ class CommonLootActionUtils:
             loot_actions.apply_to_resolver(resolver)
             has_applied_at_least_one = True
         return has_applied_at_least_one
+
+    @classmethod
+    def combine_loot_actions(cls, loot_action_a: Union[int, CommonInt, LootActions], loot_actions: Tuple[Union[int, CommonInt, LootActions], ...]):
+        """combine_loot_actions(loot_action_a, loot_actions)
+
+        Combine Loot Actions into Loot Action A.
+
+        .. note:: Tests are not combined into Loot Action A.
+
+        :param loot_action_a: The loot action to modify.
+        :type loot_action_a: Union[int, CommonInt, LootActions]
+        :param loot_actions: The loot actions that will be combined into Loot Action A
+        :type loot_actions: Tuple[Union[int, CommonInt, LootActions]]
+        """
+        loot_action: LootActions = CommonLootActionUtils.load_loot_actions_by_id(loot_action_a)
+        if loot_action is None:
+            return
+
+        if hasattr(loot_action, 'loot_actions') and loot_action.loot_actions:
+            loot_actions_to_add_to = list(loot_action.loot_actions)
+            for loot_action_id_to_combine in loot_actions:
+                loot_action_to_combine: LootActions = CommonLootActionUtils.load_loot_actions_by_id(loot_action_id_to_combine)
+                if loot_action_to_combine is None:
+                    continue
+                if hasattr(loot_action_to_combine, 'loot_actions') and loot_action_to_combine.loot_actions:
+                    # noinspection PyUnresolvedReferences
+                    loot_actions_to_add_to.extend(list(loot_action_to_combine.loot_actions))
+            loot_action.loot_actions = tuple(loot_actions_to_add_to)
+
+        if hasattr(loot_action, 'random_loot_actions') and loot_action.random_loot_actions:
+            random_loot_actions_to_add_to = list(loot_action.random_loot_actions)
+            for loot_action_id_to_combine in loot_actions:
+                loot_action_to_combine: LootActions = CommonLootActionUtils.load_loot_actions_by_id(loot_action_id_to_combine)
+                if loot_action_to_combine is None:
+                    continue
+                if hasattr(loot_action_to_combine, 'random_loot_actions') and loot_action_to_combine.random_loot_actions:
+                    # noinspection PyUnresolvedReferences
+                    random_loot_actions_to_add_to.extend(list(loot_action_to_combine.random_loot_actions))
+            loot_action.random_loot_actions = tuple(random_loot_actions_to_add_to)
+
 
     @staticmethod
     def load_loot_actions_by_id(loot_actions_id: Union[int, LootActions]) -> Union[LootActions, None]:

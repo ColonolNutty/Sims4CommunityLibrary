@@ -33,7 +33,7 @@ class CommonBuff(Buff, HasClassLog):
     # noinspection PyMissingOrEmptyDocstring
     @classmethod
     def get_mod_identity(cls) -> CommonModIdentity:
-        raise NotImplementedError('Missing \'{}\'.'.format(cls.get_mod_identity.__name__))
+        raise NotImplementedError(f'Missing \'{cls.get_mod_identity.__name__}\'.')
 
     @property
     def sim(self) -> Union[Sim, None]:
@@ -70,7 +70,7 @@ class CommonBuff(Buff, HasClassLog):
         try:
             self.on_added(self.sim, *_, from_load=from_load, apply_buff_loot=apply_buff_loot, buff_source=buff_source)
         except Exception as ex:
-            self.log.error('Error occurred while running buff \'{}\' on_added.'.format(self.__class__.__name__), exception=ex)
+            self.log.error(f'Error occurred while running buff \'{self.__class__.__name__}\' on_added.', exception=ex)
 
     def on_remove(self, *_, apply_loot_on_remove: bool = True, **__):
         """on_remove(apply_loot_on_remove=True)
@@ -84,7 +84,7 @@ class CommonBuff(Buff, HasClassLog):
         try:
             self.on_removed(self.sim, *_, apply_loot_on_remove=apply_loot_on_remove, **__)
         except Exception as ex:
-            self.log.error('Error occurred while running buff \'{}\' on_removed.'.format(self.__class__.__name__), exception=ex)
+            self.log.error(f'Error occurred while running buff \'{self.__class__.__name__}\' on_removed.', exception=ex)
 
     # The following functions are hooks into various parts of a buff, override them in your own buff to provide custom functionality.
 

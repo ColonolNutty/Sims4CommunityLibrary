@@ -1,6 +1,14 @@
 Sim Event Types
 ===========================================
 
+`Age Changing`
+------------------------------------------------------------
+
+.. autoclass:: sims4communitylib.events.sim.events.sim_changing_age.S4CLSimChangingAgeEvent
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Age Changed`
 ------------------------------------------------------------
 

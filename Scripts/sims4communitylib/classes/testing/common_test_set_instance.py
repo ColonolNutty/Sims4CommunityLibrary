@@ -78,11 +78,15 @@ class S4CLTunableTestVariant(CommonTunableTestVariant):
     """A tunable test variant with common tests available for use in TestSetInstance tunables."""
 
     def _get_test_variants(self) -> Dict[str, Any]:
-        from sims4communitylib.classes.testing.common_tests import _S4CLSimIsHumanTest
-        from sims4communitylib.classes.testing.common_tests import _S4CLSimIsInActiveHouseholdTest
+        from sims4communitylib.classes.testing.common_tests import _S4CLSimHasNextCareerLevelTest, \
+            _S4CLSimHasPreviousCareerLevelTest, _S4CLSimHasCareerLevelPositionTargetTest, _S4CLSimIsHumanTest, \
+            _S4CLSimIsInActiveHouseholdTest
         items = {
             'sim_is_human': _S4CLSimIsHumanTest.TunableFactory,
-            'sim_is_in_active_household': _S4CLSimIsInActiveHouseholdTest.TunableFactory
+            'sim_is_in_active_household': _S4CLSimIsInActiveHouseholdTest.TunableFactory,
+            'sim_has_next_career_level': _S4CLSimHasNextCareerLevelTest.TunableFactory,
+            'sim_has_previous_career_level': _S4CLSimHasPreviousCareerLevelTest.TunableFactory,
+            'sim_has_career_level_position_to_sim': _S4CLSimHasCareerLevelPositionTargetTest.TunableFactory
         }
         items.update(super()._get_test_variants())
         return items

@@ -118,24 +118,26 @@ class CommonCASUtils(_HasS4CLClassLog):
         return CommonResourceUtils.get_enum_by_name(upper_case_name, BodyType, default_value=default_body_type)
 
     @staticmethod
-    def convert_value_to_body_type(value: Union[BodyType, int]) -> Union[BodyType, int]:
+    def convert_value_to_body_type(value: Union[CommonBodySlot, BodyType, int]) -> Union[BodyType, int]:
         """convert_value_to_body_type(value)
 
         Retrieve an BodyType by value.
 
         :param value: The value of a body type.
-        :type value: Union[BodyType, int]
+        :type value: Union[CommonBodySlot, BodyType, int]
         :return: The BodyType with the specified value or the specified value if no BodyType was found.
         :rtype: Union[BodyType, int]
         """
         if isinstance(value, BodyType):
             return value
+        if isinstance(value, CommonBodySlot):
+            return CommonBodySlot.convert_to_vanilla(value)
         if value in BodyType.value_to_name:
             return CommonResourceUtils.get_enum_by_name(BodyType.value_to_name[value], BodyType, default_value=value)
         return value
 
     @classmethod
-    def attach_cas_part_to_sim(cls, sim_info: SimInfo, cas_part_id: int, body_type: Union[BodyType, int] = None, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None, **__) -> bool:
+    def attach_cas_part_to_sim(cls, sim_info: SimInfo, cas_part_id: int, body_type: Union[CommonBodySlot, BodyType, int] = None, outfit_category_and_index: Union[Tuple[OutfitCategory, int], None] = None, **__) -> bool:
         """attach_cas_part_to_sim(sim_info, cas_part_id, body_type=None, outfit_category_and_index=None, **__)
 
         Add a CAS part at the specified BodyType to the Sims outfit.
@@ -145,7 +147,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         :param cas_part_id: The decimal identifier of a CAS part to attach to the Sim.
         :type cas_part_id: int
         :param body_type: The BodyType the CAS part will be attached to. If no value is provided, the BodyType of the CAS part itself will be used. Default is None.
-        :type body_type: Union[BodyType, int], optional
+        :type body_type: Union[CommonBodySlot, BodyType, int], optional
         :param outfit_category_and_index: The outfit category and index of the Sims outfit to modify. If no value is provided, the Sims current outfit will be used.
         :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
         :return: True if the CAS part was successfully attached to the Sim. False if the CAS part was not successfully attached to the Sim.
@@ -155,7 +157,7 @@ class CommonCASUtils(_HasS4CLClassLog):
             raise RuntimeError('No cas_part_id was provided.')
 
         cls.get_log().format_with_message('Attempting to attach CAS part to Sim', sim=sim_info, cas_part_id=cas_part_id, body_type=body_type, outfit_category_and_index=outfit_category_and_index)
-        cas_part = CommonCASPart(cas_part_id, body_type=body_type if body_type != BodyType.NONE else None)
+        cas_part = CommonCASPart(cas_part_id, body_type=body_type if body_type != BodyType.NONE and body_type != CommonBodySlot.NONE else None)
         return cls.attach_cas_part_to_outfit_of_sim(sim_info, cas_part, outfit_category_and_index=outfit_category_and_index)
 
     @classmethod
@@ -557,7 +559,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return cls.detach_cas_part_from_outfit_of_sim(sim_info, cas_part, outfit_category_and_index=outfit_category_and_index)
 
     @classmethod
-    def detach_body_type_from_all_outfits_of_sim(cls, sim_info: SimInfo, body_type_to_remove: Union[BodyType, int]):
+    def detach_body_type_from_all_outfits_of_sim(cls, sim_info: SimInfo, body_type_to_remove: Union[CommonBodySlot, BodyType, int]):
         """detach_body_type_from_all_outfits_of_sim(sim_info, body_type_to_remove)
 
         Detach a body type from all outfits of a Sim.
@@ -565,12 +567,12 @@ class CommonCASUtils(_HasS4CLClassLog):
         :param sim_info: The SimInfo of a Sim to modify.
         :type sim_info: SimInfo
         :param body_type_to_remove: The body type to remove.
-        :type body_type_to_remove: Union[BodyType, int]
+        :type body_type_to_remove: Union[CommonBodySlot, BodyType, int]
         """
         return cls.detach_body_types_from_all_outfits_of_sim(sim_info, (body_type_to_remove,))
 
     @classmethod
-    def detach_body_types_from_all_outfits_of_sim(cls, sim_info: SimInfo, body_types_to_remove: Iterator[Union[BodyType, int]]):
+    def detach_body_types_from_all_outfits_of_sim(cls, sim_info: SimInfo, body_types_to_remove: Iterator[Union[CommonBodySlot, BodyType, int]]):
         """detach_body_types_from_all_outfits_of_sim(sim_info, body_types_to_remove)
 
         Detach body types from all outfits of a Sim.
@@ -578,9 +580,9 @@ class CommonCASUtils(_HasS4CLClassLog):
         :param sim_info: The SimInfo of a Sim to modify.
         :type sim_info: SimInfo
         :param body_types_to_remove: A collection of body types to remove.
-        :type body_types_to_remove: Iterator[Union[BodyType, int]]
+        :type body_types_to_remove: Iterator[Union[CommonBodySlot, BodyType, int]]
         """
-        body_types_to_remove = tuple([int(body_type) for body_type in body_types_to_remove])
+        body_types_to_remove = tuple([int(CommonBodySlot.convert_to_vanilla(body_type)) for body_type in body_types_to_remove])
         from protocolbuffers import S4Common_pb2, Outfits_pb2
         saved_outfits = sim_info.save_outfits()
         for saved_outfit in saved_outfits.outfits:
@@ -606,7 +608,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         sim_info._base.outfits = saved_outfits.SerializeToString()
 
     @classmethod
-    def detach_body_type_from_outfit_of_sim(cls, sim_info: SimInfo, body_type_to_remove: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int] = None) -> bool:
+    def detach_body_type_from_outfit_of_sim(cls, sim_info: SimInfo, body_type_to_remove: Union[CommonBodySlot, BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int] = None) -> bool:
         """detach_body_type_from_outfit_of_sim(sim_info, body_type_to_remove, outfit_category_and_index=None)
 
         Detach the CAS Part at a specific body type from an outfit of a Sim.
@@ -614,7 +616,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         :param sim_info: The SimInfo of a Sim to modify.
         :type sim_info: SimInfo
         :param body_type_to_remove: The body type to remove.
-        :type body_type_to_remove: Union[BodyType, int]
+        :type body_type_to_remove: Union[CommonBodySlot, BodyType, int]
         :param outfit_category_and_index: The outfit category and index of the Sims outfit to modify. If no value is provided, the Sims current outfit will be used. Default is current outfit.
         :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
         :return: True, if the body type was successfully detached from the outfit of the Sim. False, if not.
@@ -623,7 +625,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return cls.detach_body_types_from_outfit_of_sim(sim_info, (body_type_to_remove,), outfit_category_and_index=outfit_category_and_index)
 
     @classmethod
-    def detach_body_types_from_outfit_of_sim(cls, sim_info: SimInfo, body_types_to_remove: Iterator[Union[BodyType, int]], outfit_category_and_index: Tuple[OutfitCategory, int] = None) -> bool:
+    def detach_body_types_from_outfit_of_sim(cls, sim_info: SimInfo, body_types_to_remove: Iterator[Union[CommonBodySlot, BodyType, int]], outfit_category_and_index: Tuple[OutfitCategory, int] = None) -> bool:
         """detach_body_types_from_outfit_of_sim(sim_info, body_types_to_remove, outfit_category_and_index=None)
 
         Detach any CAS Parts at specific body types from an outfit of a Sim.
@@ -631,7 +633,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         :param sim_info: The SimInfo of a Sim to modify.
         :type sim_info: SimInfo
         :param body_types_to_remove: A collection of body types to remove.
-        :type body_types_to_remove: Iterator[Union[BodyType, int]]
+        :type body_types_to_remove: Iterator[Union[CommonBodySlot, BodyType, int]]
         :param outfit_category_and_index: The outfit category and index of the Sims outfit to modify. If no value is provided, the Sims current outfit will be used. Default is current outfit.
         :type outfit_category_and_index: Union[Tuple[OutfitCategory, int], None], optional
         :return: True, if the body types were successfully detached from the outfit of the Sim. False, if not.
@@ -642,7 +644,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         if outfit_category_and_index is None:
             outfit_category_and_index = current_outfit
         existing_outfit_data = sim_info.get_outfit(outfit_category_and_index[0], outfit_category_and_index[1])
-        body_types_to_remove = tuple([int(body_type) for body_type in body_types_to_remove])
+        body_types_to_remove = tuple([int(CommonBodySlot.convert_to_vanilla(body_type)) for body_type in body_types_to_remove])
         from protocolbuffers import S4Common_pb2, Outfits_pb2
         saved_outfits = sim_info.save_outfits()
         for saved_outfit in saved_outfits.outfits:
@@ -699,7 +701,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         return outfit_io.get_cas_part_at_body_type(body_type) == cas_part_id
 
     @staticmethod
-    def has_any_cas_part_attached_to_body_type(sim_info: SimInfo, body_type: Union[BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int] = None, mod_identity: CommonModIdentity = None) -> bool:
+    def has_any_cas_part_attached_to_body_type(sim_info: SimInfo, body_type: Union[CommonBodySlot, BodyType, int], outfit_category_and_index: Tuple[OutfitCategory, int] = None, mod_identity: CommonModIdentity = None) -> bool:
         """has_any_cas_part_attached_to_body_type(sim_info, body_type, outfit_category_and_index=None, mod_identity=None)
 
         Determine if a Sim has a CAS Part attached to a BodyType.
@@ -707,7 +709,7 @@ class CommonCASUtils(_HasS4CLClassLog):
         :param sim_info: An instance of a Sim.
         :type sim_info: SimInfo
         :param body_type: A BodyType to check.
-        :type body_type: Union[BodyType, int]
+        :type body_type: Union[CommonBodySlot, BodyType, int]
         :param outfit_category_and_index: An outfit category and index of the outfit. Default is None, which is whatever outfit a Sim is currently wearing.
         :type outfit_category_and_index: Tuple[OutfitCategory, int], optional
         :param mod_identity: The identity of the mod performing the function. Default is None. Optional, but highly recommended!
