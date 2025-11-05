@@ -1,4 +1,19 @@
 v3.17:
+- Added a fix for broken relationship tracks in EA
+- Added new test set instance tests for checking career levels between two Sims
+- Added an option to hide tooltips for CommonTest
+- Added an event for when a Sim is Changing ages but has not changed ages yet.
+- Added a command to set fame level of a Sim
+- Fixed some issues when using CommonBodySlot with CommonCASUtils functions
+- Added a function to combine loot actions to CommonLootActionsUtils
+- When creating a household after not finding one via locate_household_by_name, if create_on_missing is true, the name of the created household will now be the one sent in.
+- Added a function to retrieve the first career of a Sim in CommonSimCareerUtils
+- Fixed the s4clib.remove_simoleons command, it now actually removes the specified simoleons, instead of adding them.
+- Added functions to determine the toilet sitting and standing traits used for a Sim's species in CommonSimGenderOptionUtils
+- Added functions to check if a Sim has a father, mother, grandmother, and grandfather in CommonSimGenealogyUtils
+- Added a function to check if a Sim has blood related children to CommonSimGenealogyUtils
+- Added a function to get all children of a Sim to CommonSimGenealogyUtils
+- Added a function to check if a Sim is instanced to CommonSimUtils
 
 v3.16:
 - Updated S4CL for the patch on 08/20/2025
