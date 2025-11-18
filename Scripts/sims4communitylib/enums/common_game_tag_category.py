@@ -95,7 +95,7 @@ class CommonGameTagCategory(CommonInt):
         Get a collection of all values.
 
         :param exclude_values: These values will be excluded. If set to None, INVALID will be excluded automatically. Default is None.
-        :type exclude_values: Iterator[CommonTagCategory], optional
+        :type exclude_values: Iterator[CommonGameTagCategory], optional
         :return: A collection of all values.
         :rtype: Tuple[CommonGameTagCategory]
         """
@@ -112,7 +112,7 @@ class CommonGameTagCategory(CommonInt):
         Retrieve a collection of the names of all values.
 
         :param exclude_values: These values will be excluded. If set to None, INVALID will be excluded automatically. Default is None.
-        :type exclude_values: Iterator[CommonTagCategory], optional
+        :type exclude_values: Iterator[CommonGameTagCategory], optional
         :return: A collection of the names of all values.
         :rtype: Tuple[str]
         """
@@ -126,7 +126,7 @@ class CommonGameTagCategory(CommonInt):
         Create a string containing all names of all values, separated by a comma.
 
         :param exclude_values: These values will be excluded. If set to None, INVALID will be excluded automatically. Default is None.
-        :type exclude_values: Iterator[CommonTagCategory], optional
+        :type exclude_values: Iterator[CommonGameTagCategory], optional
         :return: A string containing all names of all values, separated by a comma.
         :rtype: str
         """
@@ -138,7 +138,7 @@ class CommonGameTagCategory(CommonInt):
 
         Convert a value into the vanilla TagCategory enum.
 
-        :param value: An instance of CommonTagCategory
+        :param value: An instance of CommonGameTagCategory
         :type value: CommonGameTagCategory
         :return: The specified value translated to TagCategory or INVALID if the value could not be translated.
         :rtype: Union[TagCategory, None]
@@ -300,12 +300,12 @@ class CommonGameTagCategory(CommonInt):
     def convert_from_vanilla(value: Union[int, TagCategory]) -> 'CommonGameTagCategory':
         """convert_from_vanilla(value)
 
-        Convert a value into a CommonTagCategory enum.
+        Convert a value into a CommonGameTagCategory enum.
 
         :param value: An instance of TagCategory
         :type value: TagCategory
-        :return: The specified value translated to CommonTagCategory or INVALID if the value could not be translated.
-        :rtype: TagCategory
+        :return: The specified value translated to CommonGameTagCategory or INVALID if the value could not be translated.
+        :rtype: CommonGameTagCategory
         """
         if value is None or value == TagCategory.INVALID:
             return CommonGameTagCategory.INVALID

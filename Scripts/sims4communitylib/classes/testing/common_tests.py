@@ -65,7 +65,7 @@ class CommonTest(HasTunableSingletonFactory, AutoFactoryInit, BaseTest, HasClass
                 return CommonTestResult.NONE
             return result
         except Exception as ex:
-            self.log.error('Error occurred while running test.', exception=ex)
+            self.log.error(f'Error occurred while running test {self}.', exception=ex)
             return CommonTestResult(False, reason=f'An error occurred. {ex}', hide_tooltip=True)
 
     def _run_test(self, *args, tooltip=None, **kwargs) -> CommonTestResult:

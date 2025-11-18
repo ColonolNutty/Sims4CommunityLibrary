@@ -18,6 +18,8 @@ log = CommonLogRegistry().register_log(ModInfo.get_identity(), 'jig_group_log')
 def _common_check_picked_object_has_slot_attribute(original, cls, picked_object) -> bool:
     if not hasattr(picked_object, 'slot'):
         return False
+    if picked_object.definition is None or picked_object.definition.get_slots_resource(0) is None:
+        return False
     try:
         return original(picked_object)
     except Exception as ex:

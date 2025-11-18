@@ -150,6 +150,14 @@ Resource Identifiers
    :undoc-members:
    :show-inheritance:
 
+`Game Packs`
+-----------------------------------------
+
+.. autoclass:: sims4communitylib.enums.common_game_pack.CommonGamePack
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 `Game Tags`
 -----------------------------------------
 
